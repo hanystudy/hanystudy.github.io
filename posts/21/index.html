@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="　　4.1一个简单的DLL 　　第2节给出了以静态链接库方式提供add函数接口的方法，接下来我们来看看怎样用动态链接库实现一个同样功能的add函数。 　　如图6，在VC++中new一个Win32 Dynamic-Link Library工程dllTest（单击此处下载本工程）。注意不要选择MFC &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 近期媒体上频繁报道的可能就是关于科索沃即将宣布独立的事件了。而就在本文发表前不久，此消息已在各大新闻网上正式登载。  对于我们中国人，十年前的科索沃战争是次令人愤慨的回忆。我驻前南大使馆遭北约轰炸，一名新华社记者和两名光明日报记者牺牲，这在当时确实影响了国内老老少少的愤青们。不管怎么说， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -102,642 +102,50 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2008/04/05/visual-c%25e5%258a%25a8%25e6%2580%2581%25e9%2593%25be%25e6%258e%25a5%25e5%25ba%2593%25e7%25bc%2596%25e7%25a8%258b%25ef%25bc%2588%25e4%25ba%258c%25ef%25bc%2589/">
+		<a href="/blog/2008/02/18/%25e4%25b8%2580%25e5%2588%2599%25e6%2596%25b0%25e9%2597%25bb%25e7%259a%2584%25e8%25af%2584%25e8%25ae%25ba-2/">
 		
-			Visual C++动态链接库编程（二）</a>
+			一则新闻的评论</a>
 	</h2>
 	<div class="entry-content">
-		<p>　　4.1一个简单的DLL</p>
+		<p> 近期媒体上频繁报道的可能就是关于科索沃即将宣布独立的事件了。而就在本文发表前不久，此消息已在各大新闻网上正式登载。</p>
 
-<p>　　第2节给出了以静态链接库方式提供add函数接口的方法，接下来我们来看看怎样用动态链接库实现一个同样功能的add函数。</p>
+<p> 对于我们中国人，十年前的科索沃战争是次令人愤慨的回忆。我驻前南大使馆遭北约轰炸，一名新华社记者和两名光明日报记者牺牲，这在当时确实影响了国内老老少少的愤青们。不管怎么说，烈士的牺牲激起了多数国人的爱国热情。十年之后，当我们重新踏上巴尔干的土地，多少有点“天下大势，浩浩荡荡”的感觉。只是彼处的“国父”不知作何感想。</p>
 
-<p class="guanggao">　　如图6，在VC++中new一个Win32 Dynamic-Link Library工程dllTest（<a target="_blank" href="http://www.mydown.com/code/244/244551.html"><font color="#000000">单击此处下载本工程</font></a>）。注意不要选择MFC AppWizard(dll)，因为用MFC AppWizard(dll)建立的将是第5、6节要讲述的MFC 动态链接库。</p>
+<p> 据公元前2世纪初的古罗马《自然史》记载，维斯瓦河地带除居住着萨尔马特人、斯基泰人外，还有维内德人，这一点在后来的《日耳曼尼亚志》中得到证实。人们普遍认为，维内德人就是斯拉夫人的祖先。斯拉夫人居住范围十分广泛，分布在西起奥得河、东抵第聂伯河、南至喀尔巴阡山、北濒波罗的海的广大地区。4-6世纪，斯拉夫人开始出现几个独立的部落，由于长期的迁徙，斯拉夫人逐渐分为东、西、南三大分支。据信，斯拉夫人的生产方式介于游牧和农耕之间，由于西欧长期的敌对使得他们拥有了异于其他民族的坚韧不屈。斯拉夫人普遍信仰东正教。</p>
 
+<p> 可以说，斯拉夫人是目前活跃在中欧、东欧以及东南欧地区许多民族的祖先。其中西斯拉夫人：捷克人，斯洛伐克人，波兰人。东斯拉夫人：俄罗斯人，小俄罗斯人（乌克兰人），白俄罗斯人。南斯拉夫人：斯洛文尼亚人，克罗地亚人，塞尔维亚人，保加利亚人。</p>
 
+<p> 如此一来，我们甚至可以更为深入的了解中东欧的历史，但这里只谈南斯拉夫人。</p>
 
+<p> 南斯拉夫人主要居住在巴尔干地区，“巴尔干”是土耳其语，事实上它曾经被土耳其人统治过，土耳其人将自己的伊斯兰文化传播到了这里。另一方面，奥地利统治着克罗地亚人和斯洛文尼亚人，并在那里广泛传播了天主教。再加上这里固有的东正教文化，巴尔干地区逐渐成为了宗教的熔炉。</p>
 
-<p><p class="guanggao">
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/z197lah23li0.jpg" />
-图6 建立一个非MFC DLL</td>
-</tr>
-</table>
-<p class="guanggao">
-　　在建立的工程中添加lib.h及lib.cpp文件，源代码如下：
-<p class="guanggao">
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>/<em> 文件名：lib.h　</em>/</p>
+<p> 一战结束后，巴尔干地区形成了一个统一的国家—南斯拉夫王国。二战中德意军队攻占南斯拉夫，深受同为斯拉夫人后裔的苏维埃政权的影响，南斯拉夫人在南共产党的带领下进行了数年的全民抗战。1945年5月，南斯拉夫解放。同年成立南斯拉夫联邦，1963年改为南斯拉夫社会主义联邦共和国，下辖6个自治共和国，并且创立了社会主义制度。</p>
 
-<h1>ifndef LIB_H</h1>
+<p> 上个世纪80年代末至90年代初，社会主义国家分别经历了一场严重的灾难。苏联解体，东欧剧变，南斯拉夫所辖6国之间的民族矛盾日益尖锐。终于从1991年开始，逐步分离出了4个国家，分别是斯洛文尼亚、克罗地亚 、波斯尼亚和黑塞哥维那及马其顿。南斯拉夫社会主义联邦正式解体。其余两个国家塞尔维亚和黑山共和国成立了南斯拉夫联盟共和国，即后来所说的南联盟。</p>
 
-<h1>define LIB_H</h1>
+<p> 南斯拉夫解体并没有平息民族之间的冲突，1992年波斯尼亚和黑塞哥维那（以下简称波黑）通过全民公决，境内的波黑族（穆斯林）、克罗地亚族均赞成独立，而塞尔维亚族抵制了公决，自此爆发了历时3年半的波黑战争。1995年底波黑战争结束时，据统计死亡27.8万人，200多万人沦为难民，此后该地区人民又经过长期艰苦的奋斗最终达成一致建立联邦国家，不再赘述。</p>
 
-<p>extern &ldquo;C&rdquo; int __declspec(dllexport)add(int x, int y);</p>
+<p> 美国及北约组织真正介入巴尔干的时间我们无法确定，但可以肯定的是北约军队趁波黑战争进入了巴尔干半岛。</p>
 
-<h1>endif</h1>
+<p> 科索沃原属南斯拉夫联邦塞尔维亚共和国，是位于该国西南部的一个自治省，人口主要有阿尔巴尼亚人、塞尔维亚人组成，其中阿族占绝大多数。阿尔巴尼亚族据其历史学者认为，属于伊利里亚人后代。伊利里亚人主要居住在巴尔干西部，自古经历了古罗马人、斯拉夫人、土耳其人的统治，在土耳其人的影响下，阿族多数人信仰伊斯兰教。</p>
 
-<p>/<em> 文件名：lib.cpp　</em>/</p>
+<p> 由于地理位置的特殊性，科索沃地区历来延续着动荡的局势。几经易手后，于1945年随着二战结束正式归并南斯拉夫，成为阿族人主导的自治省。1980年南斯拉夫革命领袖铁托逝世，当地阿族人开始发展科索沃民族主义运动，并以独立为最终目标。1989年，时任塞尔维亚共产党领导人的米洛舍维奇为压制阿族人的独立运动，宣布取消科索沃自治权。此后，科索沃阿族人开始抵制塞尔维亚政府的决定，并于当年宣布独立并成立“科索沃共和国”。进入1990年，阿族人开始组建军事力量与塞政府展开游击对抗。此后引发南联盟军队协助塞尔维亚警察进入科索沃进行镇压行动。</p>
 
-<h1>include &ldquo;lib.h&rdquo;</h1>
+<p> 波黑战争结束后，科索沃局势愈演愈烈。1998年，政府军队展开大规模军事行动，冲突进一步升级。据估计科索沃有20-30万人沦为难民。当地阿族和西方国家认为这是南联盟的种族清洗政策，意图将科索沃占90%的阿族人替换为塞尔维亚人。同时，美国和其他西方国家也已看到，在冷战结束以后，南欧巴尔干地区唯一与西方体系相异的国家就只剩南斯拉夫联盟共和国了。</p>
 
-<p>int add(int x, int y)
-{
-　return x + y;
-}</td>
-</tr>
-</table>
-<p class="guanggao">
-　　与第2节对静态链接库的调用相似，我们也建立一个与DLL工程处于同一工作区的应用工程dllCall，它调用DLL中的函数add，其源代码如下：
-<p class="guanggao">
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#include &lt;stdio.h&gt;</p>
+<p> 北约组织从1998年底开始介入科索沃危机，并促使两方于次年2月在巴黎进行了和平谈判。美国为此拟定解决方案，但两方均无法接受该方案。首先都不同意科索沃获得南联盟主权内的自治共和国地位，而南方也反对北约派遣多国部队进驻科索沃保障协议实施。</p>
 
-<h1>include &lt;windows.h&gt;</h1>
+<p> 美国和北约随后警告两方可能发生的后果，3月18日，阿族代表签署了该协议。但塞尔维亚始终拒绝签字。19日，北约向南联盟发起最后通牒。3月24日，北约向南联盟发动空中打击，科索沃战争爆发。</p>
 
-<p>typedef int(<em>lpAddFun)(int, int); //宏定义函数指针类型
-int main(int argc, char </em>argv[])
-{
-　HINSTANCE hDll; //DLL句柄
-　lpAddFun addFun; //函数指针
-　hDll = LoadLibrary(&ldquo;..\Debug\dllTest.dll&rdquo;);
-　if (hDll != NULL)
-　{
-　　addFun = (lpAddFun)GetProcAddress(hDll, &ldquo;add&rdquo;);
-　　if (addFun != NULL)
-　　{
-　　　int result = addFun(2, 3);
-　　　printf(&ldquo;%d&rdquo;, result);
-　　}
-　　FreeLibrary(hDll);
-　}
-　return 0;
-}</td>
-</tr>
-</table>
-<p class="guanggao">
-　　分析上述代码，dllTest工程中的lib.cpp文件与第2节静态链接库版本完全相同，不同在于lib.h对函数add的声明前面添加了__declspec(dllexport)语句。这个语句的含义是声明函数add为DLL的导出函数。DLL内的函数分为两种：</p>
+<p> 战争呈现一边倒态势，北约凭借占绝对优势的空中力量对南联盟进行了大规模空袭。在承受了巨大的空袭压力和损失后，南联盟总统米洛舍维奇于6月2日接受了俄罗斯、芬兰、美国共同制定的和平协议。6月10日，联合国安理会通过的1244号决议，承认科索沃是塞尔维亚的组成部分，并同意派遣除北约成员国以外的12个国家与北约共同组建多国部队进入科索沃地区。历时78天的空袭停止，科索沃战争结束。</p>
 
-<p>　　(1)DLL导出函数，可供应用<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>调用；</p>
+<p> 战争结束后，多国部队开始进入科索沃地区，并且按照协议，科索沃问题被移交联合国解决。此后科索沃一直被联合国管辖。</p>
 
-<p>　　(2) DLL内部函数，只能在DLL程序使用，应用程序无法调用它们。</p>
+<p> 2003年，南联盟更名为塞尔维亚和黑山联邦。2006年5月，黑山通过全民公决宣布独立。6月，塞尔维亚宣布独立并继承前塞黑联邦。在此期间，科索沃临时政府逐渐从联合国接过了部分权力。2007年12月，塞尔维亚政府与科索沃临时政府谈判失败，后者宣称将于2008年初宣布独立。</p>
 
-<p>　　而应用程序对本DLL的调用和对第2节静态链接库的调用却有较大差异，下面我们来逐一分析。</p>
+<p>  就合法性来说，此次独立是在国际社会尚未普遍达成共识的情况下单方面宣布的，这明显不符合联合国1244号决议的有关条款。但美国和欧盟多数国家给予了支持，并表示愿意协助科索沃实现独立。另外，俄罗斯方面则支持塞尔维亚的立场，坚决反对科索沃独立。如此做法不免使得欧洲再次陷入两方尖锐对立的局面。</p>
 
-<p>　　首先，语句typedef int ( * lpAddFun)(int,int)定义了一个与add函数接受参数类型和返回值均相同的函数指针类型。随后，在main函数中定义了lpAddFun的实例addFun；</p>
-
-<p>　　其次，在函数main中定义了一个DLL HINSTANCE句柄实例hDll，通过Win32 Api函数LoadLibrary动态加载了DLL模块并将DLL模块句柄赋给了hDll；</p>
-
-<p>　　再次，在函数main中通过Win32 Api函数GetProcAddress得到了所加载DLL模块中函数add的地址并赋给了addFun。经由函数指针addFun进行了对DLL中add函数的调用；</p>
-
-<p>　　最后，应用工程使用完DLL后，在函数main中通过Win32 Api函数FreeLibrary释放了已经加载的DLL模块。</p>
-
-<p>　　通过这个简单的例子，我们获知DLL定义和调用的一般概念：</p>
-
-<p>　　(1)DLL中需以某种特定的方式声明导出函数（或变量、类）；</p>
-
-<p>　　(2)应用工程需以某种特定的方式调用DLL的导出函数（或变量、类）。</p>
-
-<p>　　下面我们来对“特定的方式进行”阐述。</p>
-
-<p>　　4.2 声明导出函数</p>
-
-<p>　　DLL中导出函数的声明有两种方式：一种为4.1节例子中给出的在函数声明中加上__declspec(dllexport)，这里不再举例说明；另外一种方式是采用模块定义(.def) 文件声明，.def文件为链接器提供了有关被链接程序的导出、属性及其他方面的信息。</p>
-
-<p>　　下面的代码演示了怎样同.def文件将函数add声明为DLL导出函数（需在dllTest工程中添加lib.def文件）：
-<p class="guanggao">
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>; lib.def : 导出DLL函数</p>
-
-<p>LIBRARY dllTest</p>
-
-<p>EXPORTS</p>
-
-<p>add @ 1</td>
-</tr>
-</table>
-<p class="guanggao">
-　　.def文件的规则为：</p>
-
-<p>　　(1)LIBRARY语句说明.def文件相应的DLL；</p>
-
-<p>　　(2)EXPORTS语句后列出要导出函数的名称。可以在.def文件中的导出函数名后加@n，表示要导出函数的序号为n（在进行函数调用时，这个序号将发挥其作用）；</p>
-
-<p>　　(3).def 文件中的注释由每个注释行开始处的分号 (;) 指定，且注释不能与语句共享一行。</p>
-
-<p>　　由此可以看出，例子中lib.def文件的含义为生成名为“dllTest”的动态链接库，导出其中的add函数，并指定add函数的序号为1。</p>
-
-<p>　　4.3 DLL的调用方式</p>
-
-<p>　　在4.1节的例子中我们看到了由“LoadLibrary-GetProcAddress-FreeLibrary”系统Api提供的三位一体“DLL加载-DLL函数地址获取-DLL释放”方式，这种调用方式称为DLL的动态调用。</p>
-
-<p>　　动态调用方式的特点是完全由编程者用 API 函数加载和卸载 DLL，程序员可以决定 DLL 文件何时加载或不加载，显式链接在运行时决定加载哪个 DLL 文件。</p>
-
-<p>　　与动态调用方式相对应的就是静态调用方式，“有动必有静”，这来源于物质世界的对立统一。“动与静”，其对立与统一竟无数次在技术领域里得到验证，譬如静态IP与DHCP、静态路由与动态路由等。从前文我们已经知道，库也分为静态库与动态库DLL，而想不到，深入到DLL内部，其调用方式也分为静态与动态。“动与静”，无处不在。《周易》已认识到有动必有静的动静平衡观，《易．系辞》曰：“动静有常，刚柔断矣”。哲学意味着一种普遍的真理，因此，我们经常可以在枯燥的技术领域看到哲学的影子。</p>
-
-<p>　　静态调用方式的特点是由编译系统完成对DLL的加载和应用程序结束时 DLL 的卸载。当调用某DLL的应用程序结束时，若系统中还有其它程序使用该 DLL，则Windows对DLL的应用记录减1，直到所有使用该DLL的程序都结束时才释放它。静态调用方式简单实用，但不如动态调用方式灵活。</p>
-
-<p>　　下面我们来看看静态调用的例子（<a target="_blank" href="http://www.mydown.com/code/244/244556.html"><font color="#0000ff">单击此处下载本工程</font></a>），将编译dllTest工程所生成的.lib和.dll文件拷入dllCall工程所在的路径，dllCall执行下列代码：
-<p class="guanggao">
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#pragma comment(lib,&ldquo;dllTest.lib&rdquo;)</p>
-
-<p>//.lib文件中仅仅是关于其对应DLL文件中函数的重定位信息</p>
-
-<p>extern &ldquo;C&rdquo; __declspec(dllimport) add(int x,int y);</p>
-
-<p>int main(int argc, char* argv[])
-{
-　int result = add(2,3);
-　printf(&ldquo;%d&rdquo;,result);
-　return 0;
-}</td>
-</tr>
-</table>
-<p class="guanggao">
-　　由上述代码可以看出，静态调用方式的顺利进行需要完成两个动作：</p>
-
-<p>　　(1)告诉编译器与DLL相对应的.lib文件所在的路径及文件名，#pragma comment(lib,&ldquo;dllTest.lib&rdquo;)就是起这个作用。</p>
-
-<p>　　程序员在建立一个DLL文件时，连接器会自动为其生成一个对应的.lib文件，该文件包含了DLL 导出函数的符号名及序号（并不含有实际的代码）。在应用程序里，.lib文件将作为DLL的替代文件参与编译。</p>
-
-<p>　　(2)声明导入函数，extern &ldquo;C&rdquo; <strong>declspec(dllimport) add(int x,int y)语句中的</strong>declspec(dllimport)发挥这个作用。</p>
-
-<p>　　静态调用方式不再需要使用系统API来加载、卸载DLL以及获取DLL中导出函数的地址。这是因为，当程序员通过静态链接方式编译生成应用程序时，应用程序中调用的与.lib文件中导出符号相匹配的函数符号将进入到生成的EXE 文件中，.lib文件中所包含的与之对应的DLL文件的文件名也被编译器存储在 EXE文件内部。当应用程序运行过程中需要加载DLL文件时，Windows将根据这些信息发现并加载DLL，然后通过符号名实现对DLL 函数的动态链接。这样，EXE将能直接通过函数名调用DLL的输出函数，就象调用程序内部的其他函数一样。</p>
-
-<p><p class="guanggao">　　4.4 DllMain函数</p>
-
-<p>　　Windows在加载DLL的时候，需要一个入口函数，就如同控制台或DOS<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>需要main函数、WIN32程序需要WinMain函数一样。在前面的例子中，DLL并没有提供DllMain函数，应用工程也能成功引用DLL，这是因为Windows在找不到DllMain的时候，系统会从其它运行库中引入一个不做任何操作的缺省DllMain函数版本，并不意味着DLL可以放弃DllMain函数。</p>
-
-<p>　　根据编写规范，Windows必须查找并执行DLL里的DllMain函数作为加载DLL的依据，它使得DLL得以保留在内存里。这个函数并不属于导出函数，而是DLL的内部函数。这意味着不能直接在应用工程中引用DllMain函数，DllMain是自动被调用的。</p>
-
-<p>　　我们来看一个DllMain函数的例子（<a target="_blank" href="http://www.mydown.com/code/244/244555.html"><font color="#0000ff">单击此处下载本工程</font></a>）。
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>BOOL APIENTRY DllMain( HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
-{
-　switch (ul_reason_for_call)
-　{
-　　case DLL_PROCESS_ATTACH:
-　　　printf(&ldquo;\nprocess attach of dll&rdquo;);
-　　　break;
-　　case DLL_THREAD_ATTACH:
-　　　printf(&ldquo;\nthread attach of dll&rdquo;);
-　　　break;
-　　case DLL_THREAD_DETACH:
-　　　printf(&ldquo;\nthread detach of dll&rdquo;);
-　　　break;
-　　case DLL_PROCESS_DETACH:
-　　　printf(&ldquo;\nprocess detach of dll&rdquo;);
-　　　break;
-　}
-　return TRUE;
-}</td>
-</tr>
-</table>
-　　DllMain函数在DLL被加载和卸载时被调用，在单个线程启动和终止时，DLLMain函数也被调用，ul_reason_for_call指明了被调用的原因。原因共有4种，即PROCESS_ATTACH、PROCESS_DETACH、THREAD_ATTACH和THREAD_DETACH，以switch语句列出。</p>
-
-<p>　　来仔细解读一下DllMain的函数头BOOL APIENTRY DllMain( HANDLE hModule, WORD ul_reason_for_call, LPVOID lpReserved )。</p>
-
-<p>　　APIENTRY被定义为__stdcall，它意味着这个函数以标准Pascal的方式进行调用，也就是WINAPI方式；</p>
-
-<p>　　进程中的每个DLL模块被全局唯一的32字节的HINSTANCE句柄标识，只有在特定的进程内部有效，句柄代表了DLL模块在进程虚拟空间中的起始地址。在Win32中，HINSTANCE和HMODULE的值是相同的，这两种类型可以替换使用，这就是函数参数hModule的来历。</p>
-
-<p>　　执行下列代码：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>hDll = LoadLibrary(&ldquo;..\Debug\dllTest.dll&rdquo;);
-if (hDll != NULL)
-{
-　addFun = (lpAddFun)GetProcAddress(hDll, MAKEINTRESOURCE(1));
-　//MAKEINTRESOURCE直接使用导出文件中的序号
-　if (addFun != NULL)
-　{
-　　int result = addFun(2, 3);
-　　printf(&ldquo;\ncall add in dll:%d&rdquo;, result);
-　}
-　FreeLibrary(hDll);
-}</td>
-</tr>
-</table>
-　　我们看到输出顺序为：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>process attach of dll
-call add in dll:5
-process detach of dll</td>
-</tr>
-</table>
-　　这一输出顺序验证了DllMain被调用的时机。</p>
-
-<p>　　代码中的GetProcAddress ( hDll, MAKEINTRESOURCE ( 1 ) )值得留意，它直接通过.def文件中为add函数指定的顺序号访问add函数，具体体现在MAKEINTRESOURCE ( 1 )，MAKEINTRESOURCE是一个通过序号获取函数名的宏，定义为（节选自winuser.h）：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#define MAKEINTRESOURCEA(i) (LPSTR)((DWORD)((WORD)(i)))</p>
-
-<h1>define MAKEINTRESOURCEW(i) (LPWSTR)((DWORD)((WORD)(i)))</h1>
-
-<h1>ifdef UNICODE</h1>
-
-<h1>define MAKEINTRESOURCE MAKEINTRESOURCEW</h1>
-
-<h1>else</h1>
-
-<h1>define MAKEINTRESOURCE MAKEINTRESOURCEA</td></h1>
-
-<p></tr>
-</table>
-　　4.5 __stdcall约定</p>
-
-<p>　　如果通过VC++编写的DLL欲被其他语言编写的程序调用，应将函数的调用方式声明为<strong>stdcall方式，WINAPI都采用这种方式，而C/C++缺省的调用方式却为</strong>cdecl。<strong>stdcall方式与</strong>cdecl对函数名最终生成符号的方式不同。若采用C编译方式(在C++中需将函数声明为extern &ldquo;C&rdquo;)，<strong>stdcall调用约定在输出函数名前面加下划线，后面加“@”符号和参数的字节数，形如_functionname@number；而</strong>cdecl调用约定仅在输出函数名前面加下划线，形如_functionname。</p>
-
-<p>　　Windows编程中常见的几种函数类型声明宏都是与<strong>stdcall和</strong>cdecl有关的（节选自windef.h）：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#define CALLBACK __stdcall //这就是传说中的回调函数</p>
-
-<h1>define WINAPI __stdcall //这就是传说中的WINAPI</h1>
-
-<h1>define WINAPIV __cdecl</h1>
-
-<h1>define APIENTRY WINAPI //DllMain的入口就在这里</h1>
-
-<h1>define APIPRIVATE __stdcall</h1>
-
-<h1>define PASCAL __stdcall</td></h1>
-
-<p></tr>
-</table>
-　　在lib.h中，应这样声明add函数：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>int <strong>stdcall add(int x, int y);</td>
-</tr>
-</table>
-　　在应用工程中函数指针类型应定义为：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>typedef int(</strong>stdcall <em>lpAddFun)(int, int);</td>
-</tr>
-</table>
-　　若在lib.h中将函数声明为__stdcall调用，而应用工程中仍使用typedef int (</em> lpAddFun)(int,int)，运行时将发生错误（因为类型不匹配，在应用工程中仍然是缺省的__cdecl调用），弹出如图7所示的对话框。
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/vrn4lm2rlf11.jpg" />
-图7 调用约定不匹配时的运行错误</td>
-</tr>
-</table>
-　　图8中的那段话实际上已经给出了错误的原因，即“This is usually a result of　…”。</p>
-
-<p>　　<a target="_blank" href="http://www.mydown.com/code/244/244554.html"><font color="#000000">单击此处下载__stdcall调用例子工程源代码</font></a>。</p>
-
-<p><p class="guanggao">　　4.6 DLL导出变量</p>
-
-<p>　　DLL定义的全局变量可以被调用进程访问；DLL也可以访问调用进程的全局数据，我们来看看在应用工程中引用DLL中变量的例子（<a target="_blank" href="http://www.mydown.com/code/244/244552.html"><font color="#000000">单击此处下载本工程</font></a>）。
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>/<em> 文件名：lib.h　</em>/</p>
-
-<h1>ifndef LIB_H</h1>
-
-<h1>define LIB_H</h1>
-
-<p>extern int dllGlobalVar;</p>
-
-<h1>endif</h1>
-
-<p>/<em> 文件名：lib.cpp </em>/</p>
-
-<h1>include &ldquo;lib.h&rdquo;</h1>
-
-<h1>include &lt;windows.h&gt;</h1>
-
-<p>int dllGlobalVar;</p>
-
-<p>BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
-{
-　switch (ul_reason_for_call)
-　{
-　　case DLL_PROCESS_ATTACH:
-　　　dllGlobalVar = 100; //在dll被加载时，赋全局变量为100
-　　　break;
-　　case DLL_THREAD_ATTACH:
-　　case DLL_THREAD_DETACH:
-　　case DLL_PROCESS_DETACH:
-　　　break;
-　}
-　return TRUE;
-}</td>
-</tr>
-</table>
-　　;文件名：lib.def</p>
-
-<p>　　;在DLL中导出变量
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>LIBRARY &ldquo;dllTest&rdquo;</p>
-
-<p>EXPORTS</p>
-
-<p>dllGlobalVar CONSTANT</p>
-
-<p>;或dllGlobalVar DATA</p>
-
-<p>GetGlobalVar</td>
-</tr>
-</table>
-　　从lib.h和lib.cpp中可以看出，全局变量在DLL中的定义和使用方法与一般的<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>设计是一样的。若要导出某全局变量，我们需要在.def文件的EXPORTS后添加：</p>
-
-<p>　　变量名　CONSTANT　　　//过时的方法</p>
-
-<p>　　或</p>
-
-<p>　　变量名　DATA　　　 　//VC++提示的新方法</p>
-
-<p>　　在主函数中引用DLL中定义的全局变量：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#include &lt;stdio.h&gt;</p>
-
-<h1>pragma comment(lib,&ldquo;dllTest.lib&rdquo;)</h1>
-
-<p>extern int dllGlobalVar;</p>
-
-<p>int main(int argc, char <em>argv[])
-{
-　printf(&ldquo;%d &rdquo;, </em>(int<em>)dllGlobalVar);
-　</em>(int<em>)dllGlobalVar = 1;
-　printf(&ldquo;%d &rdquo;, </em>(int<em>)dllGlobalVar);
-　return 0;
-}</td>
-</tr>
-</table>
-　　特别要注意的是用extern int dllGlobalVar声明所导入的并不是DLL中全局变量本身，而是其地址，应用程序必须通过强制指针转换来使用DLL中的全局变量。这一点，从</em>(int*)dllGlobalVar可以看出。因此在采用这种方式引用DLL全局变量时，千万不要进行这样的赋值操作：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>dllGlobalVar = 1;</td>
-</tr>
-</table>
-　　其结果是dllGlobalVar指针的内容发生变化，程序中以后再也引用不到DLL中的全局变量了。</p>
-
-<p>　　在应用工程中引用DLL中全局变量的一个更好方法是：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#include &lt;stdio.h&gt;</p>
-
-<h1>pragma comment(lib,&ldquo;dllTest.lib&rdquo;)</h1>
-
-<p>extern int <em>declspec(dllimport) dllGlobalVar; //用</em>declspec(dllimport)导入
-int main(int argc, char *argv[])
-{
-　printf(&ldquo;%d &rdquo;, dllGlobalVar);
-　dllGlobalVar = 1; //这里就可以直接使用, 无须进行强制指针转换
-　printf(&ldquo;%d &rdquo;, dllGlobalVar);
-　return 0;
-}</td>
-</tr>
-</table>
-　　通过_declspec(dllimport)方式导入的就是DLL中全局变量本身而不再是其地址了，笔者建议在一切可能的情况下都使用这种方式。</p>
-
-<p>　　4.7 DLL导出类</p>
-
-<p>　　DLL中定义的类可以在应用工程中使用。</p>
-
-<p>　　下面的例子里，我们在DLL中定义了point和circle两个类，并在应用工程中引用了它们（<a target="_blank" href="http://www.mydown.com/code/244/244553.html"><font color="#0000ff">单击此处下载本工程</font></a>）。
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>//文件名：point.h，point类的声明</p>
-
-<h1>ifndef POINT_H</h1>
-
-<h1>define POINT_H</h1>
-
-<h1>ifdef DLL_FILE</h1>
-
-<p>　class _declspec(dllexport) point //导出类point</p>
-
-<h1>else</h1>
-
-<p>　class _declspec(dllimport) point //导入类point</p>
-
-<h1>endif</h1>
-
-<p>{
-　public:
-　　float y;
-　　float x;
-　　point();
-　　point(float x_coordinate, float y_coordinate);
-};</p>
-
-<h1>endif</h1>
-
-<p>//文件名：point.cpp，point类的实现</p>
-
-<h1>ifndef DLL_FILE</h1>
-
-<p>　#define DLL_FILE</p>
-
-<h1>endif</h1>
-
-<h1>include &ldquo;point.h&rdquo;</h1>
-
-<p>//类point的缺省构造函数</p>
-
-<p>point::point()
-{
-　x = 0.0;
-　y = 0.0;
-}</p>
-
-<p>//类point的构造函数</p>
-
-<p>point::point(float x_coordinate, float y_coordinate)
-{
-　x = x_coordinate;
-　y = y_coordinate;
-}</p>
-
-<p>//文件名：circle.h，circle类的声明</p>
-
-<h1>ifndef CIRCLE_H</h1>
-
-<h1>define CIRCLE_H</h1>
-
-<h1>include &ldquo;point.h&rdquo;</h1>
-
-<h1>ifdef DLL_FILE</h1>
-
-<p>class _declspec(dllexport)circle //导出类circle</p>
-
-<h1>else</h1>
-
-<p>class _declspec(dllimport)circle //导入类circle</p>
-
-<h1>endif</h1>
-
-<p>{
-　public:
-　　void SetCentre(const point &amp;centrePoint);
-　　void SetRadius(float r);
-　　float GetGirth();
-　　float GetArea();
-　　circle();
-　private:
-　　float radius;
-　　point centre;
-};</p>
-
-<h1>endif</h1>
-
-<p>//文件名：circle.cpp，circle类的实现</p>
-
-<h1>ifndef DLL_FILE</h1>
-
-<h1>define DLL_FILE</h1>
-
-<h1>endif</h1>
-
-<h1>include &ldquo;circle.h&rdquo;</h1>
-
-<h1>define PI 3.1415926</h1>
-
-<p>//circle类的构造函数</p>
-
-<p>circle::circle()
-{
-　centre = point(0, 0);
-　radius = 0;
-}</p>
-
-<p>//得到圆的面积</p>
-
-<p>float circle::GetArea()
-{
-　return PI *radius * radius;
-}</p>
-
-<p>//得到圆的周长</p>
-
-<p>float circle::GetGirth()
-{
-　return 2 *PI * radius;
-}</p>
-
-<p>//设置圆心坐标</p>
-
-<p>void circle::SetCentre(const point &amp;centrePoint)
-{
-　centre = centrePoint;
-}</p>
-
-<p>//设置圆的半径</p>
-
-<p>void circle::SetRadius(float r)
-{
-　radius = r;
-}</td>
-</tr>
-</table>
-　　类的引用：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#include &ldquo;..\circle.h&#8221;　　//包含类声明头文件</p>
-
-<h1>pragma comment(lib,&ldquo;dllTest.lib&rdquo;);</h1>
-
-<p>int main(int argc, char *argv[])
-{
-　circle c;
-　point p(2.0, 2.0);
-　c.SetCentre(p);
-　c.SetRadius(1.0);
-　printf(&ldquo;area:%f girth:%f&rdquo;, c.GetArea(), c.GetGirth());
-　return 0;
-}</td>
-</tr>
-</table>
-　　从上述源代码可以看出，由于在DLL的类实现代码中定义了宏DLL_FILE，故在DLL的实现中所包含的类声明实际上为：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class <em>declspec(dllexport) point //导出类point
-{
-　…
-}</td>
-</tr>
-</table>
-　　和
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class </em>declspec(dllexport) circle //导出类circle
-{
-　…
-}</td>
-</tr>
-</table>
-　　而在应用工程中没有定义DLL_FILE，故其包含point.h和circle.h后引入的类声明为：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class <em>declspec(dllimport) point //导入类point
-{
-　…
-}</td>
-</tr>
-</table>
-　　和
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class </em>declspec(dllimport) circle //导入类circle
-{
-　…
-}</td>
-</tr>
-</table>
-　　不错，正是通过DLL中的
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class <em>declspec(dllexport) class_name //导出类circle　
-{
-　…
-}</td>
-</tr>
-</table>
-　　与应用程序中的
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class </em>declspec(dllimport) class_name //导入类
-{
-　…
-}</td>
-</tr>
-</table>
-　　匹对来完成类的导出和导入的！</p>
-
-<p>　　我们往往通过在类的声明头文件中用一个宏来决定使其编译为class <em>declspec(dllexport) class_name还是class </em>declspec(dllimport) class_name版本，这样就不再需要两个头文件。本程序中使用的是：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#ifdef DLL_FILE
-　class _declspec(dllexport) class_name //导出类</p>
-
-<h1>else</h1>
-
-<p>　class _declspec(dllimport) class_name //导入类</p>
-
-<h1>endif</td></h1>
-
-<p></tr>
-</table>
-　　实际上，在MFC DLL的讲解中，您将看到比这更简便的方法，而此处仅仅是为了说明<em>declspec(dllexport)与</em>declspec(dllimport)匹对的问题。</p>
-
-<p>　　由此可见，应用工程中几乎可以看到DLL中的一切，包括函数、变量以及类，这就是DLL所要提供的强大能力。只要DLL释放这些接口，应用程序使用它就将如同使用本工程中的程序一样！</p>
-
-<p>　　本章虽以VC++为平台讲解非MFC DLL，但是这些普遍的概念在其它语言及开发环境中也是相同的，其思维方式可以直接过渡。 接下来，我们将要研究MFC规则DLL。</p>
+<p> 另一方面，此次事件将为世界民族主义运动首开单方面独立的恶例。由于受到美国政府和欧盟的支持，我们就很难保证多米诺骨牌效应的不再发生，甚至酿成今后更为严重的地区危机。</p>
 
 		
 		
@@ -757,12 +165,12 @@ int main(int argc, char *argv[])
   
 
 
-<time datetime="2008-04-05T14:49:07+08:00" pubdate data-updated="true">Apr 5<sup>th</sup>, 2008</time></div>
+<time datetime="2008-02-18T02:38:38+08:00" pubdate data-updated="true">Feb 18<sup>th</sup>, 2008</time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+	<a class='category' href='/blog/categories/guan-dian/'>观点</a>
 
 </div>
 
@@ -774,169 +182,87 @@ int main(int argc, char *argv[])
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2008/04/05/visual-c%25e5%258a%25a8%25e6%2580%2581%25e9%2593%25be%25e6%258e%25a5%25e5%25ba%2593%25e7%25bc%2596%25e7%25a8%258b%25ef%25bc%2588%25e4%25b8%2580%25ef%25bc%2589/">
+		<a href="/blog/2008/02/16/seven-little-girls-sitting-in-the-back-seat/">
 		
-			Visual C++动态链接库编程（一）</a>
+			Seven Little Girls Sitting in the Back Seat</a>
 	</h2>
 	<div class="entry-content">
-		<p> 最近在网上闲逛，一是为了巩固和拓展一下对C/C++的研习，二是大致感受下windows编程原理。当然最近被汇编也搞的比较晕乎，找机会出来透点新鲜空气。</p>
+		<p>有趣的歌曲，1959。</p>
 
-<p> 要说我接触VC的时间很短，仅凭一两个工程实例和一本本科阶段教材恐怕也是微不足道。下面这篇文章就是对书本之外相当不错的补充，当然此类书籍绝不缺少字纸版本。只不过，文章作者宋宝华老师所展现给我们的，却不比任何动辄数百页的书商们逊色。</p>
-
-<p> 　　<strong>1.概论</strong></p>
-
-<p>　　先来阐述一下DLL(Dynamic Linkable Library)的概念，你可以简单的把DLL看成一种仓库，它提供给你一些可以直接拿来用的变量、函数或类。在仓库的发展史上经历了“无库－静态链接库－动态链接库”的时代。静态链接库与动态链接库都是共享代码的方式，如果采用静态链接库，则无论你愿不愿意，lib中的指令都被直接包含在最终生成的EXE文件中了。但是若使用DLL，该DLL不必被包含在最终EXE文件中，EXE文件执行时可以“动态”地引用和卸载这个与EXE独立的DLL文件。静态链接库和动态链接库的另外一个区别在于静态链接库中不能再包含其他的动态链接库或者静态库，而在动态链接库中还可以再包含其他的动态或静态链接库。</p>
-
-<p>  对动态链接库，我们还需建立如下概念：</p>
-
-<p>　　（1）DLL 的编制与具体的编程语言及编译器无关</p>
-
-<p>　　只要遵循约定的DLL接口规范和调用方式，用各种语言编写的DLL都可以相互调用。譬如Windows提供的系统DLL（其中包括了Windows的API），在任何开发环境中都能被调用，不在乎其是Visual Basic、Visual C++还是Delphi。</p>
-
-<p>　　（2）动态链接库随处可见</p>
-
-<p>　　我们在Windows目录下的system32文件夹中会看到kernel32.dll、user32.dll和gdi32.dll，windows的大多数API都包含在这些DLL中。kernel32.dll中的函数主要处理内存管理和进程调度；user32.dll中的函数主要控制用户界面；gdi32.dll中的函数则负责图形方面的操作。</p>
-
-<p>　　一般的<a target="_blank" href="http://dev.yesky.com/" class="bluekey">程序</a>员都用过类似MessageBox的函数，其实它就包含在user32.dll这个动态链接库中。由此可见DLL对我们来说其实并不陌生。</p>
-
-<p>　　(3)VC动态链接库的分类</p>
-
-<p>　　Visual C++支持三种DLL，它们分别是Non-MFC DLL（非MFC动态库）、MFC Regular DLL（MFC规则DLL）、MFC Extension DLL（MFC扩展DLL）。</p>
-
-<p>　　非MFC动态库不采用MFC类库结构，其导出函数为标准的C接口，能被非MFC或MFC编写的应用程序所调用；MFC规则DLL 包含一个继承自CWinApp的类，但其无消息循环；MFC扩展DLL采用MFC的动态链接版本创建，它只能被用MFC类库所编写的应用程序所调用。</p>
-
-<p>　　由于本文篇幅较长，内容较多，势必需要先对阅读本文的有关事项进行说明，下面以问答形式给出。</p>
-
-<p>　　问：本文主要讲解什么内容？</p>
-
-<p>　　答：本文详细介绍了DLL编程的方方面面，努力学完本文应可以对DLL有较全面的掌握，并能编写大多数DLL程序。</p>
-
-<p>　　问：如何看本文？</p>
-
-<p>　　答：本文每一个主题的讲解都附带了源代码例程，可以随文下载（每个工程都经WINRAR压缩）。所有这些例程都由笔者编写并在VC++6.0中调试通过。</p>
-
-<p>　　当然看懂本文不是读者的最终目的，读者应亲自动手实践才能真正掌握DLL的奥妙。</p>
-
-<p>　　问：学习本文需要什么样的基础知识？</p>
-
-<p>　　答：如果你掌握了C，并大致掌握了C++，了解一点MFC的知识，就可以轻松地看懂本文。</p>
-
-<p>　<strong>　2.静态链接库</strong></p>
-
-<p>　　对静态链接库的讲解不是本文的重点，但是在具体讲解DLL之前，通过一个静态链接库的例子可以快速地帮助我们建立“库”的概念。</p>
-
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/6v58bw881n81.jpg" />
-图1 建立一个静态链接库</td>
-</tr>
-</table>
+<object classid="CLSID:6BF52A52-394A-11d3-B153-00C04F79FAA6" width="260" height="64" id="player">
+<param name="URL" value="/blog/wp-content/uploads/2008/02/Seven Little Girls Sitting in the Back Seat.mp3"></param>
+<param name="rate" value="1"></param>
+<param name="balance" value="0"></param>
+<param name="currentPosition" value="0"></param>
+<param name="defaultFrame"></param>
+<param name="playCount" value="1"></param>
+<param name="autoStart" value="0"></param>
+<param name="currentMarker" value="0"></param>
+<param name="invokeURLs" value="-1"></param>
+<param name="baseURL"></param>
+<param name="volume" value="50"></param>
+<param name="mute" value="0"></param>
+<param name="uiMode" value="full"></param>
+<param name="stretchToFit" value="0"></param>
+<param name="windowlessVideo" value="0"></param>
+<param name="enabled" value="-1"></param>
+<param name="enableContextMenu" value="-1"></param>
+<param name="fullScreen" value="0"></param>
+<param name="SAMIStyle"></param>
+<param name="SAMILang"></param>
+<param name="SAMIFilename"></param>
+<param name="captioningID"></param>
+<param name="enableErrorDialogs" value="0"></param>
+<param name="_cx" value="6879"></param>
+<param name="_cy" value="1693"></param></object>
 
 
-<p>　　如图1，在VC++6.0中new一个名称为libTest的static library工程（单击此处下载本工程），并新建lib.h和lib.cpp两个文件，lib.h和lib.cpp的源代码如下：</p>
+<p></p>
+<strong>Seven Little Girls Sitting in the Back Seat</strong></p>
 
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>//文件：lib.h
+<p>(Dee doody doom doom)
+(Dee doody doom doom)
+(Dee doody doom doom, DOOM)</p>
 
-#ifndef LIB_H
-#define LIB_H
-extern &#8220;C&#8221; int add(int x,int y);　　　//声明为C编译、连接方式的外部函数
-#endif
+<p><font size="2" color="#444433" face="Verdana">Seven little girls sittin&#8217; in the back seat
+Huggin and a&#8217;kissin with Fred
+I said, why don&rsquo;t one of you come up and sit beside me
+And this is what the seven girls said</font><font size="2" color="#444433" face="Verdana">(All together now, one, two, three)
+(Keep you mind on your drivin&#8217;)
+(Keep you hands on the wheel)
+(Keep your snoopy eyes on the road ahead)
+(We&rsquo;re havin&#8217; fun sittin&#8217; in the back seat)
+(Kissin&#8217; and a&#8217;huggin with Fred)
+(Dee doody doom doom, dee doody doom doom)
+(Dee doody doom doom, DOOM)</font><font size="2" color="#444433" face="Verdana">Drove through the town, drove through the country
+Showed &lsquo;em how a motor could go
+I said, how do you like my triple carburetor
+And one of them whispered low</font><font size="2" color="#444433" face="Verdana">(All together now, one, two, three)
+(Keep you mind on your drivin&rsquo;)
+(Keep you hands on the wheel)
+(Keep your snoopy eyes on the road ahead)
+(We&rsquo;re havin&#8217; fun sittin&#8217; in the back seat)
+(Kissin&#8217; and a&#8217;huggin with Fred)
+(Dee doody doom doom, dee doody doom doom)
+(Dee doody doom doom, DOOM)</font><font size="2" color="#444433" face="Verdana">Seven little girls smoochin&#8217; in the back seat
+Every one in love with Fred
+I said &ldquo;you don&rsquo;t need me, I&rsquo;ll get off at my house&rdquo;
+And this is what the seven girls said</font><font size="2" color="#444433" face="Verdana">(All together now, one, two, three)
+(Keep you mind on your drivin&#8217;)
+(Keep you hands on the wheel)
+(Keep your snoopy eyes on the road ahead)
+(We&rsquo;re havin&#8217; fun sittin&#8217; in the back seat)
+(Kissin&#8217; and a&#8217;huggin with Fred)</font><font size="2" color="#444433" face="Verdana"> </font><font size="2" color="#444433" face="Verdana">All of them in love with Fred
+(Dee doody doom doom)
+Kissin&#8217; and a&#8217;huggin with Fred
+(Dee doody doom doom)
+Wish that I could be like Fred
+(DOOM)</font></p>
 
-//文件：lib.cpp
-
-#include &#8220;lib.h&#8221;
-int add(int x,int y)
-{
-　return x + y;
-}</td>
-</tr>
-</table>
-
-
-<p>　　编译这个工程就得到了一个.lib文件，这个文件就是一个函数库，它提供了add的功能。将头文件和.lib文件提交给用户后，用户就可以直接使用其中的add函数了。</p>
-
-<p>　　标准Turbo C2.0中的C库函数（我们用来的scanf、printf、memcpy、strcpy等）就来自这种静态库。</p>
-
-<p>　　下面来看看怎么使用这个库，在libTest工程所在的工作区内new一个libCall工程。libCall工程仅包含一个main.cpp文件，它演示了静态链接库的调用方法，其源代码如下：</p>
-
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#include &lt;stdio.h&gt;
-#include &#8220;..\lib.h&#8221;
-#pragma comment( lib, &#8220;..&#92;debug&#92;libTest.lib&#8221; ) 　//指定与静态库一起连接
-
-int main(int argc, char* argv[])
-{
-　printf( &#8220;2 + 3 = %d&#8221;, add( 2, 3 ) );
-}</td>
-</tr>
-</table>
-
-
-<p>　　静态链接库的调用就是这么简单，或许我们每天都在用，可是我们没有明白这个概念。代码中#pragma comment( lib , &ldquo;..\debug\libTest.lib&rdquo; )的意思是指本文件生成的.obj文件应与libTest.lib一起连接。如果不用#pragma comment指定，则可以直接在VC++中设置，如图2，依次选择tools、options、directories、library files菜单或选项，填入库文件路径。图2中加红圈的部分为我们添加的libTest.lib文件的路径。</p>
-
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/rcw6s5cz52wb.jpg" />
-图2 在VC中设置库文件路径</td>
-</tr>
-</table>
-
-
-<p>　　这个静态链接库的例子至少让我们明白了库函数是怎么回事，它们是哪来的。我们现在有下列模糊认识了：</p>
-
-<p>　　（1）库不是个怪物，编写库的程序和编写一般的程序区别不大，只是库不能单独执行；</p>
-
-<p>　　（2）库提供一些可以给别的程序调用的东东，别的程序要调用它必须以某种方式指明它要调用之。</p>
-
-<p>　　以上从静态链接库分析而得到的对库的懵懂概念可以直接引申到动态链接库中，动态链接库与静态链接库在编写和调用上的不同体现在库的外部接口定义及调用方式略有差异。</p>
-
-<p><strong>3.库的调试与查看</p>
-
-<p></strong>　　在具体进入各类DLL的详细阐述之前，有必要对库文件的调试与查看方法进行一下介绍，因为从下一节开始我们将面对大量的例子工程。</p>
-
-<p>　　由于库文件不能单独执行，因而在按下F5（开始debug模式执行）或CTRL+F5（运行）执行时，其弹出如图3所示的对话框，要求用户输入可执行文件的路径来启动库函数的执行。这个时候我们输入要调用该库的EXE文件的路径就可以对库进行调试了，其调试技巧与一般应用工程的调试一样。</p>
-
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/xupwa5a7t93h.jpg" />
-图3 库的调试与“运行”</td>
-</tr>
-</table>
-
-
-<p>　　通常有比上述做法更好的调试途径，那就是将库工程和应用工程（调用库的工程）放置在同一VC工作区，只对应用工程进行调试，在应用工程调用库中函数的语句处设置断点，执行后按下F11，这样就单步进入了库中的函数。第2节中的libTest和libCall工程就放在了同一工作区，其工程结构如图4所示。</p>
-
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/lv690b4m255y.jpg" />
-图4　把库工程和调用库的工程放入同一工作区进行调试</td>
-</tr>
-</table>
-
-
-<p>　　上述调试方法对静态链接库和动态链接库而言是一致的。所以本文提供下载的所有源代码中都包含了库工程和调用库的工程，这二者都被包含在一个工作区内，这是笔者提供这种打包下载的用意所在。</p>
-
-<p>　　动态链接库中的导出接口可以使用Visual C++的Depends工具进行查看，让我们用Depends打开系统目录中的user32.dll，看到了吧？红圈内的就是几个版本的MessageBox了！原来它真的在这里啊，原来它就在这里啊！</p>
-
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/4q1kv1nrlhov.jpg" />
-图5　用Depends查看DLL</td>
-</tr>
-</table>
-
-
-<p>　　当然Depends工具也可以显示DLL的层次结构，若用它打开一个可执行文件则可以看出这个可执行文件调用了哪些DLL。</p>
-
-<p>　　好，让我们正式进入动态链接库的世界，先来看看最一般的DLL，即非MFC DLL。</p>
+<p><font size="2" color="#444433" face="Verdana"><strong>Bill Evans</strong>(1929-1980)</font><font size="2" color="#444433" face="Verdana">Bill Evans爵士乐上最优秀的钢琴家之一，与Keith Jarrett一起被誉为70-80年代字优秀的钢琴家。</font><font size="2" color="#444433" face="Verdana">活跃年份: 50s 60s 70s 80s
+主要演奏乐器：钢琴
+演出相关工作：指挥
+主要音乐风格：后波普爵士乐、冷爵士乐</font><font size="2" color="#444433" face="Verdana"><script src="../../song_in_bot.js" language="javascript"></script> </font></p>
 
 		
 		
@@ -956,12 +282,12 @@ int main(int argc, char* argv[])
   
 
 
-<time datetime="2008-04-05T14:44:45+08:00" pubdate data-updated="true">Apr 5<sup>th</sup>, 2008</time></div>
+<time datetime="2008-02-16T13:12:53+08:00" pubdate data-updated="true">Feb 16<sup>th</sup>, 2008</time></div>
 	
 
 <div class="tags">
 
-	<a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
 
 </div>
 
@@ -973,237 +299,14 @@ int main(int argc, char* argv[])
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2008/03/31/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e4%25b8%2589/">
+		<a href="/blog/2008/02/14/%25e5%25bc%2580%25e5%25bc%25a0%25e3%2580%2582%25e3%2580%2582%25e3%2580%2582/">
 		
-			C++学习笔记(重温计划之三)</a>
+			开张。。。</a>
 	</h2>
 	<div class="entry-content">
-		<p>3、数据类型(上)</p>
+		<p>以前的icp备案在信产部网页上查询不到了，这次重新注册一个。</p>
 
-<p> c++中的数据类型,主要分为内部数据类型和外部数据类型两大类。其中，内部数据类型主要有：</p>
-
-<p>  1）整数类型int;</p>
-
-<p>   计算机内部是以二进制补码的形式表示整数的。从十进制转换的具体方法为除二取余、高位补零、再取反。整形数的表示范围如下:</p>
-
-<table align="center" style="border-collapse: collapse">
-<tr>
-<td rowSpan="2" width="122" vAlign="top" style="padding-right: 5.4pt; padding-left: 5.4pt; padding-bottom: 0pt; width: 91.6pt; padding-top: 0pt; border: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">类型</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td rowSpan="2" width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">字节数</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td rowSpan="2" width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">位数</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td colSpan="2" width="184" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 138.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">表示范围</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td rowSpan="2" width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">解释</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">下限</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">上限</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">char</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">1</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">8</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-128</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">128</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^7~(2^7-1)</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">signed char</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">1</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">8</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-128</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">128</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^7~(2^7-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">un</span><span style="font-size: 10.5pt; font-family: '宋体'">signed char</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">1</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">8</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">255</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0~(2^8-1)</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">short int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">16</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-32768</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32767</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^15~(2^15-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">signed short int</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">16</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-32768</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32767</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^15~(2^15-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">un</span><span style="font-size: 10.5pt; font-family: '宋体'">signed short int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">16</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">65535</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0~(2^16-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2147483648</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2147483647</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^31~(2^31-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">signed int</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2147483648</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2147483647</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^31~(2^31-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">un</span><span style="font-size: 10.5pt; font-family: '宋体'">signed int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4294967295</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0~(2^32-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">long int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2147483648</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2147483647</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^31~(2^31-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">signed long int</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2147483648</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2147483647</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^31~(2^31-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">unsigned long int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4294967295</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0~(2^32-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
-</tr>
-</table>
-
-
-<p> 不过，随着64位cpu的应用，上表内容将有进一步扩充。同时在进位计数制中，以0起始的数字表示八进制，以0x起始表示十六进制。在基本取余运算%中，余数的符号决定于被除数的符号。<!--EndFragment--></p>
-
-<p>  2）字符类型char;</p>
-
-<p>   ASCII码有128个字符，字符型需加&#8217; &lsquo;。例如ASCII码为65的字符&#8217;A&#8217;。下面是除此之外的转义字符。</p>
-
-<table align="center" style="border-collapse: collapse">
-<tr>
-<td width="94" vAlign="top" style="padding-right: 5.4pt; padding-left: 5.4pt; padding-bottom: 0pt; width: 71pt; padding-top: 0pt; border: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">字符形式</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">整数值</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">代表符号</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">字符形式</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">整数值</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">代表符号</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\a</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x07</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">响铃bell</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">&#34;</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x22</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">双引号</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\b</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x08</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">退格backspace</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">&#39;</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x27</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">单引号</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\t</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x09</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">水平制表符HT</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\?</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x3F</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">问号</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\n</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x0A</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">换行return</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">&#92;</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x5C</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">反斜杠字符</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\v</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x0B</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">垂直制表符VT</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\ddd</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0ddd</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">1~3<font face="宋体">位八进制数</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-<tr>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\r</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x0C</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">回车</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\xhh</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0xhh</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">1~2<font face="宋体">位十六进制数</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
-</tr>
-</table>
-
-
-<!--EndFragment-->
-
-
-<!--EndFragment-->
-
-
-<p>  3）枚举类型enum;</p>
-
-<p>   枚举型是对整数区间的自定义类型，通常用于整数常量。例如：</p>
-
-<p>   enum Week{mon,tue,wed,thu.fri,sat,sun};</p>
-
-<p>   默认第一个枚举符mon=0,以此类推。或者：</p>
-
-<p>   enum Color{Red=5,Green,Yellow,Blue=20,Orange};</p>
-
-<p>   由上可知，Green=6&hellip;Orange=21;枚举的好处是，在代替整数常量的过程中，枚举不需要初始化常量而直接使用，提高编写效率。</p>
-
-<p>  4）布尔类型bool;</p>
-
-<p>   布尔类型实际的存在意义为:</p>
-
-<p>   enum bool{false,true};</p>
-
-<p>   因此可以进行0或1的逻辑运算。例如：</p>
-
-<p>   bool a = 3;  //a为true;</p>
-
-<p>   在i/o流中，cout&lt;&lt;boolalpha&lt;&lt;a&lt;&lt;endl;//输出结果为false，如果不做boolalpha设置则输出为0;</p>
-
-<p>  5）浮点型;</p>
-
-<p>   浮点型包含单精度浮点float、双精度浮点double以及长双精度浮点long double。其中float、double、long double的十进制有效位数分别为7位、15位和19位。</p>
-
-<p>  外部数据类型等变异类型：</p>
-
-<p>  1）整形数组int[];</p>
-
-<p>  2）浮点应用double&amp;;</p>
-
-<p>  3）字符指针char*;</p>
+<p>陕ICP备08000873</p>
 
 		
 		
@@ -1223,515 +326,7 @@ int main(int argc, char* argv[])
   
 
 
-<time datetime="2008-03-31T11:05:59+08:00" pubdate data-updated="true">Mar 31<sup>st</sup>, 2008</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/03/30/%25e7%25ae%2580%25e5%258d%2595%25e7%259a%2584winapi%25e5%25ae%259e%25e7%258e%25b0/">
-		
-			简单的winapi实现</a>
-	</h2>
-	<div class="entry-content">
-		<p>　第一次接触windows编程，初步领略了下api的复杂程度。修改了一个基本的窗口显示程序，并加入了md5算法模块。较费时的地方在md5和win函数本身的结合部分，包括格式转换和部分函数的参数限制。现在的想法是先了解下mfc，以便进行下一步的设计实现。</p>
-
-<p>　<a href="http://www.hanyi.name/blog/wp-content/uploads/2008/03/md5.jpg" title="md5.jpg"><img src="http://www.hanyi.name/blog/wp-content/uploads/2008/03/md5.thumbnail.jpg" alt="md5.jpg" /></a></p>
-
-<p> scode download:<a href="http://www.hanyi.name/blog/wp-content/uploads/2008/03/md5.rar" title="md5">md5</a></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-30T13:13:16+08:00" pubdate data-updated="true">Mar 30<sup>th</sup>, 2008</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/xiang-mu/'>项目</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/03/30/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e4%25ba%258c/">
-		
-			C++学习笔记(重温计划之二)</a>
-	</h2>
-	<div class="entry-content">
-		<p>2、基本编程语句</p>
-
-<p> 沿用c语言的方法,c++包含了说明语句、赋值语句、表达式语句、过程控制语句。其中，过程控制语句又分为条件语句、循环语句和转移语句。</p>
-
-<p> 2.1 说明语句(略)</p>
-
-<p> 2.2 条件语句</p>
-
-<p>  1）if语句: if(条件) 语句 or if(条件) 语句1 else 语句2；</p>
-
-<p>  2）条件表达式:（条件）?表达式1:表达式2</p>
-
-<p>  3）switch语句:switch(表达式){</p>
-
-<p>                                                          case 常量表达式1:语句1;break;</p>
-
-<p>                                                          case 常量表达式1:语句2;break;</p>
-
-<p>                                                          // &hellip;</p>
-
-<p>                                                          case 常量表达式n:语句n;break;</p>
-
-<p>                                                          default:                   语句n+1;break;</p>
-
-<p>                                                       }</p>
-
-<p> 2.3循环语句</p>
-
-<p>  1)for循环结构:for(i=0;i&lt;n;i++){ 语句};</p>
-
-<p>  2)while循环结构:while(条件){语句};</p>
-
-<p>  3)do-while循环结构:do{语句}while(条件);</p>
-
-<p> 2.4输入输出语句</p>
-
-<p>  1)标准I\O流:cout&lt;&lt;类型&lt;&lt;内容&lt;&lt;格式&lt;&lt;(条件判断);</p>
-
-<p>  2)设置参数 setw(int)宽度、setfill(char)填充字符、setprecision(int)设置精度和有效位数;</p>
-
-<p>  3)文件流:ifstream fin(filename,openmode=ios::in);</p>
-
-<p>                  ofstream fout(filename,openmode=ios::out);</p>
-
-<p> 2.5转移语句</p>
-
-<p>  1)break语句:跳出本级循环；</p>
-
-<p>  2)continue语句:结束本次循环，直接进入下次循环。</p>
-
-<p>  3)goto语句:略。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-30T12:53:46+08:00" pubdate data-updated="true">Mar 30<sup>th</sup>, 2008</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/03/29/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e4%25b8%2580/">
-		
-			C++学习笔记(重温计划之一)</a>
-	</h2>
-	<div class="entry-content">
-		<p>1、C++新特点</p>
-
-<p> 这里所说的新特点,是相较于C语言而言的.本笔记旨在加强记忆和理解,本身内容并未超出教材的范围.我们仍将沿用《面向对象程序设计c++版》（刘振安，机械工业出版）和《c++程序设计教程第二版》（钱能，清华大学出版社）的基本思路，开始都是最基本的东西。</p>
-
-<p> C++与C语言的关系，向来是众说纷纭的。但在我结束首轮学习之后发现，C++与C的关系，仅表明C++包含了C，C++完全可以当作一门新语言来学习，有C基础的人也未必比没有基础而开始学习C++的占多大优势。以下是C++一则例示:</p>
-
-<p>/<em>功能:将结构的两个域值相加，乘以2再减去50</em>/</p>
-
-<h1>include&lt;iostream&gt;</h1>
-
-<p>//&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;hanyi.name 1.1&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</p>
-
-<p>using namespace std;</p>
-
-<p>int result(int,int);</p>
-
-<p>const int k = 2;</p>
-
-<p>struct Point{
- 
- int x,y;</p>
-
-<p>};</p>
-
-<p>int main(){</p>
-
-<p> int z(0),b(50);
- 
- Point a;
- 
- cout  &lt;&lt;&ldquo;输入两个整数（以空格区分）:&rdquo;;</p>
-
-<p>    cin  &gt;&gt;a.x&gt;&gt;a.y;</p>
-
-<p>    z = (a.x + a.y)*k;</p>
-
-<p>    z = result(z,b);</p>
-
-<p>    cout  &lt;&lt;&ldquo;计算结果如下:&rdquo;&lt;&lt;endl;</p>
-
-<p>    cout  &lt;&lt;&ldquo;((&rdquo;&lt;&lt;a.x&lt;&lt;&ldquo;+&rdquo;&lt;&lt;a.y&lt;&lt;&ldquo;)*&rdquo;&lt;&lt;k&lt;&lt;&ldquo;)&ndash;&rdquo;&lt;&lt;b&lt;&lt;&ldquo;=&rdquo;&lt;&lt;z&lt;&lt;endl;</p>
-
-<p>    return 0;</p>
-
-<p>}</p>
-
-<p>int result(int a,int b){</p>
-
-<p> a = a &ndash; b;
- 
- return a;</p>
-
-<p>}</p>
-
-<p> 下面对以上内容作一说明:</p>
-
-<p> 1、c++源程序以.cpp作为文件扩展名，其中main()主函数只能有一个。由于main()是过程化语言的标志，c++也被称为混合型语言。</p>
-
-<p> 2、注释符号基本以/<em> </em>/和左起开头//为主。</p>
-
-<p> 3、引入“流”的概念，例如cin和cout分别是c++标准输入输出库iostream的一员，这类库总称为STL(standard library标准函数库)。endl类似于转义字符\n，功能均为换行。</p>
-
-<p> 4、头文件中iostream.h的.h可以省略，但必须新标准类库的使用头文件载入的方法:using namespace std;</p>
-
-<p> 5、对象定义和初始化，新引入了int z(0);定义的方法，此方法功能与int z = 0相同。</p>
-
-<p> 6、函数必须有类型声明，例如int main()，且必须有返回值return。当然void类型也是被允许的，但不和return同时使用。</p>
-
-<p> 7、const修饰符。</p>
-
-<p>       在c语言中，我们使用宏定义#define定义常量，这里推荐使用const。以下文章摘自csdn: </p>
-
-<p>====================================================================================     </p>
-
-<h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于基本声明</font></span></h3>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">1.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">const int r=100; //</font></span></font><font size="3"><span style="font-family: 宋体">标准</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">变量声明加初始化，因为默认内部连接所以必须被初始化，其作用域为此文件，编译器经过类型检查后直接用</span><span lang="EN-US"><font face="Times New Roman">100</font></span><span style="font-family: 宋体">在编译时替换</span></font></p>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">2.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">extend const int r=100; //</font></span></font><font size="3"><span style="font-family: 宋体">将</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">改为外部连接，作用于扩大至全局，编译时会分配内存，并且可以不进行初始化，仅仅作为声明，编译器认为在程序其他地方进行了定义</span></font></p>
-
-
-<p><span lang="EN-US"><font face="Times New Roman"><font size="3">3.</font><span style="font: 7pt 'Times New Roman'">       </span></font></span><font size="3"><span lang="EN-US"><font face="Times New Roman">const int r[ ]={1,2,3,4};</font></span></font><font size="3"><span lang="EN-US"><font face="Times New Roman">struct S {int a,b;};
-const S s[ ]={(1,2),(3.4)}; //<span style="font-family: 宋体">以上两种都是常量集合，编译器会为其分配内存，所以不能在编译期间使用其中的值，例如：</span><span lang="EN-US"><font face="Times New Roman">int temp[r[2]];</font></span><span style="font-family: 宋体">这样的编译器会报告不能找到常量表达式</span></font></span></font></p>
-
-<h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于指针</font></span></h3>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">1.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">const int *r=&amp;x; //</font></span></font><font size="3"><span style="font-family: 宋体">声明</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">为一个指向常量的</span><span lang="EN-US"><font face="Times New Roman">x</font></span><span style="font-family: 宋体">的指针，</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">指向的对象不能被修改，但他可以指向任何地址的常量</span></font></p>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">2.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">int const *r=&amp;x; //</font></span></font><font size="3"><span style="font-family: 宋体">与用法</span><span lang="EN-US"><font face="Times New Roman">1</font></span><span style="font-family: 宋体">完全等价，没有任何区别</span></font></p>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">3.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">int * const r=&amp;x; //</font></span></font><font size="3"><span style="font-family: 宋体">声明</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">为一个常量指针，他指向</span><span lang="EN-US"><font face="Times New Roman">x</font></span><span style="font-family: 宋体">，</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">这个指针的指向不能被修改，但他指向的地址的内容可以修改</span></font></p>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">4.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">const int * const r=&amp;x; //</font></span></font><font size="3"><span style="font-family: 宋体">综合</span><span lang="EN-US"><font face="Times New Roman">1</font></span><span style="font-family: 宋体">、</span><span lang="EN-US"><font face="Times New Roman">3</font></span><span style="font-family: 宋体">用法，</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">是一个指向常量的常量型指针</span></font></p>
-
-
-
-
-<h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于类型检查</font></span></h3>
-
-
-<p><p style="margin: 0cm 0cm 0pt" class="MsoNormal"><font size="3"><span style="font-family: 宋体">可以把一个非</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象赋给一个指向</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">的指针，因为有时候我们不想从这个指针来修改其对象的值；但是不可以把一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象赋值给一个非</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">指针，因为这样可能会通过这个指针改变指向对象的值，但也存在使这种操作通过的合法化写法，使用类型强制转换可以通过指针改变</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">const int r=100;
-int * ptr = const_cast&lt;int<em>&gt;(&amp;r);<span>  </span>//C++</font></span><font size="3"><span style="font-family: 宋体">标准，</span><span lang="EN-US"><font face="Times New Roman">C</font></span><span style="font-family: 宋体">语言使用：</span><span lang="EN-US"><font face="Times New Roman">int * ptr =(int</em>)&amp;r;</font></span></font>
-<h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于字符数组</font></span></h3>
-<p style="margin: 0cm 0cm 0pt" class="MsoNormal"><font size="3"><span style="font-family: 宋体">如</span><span lang="EN-US"><font face="Times New Roman">char * name = “china”; </font></span><span style="font-family: 宋体">这样的语句，在编译时是能够通过的，但是</span><span lang="EN-US"><font face="Times New Roman">”china”</font></span><span style="font-family: 宋体">是常量字符数组，任何想修改他的操作也能通过编译但会引起运行时错误，如果我们想修改字符数组的话就要使用</span><span lang="EN-US"><font face="Times New Roman">char name[ ] = “china”; </font></span><span style="font-family: 宋体">这种形式。</span></font></p></p>
-
-<p><h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于函数</font></span></h3>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">1.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">void Fuction1 ( const int r ); //</font></span></font><font size="3"><span style="font-family: 宋体">此处为参数传递</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">值，意义是变量初值不能被函数改变</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">2.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">const int Fuction1 (int); //</font></span></font><font size="3"><span style="font-family: 宋体">此处返回</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">值，意思指返回的原函数里的变量的初值不能被修改，但是函数按值返回的这个变量被制成副本，能不能被修改就没有了意义，它可以被赋给任何的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">或非</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">类型变量，完全不需要加上这个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">关键字。但这只对于内部类型而言（因为内部类型返回的肯定是一个值，而不会返回一个变量，不会作为左值使用），对于用户自定义类型，返回值是常量是非常重要的，见下面条款</span><span lang="EN-US"><font face="Times New Roman">3</font></span><span style="font-family: 宋体">。</span></font></p></p>
-
-<p><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">3.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">Class CX; //</font></span></font><span style="font-family: 宋体"><font size="3">内部有构造函数，声明如</font></span><font size="3"><span lang="EN-US"><font face="Times New Roman">CX(int r =0)
-CX<span>  </span>Fuction1 () { return CX(); }
-const CX Fuction2 () { return CX(); }
-</font></span><span style="font-family: 宋体">如有上面的自定义类</span><span lang="EN-US"><font face="Times New Roman">CX</font></span><span style="font-family: 宋体">，和函数</span><span lang="EN-US"><font face="Times New Roman">Fuction1()</font></span><span style="font-family: 宋体">和</span><span lang="EN-US"><font face="Times New Roman">Fuction2(),</font></span><span style="font-family: 宋体">我们进行如下操作时：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">Fuction1() = CX(1); //</font></span><span style="font-family: 宋体"><font size="3">没有问题，可以作为左值调用</font></span><span lang="EN-US">
-<font size="3" face="Times New Roman">Fuction2() = CX(1); //</font></span><font size="3"><span style="font-family: 宋体">编译错误，</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">返回值禁止作为左值调用。因为左值把返回值作为变量会修改其返回值，</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">声明禁止这种修改。</span></font></p>
-
-<p><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><span lang="EN-US"><font face="Times New Roman"><font size="3">4.</font><span style="font: 7pt 'Times New Roman'">       </span></font></span><font size="3"><span style="font-family: 宋体">函数中指针的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">传递和返回：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">int F1 (const char * pstr); //</font></span><font size="3"><span style="font-family: 宋体">作为传递的时候使用</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">修饰可以保证不会通过这个指针来修改传递参数的初值，这里在函数内部任何修改</span><span lang="EN-US"><font face="Times New Roman">*pstr</font></span><span style="font-family: 宋体">的企图都会引起编译错误。</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">const char * F2 (); //</font></span><font size="3"><span style="font-family: 宋体">意义是函数返回的指针指向的对象是一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象，它必须赋给一个同样是指向</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象的指针。</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">const char * const F3(); //</font></span><font size="3"><span style="font-family: 宋体">比上面多了一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">，这个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">的意义只是在他被用作左值时有效，它表明了这个指针除了指向</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象外，它本身也不能被修改，所以就不能当作左值来处理。</span></font></p>
-
-<p><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><span lang="EN-US"><font face="Times New Roman"><font size="3">5.</font><span style="font: 7pt 'Times New Roman'">       </span></font></span><font size="3"><span style="font-family: 宋体">函数中引用的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">传递：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">void F1 ( const X&amp; px); //</font></span><font size="3"><span style="font-family: 宋体">这样的一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">引用传递和最普通的函数按值传递的效果是一模一样的，他禁止对引用的对象的一切修改，唯一不同的是按值传递会先建立一个类对象的副本，然后传递过去，而它直接传递地址，所以这种传递比按值传递更有效。</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">**</font></span><font size="3"><span style="font-family: 宋体">另外只有引用的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">传递可以传递一个<strong>临时对象</strong>，因为临时对象都是</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">属性，且是不可见的，他短时间存在一个局部域中，所以不能使用指针，只有引用的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">传递能够捕捉到这个家伙。</span></font>
-<h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于类</font></span></h3>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><span lang="EN-US"><font face="Times New Roman"><font size="3">1.</font><span style="font: 7pt 'Times New Roman'">       </span></font></span><font size="3"><span style="font-family: 宋体">首先，对于</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">的成员变量，只能在构造函数里使用初始化成员列表来初始化，试图在构造函数体内进行初始化</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员变量会引起编译错误。初始化成员列表形如：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">X:: X ( int ir ): r(ir) {} //</font></span><font size="3"><span style="font-family: 宋体">假设</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">是类</span><span lang="EN-US"><font face="Times New Roman">X</font></span><span style="font-family: 宋体">的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员变量</span></font></p>
-
-<p><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">2.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">const</font></span></font><font size="3"><span style="font-family: 宋体">成员函数。提到这个概念首先要谈到</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象，正象内置类型能够定义</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象一样（</span><span lang="EN-US"><font face="Times New Roman">const int r=10;</font></span><span style="font-family: 宋体">），用户自定义类型也可以定义</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象</span><span lang="EN-US"><font face="Times New Roman">(const X px(10);)</font></span><span style="font-family: 宋体">，编译器要保证这个对象在其生命周期内不能够被改变。如果你定义了这样的一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象，那么对于这个对象的一切非</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数的调用，编译器为了保证对象的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">特性，都会禁止并在编译期间报错。所以如果你想让你的成员函数能够在</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象上进行操作的话，就要把这个函数声明为</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数。假如</span><span lang="EN-US"><font face="Times New Roman">f( )</font></span><span style="font-family: 宋体">是类中的成员函数的话，它的声明形如：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">int f( ) const; //const</font></span><font size="3"><span style="font-family: 宋体">放在函数的最后，编译器会对这个函数进行检查，在这个函数中的任何试图改变成员变量和调用非</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数的操作都被视为非法</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">**</font></span><font size="3"><span style="font-family: 宋体">类的构造和析构函数都不能是</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">函数。</span></font></p>
-
-<p><span lang="EN-US"><font face="Times New Roman"><font size="3">3.</font><span style="font: 7pt 'Times New Roman'">       </span></font></span><font size="3"><span style="font-family: 宋体">建立了一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数，但仍然想用这个函数改变对象内部的数据。这样的一个要求也会经常遇到，尤其是在一个苛刻的面试考官那里。首先我们要弄清楚考官的要求，因为有两种方法可以实现，如果这位考官要求不改变原来类的任何东西，只让你从当前这个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数入手，那么你只有使用前面提到的类型强制转换方法。实例如下：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">//</font></span><font size="3"><span style="font-family: 宋体">假如有一个叫做</span><span lang="EN-US"><font face="Times New Roman">X</font></span><span style="font-family: 宋体">的类，它有一个</span><span lang="EN-US"><font face="Times New Roman">int</font></span><span style="font-family: 宋体">成员变量</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">，我们需要通过一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数</span><span lang="EN-US"><font face="Times New Roman">f( )</font></span><span style="font-family: 宋体">来对这个</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">进行</span><span lang="EN-US"><font face="Times New Roman">++r</font></span><span style="font-family: 宋体">操作，代码如下</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">void X::f( ) const
-{<span>  </span>(const_cast&lt;X*&gt;(this)) &ndash;&gt; ++r; <span> </span>} //</font></span><font size="3"><span style="font-family: 宋体">通过</span><span lang="EN-US"><font face="Times New Roman">this</font></span><span style="font-family: 宋体">指针进行类型强制转换实现</span></font><span lang="EN-US"></span><span lang="EN-US"><font size="3"><span style="font-family: 宋体">另外一种方法就是使用关键字：</span><strong><span lang="EN-US"><font face="Times New Roman">mutable</font></span></strong><strong><span style="font-family: 宋体">。</span></strong><span style="font-family: 宋体">如果你的成员变量在定义时是这个样子的：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">mutable int r ;
-</font></span><font size="3"><span style="font-family: 宋体">那么它就告诉编译器这个成员变量可以通过</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数改变。编译器就不会再理会对他的检查了。</span></font></span><span lang="EN-US"><font size="3"><span style="font-family: 宋体">===========================================================================================================</span></font><font size="3" face="Georgia"><span style="font-family: 宋体"> </span></font></p>
-
-<p></span>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font><font size="3" face="Georgia"><span style="font-family: 宋体">8、变量对象命名以及初始化</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"> c++本身区别字母的大小写语言，以<em>开头的标识符一般为系统使用，应当尽量避免。同时宏定义标识符需用大写字母标</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">识。另外，名字的第1个字母不能是数字或运算符，也不能包含运算符。为标识符命名时可遵循如下规律:</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   1）使用能代表数据类型的前缀；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   2）名称与变量的作用尽量接近；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   3）如果名称由多个英文单词组成，每个英文单词首字母大写；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   4）在库函数中尽量不要使用以</em>开头的名字，以免与系统命名冲突；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   5）局部变量名称较短，尤其是循环控制变量；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   6）外部变量应使用较长的名字，并能与其代表的变量含义接近；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"> 9、程序的书写格式:</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   </span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   1)括号需紧跟在函数名的后面，但在for和while后面，应用一个空格和左括号隔开以增加可读性；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   2)数学运算符的左右两边各留一个空格，与表达式区别；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   3)在表示参数时括号后面留一个空格；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   4)在for、do&hellip;while、while中，应合理使用缩进、一对话括号和空行；</span></font></p></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-29T20:11:06+08:00" pubdate data-updated="true">Mar 29<sup>th</sup>, 2008</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/03/29/c%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592/">
-		
-			C++重温计划</a>
-	</h2>
-	<div class="entry-content">
-		<p>Dear Mr.Bjarne Stroustrup,</p>
-
-<p> 如果让您看到我至今对令嫒仍一知半解的状况，恐怕接下来的生产工作就很难继续进行下去了。因此，我也愿意拿出部分时间来弥补这一缺憾。相信这次我们能真正相互了解，提高今后衍生产品基因的质量。</p>
-
-<p> 再次感谢！</p>
-
-<p>                                                                                                                                          您真诚的</p>
-
-<p>                                                                                                                                               mp77</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-29T19:30:53+08:00" pubdate data-updated="true">Mar 29<sup>th</sup>, 2008</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/03/28/%25e8%25bf%259c%25e5%25be%2581%25e7%25bb%2593%25e6%259d%259f/">
-		
-			远征结束</a>
-	</h2>
-	<div class="entry-content">
-		<p><span id="postcontent0"> “你的梦境会改变吗？我的梦境从来都不会改变，我只有一个梦：数量超乎想象的燃烧军团士兵像深红色的地平线包围着我，战争在远处打响。”</span><span id="postcontent0"> </span></p>
-
-<p><span>                                                                                                                       ——  救赎者阿拉托尔</span><span id="postcontent0"><span> </span></span></p>
-
-<p><span><span> 远征军最高指挥官下令进军的那一刻，西线部队已在外域奋战了七个月。又过了同样的时间，我们终于可以说:远征结束了。</span></span><span id="postcontent0"><span> 然而，燃烧军团并没有因伊利丹·怒风在黑暗神庙的失败而怯步。恶魔领主—基尔加丹亲自坐镇太阳井之岛，指挥军团卷土重来。</span></span><span id="postcontent0"> </span><span id="postcontent0"><span> </span></span></p>
-
-<p><span><span> 通常我们尊重历史，是因为它本身的真实性和未来的不可预知。但是，当角色的扮演者们将不得不依据编剧的笔来被迫接受他自身的“命运”的时候，兴趣已经丧失了一半了。后来他们坚持，是因为对世界仍有的一丝留恋。当战友一个个远去，独自冷静想想，也只不过是一部游戏而已。</span></span><span id="postcontent0"><span> </span><span> </span></span></p>
-
-<p><span><span> 回首三载光阴，探险者生涯似乎该就此终结了。2005年4月26日2点40分，我们迎来了世界，但它并非起点。起点应当更早，终点也不会仅限于此。探险者应当试图去感受不同世界的风景，三年时间已有些长了，以至于彼此之间几乎留不下一点些许惦念。</span></span></p>
-
-<p><span><span></span></span><span id="postcontent0"><span><a href="http://www.hanyi.name/blog/wp-content/uploads/2008/03/5.JPG" title="1.JPG"><img src="http://www.hanyi.name/blog/wp-content/uploads/2008/03/5.JPG" alt="1.JPG" /></a></span></span></p>
-
-<p><span><span>druid 古殿小芋 雷霆之王 2005.4</span></span></p>
-
-<p><span><span></span></span><span id="postcontent0"><span><a href="http://www.hanyi.name/blog/wp-content/uploads/2008/03/4.JPG" title="1.JPG"><img src="http://www.hanyi.name/blog/wp-content/uploads/2008/03/4.JPG" alt="1.JPG" /></a></span></span></p>
-
-<p><span><span>warrior keroro 红龙军团 2006.6</span></span></p>
-
-<p><span><span></span></span><span id="postcontent0"><span><a href="http://www.hanyi.name/blog/wp-content/uploads/2008/03/1.JPG" title="1.JPG"><img src="http://www.hanyi.name/blog/wp-content/uploads/2008/03/1.JPG" alt="1.JPG" /></a></span></span></p>
-
-<p><span><span>druid 梦境之翼 古加尔-达文格尔-灰谷 2006.10</span></span></p>
-
-<p><span><span></span></span><span id="postcontent0"><span><a href="http://www.hanyi.name/blog/wp-content/uploads/2008/03/2.JPG" title="1.JPG"><img src="http://www.hanyi.name/blog/wp-content/uploads/2008/03/2.JPG" alt="1.JPG" /></a></span></span></p>
-
-<p><span><span>paladin 梦境之树 古加尔 2007.4</span></span></p>
-
-<p><span><span></span></span><span id="postcontent0"><span><a href="http://www.hanyi.name/blog/wp-content/uploads/2008/03/3.JPG" title="1.JPG"><img src="http://www.hanyi.name/blog/wp-content/uploads/2008/03/3.JPG" alt="1.JPG" /></a></span></span></p>
-
-<p><span><span>warlock 遗失的梦境 灰谷 2008.1</span></span></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-28T13:46:46+08:00" pubdate data-updated="true">Mar 28<sup>th</sup>, 2008</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/pcyou-xi/'>pc游戏</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/02/29/%25e6%259a%2582%25e7%25a6%25bb%25e4%25ba%2586%25e5%2587%25a0%25e5%25a4%25a9/">
-		
-			暂离了几天</a>
-	</h2>
-	<div class="entry-content">
-		<p>开学事多耽搁了一阵，blog近日恢复，修正了几个网站的bug，1280*1024下美观性增强了。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-02-29T19:07:05+08:00" pubdate data-updated="true">Feb 29<sup>th</sup>, 2008</time></div>
+<time datetime="2008-02-14T17:26:29+08:00" pubdate data-updated="true">Feb 14<sup>th</sup>, 2008</time></div>
 	
 
 <div class="tags">
@@ -1748,67 +343,40 @@ const CX Fuction2 () { return CX(); }
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2008/02/20/lolicon%25e5%25af%25b9%25e4%25b8%25ad%25e5%259b%25bd%25e7%25a4%25be%25e4%25bc%259a%25e7%259a%2584%25e7%258e%25b0%25e5%25ae%259e%25e6%2584%258f%25e4%25b9%2589%25e5%258f%258a%25e5%2585%25b6%25e6%259c%25aa%25e6%259d%25a5%25e5%25b1%2595%25e6%259c%259b/">
+		<a href="/blog/2008/02/13/%25e4%25b8%2580%25e5%2588%2599%25e6%2596%25b0%25e9%2597%25bb%25e7%259a%2584%25e8%25af%2584%25e8%25ae%25ba/">
 		
-			Lolicon对中国社会的现实意义及其未来展望</a>
+			一则新闻的评论</a>
 	</h2>
 	<div class="entry-content">
-		<p> “loli”(亦作“萝莉”)一词成为当前一段时期我国网络文化中的流行元素。据悉，近日登载在成都商报上的一篇文章—《涉黄文章被指系高考满分作文引发争议》，首次将loli文化通过纸媒形式进行了报道，并且经过多家新闻网站转载，逐渐在网民中引发了一系列讨论。文章还引用成都某高级中学一线教师的评论，并在当地教育界得到了广泛共鸣。以下是评论原文：</p>
+		<p>今天在网上看到这一消息:</p>
 
-<p> <em>现在网络文化对青少年的影响的确很大，但也不用将网络文化视为洪水猛兽，关键是疏通和引导。她认为应该提倡清新纯正的文风，但也不完全拒绝个性化和青春特征的表达。如果为了扮酷和追求时尚和颓废，而堆砌起网络元素，那纯粹就是垃圾，要摒弃。</em></p>
+<p><a href="http://chinese.wsj.com/gb/20080213/bch104818.asp?source=baidunews"><a href="http://chinese.wsj.com/gb/20080213/bch104818.asp?source=baidunews">http://chinese.wsj.com/gb/20080213/bch104818.asp?source=baidunews</a></a></p>
 
-<p> 如果单就所谓的“高考满分作文”来说，此言论自然是较为中肯的。相较于此而言，前段时间争议较大的“火星文”、备受色情信息困扰的某“流行休闲网游”此类，则可以称得上“垃圾”的代名词，大可以摒弃之。然而，在面对loli文化是否应该单纯归于网络，亦或者是为了扮酷或者追求时尚和颓废的问题上，我们还是需要再三考量的。</p>
+<p>此消息据本文发稿时，国内主流媒体尚未有反应。下面来谈谈我的看法:</p>
 
-<p> 成都商报这篇文章源起于天涯社区的一篇网友发帖，此帖经由众多大型论坛转载后进入了记者视野，并最终得以刊发。“行走在消逝中”本身为2007年浙江省高考作文题，在此不作讨论。</p>
+<p>谨就新闻内容来看，此君做法确实不能令人恭维。</p>
 
-<p> 在中国，loli文化源于动漫。国内动漫文化深受邻国日本的影响，而日本关于loli的解释起源于上世纪50年代小说家Vladimir Nabokov(1899-1977)的长篇小说《lolita》，事实上，现今对loli的描述已与50年前没有任何关系，而是完全由日本动漫发展而来的。</p>
+<p>但是，考虑到当前国际舆论环境，我们纵然比较气愤之，却也只能表示遗憾了。spielberg先生的影片我是看过部分的：《大白鲨》、《外星人》、《人工智能》等都有一定了解。给人印象较深的应该是《辛德勒的名单》，一部真实且沉重地记述了历史的影片。</p>
 
-<p> 人们普遍认为，loli主要是指年龄8-15岁左右，长相可爱柔弱，性格天真无邪、开朗活泼的小女孩。这一形象的首次亮相是在1995年，日本GAINAX公司制作的26话动画片《新世纪evangleion》（国内译《新世纪福音战士》），片中零号机驾驶者、第一适格者—绫波丽。尽管制作方并未刻意向大众推崇loli形象的角色，但明显，几代动漫迷们依然把绫波丽尊为心目中最重要的地位。为迎合广大动漫迷的口味，日本动漫界掀起了一场loli热潮，无数不同风格，但都内涵loli情结的角色横空出世，吸引了大批眼球。具有loli情结的人开始自称ロリコン（音译“lolicon”，亦作“萝莉控”）。</p>
+<p>曾几何时，艺术和文学与政治挂上了钩。其实依某些西方媒体所言，spielberg先生应该是一个不屈不挠的、“不为五斗米折腰”的中国传统“义士”的形象。那么先生恐怕要去查下宗谱，或许刚好和1600年前中国历史上的著名诗人陶潜同宗。然而，事实恐怕并非如此。</p>
 
-<p> 可以说，日本的loli文化从上世纪90年代就开始兴起了。而它传播到中国却是最近几年的事，这主要是由于当初社会普遍对日本动漫文化持有厌恶，近年网络的飞速发展使动漫得以凭借非主流的渠道与中国青少年见面。我起初认为，在过去时期一味封堵而不加引导，是当前人们尤其是青少年对一些消极的新鲜事物缺乏免疫力的重要原因。现在看来，一味封堵固然不对，如何引导确实是一大难题，但却不容回避。</p>
+<p>那么我们先来了解下所谓的达尔富尔问题：达尔富尔位于苏丹西部。非洲东北部的经济较发达的地区历来集中在尼罗河沿岸，达尔富尔恰好处于苏丹国内远离尼罗河的地区。除了远离大河流之外，苏丹东西部的经济差距过大其实和19世纪末至20世纪初的西方殖民者有关（当时在此殖民的西方国家主要是英国）。</p>
 
-<p> 日本人通常把痴迷动漫、电脑游戏的男性称为お宅/オタク（译为“御宅男”），后来，国人通过音译，以及其字面意思的理解把国内此类男性称为“宅男”（女性相应为“腐女”）。正是这些宅男腐女们，使得国内lolicon有了诞生的温床，成为当前loli文化的源头。</p>
+<p>苏丹虽属于阿拉伯国家，但达尔富尔地区居住着大量非阿拉伯的非洲人。过大的经济差距激化了本身就存在民族矛盾，再加上20世纪80年代出现了严重的饥荒，一些达尔富尔住民认为政府应当为此负责，并组建了武装力量要求独立。反政府武装在2003年初起发动了多次针对政府军的袭击，并且获得了多数胜利，日益强大起来。此后，当地牧民武装部队（主要由阿拉伯人组成）开始攻击反政府武装，迅速占据上风，外界认为其受到了苏丹政府的大力支持。两方交战持续至今，战争造成了大量的平民伤亡，其间国际社会进行了数次调解和斡旋，但效果不大。</p>
 
-<p> 如此一来，人们通常会按此将loli文化纳入“垃圾”的行列。此举看似缺乏理性，但少有能找出理由的人来，保守的人自然是一味地意淫其可能引发的社会危机，以至于自恃专家、招摇撞骗，而激进的人不免又要归罪于教育失败的借口，怨天尤人一番。那么，lolicon现象所蕴藏的现实意义又如何体现？</p>
+<p>西方势力近年开始介入达尔富尔问题。按照其官方的说法，是由于达尔富尔发生了严重的“人道主义危机”，美国政府称其为“种族灭绝”。而其民间一般认为，西欧国家在达尔富尔问题上作文章是为了“补偿”当年殖民主义者在非洲的残暴统治，由于美国在此地区并无历史问题，所以反应并没有所谓西欧“列强”那么“强烈”。</p>
 
-<p> 下面来看一则新闻：</p>
+<p>但是，我们并不能忽视一个主要因素—中国在苏丹问题上的角色。中国与苏丹官方进行石油合作已有多年历史，其合作规模也在近年逐步增大，这与当前中国经济高速发展所产生的能源需求是相适应的。深入地来看，由于蕴藏石油的波斯湾地区长期受到西方高压政策影响，因此中国只能在非洲找到石油合作伙伴。</p>
 
-<p><em>  据新华社电 日前出炉的《当代中国青年人口发展状况报告》显示，中国当代青年未婚比例越来越高。报告引起相关媒体纷纷关注</em><em>，称“中国光棍越来越多”。</em></p>
+<p>因此，西欧国家认为：苏丹政府把与中国之间的石油贸易利润主要用来发展军事力量，而中国政府并没有在达尔富尔问题发挥“积极的作用”。并要求中国对苏丹政府施压以解决该地区发生的“危机”。美国政府随后也在该问题上与其站在了同一立场，在联合国方面多次与苏丹政府交涉未果不得不延迟维和行动之后，美国甚至动议北约组织对该地区展开军事行动。</p>
 
-<p> <em>这项由中国青少年研究中心、中国人民大学人口与发展研究中心发布的报告，利用2005年中国1％人口抽样调查数据，分析了中国青年人口发展的基本状况和时代特征。 </em></p>
+<p>中国政府认为，首先达尔富尔问题是苏丹的内政，国际社会应维护苏丹的主权和领土完整，通过对话和平等协商推动达尔富尔问题的政治解决。</p>
 
-<p><em> 报告数据显示，1995年，中国15—29岁青年未婚人口比例为51．54％，15－35岁青年未婚人口比例为38．23％；2005年的相应数据则分别上升为65．89％、45．71％。青年未婚比例越来越高。</em></p>
+<p>那么，为何最近一段时期西方对中国在达尔富尔问题上立场的“担忧”越来越强烈？以至于拿即将举行的北京奥运会来大作文章？</p>
 
-<p><em> 中国人民大学法律社会学研究所所长周孝正接受记者采访时指出，性别比的连续失调超出正常，未婚青年增多已经构成了威胁国家可持续发展及社会和谐的一个弊病。</em></p>
+<p>“没有永远的朋友，只有永远的利益”，这是一段描述国与国之间关系的至理。由此可以看出，西方所希望在达尔富尔所扮演的救世主角色只不过是个笑话罢了。西方国家一向把中国看作是“极权国家”，并认为中国崛起对西方式的民主传播有很大的阻碍作用。其寄希望于中国发生“和平演变”，甚至希望中国经济发展停滞甚至倒退。然而中国经济近年来不断加速增长在西方引起了一定程度上的恐慌，这也就是其以不公平待遇对待中国的一个重要原因。</p>
 
-<p><em> </em>如果说性别比例失调是当前我国社会所面临的一个重大课题，那么lolicon们已经向我们提交了一张未来社会发展的蓝图。</p>
-
-<p> 有专家指出，适龄未婚男性增多，可能导致该部分男性降低择偶的年龄限制。此降低程度可能是2-3年，亦可能是5-7年甚至更长。尽管此话题可能引起争议，但却是必须面对的事实。据非权威统计，lolicon的主流年龄段在19-23周岁（~60%），其次是24-28周岁（~30%），我本人对此调查结果持怀疑态度，但可以预见lolicon主要是适婚男青年，或者是即将适婚的男青年。更有一种倾向，其年龄下限趋势可能将是17周岁左右，主要原因被认为是：</p>
-
-<p> 1、一般低于17周岁的青少年并不具备成人的思维能力，因而可能无法接近该问题的实质。这里仅仅是指loli文化所内涵的社会影响，无任何其他方面的贬低之意。</p>
-
-<p> 2、低于17周岁的青少年可能会心存表面上的loli情结，但由于其不符合年龄差距过大的条件，所以不能被认为是lolicon。尽管人们公认的loli年龄为8-15岁，但这基本上是以loli自身的心理年龄而定的。即使是最初的《lolita》一书也认为loli年龄应在12-15岁左右较为合适。</p>
-
-<p> 那么，loli文化就恰与当前我国社会存在的一种特殊现象相适应了。有报道指出，至少20年内，人口性别比例严重失调的现象仍然不会有太大改观。那么可以想见40年、50年后的社会状况呢？</p>
-
-<p> 尽管当前loli主要被指为青春期少女，但并不能排除其含义在今后发生演变的可能，我认为这恰好就是引导的一个方向。要说的是，由于中国传统文化限制很多，如何突破也是一个难题，这自然是社会学家应当去思考的问题。但是，如果我们成功地对lolicon进行适度宣传及正确导向，那么将有可能使性别比例失调的难题迎刃而解，甚至使人们重新审视传统文化与新锐理念的深度撞击所引发的一系列课题。</p>
-
-<p> 东坡曾诗曰：</p>
-
-<p align="center">十八新娘八十郎，</p>
-
-
-<p align="center">苍苍白发对红妆。</p>
-
-
-<p align="center">鸳鸯被里成双夜，</p>
-
-
-<p align="center">一树梨花压海棠。</p>
-
-
-<p align="left"> 今人当不必如此夸张，但理解下古人的浪漫情怀还是有些意义的。</p>
-
+<p>由此我们可以看出，尽管spielberg在内心“矛盾”了一年之后终于“辞职”，成为了所谓的“令人敬仰的人”。但其事实上也只不过是大国角力中一枚自我牺牲了的棋子而已。</p>
 
 		
 		
@@ -1828,12 +396,308 @@ const CX Fuction2 () { return CX(); }
   
 
 
-<time datetime="2008-02-20T16:46:50+08:00" pubdate data-updated="true">Feb 20<sup>th</sup>, 2008</time></div>
+<time datetime="2008-02-13T22:56:01+08:00" pubdate data-updated="true">Feb 13<sup>th</sup>, 2008</time></div>
 	
 
 <div class="tags">
 
 	<a class='category' href='/blog/categories/guan-dian/'>观点</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/02/13/%25e9%259b%25be/">
+		
+			雾</a>
+	</h2>
+	<div class="entry-content">
+		<p>假期闲来无聊，茶余饭后便和人聊起天来。请看下文:</p>
+
+<p>三巡过，路人甲忽曰:吾愚矣，曾有自曰XX者凭电来信，盼汝回复焉。</p>
+
+<p>吾悟而思之:料其时已早，无大意耳。仍曰:此事据此年之有余乎？</p>
+
+<p>甲抚额而答:然也。</p>
+
+<p>吾叹起，拂袖而去。</p>
+
+<p>后人以此行文，有诗为证:</p>
+
+<p>暮夜稀星月如舟,升平歌舞绕孤楼。</p>
+
+<p>一语道破寒依旧,朝出雾弥言尽收。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-02-13T19:21:33+08:00" pubdate data-updated="true">Feb 13<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/02/11/blog%25e6%2581%25a2%25e5%25a4%258d/">
+		
+			Blog恢复&#8230;</a>
+	</h2>
+	<div class="entry-content">
+		<p>空间还存在很多问题&hellip;比如说每天0:00准挂&hellip;需要第二天午后紧急抢救才能重获生命&hellip;</p>
+
+<p>由于新年假期恢复不很及时，不过总算是好了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-02-11T22:40:25+08:00" pubdate data-updated="true">Feb 11<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/zhan-dian-ri-zhi/'>站点日志</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/02/07/mp77cn%25e4%25bb%258d%25e5%25a4%2584%25e4%25ba%258e%25e9%259c%2587%25e8%258d%25a1%25e6%259c%259f/">
+		
+			hanyi.name仍处于震荡期</a>
+	</h2>
+	<div class="entry-content">
+		<p>昨晚解析再次出现问题&hellip;直到今天下午才解决。kf说是华众系统的bug暂时无法彻底解决，因而本blog短期内不对外开放&hellip;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-02-07T20:13:42+08:00" pubdate data-updated="true">Feb 7<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/zhan-dian-ri-zhi/'>站点日志</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/02/06/%25e6%2596%25b0%25e6%2598%25a5%25e5%25b0%2586%25e8%2587%25b3%25ef%25bc%258c%25e9%2599%25a4%25e5%25a4%2595%25e5%25a4%259c%25e8%25b5%258b%25e8%25af%2597%25e4%25b8%2580%25e9%25a6%2596%25e8%25b0%25a8%25e4%25be%259b%25e5%25b0%258f%25e5%25a8%25b1%25e3%2580%2582/">
+		
+			新春将至，除夕夜赋诗一首谨供小娱。</a>
+	</h2>
+	<div class="entry-content">
+		<p>翼揽九霄云外月，贺岁一撇泛星尘。</p>
+
+<p>新闻亥雪已逾旧，春言戊雨湿满身。</p>
+
+<p>万仗惊雷神州起，世持福运来年问。</p>
+
+<p>吉瑞华夏民齐照，祥福与天共沉沦。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-02-06T22:21:16+08:00" pubdate data-updated="true">Feb 6<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/02/06/%25e3%2580%258a%25e8%25bd%25a9%25e8%25be%2595%25e5%2589%25915%25e5%25a4%2596%25e4%25bc%25a0%25e2%2580%2594%25e6%25b1%2589%25e4%25b9%258b%25e4%25ba%2591%25e3%2580%258b%25e8%25af%2584%25e6%259e%2590/">
+		
+			《轩辕剑5外传—汉之云》评析</a>
+	</h2>
+	<div class="entry-content">
+		<p>自枫之舞玩到现在也已有了8个年头了，轩辕剑系列始终贯彻着以往的路线。或许因为制作公司的缘故，人们总爱把仙剑系列和轩辕系列相提并论。越来越多的看法是，pal总能给人以感人至深的儿女情长，而swd则展示了神州五千年来的民族大义。</p>
+
+<p>直到08年1月的《汉之云》，仍不能例外。</p>
+
+<p>本次故事仍由音乐+编剧的吴欣睿执笔，时间立足于中国历史上的三国时代。但由于轩辕系列历代忠于史实，使得依附于《三国志》的游戏情节大大颠覆了以往大众从《三国演义》中了解到的人物形象。作者行文起点之高，情节之戏剧性都是能让人为之叫好的。当然，游戏中稍显虚构的成分也许缺乏严谨，总体来说瑕不能掩玉。</p>
+
+<p>关于游戏具体流程、支线攻略以及相关秘籍修改就烦大家拜托百度了。</p>
+
+<p>以下仅从几个方面加以评述:</p>
+
+<p>画面:DOMO的水墨功底加上新的cg工作室的支持，使得汉之云的游戏画面已是历代国产3D游戏的巅峰，这一说法毫无夸张。在主张全力发扬我国历史文化的精粹同时，谨希望轩辕剑后代能再有所突破，加入世界顶尖的制作技术，能将轩辕文化推广出去。当然，这一切是必须取决于成本投入的。</p>
+
+<p>音乐:轩辕系列的音乐几乎已成pc game的经典，但经典归经典，缺少的仍是对前作的突破。而事实上，大家可以把汉之云的音乐包解开来仔细听，个人认为本次作品总体品质有所下降，有2、3部长篇还是很耐听的，例如本站首页主题&hellip;</p>
+
+<p>     关于游戏音乐的提取，大家可将游戏根目录下的music文件夹打开，利用fmv-extractor提取工具分析并提取.sfb中的mp3文件。</p>
+
+<p>系统:或许是最不值一提的地方，因为战斗几乎没有什么改进。炼妖壶功能有所加强，但是炼制体系并不严谨，感觉仍是很乱。许多宝物的炼制没有固定的配方，这点建议制作方历代能够加以明确。</p>
+
+<p>语音:前代曾在开篇cg中嵌入了语音并受到好评，本作开始语音的应用加入到了每个过场动画中，令人耳目一新。或许从这次专业的语音配置上研发人员和广大玩家都看到了轩辕系列今后的一个重要突破点。在mmorpg大行其道的今天，单机rpg的游戏性已备受考验，但是，历来以史诗般剧情+电影式画面的经典rpg续作仍然在连绵不绝着。由此可以看出，玩家需要的不仅仅是酣畅淋漓的游戏体验，也不能轻视唯美大片带来的感官冲击。rpg的未来还是一片坦途的。</p>
+
+<p>游戏主题:由于此次作者拿到《汉之云》较港台上市晚了半个多月，之前通过网络交流部分了解了游戏的剧情，并且有部分玩家指出游戏内容可能涉及到海峡两岸的政治问题。起初出于兴趣，再加上从《苍之涛》开始轩辕剑系列就被指存在相关一些问题，作者对游戏稍加研究了一番。但事实上，我对上述看法稍有些不以为然。</p>
+
+<p>通过《轩辕剑2外传—枫之舞》直到现在，我们基本上大致已经能够把握编剧在游戏世界观上的控制技巧了。不难发现，历代游戏几乎都有对正统历史的颠覆之处。由于不是历史专门研究，作者不便发表一些看法，但历代的游戏主题是有一定依据可查的，这点并不能否认。其次，历代游戏一直向大家提出这样一个疑问:民族大义和民族民生，哪个更为重要？我认为，游戏本身就无法回答这个问题。轩辕系列的结局皆为形式上悲剧，但对每个认真体验过情节的人而言并没有实际上的压迫之感，这也就说明了游戏不存在误导的问题。如果要说轩辕剑历史上的败笔，就是在某些作品上对历史有些过于“修饰”了，但不至“篡改”。我建议制作方今后能将剧情所依据的史实附于片尾字幕，这样能够做到有据可查，也能够进一步延续十几年来的好作风。相较于近年热播的几部历史电视剧而言，轩辕剑充其量也就只能谓之保守罢了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-02-06T20:43:50+08:00" pubdate data-updated="true">Feb 6<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/pcyou-xi/'>pc游戏</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/02/06/%25e4%25b8%25bb%25e9%25a2%2598%25e8%2583%258c%25e6%2599%25af%25e7%25a1%25ae%25e5%25ae%259a/">
+		
+			主题背景确定</a>
+	</h2>
+	<div class="entry-content">
+		<p><a href="http://www.hanyi.name/blog/wp-content/uploads/2008/02/shanshui.jpg" title="shanshui.jpg"><img src="http://www.hanyi.name/blog/wp-content/uploads/2008/02/shanshui.jpg" alt="shanshui.jpg" /></a>再次印证了百度中文第一搜索的招牌不是盖的，尽管最终仍有点小遗憾，但总比google强的多。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-02-06T19:17:56+08:00" pubdate data-updated="true">Feb 6<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/zhan-dian-ri-zhi/'>站点日志</a>
 
 </div>
 
