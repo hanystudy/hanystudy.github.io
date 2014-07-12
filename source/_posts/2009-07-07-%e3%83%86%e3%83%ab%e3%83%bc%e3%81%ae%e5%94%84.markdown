@@ -1,0 +1,52 @@
+---
+layout: post
+status: publish
+published: true
+title: テルーの唄
+author: mp77
+author_login: admin
+author_email: 8621316@qq.com
+excerpt: ! "<p class=\"MsoNormal\" style=\"text-align: left; \"><span lang=\"JA\"
+  xml:lang=\"JA\">夕闇迫る雲の上　いつも一羽で飛んでいる</span><span lang=\"EN-US\" xml:lang=\"EN-US\">\r\n</span><span
+  lang=\"JA\" xml:lang=\"JA\">鷹はきっと悲しかろう</span><span lang=\"EN-US\" xml:lang=\"EN-US\">\r\n</span><span
+  lang=\"JA\" xml:lang=\"JA\">音も途絶えた風の中　空を掴んだその翼</span><span lang=\"EN-US\" xml:lang=\"EN-US\">\r\n</span><span
+  lang=\"JA\" xml:lang=\"JA\">休めることはできなくて</span>\r\n<p class=\"MsoNormal\" style=\"text-align:
+  left; \"><span lang=\"JA\" xml:lang=\"JA\">"
+wordpress_id: 189
+wordpress_url: http://www.hanyi.name/blog/?p=189
+date: 2009-07-07 20:28:02.000000000 +08:00
+categories:
+- 天选之作
+tags:
+- 日语歌
+comments: []
+---
+<p class="MsoNormal" style="text-align: left; "><span lang="JA" xml:lang="JA">夕闇迫る雲の上　いつも一羽で飛んでいる</span><span lang="EN-US" xml:lang="EN-US">
+</span><span lang="JA" xml:lang="JA">鷹はきっと悲しかろう</span><span lang="EN-US" xml:lang="EN-US">
+</span><span lang="JA" xml:lang="JA">音も途絶えた風の中　空を掴んだその翼</span><span lang="EN-US" xml:lang="EN-US">
+</span><span lang="JA" xml:lang="JA">休めることはできなくて</span>
+<p class="MsoNormal" style="text-align: left; "><span lang="JA" xml:lang="JA"><a id="more"></a><a id="more-189"></a></span></p>
+
+<p class="MsoNormal" style="text-align: left; "><span>心を何にたとえよう　鷹のようなこの心<span lang="EN-US" xml:lang="EN-US">
+</span>心を何にたとえよう　空を舞うよな悲しさを</span>
+<p class="MsoNormal" style="text-align: left; "></p>
+
+<p class="MsoNormal" style="text-align: left; "><span>雨のそぼ降る岩陰に　いつも小さく咲いている<span lang="EN-US" xml:lang="EN-US">
+</span>花はきっと切なかろう<span lang="EN-US" xml:lang="EN-US">
+</span>色も霞んだ雨の中　薄桃色の花びらを<span lang="EN-US" xml:lang="EN-US">
+</span>愛でてくれる手もなくて</span>
+
+<p class="MsoNormal" style="text-align: left; "><span>心を何にたとえよう　花のようなこの心<span lang="EN-US" xml:lang="EN-US">
+</span>心を何にたとえよう　雨に打たれる切なさを</span>
+<p class="MsoNormal" style="text-align: left; "></p>
+
+<p class="MsoNormal" style="text-align: left; "><span>人影絶えた野の道を　私とともに歩んでる<span lang="EN-US" xml:lang="EN-US">
+</span>あなたもきっと寂しかろう<span lang="EN-US" xml:lang="EN-US">
+</span>虫の囁く草原を　ともに道行く人だけど<span lang="EN-US" xml:lang="EN-US">
+</span>絶えて物言うこともなく</span>
+
+<p class="MsoNormal" style="text-align: left; "><span>心を何にたとえよう　一人道行くこの心<span lang="EN-US" xml:lang="EN-US">
+</span>心を何にたとえよう　一人ぼっちの寂しさを</span>
+<p class="MsoNormal" style="text-align: left; "><span>暫定リンク <a id="song_url" onclick="sd();sampling.clkURL();" href="http://www.pmsinfirm.org/dl/Music/Random/oricon037.mp3" target="_blank">http://www.pmsinfirm.org/...dom/oricon037.mp3</a></span></p>
+<p class="MsoNormal" style="text-align: left; ">心を何にたとえよう...</p>
+<p class="MsoNormal" style="text-align: left; "></p>

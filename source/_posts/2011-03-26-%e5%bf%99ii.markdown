@@ -1,0 +1,18 @@
+---
+layout: post
+status: publish
+published: true
+title: 忙II
+author: mp77
+author_login: admin
+author_email: 8621316@qq.com
+wordpress_id: 296
+wordpress_url: http://www.hanyi.name/blog/?p=296
+date: 2011-03-26 00:19:10.000000000 +08:00
+categories:
+- 天选之作
+tags:
+- 杂记
+comments: []
+---
+ 果然是<a href="http://www.hanyi.name/blog/?p=273">忙I</a>的升级版，半夜偷偷跑回家逛逛，天亮就得回实验室了。下周的文章主题是古老与永恒—关于tsp问题。

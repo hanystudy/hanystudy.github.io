@@ -1,0 +1,19 @@
+---
+layout: post
+status: publish
+published: true
+title: 真累啊
+author: mp77
+author_login: admin
+author_email: 8621316@qq.com
+wordpress_id: 308
+wordpress_url: http://www.hanyi.name/blog/?p=308
+date: 2011-04-26 23:38:52.000000000 +08:00
+categories:
+- 天选之作
+tags:
+- 杂记
+- 杂
+comments: []
+---
+本来就懒得跑，没消停几天就又得出差...人生真真是个杯具。

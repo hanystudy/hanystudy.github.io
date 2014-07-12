@@ -1,0 +1,20 @@
+---
+layout: post
+status: publish
+published: true
+title: 开张。。。
+author: mp77
+author_login: admin
+author_email: 8621316@qq.com
+wordpress_id: 13
+wordpress_url: http://www.hanyi.name/blog/?p=13
+date: 2008-02-14 17:26:29.000000000 +08:00
+categories:
+- 站点日志
+tags:
+- 开张
+comments: []
+---
+以前的icp备案在信产部网页上查询不到了，这次重新注册一个。
+
+陕ICP备08000873

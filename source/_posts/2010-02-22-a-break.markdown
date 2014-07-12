@@ -1,0 +1,19 @@
+---
+layout: post
+status: publish
+published: true
+title: A break
+author: mp77
+author_login: admin
+author_email: 8621316@qq.com
+wordpress_id: 215
+wordpress_url: http://www.hanyi.name/blog/?p=215
+date: 2010-02-22 00:10:49.000000000 +08:00
+categories:
+- 天选之作
+- 站点日志
+tags:
+- 杂记
+comments: []
+---
+离开了十天左右，因为要在月底前完成一个win32下的医学图像预处理工具。令人欣慰的是前期的编程工作已经基本结束，且接下来的数据实验阶段可能不会很快开始，因此近期的重点将重新放在网站建设上面...但由于行将开学，我注定还要奔波于见不到什么人的最后一个学期，因此设施更新进程就很难保证了。不过我们会在下个月开启一个新的板块，并讨论一些新问题。

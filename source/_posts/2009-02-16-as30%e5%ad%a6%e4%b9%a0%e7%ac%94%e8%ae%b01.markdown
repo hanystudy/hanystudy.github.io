@@ -1,0 +1,361 @@
+---
+layout: post
+status: publish
+published: true
+title: AS3.0学习笔记(1)
+author: mp77
+author_login: admin
+author_email: 8621316@qq.com
+wordpress_id: 141
+wordpress_url: http://www.hanyi.name/blog/?p=141
+date: 2009-02-16 21:21:08.000000000 +08:00
+categories:
+- 编程语言
+tags:
+- ActionScript
+- flash
+comments:
+- id: 7538
+  author: ranitidine cheap tramadol
+  author_email: aaacztnx@qwunskyg.com
+  author_url: http://www.azcentral.com/members/Blog/medecinesupply/84984
+  date: !binary |-
+    MjAxMC0wNi0wNCAwNTozMzo1OSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wNi0wMyAyMTozMzo1OSArMDgwMA==
+  content: <a href="http://forum.ywcasudbury.ca/members/Tramadol-online-without-prescription.aspx"
+    rel="nofollow">get tramadol online</a> , [url="http://forum.ywcasudbury.ca/members/Tramadol-online-without-prescription.aspx"]get
+    tramadol online[/url] , http://forum.ywcasudbury.ca/members/Tramadol-online-without-prescription.aspx
+    get tramadol online ,
+- id: 7573
+  author: cialis terazosin
+  author_email: snkaspex@sxmnqwwa.com
+  author_url: http://community.miragespeakers.com/members/buy-generic-Cialis-online.aspx
+  date: !binary |-
+    MjAxMC0wNi0wNCAwNjowNTozMCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wNi0wMyAyMjowNTozMCArMDgwMA==
+  content: <a href="http://forum.ywcasudbury.ca/members/Tramadol-reviews.aspx" rel="nofollow">tramadol
+    m print on one side</a> , [url="http://forum.ywcasudbury.ca/members/Tramadol-reviews.aspx"]tramadol
+    m print on one side[/url] , http://forum.ywcasudbury.ca/members/Tramadol-reviews.aspx
+    tramadol m print on one side ,
+- id: 7624
+  author: does tramadol contain opiates
+  author_email: vqsbgdbm@exsyptbj.com
+  author_url: http://community.omnicom.no/members/Tramadol-reviews.aspx
+  date: !binary |-
+    MjAxMC0wNi0wNCAwNzowNjoyNSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wNi0wMyAyMzowNjoyNSArMDgwMA==
+  content: <a href="http://dexterwiki.sho.com/account/tramadol-online-j126" rel="nofollow">tramadol
+    online cod payment</a> , [url="http://dexterwiki.sho.com/account/tramadol-online-j126"]tramadol
+    online cod payment[/url] , http://dexterwiki.sho.com/account/tramadol-online-j126
+    tramadol online cod payment ,
+- id: 7664
+  author: ranitidine tramadol
+  author_email: xrlavugm@zfryweby.com
+  author_url: http://www.whur.com/drhouse7/blog/2010/06/07/tramadol_canadian_pharmacy
+  date: !binary |-
+    MjAxMC0wNi0wOSAxMTo0Mzo0NyArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wNi0wOSAwMzo0Mzo0NyArMDgwMA==
+  content: Great work, webmaster, nice design!
+- id: 7684
+  author: what is the drug tramadol
+  author_email: ngiikaht@bfvaqhfs.com
+  author_url: http://community.webglobal.cz/members/Tramadol-without-rx.aspx
+  date: !binary |-
+    MjAxMC0wNi0yNyAwMToxNToyOCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wNi0yNiAxNzoxNToyOCArMDgwMA==
+  content: Very interesting site. Hope it will always be alive!
+- id: 7733
+  author: tramadol without tylenol
+  author_email: xpvcoqfy@mvqqwyks.com
+  author_url: http://connect.al.com/user/tramadolk138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNiAxOToyNjoxOCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxMToyNjoxOCArMDgwMA==
+  content: Very interesting site. Hope it will always be alive!
+- id: 7794
+  author: drug test reactions to adipex
+  author_email: gqmtujru@hwrfpqxl.com
+  author_url: http://connect.lehighvalleylive.com/user/adipexs138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNiAxOTo1NDo1NSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxMTo1NDo1NSArMDgwMA==
+  content: Great site. Keep doing.
+- id: 7823
+  author: tablet adipex
+  author_email: huqfnjnn@tmyfgrcy.com
+  author_url: http://connect.pennlive.com/user/Adipex-Online-i138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNiAyMDowOTowNSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxMjowOTowNSArMDgwMA==
+  content: It is the coolest site, keep so!
+- id: 7853
+  author: cortisol and adipex
+  author_email: cyckpylc@unnkyjls.com
+  author_url: http://connect.pennlive.com/user/Adipex-Online-i138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNiAyMDoyMzozMiArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxMjoyMzozMiArMDgwMA==
+  content: Perfect work!
+- id: 7884
+  author: list generic brands of valium
+  author_email: fslrnrre@bnkdknlt.com
+  author_url: http://www.thekartel.com/valium-online-n138m/
+  date: !binary |-
+    MjAxMC0wOC0wNiAyMDozODoxNiArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxMjozODoxNiArMDgwMA==
+  content: Beautiful site!
+- id: 8060
+  author: canine medication tramadol
+  author_email: oesqfbeb@wfttkvoc.com
+  author_url: http://www.urbanmoms.ca/mt/mt-cp.cgi?__mode=view&amp;blog_id=52&amp;id=28183
+  date: !binary |-
+    MjAxMC0wOC0wNiAyMjowNjowOCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxNDowNjowOCArMDgwMA==
+  content: Great work, webmaster, nice design!
+- id: 8119
+  author: phentermine free consultation free shipping
+  author_email: zsnsetpt@xpvfihhq.com
+  author_url: http://connect.nj.com/user/Phentermine-Online-i138/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNiAyMjozNDo0NCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxNDozNDo0NCArMDgwMA==
+  content: Beautiful site!
+- id: 8176
+  author: false positive for tramadol
+  author_email: gvuvdfxz@vwqrulmb.com
+  author_url: http://www.urbanmoms.ca/mt/mt-cp.cgi?__mode=view&amp;blog_id=52&amp;id=28183
+  date: !binary |-
+    MjAxMC0wOC0wNiAyMzowMzozNiArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxNTowMzozNiArMDgwMA==
+  content: It is the coolest site, keep so!
+- id: 8234
+  author: dangers of adipex
+  author_email: ibowmhjb@vihkbxnu.com
+  author_url: http://connect.lehighvalleylive.com/user/adipexw138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNiAyMzozMzowMSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxNTozMzowMSArMDgwMA==
+  content: Great site. Good info.
+- id: 8262
+  author: best place to buy xanax online
+  author_email: arwfyrhp@ojfpxnmw.com
+  author_url: http://www.urbanmoms.ca/mt/mt-cp.cgi?__mode=view&amp;blog_id=52&amp;id=28185
+  date: !binary |-
+    MjAxMC0wOC0wNiAyMzo0NzoyNCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxNTo0NzoyNCArMDgwMA==
+  content: Great site. Keep doing.
+- id: 8321
+  author: buy tramadol online cheap cod
+  author_email: ekdcyyen@pdltlhkc.com
+  author_url: http://connect.cleveland.com/user/Tramadol-Online-a138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNyAwMDoxNjoxMCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxNjoxNjoxMCArMDgwMA==
+  content: If you have to do it, you might as well do it right.
+- id: 8350
+  author: online pharmacies tramadol
+  author_email: qejoxbmw@qdlrhesf.com
+  author_url: http://www.urbanmoms.ca/mt/mt-cp.cgi?__mode=view&amp;blog_id=52&amp;id=28183
+  date: !binary |-
+    MjAxMC0wOC0wNyAwMDozMDoyMSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxNjozMDoyMSArMDgwMA==
+  content: Great site. Good info.
+- id: 8378
+  author: how to make tramadol
+  author_email: zpqsawyc@mwxwktcs.com
+  author_url: http://www.urbanmoms.ca/mt/mt-cp.cgi?__mode=view&amp;blog_id=52&amp;id=28182
+  date: !binary |-
+    MjAxMC0wOC0wNyAwMDo0NDozOCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxNjo0NDozOCArMDgwMA==
+  content: Incredible site!
+- id: 8554
+  author: soma serene
+  author_email: zcwpwwnb@dkwbpmfx.com
+  author_url: http://connect.advance.net/user/Soma-Online-2138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNyAwMjoxMDo1MSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxODoxMDo1MSArMDgwMA==
+  content: Perfect site, i like it!
+- id: 8676
+  author: antibiotics and tramadol reaction
+  author_email: binhexmz@hkfsgbih.com
+  author_url: http://connect.lehighvalleylive.com/user/tramadolb138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNyAwMzowODoxMSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxOTowODoxMSArMDgwMA==
+  content: Great site. Keep doing.
+- id: 8705
+  author: phentermine patch
+  author_email: wdfjcqqh@pjwienhd.com
+  author_url: http://connect.advance.net/user/Phentermine-Online-x138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNyAwMzoyMjozNCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxOToyMjozNCArMDgwMA==
+  content: I want to say - thank you for this!
+- id: 8861
+  author: wisconsin union theater map
+  author_email: Lukaskiewicz78@yahoo.com
+  author_url: http://uniontheater.wisc.edu/calendar.asp?month=2&amp;year=2010
+  date: !binary |-
+    MjAxMC0xMC0yNSAxODozNTowMyArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0xMC0yNSAxMDozNTowMyArMDgwMA==
+  content: Another  a really great writeup by you looking forward to come back more
+    very soon.
+---
+<div class="Section0" style="layout-grid: 15.6pt none;">
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">即日起我们推出一部新的连载系列——《AS3.0》，原有的“假期系列”改为周末仍以假期形式不间断放出。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">ActionScript<span style="font-family: 宋体;">是针对Adobe Flash Player运行时环境的编程语言。它实现了Flash在动画制作、图像处理、数据处理以及人机交互等方面的众多功能。ActionScript是由Flash Player中的ActionScript虚拟机AVM来执行的，与Java类似，AS的程序代码通常被IDE内嵌的编译器编译成“字节码格式”并放入swf最终文件中，最后由Flash Player统一执行。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">自ActionScript的第一个完整版v1.0与Flash 5共同发布以来，AS就随着Flash的不断更新而变得越来越强大，从MX时代起AS就被Macromedia确立为RIA战略的重要工具。</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">AS3.0<span style="font-family: 宋体;">是随着Flash 9的发布而正式亮相的，我们今后连载所使用的编程环境也是Flash CS3(v9)，但我们更多的只是关注语言本身，并不会过于脱离主题。内容也是严格依据adobe官方manual和livedocs编写，如果对本文有任何疑问的话，可以直接前往adobe.com查阅相关文章。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">尽管adobe宣称AS3.0同样适合无程序设计语言基础者学习，但为了能够更效率地写出有用的程序，请至少拥有一种语言基础，例如C语言。当然，如果你在此基础上还拥有Javascript基础那么学习起来将感到一些似曾相识，如果你还系统学习过Java—那么看半个小时manual你就可以直接上手AS3.0了！</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">请再次注意，由于作者本人几乎没有接触过AS3.0以前的版本，因此本文的版本衔接并不能满足一些读者的需要。另外对于RIA的另一个重要工具Flex我们暂时还不会涉及，因此以后的例解程序并不会出现关于AS3.0在Flex中的应用。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">一、</span><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">构建自己的AS应用程序</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">现在讨论如何利用Adobe Flash CS3 professional创建一个应用程序，通常我们会有两种做法：</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">将代码存储在时间轴中的帧中；</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">将代码存储在ActionScript文件中；</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">前一种方法较为简单，在代码复杂度不高、没有重用需求的情况下经常使用。首先开启Adobe Flash CS3 Professional应用程序，在引导界面中选择“Flash文件(ActionScript 3.0)”，如果没有引导界面，可以选择菜单“文件-新建”，随后直接点击“确定”。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">现在点击图层中某一帧，例如当前flash文档“图层1”的第一帧，按“F9”，此时会弹出脚本编辑器，在编辑窗口中填入相关代码即可（如图1-1）。</span></span> <img class="alignleft size-full wp-image-147" title="1-1" src="http://www.hanyi.name/blog/wp-content/uploads/2009/02/1-1.jpg" alt="1-1" width="246" height="75" /></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">在创建大型应用程序时，为了方便代码维护，或者希望代码能够在其他程序中得到重用，此时采取前文所说的第二种方法：选择菜单“文件-新建”，选择“常规”选项卡中的“ActionScript文件选项”，点击“确定”就可以进入脚本编辑页面了。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">图1-1</span></span></span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">在了解了上述内容后，让我们来制作一个简单的应用程序，本程序将采用第二种代码存储方式进行构建，其中涉及到了关于IDE本身的一些基本操作，以及面向对象程序设计的一些知识。当然，本文的重点并不在这些方面，该程序段仅仅起到演示作用。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">程序例1-1</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">步骤1</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、首先启动Flash并新建一个ActionScript文件，选择一个指定文件夹并将其保存为HelloWorld.as文件。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">步骤2</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、在编辑区内输入以下代码，并保存。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">package</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">定义一个"包",我们会在今后详细讨论 </span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    public class HelloWorld</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">声明一个类HelloWorld</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    {</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">private var sthSaved:String;</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">声明一个String类型变量sthSaved</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">public function HelloWorld()</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">类的构造方法</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        {</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">            sthSaved = "Hello World!by hanyi.name!";</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        }</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        public function getSaved():String </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">使对象返回sthSaved值的方法</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        {</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">            return sthSaved;</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        }</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    }</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">步骤3</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、新建一个Flash文件(ActionScript3.0)，保存至与.as文件相同的文件夹中，并取名为HelloWorld.fla。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">步骤4</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、现在在一个传统的Flash工作界面中，首先点击界面左侧工具栏的“文本工具”（快捷键为“T”），用鼠标点击拖动在舞台中创建一个文本字段，并在下方“属性”标签栏(ctrl+F3)内选择“动态文本”，并调整其“宽”、“高”分别为300、50，并设定实例名称为“textOutput”，如图1-2。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><img class="alignleft size-full wp-image-144" title="1-2" src="http://www.hanyi.name/blog/wp-content/uploads/2009/02/1-2.jpg" alt="1-2" width="178" height="146" /></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">步骤5</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、单击时间轴第一帧，并按“F9”，在脚本编辑框内写入如下代码。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var object:HelloWorld=new HelloWorld(); //<span style="font-family: 宋体;">定义对象object</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">textOutput.text=object.getSaved(); //<span style="font-family: 宋体;">设置文本框显示的内容</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">步骤6</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、ctrl+c保存文档，此时文档创建结束。按下ctrl+enter即可测试影片。此时测试舞台上应出现“Hello World!by hanyi.name!”。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">在上述程序中，有一些其他语言程序员值得注意的地方。其中package包的概念和用法，与Java类似，在后面的部分中会详细介绍。注意变量的声明方式：var 变量名:类型</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">这样的用法，这在声明类的方法时同样适用。尽管以上程序中的效果可能在Flash中仅仅用两个简单操作就能实现，但是比较完整地体现出了AS运行的方式。下面我们对上述程序作出一些改进，这些改进主要体现在交互功能方面。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">程序例1-1改进版</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">步骤1</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、打开HelloWorld.as文件，对源文件做以下修改。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">package</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">定义一个"包",我们会在今后详细讨论 </span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    public class HelloWorld </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">声明一个类HelloWorld</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    {</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">private var sthSaved:String;</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">声明一个String类型变量sthSaved</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">private var exam:ShortTest;</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">public function HelloWorld() </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">类的构造方法</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        {</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">            sthSaved = "Hello World!by hanyi.name!";</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        }</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">public function getSaved():String </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">使对象返回sthSaved值的方法</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        {</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">            return sthSaved;</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        }</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">public function startAnswer():String</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">声明ShortTest类对象,并初始化显示器</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">exam = new ShortTest();</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">return exam.showQuestion();</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">public function input(answer:int):String</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">返回结果</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">if(exam.updateResult(answer))</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">return "Congratulations!";</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">else</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">return "Sorry,Try again!";</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    }</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">class ShortTest</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">包外类</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">public function updateResult(finalResult:int):Boolean</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">接收传入的答案,并判断正误</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">if(finalResult == 18)</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">return true;</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">else</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">return false;</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">public function showQuestion():String</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">显示题目</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var question:String = "2*9=?";</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">return question;</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">步骤2</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、打开HelloWorld.fla文件，对第一帧上的脚本作以下修改。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var object:HelloWorld=new HelloWorld();</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var flag:Boolean;</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">textOutput.border=true;</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">textInput.border=true;</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">textOutput.text=object.getSaved();</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">textInput.text="continue...";</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">textInput.addEventListener(KeyboardEvent.KEY_UP, keyPressed); //<span style="font-family: 宋体;">监听键盘事件</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">function keyPressed(keyevent:KeyboardEvent):void //<span style="font-family: 宋体;">委托事件处理</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    if (keyevent.keyCode == Keyboard.ENTER)</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    {</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">if(flag==false)</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">textInput.replaceText(0,textOutput.length,"");</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">textOutput.text = object.startAnswer(); //<span style="font-family: 宋体;">进入答题</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">flag=true;</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">else</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">textOutput.text = object.input(int(textInput.text)); //<span style="font-family: 宋体;">显示答案</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">textInput.replaceText(0,textOutput.length,"");</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    }</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">步骤3</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、在textOutput下方重新插入一个文本工具，属性选择“输入文本”，实例名称为“textInput”，其他选项与textOutput相同。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">步骤4</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、测试影片，首先选定下面的“continue...”框并按enter，此时出现题目，在下方文本框中输入答案，并按enter，检查结果。</span></span></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">本例作为例1-1的改进版本，功能上主要体现在交互性的增强。另外需要注意HelloWorld.as文件内包外类ShortTest，这表示ShortTest仅具备被.as文件内其他类访问的权限，并不能被包外数据访问。另一方面，AS3.0的事件委托机制与Java是极其类似的，该程序最终结果显示如下图。</span></span> </p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><img class="alignleft size-full wp-image-143" title="1-3" src="http://www.hanyi.name/blog/wp-content/uploads/2009/02/1-3.jpg" alt="1-3" width="358" height="158" /></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span><img class="alignleft size-full wp-image-146" title="1-4" src="http://www.hanyi.name/blog/wp-content/uploads/2009/02/1-4.jpg" alt="1-4" width="353" height="169" /></p>
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><img class="alignleft size-full wp-image-145" title="1-5" src="http://www.hanyi.name/blog/wp-content/uploads/2009/02/1-5.jpg" alt="1-5" width="351" height="163" /></p>
+
+</div>

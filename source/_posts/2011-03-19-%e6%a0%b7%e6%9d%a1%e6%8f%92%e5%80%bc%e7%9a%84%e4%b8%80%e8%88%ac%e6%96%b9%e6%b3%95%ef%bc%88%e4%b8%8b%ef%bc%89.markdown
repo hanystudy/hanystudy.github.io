@@ -1,0 +1,39 @@
+---
+layout: post
+status: publish
+published: true
+title: 样条插值的一般方法（下）
+author: mp77
+author_login: admin
+author_email: 8621316@qq.com
+wordpress_id: 294
+wordpress_url: http://www.hanyi.name/blog/?p=294
+date: 2011-03-19 16:32:56.000000000 +08:00
+categories:
+- 可视化
+tags:
+- Bezier
+- catmull-rom
+comments: []
+---
+ 前一篇文章中，我们通过基本的三次Bezier曲线引入了样条曲线插值的一般方法—catmull-rom及其改进算法Bessel—Overhauser。这里首先需要澄清的是，本文题名为“样条插值的一般方法”，实际上仅限于在计算机图形学中作基础应用性的讨论，而非是对数值计算方法中有关插值或曲线拟合的一般性总结，事实上在现阶段研究大量的理论方法对实际工作而言并无多大意义—当然，如果读者来自数学相关专业，本文的内容可能没有任何帮助，甚至起到误导的作用。
+
+ 同时，在继续这次的讨论之前，我们需要对上节遗留的问题做一些补充。因为我们愈加注意到，当前的基本造型技术所采用的样条插值方法实际上是改进后的catmull-rom，许多文献介绍了各种各样的改进算法，如果读者确实需要更加灵活可控的样条插值，除了上文文末的参考文献外，可能还需要阅读但不仅限于Kockanek和Bartels等人的论文。
+
+ 有了上述样条曲线插值的基础，就可以尝试进行曲面插值了。在这之前，我们应先回顾一下Bezier曲面的构造方法。
+
+ 三次Bezier曲面的控制点有4*4个，从基本公式来看，单独固定u值或v值，所得到的截面曲线实际上是普通的三次Bezier曲线。下面的影片演示了三次Bezier曲面的边界曲线构造过程，完整空间的情况比较复杂，待webGL成熟后我们会改进演示......
+
+ <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="480" height="380" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="quality" value="high" /><param name="scale" value="showall" /><param name="salign" value="t" /><param name="wmode" value="transparent" /><param name="src" value="http://www.hanyi.name/blog/wp-content/uploads/2011/03/bezier-surf.swf" /><embed type="application/x-shockwave-flash" width="480" height="380" src="http://www.hanyi.name/blog/wp-content/uploads/2011/03/bezier-surf.swf" scale="showall" wmode="transparent" salign="t" quality="high"></embed></object>
+
+ 类似基于分段Bezier曲线的样条曲线插值，同样可以使用局部Bezier曲面拼接的方法构建样条曲面插值。关键问题在于如何尽可能确保曲面拼接的连续性。由已知，两个Bezier曲面在边界处C1连续，实际上即其在边界处的偏导数非零且相等。现在给定m*n个控制点，要求构造通过每个控制点的C1连续的Bezier曲面。分析如下：
+
+ 1、按照catmull-rom的思路，易知可对相邻两个控制点插值构建Bezier曲线。
+
+ 2、又由前文的结论得知，三次Bezier曲面在边界处完全是一条只受边界点控制的三次Bezier曲线。
+
+ 由1、2，将m*n个控制点划分为相邻的2*2角点集，每个角点集内部的4个角点即局部三次Bezier曲面片的顶点。通过Catmull-rom或Bessel-Overhauser算法在每条边界插值2个额外控制点，从而构建4条边界曲线。为了保证相邻曲面片C1连续，需要考虑局部面片中间的4个控制点。
+
+ 这里引入三次Bezier曲面在角点处的扭向量的概念：对于三次Bezier曲面，扭向量是指曲面在角点处的二阶混合偏导数。为了保证构建的曲面在边界处偏导数相等，可以将连续条件公式做简单变换，并使用扭向量表示。那么只需给定扭向量即可简单算出剩余的4个控制点值了。
+
+ 最简单的扭向量计算方法是直接令其为0，那么其等价于Ferguson法（1964）构造的曲面。其缺陷是曲面在插值点处较“平”，这种情况在真实感图形绘制时会变得尤为明显。还有其它一些扭向量的估计方法，如标准公式，但其仅限于在控制点等间距的情况下使用。当控制点间距不相等时，我们建议参考Buss的《3D computer graphics》中提到的方法。当然，作者推荐的《Curves and Surfaces for Computer-Aided Geometric Design: A Practical Guide》by Gerald Farin也绝对是几何造型领域的必备导论书了。

@@ -1,0 +1,603 @@
+---
+layout: post
+status: publish
+published: true
+title: Visual C++动态链接库编程（三）
+author: mp77
+author_login: admin
+author_email: 8621316@qq.com
+wordpress_id: 29
+wordpress_url: http://www.hanyi.name/blog/?p=29
+date: 2008-04-05 15:01:46.000000000 +08:00
+categories:
+- 转载
+tags:
+- dll
+- vc++
+comments:
+- id: 7631
+  author: adipex with no script
+  author_email: uwebgxkx@qoffgsyu.com
+  author_url: http://dexterwiki.sho.com/account/adipex-online-3126m
+  date: !binary |-
+    MjAxMC0wNi0wNCAwNzoxMjo0MiArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wNi0wMyAyMzoxMjo0MiArMDgwMA==
+  content: <a href="http://medecinesupply.socialgo.com/magazine/read/phentermine-forum_1.html"
+    rel="nofollow">chepa no prescription phentermine</a> , [url="http://medecinesupply.socialgo.com/magazine/read/phentermine-forum_1.html"]chepa
+    no prescription phentermine[/url] , http://medecinesupply.socialgo.com/magazine/read/phentermine-forum_1.html
+    chepa no prescription phentermine ,
+- id: 7656
+  author: adipex on-line no physician
+  author_email: gspthxug@grlvpffg.com
+  author_url: http://community.miragespeakers.com/members/buy-generic-Adipex-online.aspx
+  date: !binary |-
+    MjAxMC0wNi0wNCAwNzo0MzozMCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wNi0wMyAyMzo0MzozMCArMDgwMA==
+  content: <a href="http://community.miragespeakers.com/members/Phentermine-canadian-pharmacy.aspx"
+    rel="nofollow">phentermine on line with overnight delivery</a> , [url="http://community.miragespeakers.com/members/Phentermine-canadian-pharmacy.aspx"]phentermine
+    on line with overnight delivery[/url] , http://community.miragespeakers.com/members/Phentermine-canadian-pharmacy.aspx
+    phentermine on line with overnight delivery ,
+- id: 8158
+  author: can steroids be mixed with tramadol
+  author_email: gxelonal@lcoaznds.com
+  author_url: http://www.thekartel.com/tramadol-online-9138m/
+  date: !binary |-
+    MjAxMC0wOC0wNiAyMjo1NDoyMyArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxNDo1NDoyMyArMDgwMA==
+  content: It is the coolest site, keep so!
+- id: 8658
+  author: xanax overnight without a prescription
+  author_email: tbhompzv@lqqswezi.com
+  author_url: http://connect.al.com/user/cialisp138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNyAwMjo1ODo1MSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxODo1ODo1MSArMDgwMA==
+  content: Excellent site. It was pleasant to me.
+- id: 8686
+  author: tramadol facts
+  author_email: xxveupgq@yvofyrdb.com
+  author_url: http://soapitstop.com/members/generic-Tramadol.aspx
+  date: !binary |-
+    MjAxMC0wOC0wNyAwMzoxMzoyMSArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxOToxMzoyMSArMDgwMA==
+  content: Beautiful site!
+- id: 8719
+  author: cialis cancdian dugs
+  author_email: yeruwydh@uqmffoah.com
+  author_url: http://connect.lehighvalleylive.com/user/cialisv138m/index.html
+  date: !binary |-
+    MjAxMC0wOC0wNyAwMzoyODowMCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0wNiAxOToyODowMCArMDgwMA==
+  content: Great work, webmaster, nice design!
+- id: 8772
+  author: buy adipex free doctor consultation
+  author_email: fxlnnree@rtjowpfh.com
+  author_url: http://www.betsielarkin.com/profiles/blogs/cheap-adipex-pills
+  date: !binary |-
+    MjAxMC0wOC0xMCAyMjozNTozNiArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOC0xMCAxNDozNTozNiArMDgwMA==
+  content: Incredible site!
+- id: 8827
+  author: adipex rx your weightloss medication source
+  author_email: rgihmkft@cemzydxp.com
+  author_url: http://spaceelephant.com/pg/profile/Adipex-Online-8150m
+  date: !binary |-
+    MjAxMC0wOS0yNCAxOTo1NzozMCArMDgwMA==
+  date_gmt: !binary |-
+    MjAxMC0wOS0yNCAxMTo1NzozMCArMDgwMA==
+  content: I bookmarked this link. Thank you for good job!
+---
+　　第4节我们对非MFC DLL进行了介绍，这一节将详细地讲述MFC规则DLL的创建与使用技巧。
+
+　　另外，自从本文开始连载后，收到了一些读者的e-mail。有的读者提出了一些问题，笔者将在本文的最后一次连载中选取其中的典型问题进行解答。由于时间的关系，对于读者朋友的来信，笔者暂时不能一一回复，还望海涵！由于笔者的水平有限，文中难免有错误和纰漏，也热诚欢迎读者朋友不吝指正！
+
+　　5. MFC规则DLL
+
+　　5.1 概述
+
+　　MFC规则DLL的概念体现在两方面：
+
+　　（1） 它是MFC的
+　　
+　　“是MFC的”意味着可以在这种DLL的内部使用MFC；
+
+　　（2） 它是规则的
+
+　　“是规则的”意味着它不同于MFC扩展DLL，在MFC规则DLL的内部虽然可以使用MFC，但是其与应用<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>的接口不能是MFC。而MFC扩展DLL与应用程序的接口可以是MFC，可以从MFC扩展DLL中导出一个MFC类的派生类。
+
+　　Regular DLL能够被所有支持DLL技术的语言所编写的应用程序调用，当然也包括使用MFC的应用程序。在这种动态连接库中，包含一个从CWinApp继承下来的类，DllMain函数则由MFC自动提供。
+
+　　Regular DLL分为两类：
+
+　　（1）静态链接到MFC 的规则DLL
+
+　　静态链接到MFC的规则DLL与MFC库（包括MFC扩展 DLL）静态链接，将MFC库的代码直接生成在.dll文件中。在调用这种DLL的接口时，MFC使用DLL的资源。因此，在静态链接到MFC 的规则DLL中不需要进行模块状态的切换。
+
+　　使用这种方法生成的规则DLL其程序较大，也可能包含重复的代码。
+
+　　（2）动态链接到MFC 的规则DLL
+
+　　动态链接到MFC 的规则DLL 可以和使用它的可执行文件同时动态链接到 MFC DLL 和任何MFC扩展 DLL。在使用了MFC共享库的时候，默认情况下，MFC使用主应用程序的资源句柄来加载资源模板。这样，当DLL和应用程序中存在相同ID的资源时（即所谓的资源重复问题），系统可能不能获得正确的资源。因此，对于共享MFC DLL的规则DLL，我们必须进行模块切换以使得MFC能够找到正确的资源模板。
+
+　　我们可以在Visual C++中设置MFC规则DLL是静态链接到MFC DLL还是动态链接到MFC DLL。如图8，依次选择Visual C++的project -&gt; Settings -&gt; General菜单或选项，在Microsoft Foundation Classes中进行设置。
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="439" src="http://dev.yesky.com/imagelist/05/10/496tcjb95zkf.jpg" height="288" /><img border="0" width="439" src="http://dev.yesky.com/imagelist/05/10/496tcjb95zkf.jpg" height="288" />
+图8 设置动态/静态链接MFC DLL</td>
+</tr>
+</table>
+　　5.2 MFC规则DLL的创建
+
+　　我们来一步步讲述使用MFC向导创建MFC规则DLL的过程，首先新建一个project，如图9，选择project的类型为MFC AppWizard(dll)。点击OK进入如图10所示的对话框。
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="438" src="http://dev.yesky.com/imagelist/05/10/181ysg7l3l3w.jpg" height="283" /><img border="0" width="438" src="http://dev.yesky.com/imagelist/05/10/181ysg7l3l3w.jpg" height="283" />
+图9 MFC DLL工程的创建</td>
+</tr>
+</table>
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="441" src="http://dev.yesky.com/imagelist/05/10/vem5qtksd311.jpg" height="305" /><img border="0" width="441" src="http://dev.yesky.com/imagelist/05/10/vem5qtksd311.jpg" height="305" />
+图10所示对话框中的1区选择MFC DLL的类别。</td>
+</tr>
+</table>
+　　2区选择是否支持automation（自动化）技术， automation 允许用户在一个应用程序中操纵另外一个应用程序或组件。例如，我们可以在应用程序中利用 Microsoft Word 或Microsoft Excel的工具，而这种使用对用户而言是透明的。自动化技术可以大大简化和加快应用程序的开发。
+
+　　3区选择是否支持Windows Sockets，当选择此项目时，应用程序能在 TCP/IP <a target="_blank" href="http://product.yesky.com/net/" class="bluekey"><font color="#003399">网络</font></a>上进行通信。 CWinApp派生类的InitInstance成员函数会初始化通讯端的支持，同时工程中的StdAfx.h文件会自动include &lt;AfxSock.h&gt;头文件。
+
+　　添加socket通讯支持后的InitInstance成员函数如下：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>BOOL CRegularDllSocketApp::InitInstance()
+{
+　if (!AfxSocketInit())
+　{
+　　AfxMessageBox(IDP_SOCKETS_INIT_FAILED);
+　　return FALSE;
+　}
+　return TRUE;
+}</td>
+</tr>
+</table>
+　　4区选择是否由MFC向导自动在源代码中添加注释，一般我们选择“Yes,please”。
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="441" src="http://dev.yesky.com/imagelist/05/10/vem5qtksd311.jpg" height="305" /><img border="0" width="441" src="http://dev.yesky.com/imagelist/05/10/vem5qtksd311.jpg" height="305" />
+图10 MFC DLL的创建选项</td>
+</tr>
+</table>
+　　5.3 一个简单的MFC规则DLL
+
+　　这个DLL的例子（属于静态链接到MFC 的规则DLL）中提供了一个如图11所示的对话框。
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="331" src="http://dev.yesky.com/imagelist/05/10/6hb0hlv43ptr.jpg" height="193" /><img border="0" width="331" src="http://dev.yesky.com/imagelist/05/10/6hb0hlv43ptr.jpg" height="193" />
+图11 MFC规则DLL例子</td>
+</tr>
+</table>
+　　在DLL中添加对话框的方式与在MFC应用<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>中是一样的。 在图11所示DLL中的对话框的Hello按钮上点击时将MessageBox一个“Hello,pconline的网友”对话框，下面是相关的文件及源代码，其中删除了MFC向导自动生成的绝大多数注释（下载本工程）：
+
+　　第一组文件：CWinApp继承类的声明与实现
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>// RegularDll.h : main header file for the REGULARDLL DLL#if !defined(AFX_REGULARDLL_H__3E9CB22B_588B_4388_B778_B3416ADB79B3__INCLUDED_)
+#define AFX_REGULARDLL_H__3E9CB22B_588B_4388_B778_B3416ADB79B3__INCLUDED_#if _MSC_VER &gt; 1000
+#pragma once
+#endif // _MSC_VER &gt; 1000
+
+#ifndef __AFXWIN_H__
+#error include ’stdafx.h’ before including this file for PCH
+#endif
+#include "resource.h" // main symbols
+
+class CRegularDllApp : public CWinApp
+{
+　public:
+　　CRegularDllApp();
+　　DECLARE_MESSAGE_MAP()
+};
+
+#endif
+
+// RegularDll.cpp : Defines the initialization routines for the DLL.
+
+#include "stdafx.h"
+#include "RegularDll.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+BEGIN_MESSAGE_MAP(CRegularDllApp, CWinApp)
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+
+// CRegularDllApp construction
+
+CRegularDllApp::CRegularDllApp()
+{
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// The one and only CRegularDllApp object
+
+CRegularDllApp theApp;</td>
+</tr>
+</table>
+　　分析：
+
+　　在这一组文件中定义了一个继承自CWinApp的类CRegularDllApp，并同时定义了其的一个实例theApp。乍一看，您会以为它是一个MFC应用程序，因为MFC应用程序也包含这样的在工程名后添加“App”组成类名的类（并继承自CWinApp类），也定义了这个类的一个全局实例theApp。
+
+　　我们知道，在MFC应用程序中CWinApp取代了SDK程序中WinMain的地位，SDK程序WinMain所完成的工作由CWinApp的三个函数完成：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>virtual BOOL InitApplication( );virtual BOOL InitInstance( );virtual BOOL Run( ); //传说中MFC程序的“活水源头”</td>
+</tr>
+</table>
+　　但是MFC规则DLL并不是MFC应用程序，它所继承自CWinApp的类不包含消息循环。这是因为，MFC规则DLL不包含CWinApp::Run机制，主消息泵仍然由应用程序拥有。如果DLL 生成无模式对话框或有自己的主框架窗口，则应用程序的主消息泵必须调用从DLL 导出的函数来调用PreTranslateMessage成员函数。
+
+　　另外，MFC规则DLL与MFC 应用程序中一样，需要将所有 DLL中元素的初始化放到InitInstance 成员函数中。
+
+　　第二组文件 自定义对话框类声明及实现
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>#if !defined(AFX_DLLDIALOG_H__CEA4C6AF_245D_48A6_B11A_A5521EAD7C4E__INCLUDED_)
+#define AFX_DLLDIALOG_H__CEA4C6AF_245D_48A6_B11A_A5521EAD7C4E__INCLUDED_#if _MSC_VER &gt; 1000
+#pragma once
+#endif // _MSC_VER &gt; 1000
+// DllDialog.h : header file
+/////////////////////////////////////////////////////////////////////////////
+// CDllDialog dialogclass CDllDialog : public CDialog
+{
+　// Construction
+　public:
+　　CDllDialog(CWnd* pParent = NULL); // standard constructor
+　　enum { IDD = IDD_DLL_DIALOG };
+　protected:
+　　virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
+　　// Implementation
+　protected:
+　　afx_msg void OnHelloButton();
+　　DECLARE_MESSAGE_MAP()
+};
+#endif
+
+// DllDialog.cpp : implementation file
+
+#include "stdafx.h"
+#include "RegularDll.h"
+#include "DllDialog.h"
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+// CDllDialog dialog
+
+CDllDialog::CDllDialog(CWnd* pParent /*=NULL*/)
+: CDialog(CDllDialog::IDD, pParent)
+{}
+
+void CDllDialog::DoDataExchange(CDataExchange* pDX)
+{
+　CDialog::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CDllDialog, CDialog)
+　ON_BN_CLICKED(IDC_HELLO_BUTTON, OnHelloButton)
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CDllDialog message handlers
+
+void CDllDialog::OnHelloButton()
+{
+　MessageBox("Hello,pconline的网友","pconline");
+}</td>
+</tr>
+</table>
+　　分析：
+
+　　这一部分的编程与一般的应用程序根本没有什么不同，我们照样可以利用MFC类向导来自动为对话框上的控件添加事件。MFC类向导照样会生成类似ON_BN_CLICKED(IDC_HELLO_BUTTON, OnHelloButton)的消息映射宏。
+
+　　第三组文件 DLL中的资源文件
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>//{{NO_DEPENDENCIES}}// Microsoft Developer Studio generated include file.// Used by RegularDll.rc
+
+//
+
+#define IDD_DLL_DIALOG 1000
+
+#define IDC_HELLO_BUTTON 1000</td>
+</tr>
+</table>
+　　分析：
+
+　　在MFC规则DLL中使用资源也与在MFC应用程序中使用资源没有什么不同，我们照样可以用Visual C++的资源编辑工具进行资源的添加、删除和属性的更改。
+
+　　第四组文件 MFC规则DLL接口函数
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>#include "StdAfx.h"
+#include "DllDialog.h"extern "C" __declspec(dllexport) void ShowDlg(void)
+{
+　CDllDialog dllDialog;
+　dllDialog.DoModal();
+}</td>
+</tr>
+</table>
+　　分析：
+
+　　这个接口并不使用MFC，但是在其中却可以调用MFC扩展类CdllDialog的函数，这体现了“规则”的概类。
+
+　　与非MFC DLL完全相同，我们可以使用__declspec(dllexport)声明或在.def中引出的方式导出MFC规则DLL中的接口。
+
+　　5.4 MFC规则DLL的调用
+
+　　笔者编写了如图12的对话框MFC<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>（下载本工程）来调用5.3节的MFC规则DLL，在这个程序的对话框上点击“调用DLL”按钮时弹出5.3节MFC规则DLL中的对话框。
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="327" src="http://dev.yesky.com/imagelist/05/10/y661eb38d8t2.jpg" height="201" /><img border="0" width="327" src="http://dev.yesky.com/imagelist/05/10/y661eb38d8t2.jpg" height="201" />
+图12 MFC规则DLL的调用例子</td>
+</tr>
+</table>
+　　下面是“调用DLL”按钮单击事件的消息处理函数：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>void CRegularDllCallDlg::OnCalldllButton()
+{
+　typedef void (*lpFun)(void);
+　HINSTANCE hDll; //DLL句柄
+　hDll = LoadLibrary("RegularDll.dll");
+　if (NULL==hDll)
+　{
+　　MessageBox("DLL加载失败");
+　}　lpFun addFun; //函数指针
+　lpFun pShowDlg = (lpFun)GetProcAddress(hDll,"ShowDlg");
+　if (NULL==pShowDlg)
+　{
+　　MessageBox("DLL中函数寻找失败");
+　}
+　pShowDlg();
+}</td>
+</tr>
+</table>
+　　上述例子中给出的是显示调用的方式，可以看出，其调用方式与第4节中非MFC DLL的调用方式没有什么不同。
+
+　　我们照样可以在EXE程序中隐式调用MFC规则DLL，只需要将DLL工程生成的.lib文件和.dll文件拷入当前工程所在的目录，并在RegularDllCallDlg.cpp文件（图12所示对话框类的实现文件）的顶部添加：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>#pragma comment(lib,"RegularDll.lib")
+void ShowDlg(void);</td>
+</tr>
+</table>
+　　并将void CRegularDllCallDlg::OnCalldllButton() 改为：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>void CRegularDllCallDlg::OnCalldllButton()
+{
+　ShowDlg();
+}</td>
+</tr>
+</table>
+　　5.5 共享MFC DLL的规则DLL的模块切换
+
+　　应用程序进程本身及其调用的每个DLL模块都具有一个全局唯一的HINSTANCE句柄，它们代表了DLL或EXE模块在进程虚拟空间中的起始地址。进程本身的模块句柄一般为0x400000，而DLL模块的缺省句柄为0x10000000。如果程序同时加载了多个DLL，则每个DLL模块都会有不同的HINSTANCE。应用程序在加载DLL时对其进行了重定位。
+
+　　共享MFC DLL（或MFC扩展DLL）的规则DLL涉及到HINSTANCE句柄问题，HINSTANCE句柄对于加载资源特别重要。EXE和DLL都有其自己的资源，而且这些资源的ID可能重复，应用程序需要通过资源模块的切换来找到正确的资源。如果应用程序需要来自于DLL的资源，就应将资源模块句柄指定为DLL的模块句柄；如果需要EXE文件中包含的资源，就应将资源模块句柄指定为EXE的模块句柄。
+
+　　这次我们创建一个动态链接到MFC DLL的规则DLL（下载本工程），在其中包含如图13的对话框。
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="376" src="http://dev.yesky.com/imagelist/05/10/qy3n1xcn12i7.jpg" height="219" /><img border="0" width="376" src="http://dev.yesky.com/imagelist/05/10/qy3n1xcn12i7.jpg" height="219" />
+图13 DLL中的对话框</td>
+</tr>
+</table>
+　　另外，在与这个DLL相同的工作区中生成一个基于对话框的MFC程序，其对话框与图12完全一样。但是在此工程中我们另外添加了一个如图14的对话框。
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="375" src="http://dev.yesky.com/imagelist/05/10/d5qj203lursc.jpg" height="219" /><img border="0" width="375" src="http://dev.yesky.com/imagelist/05/10/d5qj203lursc.jpg" height="219" />
+图14 EXE中的对话框</td>
+</tr>
+</table>
+　　图13和图14中的对话框除了caption不同（以示区别）以外，其它的都相同。
+
+　　尤其值得特别注意，在DLL和EXE中我们对图13和图14的对话框使用了相同的资源ID=2000，在DLL和EXE工程的resource.h中分别有如下的宏：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>//DLL中对话框的ID#define IDD_DLL_DIALOG 2000//EXE中对话框的ID
+
+#define IDD_EXE_DIALOG 2000</td>
+</tr>
+</table>
+　　与5.3节静态链接MFC DLL的规则DLL相同，我们还是在规则DLL中定义接口函数ShowDlg，原型如下：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>#include "StdAfx.h"
+#include "SharedDll.h"void ShowDlg(void)
+{
+　CDialog dlg(IDD_DLL_DIALOG); //打开ID为2000的对话框
+　dlg.DoModal();
+}</td>
+</tr>
+</table>
+　　而为应用工程主对话框的“调用DLL”的单击事件添加如下消息处理函数：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>void CSharedDllCallDlg::OnCalldllButton()
+{
+　ShowDlg();
+}</td>
+</tr>
+</table>
+　　我们以为单击“调用DLL”会弹出如图13所示DLL中的对话框，可是可怕的事情发生了，我们看到是图14所示EXE中的对话框！
+
+　　惊讶？
+
+　　产生这个问题的根源在于应用<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>与MFC规则DLL共享MFC DLL（或MFC扩展DLL）的程序总是默认使用EXE的资源，我们必须进行资源模块句柄的切换，其实现方法有三：
+
+　　方法一 在DLL接口函数中使用：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>AFX_MANAGE_STATE(AfxGetStaticModuleState());</td>
+</tr>
+</table>
+　　我们将DLL中的接口函数ShowDlg改为：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>void ShowDlg(void)
+{
+　//方法1:在函数开始处变更，在函数结束时恢复
+　//将AFX_MANAGE_STATE(AfxGetStaticModuleState());作为接口函数的第一//条语句进行模块状态切换　AFX_MANAGE_STATE(AfxGetStaticModuleState());
+　CDialog dlg(IDD_DLL_DIALOG);//打开ID为2000的对话框
+　dlg.DoModal();
+}</td>
+</tr>
+</table>
+　　这次我们再点击EXE程序中的“调用DLL”按钮，弹出的是DLL中的如图13的对话框！嘿嘿，弹出了正确的对话框资源。
+
+　　AfxGetStaticModuleState是一个函数，其原型为：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td height="21">AFX_MODULE_STATE* AFXAPI AfxGetStaticModuleState( );</td>
+</tr>
+</table>
+　　该函数的功能是在栈上（这意味着其作用域是局部的）创建一个AFX_MODULE_STATE类（模块全局数据也就是模块状态）的实例，对其进行设置，并将其指针pModuleState返回。
+
+　　AFX_MODULE_STATE类的原型如下：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>// AFX_MODULE_STATE (global data for a module)class AFX_MODULE_STATE : public CNoTrackObject
+{
+　public:
+　　#ifdef _AFXDLL
+　　　AFX_MODULE_STATE(BOOL bDLL, WNDPROC pfnAfxWndProc, DWORD dwVersion);
+　　　AFX_MODULE_STATE(BOOL bDLL, WNDPROC pfnAfxWndProc, DWORD dwVersion,BOOL bSystem);
+　　#else
+　　　AFX_MODULE_STATE(BOOL bDLL);
+　　#endif
+　　~AFX_MODULE_STATE();　　CWinApp* m_pCurrentWinApp;
+　　HINSTANCE m_hCurrentInstanceHandle;
+　　HINSTANCE m_hCurrentResourceHandle;
+　　LPCTSTR m_lpszCurrentAppName;
+
+　　… //省略后面的部分
+}</td>
+</tr>
+</table>
+　　AFX_MODULE_STATE类利用其构造函数和析构函数进行存储模块状态现场及恢复现场的工作，类似汇编中call指令对pc指针和sp寄存器的保存与恢复、中断服务程序的中断现场压栈与恢复以及<a target="_blank" href="http://os.yesky.com/" class="bluekey"><font color="#003399">操作系统</font></a>线程调度的任务控制块保存与恢复。
+
+　　许多看似不着边际的知识点居然有惊人的相似！
+
+　　AFX_MANAGE_STATE是一个宏，其原型为：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>AFX_MANAGE_STATE( AFX_MODULE_STATE* pModuleState )</td>
+</tr>
+</table>
+　　该宏用于将pModuleState设置为当前的有效模块状态。当离开该宏的作用域时（也就离开了pModuleState所指向栈上对象的作用域），先前的模块状态将由AFX_MODULE_STATE的析构函数恢复。
+
+　　方法二 在DLL接口函数中使用：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>AfxGetResourceHandle();AfxSetResourceHandle(HINSTANCE xxx);</td>
+</tr>
+</table>
+　　AfxGetResourceHandle用于获取当前资源模块句柄，而AfxSetResourceHandle则用于设置程序目前要使用的资源模块句柄。
+
+　　我们将DLL中的接口函数ShowDlg改为：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>void ShowDlg(void)
+{
+　//方法2的状态变更
+　HINSTANCE save_hInstance = AfxGetResourceHandle();
+　AfxSetResourceHandle(theApp.m_hInstance);
+　CDialog dlg(IDD_DLL_DIALOG);//打开ID为2000的对话框
+　dlg.DoModal();　//方法2的状态还原
+　AfxSetResourceHandle(save_hInstance);
+}</td>
+</tr>
+</table>
+　　通过AfxGetResourceHandle和AfxSetResourceHandle的合理变更，我们能够灵活地设置程序的资源模块句柄，而方法一则只能在DLL接口函数退出的时候才会恢复模块句柄。方法二则不同，如果将ShowDlg改为：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>extern CSharedDllApp theApp; //需要声明theApp外部全局变量void ShowDlg(void)
+{
+　//方法2的状态变更
+　HINSTANCE save_hInstance = AfxGetResourceHandle();
+　AfxSetResourceHandle(theApp.m_hInstance);　CDialog dlg(IDD_DLL_DIALOG);//打开ID为2000的对话框
+　dlg.DoModal();
+
+　//方法2的状态还原
+
+　AfxSetResourceHandle(save_hInstance);
+
+　//使用方法2后在此处再进行操作针对的将是应用程序的资源
+
+　CDialog dlg1(IDD_DLL_DIALOG); //打开ID为2000的对话框
+　dlg1.DoModal();
+}</td>
+</tr>
+</table>
+　　在应用程序主对话框的“调用DLL”按钮上点击，将看到两个对话框，相继为DLL中的对话框（图13）和EXE中的对话框（图14）。
+
+　　方法三 由应用程序自身切换
+
+　　资源模块的切换除了可以由DLL接口函数完成以外，由应用程序自身也能完成（下载本工程）。
+
+　　现在我们把DLL中的接口函数改为最简单的：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>void ShowDlg(void)
+{
+　CDialog dlg(IDD_DLL_DIALOG); //打开ID为2000的对话框
+　dlg.DoModal();
+}</td>
+</tr>
+</table>
+　　而将应用程序的OnCalldllButton函数改为：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>void CSharedDllCallDlg::OnCalldllButton()
+{
+　//方法3：由应用程序本身进行状态切换
+　//获取EXE模块句柄　HINSTANCE exe_hInstance = GetModuleHandle(NULL);　//或者HINSTANCE exe_hInstance = AfxGetResourceHandle();
+　//获取DLL模块句柄
+
+　HINSTANCE dll_hInstance = GetModuleHandle("SharedDll.dll");
+　AfxSetResourceHandle(dll_hInstance); //切换状态
+　ShowDlg(); //此时显示的是DLL的对话框
+　AfxSetResourceHandle(exe_hInstance); //恢复状态
+
+　//资源模块恢复后再调用ShowDlg
+　ShowDlg(); //此时显示的是EXE的对话框
+}</td>
+</tr>
+</table>
+　　方法三中的Win32函数GetModuleHandle可以根据DLL的文件名获取DLL的模块句柄。如果需要得到EXE模块的句柄，则应调用带有Null参数的GetModuleHandle。
+
+　　方法三与方法二的不同在于方法三是在应用程序中利用AfxGetResourceHandle和AfxSetResourceHandle进行资源模块句柄切换的。同样地，在应用程序主对话框的“调用DLL”按钮上点击，也将看到两个对话框，相继为DLL中的对话框（图13）和EXE中的对话框（图14）。
+
+　　在下一节我们将对MFC扩展DLL进行详细分析和实例讲解，欢迎您继续关注本系列连载。
