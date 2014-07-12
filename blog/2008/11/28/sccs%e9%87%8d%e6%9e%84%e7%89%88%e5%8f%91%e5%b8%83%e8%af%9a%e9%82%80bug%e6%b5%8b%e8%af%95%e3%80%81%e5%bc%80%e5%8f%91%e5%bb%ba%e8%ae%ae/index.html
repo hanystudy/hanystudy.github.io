@@ -1,0 +1,194 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>SCCS重构版发布~诚邀bug测试、开发建议  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="值得欣慰的是，“基于web的程序语言智能学习系统”在今晚赶回家后2小时内完成了internet正式发布前的准备工作，我们可能会选择较有代表性的设计文档在近期予以公布。 整个系统由于限制工期短（整整1个月），且由于并没有占用课内学时，因而实际的开发时间估计也比较可怜。整体完成度达到了预期的50%， &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">SCCS重构版发布~诚邀bug测试、开发建议</h2>
+	<div class="entry-content"><p>值得欣慰的是，“基于web的程序语言智能学习系统”在今晚赶回家后2小时内完成了internet正式发布前的准备工作，我们可能会选择较有代表性的设计文档在近期予以公布。</p>
+
+<p>整个系统由于限制工期短（整整1个月），且由于并没有占用课内学时，因而实际的开发时间估计也比较可怜。整体完成度达到了预期的50%，但美工方面真正做起来的时候才觉得很难&hellip;数据库设计方面还存在一定问题，整体安全性上未作过多考量，一些无关正常使用的bug还是比较明显，但相较于7月份的版本，我们至少在以下几个方面取得突破：</p>
+
+<p>1、首次尝试独立创建模版网页，尽管参考了everydns，但仅限于视觉上的借鉴，css代码完全独立编写。</p>
+
+<p>2、首次以较全面的数据库设计流程完成了初步设计，但问题很多，成品还存在一些问题，这些已经可以在今后的设计阶段中被当作宝贵的经验。</p>
+
+<p>3、首次全面接触javascript和xml技术，即Ajax。初步了解了主流网站系统的Ajax应用方法，此类部分的源代码可在今后得以沿用，该方向的前景是用面向对象的方法对已成熟的技术进行重构，方便复用。</p>
+
+<p>4、使用php初步完成了迄今为止最大的网站项目，目前的数据字典已经覆盖C++/C近七百条库函数，已具备实用意义。</p>
+
+<p>5、在对较大规模数据库的系统中使用查询优化工作，这是数据库设计方面的范畴，同时对本系统的真正实现也具有重大意义。</p>
+
+<p>注：本文以后的SCCS将不再作为本系统的英文缩写，按正式名称取开头字母则为&#8221;wiplls”，这将是本系统的新名称，在今后可能的技术更新中将统一使用该名称。</p>
+
+<p>系统的唯一入口地址为：</p>
+
+<p><a href="http://www.hanyi.name/code"><a href="http://www.hanyi.name/code">http://www.hanyi.name/code</a></a></p>
+
+<p>待beta成熟后将全面取代原有版本，并启用code.hanyi.name的独立二级域名。</p>
+
+<p>ps:同时也提前宣传一下</p>
+
+<br><img src="http://tbn2.google.cn/images?q=tbn:sZ-C_CNecw0J::">
+
+
+<br>&怀念
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-28T20:57:15+08:00" pubdate data-updated="true">Nov 28<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

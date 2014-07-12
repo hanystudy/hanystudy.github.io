@@ -1,0 +1,172 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>TangleTracer(Basic edition/B) 1.0 beta开源发布  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="TangleTracer是一个实验性光线跟踪渲染平台，目的在于为真实感绘制技术的初学者提供完备的学习例程和友好的实验接口。系统设计思路主要源于Kevin Suffern的《Ray tracing from the Ground Up》一书，同时部分参考了著名的真实感绘制圣经《PBRT 2nd》。 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">TangleTracer(Basic edition/B) 1.0 Beta开源发布</h2>
+	<div class="entry-content"><p>TangleTracer是一个实验性光线跟踪渲染平台，目的在于为真实感绘制技术的初学者提供完备的学习例程和友好的实验接口。系统设计思路主要源于Kevin Suffern的《Ray tracing from the Ground Up》一书，同时部分参考了著名的真实感绘制圣经《PBRT 2nd》。从今年三月中旬起我们就开始了前期的技术储备工作，该项目由四月初正式开始，截至目前完成代码近9万行，系统框架基本完善，实现并调试通过了440个demo或Kevin书中的习题（这部分代码超过4万行）。与K书中提供的原型系统不同，项目开发平台选择了Microsoft Visual Studio 2010和Qt framework 4.7.3，为快速开发提供了良好基础。
+由于系统和部分框架来源于K书，我们循例采用GPLv2开源发布。此次发布的主要内容是系统的代码部分，为便于大家测试，我们稍后会提供基于win32平台的二进制版本（目前正在进行兼容性测试），运行系统内置的全部例程需要同时满足以下条件：
+1.下载例程所需的纹理包：<a href="http://www.raytracegroundup.com/downloads/TextureImages.zip%EF%BC%9B">http://www.raytracegroundup.com/downloads/TextureImages.zip%EF%BC%9B</a>
+2.下载例程所需的模型包：<a href="http://www.raytracegroundup.com/downloads/PLYFiles.zip%EF%BC%9B">http://www.raytracegroundup.com/downloads/PLYFiles.zip%EF%BC%9B</a>
+3.确保纹理包的TextureFiles目录和模型包的PLYFiles目录与程序二进制文件位于同一目录下；
+4.部分模型需要下载stanford的原始文件并进行替换（具体请阅读README及代码注释）：<a href="http://www-graphics.stanford.edu/data/3Dscanrep/%EF%BC%9B">http://www-graphics.stanford.edu/data/3Dscanrep/%EF%BC%9B</a>
+此次发布的是TangleTracer的Basic edition/B版本，其目的在于提供思路清晰的CPU渲染技术，但实际渲染性能较低。我们正在进行系统的并行迁移实现，并力求在下半年提供TangleTracer的GPU edition/G版本。详情请关注项目github主页：<a href="http://mp77.github.com%E3%80%82">http://mp77.github.com%E3%80%82</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-08T22:32:17+08:00" pubdate data-updated="true">Jun 8<sup>th</sup>, 2012</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

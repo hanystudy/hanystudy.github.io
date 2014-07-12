@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 项目 | Wing of Dream 梦境之翼]]></title>
+  <link href="http://www.hanyi.name/blog/categories/xiang-mu/atom.xml" rel="self"/>
+  <link href="http://www.hanyi.name/"/>
+  <updated>2014-07-12T22:04:54+08:00</updated>
+  <id>http://www.hanyi.name/</id>
+  <author>
+    <name><![CDATA[Han Yi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[KINECT来了——解析SDK(MS SDK 2)]]></title>
+    <link href="http://www.hanyi.name/blog/2011/09/24/kinect%25e6%259d%25a5%25e4%25ba%2586-%25e8%25a7%25a3%25e6%259e%2590sdkms-sdk-2/"/>
+    <updated>2011-09-24T23:09:39+08:00</updated>
+    <id>http://www.hanyi.name/blog/2011/09/24/kinect%e6%9d%a5%e4%ba%86-%e8%a7%a3%e6%9e%90sdkms-sdk-2</id>
+    <content type="html"><![CDATA[<p><strong>NUI图像数据流概述</strong></p>
+
+<p>NUI的流数据是通过连续静态图像序列传递的。在上下文初始化阶段，应用程序将识别需要读取的流数据，并对其进行附加的流相关设置，包括数据解析度、图像类型、用于存储输入帧的缓冲区数量等内容。在应用程序检索并释放相关帧之前，如果运行时数据占满了缓冲区，那么系统将自动丢弃最旧的帧并重用缓冲区，也就是说，帧数据是可被丢弃的。同时系统最多允许请求四个缓冲区，而在大多数应用情形下通常只需要其中的两个。应用程序可通过API获取如下类型的图像信息：彩色图像数据、深度图像数据、用户分割数据等。下面将分别对上述三种类型的数据进行一些说明。</p>
+
+<p>彩色图像数据：系统提供两种格式的彩色图像数据，包括32位X8R8G8B8格式的sRGB位图数据和16位的UYVY格式的YUV位图数据。由于两者实际来自同一图像数据，因此两种格式的最终图像实际上没有任何差别。不过后者要求图像保持640x480的分辨率和15FPS的帧率，同时内存需求更小。应注意，由于系统采用USB连接，传感器层会首先将1280x1024分辨率的Bayer彩色滤波马赛克图像压缩并转换为RGB格式传输，运行时系统再对该数据进行解压缩操作。上述特性可以保证数据帧率可达30FPS，但解码操作会损失一定的图像精度。</p>
+
+<p>深度图像数据：深度图像帧中的每一个像素点都表示从摄像头所在平面到视野内最近物体的笛卡尔坐标系距离，单位为毫米。系统目前支持630x480、320x240、80x60三种规格的深度图像帧。应用程序可根据深度图像数据跟踪人物动作、识别并忽略背景物体。深度图像数据含有两种格式，其一是唯一表示深度值：那么像素的低12位表示一个深度值，高4位未使用；其二是既表示深度值又含有人物序号，则低三位保存人物序号，其余数据位表示深度值。应注意如果获取的深度值为0，则说明物体距离摄像头过近或过远以致超出了设备规格。</p>
+
+<p>用户分割数据：SDK beta目前支持读取两个用户的分割映射数据，其数据帧的相关像素分别记录了用户的序号。尽管用户分割数据是独立生成的数据流，在实际应用中仍可以将深度数据和用户分割数据整合成一个帧，其中像素值的高13位保存了深度值，低三位保存用户序号，其中序号为0则表示无用户，1和2分别表示两个不同的用户。在实际应用中，应用程序往往利用用户分割数据在深度图像和原始彩色图像中获取ROI感兴趣信息。</p>
+
+<p><strong> 基本编程模型</strong></p>
+
+<p>基于NUI API的编程模型本质上就是获取传感器图像数据的过程。应用程序往往通过相关代码首先将图像的最后一帧读入至缓冲区中，如果该帧已预备好，那么其将进入缓冲区，如果帧数据尚未就绪，代码仍可选择是否继续挂起等待或暂时释放并稍后重试。NUI摄像头API绝对不会多次传递相同的图像数据。框架包含的基本编程模型如下：</p>
+
+<p>1、POLLing模型，该模型较为基础易用。首先应开启图像数据流，然后请求并设置等待下一帧的时间，范围允许从0到无穷大，单位为毫秒；如果帧数据尚未就绪，则系统将等待刚才指定的时间然后返回。如果帧数据成功返回，则应用程序可请求下一帧数据并在同一线程执行其它操作。通常一个C++应用程序应调用NuiImageStreamOpen函数首先启动一个彩色或深度数据流，并忽略可选事件。托管代码则需调用ImageStream.Open方法。请求彩色或深度图像帧的C++函数为NuiImageStreamGetNextFrame，C#为ImageStream.GetNextFrame方法。</p>
+
+<p>2、事件模型，事件模型允许将获取骨骼帧的功能精确、灵活地集成入应用程序引擎。在该模型中，C++程序首先调用NuiImageStreamOpen函数并传入一个事件句柄。每当一个新的图像帧数据可用时，事件信号将被触发。任何相关的等待线程将被唤醒并通过调用NuiImageGetNextFrame函数获取骨骼信息，与此同时事件将被系统重置。托管代码应绑定Runtime.DepthFrameReady和Runtime.ImageFrameReady事件到相关的处理函数，当新数据可用时，处理函数可调用ImageStream.GetNextFrame获取该数据。</p>
+
+<p><strong>NUI骨骼跟踪应用</strong></p>
+
+<p>NUI还包括一个Skeleton骨骼跟踪模块，该部分提供最多两名用户的详细位置和朝向信息。骨骼跟踪的输出是一个点集，称作Skeleton Positions，该点集表示了一个完整的人体骨骼信息，如下图所示。</p>
+
+<p>[singlepic id=44 w=320 h=240 mode=watermark float=center]</p>
+
+<p>骨骼位置信息表示了用户当前的位置和姿态，如果要使用骨骼跟踪功能，应用程序应在NUI初始化阶段设置相关内容。NUI骨骼数据获取的方式与NUI Image部分基本一致，其基本编程模型也包括Polling和Event两种。前者的C++函数为NuiSkeletonGetNextFrame，托管函数为SkeletonEngine.GetNextFrame；后者的C++句柄绑定操作由NuiSkeletonTrackingEnable完成，并在处理线程内调用NuiSkeletonGetNextFrame；C#则使用Runtime.SkeletonFrameReady绑定事件，然后调用SkeletonEngine.GetNextFrame获取相关信息。</p>
+
+<p>骨骼跟踪模块通过深度数据计算地板裁切面，其基本方法将在后文进行介绍。如果应用程序在NUI初始化时开启了骨骼跟踪功能，则其每处理完一套深度数据则就放出相应的骨骼数据信号，而无论该深度数据中是否真的包含骨骼信息。应用程序使用地板裁切面数据获取骨骼框架，返回的骨架信息将携带一个时间戳以和相关的深度信息进行匹配。</p>
+
+<p>NUI骨骼跟踪分主动和被动两种模式，提供最多两副完整的骨骼跟踪数据。主动模式下需要调用相关帧读取函数获得用户骨骼数据，而被动模式下还支持额外最多四人的骨骼跟踪，但是在该模式下仅包含了用户的位置信息。对于所有获取的骨骼数据，其至少包含以下信息：</p>
+
+<p>1、相关骨骼的跟踪状态，被动模式时仅包括位置数据，主动模式包括完整的骨骼数据。</p>
+
+<p>2、唯一的骨骼跟踪ID，用于分配给视野中的每个用户。</p>
+
+<p>3、用户质心位置，该值仅在被动模式下可用。</p>
+
+<p>4、对于主动模式下的骨骼跟踪数据，还包括用户完整的骨骼数据。</p>
+
+<p>5、对于被动模式下的骨骼跟踪数据，仅包括用户位置信息，不包括详细的骨骼数据。</p>
+
+<p><strong>NUI坐标变换原理</strong></p>
+
+<p>深度图像空间：这是一个仅包含物体到传感器法平面的深度数据的投影空间，其z值是唯一有效的，而x、y值仅仅是进行了插值计算的结果，其数据实际并无任何物理意义；</p>
+
+<p>骨骼空间：用户骨骼位置使用x、y、z三维坐标表示，与深度图像空间坐标系不同的是，该空间的单位为米，且是一个传感器朝向为z轴正向的右手系。应注意，骨骼空间坐标系与Kinect位置息息相关，如果传感器被放置在一个非水平面上，那么计算得到的坐标系可能并非是标准形式，最终的用户数据也有可能是倾斜的。</p>
+
+<p>地板裁剪面的确定：骨骼数据均需要包含一个地板裁剪面向量，该向量保存了与地板平面方程有关的系数coefficients，骨骼跟踪模块通过地板裁剪平面除去背景，并将用户图像分割出来。对于平面的一般式方程Ax+By+Cz+D=0，该方程经过规范化即D值实际是指传感器到地板平面的高度值。如果地板不可见，那么地板裁剪平面向量实际为0。地板裁剪面向量值可在NUI_SKELETON_FRAME结构的vFloorClipPlane成员中获取。托管代码则保存在SkeletonFrame.FloorClipPlane域中。</p>
+
+<p>骨骼镜像：默认的用户图像实际上是一个镜像数据，也就是说该数据表示了用户当前面朝屏幕内部。然而有时确实需要图像面向用户本人一侧，那么需要确定一个镜像变换矩阵以达到此类要求。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[KINECT来了——解析SDK(MS SDK 1)]]></title>
+    <link href="http://www.hanyi.name/blog/2011/09/17/kinect%25e6%259d%25a5%25e4%25ba%2586-%25e8%25a7%25a3%25e6%259e%2590sdkms-sdk-1/"/>
+    <updated>2011-09-17T23:41:18+08:00</updated>
+    <id>http://www.hanyi.name/blog/2011/09/17/kinect%e6%9d%a5%e4%ba%86-%e8%a7%a3%e6%9e%90sdkms-sdk-1</id>
+    <content type="html"><![CDATA[<p>在8月初的<a href="http://www.hanyi.name/blog/?p=330" target="_blank">文章</a>里，我们曾对Microsoft推出的官方Kinect SDK beta进行了初步介绍，本文将在此基础上对其做出进一步说明。值得注意的是对托管代码和非托管代码的选择，从社区反馈看来似乎前者占据了绝对上风，coding4fun推荐的项目也基本都是以WPF编程为主。不过考虑到平台的潜在可扩展，这里还是推荐使用标准C++构建非托管程序。下面先给出两种编程方式在VS2010中的配置方法：</p>
+
+<p>对于托管C#程序，添加Add Reference中.Net标签页的Microsoft.Research.Kinect.dll，使用using Microsoft.Research.Kinect.Nui引用NUI API的声明文件，如果还要引用音频API，还要加上using Microsoft.Research.Kinect.Audio。</p>
+
+<p>对于标准C++程序，代码中必须加入&lt;windows.h&gt;头文件，其中NUI API需要包含MSR_NuiApi.h头文件、音频API需要包含MSRKinectAudio.h。另外需要添加相应的静态链接库，同时确保安装的DLL文件存放在PATH路径中。这里给出SDK所包含的头文件说明：</p>
+
+<p>MSR_NuiApi.h，该文件包含所有关于NUI API声明，包括初始化调用和访问函数，如NuiInitialize、NuiShutdown、MSR_NuiXxx以及INuiInstance，其主要功能是枚举设备并对其进行访问调用。MSR_NuiImageCamera.h，该文件包含对NUI图像和摄像头功能API的声明，其一般形式为NuiCameraXxx和NuiImageXxx：此类API的功能为调整摄像头倾角和仰角，并启动数据流并读入图像帧。MSR_NuiProps.h，该文件包含对NUI属性枚举API函数的声明。MSR_NuiSkeleton.h，该文件包括NUI骨架API函数的声明，其一般形式为NuiSkeletonXxx and NuiTransformXxx：功能为打开/关闭骨架跟踪、获取骨架数据、将骨架数据进行变换以实现平滑绘制。MSRKinectAudio.h，该文件包括对音频API函数的声明，其中ISoundSourceLocalizer接口可返回波束方向和音源位置。NuiImageBuffer.h，该文件定义了一个帧缓冲器，其作用类似DirectX9的纹理缓冲。</p>
+
+<p><strong>Kinect for Windows应用程序架构</strong></p>
+
+<p>[singlepic id=43 w=320 h=240 mode=watermark float=center]</p>
+
+<p>上图给出了beta SDK的整体组件架构，硬件层我们已经在上月进行了详细介绍。驱动的内核模式包含了设备驱动程序，上层的数据交互统一使用WinUSB数据栈，其中设备栈主要用于设备的配置和访问，摄像头栈用于视频数据流控制，USBAudio栈用于音频数据流控制；用户模式为API提供了访问和控制接口。应用层API上包括了三部分组件，其中MS SDK beta直接提供了NUI API即基本API集和KinectAudio DMO，后者的功能主要是提供波束成形和音源定位功能。此外，如果要使用Kinect的所有功能，还需要自己准备Windows 7 SDK中的音频、语音、媒体API集以及微软语音识别SDK，上述组件并未包含在SDK中。近两篇文章会主要介绍NUI API部分的设计原理和编程说明。</p>
+
+<p><strong> NUI API概述</strong></p>
+
+<p>NUI API是Kinect SDK的核心组成部分，其主要功能包括：提供连接至PC的Kinect传感器元件的访问接口、提供对由Kinect成像传感器生成的图像和深度数据流访问接口、通过经处理的图像和深度数据实现骨骼跟踪。下面我们分别使用托管和非托管代码介绍整个Kinect API上下文环境的创建和销毁。</p>
+
+<p>与OpenNI不同的是，Kinect SDK允许方便地同时使用多台Kinect设备，但是每台设备（或传感器）同一时间只能被一个程序实例使用。<strong>下面是使用C++代码实现传感器枚举和访问的整个过程：</strong></p>
+
+<p>情形一：应用程序同一时间仅使用一台Kinect设备：</p>
+
+<p>1、调用NuiInitialize，该函数首先会初始化一个Kinect传感器设备实例；</p>
+
+<p>2、调用NuiXxx，该函数集的功能是传输图像和骨骼数据流，并管理并配置相关摄像头；</p>
+
+<p>3、调用NuiShutdown结束。</p>
+
+<p>情形二：应用程序同一时间使用多台Kinect设备：</p>
+
+<p>1、调用MSR_NuiDeviceCount，查看可用Kinect设备的数量；</p>
+
+<p>2、调用MSR_NuiCreateInstanceByIndex创建指定设备索引的实例，该函数将返回该实例的INuiInstance接口指针；</p>
+
+<p>3、调用INuiInstance::NuiInitialize，该函数用于初始化针对该实例的NUI API上下文；</p>
+
+<p>4、调用针对INuiInstance接口的其它方法，用于传输图像和骨骼数据流并管理相关摄像头；</p>
+
+<p>5、调用INuiInstance::NuiShutdown，销毁某个设备实例的NUI API上下文；</p>
+
+<p>6、调用MSR_NuiDestroyInstance函数销毁该实例；</p>
+
+<p><strong>接下来是使用C#代码实现传感器枚举和访问的整个过程：</strong></p>
+
+<p><strong></strong>情形一：应用程序同一时间仅使用一台Kinect设备：</p>
+
+<p>1、创建一个新的运行时对象，将其参数列表留空，例如nui = new Runtime()，调用该构造函数表示在系统中创建了一个Kinect传感器设备实例；</p>
+
+<p>2、调用Runtime.Initialize函数初始化NUI API上下文；</p>
+
+<p>3、调用其它托管接口，用于传输图像和骨骼数据流，并管理和配置相关摄像头；</p>
+
+<p>4、调用Runtime.Shutdown销毁实例。</p>
+
+<p>情形二：应用程序同一时间使用多台Kinect设备：</p>
+
+<p>1、调用MSR_NuiDeviceCount函数获取可用设备数量；</p>
+
+<p>2、创建一个新的运行时对象，参数为设备索引号，如nui = new Runtime(index)，调用该构造函数表示创建了针对某个Kinect传感器的系统实例；</p>
+
+<p>3、调用Runtime.Initialize函数初始化NUI API上下文；</p>
+
+<p>4、调用其它托管接口方法，用于传输图像和深度数据、并管理和配置相关摄像头；</p>
+
+<p>5、调用Runtime.Shutdown函数销毁实例。</p>
+
+<p>NUI API的数据处理是通过一个多级管线实现的，在初始化阶段，应用程序需要指定相应级别的子系统，这样运行时系统才能系统所需的部分管线。在初始化时系统通常允许进行以下配置：</p>
+
+<p>彩色：应用程序指定从设备中获取彩色图像数据流；</p>
+
+<p>深度：应用程序指定从设备中获取深度图像数据流；</p>
+
+<p>深度和人物索引：应用程序指定从设备中获取深度数据流，并请求骨骼跟踪引擎当前生成的人物索引；</p>
+
+<p>骨骼：获取骨骼位置数据；</p>
+
+<p>上述设置指定了有效数据流类型和解析度，例如当一个应用程序没有在NUI API初始化阶段指定深度数据时，它随后也无法开启一个深度数据流。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Kinect来了——解析SDK(OpenNI Framework 4)]]></title>
+    <link href="http://www.hanyi.name/blog/2011/09/03/kinect%25e6%259d%25a5%25e4%25ba%2586-%25e8%25a7%25a3%25e6%259e%2590sdkopenni-framework-4/"/>
+    <updated>2011-09-03T21:48:15+08:00</updated>
+    <id>http://www.hanyi.name/blog/2011/09/03/kinect%e6%9d%a5%e4%ba%86-%e8%a7%a3%e6%9e%90sdkopenni-framework-4</id>
+    <content type="html"><![CDATA[<p><strong>配置工作节点的一般方法</strong></p>
+
+<p>前文的例子中已经说明了在程序中动态配置节点信息的一般过程，节点配置完成的主要标志一般是对xn::Generator::StartGenerating()函数的调用。除此之外，OpenNI还提供了基于外置XML文件的节点配置方法，使用XML配置文件能够显著降低代码复杂度，同时提高应用程序的可用性和灵活性，本文将主要讨论上述方式结合OpenNI编程。</p>
+
+<p>OpenNI支持的XML脚本功能非常强大，仅使用外置的文件就能够实现节点的创建、配置，甚至操作上下文属性（例如增加相应的许可证等）。通常可以使用xn::Context::RunXmlScript()直接执行脚本字符串，或通过xn::Context::RunXmlScriptFromFile()调用外部文件。</p>
+
+<p>一个XML内容中必须包含一个OpenNI结点，该结点内共包含三个子结点：Licenses，Log和Production Nodes。其中Licenses结点提供了系统需要的额外的许可证，其格式一般如下：</p>
+
+<p>[c]&lt;Licenses&gt;
+&lt;License vendor=&quot;vendor1&quot; key=&quot;key1&quot;/&gt;
+&lt;License vendor=&quot;vendor2&quot; key=&quot;key2&quot;/&gt;
+&lt;/Licenses&gt;[/c]</p>
+
+<p>Log结点用于配置OpenNI的日志系统，该结点内可添加下列可选元素属性：writeToConsole，设置日志信息是否在控制台中显示，默认为false。writeToFile:，设置日志信息是否将被写入文件，该文件将被放置在工作目录下，默认为false。writeLineInfo，设置是否每一条日志记录都需要包含文件名和行信息，默认为true。此外，Log还包含三个子结点：LogLevel，携带value属性，其值为0 (verbose), 1 (info), 2 (warnings) or 3 (errors)，其中3为默认值，该结点决定了日志记录的粒度。Masks，包含一个mask元素列表，设置相应mask的开启和关闭。Dumps，包含一个dump元素列表，设置相应dump的开启和关闭。下面的XML脚本演示了一段日志配置信息：</p>
+
+<p>[c]&lt;Log writeToConsole=&quot;false&quot; writeToFile=&quot;false&quot; writeLineInfo=&quot;true&quot;&gt;
+&lt;LogLevel value=&quot;3&quot;/&gt;
+&lt;Masks&gt; &lt;Mask name=&quot;ALL&quot; on=&quot;true&quot; /&gt; &lt;/Masks&gt;
+&lt;Dumps&gt; &lt;Dump name=&quot;SensorTimestamps&quot; on=&quot;false&quot; /&gt; &lt;/Dumps&gt;
+&lt;/Log&gt;[/c]</p>
+
+<p>ProductionNodes结点包含了工作结点的创建和配置信息，它包括了若干个子结点：
+GlobalMirror，设置Global Mirror属性的开启和关闭，相当于调用xn::Context::SetGlobalMirror()函数；
+Recording，设置是否启动一个记录，其file属性包括了记录文件名；
+Node，该子结点可以包含多个，它将引导OpenNI枚举并创建一个工作结点，其作用类似xn::Context::CreateAnyProductionTree()函数。其type属性表示枚举类型，值可包括下列内容：Device (XN_NODE_TYPE_DEVICE)</p>
+
+<p>Depth (XN_NODE_TYPE_DEPTH)</p>
+
+<p>Image (XN_NODE_TYPE_IMAGE)</p>
+
+<p>IR (XN_NODE_TYPE_IR)</p>
+
+<p>Audio (XN_NODE_TYPE_AUDIO)</p>
+
+<p>Gesture (XN_NODE_TYPE_GESTURE)</p>
+
+<p>User (XN_NODE_TYPE_USER)</p>
+
+<p>Scene (XN_NODE_TYPE_SCENE)</p>
+
+<p>Hands (XN_NODE_TYPE_HANDS)</p>
+
+<p>Recorder (XN_NODE_TYPE_RECORDER)</p>
+
+<p>Node结点的name属性允许设置一个工作节点名称。</p>
+
+<p>Query，Node还含有一个Query子结点，用于枚举时的查询操作。Query可包含下列子结点："Vendor"、"Name"、"MinVersion"、"MaxVersion"、"Capabilities"、"MapOutputModes"、"MinUserPositions"、"NeededNodes"，上述结点均可设置不同的子结点和属性，用于查询条件的选择，如果有多个子结点同时出现，那么OpenNI将按照AND进行逻辑整合。下列XML脚本演示了创建一个自定义属性的深度生成器：</p>
+
+<p>[c]&lt;Node type=&quot;Depth&quot; name=&quot;MyDepth&quot;&gt;
+&lt;Query&gt;
+&lt;Vendor&gt;vendor1&lt;/Vendor&gt;
+&lt;Name&gt;name1&lt;/Name&gt;
+&lt;MinVersion&gt;1.0.0.0&lt;/MinVersion&gt;
+&lt;MaxVersion&gt;3.1.0.5&lt;/MaxVersion&gt;
+&lt;Capabilities&gt; &lt;Capability&gt;UserPosition&lt;/Capability&gt; &lt;Capability&gt;Mirror&lt;/Capability&gt; &lt;/Capabilities&gt;
+&lt;MapOutputModes&gt; &lt;MapOutputMode xRes=&quot;640&quot; yRes=&quot;480&quot; FPS=&quot;30&quot;/&gt; &lt;/MapOutputModes&gt; &lt;MinUserPositions&gt;2&lt;/MinUserPositions&gt;
+&lt;NeededNodes&gt; &lt;Node&gt;MyDevice&lt;/Node&gt;&lt;/NeededNodes&gt;
+&lt;/Query&gt;
+&lt;/Node&gt;[/c]</p>
+
+<p>Configuration子结点实际上代表了对工作节点的动态配置，其指令内容将是顺序执行的。同时，该结点几乎对应了OpenNI所有的Set配置操作，下面的例子演示了分别创建图像、深度和音频节点的过程：</p>
+
+<p>[c]&lt;ProductionNodes&gt; &lt;Node type=&quot;Image&quot;&gt;
+&lt;Query&gt;
+&lt;MapOutputModes&gt; &lt;MapOutputMode xRes=&quot;320&quot; yRes=&quot;240&quot; FPS=&quot;60&quot;/&gt; &lt;/MapOutputModes&gt;
+&lt;Capabilities&gt; &lt;Capability&gt;Cropping&lt;/Capability&gt; &lt;Capability&gt;Mirror&lt;/Capability&gt; &lt;/Capabilities&gt;
+&lt;/Query&gt;
+&lt;Configuration&gt; &lt;MapOutputMode xRes=&quot;320&quot; yRes=&quot;240&quot; FPS=&quot;60&quot;/&gt; &lt;PixelFormat&gt;RGB24&lt;/PixelFormat&gt; &lt;Cropping enabled=&quot;true&quot; xOffset=&quot;28&quot; yOffset=&quot;28&quot; xSize=&quot;200&quot; ySize=&quot;160&quot; /&gt; &lt;Mirror on=&quot;true&quot; /&gt; &lt;/Configuration&gt;
+&lt;/Node&gt; &lt;Node type=&quot;Depth&quot;&gt;
+&lt;Query&gt; &lt;Vendor&gt;VendorX&lt;/Vendor&gt; &lt;MapOutputModes&gt; &lt;MapOutputMode xRes=&quot;640&quot; yRes=&quot;480&quot; FPS=&quot;30&quot;/&gt; &lt;/MapOutputModes&gt;&lt;Capabilities&gt; &lt;Capability&gt;UserPosition&lt;/Capability&gt; &lt;/Capabilities&gt;
+&lt;/Query&gt;
+&lt;Configuration&gt; &lt;MapOutputMode xRes=&quot;640&quot; yRes=&quot;480&quot; FPS=&quot;30&quot;/&gt; &lt;UserPosition index=&quot;0&quot;&gt; &lt;Min x=&quot;128&quot; y=&quot;128&quot; z=&quot;500&quot;/&gt; &lt;Max x=&quot;600&quot; y=&quot;400&quot; z=&quot;2000&quot;/&gt; &lt;/UserPosition&gt; &lt;Property type=&quot;int&quot; name=&quot;VendorXDummyProp&quot; value=&quot;3&quot; /&gt; &lt;/Configuration&gt;
+&lt;/Node&gt;
+&lt;Node type=&quot;Audio&quot;&gt;
+&lt;Configuration&gt; &lt;WaveOutputMode sampleRate=&quot;44100&quot; bitsPerSample=&quot;16&quot; channels=&quot;2&quot; /&gt; &lt;/Configuration&gt;
+&lt;/Node&gt;
+&lt;/ProductionNodes&gt;[/c]</p>
+
+<p>通常在上述配置信息载入后，应手动调用xn::Context::StartGeneratingAll()函数启动数据流。然而也可以在XML中加入默认的Start信息，即在ProductionNodes和其Node子结点中均包含有startGenerating属性，其中如果前者的该属性为true，那么将意味着执行StartGeneratingAll()，否则只执行相应为true的工作节点。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Kinect来了——解析SDK(OpenNI Framework 3)]]></title>
+    <link href="http://www.hanyi.name/blog/2011/08/24/kinect%25e6%259d%25a5%25e4%25ba%2586-%25e8%25a7%25a3%25e6%259e%2590sdkopenni-framework-3/"/>
+    <updated>2011-08-24T23:24:07+08:00</updated>
+    <id>http://www.hanyi.name/blog/2011/08/24/kinect%e6%9d%a5%e4%ba%86-%e8%a7%a3%e6%9e%90sdkopenni-framework-3</id>
+    <content type="html"><![CDATA[<p><strong>基本编程方法</strong></p>
+
+<p>本节的主要内容是结合OpenNI编程。</p>
+
+<p>首先假设使用MS VS作为开发工具，那么应先在工程中配置OpenNI库：其中分别需要添加环境变量$(OPEN_NI_INCLUDE)和$(OPEN_NI_LIB)，以及静态链接库OpenNI.lib；此外代码文件中还要添加相应的头文件，C语言工程需包含XnOpenNI.h，C++工程为XnCppWrapper.h。</p>
+
+<p>下面的代码段演示了如何初始化一个上下文对象，并从深度节点中创建和读取数据：</p>
+
+<p>[c]XnStatus nRetVal = XN_STATUS_OK;
+xn::Context context;       //声明上下文对象
+nRetVal = context.Init();        //初始化并返回异常编码
+xn::DepthGenerator depth;        //声明深度生成器节点</p>
+
+<p>nRetVal = depth.Create(context);        //初始化节点，返回异常编码
+nRetVal = context.StartGeneratingAll();        //启动深度节点数据生成
+while (bShouldRun)
+{
+nRetVal = context.WaitOneUpdateAll(depth);        //等待数据更新
+if (nRetVal != XN_STATUS_OK)        //数据更新异常
+{
+printf(&quot;Failed updating data: %s\n&quot;,xnGetStatusString(nRetVal));
+continue;        //不间断通信
+}
+//深度数据获取正常
+const XnDepthPixel* pDepthMap = depth.GetDepthMap();        //获取数据缓冲区指针
+}
+context.Shutdown();        //关闭上下文对象[/c]</p>
+
+<p>通常配置一个工作链需要实现大量代码，OpenNI提供了工作链查询接口，使得程序员可以通过查询关键字的形式找到系统内已有的相关工作链配置信息，考虑到符合查询条件的结果数量可能不唯一，OpenNI的查询机制结果总是以集合的形式返回。下面给出相关代码：</p>
+
+<p>[c]//创建查询对象
+xn::Query query;
+nRetVal = query.SetVendor(&quot;MyVendor&quot;);        //设置查询条件，这里设置了有关提供商名称
+query.AddSupportedCapability(XN_CAPABILITY_SKELETON);        //这里的查询条件指定数字骨架数据支持
+xn::NodeInfoList possibleChains;
+nRetVal = context.EnumerateProductionTrees(XN_NODE_TYPE_USER, &amp;query, possibleChains, NULL);        //根据查询对象枚举全部的工作链配置
+xn::NodeInfo selected = *possibleChains.Begin();        //返回最相似的查询结果，此时仍是但节点信息
+nRetVal = context.CreateProductionTree(selected);        //根据节点信息创建相应工作节点
+xn::UserGenerator userGen;
+nRetVal = selected.GetInstance(userGen);        //获取节点实例
+&hellip;&hellip;        //进一步操作[/c]</p>
+
+<p>实际上上述代码在OpenNI编程中非常常见，因为通过编程配置有关工作链实际上是一件很烦琐的事情。但显然对相关节点的查询并不一定能得到理想的结果，有时确实会发生查询结果为零的情况。例如该功能类型的节点尚未配置入系统中，或者节点的许可证序号不一致等异常情况。为方便查看节点测试失败的原因，OpenNI提供了一种针对节点类型的全局测试机制，该机制允许记录节点初始化失败的原因。相关代码如下：</p>
+
+<p>[c]xn::EnumerationErrors errors;        //实际上是一个异常结果集合
+xn::HandsGenerator handsGen;
+nRetVal = context.CreateAnyProductionTree(XN_NODE_TYPE_HANDS, NULL, handsGen, &amp;errors);
+//如果没有一个节点测试成功
+if (nRetVal == XN_STATUS_NO_NODE_PRESENT) {
+//遍历所有的异常信息，并输出
+for (xn::EnumerationErrors::Iterator it = errors.Begin(); it != errors.End(); ++it) {
+XnChar strDesc[512];
+xnProductionNodeDescriptionToString(&amp;it.Description(), strDesc, 512);
+printf(&quot;%s failed to enumerate: %s\n&quot;, xnGetStatusString(it.Error()));
+}
+return (nRetVal);
+}
+//如果存在相关节点，但无法验证
+else if (nRetVal != XN_STATUS_OK) {
+printf(&quot;Create failed: %s\n&quot;, xnGetStatusString(nRetVal)); return (nRetVal);
+}[/c]</p>
+
+<p>下面这段代码演示了从创建深度生成器，到节点设置配置信息，再从中获取数据并最终显示的全过程。</p>
+
+<p>[c]XnStatus nRetVal = XN_STATUS_OK;
+Context context;
+nRetVal = context.Init();        //创建上下文
+DepthGenerator depth;
+nRetVal = depth.Create(context); //创建深度生成器
+XnMapOutputMode mapMode;
+mapMode.nXRes = XN_VGA_X_RES;
+mapMode.nYRes = XN_VGA_Y_RES;
+mapMode.nFPS = 30;
+nRetVal = depth.SetMapOutputMode(mapMode);        //设置其输出模式为VGA+30FPS，
+nRetVal = context.StartGeneratingAll();        //开始获取数据
+XnUInt32 nMiddleIndex = XN_VGA_X_RES * XN_VGA_Y_RES/2 + XN_VGA_X_RES/2;        //计算中心像素索引
+while (TRUE) {
+nRetVal = context.WaitOneUpdateAll(depth);       //刷新数据缓冲区
+const XnDepthPixel* pDepthMap = depth.GetDepthMap();
+printf(&quot;Middle pixel is %u millimeters away\n&quot;, pDepthMap[nMiddleIndex]);        //输出中心像素的深度值
+}
+context.Shutdown();[/c]</p>
+
+<p>音频生成器（AG）的操作与其它节点相比有一定区别，原因在于当程序执行UpdateData()方法后AG才会将之前记录的音频数据存入数据缓冲区中，而且许多情况下音频生成器的数据缓冲区大小是未知的，因此需要经常使用xn::AudioGenerator::GetDataSize()方法获取当前环境下的数据缓冲区大小。下面的例子中首先创建了一个AG，然后对其进行配置，最后读取音频数据。</p>
+
+<p>[c]Context context;
+nRetVal = context.Init();        //初始化上下文
+AudioGenerator audio;
+nRetVal = audio.Create(context);         //初始化AG
+XnWaveOutputMode waveMode;
+waveMode.nSampleRate = 44100;
+waveMode.nChannels = 2;
+waveMode.nBitsPerSample = 16;
+nRetVal = audio.SetWaveOutputMode(waveMode);        //设置AG配置属性
+while (TRUE) {
+nRetVal = context.WaitOneUpdateAll(audio);        //刷新数据缓冲区
+const XnUChar* pAudioBuf = audio.GetAudioBuffer();
+XnUInt32 nBufSize = audio.GetDataSize();        //获取当前数据大小
+}
+context.Shutdown();[/c]</p>
+
+<p>最后，我们来看看OpenNI提供的录制与缩放功能（NSSDK未提供该功能）。执行录制的前提是首先创建一个Recorder节点对象,并设置好它的待保存文件名。然后应用程序在该节点中添加需要进行录制目标节点，当在Recorder中加入一个节点后，Recorder将首先保存其配置信息，然后对其进行记录。同时Recorder会持续监听目标节点的所有触发事件，以便当节点配置发生改变时能及时获得响应。一旦所有节点添加至Recorder中，应用程序就可以使用Recorder记录节点的数据流了。需要注意的是，针对数据的记录可以使用xn::Recorder::Record()方法，或者通过UpdateAll函数进行。</p>
+
+<p>此外，使用外部XML文件初始化的OpenNI程序可方便地记录其session信息，从而避免修改相应代码。具体只需要在XML文件中为Recorder创建一个新的节点，并将所有节点添加至其中，每当应用程序调用一类UpdataAll函数时均会自动触发记录操作。下面的代码演示了记录一个深度生成器的操作：</p>
+
+<p>[c]DepthGenerator depth;
+nRetVal = depth.Create(context);          // 创建深度生成器
+RetVal = context.StartGeneratingAll();
+Recorder recorder;
+nRetVal = recorder.Create(context);        //创建一个Recorder
+nRetVal = recorder.SetDestination(XN_RECORD_MEDIUM_FILE, &quot;c:\temp\tempRec.oni&quot;);        //配置Recorder属性
+nRetVal = recorder.AddNodeToRecording(depth, XN_CODEC_16Z_EMB_TABLES);        //将深度节点加入Recorder
+while (TRUE) {
+nRetVal = context.WaitOneUpdateAll(depth);        //注意UpdataAll函数既刷新了数据缓冲区，同时对其中的帧数据进行了记录
+}[/c]</p>
+
+<p>录制数据的重放需要首先调用xn::Context::OpenFileRecording()函数，OpenNI读入该文件后先针对文件中的每一个节点创建一个对应的模拟节点，然后使用记录的配置信息进行重配置。应用程序可以随时调用xn::Context::FindExistingNode()获取任何需要的节点，并能像正常节点一样使用。但是应注意，由播放器创建的节点处于锁定状态，且无法被更改，因此其配置信息只能维持记录中保存的状态。同时 ，使用XML文件的OpenNI程序可以轻松替换其载入录制内容，即直接从XML的Recorder节点中读取相应数据。下面的代码就演示了如何载入录制文件，并获取其中保存的深度节点信息。</p>
+
+<p>[c]Context context;
+nRetVal = context.Init();        //初始化上下文
+nRetVal = context.OpenFileRecording(&quot;c:\temp\tempRec.oni&quot;);        //载入录制文件
+DepthGenerator depth;
+nRetVal = context.FindExistingNode(XN_NODE_TYPE_DEPTH, depth);        //获取已录制的深度生成器节点[/c]
+ 在关于OpenNI的最后一篇文章中，我们将重点关注有关节点配置的内容。</pre></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Kinect来了——解析SDK(OpenNI Framework 2)]]></title>
+    <link href="http://www.hanyi.name/blog/2011/08/23/kinect%25e6%259d%25a5%25e4%25ba%2586-%25e8%25a7%25a3%25e6%259e%2590sdkopenni-framework-2/"/>
+    <updated>2011-08-23T00:18:19+08:00</updated>
+    <id>http://www.hanyi.name/blog/2011/08/23/kinect%e6%9d%a5%e4%ba%86-%e8%a7%a3%e6%9e%90sdkopenni-framework-2</id>
+    <content type="html"><![CDATA[<p>前文主要介绍了OpenNI FrameWork的基本概念和整体构架，在正式进入API概览之前，我们需要对工作节点（Production Nodes）进行一些补充说明。</p>
+
+<p><strong> 工作节点的数据创建/销毁机制</strong></p>
+
+<p>通常把能够输出数据的工作节点称为“生成器”，这里我们可以把“生成器”看作一个对象。而当“生成器”对象被首次创建时，这些对象往往不会立即执行有关数据处理的代码，而需要等待上层应用针对该节点输入相关配置信息之后才进行。实际上“生成器”必须等候相关应用的执行指令到达之后才进行创建数据操作。这一操作往往通过下列虚方法实现：</p>
+
+<p>[c]xn::Generator::StartGenerating();[/c]</p>
+
+<p>应注意 ，上面的StartGenerating函数的作用是开始执行数据生成操作，有时我们希望停止生成新数据，但最好能保留该工作节点的配置信息。那么就没有必要销毁该工作节点对象，只需调用下面的函数即可：</p>
+
+<p>[c]xn::Generator::StopGenerating();[/c]</p>
+
+<p>事实上每一个“生成器”节点都需要实现数据输入操作，但有时可能会遇到这种情况：程序运行可能需要上一次处理的数据结果，为了避免频繁I/O，每个“生成器”节点必须在内部保存一份数据结果副本，直到上层代码显示调用更新数据备份区的函数。此类函数通常是以下形式：</p>
+
+<p>[c]xn::Generator::WaitAndUpdateData();[/c]</p>
+
+<p>调用该函数就意味着通知工作节点需要重置自己的数据备份区，并等待下一次新的数据生成操作。在一条完整的工作链上，程序员需要一次性刷新所有工作节点的数据备份区，那么依照不同情况可以选择相应的简便处理方式：</p>
+
+<p>[c]xn::Context::WaitAnyUpdateAll();        //当任意节点产生新数据时，所有节点都刷新自己的数据备份区；</p>
+
+<p>xn::Context::WaitOneUpdateAll();        //只有当某一个指定节点产生新数据时，所有节点才刷新自己的数据备份区，这种情况通常适用于只有一个控制节点的应用程序；</p>
+
+<p>xn::Context::WaitNoneUpdateAll();        //所有节点立即刷新数据备份区；</p>
+
+<p>xn::Context::WaitAndUpdateAll();        //只有当全部节点都产生新数据时，所有节点才刷新自己的数据备份区；[/c]</p>
+
+<p>上述函数均会在延迟两秒后自动退出。</p>
+
+<p>官方建议程序员应尽量使用形如xn::Context::Wait…UpdateAll()的函数进行数据备份区刷新，除非确实需要只刷新某一个节点，上述方式也会在一定程度上简化程序员的设计和编码工作。</p>
+
+<p><strong>主要数据对象</strong></p>
+
+<p>OpenNI的最基本的数据对象是指上下文对象，上下文对象保存了应用程序使用OpenNI的所有状态信息，包括所有工作链。应注意同一个应用程序可同时创建多个上下文对象，但上下文之间无法共享信息。同时上下文对象必须进行初始化后才能首次使用，且需保证所有的附加模块均得到正确的载入和确认。应用程序可以通过调用shutdown函数释放上下文对象所使用的内存空间。</p>
+
+<p>OpenNI中还定义了一种元数据对象，元数据主要用于保存与特殊数据类型有关的属性信息。例如在一套深度映射数据中，其解析度的大小就属于元数据范畴。任何从生成器节点产生的数据都拥有相应的元数据对象。设计元数据对象的目的在于，由于节点配置可由人为随机干预，任何生成器节点的配置信息和其所产生的数据信息始终无法保证完全一致，因此有必要对每套数据也封装进相应的属性信息，这就是元数据对象的作用。</p>
+
+<p><strong> 配置变更</strong></p>
+
+<p>每一个OpenNI中所包含有关配置的选项都携带以下方法：</p>
+
+<p>1、Set函数，用于修改当前配置；</p>
+
+<p>2、Get函数，用于返回当前配置内容；</p>
+
+<p>3、Register和Unregister函数，用于为配置变更事件注册一个回调函数；</p>
+
+<p><strong>数据生成器</strong></p>
+
+<p>1、基本映射图像生成器，OpenNI中用于生成任意数据映射类型的最基本的映射生成器，它的功能主要包括配置控制、特性分配、可替换的视点特性以及帧同步特性；</p>
+
+<p>2、深度映射生成器，主要功能包括获取深度映射、获取设备的最大深度范围、设备的视野属性配置、用户位置特性等；</p>
+
+<p>3、图像生成器，主要功能包括获取彩色图像、获取像素格式属性；</p>
+
+<p>4、红外数据生成器，用于获取当前的红外映射图像；</p>
+
+<p>5、场景分析器，用于获取传感器原始数据，并对原始数据内容进行分类标记和输出，其主要功能包括获取分类映射图像（每一个像素都携带相应的标签）、获取水平面坐标；</p>
+
+<p>6、音频生成器，主要功能包括获取音频缓冲区、配置音频设备属性，包括采样率、通道数以及采样带宽等；</p>
+
+<p>7、姿态生成器，用于对特定的人物或手势进行跟踪，主要功能包括姿态添加/删除、获取活动姿态、注册/反注册姿态存在回调函数、注册/反注册姿态变更毁掉函数；</p>
+
+<p>8、手部标记点生成器，用于跟踪手部标记点，主要功能包括开始/停止手部跟踪、注册/反注册手部跟踪回调函数（包括手部的进/出以及位置变化）；</p>
+
+<p>9、用户生成器，用于生成场景中有关人物的数据，主要功能包括返回用户数据、获取用户信息、获取用户质心CoM、获取携带用户标记像素的场景图像、注册/反注册用户进/出回调函数。</p>
+
+<p>最后，我们将介绍几个OpenNI的基本程序框架。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,2296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: unix/linux | Wing of Dream 梦境之翼]]></title>
+  <link href="http://www.hanyi.name/blog/categories/unix-slash-linux/atom.xml" rel="self"/>
+  <link href="http://www.hanyi.name/"/>
+  <updated>2014-07-12T22:04:54+08:00</updated>
+  <id>http://www.hanyi.name/</id>
+  <author>
+    <name><![CDATA[Han Yi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[MP77的UNIX课件笔记(12)]]></title>
+    <link href="http://www.hanyi.name/blog/2009/06/15/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b012/"/>
+    <updated>2009-06-15T20:44:03+08:00</updated>
+    <id>http://www.hanyi.name/blog/2009/06/15/mp77%e7%9a%84unix%e8%af%be%e4%bb%b6%e7%ac%94%e8%ae%b012</id>
+    <content type="html"><![CDATA[<p>本章介绍socket网络编程，socket是当前计算机网络中最流行的编程接口，同时也是UNIX系统应用中必不可少的关键模块之一。我们会介绍计算机网络的基本概念和原理，但仍然需要读者具备一定的计算机网络通信基础知识。在后继连载中，会经常引用本文讨论的内容。</p>
+
+<p><a id="more"></a><a id="more-180"></a></p>
+
+<p>1 socket网络编程概述</p>
+
+<p>1.1 socket概述</p>
+
+<p>网络协议规定了两台计算机之间进行数据交换的共同规则，包括交换数据的格式和动作序列。但并不规定在一台计算机内利用网络协议传输信息的应用程序和实现这些协议的协议实体之间的程序接口。</p>
+
+<p>UNIX中传输层和传输层以下的协议在操作系统内核中实现，那么，就必须规定一种应用程序使用内核的这些网络功能的方法。UNIX总是习惯于将设备和其他机制组织成文件的方式，然后通过文件描述符像访问普通文件那样访问它们。UNIX访问网络也用文件描述符引用一个特殊文件的方法。网络机制要比终端和管道复杂得多，所以，还提供了一组施加在这种特殊文件描述符上的系统调用实现网络所必需的功能。这组函数，就是应用程序和网络之间的接口。</p>
+
+<p>应用程序与网络之间接口有socket和TLI。socket最先由BSD 4.3提供，TLI（tansport layer interface）由AT&amp;T的System V提供。除此之外，还有其他的几种接口，但没有被程序员普遍接受。</p>
+
+<p>对于socket和TLI，多数程序员更偏爱socket，在System V和其他的UNIX系统中也提供了socket编程界面。Windows系统中也有类似的Winsock接口，几乎所有函数都兼容。</p>
+
+<p>最流行的网络协议是TCP/IP，socket提供的编程接口可以使用TCP/IP协议。BSD UNIX设计的socket编程界面是一种通用的网络编程界面，充分考虑了各种网络，例如：IPX网络，X.25网络，ISO的传输层协议TP4，IBM的SNA，以及UNIX内的进程之间通信等。但是，许多系统并不提供所有这些网络支持，有的系统甚至只允许TCP/IP协议的socket编程。</p>
+
+<p>在运行TCP/IP协议的计算机中，一般都支持软件虚拟的IP数据报自环接口loopback。如果试图和IP地址等于自己地址的计算机通信，或者与地址127.0.0.1的计算机通信，数据不会发送到网络上，而是通过内核实现的虚拟的自环接口loopback，将数据回环到计算机自身。利用这一点，可以在一个计算机的多个进程之间进行通信。</p>
+
+<p>现代的许多软件设计，同一台计算机内的进程之间通信也使用socket方式，这使得系统有很大的灵活性，因为需要的时候，只要将两个进程分布到不同的计算机上运行就可以了，而不需要更改程序。</p>
+
+<p>1.2 TCP和UDP协议</p>
+
+<p>TCP/IP对应用程序提供的服务主要有两种：</p>
+
+<p>1、一种是面向连接的可靠的数据流传输TCP，另一种是无连接不可靠数据报传输UDP。</p>
+
+<p>2、应用程序员在使用TCP/IP网络编写通信程序之前，应当首先在TCP和UDP协议之间作出选择，它们决定了由系统提供的通信可靠性。</p>
+
+<p>1.3 基本网络体系结构</p>
+
+<p>在ISO(International organization for Standards)定义的网络体系结构OSI(Open System Interconnection)开放系统互连模型中，计算机网络被定义为七层结构模型。从底向上分别是物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。目前广泛使用的Internet协议簇结构表示如下：</p>
+
+<p>介质层包括IEEE802.3(Ethernet)、802.4(token bus)、802.5(token ring)及其它；</p>
+
+<p>网络层以Internet protocal为主，ARP、RARP、ICMP和IGMP为辅结构；</p>
+
+<p>传输层主要分为TCP协议和UDP协议；</p>
+
+<p>应用层建立了以TCP为基础的FTP、TELNET、SMTP、SNMP，DNS(Domain Name Server)则建立在TCP和UDP之上，另外一些如RPC、NFS、XDR建立在纯粹的UDP协议之上。</p>
+
+<p>计算机网络的通信过程不属于本文讨论范围，如有必要可自行查阅相关文献。</p>
+
+<p>1.4 网络字节次序</p>
+
+<p>不同计算机厂商在计算机内部存储整数的方法会有不同。有的厂商将整数的低位字节放在最低地址处，这种安排叫Little Endian，而有的厂商正好相反，高位字节放在内存的低地址处，它们的字节顺序安排叫Big Endian。</p>
+
+<p>网络通信时，总是从内存的低地址开始传输连续的若干字节，因此，网络软件为了保证各计算机之间的互联性，要求所有的数据按统一的字节顺序传输，这就是规定的网络字节顺序。网络字节顺序的规定与Big Endian 相同。</p>
+
+<p>UNIX中htons，htonl两个库函数，分别将短整数和长整数从主机字节次序转换到网络字节次序。相应地，ntohs和ntohl把网络字节顺序转换到主机字节顺序。</p>
+
+<p>在socket的网络系统调用和库函数的结构体参数中的整数，一般也要求按网络字节顺序排列。为了源程序的可移植性，即使所用的UNIX中主机字节顺序与网络字节顺序正好吻合，也不要省略掉所必须的htons、htonl、ntohs和ntohl。</p>
+
+<p>2 TCP客户端/服务器程序</p>
+
+<p>2.1 Clinet/Server结构概述</p>
+
+<p>socket编程接口，无论使用TCP还是UDP协议，都是一种client/server风格的软件结构。client/server结构的协议软件包括客户端软件和服务器端软件。</p>
+
+<p>以文件传送协议FTP为例，UNIX提供的ftp命令就是客户端软件，在提供文件传送服务的远程计算机上，运行服务器端软件。这些服务器端的软件，在UNIX中由“精灵(daemon)”进程inetd控制，当TCP连接到达时，inetd创建ftpd服务进程负责与客户端软件的ftp通信，以完成文件传送操作，文件传送结束后，ftpd进程结束。</p>
+
+<p>事实上，UNIX设计的socket机制，不仅仅是面向TCP/IP协议的，而是面向所有的网络通信，包括SPX/IPX，X.25，SNA，甚至充分考虑了可扩展性，支持将来可能出现的其他协议。IPv6比socket出现得晚，但是仍然继续沿用socket机制的这层“壳”，内核扩充了IPv6支持后，应用程序员就可以写基于IPv6的socket风格的通信程序了。</p>
+
+<p>2.2 仿照文件的操作模式</p>
+
+<p>访问文件有一组函数，而且这些函数调用的先后顺序也有一定的规则：</p>
+
+<p>先open得到文件描述符fd，然后可以执行read和write访问文件内容，另有一些可以施加在fd上的函数，如：lseek定位文件指针，fcntl设置close-on-exec标志或者对文件的记录加锁，fstat获得文件的状态，等等。</p>
+
+<p>使用管道时，就不再用open获得文件描述符，而是用pipe一次获得两个文件描述符。</p>
+
+<p>使用socket的情况类似：</p>
+
+<p>先用socket创建一个文件描述符，在这个文件描述符上，先施行一些connect，bind，listen等操作控制建立TCP连接，然后才能使用read和write收发数据。</p>
+
+<p>通信过程中可使用fcntl、setsockopt和getpeername等函数，获得一些通信的状态，或者设置一些与通信有关的参数。最终，用close关闭连接。</p>
+
+<p>这些函数调用的先后顺序，也遵循一定的规则。</p>
+
+<p>2.3 网间进程通信需解决的问题</p>
+
+<p>1、网间进程标识问题</p>
+
+<p>单机上不同进程可以用进程号唯一标识。但在网络环境下，各主机独立分配的进程号是不能唯一标识该进程的。</p>
+
+<p>2、多重协议的识别问题</p>
+
+<p>操作系统支持的网络协议众多，不同协议的工作方式、地址格式都不同， TCP/IP协议引入了下列几个概念解决多重协议的识别问题：端口、地址、网络字节序、连接、半相关、全半相关等。</p>
+
+<p>接下来我们将对以上概念逐一做一介绍。</p>
+
+<p>2.3.1 Ports</p>
+
+<p>把网络地址和端口号信息放在一个结构中，也就是套接字地址结构。大多数套接字系统调用都需要一个指向套接字地址结构的指针作为参数，并以此来传递地址信息。每个协议族都定义它自己的套接字地址结构，套接字地址结构都以“sockaddr_”开头，并以每个协议族名中的两个字母作结尾。</p>
+
+<p>端口包括一些数据结构和I/O缓冲区。进程通过系统调用和某端口建立连接后，传输层传给该端口的数据都被相应的进程接收，相应进程发给传输层的数据都从该端口输出。</p>
+
+<p>在TCP/IP协议的实现中，端口操作类似于一般I/O操作，进程获取一个端口相当于获取本地的唯一的I/O文件，可以用一般的读/写原语访问。类似于文件描述符，每个端口都有一个叫端口号的整数描述符，以区别不同的端口。由于TCP/IP传输层的两个协议TCP和UDP是两个完全独立的软件模块，因此各自端口号也相互独立。如TCP和UDP的端口号可以相同，两者并不冲突。</p>
+
+<p>2.3.2 端口的分配</p>
+
+<p>（1）全局分配：是一种集中式分配，由一个公认的中央机构根据用户的需要进行统一分配，并将结果公布于众；</p>
+
+<p>（2）本地分配（ 动态连接）： 进程在需要访问传输层时，向本地操作系统提出申请，操作系统返回本地唯一的端口号，进程再通过合适的系统调用将自己和该端口连接起来（binding)。</p>
+
+<p>TCP/IP端口号分配综合了两种方式。 TCP/IP是将端口号分为两部分，少量的作为保留端口（&lt;256），以全局的方式分配给服务进程。因此，每一个标准服务器都拥有一个全局公认的端口叫周知口，即使在不同的机器上，其端口号也相同。如HTTP中80、TELNET中的23等。剩余的为自由端口，是以本地方式进行分配。</p>
+
+<p>/etc/services文件包含了服务名、端口号和协议名。若机器提供新服务，则需要在该文件中建立一项。</p>
+
+<p>2.3.3 地址</p>
+
+<p>网络通信中的两个进程是分别在两个不同的机器上。两台机器可以位于不同的网络，这些网络通过互连设备（网关、网桥、路由器）连接，因此需要三级寻址（网络地址、主机地址、进程标识）。</p>
+
+<p>某一主机可与多个网络相连，必须指定一特定网络地址；</p>
+
+<p>网络上每一台主机应有其唯一的地址；</p>
+
+<p>每一主机上的每一进程应有在该主机上的唯一标识符。</p>
+
+<p>通常主机地址由网络ID和主机ID组成，在TCP/IP协议中用32位整数值表示；TCP和UDP均使用16位端口号标识用户进程。</p>
+
+<p>2.3.4 连接</p>
+
+<p>两个进程间的通信链路称为连接，连接在内部表现为一些缓冲区和一组协议机制。</p>
+
+<p>2.3.5 半相关和全半相关</p>
+
+<p>1、半相关（half-association）</p>
+
+<p>网络中用一个三元组(the triple)可以在全局中唯一标识一个进程（协议，本机地址，本地端口号）。这样的一个三元组叫做半相关。</p>
+
+<p>2、全半相关</p>
+
+<p>一个完整的网间进程通信需要两个进程组成，并且只能使用同一种高层协议，也就是说TCP无法和UDP通信，因此一个完整的网间进程通信需要一个五元组来标识（协议，本机地址，本地端口号，远地地址，远地端口号）。</p>
+
+<p>这样一个五元组，叫做一个相关（association），即两个协议相同的半相关才能组合成一个合适的相关，或完全指定组成一连接。</p>
+
+<p>2.3.6 服务方式</p>
+
+<p>1、面向连接服务</p>
+
+<p>面向连接服务是电话系统服务模式的抽象，即每一次完整的数据传输都要经过建立连接，使用连接，终止连接的过程。在数据传输过程中，各数据分组不携带目的地址，而使用连接号（connect ID）。本质上，连接是一个管道，收发数据不但顺序一致，而且内容相同。TCP协议提供面向连接的虚电路。</p>
+
+<p>2、无连接服务</p>
+
+<p>无连接服务是邮政系统服务的抽象，每个分组都携带完整的目的地址，各分组在系统中独立传送。无连接服务不能保证分组的先后顺序，不进行分组出错的恢复与重传，不保证传输的可靠性。UDP协议提供无连接的数据报服务。</p>
+
+<p>2.3.7 客户机/服务器模式</p>
+
+<p>TCP/IP允许程序员在两个应用程序之间建立通信并来回传送数据，提供一种对等通信，可以是同一台机器上，也可以是不在同一台机器上。TCP/IP指明了数据是如何进行通信的，但并没有规定如何组织这些应用程序。</p>
+
+<p>实践中网间进程通信的主要模式是客户机/服务器模式，即客户机向服务器发出请求，服务器在接收到请求后提供相应的服务。客户与服务器的作用是非对称的，服务器进程一般是先于客户启动，并一直随系统运行而存在，直到被终止。</p>
+
+<p>客户机/服务器模式的建立基于以下两点：</p>
+
+<p>（1）网络的目的是共享，从而让拥有众多资源的主机提供服务，让资源较少的客户请求服务；</p>
+
+<p>（2）网间进程通信完全是异步的，在通信的进程间需要一种机制建立联系，以便为二者的数据交换提供同步。</p>
+
+<p>客户机/服务器模式操作过程中采取的是以下主动请求方式：</p>
+
+<p>1、服务器端</p>
+
+<p>（1）打开一个通信信道，并告知本地主机将在某一公共地址端口（如Http中80、Telnet中的23）上接受用户的请求；</p>
+
+<p>（2）等待客户请求到达端口；</p>
+
+<p>（3）若接收到重复请求服务，则处理该请求并发送应答信号；若接收到并发服务请求，则要建立子进程来处理这个客户的请求，服务完成后，关闭子进程与客户的通信链路，并终止子进程；</p>
+
+<p>（4） 跳至（2）步；</p>
+
+<p>（5） 关闭服务器。</p>
+
+<p>2、客户端</p>
+
+<p>（1）打开一个通信信道，并连接到服务器所在主机的特定端口；</p>
+
+<p>（2）向服务器发出服务器请求报文，等待并接受应答；</p>
+
+<p>（3）请求结束后关闭与服务器的通信链路并终止此进程。</p>
+
+<p>从以上描述过程可以看出：</p>
+
+<p>客户与服务器的作用是非对称的，因此编码不同。</p>
+
+<p>服务器进程一般是先于客户请求启动。只要系统运行，进程就一直存在，直到正常终止或者强迫终止。</p>
+
+<p>客户软件不必处理并发性，因此比服务器程序简单得多。</p>
+
+<p>2.3.8 TCP协议的实现机制</p>
+
+<p>UDP协议是无连接的不可靠的协议，而TCP是面向连接的，所谓面向连接，是指在数据传输开始前建立一个数据通道，这个通道在整个数据传输过程中都保证通畅，到传输结束才关闭这一通道。</p>
+
+<p>一个典型的TCP协议双方通信的过程是：</p>
+
+<p>（1）获得对方IP地址和端口号。</p>
+
+<p>（2）在本地主机上选择一个IP地址和端口号。</p>
+
+<p>（3）建立连接。</p>
+
+<p>（4）传输数据   这时数据就好象是直接从发送方顺序流出到接收方的一样，与普通的文件流操作没有什么不同。</p>
+
+<p>（5）断开连接。</p>
+
+<p>2.4 TCP网络通信程序构建</p>
+
+<p>2.4.1 建立TCP连接</p>
+
+<p>为了建立一条可靠的连接，TCP采用3次握手：</p>
+
+<p>（1）服务器首先执行被打开的连接操作：socket, bind, listen, accept,然后服务器阻塞，等待客户端的连接。</p>
+
+<p>（2）客户端执行主动打开的连接操作：socket,connect,同时客户端向服务器发送SYN类型的数据段，其中包括客户端的序列号。</p>
+
+<p>（3）服务器接收到这个SYN数据段后，也发送一个SYN类型的数据段，其中包括服务器的序列号和对上一个SYN的确认。</p>
+
+<p>（4）客户端在接收到这个确认后，就发送了对服务器SYN的确认，完成客户端的连接。</p>
+
+<p>（5）服务器接收到这个确认，完成服务器的连接。</p>
+
+<p>2.4.2 面向连接的SOCKET编程</p>
+
+<p>套接字根据使用的协议不同可以分很多种，这里主要介绍两种：TCP套接字和UDP套接字。</p>
+
+<p>Socket套接字对于不同的对象存在相应合理的解释。对于内核来说，socket标记了通信的终点，而对于应用程序来说，socket是一个文件描述符，这种文件描述符指定了应用程序写入/读取信息的位置。</p>
+
+<p>显然，套接字描述符和文件描述符形式上基本一致，但数据结构上存在很大区别。</p>
+
+<p>文件描述符在前文中已经有详细讨论，我们曾提到每个进程均含有一张文件描述符表，表内的数据结构存储了文件的相关信息。</p>
+
+<p>套接字接口为网络通信增加了一个新的抽象，即套接字。当进程调用socket后，操作系统就分配了一个新的数据结构以便保存通信所需的信息，并在文件描述符表中填入了一个新的条目，该条目含有一个指向这个数据结构的指针。尽管套接字内部的数据结构有许多字段，在系统创建套接字后，大多数字段中的值并没有填上。在套接字能够被使用之前，创建该套接字的应用程序必须用其他系统调用把套接字数据结构中的这些信息填上。</p>
+
+<p>套接字一旦创建，应用程序就必须指定如何使用它，套接字本身是完全通用的，可以用来进行任意方式的通信。例如，服务器可以将套接字配置为等待传入连接，而客户可以将其配置为发起连接。</p>
+
+<p>如果服务器将套接字配置为等待传入连接，就称此套接字套接字为主动套接字；反之，客户用来发起连接的套接字就称为被动套接字。</p>
+
+<p>使用TCP的客户和服务器各自使用套接字的一种调用序列。</p>
+
+<p>客户创建套接字，调用connect连接服务器，交互时，使用send（或者write）发送请求，使用recv（或者read）接收应答。当使用连接结束时，客户调用close。</p>
+
+<p>服务器使用bind指明使用的本地（熟知）协议端口，调用listen设置连接等待队列的长度，之后便进入循环。在循环中，服务器调用accept进行等待，直到下一个连接请求到达为止，它使用recv和send（或read和write）同客户交流，最后使用close终止连接。之后，服务器回到accept调用，在那里等待下一个连接。</p>
+
+<p>2.4.3 使用TCP时客户和服务端通信流程</p>
+
+<p>服务端：socket-&gt;bind-&gt;listen-&gt;accept-&gt;read-&gt;write-&gt;close</p>
+
+<p>客户端：socket-&gt;connect-&gt;write-&gt;read-&gt;close</p>
+
+<p>2.4.4 套接字用到的具体数据结构</p>
+
+<p>1、通用套接字地址数据结构（/usr/include/sys/socket.h）</p>
+
+<p>struct sockaddr   /<em>struct  to hold an address </em>/</p>
+
+<p>{</p>
+
+<p>unsigned short sa_familly;     /<em>address family</em>/</p>
+
+<p>char        sa_data[14];       /<em>protocol address</em>/</p>
+
+<p>};</p>
+
+<p>sa_familly为协议族，指出通信协议类型，对于internet域的地址族为AF-INET。</p>
+
+<p>sa_data存贮实际的地址。</p>
+
+<p>2、IPV4套接字地址数据结构</p>
+
+<p>在实际中为了方便处理，每个协议在上面通用定义的基础上改成自己的套接字地址结构，这些结构均以“sockaddr_”开头，并以对应每个协议族的唯一后缀结束。</p>
+
+<p>对于我们关心的Internet（IPV4）域，我们有专用的套接字地址结构sockaddr_in结构，它定义在中。</p>
+
+<p>struct sockaddr_in</p>
+
+<p>{</p>
+
+<p>short int  sin_fammily;    / <em>address family Ipv4 is AF_INET</em>/</p>
+
+<p>unsigned short  sin_port;   /<em>port  number</em>/</p>
+
+<p>struct in_addr   sin_addr;  /<em>internet address   IP address</em>/</p>
+
+<p>unsigned char  sin_zero[8]; /<em>same size as struct sockaddr</em>/</p>
+
+<p>};</p>
+
+<p>struct  in_addr</p>
+
+<p>{</p>
+
+<p>unsigned long s_addr;   /<em>32-bit  IP  address , network byte</em>/</p>
+
+<p>};</p>
+
+<p>2.4.5 套接字用到的基本系统调用</p>
+
+<p>1、socket系统调用，用来获得一个socket描述符。</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<p>int socket(int domain, int type,  int protocol);</p>
+
+<p>domain是指存放通信进程的区域，通常使用的domains包括：</p>
+
+<p>AF_UNIX for communication between processes on one system;</p>
+
+<p>AF_INET (IPv4) for communication between processes on the same or different systems using the DARPA standard protocols(IP/UDP/TCP)</p>
+
+<p>AF_INET6 (IPv6)</p>
+
+<p>AF_LOCAL (Unix domain)</p>
+
+<p>…</p>
+
+<p>type：通信的类型SOCK-STREAM（TCP)、SOCK-DGRAM(UDP)、SOCK-RAW。</p>
+
+<p>Protocol：一般为0，除非使用原始套接口。</p>
+
+<p>2、bind系统调用</p>
+
+<p>bind为套接字指定本地地址，它包含了IP地址和协议端口号，服务器主要由bind来指明熟知的端口号，它在此熟知的端口号等待连接。以下是一段bind程序演示：</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<h1>define MYPORT 3490</h1>
+
+<p>main()</p>
+
+<p>{
+int sockfd;
+struct sockaddr_in   my_addr;
+sockfd = socket(AF_INET, SOCK_STREAM, 0); /<em>需要错误检查 </em>/
+my_addr.sin_family = AF_INET; /<em> host byte order </em>/
+my_addr.sin_port = htons(MYPORT); /<em> short, network byte order </em>/
+my_addr.sin_addr.s_addr = inet_addr(&ldquo;132.241.5.10&rdquo;);
+bzero(&amp;(my_addr.sin_zero),; /<em> zero the rest of the struct </em>/
+/<em> don&rsquo;t forget your error checking for bind(): </em>/
+bind(sockfd, (struct sockaddr *)&amp;my_addr, sizeof(struct sockaddr));</p>
+
+<p>&hellip;</p>
+
+<p>处理自己的 IP 地址和端口的 时候，有些工作是可以自动处理的。
+my_addr.sin_port = 0; /<em> 随机选择一个没有使用的端口 </em>/
+my_addr.sin_addr.s_addr = INADDR_ANY; /<em> 用自己的IP地址 </em>/
+通过将0赋给 my_addr.sin_port，告诉 bind() 自己选择合适的端 口。</p>
+
+<p>将 my_addr.sin_addr.s_addr 设置为 INADDR_ANY，告诉 它自动填上它所运行的机器的 IP 地址。没有将INADDR_ANY转 换为网络字节顺序！INADDR_ANY 实际上就 是 0！即使你改变字节的顺序，0依然是0。
+my_addr.sin_port = htons(0); /<em> 随机选一没有使用的端口 </em>/
+my_addr.sin_addr.s_addr = htonl(INADDR_ANY);</p>
+
+<p>/<em> 使用自己的IP地址 </em>/</p>
+
+<p>3、connect系统调用</p>
+
+<p>connect系统调用于在一个指定的socket上建立一个连接。</p>
+
+<p>int connect(int sockfd, struct sockaddr *serv_addr,int addrlen);</p>
+
+<p>在创建套接字后，客户程序connect以便同远程服务器建立主动的连接，connect的一个参数允许客户指明远程端点，它包括IP地址以及协议端口号。一旦建立了连接，客户就可以向它传送数据了。</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<h1>define DEST_IP   &ldquo;132.241.5.10&rdquo;</h1>
+
+<h1>define  DEST_PORT  23</h1>
+
+<p>main()</p>
+
+<p>{</p>
+
+<p>int sockfd;</p>
+
+<p>struct sockaddr_in  dest_addr; /<em> 目的地址</em>/
+sockfd = socket(AF_INET, SOCK_STREAM, 0); /<em> 错误检查 </em>/
+dest_addr.sin_family = AF_INET; /<em> host byte order </em>/</p>
+
+<p>dest_addr.sin_port = htons(DEST_PORT); /<em> short, network byte order </em>/
+dest_addr.sin_addr.s_addr = inet_addr(DEST_IP);</p>
+
+<p>bzero(&amp;(dest_addr.sin_zero),; /<em> zero the rest of the struct </em>/
+/<em> don&rsquo;t forget to check error  </em>/
+connect(sockfd, (struct sockaddr *)&amp;dest_addr, sizeof(struct sockaddr));</p>
+
+<p>&hellip;</p>
+
+<p>4、listen系统调用</p>
+
+<p>系统调用使一个套接字进入监听状态，仅被TCP服务器调用</p>
+
+<h1>include</h1>
+
+<p>int listen(int sockfd, int backlog);</p>
+
+<p>在创建套接字后,直到应用程序采取进一步行动以前，它既不是主动的（由客户使用）也不是被动的（由服务器使用）。面向连接的服务器用listen将一个套接字置为被动的模式，并使其准备接受传入连接。大多数服务器由无限循环构成。该循环可以接受传入的下一个连接，然后对其进行处理，完成后便返回准备接受下一个连接，正处于忙的服务器有可能又来了一个连接请求。为保证不丢失连接请求，服务器必须给listen传递一个参数，告诉操作系统对某个套接字上的连接请求进行排队。因此，listen的一个参数指明某个套接字将被置为被动的模式，而另一个参数将指明套接字所使用的队列长度。</p>
+
+<p>5、accept系统调用</p>
+
+<p>int accept(int sockfd, struct sockaddr <em>addr, int </em>addrlrn);</p>
+
+<p>accept返回非负描述字表示成功，出错将返回-1。如果成功，则返回值用来标识新建立的连接。</p>
+
+<p>参数addr为返回客户进程协议地址，参数addrlen为返回客户进程协议地址的长度。</p>
+
+<p>对TCP套接字，服务器用socket创建一个套接字，用bind指明本地端口地址，用listen将其置为被动的模式，用accept以获取传入连接请求，accept的一个参数指明一个套接字，将从该套接字上接受连接。</p>
+
+<p>accept为每一个新连接创建了一个新的套接字，并将这个新套接字的描述符传给调用者。服务器只对这个新的连接使用该套接字，而原来的套接字接受其他的连接请求。服务器一旦接受了一个连接后，它就可以在这个新的套接字上传送数据。在使用完这个新的套接字后，服务器将关闭该套接字。</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<h1>define MYPORT 3490 /<em>用户接入端口</em>/</h1>
+
+<h1>define BACKLOG 10 /<em> 多少等待连接控制</em>/</h1>
+
+<p>main()</p>
+
+<p>{</p>
+
+<p>int sin_size;
+int sockfd, new_fd; /<em> listen on sock_fd, new connection on new_fd </em>/
+struct sockaddr_in  my_addr; /<em> 地址信息 </em>/
+struct sockaddr_in  their_addr; /<em> connector&rsquo;s address information </em>/
+sockfd = socket(AF_INET, SOCK_STREAM, 0); /<em> 错误检查</em>/
+my_addr.sin_family = AF_INET; /<em> host byte order </em>/
+my_addr.sin_port = htons(MYPORT); /<em> short, network byte order </em>/
+my_addr.sin_addr.s_addr = INADDR_ANY; /<em> auto-fill with my IP </em>/
+bzero(&amp;(my_addr.sin_zero),; /<em> zero the rest of the struct </em>/
+/<em> don&rsquo;t forget your error checking for these calls: </em>/
+bind(sockfd, (struct sockaddr *)&amp;my_addr, sizeof(struct sockaddr));
+listen(sockfd, BACKLOG);
+sin_size = sizeof(struct sockaddr_in);
+new_fd = accept(sockfd, &amp;their_addr, &amp;sin_size);</p>
+
+<p>&hellip;</p>
+
+<p>6、send和recv系统调用(read和write)</p>
+
+<p>int send( int sockfd,void *buf ,int len,int flags);</p>
+
+<p>int recv( int sockfd,void *buf ,int len,int flags);</p>
+
+<p>在大多数UNIX系统，程序员可以用read代替recv，用write代替send。对TCP和UDP套接字来说，他们的语义是一样的。把 flags 设置为 0 就可以了。</p>
+
+<p>下列调用将导致进程阻塞：</p>
+
+<p>1、accept()系统调用,若没有连接请求，则被阻塞。</p>
+
+<p>2、read()系统调用。</p>
+
+<p>3、write()系统调用。</p>
+
+<p>7、Closesocket</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MP77的UNIX课件笔记(11)]]></title>
+    <link href="http://www.hanyi.name/blog/2009/06/13/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b011/"/>
+    <updated>2009-06-13T23:24:07+08:00</updated>
+    <id>http://www.hanyi.name/blog/2009/06/13/mp77%e7%9a%84unix%e8%af%be%e4%bb%b6%e7%ac%94%e8%ae%b011</id>
+    <content type="html"><![CDATA[<p>3 进程与文件描述符</p>
+
+<p>3.1 内核中的文件打开结构</p>
+
+<p>我们已经在前文中介绍过有关文件描述符的概念。在OS文件系统中，为了提高文件访问的效率，在访问一个文件时，将文件的inode节点读入内核内存，在整个文件访问期间使用内存中的inode节点。由于同一个进程可以访问多个文件，多个进程可以同时访问文件，因此在内核中构建了“活动文件目录AFD”active file directory，文件描述符即该文件目录的索引。</p>
+
+<p><a id="more"></a><a id="more-179"></a></p>
+
+<p>从内核的角度来看，AFD是一个三级存储结构，它包括了如下几个部分：</p>
+
+<p>1、进程PCB的user结构中有一整型数组u_ofile，记录当前进程打开的文件。所谓的文件描述符fd，实际上就是user结构中u_ofile数组的下标值。每个进程有一个u_ofile数组。当然，无论是动态分配还是静态分配，系统不可能允许这个数组无限大，这就是每个进程最多可以打开的文件个数限制。</p>
+
+<p>2、u_ofile数组中的元素值，是一个整数，这个整数是file数组的一个下标。file定义在/usr/include/sys/file.h中，主要包含以下几个域：</p>
+
+<p>struct file{</p>
+
+<p>char f_flag; //开启文件的读写操作要求</p>
+
+<p>char f_count; //引用计数</p>
+
+<p>int f_inode; //内核中inode数组的下标，可找到已读入内核中的文件inode节点</p>
+
+<p>offset_t f_offset; //文件读写位置指针，系统在此记录文件读写位置</p>
+
+<p>}</p>
+
+<p>3、内存inode表在整个系统也只有一张，是外存中inode的缓冲。在内存inode中也有一个引用计数字段，统计有多少个file结构引用它。</p>
+
+<p>在具体的OS实现中，尽管可能使用了更复杂的引用类型，但整体三级结构的框架是不变的。</p>
+
+<p>内存AFD三级存储结构的构建，与文件描述符的有关操作密切相关。</p>
+
+<p>例如open调用，其实质是增加了活动文件目录，在三级表格中增加原始条目。在open层次上已经将设备虚拟得跟普通磁盘文件一样。</p>
+
+<p>又例如管道操作pipe，网络通信socket，都是创建文件描述符，系统把它们虚拟得跟普通文件一样，随后利用read、write像访问普通磁盘文件一样访问管道，或者在网络连接上收发数据。fork导致的子进程继承也会增加条目。</p>
+
+<p>而close调用实质是AFD的删除操作，直接消除u_ofile项，根据引用计数，可能会引发file，inode结构的释放。进程正常地或者异常地终止，内核都会根据进程user结构中u_file的记载，自动关闭已打开的所有文件。</p>
+
+<p>3.2 文件描述符的继承和复制</p>
+
+<p>3.2.1 文件描述符的继承</p>
+
+<p>根据上节介绍的AFD原理，我们很容易能理解fork和exec对已打开文件的影响。这里仍有必要对此进行进一步说明。</p>
+
+<p>fork创建子进程后，子进程继承父进程已打开的所有文件描述符。具体做法就是，子进程user结构中的u_ofile是父进程这个数组的复制。为了防止随后各自独立执行的父子进程close调用会带来的影响，进行了这样的复制后，所有打开文件描述符对应file结构中的f_count都加1。这样，父子进程可以独立地关闭各自的文件，而对另一个进程不产生影响。这种做法还使得父子进程共用文件的读写位置。</p>
+
+<p>由于fork后父进程的文件描述符被子进程继承，因此子进程不需要再次执行open调用，就可以直接使用这些文件描述符，由于exec系统调用不会创建任何进程，执行exec系统调用也不影响文件描述符。</p>
+
+<p>shell程序正是利用了文件描述符的继承机制，向子进程自动文件描述符0、1、2，分别表示标准输入、标准输出和标准错误输出，确保该进程的上述操作均关联至当前tty。</p>
+
+<p>3.2.2 close-on-exec标志</p>
+
+<p>在有的情况下，我们希望在执行exec时自动关闭某些文件描述符。这就需要为已经打开的文件设置close-on-exec标志。</p>
+
+<p>内核为每个文件描述符记录了一个文件描述符标志字，标志字的第0比特是close-on-exec标志。默认情况下，该标志位被清除，因此如果要求文件描述符在exec时自动关闭，必须取出这个文件描述符的标志字，将第0比特设置为1，标志字的其他比特保持原值，然后重新设置文件描述符的标志字。</p>
+
+<p>获取文件描述符标志字，使用系统调用函数fcntl，函数原型如下：</p>
+
+<h1>include</h1>
+
+<p>int fcntl(int fd,int cmd,&hellip;);</p>
+
+<p>fcntl有很多功能，这里用到的仅仅是获取和设置文件描述符控制字的功能，后面的文件和记录锁定，以及设置无阻塞I/O时，还会用到这个函数。</p>
+
+<p>flags = fcntl(fd,F_GETFD,0);</p>
+
+<p>flags |= FD_CLOEXEC;</p>
+
+<p>fcntl(fd,F_SETFD,flags);</p>
+
+<p>上述程序演示了获取文件描述符关键字、置位close-on-exec标志，然后重新设置文件描述符控制字。F_GETFD和F_SETFD都是中定义的宏。为了程序的可读性，不直接操作第0比特，而是使用宏FD_CLOEXEC，清除该标志应当使用下面的语句：</p>
+
+<p>flags &amp;= ~FD_CLOEXEC;</p>
+
+<p>3.2.3 文件描述符的复制</p>
+
+<p>fork在创建新进程时复制所有文件描述符，如果只需要复制一个文件描述符，需要使用到System call为dup2。</p>
+
+<p>int dup2(int fd1,int fd2);</p>
+
+<p>复制文件描述符fd1到fd2，fd2可以是空闲的文件描述符，如果fd2是已打开的文件，则先关闭原先的fd2，如果fd1不是有效的描述符，则不关闭fd2，调用失败。dup2的返回值为-1时，标志调用失败。</p>
+
+<p>3.3 管道操作</p>
+
+<p>3.3.1 创建管道</p>
+
+<p>进程使用fork创建子进程后，父子进程就有各自独立的存储空间，互不影响。两个进程之间交换数据就不可能像进程内的函数调用那样，通过传递参数或者使用全局变量实现，必须通过其它的方式。</p>
+
+<p>管道是一种历史悠久的进程间通信机制，在shell中通常使用元字符|连接两个命令，就是基于管道机制而实现的。</p>
+
+<p>管道创建后会在内核中生成一个管道对象，进程可以得到两个文件描述符，然后程序就像访问文件一样访问管道。write调用将数据写入管道，read调用从管道中读出写入的内容。读入的顺序和写入的顺序相同。</p>
+
+<p>int pipe(int pfd[2]);</p>
+
+<p>当创建管道失败时，pipe返回-1。创建管道成功后，获得两个文件描述符pfd[0]和pfd[1]，分别用于读管道和写管道。这样如果进程向pfd[1]写入数据，那么就会从pfd[0]顺序读出来。</p>
+
+<p>管道实现的基本思路是，当使用fork创建子进程后，文件描述符被继承，这样父进程冲pfd[1]写入的数据，子进程就可以从pfd[0]读出，从而实现父子进程之间的通信。</p>
+
+<p>一般情况下，父子进程就可以关闭不再需要的文件描述符。</p>
+
+<p>3.3.2 管道读写操作</p>
+
+<p>对于写操作write来说，由于管道是内核中的一个缓冲区，缓冲区不可能无限大，或者说管道不可能长度无限。若管道已满，则write操作会导致进程被阻塞，直到管道另一端read将已进入管道的数据取走后，内核才把阻塞在write的写端进程唤醒。管道容量依赖于Unix系统的实现，一般至少为4096B。</p>
+
+<p>管道的读操作分三种情况。</p>
+
+<p>第一种情况，管道为空，则read调用会将进程阻塞，而不是返回0.进程会一直等待到管道写端向管道写入了数据，才会醒来，read调用返回。类似的情况还有终端读，以及网络通信socket读，在终端没有按键，或者网络上尚未有数据到达的时候，read一样会将进程睡眠等待，而不是返回0。</p>
+
+<p>第二种情况，管道不为空，返回读取的内容，read调用的形式为：</p>
+
+<p>n = read(fd,buf,m);</p>
+
+<p>read的第三个参数m是最多可以读取的字节数。如果管理中实际有n个字节，那么如果m&gt;=n，则读n个；如果m</p>
+
+<p>第三种情况，管道写端已关闭，则返回0。类似的，终端文件和网络socket，终端上按ctrl+D键或者网络连接被关闭，read也是返回0。</p>
+
+<p>两个独立的进程对管道的读写操作，如果未写之前，读先行一步，那么，操作系统内核在系统调用read中让读端进程睡眠，等待写端送来数据。同样，如果写端的数据太多或者写得太快，读端来不及读，管道满了之后操作系统内核就会在系统调用write中让写端进程睡眠，等待读端独奏数据。这种同步机制，在读写速度不匹配时不会丢失数据。</p>
+
+<p>3.3.3 管道的关闭</p>
+
+<p>只有所有进程中引用管道写端的文件描述符都关闭了，读端read调用才返回0。</p>
+
+<p>关闭读端，不再有任何进程读，则导致写端write调用返回-1。errno被设为EPIPE，在写端write函数退出前进程还会收到SIGPIPE信号，默认处理是终止进程，该信号可以被捕捉。</p>
+
+<p>3.3.4 管道通信应注意的问题</p>
+
+<p>1、管道传输的是一个无记录边界的字节流。写端的一次write所发送的数据，读端可能需要多次read才能读取，如一次写64KB数据。也有可能写端的多次write所发送的数据，读端一次就全部读出积压在管道中的所有数据。使用TCP协议的网络socket操作也存在同样的问题。</p>
+
+<p>2、父子进程需要双向通信时，应采用两个管道。父子进程只使用一个管道进行双向数据传送时会存在问题导致数据流混乱。</p>
+
+<p>3、父子进程使用两个管道传递数据，安排不当就有可能产生死锁。死锁出现的原因是，如果父进程一次性将若干处理请求写至管道A，然后读管道B等待这个请求的处理结果。子进程先读管道A得到处理请求，但是每次只从管道A中读走一个请求，将处理结果写到管道B。如果因为某个处理请求的数据过大，写管道A满而导致父进程被阻塞，而子进程因要向父进程写回一个体积较大的数据而导致写管道B也被阻塞，这时死锁出现。</p>
+
+<p>4、管道的缺点，管道是半双工的通信通道，数据只能在一个方向上流动，且只限于父子进程或同祖先进程间通信，而且没有保留记录边界。</p>
+
+<p>3.3.5 命名管道</p>
+
+<p>命名管道允许没有共同祖先的不相干进程访问一个FIFO管道。首先用命令：</p>
+
+<p>mknod pipe0 p</p>
+
+<p>创建一个文件，pipe0是文件名，p是文件类型标识。</p>
+
+<p>这时在文件系统中就存在一个命名管道，向这个文件中写入数据，就是向管道内写数据，从这个文件中读取数据，就是从管道中读取数据。</p>
+
+<p>发送者调用：</p>
+
+<p>fd = open(&ldquo;pipe0&rdquo;,O_WRONLY);</p>
+
+<p>write(fd,buf,len);</p>
+
+<p>接受者调用：</p>
+
+<p>fd = open(&ldquo;pipe0&rdquo;,O_RDONLY);</p>
+
+<p>len = read(fd,buf,sizeof buf );</p>
+
+<p>总的来说，管道是最早用于进程之间通信的手段，包括后来增加的命名管道。而Unix从System V开始增强了进程之间的通信机制IPC(inter-process communication)，提供了消息队列message、信号量semaphore和共享内存share memory等多种通信方式，限于篇幅我们不可能一一列举，读者也可以根据需要随时查阅相关资料。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MP77的UNIX课件笔记(10)]]></title>
+    <link href="http://www.hanyi.name/blog/2009/06/09/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b010/"/>
+    <updated>2009-06-09T10:21:41+08:00</updated>
+    <id>http://www.hanyi.name/blog/2009/06/09/mp77%e7%9a%84unix%e8%af%be%e4%bb%b6%e7%ac%94%e8%ae%b010</id>
+    <content type="html"><![CDATA[<p>上一章讨论了Unix进程控制机制和具体实现，在此基础上我们将进一步研究进程间通信的原理和方法。</p>
+
+<p>2 信号Signal</p>
+
+<p>2.1 信号的基本概念</p>
+
+<p><a id="more"></a><a id="more-178"></a></p>
+
+<p>信号是进程间通信的方法之一，它用以指示某些事件的发生。信号提供了一种异步事件处理的方法。</p>
+
+<p>信号可以由系统核心程序发出，也可以由某些进程发出，但大部分时候是由核心程序发出的。</p>
+
+<p>如系统核心程序在下面几种情况会向进程发信号：</p>
+
+<p>1、程序有异常行为，如企图处以零。（SIGFPE）</p>
+
+<p>2、系统测出一个可能出现的电源故障。（SIGPWR）</p>
+
+<p>3、该进程的子进程执行终止。（SIGCHLD）</p>
+
+<p>4、用户由终端对目标进程输入中断(delete或ctrl-c)，退出(ctrl-)等键。</p>
+
+<p>5、进程调用kill函数可以将信号发送给一个进程或进程组。</p>
+
+<p>6、用户可以用kill命令将信号发送给其他进程。</p>
+
+<p>同时系统中很多条件下会产生一个信号，它们分别被赋予不同的含义：</p>
+
+<p>7、按键产生信号。</p>
+
+<p>SIGINT：Ctrl+C（有的系统是Del键），默认情况下中止当前的进程。</p>
+
+<p>SIGQUIT：Ctrl+\键，默认情况下中止当前进程，但额外生成一个记录进程的内存存储图像的core文件，调试程序可以使用core文件检查进程在终止时的状态。</p>
+
+<p>SIGTSTP信号：在支持作业控制的系统中，终端上按下“挂起键”（一般是 Ctrl+Z键），会产生SIGTSTP信号，默认处理是暂停当前进程的执行，挂起（suspend）当前进程。</p>
+
+<p>8、硬件异常产生信号。</p>
+
+<p>SIGSEGV：内存越界或者试图写只读存储区的存储单元，CPU中的内存管理单元MMU的内存保护机制会引发一个软件中断，操作系统内核在中断服务程序中向进程发送段违例信号（segmentation violation）。</p>
+
+<p>SIGFPE:CPU产生中断最终导致内核向进程发送浮点溢出信号SIGFPE通知用户态的进程。</p>
+
+<p>SIGBUS：早期的RISC结构CPU要求一个4B整数的地址必须能被4整除。</p>
+
+<p>SIGILL：用户状态下的CPU不允许执行硬件I/O指令和其他特权指令。如果用户程序代码中有这样的指令，或者是非法的指令编码，CPU就会产生软中断，最终内核的处理就是送达进程SIGILL信号。默认处理是进程终止。</p>
+
+<p>9、事件产生的信号，当某些事件发生，内核监测到某种条件时，也会给进程发出信号。</p>
+
+<p>SIGALRM：当进程设置的闹钟时间到时会收到该信号。</p>
+
+<p>SIGPIPE：两进程用管道进行通信，从管道读取数据的进程关闭了管道，向管道的写操作进程收到SIGPIPE信号。</p>
+
+<p>SIGTTIN：后台进程试图读终端，会导致终端向其发送SIGTTIN信号，默认处理是进程终止。</p>
+
+<p>SIGHUP：发生在用户从当前终端退出登录的时候，运行在该终端上的程序，会收到SIGHUP信号。</p>
+
+<p>SIGCLD：子进程终止时会产生僵尸进程，内核向父进程发送该信号，通知父进程用wait()调用来获取子进程的终止状态，并销毁僵尸进程，释放僵尸进程占用的资源。</p>
+
+<p>10、其他进程发送来的信号。</p>
+
+<p>用户直接使用kill命令，或者，程序中使用kill()函数，向其他进程发送信号。</p>
+
+<p>发送的信号可以是任意信号类型。发送信号的进程和接收信号的进程必须是同一个用户的进程，或者，发信号的进程是超级用户。以防止不同用户间的恶意干扰。</p>
+
+<p>2.2 SIGNAL定义</p>
+
+<p>SIGNAL标识定义在/usr/include/sys/signal.h头文件中，给每个信号都定义了一个宏名字，这些宏名字都是以SIG开头，这些信号都被定义为正整数（信号编号）。例如delete键和ctrl-c产生的信号是SIGINT，退出(ctrl-)产生的信号是SIGQUIT等，SIGINT的值为2，SIGQUIT的值为3。</p>
+
+<p>SIGNAL类型有很多，这里不再详细介绍。读者可以参考以下较常用的值：</p>
+
+<p>名字 说明 缺省动作</p>
+
+<p>SIGALRM 用户用alarm设置时钟，定时器到时 终止</p>
+
+<p>SIGCHLD 子进程消亡，向父进程发此信号 忽略</p>
+
+<p>SIGCONT 使暂停进程继续 忽略</p>
+
+<p>SIGFPE 算术异常，如除以0 终止w/core</p>
+
+<p>SIGILL 当硬件检查到非法指令时，发送该信号 终止w/core</p>
+
+<p>SIGINT 用delete或ctrl_c 终止，发送到终端相连的所有进程 终止</p>
+
+<p>SIGKILL 杀死进程,不能被捕获或忽略,发生紧急事件用 终止</p>
+
+<p>SIGQUIT 用户用ctrl-\终止程序 终止w/core</p>
+
+<p>SIGUSR1 用户自定义信号1 终止</p>
+
+<p>SIGUSR2 用户自定义信号1 终止</p>
+
+<p>SIGHUP 一个终端切断时,发送信号到该终端相连的所有进程 终止</p>
+
+<p>SIGTERM 由kill命令发送的系统默认终止信号 终止</p>
+
+<p>SIGPIPE 写管道错，进程向没有任何读进程的管道中写数据 终止</p>
+
+<p>2.3 kill发送信号</p>
+
+<p>kill命令和kill函数的功能仅仅是将一个信号送达一个进程或者进程组内的所有进程。</p>
+
+<p>尽管多数的默认情况下，用户直接使用kill命令，不附带任何选项，会给进程送达一个SIGTERM信号。对于那些终端失去控制的进程无法用Ctrl+C键终止，那么，就可以从其他终端上登录，用ps命令查出进程的PID，然后用kill命令发送信号给进程，如果终端还不能恢复正常，甚至可以用kill命令发送信号给这个终端上的shell进程。</p>
+
+<p>但是，该信号是否确实能够将进程“杀死”还要看信号的类型以及进程自身的行为，是否安排了捕捉这个信号。</p>
+
+<p>2.3.1 kill命令</p>
+
+<h1>kill -signal PID-list</h1>
+
+<h1>kill 1275 1277</h1>
+
+<p>默认信号为15（SIGTERM），一般会导致进程终止。</p>
+
+<h1>kill -9 1326</h1>
+
+<p>向进程1326发送一个信号9（SIGKILL），会导致该进程死亡。</p>
+
+<p>在kill命令中，指定进程号PID时，可使用特殊的PID号0，$kill 0 或</p>
+
+<h1>kill -9 0</h1>
+
+<p>向与本进程同组的所有进程发送信号。</p>
+
+<p>2.3.2 会晤组和进程组</p>
+
+<p>UNIX为每个进程在其PCB中设置了两个字段，进程组号PGID（process group ID），会晤组号SID（session ID）。</p>
+
+<p>进程的PGID是创建子进程的时候从父进程那里继承来的，PGID相同的所有进程构成一个“进程组”。PID号和PGID相等的进程是进程组的组长。组长进程终止后，进程组照样可以存在。</p>
+
+<p>从进程的组织结构上看，一个会晤组由一个或者多个进程组构成。</p>
+
+<p>进程的SID也是创建子进程时从父进程那继承来的，SID相同的所有进程构成一个“会晤组”。PID和SID相等的进程是会晤组首进程。也可能会出现没有首进程的会晤组。</p>
+
+<p>ps命令的j选项（job）可以打印出进程的PGID和SID。</p>
+
+<h1>ps -j -u fang</h1>
+
+<p>查阅用户fang的所有进程，每个进程都打印出PGID和SID。</p>
+
+<p>一个会晤组由多个进程组构成。进程组分两类，前台进程组和后台进程组。前台进程组最多只有一个，后台进程组可以有多个。</p>
+
+<p>例如在shell中，从当前登录shell启动的所有进程都属于一个会晤组，会晤组首进程是登录shell自己。通常在一个tty中，进程的标准输出会输出到tty，tty上的按键产生的SIGINT和SIGQUIT信号，只送到前台进程组。如果后台进程企图从tty上获取输入如：scanf()，gets()，进程就会收到SIGTTIN信号，默认处理是终止进程。</p>
+
+<p>2.3.2.1 SIGHUP信号</p>
+
+<p>SIGHUP信号的产生有两种不同的情况:</p>
+
+<p>1、如果控制终端突然断开，那么，内核负责向会晤组首进程发送SIGHUP信号。会晤组首进程终止，内核仅负责向会晤组内的前台进程组发送SIGHUP信号，但不发送到后台进程组。会晤组首进程终止还会导致原会晤组内的所有进程组都失去控制终端。</p>
+
+<p>控制终端突然断开的情况发生在连接终端的调制解调器断线，或者使用网络虚拟终端时，TCP连接断开。TCP连接断开的原因会是由于网络故障，或者TELNET客户端使用TELNET自身的close命令关闭连接。</p>
+
+<p>2、会晤组首进程的终止，包括自愿终止和被迫终止。在登录shell中执行exit或logout，作为会晤组首进程的shell就会终止。被迫终止:在其他终端上使用kill -9命令，或者会晤组首进程中的软件故障导致内存越权访问而收到内核发来的SIGSEGV信号而终止。</p>
+
+<p>会晤组首进程终止后，残留的后台进程组就失去了控制终端，用ps命令列出的进程的TTY属性打印的是问号(?)。即使同一个用户再次从这个终端登录，也不会成为这些进程的控制终端。</p>
+
+<p>失去控制终端的进程中访问终端的操作read(0,buf,nbytes)会导致read返回0，这会影响scanf,gets等函数；写操作write(1,buf,nbytes)会失败返回-1，errno为EIO，没有任何输出，这影响printf等函数。</p>
+
+<p>2.3.2.2 不同shell的PGID与SID区别</p>
+
+<p>会晤组，前台进程组，后台进程组，进程的这些组织关系，是由UNIX的相关系统调用实现的。</p>
+
+<p>上述的这些处理方式，在C-shell, K-shell, bash中相同。</p>
+
+<p>在不支持作业控制的传统的Bourne Shell中，处理就会有些不同。它作为登录shell时，在一个终端上启动的所有进程，包括像前面使用&amp;元字符启动的进程，以及前台进程，都属于同一个进程组。登录shell进程做组长。也就是说会晤组内只有一个进程组，而且作为前台进程组。</p>
+
+<p>SIGHUP信号的发送时机与会晤组，进程组，控制终端的关系，以及进程组织关系的安排，在不同的系统或者不同的shell中会有些差异。有的UNIX不支持作业控制功能，没有会晤组（session）的概念，但是都支持进程组的概念。</p>
+
+<p>2.3.2.3 setpgid</p>
+
+<p>进程组的最主要作用就是进程组的成员可以一起接收到相同的信号。这样便于一起管理共同协作的多个进程。</p>
+
+<p>UNIX提供了系统调用函数setpgid()，可以修改进程的PGID。</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<p>int setpgid(pid_t pid, pid_t pgid);</p>
+
+<p>将进程pid组号设为pgid。成功函数返回0；失败返回–1。</p>
+
+<p>如果参数pid设为0，使用进程自己的PID；参数pgid设为0，使用pid指定进程的PID做组号。</p>
+
+<p>为了安全起见，系统只允许进程修改它自己和它的子进程的PGID，而且，在子进程调用了exec之后，就不能再改变子进程的PGID。</p>
+
+<p>如果fork之后再由父进程修改子进程的PGID就可能会出问题。如果子进程赶在父进程修改PGID之前执行了exec，那么父进程的修改就会失败。所以，fork之后，子进程修改自己的PGID后再执行exec就可以避免这样的情况发生。</p>
+
+<p>2.3.2.4 setsid</p>
+
+<p>一般的程序员对setpgid()调用不是很感兴趣，这常常由shell程序使用。</p>
+
+<p>一般程序员更感兴趣的是系统调用函数setsid()。它设置进程的SID和PGID都为自己的PID，而且脱离控制终端。系统调用的函数原型是：</p>
+
+<p>pid_t setsid(void);</p>
+
+<p>调用这个函数的进程必须不是组长进程，调用才能成功。</p>
+
+<p>调用结束后，事实上创建了新的会晤组和进程组，并失去控制终端。</p>
+
+<p>当前进程成为了新会晤组和新进程组的惟一成员，既是会晤组首进程又是进程组组长。这样，脱离了原来的会晤组和进程组关系之后，原终端退出登录，原进程组群发信号，当前进程都不会再受到干扰。</p>
+
+<p>2.3.3 kill系统调用</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<p>int kill(pid_t pid,int signo);</p>
+
+<p>把信号signo发送给进程标识号为pid的相关进程。成功时间返回0，失败返回-1。</p>
+
+<p>pid取值情况：</p>
+
+<p>正数：将信号发送给指定的进程；</p>
+
+<p>0：   将信号发送给调用进程的同组进程；</p>
+
+<p>负数：向以-pid为组长的所有进程发信号sig。</p>
+
+<p>2.4 信号的捕捉与处理</p>
+
+<p>2.4.1 信号的捕捉</p>
+
+<p>进程接收到信号后，处理的方式有三种：</p>
+
+<p>1、忽略方式</p>
+
+<p>进程在接收到一个被指明忽略的信号后，则将该信号清除后，立即返回，不进行其他处理。但信号SIGKILL和SIGSTOP是不能被忽略的。原因是，它们向超级用户提供一种使进程终止的方式。</p>
+
+<p>signal(SIGINT,SIG_IGN);</p>
+
+<p>signal的第一个参数是要忽略的信号名字，第二个参数是宏SIG_IGN。执行了这个调用后,进程就不再收到SIGINT信号。</p>
+
+<p>如果进程忽略SIGCLD信号，子进程终止后，系统会自动销毁僵尸子进程。</p>
+
+<p>信号被忽略，作为进程的一种属性，会被它的子进程所继承。</p>
+
+<p>Unix提供一种系统命令来实现SIG_IGN的效果，即nohup。</p>
+
+<p>用nohup来运行一个命令可以使得程序的执行免于SIGHUP信号的打扰，在终端注销后继续运行。</p>
+
+<p>上面的例子，没有修改xyz.c中的任何程序，单独启动xyz时，可以被kill命令终止，从abc进程中启动时，又不能被kill命令终止。</p>
+
+<p>如果使用类似上述方式，不需要修改命令程序，也可以做到让启动的命令进程忽略SIGHUP信号。这样，终端被挂断时，就不会终止正在运行的命令。这就是nohup命令的基本做法。</p>
+
+<p>nohup 命令 命令参数</p>
+
+<p>$nohup find / -name data -print&gt;f.res 2&gt;/dev/null &amp;</p>
+
+<p>find命令就在后台运行，终端注销时进程也不会终止。如果上述命令的输出没有重定向，nohup自动将find命令的输出重定向到nohup.out文件中。</p>
+
+<p>2、默认方式</p>
+
+<p>大多数信号的系统默认动作是终止该进程。</p>
+
+<p>signal(SIGINT,SIG_DFL);</p>
+
+<p>signal的第一个参数是信号的宏名字，第二个参数是宏SIG_DFL。</p>
+
+<p>由于信号的处理属性会从父进程继承，所以，程序运行初始，信号的处理方式不见得会是一种默认方式。如果要求必须是默认处理方式，那么，就必须执行这个函数调用。</p>
+
+<p>3、捕捉方式</p>
+
+<p>进程在接收到该信号时，执行用户设置的信号处理函数，执行完毕，恢复现场，然后继续往下执行。</p>
+
+<h1>include</h1>
+
+<p>singal(int signo, *func)</p>
+
+<p>signo是除SIGKILL和SIGSTOP以外的任何一种信号。</p>
+
+<p>func定义了该信号的处理方式，它的值可以是:</p>
+
+<p>SIG_IGN</p>
+
+<p>SIG_DFL</p>
+
+<p>当指使定函数时，我们称为捕捉此信号，对应的函数称为signal handler or signal-catching function。</p>
+
+<p>signal调用成功的返回值总是进程上次对指定信号的处理方式。失败时返回-1。</p>
+
+<p>例如下段程序捕捉按下Ctrl+C键时和Ctrl+\键时产生的信号。</p>
+
+<h1>include</h1>
+
+<p>void sig_handle(int sig)</p>
+
+<p>{printf(&ldquo;HELLO! Signal %d catched.\n&rdquo;, sig);}</p>
+
+<p>main(){</p>
+
+<p>int i;</p>
+
+<p>signal(SIGINT, sig_handle);</p>
+
+<p>signal(SIGQUIT, sig_handle);</p>
+
+<p>for (i = 0; ; i++) {</p>
+
+<p>printf(&ldquo;i=%d\n&rdquo;, i);</p>
+
+<p>sleep(1);}</p>
+
+<p>}</p>
+
+<p>UNIX中一个捕捉的信号在处理它的用户函数被调用之前，首先被内核重置到它的默认行为。因此，第一次按下Ctrl+\ 时，执行sig_handle()之前，已被置为默认行为。从此之后，只要再按Ctrl+\ 键，仍按默认行为处理，导致进程终止。</p>
+
+<p>2.4.2 捕捉处理方式</p>
+
+<p>当造成信号的事件发生时，将为进程产生一个信号（或向一个进程发送一个信号）在信号产生时，内核通常在进程表中设置对应于该信号的的位。</p>
+
+<p>如当系统运行一个需要较长时间的程序时，我们发现有错误产生，并断定该程序最终要失败。为了节省时间，可以按ctrl-c终止该程序的运行。这一过程的实现就用到了信号。</p>
+
+<p>响应键盘输入的核心部分发现了中断ctrl-c后，就向发中断字符的终端上运行的所有进程发送一个SIGINT信号。该进程接收到此信号时，就完成与SIGINT有关的工作，然后终止。该终端上的shell进程也会收到内核发来的SIGINT信号，由于它必须执行，以解释以后键入的系统命令，所以它会忽略这个信号。当然程序也可以捕获这个信号。</p>
+
+<p>2.4.3 SIGCLD信号的处理</p>
+
+<p>将信号处理函数第一行写为重新设置信号处理函数的语句signal，可以减少风险。</p>
+
+<p>需要特别注意的是SIGCLD信号的处理。当一个子进程终止后产生了僵尸子进程，父进程会收到信号SIGCLD。信号处理函数必须在完成了wait()调用销毁了僵尸进程之后，才可以再次调用类似下面的语句来重新设定SIGCLD信号的用户处理函数。</p>
+
+<p>signal(SIGCLD, &hellip;);</p>
+
+<p>因为在调用signal(SIGCLD,&hellip;)时，内核将检查当前是否已经有僵尸子进程，如果现有的僵尸子进程尚未用wait()调用销毁，内核会立刻发送SIGCLD信号。再次进入信号处理函数，信号处理函数的第一行，又重复这样的操作，于是进入死循环，进程堆栈不停地增长，最终程序被终止。所以，必须在用wait()调用销毁了僵尸子进程之后才可以再次重置SIGCLD的处理函数。</p>
+
+<p>如果进程不设置对SIGCLD信号的处理，而且也不在子进程终止后去调用wait()，那么，子进程终止后的僵尸进程就一直存在。</p>
+
+<p>2.4.4 进程收尸</p>
+
+<p>上节最后提到子进程终止后的僵尸进程将一直存在，那么我们需要试图为其“收尸”以释放系统资源。</p>
+
+<p>ps命令可以看到子进程是僵尸（defunct）进程，kill -9命令无法销毁它。</p>
+
+<p>kill将其父进程终止后，僵尸进程变成孤儿进程，由操作系统的1进程领养，新的父进程负责销毁僵尸进程。于是，最后的ps命令发现僵尸进程已经被销毁。如果用户进程是个长期运行的进程，一直作为僵尸进程的父进程，那么，僵尸进程就一直存在。</p>
+
+<p>程序中应当捕捉SIGCLD，在信号处理函数中执行wait调用销毁僵尸进程。如果进程对它的子进程终止状态毫无兴趣，在System V中，可以直接使用：</p>
+
+<p>signal(SIGCLD, SIG_IGN);</p>
+
+<p>忽略SIGCLD信号，这样，子进程产生的僵尸就被系统自动销毁了，不会再有僵尸子进程出现。</p>
+
+<p>.2.5 全局跳转longjmp</p>
+
+<p>经常需要一个类似于SIGINT这样的信号来只终止当前的活动，而不是整个进程。这时，当进程捕捉信号后必须跳到主循环，或者在某个地方恢复执行。例如如下程序：</p>
+
+<p>main(){</p>
+
+<p>int c;</p>
+
+<p>for (;;) {</p>
+
+<p>printf(&ldquo;Input a command:&rdquo;);</p>
+
+<p>c = getchar();</p>
+
+<p>switch &copy; {</p>
+
+<p>case ’Q’: return(0);</p>
+
+<p>case ’A’: func_a();   break;</p>
+
+<p>case ’B’: func_b();   break;</p>
+
+<p>&hellip;        }</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>这段程序先是提示用户输入一条命令，然后根据命令的不同，执行不同的内容。</p>
+
+<p>例如用户输入A，就执行函数func_a()，假设该函数的处理非常复杂，需要完成共10个阶段非常复杂的计算，大约总共需要5~10min。</p>
+
+<p>有时，用户在输入了命令A后又反悔了，希望中止func_a()对命令A的处理，而要重新选择另一条命令。这就要求中止func_a()的执行而返回到前面的printf语句去执行。下面程序改成：</p>
+
+<h1>include</h1>
+
+<p>void main_control(int sig){</p>
+
+<p>int c;</p>
+
+<p>signal(sig, main_control);</p>
+
+<p>for(;;) {</p>
+
+<p>printf(&ldquo;Input  a command:&rdquo;);</p>
+
+<p>c = getchar();</p>
+
+<p>switch &copy; {</p>
+
+<p>case &lsquo;Q&rsquo;: return 0;</p>
+
+<p>case &lsquo;A&rsquo;: func_a();  break;</p>
+
+<p>case &lsquo;B&rsquo;: func_b();  break;</p>
+
+<p>M</p>
+
+<p>} }｝</p>
+
+<p>int main(void){</p>
+
+<p>main_control(SIGINT);}</p>
+
+<p>这样，在进行func_a()处理期间，用户按中断键Ctrl+C，就会终止func_a()处理，再次出现Input a command：的提示，可以重新输入命令。但是，这有严重的缺陷。</p>
+
+<p>（1）每次敲击中断键，程序都停留在信号捕捉函数中，且嵌套得越来越深，这样就会有越来越多的内容压在堆栈中，可能在一段时间内工作得还行，但占用的栈空间越来越多，最终可能会导致该进程用户栈空间溢出。</p>
+
+<p>（2）main_control()一旦返回，进程的执行将根据堆栈中记录的状态，返回到当初被SIGINT中断的地方恢复刚才的执行，会让用户感到迷惑不解：刚才的动作已打断而且又已经开始了新的工作，可过一段时间后死灰复燃。</p>
+
+<p>那么该问题的解决办法就是把堆栈恢复为第一次调用main_control()时的状态，再调用main_control()去重新执行。</p>
+
+<h1>include</h1>
+
+<p>int setjmp(jmp_buf env);  /<em> 返回值为0，或者是longjmp提供的值</em>/</p>
+
+<p>void longjmp(jmp_buf env, int val);</p>
+
+<p>其中setjmp将当前栈状态保存入env中，longjmp负责将当前的执行流程转为调用setjmp的地方，同时堆栈状态也恢复至目标位置的状态。程序改进后如下：</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<p>static jmp_buf jmpbuf;</p>
+
+<p>void intr_proc(int sig)</p>
+
+<p>{</p>
+
+<p>printf(&ldquo;\n&hellip;INTERRUPT\n&rdquo;)</p>
+
+<p>longjmp(jmpbuf, 1);</p>
+
+<p>}</p>
+
+<p>main(){</p>
+
+<p>int c;</p>
+
+<p>setjmp(jmpbuf);</p>
+
+<p>signal(SIGINT, intr_proc);</p>
+
+<p>for (;;) {</p>
+
+<p>printf(&ldquo;Input a command:&rdquo;);</p>
+
+<p>c = getchar();</p>
+
+<p>switch &copy; {</p>
+
+<p>case &lsquo;Q&rsquo;: return 0;</p>
+
+<p>case &lsquo;A&rsquo;: func_a();  break;</p>
+
+<p>case &lsquo;B: func_b();  break;</p>
+
+<p>&hellip;     }</p>
+
+<p>}</p>
+
+<p>｝</p>
+
+<p>2.6 信号对进程执行的影响</p>
+
+<p>可以捕捉一个信号，为这个信号设置一个程序员自定义的处理函数。当一个信号到达进程的时候，执行这个处理函数。有两种可能的情况：</p>
+
+<p>第一种情况是进程正在执行用户态程序指令。这包括程序员自编的程序代码和库程序代码，在处理上等同看待，不做区分，也无法区分。这种情况下，信号到达时，进程正在执行的代码被暂停，执行完信号处理函数之后，除非信号处理函数中exit()终止当前进程或者longjmp跳转到别的地方，否则恢复到被信号中断的位置继续执行，这种做法跟中断服务程序类似。</p>
+
+<p>第二种情况是进程正在执行系统调用。传统的UNIX内核，进程在执行内核代码时，是不可被其他进程打断的，只有在系统调用结束或者进程在核心态代码中调用sleep原语睡眠，自愿让出CPU时，进程调度才会发生。所以，只需要考虑进程睡眠时收到信号的处理，其他时间是不可被信号打断的。</p>
+
+<p>进程在执行系统调用而睡眠时收到信号，有两种处理方法。对于像磁盘操作那样的快速的I/O，进程睡眠时间很短暂，这些系统调用不会被信号操作打断。</p>
+
+<p>但是，对于那些慢速的I/O，如：终端读写或者从网络接收数据，wait()等待子进程结束，进程间通信的函数，这些操作，只要条件不满足，进程会睡眠很长时间。终端读入时如果终端上的用户离开终端很长时间，进程等待的时间就会很长，甚至会无限期等待。慢速I/O的系统调用导致进程睡眠时，到达的信号就会打断这个系统调用，返回到用户态程序，系统调用返回–1，标志系统调用出错，errno中记录的出错代码是EINTR。</p>
+
+<p>程序员应当处理这样的错误，并且根据需要重新开始系统调用，或者完成其他的操作。</p>
+
+<p>2.7 sleep，pause与alarm</p>
+
+<p>2.7.1 sleep</p>
+
+<p>int sleep(int seconds);</p>
+
+<p>sleep不是系统调用，而是一个库函数。函数的返回值是剩余的秒数。由于信号会打断睡眠进程，所以，sleep()不见得会睡足指定的时间。</p>
+
+<p>使用sleep函数应注意的问题。</p>
+
+<h1>cat slp.c</h1>
+
+<h1>include</h1>
+
+<p>void handler(int sig){</p>
+
+<p>signal(SIGINT, handler);}</p>
+
+<p>int main(void){</p>
+
+<p>int n;</p>
+
+<p>signal(SIGINT, handler);</p>
+
+<p>n = sleep(3600);</p>
+
+<p>printf(&ldquo;n = %d\n&rdquo;, n);</p>
+
+<p>}</p>
+
+<h1>./slp</h1>
+
+<p>^Cn = 3596</p>
+
+<p>程序执行4s后，按Ctrl+C 键就会打印出上述信息，就执行了sleep之后的printf函数，而没有持续等待一个小时。如果进程一定要睡眠一个小时，并且有可能会到达信号，那么，程序该自己设法继续睡眠。把上述程序的最后两条语句改为：</p>
+
+<p>for (n = 3600; n &gt; 0; n = sleep(n))</p>
+
+<p>printf(&ldquo;Timeout will occur in %d seconds.\n&rdquo;, n);</p>
+
+<p>那么，每按一次Ctrl+C键，sleep调用就返回一次，程序打印出剩余的秒数。极端情况下，上述循环不见得会让程序在这个循环等待一个小时。解决这样的问题，可以采用time()获取时间坐标，决定sleep时长。这里不再给出改进后的程序。</p>
+
+<p>2.7.2 pause</p>
+
+<p>系统调用pause()的功能有点类似sleep函数，只是指定的秒数是无穷大∞。</p>
+
+<p>pause会使得进程一直睡眠。一旦收到信号，从信号捕捉函数返回后，pause()才返回。一般用pause()无限期等待一个信号。</p>
+
+<p>int pause(void);</p>
+
+<p>pause函数返回值只可能是-1，errno为EINTR。</p>
+
+<p>2.7.3 alarm</p>
+
+<p>alarm调用用于设置进程自己的报警时钟（闹钟），函数原型为：</p>
+
+<p>int alarm(int seconds);</p>
+
+<p>每个进程都有一个报警时钟，存储在它内核中的PCB中。当报警时钟走完时，就向自己发送SIGALRM信号。子进程继承父进程的报警时钟值。报警时钟在exec执行期间仍保持这一设置。进程收到SIGALRM后的默认处理是终止进程。使用这种功能，程序中在fork语句后exec语句前加上alarm(n);语句，就会使得一个不对SIGALRM信号进行任何处理设置的命令的执行时间限制为n秒。</p>
+
+<p>alarm参数seconds为秒数。当seconds&gt;0时，将闹钟设置成seconds指定的秒数。当seconds=0时，关闭报警时钟。</p>
+
+<p>例如，程序要求操作员在5s内输入一命令。超时了使用默认命令CMDA。</p>
+
+<h1>include</h1>
+
+<p>static char cmd[256];</p>
+
+<p>void default_cmd(int sig){</p>
+
+<p>strcpy(cmd, &ldquo;CMDA&rdquo;);}</p>
+
+<p>int main(void)</p>
+
+<p>{</p>
+
+<p>signal(SIGALRM, default_cmd);</p>
+
+<p>printf(&ldquo;Input command : &rdquo;);</p>
+
+<p>alarm(5);</p>
+
+<p>scanf(&ldquo;%s&rdquo;, cmd);</p>
+
+<p>alarm(0);</p>
+
+<p>printf(&ldquo;cmd=[%s]\n&rdquo;, cmd);</p>
+
+<p>&hellip;</p>
+
+<p>}</p>
+
+<p>由于库函数scanf会调用read系统调用从当前终端读取数据，进程睡眠时收到SIGALRM信号系统调用就会返回。这个程序的一个最糟糕情况是，用户输入了命令，但是在执行语句alarm(0)之前正好闹钟到期，输入无效。</p>
+
+<p>Linux默认情况下，从终端读的系统调用不可被SIGALRM中断，上述程序在Linux中成功运行，还需要在程序中增加下面的语句，以允许SIGALRM信号可以打断对终端的read()系统调用：</p>
+
+<p>siginterrupt(SIGALRM, 1);</p>
+
+<p>第二个参数1表明允许SIGALRM信号打断系统调用；如果为0，表明不许打断系统调用。</p>
+
+<p>在连载11中，我们将进一步对进程间通信进行讨论，并且介绍利用中间介质进行进程间通信的原理和基本方法。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MP77的UNIX课件笔记(9)]]></title>
+    <link href="http://www.hanyi.name/blog/2009/06/07/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b09/"/>
+    <updated>2009-06-07T09:49:39+08:00</updated>
+    <id>http://www.hanyi.name/blog/2009/06/07/mp77%e7%9a%84unix%e8%af%be%e4%bb%b6%e7%ac%94%e8%ae%b09</id>
+    <content type="html"><![CDATA[<p>本章和下一章讨论UNIX进程控制和进程间通信机制和相关System call。从“操作系统原理”中我们了解到，进程是OS进行系统资源管理的基本单位。其具体的内容则不属于本章讨论范围，但我们假设读者已经阅读过有关操作系统进程管理方面的文献。</p>
+
+<p><a id="more"></a><a id="more-177"></a></p>
+
+<p>1 进程控制</p>
+
+<p>进程是如何创建的？我们以日常工作的shell平台为起点展开讨论。</p>
+
+<p>1.1 用程序运行程序</p>
+
+<p>简单地说，shell是用于管理程序的系统工具，其实质也是一个程序。</p>
+
+<p>用程序运行程序的思想来实现一个简单shell，我们想到被称为exec的System call。exec的特点是：</p>
+
+<p>1、exec创建执行其它程序的进程，而不必返回。</p>
+
+<p>2、这些例程简单的把新程序覆盖在旧程序上，并以调用者提供的参数去执行这个新代码。</p>
+
+<p>下面是一段使用exec运行ls的程序示例：</p>
+
+<p>main()</p>
+
+<p>{</p>
+
+<p>/*the definition below can also be made like this:</p>
+
+<p>char <em>args[4]={&ldquo;ls&rdquo;,&ldquo;-l&rdquo;,&ldquo;/usr/bin&rdquo;,&ldquo;(char</em>)0&rdquo;}*/</p>
+
+<p>char *args[4];</p>
+
+<p>args[0] = &ldquo;ls&rdquo;; /<em> build the arglist </em>/</p>
+
+<p>args[1] = &ldquo;-l&rdquo;;</p>
+
+<p>args[2] = &ldquo;/usr/bin&rdquo;;</p>
+
+<p>args[3] = (char <em>) 0; /</em> terminate with NULL */</p>
+
+<p>printf(&ldquo;about to execute ls -l /usr/bin\n&rdquo; );</p>
+
+<p>execvp( &ldquo;ls&rdquo; , args );</p>
+
+<p>printf( &ldquo;that was ls, cool, eh?\n&rdquo;);</p>
+
+<p>}</p>
+
+<p>exec包含六种形式，除了建立在exec基础上之外：</p>
+
+<p>l与v，指定命令行参数的两种方式，l代表的形式在函数参数中列举出命令行参数，v要实现组织成一个数组。函数参数中的命令行参数表，参数数目可变，所以最后一个要以0为结束标识。</p>
+
+<p>e，用envp数组的内容初始化环境参数，否则使用与当前相同的环境参数environ。</p>
+
+<p>p，函数第一个参数，是程序文件名，在环境变量PATH指定的多个查找目录中查询可执行文件，否则不按PATH指定路径自动搜索。</p>
+
+<p>由于exec覆盖源进程直接运行目标程序，因此上段C代码中的最后一行输出that was ls,cool,eh?并不会显示在标准输出。</p>
+
+<p>很明显，仅仅使用exec无法满足我们的需求，这种需求主要表现在：</p>
+
+<p>1、为了保护旧程序，要把它分割成两个副本：其中一个被覆盖，而另一个则等待新的覆盖进程的结束。</p>
+
+<p>2、调用成功不返回；失败返回。</p>
+
+<p>为了实现以上功能，需要建立新的进程供exec调用。</p>
+
+<p>1.2 进程创建</p>
+
+<p>Unix涉及进程创建的基本System call是int fork()。fork()调用成功内核建立一个新进程。新进程是调用fork()的进程的副本。即新创建的进程继承了其父进程的环境。</p>
+
+<p>新进程(子进程）运行与创建者（父进程）一样的程序，其中的变量与创建进程的变量相同.</p>
+
+<p>父进程与子进程并发执行，哪一个进程能够占用CPU由进程调度程序决定。它们都是从fork()调用后的那条语句开始执行。例如程序段：</p>
+
+<p>main()</p>
+
+<p>{int pid;</p>
+
+<p>printf(“for example”);</p>
+
+<p>pid=fork();</p>
+
+<p>printf(“fok system calll”);</p>
+
+<p>……</p>
+
+<p>}</p>
+
+<p>标准输出中至少会出现fok system call * 2的显示，且表象上根本无法分别“父”与“子”。简单地说，父子进程间互不影响其数据堆栈的情况。</p>
+
+<p>注意到fork的返回值为整型，实际上就是子进程的process id。也就是说，fork会同时返回两个分别指示父子进程的pid。其中：</p>
+
+<p>1、父进程的返回值为子进程的PID；</p>
+
+<p>2、子进程的返回值为0；</p>
+
+<p>3、出错返回值为-1，并将errno置为相应值。</p>
+
+<h1>include</h1>
+
+<p>main(){</p>
+
+<p>int ret_from_fork, my_pid;</p>
+
+<p>my_pid = getpid();</p>
+
+<p>printf(&ldquo;Hi, my pid is %d\n&rdquo;, my_pid );</p>
+
+<p>ret_from_fork = fork();</p>
+
+<p>sleep(1);</p>
+
+<p>printf(&ldquo;after fork().  It returned %d and my pid is %d\n&rdquo;,</p>
+
+<p>ret_from_fork, getpid());</p>
+
+<p>}</p>
+
+<p>本段程序演示了fork父子进程的pid状态。至于父子进程标识谁最先显示，完全由CPU决定。</p>
+
+<p>1.3 空闲进程</p>
+
+<p>现在回过头来再看shell，似乎心中有数了许多。紧接着问题来了，我们现在知道shell程序通过创建子进程运行新程序，那么此时父进程处于什么地位？子程序运行结束后又是如何回退至父进程的?</p>
+
+<p>显然父进程需要做的是在子进程运行过程中等待，直到子进程结束。这就需要用到/usr/include/sys/wait.h中的System call了。</p>
+
+<p>pid_t wait(int *status);</p>
+
+<p>其中pid_t定义在/usr/include/sys/types.h中，返回值代表已终止的子进程的pid号。status的作用是返回一个整型值，其代表了子进程终止的原因。子进程的终止一般有两种情况：“自杀”和“被杀”，“自杀”即自愿终止，在程序中调用函数exit()或主函数return均可。“被杀”是指由其它进程或者操作系统内核向进程发送信号将其杀死。第一种情况可以获得进程正常终止的返回码，第二种情况可以获得进程被杀死的信号值，“信号值”会在下一篇文章讨论。</p>
+
+<p>在/usr/include/sys/wait.h中定义了几个宏支持返回status的调用：</p>
+
+<p>WIFEXITED(status)，如果进程正常终止，则为真。调用WEXITSTATUS(status)可以返回子进程的返回码。</p>
+
+<p>WIFSIGNALED(status)，如果进程异常终止，则为真。调用WTERMSIG(status)获得子进程被杀的信号值。</p>
+
+<p>严格说来，status的低8位反映了子进程的终止状态：0表示子进程正常结束，非0表示出现了各种各样的问题。status高8位带回了exit的返回值。低7位记录信号序号,bit 7 用来指明发生了错误并产生了内核映像(core dump)。</p>
+
+<p>1.4 简单shell的实现</p>
+
+<p>至此，我们完全有能力制作一个简单的仿真shell程序了，尽管尚无法实现有关信号、文本编辑器以及一些其它特殊功能的调用。</p>
+
+<p>从本篇开始，我们将构建一个shell及其基本系统命令的C语言程序，此项工作会持续到本系列连载的结束。</p>
+
+<p>/<em> example of simple shell </em>/</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<h1>define   MAXARGS    20 /<em> cmdline args </em>/</h1>
+
+<h1>define   ARGLEN 100 /<em> token length </em>/</h1>
+
+<p>main()</p>
+
+<p>{char <em>arglist[MAXARGS+1]; /</em> an array of ptrs */</p>
+
+<p>int numargs; /<em> index into array </em>/</p>
+
+<p>char argbuf[ARGLEN]; /<em> read stuff here </em>/</p>
+
+<p>char <em>makestring(); /</em> malloc etc */</p>
+
+<p>numargs = 0;</p>
+
+<p>while ( numargs &lt; MAXARGS )</p>
+
+<p>{   printf(&ldquo;Arg[%d]? &rdquo;, numargs);</p>
+
+<p>if ( fgets(argbuf, ARGLEN, stdin) &amp;&amp; *argbuf != &lsquo;\n&rsquo; )</p>
+
+<p>arglist[numargs++] = makestring(argbuf);</p>
+
+<p>else</p>
+
+<p>{  if ( numargs &gt; 0 ) /<em> any args? </em>/</p>
+
+<p>{ arglist[numargs]=NULL; /<em> close list </em>/</p>
+
+<p>execute( arglist ); /<em> do it </em>/</p>
+
+<p>numargs = 0; /<em> and reset </em>/</p>
+
+<p>}</p>
+
+<p>}}</p>
+
+<p>return 0;}</p>
+
+<p>execute( char *arglist[] )</p>
+
+<p>{    int pid,   exitstatus; /<em> of child </em>/</p>
+
+<p>pid = fork(); /<em> make new process </em>/</p>
+
+<p>switch( pid ){</p>
+
+<p>case -1:</p>
+
+<p>perror(&ldquo;fork failed&rdquo;);</p>
+
+<p>exit(1);</p>
+
+<p>case 0:</p>
+
+<p>execvp(arglist[0], arglist); /<em> do it </em>/</p>
+
+<p>perror(&ldquo;execvp failed&rdquo;);</p>
+
+<p>exit(1);</p>
+
+<p>default:</p>
+
+<p>while( wait(&amp;exitstatus) != pid );</p>
+
+<p>printf(&ldquo;child exited with status %d,%d\n&rdquo;,</p>
+
+<p>exitstatus&gt;&gt;8, exitstatus&amp;0377);</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>char <em>makestring( char </em>buf )</p>
+
+<p>/*</p>
+
+<ul>
+<li>trim off newline and create storage for the string</li>
+</ul>
+
+
+<p>*/</p>
+
+<p>{</p>
+
+<p>char <em>cp, </em>malloc();</p>
+
+<p>buf[strlen(buf)-1] = &lsquo;\0&rsquo;; /<em> trim newline </em>/</p>
+
+<p>cp = malloc( strlen(buf)+1 );         /<em> get memory </em>/</p>
+
+<p>if ( cp == NULL ){ /<em> or die </em>/</p>
+
+<p>fprintf(stderr,&ldquo;no memory\n&rdquo;);</p>
+
+<p>exit(1);</p>
+
+<p>}</p>
+
+<p>strcpy(cp, buf); /<em> copy chars </em>/</p>
+
+<p>return cp; /<em> return ptr </em>/</p>
+
+<p>}</p>
+
+<p>/<em> end of example </em>/</p>
+
+<p>1.5 字符串解析的C语言细节处理</p>
+
+<p>通过上述程序我们可以获得一种对输入字符串进行格式解析的方法，事实上C语言库函数中即给出了一些极为方便的函数调用。</p>
+
+<p>char <em>strtok(char </em>string, char *tokens);</p>
+
+<p>1、给定字符串string以及“单词”分界符的集合tokens，从字符串中分析出一个“单词”。忽略字符串中连续多个的单词分隔符。</p>
+
+<p>2、函数返回值是指向单词的首字符的指针。</p>
+
+<p>3、函数的副作用是，会修改原先给定的字符串存储空间中的内容。</p>
+
+<p>以下是strtok运行原理解析：</p>
+
+<p>首先键盘输入 who  am i后按enter，应当注意who之前有一个空格和一个制表符（tab），who和am之间有两个空格。</p>
+
+<p>下面是用fgets(s, sizeof s, stdin)读入到内存中的字符串s的存储结构，每个字节用十六进制列出。</p>
+
+<p>\t w h o a m i \n \0</p>
+
+<p>s 20 09 77 68 6f 20 20 61 6d 20 69 0a 00</p>
+
+<p>第一次执行p=strtok(s,&ldquo; \t\n&rdquo;)之后的状态:</p>
+
+<p>\t w h o a m i \n \0</p>
+
+<p>s 20 09 77 68 6f 00 20 61 6d 20 69 0a 00</p>
+
+<p>p</p>
+
+<p>第二次执行p=strtok(NULL,&ldquo; \t\n&rdquo;)后的状态:</p>
+
+<p>\t w h o a m i \n \0</p>
+
+<p>s 20 09 77 68 6f 00 20 61 6d 00 69 0a 00</p>
+
+<p>p</p>
+
+<p>第三次执行p=strtok(NULL,&ldquo; \t\n&rdquo;)后的状态:</p>
+
+<p>\t w h o a m i \n \0</p>
+
+<p>s 20 09 77 68 6f 00 20 61 6d 00 69 00 00</p>
+
+<p>p</p>
+
+<p>这时，strtok扫描结束的位置指向了字符串尾部的'\0'，第四次再执行strtok就会返回NULL，表示找不到新的单词。</p>
+
+<p>1.6 另类的进程创建方法</p>
+
+<p>vfork()创建一个进程，而新进程的目的是exec一个新程序。vfork与fork一样都创建一个子进程，但它并不把父进程的地址空间完全复制到子进程，因为子进程会立即调用exec（或exit），于是也就不访问该地址空间，不过它在exec(或exit)调用之前，它在父进程空间运行。</p>
+
+<p>vfork()保证子进程先运行，在它调用exec(或exit)之后父进程才运行。</p>
+
+<p>这里需要明确两个终止操作的区别exit和<em>exit，它们均定义在/usr/include/unistd.h中，不同的是前者属于C语言库函数的范畴，而</em>exit属于System call，也就是说，在具体实现中，exit最终仍需要调用_exit。</p>
+
+<p>但exit终止进程时比系统调用<em>exit多做一些操作。这些操作主要是自动关闭用fopen等函数创建的缓冲I/O文件，将缓冲区里的数据写到磁盘上。exit释放缓冲文件的文件缓冲区和缓冲文件所需要的数据结构，因为库函数相关的这些数据都存放在进程的数据区内，这会影响子进程借用的父进程的数据段，所以，当采用vfork()创建进程时，必须直接使用系统调用</em>exit。</p>
+
+<p>例如下段程序：</p>
+
+<h1>cat vf.c</h1>
+
+<p>int main(void){</p>
+
+<p>int a = 1;</p>
+
+<p>if (vfork() == 0) {</p>
+
+<p>a++;</p>
+
+<p>_exit(0);</p>
+
+<p>} else {</p>
+
+<p>a++;</p>
+
+<p>}</p>
+
+<p>printf(&ldquo;a=%d\n&rdquo;, a);</p>
+
+<p>}</p>
+
+<h1>cc vf.c -o vf</h1>
+
+<h1>./vf</h1>
+
+<p>a=3</p>
+
+<p>显然子进程使用了父进程的数据区进行操作。</p>
+
+<p>1.7 另类的程序运行方法</p>
+
+<p>在C语言标准库中还定义了这样的函数，其本质上使用了fork、exec、wait等System call，用于执行某一行命令。</p>
+
+<p>int system(char *cmd)</p>
+
+<p>其中cmd是可执行程序的名称。该系统调用的功能是执行参数cmd所指定的命令。正确返回0，否则返回错误代码（非0值）。它的执行与命令行键入的命令具有同样的效果。</p>
+
+<p>现在考虑如下实际问题：</p>
+
+<p>编程时希望在程序中获得系统当前的IP转发路由表，一时又找不到编程接口，但是，执行netstat -rn命令后可以获得这个表格。选项r指的是路由表，选项n指的是输出IP地址时用数字形式，而不是自动将地址转换为主机名。</p>
+
+<p>将命令输出重定向到一个临时文件中，然后从程序中读这个文件的内容，获取所希望的信息。最后，把文件删除。具体实现如下：</p>
+
+<h1>cat cmd.c</h1>
+
+<h1>include</h1>
+
+<p>main(){</p>
+
+<p>char fname[256], cmd[256], buf[256];</p>
+
+<p>FILE *f;</p>
+
+<p>tmpnam(fname);</p>
+
+<p>sprintf(cmd, &ldquo;netstat -rn &gt; %s&rdquo;, fname);</p>
+
+<p>printf(&ldquo;Execute \&rdquo;%s\&ldquo;\n&rdquo;, cmd);</p>
+
+<p>system(cmd);</p>
+
+<p>f = fopen(fname, &ldquo;r&rdquo;);</p>
+
+<p>while(fgets(buf, sizeof buf, f))</p>
+
+<p>printf(&ldquo;%s&rdquo;, buf);</p>
+
+<p>fclose(f);</p>
+
+<p>printf(&ldquo;Remove file \&rdquo;%s\&ldquo;\n&rdquo;, fname);</p>
+
+<p>unlink(fname);</p>
+
+<p>}</p>
+
+<p>唯一需要解释的是char * tmpnam(char *str);</p>
+
+<p>其作用是获得一个临时文件的文件名，库函数会保证这个文件名与已有文件名不冲突。</p>
+
+<p>库函数sprintf的用法和printf类似，只是打印的字符存到了字符串而不是显示在终端输出。sprintf使用和printf一样的格式控制字符串，程序员还经常用它将二进制数字转换成ASCII码串。</p>
+
+<p>程序把system(cmd)得到的文件打印出来。需要时，程序应该解读这个文件，获得所需要的信息。</p>
+
+<p>1.8 进程信息获取命令</p>
+
+<p>ps（process status）命令列出系统中进程的当前状态，实际上就是将进程系统数据段中的部分进程属性有选择地打印出来。不同的UNIX系统，ps命令的使用也有些差别。</p>
+
+<p>-a （all）列出所有当前终端上启动的进程；</p>
+
+<p>-t （tty）指定一个终端名字，列出这个终端上启动的所有进程，如ps -t pts/1；</p>
+
+<p>-u （User）指定一个用户名，列出这个用户的所有进程，如ps -u jiang；</p>
+
+<p>-e （everything）列出系统中所有的进程；</p>
+
+<p>-f （full）以full格式列出进程；</p>
+
+<p>-l （long）以long格式列出进程。</p>
+
+<p>下一节将介绍进程间通信的相关原理和方法。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MP77的UNIX课件笔记(8)]]></title>
+    <link href="http://www.hanyi.name/blog/2009/06/03/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b08/"/>
+    <updated>2009-06-03T17:11:21+08:00</updated>
+    <id>http://www.hanyi.name/blog/2009/06/03/mp77%e7%9a%84unix%e8%af%be%e4%bb%b6%e7%ac%94%e8%ae%b08</id>
+    <content type="html"><![CDATA[<p>本章主要介绍目录和文件的状态信息，这些是大量系统功能应用的基础。后续文章会针对前次连载的文件系统、System call等内容进行部分常用程序的设计以及分析工作。</p>
+
+<p><a id="more"></a><a id="more-175"></a></p>
+
+<p>1 文件状态信息</p>
+
+<p>1.1 获取文件的状态信息</p>
+
+<p>该部分系统调用定义在/usr/include/sys/stat.h中，并且需要types.h的支持。</p>
+
+<p>int stat(char <em>path, struct stat </em>statbuf); /<em> return 0 on success or -1 on error </em>/</p>
+
+<p>int fstat(int fd，struct stat <em>statbuf); /</em> returns 0 n success or -1 on error */</p>
+
+<p>stat和fstat的原理均是从inode节点中获取文件状态信息。值得注意的是，如果是利用C语言缓冲I/O方式打开文件，将FILE *f转换为相应文件描述符的方法是，使用宏调用fileno(f)即可返回discriptor。stat由于是提供了路径，因此可能需要逐级深入，导致效率普遍不如fstat，但考虑到fstat仅适用于已打开的文件，那么两种call就需要灵活使用了。</p>
+
+<p>注意到参数struct stat *statbuf定义了存储文件状态信息的结构体，其在types.h中定义，其基本成员如下：</p>
+
+<p>struct stat {</p>
+
+<p>dev_t     st_dev;        /<em>device of inode</em>/</p>
+
+<p>ino_t     st_ino; /<em> inode  number</em>/</p>
+
+<p>mode_t   st_mode; /<em> mode bits </em>/</p>
+
+<p>nlink_t   st_nlink; /<em> number of links to file </em>/</p>
+
+<p>uid_t     st_uid; /<em> owener’s userid </em>/</p>
+
+<p>dev_t     st_gid; /<em> owener’s group id </em>/</p>
+
+<p>dev_t     st_rdev; /<em> for special files </em>/</p>
+
+<p>off_t     st_size; /<em>file size in characters </em>/</p>
+
+<p>time_t    st_atime; /<em>time file last read</em>/</p>
+
+<p>time_t    st_mtime; /<em>time file last written or created</em>/</p>
+
+<p>time_t st_ctime; /<em>time file or inode last changed</em>/</p>
+
+<p>}</p>
+
+<p>尽管stat成员类型大部分均为整型，但基于可移植性的需要，通常不直接定义为C语言的内部数据类型如short、int或long等等。可以发现，此类类型定义都是以_t结尾的使用typedef重定义后的类型声明符。</p>
+
+<p>1.1.1 st_mode转换成字符</p>
+
+<p>st_mode字段长度为16位，包括4位的类型标识，suid、sgid和sticky字段以及9位权限标识位。</p>
+
+<p>类型标识位我们在连载五中已经有所涉及：</p>
+
+<p><a href="http://www.hanyi.name/blog/?p=169">http://www.hanyi.name/blog/?p=169</a></p>
+
+<p>suid和sgid涉及到系统安全，它们分别指Set User ID和Set Group ID，其作用类似。对一个suid被置位的程序来说，其权限设置示例如下:</p>
+
+<p>rwsr&mdash;r&mdash;</p>
+
+<p>这里需要解释一下effective uid和effective gid，它们是记录在内核中相对于用户uid和gid的标识，其主要目的是为了分配给其相应的权限。一般情况下，如果suid和sgid未被置位，那么进程显示的euid应是正在执行操作的用户uid。但是在suid被置位的情况下，euid会显示为程序拥有者的uid，并且该进程享受拥有者权限。</p>
+
+<p>简单举例/usr/bin/passwd命令，功能是修改用户密码，其实质是对/etc/passwd和/etc/shadow进行更新操作。我们知道/etc/.一般对普通用户不具备wx权限。借助于/usr/bin/passwd，该程序的默认权限为：</p>
+
+<p>rws&mdash;x&mdash;x</p>
+
+<p>那么普通用户就可以以root身份对上述两个文件进行w操作了。</p>
+
+<p>sgid的作用与suid类似，创建该位的主要目的是当涉及到root权限时，如非必要应置sgid而非suid以避免造成安全缺陷。</p>
+
+<p>sticky粘贴位，该位一般只在目录文件定义时有效。sticky置位的目录下所有用户都可以在该目录下创建文件，但除root外的用户只能删除自己创建的文件。</p>
+
+<p>这里可能需要解释一下Unix的文件删除机制。严格说来删除权限和源文件的mode字段无关，而是与存放该文件的目录文件权限有关，如果允许相应用户拥有删除权限，那么用户必须在该目录下拥有写权限。</p>
+
+<p>但是/usr/include/sys/stat.h中对标识的宏定义为八进制，且无法与st_mode中的bit直接对应，为此要借助于掩码运算计算出相应的字段定义，计算方法是st_mode &amp; 相应的标识掩码（其中&amp;为位运算中的“与”）。例如文件类型宏：</p>
+
+<h1>define  S_IFMT  0170000  /<em>type of file</em>/</h1>
+
+<h1>define  S_IFREG 0100000  /<em> Regular file </em>/</h1>
+
+<h1>define  S_IFDIR 0040000  /<em> Directory </em>/</h1>
+
+<h1>define  S_IFCHR 0020000  /<em> Character device </em>/</h1>
+
+<h1>define  S_IFBLK 0060000  /<em> Block device </em>/</h1>
+
+<h1>define  S_IFIFO 0010000  /<em> FIFO</em>/</h1>
+
+<h1>define  S_IFLNK 0120000  /<em> Symbolic link </em>/</h1>
+
+<h1>define  S_IFSOCK 0140000 /<em> SOCKET</em>/</h1>
+
+<p>S_IFMT即为文件类型的掩码，运算时只需st_mode &amp; S_IFMT，判断其相应的文件类型宏编码即可。下面仍列出一些/usr/include/sys/stat.h宏定义编码：</p>
+
+<h1>define S_ISUID   0004000    /<em>set user  id on execution</em>/</h1>
+
+<h1>define S_ISGID   0002000   /<em>set group id on execution</em>/</h1>
+
+<h1>define S_IREAD 0000400 /<em>read permission </em>/</h1>
+
+<h1>define S_IWRITE  0000200 /<em>write permission </em>/</h1>
+
+<h1>define S_IEXEC  0000100  /<em>execute/search permission,owner</em>/</h1>
+
+<p>在编写程序的时候，可能会利用如下代码：</p>
+
+<p>if  ((info.st_mode &amp; S_IFMT) == S_IFDIR)</p>
+
+<p>printf(“this is a directory”);</p>
+
+<p>/usr/include/sys/stat.h同样给出了此类转换的宏定义，例如：</p>
+
+<h1>define  S_ISDIR(mode)   (((mode)&amp;S_IFMT)==S_IFDIR)</h1>
+
+<h1>define  S_ISREG(mode)   (((mode)&amp;S_IFMT)==S_IFREG</h1>
+
+<h1>define  S_ISBLK(mode)   (((mode)&amp;S_IFMT)==S_IFBLK</h1>
+
+<h1>define  S_ISCHR(mode)   (((mode)&amp;S_IFMT)==S_IFCHR</h1>
+
+<p>那么就可以实现本节题目所提出的问题了：</p>
+
+<p>void mode_to_letters( int mode, char str[] ){</p>
+
+<p>strcpy( str, &ldquo;&mdash;&mdash;&mdash;&mdash;&mdash;&rdquo; );                    /<em> default=no perms </em>/</p>
+
+<p>if ( S_ISDIR(mode) )    str[0] = &rsquo;d';     /<em> directory?       </em>/</p>
+
+<p>if ( S_ISCHR(mode) )   str[0] = &lsquo;c&rsquo;;    /<em> char devices     </em>/</p>
+
+<p>if ( S_ISBLK(mode) )    str[0] = &lsquo;b&rsquo;;    /<em> block device     </em>/</p>
+
+<p>if ( mode &amp; S_IRUSR )  str[1] = &lsquo;r&rsquo;;    /<em> 3 bits for user  </em>/</p>
+
+<p>if ( mode &amp; S_IWUSR ) str[2] = &lsquo;w&rsquo;;</p>
+
+<p>if ( mode &amp; S_IXUSR )  str[3] = &lsquo;x&rsquo;;</p>
+
+<p>if ( mode &amp; S_IRGRP )  str[4] = &lsquo;r&rsquo;;    /<em> 3 bits for group </em>/</p>
+
+<p>if ( mode &amp; S_IWGRP ) str[5] = &lsquo;w&rsquo;;</p>
+
+<p>if ( mode &amp; S_IXGRP )  str[6] = &lsquo;x&rsquo;;</p>
+
+<p>if ( mode &amp; S_IROTH )   str[7] = &lsquo;r&rsquo;;    /<em> 3 bits for other </em>/</p>
+
+<p>if ( mode &amp; S_IWOTH )  str[8] = &lsquo;w&rsquo;;</p>
+
+<p>if ( mode &amp; S_IXOTH )   str[9] = &lsquo;x&rsquo;;</p>
+
+<p>}</p>
+
+<p>1.1.2 时间字段转换成字符</p>
+
+<p>1.1中已经给出了文件状态信息中的st_atime（read）、st_mtime（write or create）和st_ctime（change）时间字段的定义，为了将其转换为标准系统时间，需要使用/usr/include/time.h中的System call函数。其基本格式为：</p>
+
+<p>char <em>ctime(const time_t </em>clock);</p>
+
+<p>注意到stat中的时间字段均为time_t型，也是Unix中系统定义的基本类型。ctime的目的是将time_t转换为标准时间格式，并以字符串形式回传。其最小单位时间为秒，采用UTC(Coordinated Universal Time )时间，其绝对值00:00:00代表1970年1月1日00:00:00，返回的格式示例如下：</p>
+
+<p>Thu Nov 24 18:22:48 1986</p>
+
+<p>值得注意的是，当年份字段长度小于4个字节时需要用前导0补齐，当年份大于4个字节时，显示会成为：</p>
+
+<p>Thu Nov 24 18:22:48     81986</p>
+
+<p>在年份字段之前会出现5个空格，这是为了防止在一些老式软件中将26个字节的输出判断为超出时间范围而显示出错。</p>
+
+<p>showtime( time_t timeval )</p>
+
+<p>{</p>
+
+<p>char <em>ctime(); /</em> convert long to ascii */</p>
+
+<p>char <em>cp; /</em> to hold address of time    */</p>
+
+<p>cp = ctime( &amp;timeval ); /<em> convert time to string </em>/</p>
+
+<p>printf(&ldquo;%12.12s&rdquo;, cp+4 ); /<em> pick 12 chars from pos 4 </em>/</p>
+
+<p>}</p>
+
+<p>以上是一段输出time_t类型时间的程序示例。</p>
+
+<p>1.1.3 st_uid &amp; st_gid 转换成字符</p>
+
+<p>st_uid和st_gid是在stat字段中记录文件拥有者ID和拥有者所在用户组ID的字段。前文已经提到用户信息和用户组信息分别存储在/etc/passwd和/etc/group中，因而要获取详细的用户或组信息就必须实现读取并分析操作，系统给出了此方面的System call。不同类型的Unix发行版其passwd结构也略有不同，这就造成了其相应结构体字段的不同。这里用OpenBSD的/usr/include/pwd.h定义加以说明，其它系统的设定较之并不全面：</p>
+
+<p>struct passwd {</p>
+
+<p>char      <em>pw_name;          /</em> user name */</p>
+
+<p>char      <em>pw_passwd;       /</em> encrypted password */</p>
+
+<p>uid_t       pw_uid;             /<em> user uid </em>/</p>
+
+<p>gid_t       pw_gid;              /<em> user gid </em>/</p>
+
+<p>time_t     pw_change;        /<em> password change time </em>/</p>
+
+<p>char       <em>pw_class;           /</em> user access class */</p>
+
+<p>char       <em>pw_gecos;          /</em> login info */</p>
+
+<p>char       <em>pw_dir;               /</em> home directory */</p>
+
+<p>char      <em>pw_shell;            /</em> default shell */</p>
+
+<p>time_t      pw_expire;         /<em> account expiration </em>/ };</p>
+
+<p>}</p>
+
+<p>其调用函数为struct passwd *getpwuid(uid_t uid);</p>
+
+<p>st_gid定义在/usr/include/grp.h中，其结构体字段如下：</p>
+
+<p>struct group {</p>
+
+<p>char     <em>gr_name;          /</em> group name */</p>
+
+<p>char      <em>gr_passwd;       /</em> group password */</p>
+
+<p>gid_t     gr_gid;              /<em> group id </em>/</p>
+
+<p>char      <em><em>gr_mem;        /</em> group members </em>/</p>
+
+<p>};</p>
+
+<p>其调用函数为struct passwd *getgrgid(uid_t uid);</p>
+
+<p>2   设备文件</p>
+
+<p>2.1 一些概念</p>
+
+<p>我们在连载5中已经介绍过特殊文件类型，它是Unix一种独特的文件类型。特殊文件类型总的说来包含物理设备文件和逻辑设备文件，Unix的设备管理将设备组织得看起来同磁盘文件一样，可以通过文件系统里的文件名进行访问。</p>
+
+<p>UNIX的设备分为块设备和字符设备：</p>
+
+<p>1、块设备面向磁盘等可以随机访问的存储设备</p>
+
+<p>2、mkfs，mount等使用块设备文件名，映射块设备。</p>
+
+<p>3、终端、打印机等为字符设备，也叫做“原始（raw）”设备。</p>
+
+<p>所有的设备在文件系统中都有一文件名，在文件的inode节点中记录了文件类型是块设备文件或者字符设备文件。</p>
+
+<p>每个设备都对应一个主设备号和次设备号，也记录在inode节点中。按照惯例，设备文件都放在/dev目录下。</p>
+
+<p>我们通过ls -l查看一些设备文件时得到如下信息：</p>
+
+<h1>ls -l /dev/hdc1 /dev/fd[01] /dev/tty1</h1>
+
+<p>brw-rw&mdash;&mdash; 1 root floppy  2, 0 Jan 30  2003 /dev/fd0</p>
+
+<p>brw-rw&mdash;&mdash; 1 root floppy  2, 1 Jan 30  2003 /dev/fd1</p>
+
+<p>brw-rw&mdash;&mdash; 1 root  disk  22,1 Jan 30  2003 /dev/hdc1</p>
+
+<p>crw&mdash;&mdash;&mdash;&ndash; 1 root  root  4, 1 Jun  2 20:32 /dev/tty1</p>
+
+<p>其中主设备号和次设备号的作用列出如下：</p>
+
+<p>1、主设备号对应物理设备的一类。</p>
+
+<p>2、设备能够正常工作，需要提供设备驱动程序。</p>
+
+<p>3、设备驱动程序中有多个入口函数，设备驱动程序安装时注册这些函数，安装完成之后，会得到一个主设备号。</p>
+
+<p>4、主设备号与驱动程序相关联，根据主设备号，可以检索到已经登记了的这个设备的设备驱动程序的入口函数。</p>
+
+<p>5、主设备号用来定位所使用的设备驱动程序，次设备号用来区分这一类物理设备的哪一个。</p>
+
+<p>要创建设备文件，需要使用mknod命令。</p>
+
+<h1>mknod /dev/ttyE0 c 16 0</h1>
+
+<p>/dev/ttyE0是要创建的设备文件名，c指的是字符设备，16是主设备号，0是次设备号。</p>
+
+<p>2.2 随机数生成器/dev/random</p>
+
+<p>我们在连载5详细介绍了逻辑设备文件/dev/null和/dev/zero，逻辑设备文件也被称作虚拟设备文件，设备驱动程序不操作任何物理硬件,它像普通设备驱动程序一样提供设备驱动程序入口，通过这些入口，可以和内核交互作用，得到某些数据。这些设备叫做“虚拟设备”。</p>
+
+<p>如设备文件/dev/mem和/dev/kmem可以通过某些操作获取内核中的一些数据表格内容，常常被随操作系统软件带来的一些运行在用户态的工具使用。</p>
+
+<p>这里再引入一个常用的虚拟设备文件——/dev/ranodm。</p>
+
+<p>在Linux中，虚拟设备文件/dev/random是一个随机数生成器，根据系统键盘和鼠标等外设的活动生成二进制的随机数数列。可以在用户自己编写的程序中使用这个设备文件。</p>
+
+<p>命令od -x /dev/random可以观察这些随机数序列。在系统外设都不活动时，这个设备暂停供应随机数序列。</p>
+
+<p>另一个虚拟设备文件/dev/urandom，无论外设是否活动，只要你的程序读取该设备，都会源源不断地供应随机数序列。命令od -x /dev/urandom可以观察到这些随机数序列。</p>
+
+<p>2.3 终端设备文件</p>
+
+<p>每个终端设备，无论是网络虚拟终端设备，还是一个真正的终端设备，都对应一个名字。可以按名字像普通文件那样使用终端，但是不方便的是无法决定当前终端到底是哪个终端。</p>
+
+<p>特殊的设备文件/dev/tty就是当前终端，而无论实际使用的终端到底是哪个。尽管scanf和printf等函数可以从当前终端获得输入和从当前终端输出，但是标准输入和标准输出的重定向功能，会使得程序不再从当前终端输入和输出数据。</p>
+
+<p>对于程序员来说，当程序在这种情况下仍然需要和用户交互时，/dev/tty文件特别有用。程序可以打开/dev/tty文件输入和输出数据，在重定向环境中，仍然保持从当前终端输入和输出数据。</p>
+
+<p>3   文件和目录权限</p>
+
+<p>尽管前部分内容很多涉及到了文件和目录权限的问题，但并没有详细描述文件系统的权限控制方法和掩码运算原理。</p>
+
+<p>3.1 权限控制</p>
+
+<p>UNIX的每个文件和目录，都有对应的一组权限存放在它的inode节点中，用于控制用户对它的访问。每个文件都有惟一的属主和组号，记录在inode节点中。</p>
+
+<p>UNIX有命令chown和chgrp可以修改文件的属主和组，也有相应的系统调用函数chown() 。在inode节点中记录的权限有9b，描述3个级别，分别是文件主、同组用户、其他用户。每个级别的权限都包括3部分：读权限、写权限、执行权限。</p>
+
+<p>1、普通文件的权限</p>
+
+<p>用户对普通文件文件具有读权限，用户可以读取文件。</p>
+
+<p>用户对文件具有写权限，可以修改文件的内容。</p>
+
+<p>用户对文件具有可执行权限，可以执行这个文件。</p>
+
+<p>2、目录的权限</p>
+
+<p>目录文件存储了多个由“文件名-i节点号”组成的目录项。目录的读写权限，就是对这个目录表文件的读写权限。</p>
+
+<p>目录无读权限，目录文件不许读，ls操作会失败。</p>
+
+<p>目录无写权限，目录文件修改的操作都被禁止。创建文件、删除文件、文件改名、复制文件到该目录、创建子目录、删除子目录等这些操作需要在目录表中增加、删除或者修改条目。</p>
+
+<p>对于上面所叙述的权限控制，现总结概括如下：</p>
+
+<p>1、目录不可写，不可以保护目录下的所有的文件不可写</p>
+
+<p>在一个只允许读的目录下修改一个已经存在的文件，不需要修改目录表中的任何数据。</p>
+
+<p>inode节点中的数据和文件内容要发生变化，只要文件自身有可写属性，这些操作就能正常完成。</p>
+
+<p>2、文件的只读权限可保护文件不被误写，不能保护文件被误删</p>
+
+<p>一个文件有只读属性，文件所在目录有写权限，就可删除这个文件。删除文件，不需要打开文件，只需修改文件所在目录，只要目录可写就可以了。rm命令会在删除一个只读文件时给出一个善意的提示，但是删除照样可以完成。</p>
+
+<p>3、目录有执行权限指可以检索该目录</p>
+
+<p>cat /a/b/c要求/，/a，/a/b三目录有x权限，c有读权限。</p>
+
+<p>cd../stud4628要求.目录、..目录和stud4628目录有x权限。</p>
+
+<p>3.2 访问合法性验证的顺序</p>
+
+<p>用户操作一个文件时，系统根据登录用户名、组名及文件i节点中存储的文件主和组，判断该使用3级权限的哪一级。</p>
+
+<p>若文件主与登录用户相同，则只使用文件主权限，不再查组和其他用户的权限。</p>
+
+<p>若文件主与登录用户不同，但文件i节点中记录的组号与登录用户的组号相同，则只使用组权限，不使用关于其他用户的权限。</p>
+
+<p>若文件主与登录用户不同，文件i节点中记录的组号与登录用户的组号也不同，则使用文件关于其他用户的权限。</p>
+
+<p>超级用户root不受任何权限的制约。</p>
+
+<p>3.3 修改权限</p>
+
+<h1>ls -l</h1>
+
+<p>可以查当前目录下所有文件和子目录的权限</p>
+
+<h1>ls -1d .</h1>
+
+<p>列出当前目录自身的权限</p>
+
+<p>如果要修改已有文件和目录的权限，只有root用户和文件拥有者才能执行此类操作。其命令为chmod。</p>
+
+<p>使用chmod时有两种体现形式，分别是字母形式和数字形式：</p>
+
+<p>1、字母形式</p>
+
+<h1>chmod [ugoa][+&ndash;=][rwx] file-list</h1>
+
+<p>u （user）   文件主的权限</p>
+
+<p>g （group）  同组用户的权限</p>
+
+<p>o （other）  其他用户权限</p>
+
+<p>a （all）    所有上述三级权限</p>
+
+<p>要执行的操作的符号：</p>
+
+<ul>
+<li><p>给指定用户增加存取权限</p></li>
+<li><p>取消指定用户的存取权限</p></li>
+</ul>
+
+
+<p>= 给指定用户设置存取权限，其他权限都取消</p>
+
+<p>定义存储权限的字母：</p>
+
+<p>r     read</p>
+
+<p>w    write</p>
+
+<p>x     execute</p>
+
+<h1>chmod   u+rw    *</h1>
+
+<h1>chmod   go-rwx *.[ch]</h1>
+
+<h1>chmod   a+x  batch</h1>
+
+<h1>chmod   u=rx try2</h1>
+
+<p>2、数字形式</p>
+
+<p>chmod mode file-list</p>
+
+<p>使用3个八进制数字，分别描述文件主、同组用户、其他用户的权限。</p>
+
+<p>八进制：    6     4     0</p>
+
+<p>二进制：   110   100  000</p>
+
+<p>权限：     rw-   r&mdash;  &mdash;&ndash;</p>
+
+<h1>chmod 640 <em>.[ch] makefile </em>.log</h1>
+
+<p>3.4 权限修改示例</p>
+
+<p>1、文件写权限</p>
+
+<h1>who am i</h1>
+
+<p>jiang      pts/2       Jun 06 08:34</p>
+
+<h1>who &gt; mydata</h1>
+
+<h1>ls -l mydata</h1>
+
+<p>-rw-r&mdash;r&mdash;  1 jiang   usr   58 Jun 06 09:04 mydata</p>
+
+<h1>chmod u-w mydata</h1>
+
+<h1>who &gt;&gt; mydata （只读文件不许写）</h1>
+
+<p>mydata: The file access permissions do not allow the specified action.</p>
+
+<h1>rm mydata （只读文件可以被删除）</h1>
+
+<p>rm: Remove mydata? y</p>
+
+<h1>ls -l mydata</h1>
+
+<p>ls: 0653-341 The file mydata does not exist.</p>
+
+<p>2、文件的读权限</p>
+
+<h1>who &gt; mydata</h1>
+
+<h1>chmod   u-rw   mydata</h1>
+
+<h1>cat   mydata （无法读取不允许读的文件中内容）</h1>
+
+<p>cat: 0652-050 Cannot open mydata.</p>
+
+<h1>chmod 644 mydata</h1>
+
+<p>3、目录写权限</p>
+
+<h1>chmod  u-w   .   （当前目录不许写）</h1>
+
+<h1>who &gt; mydata2 （不能创建新文件）</h1>
+
+<p>mydata2: The file access permissions do not allow the specified action.</p>
+
+<h1>who&gt;&gt; mydata （可以修改已有的文件，追加一部分数据）</h1>
+
+<h1>rm mydata     （不能删除文件）</h1>
+
+<p>rm: 0653-609 Cannot remove mydata.</p>
+
+<p>The file access permissions don’tallow the specified action.</p>
+
+<h1>cp /etc/passwd   mydata （可以覆盖旧文件）</h1>
+
+<h1>cp /etc/passwd   mydata2 （不能创建新文件）</h1>
+
+<p>cp: mydata2: The file access permissions do not allow the specified action.</p>
+
+<h1>mv mydata MyData  （文件不许改名）</h1>
+
+<p>mv: 0653-401 Cannot rename mydata to MyData:</p>
+
+<p>The file access permissions do not allow the specified action.</p>
+
+<h1>mkdir Test  （不可创建子目录）</h1>
+
+<p>mkdir: 0653-357 Cannot access directory ..</p>
+
+<p>.: The file access permissions do not allow the specified action.</p>
+
+<p>4、目录读权限</p>
+
+<p>设pwd为:           /usr/jiang</p>
+
+<h1>chmod   u-r .</h1>
+
+<h1>ls （不可读的目录无法列出其中文件）</h1>
+
+<p>ls: .:The file access permissions do not allow the specified action.</p>
+
+<h1>chmod   000 . （取消当前目录所有权限）</h1>
+
+<h1>ls</h1>
+
+<p>ls: 0653-345 .: Permission denied.</p>
+
+<h1>chmod 755 . chmod: .:The file access permissions do not allow the specified action.</h1>
+
+<h1>chmod 755 /usr/jiang （这种访问不需要当前目录的权限，可恢复当前目录权限）</h1>
+
+<p>5、子目录ttt没有读写权限，但是保留了x权限</p>
+
+<h1>chmod  u=x  ttt</h1>
+
+<h1>cat ttt/ccp.c</h1>
+
+<p>main(int argc, char **argv)</p>
+
+<p>{</p>
+
+<p>&hellip;</p>
+
+<p>}</p>
+
+<h1>rm ttt/arg.c （子目录没有写权限，不能删除其中的文件）</h1>
+
+<p>rm: 0653-609 Cannot remove ttt/arg.c.</p>
+
+<p>The file access permissions do not allow the specified action.</p>
+
+<h1>ls ttt   （子目录没有读权限，不能列出其中的文件）</h1>
+
+<p>ls: ttt: The file access permissions do not allow the specified action.</p>
+
+<p>6、子目录有读写权限，但没有x权限</p>
+
+<h1>chmod u=rw ttt</h1>
+
+<h1>ls ttt</h1>
+
+<p>BUGS.report  arg.c     ccp.c      chap.h       mydata</p>
+
+<p>arg          auth.c       chap.c       disk.img</p>
+
+<h1>cat ttt/arg.c</h1>
+
+<p>cat: 0652-050 Cannot open ttt/arg.c.</p>
+
+<p>7、试图设置其他用户的文件或目录的权限</p>
+
+<h1>chmod 777 /</h1>
+
+<p>chmod: /: Operation not permitted.</p>
+
+<p>#</p>
+
+<p>3.5 文件掩码umask</p>
+
+<p>3.5.1   概念</p>
+
+<p>umask指设置文件和目录的初始权限。掩码值的含义是在新创建的文件和目录中，不含有掩码值中列出的权限。</p>
+
+<h1>umask       （打印当前的umask值）</h1>
+
+<h1>umask 022   （将umask值设置为八进制的022）</h1>
+
+<p>umask是shell内部命令，是进程属性的一部分，每个进程都对应一umask值。umask命令用于修改shell进程自身的umask属性。</p>
+
+<p>常将umask命令放到自动执行批处理文件中，如用csh作登录时，可将umask命令加入到.login文件或.cshrc文件中；用sh作登录shell时，可以将umask命令加入到.profile文件中。</p>
+
+<h1>umask 022   （将umask值设置为八进制的022）</h1>
+
+<p>掩码值：    022</p>
+
+<p>二进制：    000010010</p>
+
+<p>掩掉的权限：&mdash;&mdash;w&mdash;w-</p>
+
+<p>即文件和目录的初始权限，不含同组用户和其他用户的写权限。</p>
+
+<h1>umask 077   （将umask值设置为八进制的077）</h1>
+
+<p>掩码值：    077</p>
+
+<p>二进制：    000111111</p>
+
+<p>掩掉的权限：&mdash;-rwxrwx</p>
+
+<p>除文件主外，不许其他用户访问</p>
+
+<p>3.5.2   System call在umask的应用</p>
+
+<p>int  umask(int new_mask);</p>
+
+<p>new_mask为新掩码值，函数返回值为原先的掩码值。为了读出进程的掩码值,需要调用umask两次。</p>
+
+<p>新文件的初始权限由umask和open中的权限参数共同确定。</p>
+
+<p>设umask为077</p>
+
+<p>fd = open(filename, O_CREAT | O_WRONLY, 0666);</p>
+
+<p>文件的权限为0666，屏蔽掉077后为0600，即rw&mdash;&mdash;&mdash;-。</p>
+
+<p>初始创建的文件的权限受open调用的规定值和进程自身属性的umask值影响。</p>
+
+<p>文件的权限只有在初始创建时受上述因素影响，一个已存在的文件的权限，不会受open和umask的影响。</p>
+
+<p>系统调用chmod可修改文件的权限,它不受umask的影响。</p>
+
+<p>int chmod(char *path, mode_t mode);</p>
+
+<p>int fchmod(int fd, mode_t mode);</p>
+]]></content>
+  </entry>
+  
+</feed>

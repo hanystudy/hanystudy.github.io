@@ -1,0 +1,960 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="三个月前，我们展示了一套配合使用OpenNI+SensorKinect+NITE在Windows平台上驱动Kinect的Demo程序，事实证明，上述框架已完全可满足基于最新版本的Kinect的PC项目开发了。不过，微软在连续跳票一个多月后终于坐不住了，于北京时间6月17日凌晨开放The &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/08/11/ms-kinect%25e5%25bc%2580%25e5%258f%2591%25e7%25a4%25be%25e5%258c%25ba%25e7%259a%2584%25e6%259c%2580%25e6%2596%25b0%25e8%25bf%259b%25e5%25b1%2595/">
+		
+			MS Kinect开发社区的最新进展</a>
+	</h2>
+	<div class="entry-content">
+		<p>三个月前，我们展示了一套配合使用OpenNI+SensorKinect+NITE在Windows平台上驱动Kinect的Demo程序，事实证明，上述框架已完全可满足基于最新版本的Kinect的PC项目开发了。不过，微软在连续跳票一个多月后终于坐不住了，于北京时间6月17日凌晨开放The Kinect for Windows SDK beta下载页面，并作为正规军首次杀入这个吸引了众多发烧友和研究人员的技术萌芽领域。</p>
+
+<p>由于最近一段时间非常忙，我们几乎没有空闲时间用于对快速发展中的Kinect技术进行潜心研究。幸运的是，我得以在暑假一天半的假期里花几个小时研究来自微软的SDK。很显然，因为她的姗姗来迟，越来越多的国内开发者尝试进入这个领域，而又由于Kinect技术在应用层面实际上要求比较高的知识和技术门槛，这也成了Kinect社区拥有一批具有较高技术素养的核心成员的重要原因。</p>
+
+<p>首先应当说明的是，我拿到的SDK其实是微软在7月29日发布的1.00.12版，msdn上给出的Refresh Details解释新版本在驱动和运行库部分相较旧版而言得到了一些增强，目前也没有发现存在任何兼容问题。须知MS的Kinect SDK beta只支持Windows 7操作系统，开发环境要求VS2010/.Netframework 4.0。关于硬件部分的要求在试验阶段其实几乎可以忽略，除非你买到了非盒装的Kinect（拆机版也可额外购买电源/USB数据接口）。</p>
+
+<p>对于初学者而言，还有一些组件需要额外安装，但这些都不是必须的。例如几个经典的Demo程序，例如骨骼跟踪，就需要Microsoft DirectX® SDK &ndash; June 2010 or later version和Runtime for Microsoft DirectX® 9才可以编译运行；另外对于语音命令识别的Sample程序，还需要安装Microsoft Speech Platform Runtime, version 10.2 (x86 edition)、Microsoft Speech Platform &ndash; Software Development Kit,version 10.2 (x86 edition)以及Kinect for Windows Runtime Language Pack, version 0.9(acoustic model from Microsoft Speech Platform for the Kinect for Windows SDK Beta。上述开发库提供了内容绘制、图像和图形处理、语音识别等非Kinect原生功能，仅仅这些，Kinect综合技术的一角其实已经显现出来了。</p>
+
+<p>那么下面就是一个运用骨骼跟踪和语音识别技术的官方Demo：</p>
+
+<p>[singlepic id=32 w=320 h=240 mode=watermark float=center]</p>
+
+<p>在试用了几个不同的Demo后，我认为微软这次放出的SDK其实并非想象中好。问题主要在于开发平台比较单调，尽管支持非托管的C++代码，但是官方demo基本上都使用C#.NET/WPF开发，在与现有资源相结合的部分还做得不够好，而且demo的bug比较多；另外与OpenNi/NITE组合相比前者似乎性能较低——当然其精度较之后者能好一些，但区别并不明显。</p>
+
+<p>荷兰人Jasper Brekelmans是一名长期关注Kinect技术的开发人员，他在<a href="http://www.brekel.com/?page_id=671" target="_blank">博客</a>上对截至目前微软的beta版和PrimeSense的OpenNi进行了比较。我们总结了他的文章，并将其划分为四个主要问题：</p>
+
+<p><strong>问：什么是Microsoft’s Kinect SDK (Beta)能而OpenNi还不能做到的？</strong></p>
+
+<p>答：目前微软的产品提供了音频支持、调整倾角的转动电机motor/tilt、在全身跟踪骨骼跟踪方面：非标准姿势检测（相对于OpenNi的投降姿势&hellip;），头部、手、脚、锁骨检测以及关节遮挡等细节上的处理更为细致（但精度是否更高还不能确定）。此外，SDK beta还提供了多机接口，使许多尚在设想中的特殊应用有直接变为现实的可能。当然，MS的开发库在安装上非常容易，也基本不需要任何设置即可使用。提供了可用视频和深度图输入的事件触发机制。</p>
+
+<p><strong>问：那么微软的产品没有提供什么功能？</strong></p>
+
+<p>答：对许多开发者而言最大的问题可能是微软对非商业使用的限制，而OpenNi则不存在这方面问题。此外，微软的SDK目前并未提供手势识别和跟踪功能，而在前一篇文章中我们已经看到用NITE的手势识别和跟踪组件控制鼠标光标的例子。</p>
+
+<p>另一方面，SDK beta未能实现RGB图像/深度图像的互对齐，只是提供了对个体坐标系的对齐，而该功能在许多应用中实际上是很有必要的。</p>
+
+<p>在全身骨骼跟踪中，SDK只计算了关节的位置，并未得出其旋转角度。从可移植的角度来看，SDK beta只能用于Kinect/Win7平台，而OpenNi还至少支持华硕的WAVI Xtion体感设备，今后支持的硬件平台还可能更多。相比较而言SDK beta不支持Unity3D游戏引擎、不支持记录/回放数据写入磁盘、不支持原始红外视频数据流、也不支持像OpenNi一样的角色入场和出场的事件响应机制。</p>
+
+<p><strong>问:能不能再说说OpenNi/NITE提供的功能？</strong></p>
+
+<p>答：可用于商业开发、包含手势识别和跟踪功能、可自动对齐深度图像和RGB图像，全身跟踪、关节旋转角度计算、看起来性能较好、跨平台多设备支持、已有众多游戏产品应用、支持记录/回放数据写入磁盘、支持原始红外视频数据流、支持角色入场和出场的事件响应机制。</p>
+
+<p><strong> 问：那么OpenNi/NITE不能做什么？</strong></p>
+
+<p>答：未提供音频功能、不支持调整倾角的转动电机motor/tilt、在全身跟踪骨骼跟踪方面：无法跟踪头部、手、脚和锁骨的旋转动作，需要标准姿势检测（即著名的投降姿势&hellip;），关节遮挡等细节上的处理似乎存在算法bug。不能自动安装并识别Kinect多机环境。安装过程较为繁琐，特别是NITE还要申请开发证书编码。OpenNi也没有提供可用视频和深度图输入的事件触发机制。</p>
+
+<p><strong>总结：</strong> OpenNI最大的优势就是允许跨平台多设备，以及商业应用。但从原始数据的采集和预处理技术上看，微软的SDK似乎更稳定一些，况且还提供了不错的骨骼和语音支持。对于部分身体部位识别方面的功能，SDK beta没有提供局部识别和跟踪，这需要自己的后续开发（至少在相当一段时期内微软可能都不会提供此类功能）。OpenNi/NITE虽然提供了手势识别和跟踪，然而在全身骨骼姿势识别和跟踪上还要更多借鉴微软的产品。</p>
+
+<p>因此，按照目前在社区中的表现，SDK beta和OpenNi/NITE孰优孰劣还真无法一下子确定。而且随着越来越多的开发者加入微软这一方，SDK beta的普及可能会更快，但在更高层次的应用上，对二者的选用往往是需要一定智慧的。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-11T10:47:36+08:00" pubdate data-updated="true">Aug 11<sup>th</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kinect/'>kinect</a>, <a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/07/29/%25e6%2588%2591%25e7%259a%2584%25e8%25a5%25bf%25e5%25a4%25a7%25e4%25b8%2589%25e5%25ae%259d3/">
+		
+			我的西大三宝(3)</a>
+	</h2>
+	<div class="entry-content">
+		<p><strong>3 南校区的癞蛤蟆</strong></p>
+
+<p>从南校区的东门进入校园，首先会看到一大片绿葱葱的草坪，草坪的中央点缀了几处灌木丛。校园东西中轴线上有一条小路，从东门进去沿此路可直抵模拟法庭，路北的草坪上遗落了一座曾经供校工们居住的庭院，尽管近年几已无人居住，然而如果你在夏季的某个上午经过那大草坪，从东面望去，炙热的阳光已洒满不远处庭院的外墙上，那墙足有两、三米高，而墙后竟伸出几株涨势颇盛的向日葵来，反比墙还高出一米左右。我从没见过如此高的向日葵。</p>
+
+<p>尽管大草坪总不是人迹罕至的地方，大学校园里的却例外。常能在上午看到三三两两的校工驾着草坪车在场地中央转圈圈，也许他们没有能创造出麦田怪圈的想象力，但总能看出工人们其实是很热衷于这项工作的。</p>
+
+<p>盛夏逢雨便是幸事，许多住在宿舍中的同学都能不知不觉体会到一觉自然醒的好处。每到此时我都会想起一只住在大草坪里的老友，那老友足足比一个拳头还大，它白天总蛰伏在地表以下的洞穴中，即使到了夜半也很难寻觅到其踪迹——不过，如果到了久旱逢霖，老友就经常兴奋异常得昏了头，时不时蹦跶到大草坪的边缘以外，运气不好的话就刚好和某个路过的冒失鬼撞个正着。</p>
+
+<p>老友俗称癞蛤蟆，汉字中“癞”有凹凸不平的意思，人们往往对对癞蛤蟆不很主流的外表印象深刻，这恐怕是这个有点“不雅”的俗名流传开来的主要原因之一。我第一次见到老友时，恰逢甘霖济旱，夜里十一点多从实验室下来，细雨正绵，大草坪中央飘着一层薄雾。由于临近楼管大妈锁门睡觉，于是步行速度自然而然就有些加快。</p>
+
+<p>这时脚下没留神就踩断一截枯枝——“嘎嘣”一下，紧接着感到脚的前方不远处有个黑影忽然往草坪方向一跃，前进了大概几十厘米。我吓了一跳，赶紧抬脚躲避，借着对面人行道上的路灯一看，原是一只好大的癞蛤蟆。那蛤蟆倒也不惊慌，尽管刚才已是奋力一跳，却没有再急于钻进草丛里，就一动不动了。</p>
+
+<p>次日中午，天早已放晴，气温回升。依旧是从实验室下来，在距前晚不远处又遇到一只肤色稍浅的癞蛤蟆，由于夜晚光照的原因，我并无法确定它就是晚上的那只。只不过，那蛤蟆依旧岿然不动：正如工业光魔的《Rango》一样，当一只变色龙被遗落在西部的戈壁上，瞬间蜕两层皮都是常事了。而癞蛤蟆似乎从未意识到这种危险，依然呆若木鸡。</p>
+
+<p>后来我发现，蛤蟆这种犹如被石化一般，其实恰恰是一种抵御外部危险的正常反应：由于不善跳跃，在行人繁杂的行道上缓缓爬行无疑是十分危险的。同时，蛤蟆亦可以通过长期匍匐以期能作出爆发一跳，以备当真正有危及生命的险情发生时得以逃脱——尽管这在其较受人欢迎的近亲——青蛙看来不过是小菜一碟，但对癞蛤蟆来说，却再现了这个物种与其宿命的抗争。</p>
+
+<p>事实上，无论是漫长的文明史，还是现代科学的证据都表明，蟾蜍——这毕竟才是癞蛤蟆的真名，正是人类眼里两栖纲中地位最高的物种之一。中国古代神话中嫦娥居住的月宫广寒，即相传是一蟾蜍化成，因此也常称其为蟾宫，固才有屈原《天问》的“夜光何德，死则又育？厥利惟何，而顾菟在腹？”两问，尤有近代闻一多先生经缜密调查终指出“顾菟”意喻蟾而非兔。可见每晚在月亮上忙不迭捣着不死药的，除了白兔还有蟾蜍啊。在其它一些典故中，更有“金蟾”一说风靡于五行风水之学，民间的热情更是经久不息。</p>
+
+<p>另一方面，传统中医上把蟾蜍的分泌物称为“蟾酥”，是一种极为名贵的中药材。在国外，一些热带地区甚至专门引进蟾蜍以避农害，收效甚好。</p>
+
+<p>可见，我的这个常年蛰伏南校区大草坪中，昼伏夜出了无数个岁月的蟾蜍老友，早已是声名远播，名满天下了。</p>
+
+<p><strong>（完）</strong></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-29T22:51:16+08:00" pubdate data-updated="true">Jul 29<sup>th</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/07/27/%25e6%2588%2591%25e7%259a%2584%25e8%25a5%25bf%25e5%25a4%25a7%25e4%25b8%2589%25e5%25ae%259d2/">
+		
+			我的西大三宝(2)</a>
+	</h2>
+	<div class="entry-content">
+		<p>假期里这个系列的文章确实包含三篇，一文一宝，写完回家。有同学好奇前文中的戴胜鸟到底算不算是西大的宝贝，我觉得当然算，只是如果我们非要强调所谓的“西大三宝”，恐怕这种过于具象化的描述还不足以承载西北大学已经走过的一百一十个春秋，因此文章最初发布时特意将题目冠以“我的”二字作为约束，这样不免又让人诚惶诚恐起来。</p>
+
+<p><strong>2 鹦鹉与喜鹊</strong></p>
+
+<p>在本部校园的任何一个角落都有机会看到灰喜鹊的身影，而喜鹊们最喜欢栖息在行政楼前的那两三棵大树上。</p>
+
+<p>每当在西门里等校车时，我都会趁着机会去观察那一片披着蓝黑色外衣的鸟。鸟们并不安分，围绕着旁边那栋矮楼叽叽喳喳个不停，有时甚至趴在二、三楼房间的窗户上，似乎很执着地想向里面的人们传达什么信息。</p>
+
+<p>沿着喷水池南边的岔口向前走一小段路就是教学六楼。有意思的是，尽管位置显眼，但六号楼却人迹罕至——即使它也拥有不逊色于这座老校园的历史。一年多前，一群以CEO自居的乡镇企业家们聚集在这里，共同出资重新翻修了这座在他们眼里早已破败不堪的六号楼，随后设下门禁阻挡闲杂人员，而教室则专供诸CEO们在每个周末集会学习使用。于是，这座楼虽然暂时告别了往日的窘迫，人气却更显凋零。</p>
+
+<p>CEO们每月挑上几个吉利的日子便过来听会儿课，且又因为装修过的教室仅限在前两层，导致二层以上几乎成了无人区，于是一只金黄色的小鹦鹉便趁机居住在这里。</p>
+
+<p>那鹦鹉并不十分畏人，如果你能缓缓靠近它，甚至是轻轻触碰都不会太过惊动这个小家伙。我发现鹦鹉每天午后准时出现在通往三楼的阶梯上，且双眼几乎全部闭住，待感受到一点风吹草动才会张开一条缝隙。等接近晚饭时间，鹦鹉才会懒懒地扑扇几下翅膀，显得很不情愿地离开原来的位置。</p>
+
+<p>令我感到好奇的是，这鹦鹉的每日生活确实显得单调，然而墙外的喜鹊却过着另外一种完全不同的生活：不远处，几只灰喜鹊从空中滑翔而过，又迅速各自隐藏在密叶丛中，互相以嘎嘎的叫声示意；此时，墙内的鹦鹉丝毫没有注意到这些动静，依旧岿然不动地立在阶梯中间。</p>
+
+<p>很显然，鹦鹉与喜鹊从未羡慕过对方的生活，甚至于让我怀疑他们是否曾经注意到对方的存在。事实上，上述假设也许永远都不可能发生。</p>
+
+<p>渐渐地，喜鹊的数目越来越多，活动范围也覆盖到了整个校园——它们成了校园天空真正的主人，并被当作西大老校园的标志之一。六号楼里，也许已是硕果仅存的这只鹦鹉依旧全神贯注，它对酷热天气的承受力远远超过了人类。</p>
+
+<p>遗憾的是，我后来再去六号楼拜谒那鸟时，除了蝉鸣和窗外的嘈杂声，那鸟竟已踪迹全无了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-27T23:58:45+08:00" pubdate data-updated="true">Jul 27<sup>th</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/07/25/%25e6%2588%2591%25e7%259a%2584%25e8%25a5%25bf%25e5%25a4%25a7%25e4%25b8%2589%25e5%25ae%259d1/">
+		
+			我的西大三宝(1)</a>
+	</h2>
+	<div class="entry-content">
+		<p>西大有三宝，这是我来西大整整五年时间才深刻体会到的。本文原应待两年后离开时再放出，然而时光荏苒，届时是否还有幸能在校园里觅得“三宝”，我自己都不太确定。当然，现在所述的“三宝”却依旧是眼前鲜活的景物。</p>
+
+<p><strong>1 戴胜</strong></p>
+
+<p>第一次见到戴胜鸟是在科技楼西侧的草坪旁边，彼时已近深秋，一只黄褐色的大鸟突然从我的头顶掠过，沿着波浪状的轨迹直飞到我面前的步行道上。我之前的确不知道这鸟原叫作戴胜，它拥有细长且扁平的头冠，有部分甚至耷拉在脑袋后侧，独特的叫声也令人感到惊奇。我和那鸟僵持了一会，突然想到要赶下一趟校车，于是便继续前行了几步——大鸟突然竖起头冠，那冠羽像一把色彩鲜明的扇子立在那里，鸟被迫向旁边挪动了两步，依然夹带着那独特的叫声——的确漂亮极了——随后扑扇了几下翅膀，消失在一片枯黄的密叶中。我对这鸟的来历好奇的很，通过对它奇特外形的描述仔细查找确认一番，才得知“戴胜”这一雅号。</p>
+
+<p>“戴胜”之所以得名，还是源于古人对戴胜鸟华美头冠的艳羡，就好似头戴华胜一般。中国自古就有许多诗歌吟咏戴胜，然而这里我想先给出一篇古希腊哲人亚里士多德有关戴胜的文章，在《动物志》第九卷中作如下描述：</p>
+
+<p><em>&hellip;&hellip;戴胜亦会变换其颜色和外观，恰如埃斯库罗斯在以下诗句中所述：</em></p>
+
+<p><em>&hellip;&hellip;The hoopoe also changes its colour and appearance, as Aeschylus has represented in the following lines:—</em></p>
+
+<p><em>戴胜见到自己的卑微，</em></p>
+
+<p><em>The Hoopoe, witness to his own distress,</em></p>
+
+<p><em>大神却令穿上多样的花衣：</em></p>
+
+<p><em>Is clad by Zeus in variable dress:&ndash;</em></p>
+
+<p><em>有时是一只戴着盔缨的山鸟，</em></p>
+
+<p><em>Now a gay mountain-bird, with knightly crest,</em></p>
+
+<p><em>有时又换上了苍鹰的白毛；</em></p>
+
+<p><em>Now in the white hawk’s silver plumage drest,</em></p>
+
+<p><em>跟着节序的变易，</em></p>
+
+<p><em>For, timely changing, on the hawk’s white wing,</em></p>
+
+<p><em>脱掉银灰的羽翼，</em></p>
+
+<p><em>He greets the apparition of the Spring.</em></p>
+
+<p><em>正当春光来到林荫，</em></p>
+
+<p><em>Thus twofold form and colour are conferred,</em></p>
+
+<p><em>他就重新打扮全身。</em></p>
+
+<p><em>In youth and age, upon the selfsame bird.</em></p>
+
+<p><em>这套冠履显得他年轻又且美丽，</em></p>
+
+<p><em>The spangled raiment marks his youthful days,</em></p>
+
+<p><em>而那银灰的古装正合老成的旨趣；</em></p>
+
+<p><em>The argent his maturity displays;</em></p>
+
+<p><em>等到坡上黍黄的时候，</em></p>
+
+<p><em>And when the fields are yellow with ripe corn,</em></p>
+
+<p><em>还得配些秋色的文绣。</em></p>
+
+<p><em>Again his particoloured plumes are worn.</em></p>
+
+<p><em>然而世事总不能尽如鸟意，</em></p>
+
+<p><em>But evermore, in sullen discontent,</em></p>
+
+<p><em>他从此深隐到何处的山里。</em></p>
+
+<p><em>He seeks the lonely hills, in self-sought banishment.</em></p>
+
+<p style="text-align: right;"><em>—— Translated by D’Arcy Wentworth Thompson</em></p>
+
+
+<p>同时期的中国古代典籍亦有《礼记.月令》：“&hellip;&hellip;是月也,命野虞无伐桑柘。鸣鸠拂共羽,戴胜降于桑&hellip;&hellip;”。意在指“季春之月”即阴历五月，戴胜降落在农田中，一步一啄，犹如农耕，因此鼓励人们像戴胜一样勤于农作。 此外，古人咏戴胜知天时而劝人耕，亦可谓是数不胜数。可见，戴胜鸟与人类伴居至少已有两千多年的历史了。</p>
+
+<p>然而尽管戴胜并不算是什么珍惜鸟类，这的确是我们唯一一次相遇。虽然我也曾经从紫藤园辗转至木香园，再寻觅到润林苑，此后却再也没有能够有幸遇见戴胜轻巧的身影徜徉于西大的树梢间。</p>
+
+<p>现如今，那只聪慧机敏、温柔灵动的戴胜，犹如这座老校园往日的生机勃勃一样，恐怕只能成为记忆中的沧海一粟了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-25T00:15:39+08:00" pubdate data-updated="true">Jul 25<sup>th</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/07/02/%25e4%25bb%25a3%25e7%25a0%2581%25e5%25a6%2582%25e8%25af%2597%25ef%25bc%258c%25e5%259b%25a0%25e6%25ad%25a4%25e8%25af%25b7%25e4%25b8%258d%25e8%25a6%2581%25e4%25bb%25a3%25e7%25a0%2581%25e5%25a6%2582shi/">
+		
+			代码如诗，因此请不要代码如Shi</a>
+	</h2>
+	<div class="entry-content">
+		<p>下周久违的仙五就要到家了，因此本文是我这周末在学校作完，下周休息且将专注通关，那么隔周的文章就会是相关的体验和评测了。</p>
+
+<p>打开这个blog所依赖的wordpress项目<a href="http://www.wordpress.org" target="_blank">官网</a>，首页下方常年静静地躺着这么一句话：CODE IS POETRY（代码如诗）。</p>
+
+<p>如今，编码已是大部分程序员仅有的几个生存技能之一了。程序员写代码的目的无非是养家糊口，费尽脑汁地想方设法满足需求，做到让客户满意，老板放心，以此换来一份还算体面的工作和报酬。除此之外 ，罕见的假期和无尽的加班——这既是冰冷的deadline要求，如今也已成为这个竞争严酷的行业的一个标志性特征。</p>
+
+<p>我第一次听说“IT工业”这个词汇时就产生一些疑惑，这个看似一（多）人一（多）本打天下的行业怎么能和生产高度社会化的大工业联系在一起——后来等逐渐快“想明白”了，现在又普遍表达为“IT服务业”。可见我们自己都时常纠结于这些政治和经济词汇中，对个人修行又有什么好处。 因此我认为，程序员的工作应归属于文学类，确切地讲是代码诗人。</p>
+
+<p>若干年前，我也曾写过许多如今看来颇幼稚可笑的诗歌，现在想想文学作品的任务不外就是叙述事实，表达观点或抒发情感，作家的阅历和天赋决定了读者的口碑。相比较而言，代码是程序员用来叙述事实，表达观点的终端工具，功能上和文学的区别似乎不大。唯一不同之处就在于，读者通过文字大概就可以了解作家，用户却只能通过综合的产品体验去评价程序员，在某种意义上说，程序员要比作家难作的多！另一方面，文学往往惊艳于作家的灵光一闪，而代码却更多依赖于理性和经验，源泉不同，其表现却是相同：同样一幅场景，无论使用文字还是代码，都有无限可能的表达方式。</p>
+
+<p>而且，代码还不能仅仅等同于一般意义上的文学作品。计算语言学（或计算机语言学）特别注重强调形式化，这是使用计算语言表示数理方法的基础。然而形式化并不意味着必须符号化，否则使用计算语言的优势也无法得以体现。现代计算语言的发展也证明了计算语言是朝着形式化与拟人化双重目标前进的。而文学作品中形式化最为深刻的体裁恐怕就是那些诗词歌赋了——这难道不是代码如诗的又一力证！</p>
+
+<p>此时我又想起了数年前的那数十篇诗歌，无一不是逃离理性的表达。如今我所能做的，竟也只是纯粹理性状态下才能写下的一行行字符。尽管意境不同，美好却是不变。于是强迫自己亲手写下每一行代码，过程艰辛，却也心安理得，纵使独臂难支，体验依旧。</p>
+
+<p>最后，代码于我如诗，于众则未必。我喜欢读如诗的代码，却非常厌恶如Shi的代码，也许无论是现在或未来，我都不会成为一名代码诗人，但这却不影响我作为如诗代码的读者之一。我唯一的愿望就是：眼前这篇代码能多些诗一般的灵气和酣畅，少些Shi一样的世俗和愚蠢。若能如是，还有什么兴趣爱好堪比与此呢。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-02T16:46:29+08:00" pubdate data-updated="true">Jul 2<sup>nd</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/06/25/%25e5%25ae%25ab%25e5%25b4%258e%25e9%25aa%258f%25e5%2592%258c%25e4%25bb%2596%25e7%259a%2584%25e8%2587%25aa%25e7%2584%25b6%25e6%25b3%2595%25e5%2588%2599/">
+		
+			宫崎骏和他的自然法则</a>
+	</h2>
+	<div class="entry-content">
+		<p>宫老的片子我向来都是力挺，这次也不例外。</p>
+
+<p>尽管比起三年前的《金鱼姬》还差了近六十亿本土票房，然而无论是宫崎吾朗还是米林宏昌，吉卜力近几次由新人扛鼎的作品丝毫都不失其国民级动画的风范。此外依旧不变的是，我仍可耻地等到一年后的DVD发行版面市——还得是由热心网友在第一时间提供抓轨下载&hellip;&hellip;不过，相较于宫老过去的几部作品，这次从影片《借りぐらしのアリエッティ》中看到了吉卜力试图淡化创作者的个人情绪，且期望承担更多社会责任——这恐怕也是影片缺少几分灵气的重要原因吧！</p>
+
+<p>无论如何，观影的过程还是让人感到舒适和温馨的。整个故事以男主角翔的独白倒叙展开，翔当时正准备接受心脏病手术，而此时父母离婚，母亲也远走国外，姥姥便专程驱车带翔到东京都附近的家中静养一周。不过姥姥的这栋住宅却不一般：宅基下面住了三代的小小人族，这些小小人族通常必须用“借”的方式从人类家中获得生活必需品，其独特的生存方式充满挑战却倒也其乐融融，唯一的禁忌就是不能被人类发现，否则就必须被迫搬离住所。</p>
+
+<p>翔已经是母亲家族在此居住的第四代，据说姥姥的父亲曾在屋内见到小小人族，当即就从英国购置了一套华美精致的人偶房屋，希望小小人族能搬到这个“新家”中。遗憾的是除了翔的母亲和姥姥的父亲以外，家中再没人能亲眼见到过小小人族，而能请小小人族们在人偶房屋居住——到翔这代已经是四代家人的一个梦想了。</p>
+
+<p>十分幸运的是，翔刚到姥姥家的第一天就无意中撞见了偷跑出来的小小人族女孩Arrietty，但也只是一个一闪而过的身影而已。而当晚上Arrietty跟随父亲又来翔的家中“借东西”，突然意识到翔这个人类发现了自己的存在，便匆忙和父亲跑回家中。其实当天晚上翔只是安静看着Arrietty的一举一动，从未有过恶意的想法。早上起来翔发现Arrietty临走时不小心丢下的一块方糖——于是把糖块放回到小小人族们经常出没的地方。Arrietty的家人知道了翔留下的方糖，认为是人类为了抓捕小小人族而设置的陷阱，父亲遂决定举家搬迁。</p>
+
+<p>尽管Arrietty不愿搬离，但也无奈于对家人安全的考虑。然而故事还未结束，翔姥姥家的管家春发现了小小人族的秘密，春是本片唯一的麻烦制造者——不对，还有一只狂暴乌鸦&hellip;&hellip;这在片头就有明确的表示了。春决定抓住家中所有小小人族，趁Arrietty搬家之际抓走了Arrietty的母亲荷蜜莉，并请来了捕鼠公司帮忙。Arrietty情急之下向翔求助，翔不顾病重和春周旋，并帮助Arrietty救出了荷蜜莉。而春也因为抓捕小小人族的计划失败而懊恼不已。</p>
+
+<p>夜，Arrietty和家人准备顺溪而下迁往森林的另一边。此时的翔同样夜不能寐，终于在家猫尼亚的带领下及时赶到并与Arrietty做了最后告别。</p>
+
+<p>现在回想一下，宫老过去二、三十年的影片不是自然题材就是生活题材。而最近的几部片子，比如《崖の上のポニョ》和本片，都尽量要做到自然与生活的统一，事实上脚本构思的也十分巧妙——尤其是三年前的那只金鱼姬和她的奇幻水世界。而这部改编自英国上世纪50年代儿童作家的作品，只是在主题上更加明确和深化了：这世间的物种无一不享有最平等的生存权利，尽管面临进化和自然选择，但各物种无不全力以赴，力争生存，而这星球上拥六十七亿之众的人类，也应该始终保有一颗对其他物种的尊重和对自然的敬畏之心。而对于从小就患有心脏疾病的翔来说，Arrietty和小小人族们永不放弃的勇气也坚定了自己面对未来的信心。</p>
+
+<p>最后，我们回到技术上看。宫老对CG的反感是出了名的，尽管近年来吉卜力的作品一直都在试图引入CG技术，但其小心翼翼的步伐也使得宫老近三十年来的动画技术几乎没有太多突破——这绝非是为了说明手绘动画已经过时，毕竟宫老和吉卜力的影响力是有目共睹的——我们看看更大众化的哆啦a梦系列，三十年如一日的机器猫剧场版在技术上始终走在业界前列，但愈发缺少原著的灵魂了。不过如果我们将视界扩展至全球，CG动画的市场份额仍然在不断扩大，老牌手绘Disney也不得不和着Pixar的脚步做起了全三维CG并横扫世界，尽管Disney还在坚持制作自己的手绘影片，然而其是否宁愿赔本赚吆喝到底也不为人知。我相信，随着CG技术在艺术表现力上突飞猛进式的发展，我们终将有机会踏入这个现实世界中的梦幻王国。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-06-25T17:44:13+08:00" pubdate data-updated="true">Jun 25<sup>th</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/05/28/gl%25e7%25bb%2588%25e7%25a9%25b6%25e8%25bf%2598%25e6%2598%25af%25e6%259d%25a5%25e4%25ba%2586/">
+		
+			GL终究还是来了</a>
+	</h2>
+	<div class="entry-content">
+		<p>本文算是最近三周内的第三个“来了”系列（博主是不是整天无所事事？）&hellip;不过这次的确是因为工作需要的原因，GL的主题将会持续一段时间。至于为什么我习惯称之gl，那么请留意gl的发音/gl/，前面再加个open&hellip;总会有人真正体会到她的魅力所在的。不过这也确实不是我第一次尝试学习gl了：一年前我曾冒着烈日学习nehe怎么用gl画会转的三角形&hellip;两天后被迫放假回家，于是又练了个新号，直到前几天又被个文明贼盗了2w多g&hellip;这里似乎离题了！总之现在就算不上是gl新手了吧&hellip;</p>
+
+<p>上述事实再次告诉我们，当你像我这么老的时候，好奇心就不能再是生活的第一目标了，而应优先满足需求&hellip;在满足各种实际需求的过程中，我们永远的好奇心也将逐步得到慰藉。</p>
+
+<p>PS:Kinect for Windows SDK近期连续跳票&hellip;广大Kinect开发者表示情绪灰常稳定，是到了该OpenNI收拾残局的时候了。</p>
+
+<p>PPS:本周读书去&hellip;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-28T10:18:36+08:00" pubdate data-updated="true">May 28<sup>th</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/05/21/cuda%25e5%25ad%25a6%25e4%25b9%25a0%25e7%259a%2584%25e7%258e%25b0%25e7%258a%25b6%25e5%2592%258c%25e5%259b%25b0%25e6%2589%25b0/">
+		
+			CUDA学习的现状和困扰</a>
+	</h2>
+	<div class="entry-content">
+		<p>首先需要说明的是，CUDA并非GPGPU（GPU通用计算）的全部。但是我们仍然应该首先感谢Nvidia，因为CUDA使GPGPU走向大众化，使得我等终于也能从中一窥究竟了。不过随之而来的疑问却是，CUDA真能担负得起GPGPU的重担吗？至少在目前看来，答案并不太明显。</p>
+
+<p><strong>战前准备</strong></p>
+
+<p>当然，要使用到CUDA，最好还是拥有一块N系列的显卡，尽管CUDA支持emu模式（该模式将把cuda程序完全放在CPU中运行），但device加速计算才是我们真正的目的。拥有并装配任意一块GeForce 8、9、GTX或Quadro、Tesla系列显卡后，在NVIDIA的网站上下载最新适用的driver、toolkit和sdk，安装在相应的平台上就可以了。下图简示了cuda应用程序的软硬件体系结构：</p>
+
+<p>[singlepic id=31 w=320 h=240 mode=watermark float=center]</p>
+
+<p>图中我们可以看出GPU在现行体系结构的计算机中所扮演的角色，以及cuda应用程序驱动GPU设备的控制流。上述环境搭建好后，就可以进入程序设计阶段了（的确，这才刚刚开始）——实际上当前cuda应用中还普遍存在一个问题，即在当前ide中配置应用程序框架以便于开发，针对该问题我们将在今后的文章中做一些说明。</p>
+
+<p><strong>CUDA的extended C基本组成</strong></p>
+
+<p><strong>1、基本结构和kernel function</strong></p>
+
+<p>这里给出一段简单易懂的基于cuda的C语言程序模板：</p>
+
+<p>[c]</p>
+
+<p>Main(){</p>
+
+<p>//Allocate memory on GPU</p>
+
+<p>float *Md;</p>
+
+<p>cudaMalloc((void**)&amp;Md, size);</p>
+
+<p>//Copy data from CPU to GPU</p>
+
+<p>cudaMemcpy(Md, M, size, cudaMemcpyHostToDevice);</p>
+
+<p>//Call GPU kernel function</p>
+
+<p>kernel&lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt; (arguments);</p>
+
+<p>//Copy data from GPU back to CPU</p>
+
+<p>CopyFromDeviceMatrix(M, Md);</p>
+
+<p>//Free device matrices</p>
+
+<p>FreeDeviceMatrix(Md);</p>
+
+<p>}</p>
+
+<p>[/c]</p>
+
+<p>从这段程序中我们可以看出cuda编程的两大特点：一是在显存中的空间分配操作和CPU操作内存的思路基本一致，同时避免不了Host与Device之间的大规模数据交换；二是GPU计算的算法核心在于核函数kernel function的设计。通过核函数的调用方式kernel&lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt; (arguments)可以看出，kernel是自定义的核函数名，符号“&lt;&lt;&lt;”和“&gt;&gt;&gt;”中含有两个参数，分别是Grid维数和Block维数，在cuda中Grid表示一个block组，而Block表示一个thread组，显然参数dimGrid和dimBlock分别定义了Grid和Block的规模，其维数均可达到三维。下面是一个定义Grid和Block的例子：</p>
+
+<p>[c]</p>
+
+<p>dim3 dimGrid(2, 2);</p>
+
+<p>dim3 dimBlock(4, 2, 2);</p>
+
+<p>[/c]</p>
+
+<p>应当注意，每一个thread block最多只能分配512个threads，其中每调用一次kernel函数就相当于在GPU上分配了一个Grid。此外，为了使线程内部处理各自的数据块，核函数内部还有为每个线程分配的threadIdx、blockIdx、threadDim和blockDim信息，示例程序如下：</p>
+
+<p>[c]</p>
+
+<p>//CUDA program</p>
+
+<p><strong>global</strong> void inc_gpu(float <em>a, float </em>b, int N)</p>
+
+<p>{</p>
+
+<p>for (intidx = 0; idx&lt;N; idx++)</p>
+
+<p>a[idx] = a[idx] + b;</p>
+
+<p>}</p>
+
+<p>int idx =blockIdx.x* blockDim.x+ threadIdx.x;</p>
+
+<p>if (idx &lt; N)</p>
+
+<p>a[idx] = a[idx] + b;</p>
+
+<p>}</p>
+
+<p>void main()</p>
+
+<p>{</p>
+
+<p>&hellip;</p>
+
+<p>dim3 dimBlock (blocksize);</p>
+
+<p>dim3 dimGrid( ceil( N / (float)blocksize) );</p>
+
+<p>inc_gpu&lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt;(a, b, N);</p>
+
+<p>}</p>
+
+<p>[/c]</p>
+
+<p><strong>2、类型关键字</strong></p>
+
+<p>为了处理Grid、Block、Thread层级内的内存共享和线程通信问题，cuda特别给出了自有的声明关键字：</p>
+
+<p><strong>device</strong></p>
+
+<p>该空间储存于GPU上，属于全局可读写空间，和应用程序具有相同的生命期，且可被grid中所有线程存取，CPU代码通过runtime函数存取。</p>
+
+<p><strong>constant</strong></p>
+
+<p>该空间储存于GPU上，属于全局只读空间，和应用程序具有相同的生命期，且可被grid中所有线程存取，CPU代码通过runtime函数存取。</p>
+
+<p><strong>shared</strong></p>
+
+<p>该空间存储于GPU上Block内的共享存储器，和Block具有相同的生命期，只能被Block内的全部线程存取。</p>
+
+<p>Local变量</p>
+
+<p>储存于SM内的寄存器和local memory中，和thread具有相同的生命期，Thread私有。</p>
+
+<p>同时CUDA还引入了几个新的内置数据类型，除了前面已经给出的dim3外，还针对C语言的内置数据类型进行了进一步扩展，如int4四维向量，其四个维数分别存储于int4.w、int4.x、int4.y、int4.z中。此外还有一个独特的Texture type，其一般声明表达式为texture&lt;Type, Dim, ReadMode&gt; texRef，其中type为C的内置数据类型，维数最多为3，ReadMode包括了cudaReadModeNormalizedFloat和cudaReadModeElementType两种形式。</p>
+
+<p>CUDA在函数声明中也引入了新的关键字：</p>
+
+<p><strong>device</strong> float DeviceFunc()</p>
+
+<p>该类型函数只能在GPU内部被调用，且只能在GPU内部运行。device函数不能使用&amp;取存储器地址、不支持递归、不支持静态变量，也不支持变长参数的声明方式。</p>
+
+<p><strong>global</strong> void KernelFunc()</p>
+
+<p>一般为核函数，在CPU内调用，但在GPU内运行，且返回值只能为void。前文已经详细说明了核函数的一般使用方法，应注意核函数还拥有一个配置参数，其调用方式一般如下：</p>
+
+<p>[c]</p>
+
+<p>&hellip;&hellip;</p>
+
+<p>size_t SharedMemBytes = 64; // 64 bytes of shared memory</p>
+
+<p>KernelFunc&lt;&lt;&lt; DimGrid, DimBlock, SharedMemBytes &gt;&gt;&gt;(&hellip;);</p>
+
+<p>[/c]</p>
+
+<p><strong>host</strong> float HostFunc()</p>
+
+<p>只在CPU中调用和运行的程序。</p>
+
+<p>还有一种声明方式，即<strong>device</strong>和<strong>host</strong> 组合使用，那么函数分别在CPU和GPU中被编译保存。</p>
+
+<p>CUDA还有自己一套非常实用的数学函数库，其功能包括pow, sqrt, cbrt, hypot, exp, exp2, expm1, log, log2, log10,log1p, sin, cos, tan,asin, acos, atan, atan2, sinh, cosh,tanh, asinh, acosh, atanh, ceil, floor, trunc, round, etc。但是上述函数都不能像matlab中一样进行向量运算（但是有了GPU和Kernel&hellip;呵呵），此外在函数名前方加入__前缀就可以达到更快的速度，但会损失一定精度。</p>
+
+<p><strong>CUDA Libraries</strong></p>
+
+<p>如果只有CUDA drivers API，那么我们对CUDA的研究可能真的要止步于此了，因为基于GPGPU的程序设计目前还缺乏方法论支持——当然这是科学家的义务（如果我们要想在此做一些贡献，可能不会先发在blog上:）。不过正是因为更多有趣的Libraries，使我们不得不对CUDA继续感起兴趣，尽管这种编程方式的难度与matlab相比远高了许多数量级。笔者使用的CUDA Toolkit 4.0 RC2（发布于2011年4月）大体上包含了四个CUDA应用库，包括GPU-accelerated BLAS library基础线性代数子程函数库、GPU-accelerated FFT library快速傅里叶变换函数库、GPU-accelerated Sparse Matrix library稀疏矩阵函数库、GPU-accelerated RNG library随机数生成函数库。</p>
+
+<p>最常用的函数库是CUBLAS基础线性代数子程函数库， 其基本功能是进行矩阵运算。有经验的读者可能会想到直接用CUDA API编写矩阵运算程序可能并不复杂，但是鉴于面对的是建立在本身就不怎么友好的标准C之上的CUDA，CUBLAS还是吸引了众多关注。这里给出基于CUDA 4.0 CUBLAS（CUBLAS v2.0）程序的基本结构：</p>
+
+<p>[c]</p>
+
+<p>cublasHandle_t handle ;</p>
+
+<p>stat = cublasCreate(&amp;handle ) ;</p>
+
+<p>stat = cublasSetMatrix ( M , N , s i z e o f (* a ) , a , M , devPtrA , M ) ;</p>
+
+<p>modify ( handle , devPtrA , M , N , 2 , 3 , 1 6.0 f , 12.0 f ) ;</p>
+
+<p>stat = cublasGetMatrix ( M , N , s i z e o f (* a ) , devPtrA , M , a , M ) ;</p>
+
+<p>cudaFree ( devPtrA ) ;</p>
+
+<p>cublasDestroy ( handle ) ;</p>
+
+<p>[/c]</p>
+
+<p>这段代码摘自CUBLAS Library手册中的Example code，其功能是将当前矩阵改为以1为起始索引。handle是CUBLAS新版本中加入的线程安全句柄，这保证了CUBLAS库函数的可重入性，从而允许其在CPU的不同线程中被安全调用。需要注意的是，CUBLAS采用了以列为主序、1为起始索引的存储结构，以便更大程度上兼容Fortran编程环境，然而数据组织这种方式与C/C++完全不同，这就需要在向存储器中填入数据时考虑选择列为主序的问题，其中官方手册上也做了如下说明：</p>
+
+<p>当应用程序的形式是在C中嵌入的Fortran代码，那么为了适应索引由1起始的习惯和以列为主序的存储方式，可使用以下宏调用进行数组操作：</p>
+
+<p>[c]</p>
+
+<h1>define IDX2F( i , j , ld ) ( ( ( ( j )-1) *( ld ) )+(( i )-1) )</h1>
+
+<p>[/c]</p>
+
+<p>如果使用的是本地C/C++代码，那么可使用以下宏调用进行数组操作：</p>
+
+<p>[c]</p>
+
+<h1>define IDX2C( i , j , ld ) ( (( j) * (ld))+( i) )</h1>
+
+<p>[/c]</p>
+
+<p>上述两段宏定义的“id”是指矩阵的主维数，如当矩阵是以行为主序存储时，主维数id即为列数，反之亦然，主维数在CUBLAS库函数中被大量使用。</p>
+
+<p><strong>后记</strong></p>
+
+<p>CUDA入门时问题往往集中在基本的extended C以及库函数的调用，其次就是编译、链接和调试了。但是当我们真正熟悉它的基本使用方法，才发现CUDA的难度集中在算法和程序设计乃至优化等方面，要知道，在传统CPU上许多数值计算方法都尚未得到高效的解决，更何况要让众多的开发者把精力投入到这种新的思考模式——也许这正是AMD至今把GPGPU捧在科学研究之巅的原因。目前，CUDA在GPGPU上的主要应用还是基本的数值计算，我们知道在纯粹的浮点运算上GPU已经把CPU远远抛在了后面，但处于冯诺依曼体系下的GPGPU仍然需要唯CPU马首是瞻，这就引出Host和Device间数据传输瓶颈的问题。即使是在PCI-E 2.0理论传输峰值达到8.0g/s的情况下，仍然与高端GPU动辄上百g/s的片内存储带宽相距甚远。更何况CUDA的数据传输机制为了避免Host对Memory的影响，往往先在Memory中申请一块独占空间再进行DMA传输——这也是往往使用cudaMallocHost的page locked内存空间申请模式的原因。</p>
+
+<p>因此，我认为，如果作为一名普通爱好者，那么学习CUDA、偶尔加速并优化自己的实际工作——如快速视频编解转码，也小有一番风味。但如果热衷于高性能计算特别是GPGPU的研究，那么是否采用CUDA——这个让GPU走下神坛的“利器”并借助它去接近理想，恐怕还是有待商榷的。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-21T23:01:52+08:00" pubdate data-updated="true">May 21<sup>st</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/gpu-slash-gpgpu/'>gpu/gpgpu</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/05/14/%25e5%2595%2583%25e5%25a5%25b6%25e6%259d%25a5%25e4%25ba%2586%25e2%2580%2594kinect-for-xbox360%25e6%258a%25a2%25e5%2585%2588%25e4%25bd%2593%25e9%25aa%258c/">
+		
+			啃奶来了—Kinect for Windows抢先体验</a>
+	</h2>
+	<div class="entry-content">
+		<p>如果说微软将“被迫”开放Kinect for Windows SDK，无疑这次是PrimeSense立了首功。然而要不是我冒着生命危险在鸟不拉屎的地方蹲守了近十天，终于在一个学院林立的院落里拿下Kinect for Taiwan Only，并跋涉1200公里侥幸逃生的话，本文的出炉可能还要推迟一个月左右。总之无论如何，感谢MS，感谢PS，感谢万恶的铁道部，我终于活着且独立完成了这篇文章。</p>
+
+<p>Kinect到底好不好玩，我不知道。不过我知道为了测试一个hand tracker手臂举得酸痛，然而结果就像是我们数年前的理想如今突然变成了现实，而且这种久逢甘霖的冲动仍在持续，套用某牛逼CEO创业时的一句话：“说实话，我们并不清楚它未来将会变成什么。”由于微软将于2011年5月16日正式开放Kinect for Windows SDK beta，尽管是non-commercial use，但对我们来说已经足矣。本文在某种程度上是基于已有hacker的经验谈，基本框架一般是OpenNI+SensorKinect+NITE这样的半官方组合，而要想全面入门体感开发还是需要先研读一下OpenNI UserGuide这种小部头。</p>
+
+<p>下面是啃奶来自NiViewer的第一张深度对比图：</p>
+
+<p>[singlepic id=30 w=320 h=240 mode=watermark float=center]</p>
+
+<p>根据PS的说法，自然交互（Natural Interaction）就是一种基于声音和视觉等人类体感信息的人机交互方式。目前看来，NI设备完全可以取代如遥控器、鼠标等远程控制外设。当前日常生活中常见的自然交互方式包括：</p>
+
+<p>演说以及口令识别，NI设备通过声音接收装置接收语音指令；</p>
+
+<p>手势识别，通过预设计一定的交互范型，人们可以通过简单的手势控制一般设备，如卧室的光照强度；</p>
+
+<p>躯体运动跟踪，NI设备通过识别当前图像中的完整人类躯体，快速分析躯体骨架信息，并将实际躯体运动姿态转换为骨架运动信息。</p>
+
+<p>值得注意的是，前面的图中展示了一张Kinect的深度对比图，也就是说大多数NI设备通过技术手段可以感应物体的空间深度信息，目前已有利用Kinect进行三维场景重建和空间交互的hacker例子。下图是利用NITE的StickFigure追踪人体骨架姿态信息的例子：</p>
+
+<p>[singlepic id=28 w=320 h=240 mode=watermark float=center]</p>
+
+<p>简单修改一下NITE的PointViewer例子，我们可以把手势跟踪进一步改进为手势鼠标控制（已做消除抖动处理），如下图：</p>
+
+<p>[singlepic id=29 w=320 h=240 mode=watermark float=center]</p>
+
+<p>由于目前官方SDK尚未推出，基于Kinect的开发框架方案已有许多，但缺乏权威性。较令人信服的组合除了我们上述建议的三件套，再加上OpenCV算法包和OpenGL库就足以做出十分不错的应用了。即日起本站新增加Kinect项目板块，将重点关注基于Kinect的应用开发。值得一提的是，目前在kinect开发领域拥有一个人气不错的中文社区<a href="http://www.cnkinect.com%EF%BC%8C%E8%BF%99%E5%9C%A8%E5%9B%BD%E5%86%85%E5%AD%A6%E9%99%A2%E6%B4%BE%E6%97%A5%E7%9B%8A%E8%A1%B0%E5%BE%AE%E7%9A%84%E4%BB%8A%E5%A4%A9%E7%BB%9D%E5%AF%B9%E6%98%AF%E9%9A%BE%E8%83%BD%E5%8F%AF%E8%B4%B5%E7%9A%84%EF%BC%8C%E4%BB%8A%E5%90%8E%E6%88%91%E4%BB%AC%E4%B9%9F%E5%B0%86%E6%8C%81%E7%BB%AD%E5%85%B3%E6%B3%A8%E8%BF%99%E4%B8%80%E7%A4%BE%E5%8C%BA%E7%9A%84%E5%8A%A8%E6%80%81%E3%80%82">http://www.cnkinect.com%EF%BC%8C%E8%BF%99%E5%9C%A8%E5%9B%BD%E5%86%85%E5%AD%A6%E9%99%A2%E6%B4%BE%E6%97%A5%E7%9B%8A%E8%A1%B0%E5%BE%AE%E7%9A%84%E4%BB%8A%E5%A4%A9%E7%BB%9D%E5%AF%B9%E6%98%AF%E9%9A%BE%E8%83%BD%E5%8F%AF%E8%B4%B5%E7%9A%84%EF%BC%8C%E4%BB%8A%E5%90%8E%E6%88%91%E4%BB%AC%E4%B9%9F%E5%B0%86%E6%8C%81%E7%BB%AD%E5%85%B3%E6%B3%A8%E8%BF%99%E4%B8%80%E7%A4%BE%E5%8C%BA%E7%9A%84%E5%8A%A8%E6%80%81%E3%80%82</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-14T20:46:15+08:00" pubdate data-updated="true">May 14<sup>th</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kinect/'>kinect</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/04/26/%25e7%259c%259f%25e7%25b4%25af%25e5%2595%258a/">
+		
+			真累啊</a>
+	</h2>
+	<div class="entry-content">
+		<p>本来就懒得跑，没消停几天就又得出差&hellip;人生真真是个杯具。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-26T23:38:52+08:00" pubdate data-updated="true">Apr 26<sup>th</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="2" class="prev">Prev</a>
+    
+    
+        <a href="4" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

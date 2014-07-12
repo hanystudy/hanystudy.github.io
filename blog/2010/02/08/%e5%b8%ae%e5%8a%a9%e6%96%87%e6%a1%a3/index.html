@@ -1,0 +1,132 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>帮助文档  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="本文旨在向访问者介绍hanyi.name网站系统的功能以及相关使用说明，由于该系统仍处于搭建初期，更多的说明将逐步发布，许多既有功能也可能会在未来发生较大调整。 8月13日21:48更新：长达半年未更新首页ui&hellip;导致一如既往地简陋。今后空闲也不会很多，只能做一点是一点了。 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="page">
+    <div class="entry-content"><p>本文旨在向访问者介绍hanyi.name网站系统的功能以及相关使用说明，由于该系统仍处于搭建初期，更多的说明将逐步发布，许多既有功能也可能会在未来发生较大调整。</p>
+
+<p>8月13日21:48更新：长达半年未更新首页ui&hellip;导致一如既往地简陋。今后空闲也不会很多，只能做一点是一点了。更换了cmd的窗口位置，留出更多的内容显示区域。原用于实验的login module的bug已经修复并投入使用，但是基于JQuery的ui框架完成度还不够，因此影响了一些应用的正式加入。我们会尽量争取时间希望能够尽快完成上述内容。</p>
+
+<p>2月8日20:07更新：在基本完成了网页定制应用前端部分之后，还是决定先将系统框架搭建起来。目前这项工作已经完成了一部分，我们花费了将近一个下午的时间进行配色和布局调整，并力争兼容IE8、FF、chrome三款浏览器（旧版本就不刻意兼顾了）。目前来看只在chrome中的表现有一小部分瑕疵，但不影响使用。
+当前的思路是，用户接口将是模拟命令行与图形化并存的混合模式，我们相信在browser中嵌入模拟shell程序会是绝佳的使用体验，也给未来的扩展应用带来许多丰富的想象力。当然，我们可能也要面临对于非专业用户易用性的问题&hellip;幸运的是，当前时期维护本站的目的就是促进计算机科学和软件工程技术的交流，因此我们的主要精力还是会放在内部应用上面。</p>
+</div>
+</article>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

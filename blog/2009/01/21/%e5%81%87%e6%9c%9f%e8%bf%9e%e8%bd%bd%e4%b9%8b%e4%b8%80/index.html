@@ -1,0 +1,761 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>假期连载之一  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="关于本连载的说明请查阅http://www.hanyi.name/blog/?p=118 一、常用数据结构分析(概念、ADT、ADT实现、线性表的顺序存储)   一） 数据即是指描述客观事物的数值、字符以及能输入机器且能被处理的各种符号集合。数据元素是指组成数据的基本单位，是数据集合的个体。相应的 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">假期连载之一</h2>
+	<div class="entry-content"><p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: -21pt; mso-list: l1 level1 lfo1; tab-stops: list 21.0pt;"><span style="font-size: small;"><span style="mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;">关于本连载的说明请查阅<a href="http://www.hanyi.name/blog/?p=118">http://www.hanyi.name/blog/?p=118</a></span></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: -21pt; mso-list: l1 level1 lfo1; tab-stops: list 21.0pt;"><span style="font-size: small; font-family: Times New Roman;"><span style="mso-bidi-font-family: 宋体;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: -21pt; mso-list: l1 level1 lfo1; tab-stops: list 21.0pt;"><span style="font-size: small; font-family: Times New Roman;"></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: -21pt; mso-list: l1 level1 lfo1; tab-stops: list 21.0pt;"><span style="font-size: small;"><span style="mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;">一、</span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">常用数据结构分析</span><span lang="EN-US"><span style="font-family: Times New Roman;">(</span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">概念、</span><span lang="EN-US"><span style="font-family: Times New Roman;">ADT</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span lang="EN-US"><span style="font-family: Times New Roman;">ADT</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">实现、线性表的顺序存储</span></strong><span lang="EN-US"><span style="font-family: Times New Roman;">)</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">一）</span></strong><span style="font-family: Times New Roman;"> </span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数据</span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">即是指描述客观事物的数值、字符以及能输入机器且能被处理的各种符号集合。<strong style="mso-bidi-font-weight: normal;">数据元素</strong>是指组成数据的基本单位，是数据集合的个体。相应的，<strong style="mso-bidi-font-weight: normal;">数据结构</strong>就是性质相同的数据元素的集合，是数据的一个子集。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">数据结构的内容大概包括以下三个方面：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt; text-indent: -18pt; mso-list: l0 level1 lfo2; tab-stops: list 60.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">1、</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">逻辑结构（通常）</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: -18pt; mso-list: l0 level2 lfo2; tab-stops: list 81.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">①</span><span style="font-family: &quot;Times New Roman&quot;;">     </span></span></span></span><span style="font-family: 宋体;"><span style="font-size: small;">集合结构，结构中的数据元素除了同属于一个集合的关系外，无其他关系。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: -18pt; mso-list: l0 level2 lfo2; tab-stops: list 81.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">②</span><span style="font-family: &quot;Times New Roman&quot;;">     </span></span></span></span><span style="font-family: 宋体;"><span style="font-size: small;">线性结构，结构中的数据元素之间存在一对一的线性关系。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: -18pt; mso-list: l0 level2 lfo2; tab-stops: list 81.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">③</span><span style="font-family: &quot;Times New Roman&quot;;">     </span></span></span></span><span style="font-family: 宋体;"><span style="font-size: small;">数型结构，结构中的数据元素之间存在着一对多的层次关系。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: -18pt; mso-list: l0 level2 lfo2; tab-stops: list 81.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">④</span><span style="font-family: &quot;Times New Roman&quot;;">     </span></span></span></span><span style="font-family: 宋体;"><span style="font-size: small;">图状结构或网状结构，结构中的数据元素之间存在着多对多的任意关系。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt; text-indent: -18pt; mso-list: l0 level1 lfo2; tab-stops: list 60.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">2、</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">存储结构</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: -18pt; mso-list: l0 level2 lfo2; tab-stops: list 81.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">①</span><span style="font-family: &quot;Times New Roman&quot;;">     </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">顺序映像，即顺序存储结构。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: -18pt; mso-list: l0 level2 lfo2; tab-stops: list 81.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">②</span><span style="font-family: &quot;Times New Roman&quot;;">     </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">非顺序映像，即非顺序存储结构。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt; text-indent: -18pt; mso-list: l0 level1 lfo2; tab-stops: list 60.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">3、</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">运算集合</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">数据结构另一个重要内容即是对一类数据的相关运算操作。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">二）</span><span style="font-family: Times New Roman;"> </span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">抽象数据类型</span><span lang="EN-US"><span style="font-family: Times New Roman;">(Abstract Data Type</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，通常称</span><span lang="EN-US"><span style="font-family: Times New Roman;">ADT)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，即包括一个相应的数学模型以及该模型上应用的各种运算，它集中体现了程序设计过程中的分解、抽象和信息隐藏等原则。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">对于如何实现抽象数据类型，一般有三种方法，这也是目前程序设计的三个重要方法。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、面向过程的程序设计，根据逻辑结构选择适当的存储结构，并按要求设计出相应的子程序或子函数，一般使用</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言、</span><span lang="EN-US"><span style="font-family: Times New Roman;">Pascal</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言描述。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、“包”、“模型”的设计方法，是面向模块结构的表示和实现，一般是指</span><span lang="EN-US"><span style="font-family: Times New Roman;">DOD</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的</span><span lang="EN-US"><span style="font-family: Times New Roman;">Ada</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言、</span><span lang="EN-US"><span style="font-family: Times New Roman;">module-2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言和</span><span lang="EN-US"><span style="font-family: Times New Roman;">Pascal</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言所支持的方法。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">3</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、面向对象程序设计，借助对象描述数据类型，存储结构和操作函数被放在一个整体结构中，例如</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span lang="EN-US"><span style="font-family: Times New Roman;">Java</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">等语言提供了此功能的支持。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: 21pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在今后的连载内容中，我们将采用面向过程与面向对象相结合的方法，即给出两种描述，分别使用</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言和</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言实现，方便大家在各方面的理解。高级算法部分主要以伪码形式给出，适当利用高级程序设计语言加以说明。</span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 18pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">三</span><span lang="EN-US"><span style="font-family: Times New Roman;">) </span></span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分别用</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">抽象数据类型实现的举例。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>ADT&lt;ADT</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">名</span><span lang="EN-US"><span style="font-family: Times New Roman;">&gt;{</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 2;"><span style="font-family: Times New Roman;">              </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数据对象：数据对象的定义。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 2;"><span style="font-family: Times New Roman;">              </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">结构关系：结构关系的定义。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 2;"><span style="font-family: Times New Roman;">              </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">基本操作：基本操作的定义。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">}ADT&lt;ADT</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">名</span><span lang="EN-US"><span style="font-family: Times New Roman;">&gt;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l4 level1 lfo3; tab-stops: list 39.0pt;"><span style="font-family: Times New Roman;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">1、</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span><span lang="EN-US"><span style="font-size: small;">C</span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">语言实现</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言中我们通常使用</span><span lang="EN-US"><span style="font-family: Times New Roman;">typedef</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">自定义类型和结构体实现数据类型的集合。例如关于一个“学生”的集合：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">typedef struct node{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>char Name[20];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>char Sex;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>int Age;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>float Money;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}Employee,*EmpPtr;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值得说明的是</span><span lang="EN-US"><span style="font-family: Times New Roman;">,typedef</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">同时定义了两个新的数据类型名，</span><span lang="EN-US"><span style="font-family: Times New Roman;">Employee</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指</span><span lang="EN-US"><span style="font-family: Times New Roman;">struct node</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">结构体类型名，而</span><span lang="EN-US"><span style="font-family: Times New Roman;">EmpPtr</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指结构体指针类型，通常代替</span><span lang="EN-US"><span style="font-family: Times New Roman;">struct node *</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类型名。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l4 level1 lfo3; tab-stops: list 39.0pt;"><span style="font-family: Times New Roman;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">2、</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span><span lang="EN-US"><span style="font-size: small;">C++</span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">语言实现</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">由于其特殊的特性对</span><span lang="EN-US"><span style="font-family: Times New Roman;">ADT</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">有多种表示方法，通常使用自定义抽象类、自定义模版和</span><span lang="EN-US"><span style="font-family: Times New Roman;">void struct *</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">三种方法，其中</span><span lang="EN-US"><span style="font-family: Times New Roman;">void struct *</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">由于模版类的使用已经很少再使用，如有需要读者可以参考</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言的方法使用。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt; text-indent: -18pt; mso-list: l3 level1 lfo4; tab-stops: list 60.0pt;"><span style="font-family: 宋体; mso-bidi-font-family: 宋体;"><span style="mso-list: Ignore;"><span style="font-size: small;">①</span><span style="font-family: &quot;Times New Roman&quot;;">     </span></span></span><span style="font-size: small;"><span style="font-family: 宋体;">自定义抽象类，与</span><span lang="EN-US"><span style="font-family: Times New Roman;">Java</span></span><span style="font-family: 宋体;">不同，</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体;">中并不提供</span><span lang="EN-US"><span style="font-family: Times New Roman;">abstract</span></span><span style="font-family: 宋体;">关键字声明抽象类，在确需要使用到抽象类时，须采用例如<strong style="mso-bidi-font-weight: normal;"><span lang="EN-US">virtual void draw() = 0;</span></strong>的函数声明方法，称为“纯虚函数”，拥有“纯虚函数”的类自动为抽象类。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt; text-indent: -18pt; mso-list: l3 level1 lfo4; tab-stops: list 60.0pt;"><span style="font-family: 宋体; mso-bidi-font-family: 宋体;"><span style="mso-list: Ignore;"><span style="font-size: small;">②</span><span style="font-family: &quot;Times New Roman&quot;;">     </span></span></span><span style="font-family: 宋体;"><span style="font-size: small;">自定义模版<span lang="EN-US">template</span>，目的是使抽象出的对象并不依赖于抽象类的数据类型。下面给出一个抽象类的声明和使用方法：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;">template&lt;class T&gt;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;">class Point{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;">private:</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: 3pt;"><span style="font-family: 宋体;"><span style="font-size: small;">T x;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;"><span style="mso-tab-count: 2;">     </span>T y;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;">public:</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;"><span style="mso-tab-count: 2;">     </span>Point(T,T);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;"><span style="mso-tab-count: 2;">     </span>Point(Point p);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;"><span style="mso-tab-count: 2;">     </span>T get_x();</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;"><span style="mso-tab-count: 2;">     </span>T get_y();</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;"><span style="mso-tab-count: 2;">     </span>virtual void draw() = 0;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;">int main()</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;"><span style="mso-tab-count: 2;">     </span>Point&lt;int&gt; a;<span style="mso-tab-count: 2;">       </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;"><span style="mso-tab-count: 2;">     </span>return 0;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-family: 宋体;"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">四</span><span lang="EN-US"><span style="font-family: Times New Roman;">) </span></span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表</span><span lang="EN-US"><span style="font-family: Times New Roman;">Linear List</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是指</span><span lang="EN-US"><span style="font-family: Times New Roman;">n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个类型相同的数据元素的有限序列，对</span><span lang="EN-US"><span style="font-family: Times New Roman;">n&gt;0</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，除第一个元素无直接前驱、最后一个元素无直接后继外，其余每个元素只有一个直接前驱和直接后继，线性表的抽象数据类型定义如下：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">ADT LinearList{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数据元素：</span><span style="font-family: Times New Roman;"><span lang="EN-US">D={a</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">|</span><span lang="EN-US"> a</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub><span lang="EN-US"> </span></span><span style="font-family: 宋体;">∈</span><span style="font-family: Times New Roman;"><span lang="EN-US">D</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">0</span></sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">,i=0,1,2,…,n,n&gt;=0,</span><span lang="EN-US"> D</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">0</span></sub></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-size: 10.5pt;">为某一数据对象</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">};</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-size: 10.5pt;">结构关系：</span><span style="font-family: Times New Roman;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">R={&lt;</span><span lang="EN-US">a</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"> ,</span><span lang="EN-US">a</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i+1</span></sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">&gt;|</span><span lang="EN-US"> a</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"> ,</span><span lang="EN-US"> a</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i+1</span></sub></span><span style="font-family: 宋体;">∈</span><span style="font-family: Times New Roman;"><span lang="EN-US">D</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">0</span></sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">,i=0,1,2,…,n-1};</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">基本操作</span><span lang="EN-US"><span style="font-family: Times New Roman;">:</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">        </span>InitList(L);<span style="mso-tab-count: 2;">             </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">初始化</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为空表</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">        </span>DestroyList(L);<span style="mso-tab-count: 1;">      </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">将</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">销毁</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">        </span>ClearList(L);<span style="mso-tab-count: 2;">          </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">将</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">置为空表</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">        </span>EmptyList(L);<span style="mso-tab-count: 2;">        </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">如果</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为空则返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">TRUE</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，否则返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">FALSE</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">        </span>ListLength(L);<span style="mso-tab-count: 2;">        </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">如果</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为空返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">0,</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">否则返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">FALSE</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">        </span>Locate(L,e);<span style="mso-tab-count: 2;">           </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">如果</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中存在元素</span><span lang="EN-US"><span style="font-family: Times New Roman;">e,</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">则将当前指针指向元素</span><span lang="EN-US"><span style="font-family: Times New Roman;">e</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的所在位置，并返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">TRUE,</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">否则返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">FALSE</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">        </span>GetData(L,i);<span style="mso-tab-count: 2;">         </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中第</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个元素的值</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">        </span>InsList(L,i,e);<span style="mso-tab-count: 2;">         </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中第</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个位置之前插入新的数据元素</span><span lang="EN-US"><span style="font-family: Times New Roman;">e</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的长度加</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">        </span>DelList(L,i,e);<span style="mso-tab-count: 2;">        </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">删除</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中第</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个数据元素，并用</span><span lang="EN-US"><span style="font-family: Times New Roman;">e</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">返回其值</span><span lang="EN-US"><span style="font-family: Times New Roman;">,L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的长度减</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}ADT LinearList</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; mso-list: l2 level1 lfo5; tab-stops: list 18.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">1、</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表的顺序存储</span><span lang="EN-US"><span style="font-family: Times New Roman;">(Sequential List)</span></span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，其实就是指线性表基于一维数组的存储表示，数组占用了内存中一段连续空间，其元素的地址映像计算公式为：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 126pt;"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span lang="EN-US">Loc(a</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub><span lang="EN-US">)= Loc(a</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span></sub><span lang="EN-US">)+(i-1)*k</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">注：上式表示在一个具有</span><span lang="EN-US"><span style="font-family: Times New Roman;">n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个元素的线性表中，每个元素占</span><span lang="EN-US"><span style="font-family: Times New Roman;">k</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个单元，第一个元素的地址为</span><span style="font-family: Times New Roman;"><span lang="EN-US">Loc(a</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span></sub><span lang="EN-US">)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，则可通过上述公式计算第</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个元素的地址</span><span style="font-family: Times New Roman;"><span lang="EN-US">Loc(a</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub><span lang="EN-US">)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">用</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言定义线性表的顺序存储结构的静态存储表示如下：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">#define MAXSIZE 100</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">typedef struct</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>ElemType elem[MAXSIZE];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>int last;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}SeqList;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">相应地，其动态存储表示如下：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">typedef struct</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>ElemType *elem;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>int last,maxSize;<span style="mso-tab-count: 3;">                   </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">利用</span><span lang="EN-US"><span style="font-family: Times New Roman;">maxSize</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">可方便控制数组空间的大小</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}SeqList;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">同时，我们也给出</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">定义的线性表的顺序存储结构的动态存储模版类表示如下：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">#include &lt;iostream.h&gt;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">#include &lt;stdlib.h&gt;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">#include “LinearList.h”</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 147pt; text-indent: -146.8pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">const int defaultSize = 100;<span style="mso-tab-count: 1;">          </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">这里的</span><span lang="EN-US"><span style="font-family: Times New Roman;">const</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指静态常量，在</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">定义中，</span><span lang="EN-US"><span style="font-family: Times New Roman;">const</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">成员函数不能调用非</span><span lang="EN-US"><span style="font-family: Times New Roman;">const</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">成员函数</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">template &lt;class T&gt;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">class SeqList:public LinearList&lt;T&gt;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">protected:</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>T *data;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>int maxSize;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>int last;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>void resize(int newSize)<span style="mso-tab-count: 2;">        </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">改变</span><span lang="EN-US"><span style="font-family: Times New Roman;">data</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数组空间的大小</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">public:</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>……<span style="mso-tab-count: 6;">                                          </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">方法函数</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">……</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值得注意的是，在顺序表动态存储表示中，由于数组本身不可能被动态改变其大小，因而实际上是通过创建新数组并加以复制的方法实现的，复制的方法涉及到了</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中数组指针的内容，其和指针数组有明显区别，指针数组的定义方式</span><span lang="EN-US"><span style="font-family: Times New Roman;">int *p[10]</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">代表</span><span lang="EN-US"><span style="font-family: Times New Roman;">p</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数组中每一个元素都是一个指针，即</span><span lang="EN-US"><span style="font-family: Times New Roman;">*p[0]</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span lang="EN-US"><span style="font-family: Times New Roman;">*p[1]…..</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数组指针一般定义为</span><span lang="EN-US"><span style="font-family: Times New Roman;">int (*p)[10]</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，这里仅表示一个指向数组的指针，它们访问内部元素的形式为而这里小结如下：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">提前说明，数组指针与指针数组在</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言和</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">之间也存在一些不同，但由于该名词是由</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中率先提出的，因此一般会按照</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">标准来定义这些概念，并解释相关问题。例如在指针数组中，一般读取其中元素的方法是：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>int *p=new int[maxSize];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>cout&lt;&lt;*(p+n)&lt;&lt;endl;<span style="mso-tab-count: 3;">                  </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">输出第</span><span lang="EN-US"><span style="font-family: Times New Roman;">n+1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个元素的值</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">而在数组指针中，我们一般用以下方式读取数组元素：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>int (*q)[maxSize]={1,2,3,…,maxSize};</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>cout&lt;&lt;*(*q+n)&lt;&lt;endl;<span style="mso-tab-count: 3;">                 </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">同上</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">下面给出</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表的顺序存储结构的动态存储模版类中重置大小函数</span><span lang="EN-US"><span style="font-family: Times New Roman;">reSize()</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的方法定义：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">template &lt;class T&gt;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">void SeqList&lt;T&gt;::resize(int newSize)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>if(newSize &lt;= 0)</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>{<span style="mso-tab-count: 1;">     </span>cerr &lt;&lt; ”</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">无效的数组大小</span><span lang="EN-US"><span style="font-family: Times New Roman;">” &lt;&lt;endl;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>return;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>if(newSize != maxSize)</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>{</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>T* newarray = new T[newSize];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>if(newarray == NULL)</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>{</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>cerr &lt;&lt; “</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">存储分配错误</span><span lang="EN-US"><span style="font-family: Times New Roman;">!” &lt;&lt;endl;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>exit(1);</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">int n = last+1;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">T* srcptr = data;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">T* destptr = newarray;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">while(n&#8211;)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>*destptr++ = *srcptr++;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">delete []data;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">data = newarray;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">maxSize = newSize;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在顺序存储结构中，由于动态存储和静态存储的区别，其内部定义的基本运算也不尽相同，我们将给出部分运算的伪码表示：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-size: small; font-family: Times New Roman;">       </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">Locate(L,e)<span style="mso-tab-count: 1;">     </span><span style="mso-tab-count: 3;">                     </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表的查找</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>i=0;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>while i&lt;=L.last &amp;&amp; L.elem[i]!=e</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>do i++;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>if i&lt;=L.last</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span><span style="mso-spacerun: yes;">    </span>then<span style="mso-tab-count: 1;"> </span>return i+1;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>else</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>then return -1;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">InsList(L,i,e)<span style="mso-tab-count: 1;">   </span><span style="mso-tab-count: 3;">                     </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表的插入</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>if i&lt;1 || i&gt;L.last+2</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>Then error “</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">插入位置不合法</span><span lang="EN-US"><span style="font-family: Times New Roman;">”</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>if L.last &gt;= maxSize-1</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>Then error “</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表已满</span><span lang="EN-US"><span style="font-family: Times New Roman;">!” </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>for k=L-last k&gt;= i-1 k—<span style="mso-tab-count: 2;">              </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">从线性表尾部开始移动所有</span><span lang="EN-US"><span style="font-family: Times New Roman;">L.last+2-i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个元素后继一位</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>L.elem[k+1]=L.elem[k];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>L.elem[i-1]=e;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>L.last++;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>return OK</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">DelList(L,i,e)<span style="mso-tab-count: 4;">                       </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表的删除</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>if i&lt;1 || i&gt;L.last+1;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>Then error “</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">删除位置不合法</span><span lang="EN-US"><span style="font-family: Times New Roman;">”</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>*e=L.elem[i-1];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>for k=i i&lt;=L.last k++</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>L.elem[k-1] = L.elem[k];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>L.last&#8211;;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>return OK;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">Merge(LA,LB,LC)<span style="mso-tab-count: 3;">                </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表的合并，按非递减有序序列合并</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>while i&lt;=LA.last &amp;&amp; j&lt;=LB.last</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>do if LA.elem[i] &lt;=LB.elem[j]</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>then LC.elem[k]=LA.elem[i];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>i++;k++;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>else then LC.elem[k] = LB.elem[j];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>j++;k++;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>while i&lt;LA.last</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>do LC.elem[k]=LA.elem[i];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>i++;k++;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>while j&lt;= LB.last</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>do LC.elem[k] = LB.elem[j];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>j++;k++;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>LC.last=LA.last+1+LB.last+1;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"> </span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="font-family: Times New Roman;">(</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">未完待续</span><span lang="EN-US"><span style="font-family: Times New Roman;">)</span></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small; font-family: Times New Roman;"><strong style="mso-bidi-font-weight: normal;"></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small; font-family: Times New Roman;"><strong style="mso-bidi-font-weight: normal;"></strong></span></p>
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-21T16:34:52+08:00" pubdate data-updated="true">Jan 21<sup>st</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

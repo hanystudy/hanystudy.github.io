@@ -1,0 +1,232 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>C++学习笔记(重温计划之六)  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="4、函数性质  1）函数形态    C++中的函数分为“求值”和“返回值为空”两种类型。当函数有返回值时，须定义函数的返回值类型，为空时须定义为void。理论上说，函数只对输入参数和输出返回值负责，至于函数内部的细节程序本身并不干预。编程的原则是优先调用c++库函数，而后再进行手写， &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">C++学习笔记(重温计划之六)</h2>
+	<div class="entry-content"><p>4、函数性质</p>
+
+<p> 1）函数形态</p>
+
+<p>   C++中的函数分为“求值”和“返回值为空”两种类型。当函数有返回值时，须定义函数的返回值类型，为空时须定义为void。理论上说，函数只对输入参数和输出返回值负责，至于函数内部的细节程序本身并不干预。编程的原则是优先调用c++库函数，而后再进行手写，这有助于提升编程效率。</p>
+
+<p> 2）传值参数</p>
+
+<p>   参数通过传值机制进入函数内部。传值的具体方法是，在程序中遇到函数被调用时，实参被克隆为形参并参加函数运算。须注意的是，参数个数不宜过多。</p>
+
+<p> 3）指针参数</p>
+
+<p>   在面向对象编程中，我们通常使用指针参数的形式来进行传参。这样的好处是，指针参数其实赋予了函数操作异地数据的能力，使得函数不再需要返回具体值，而已经在函数运行中产生结果了。我们给出一个传递数组的方法:</p>
+
+<p>   void mySort (int* b,int size);</p>
+
+<p>   void f(){</p>
+
+<p>    int a[]={3，4，5，1，7，2，9};</p>
+
+<p>    mySort(a,sizeof(a)/sizeof(a[0]));</p>
+
+<p>    //&hellip;</p>
+
+<p>   }</p>
+
+<p>   而事实上，数组也就只能使用传递地址一种方法来达到传递的目的。在实际编程中，传递指针和引用的特性广受欢迎。但是，传递指针和引用在一定程度上破坏了函数的黑盒性，不排除造成灾难性错误的可能，这就引起了一些麻烦。当然我们也可以利用一些手段来避免此类问题，例如:当传递引用时，使用const修饰符限制函数对参数的操作等等。</p>
+
+<p> 4）函数的栈机制</p>
+
+<p>   一般情况下，每当一个程序要运行时，操作系统会自动在内存中生成一个随时可以运行的进程空间。空间中分四个区域，分别是代码区、全局数据区、堆区和栈区。在栈区中，动态地存放了程序运行中的函数状态，利用这一点，我们可以进一步研究函数机制。</p>
+
+<p>   平时在编写函数时，我们会给局部变量赋初值。这是因为c++的栈机制决定的。由于系统并不存在所谓的清理机制，每当运行一个新的程序时，旧的栈区中的数据将保留下来，而未得到初值的变量也就无可奈何了。</p>
+
+<p>   以上也同样展现了指针的负面效应，甚至当我们知道数据确切地存放地址时，就可以任意而直接地改变地址中的数值了。</p>
+
+<p> 5）函数指针</p>
+
+<p>   函数指针主要有以下几种声明方法:</p>
+
+<p>   int* f(int a);</p>
+
+<p>   int *gp(int) ;</p>
+
+<p>   int g(int);                  //这是另一种声明和定义区分开的例子</p>
+
+<p>   int (<em>gp)(int) =g;       //我们可以写成 int (</em>gp)(int); int gp =g;</p>
+
+<p> 需要注意，在声明或定义函数指针时，其参数的类型须为一致，否则编译不能通过。函数指针的主要作用是用来进行参数传递，且一般为bool(const T&amp;,const T&amp;)形式。在函数指针数组中，一些特定的操作将被简化和易于维护，例如:</p>
+
+<p>  //&hellip; </p>
+
+<p>  typedef void (*MenuFun)();</p>
+
+<p>   MenuFun fun[] = {f1,f2,f3};</p>
+
+<p>   cin&gt;&gt;choice;</p>
+
+<p>   switch(choice){</p>
+
+<p>   case 1:fun<a href="">0</a>;break;</p>
+
+<p>   //&hellip;</p>
+
+<p>   }//&hellip;</p>
+
+<p>   函数指针还使得C++有了沟通其它语言编写程序的能力，同时作为面向对象编程机制中的重要手段，在高级编程诸如动态链接库编程中都有广泛应用。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-20T22:56:01+08:00" pubdate data-updated="true">Apr 20<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

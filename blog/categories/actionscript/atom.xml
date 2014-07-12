@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: actionscript | Wing of Dream 梦境之翼]]></title>
+  <link href="http://www.hanyi.name/blog/categories/actionscript/atom.xml" rel="self"/>
+  <link href="http://www.hanyi.name/"/>
+  <updated>2014-07-12T22:04:54+08:00</updated>
+  <id>http://www.hanyi.name/</id>
+  <author>
+    <name><![CDATA[Han Yi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[AS3.0学习笔记(2)]]></title>
+    <link href="http://www.hanyi.name/blog/2009/02/22/as30%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b02/"/>
+    <updated>2009-02-22T20:01:59+08:00</updated>
+    <id>http://www.hanyi.name/blog/2009/02/22/as30%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b02</id>
+    <content type="html"><![CDATA[<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">二、AS3.0语法概要</span></span><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">我们知道，按照adobe的说法，AS3.0是完全依据ECMAScript 4.0（草案）标准的。尽管无意提起JavaScript和ActionScript的争端，但ECMA委员会延用v3.1标准已是板上钉钉的事实，似乎预示着Ajax和Flex即将实现不同目标的分离—在我看来这未必是一件坏事，当然，各方的众多支持者恐怕都不会放弃“吃着碗里，看着锅里”的想法。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">AS3.0<span style="font-family: 宋体;">延用了Java的制式包含了许多内置类，如类型封装类Number、String、Boolean等，还有一些内置类如Array、Math和XML等定义了更多复杂的数据结构以及运算。所有的类，无论是内置类还是用户自定义类，都是由一个共同的类Object派生的。但是有一种特殊的变量被称为无类型变量，它们的定义方式如下：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var example;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var example:*;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">它们可以用来存储一些特殊值，这是指定类型Object或其派生类所不具备的。声明并创建类的对象的语句如下:</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var timeNow:Date = new Date();</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">new<span style="font-family: 宋体;">运算符的用法，和C++/Java是惊人的相似！</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、包和命名空间</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">包packge</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用于管理一段共享代码中的类文件，它的目的是使程序更易于被复用以及维护—这也是现代OOP的一个重要思想之一。下面一段代码用来创建一个简单类的包：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">package samples</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    public class SampleCode</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    {</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        public var sampleGreeting:String;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        public function sampleFunction()</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        {</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">            trace(sampleGreeting + " from sampleFunction()");</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">        }</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    }</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">注意包的名称samples，当编译器编译时会把类名称变为完全限定名称，如samples.SampleCode，其方法的调用也相应变成samples.SampleCode.sampleFunction()。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">AS3.0<span style="font-family: 宋体;">还有一个特点，即包内不仅仅可以含有一个顶级类，还可以定义顶级变量、函数甚至语句，这些内容将可以被包内成员访问。同时在包的顶级只能允许public和internal两种访问说明符。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">与Java不同的是，AS3.0不支持私有类和嵌套类，你会发现包内一般也只能定义一个类。这是因为对于一个.as文件，程序只允许调用其中的一个类，Java中只需将类定义为public即可，AS3.0中这个类必须是在包中。如果要实现类似私有类的定义，那么可以在同一文件的包外进行定义—例如上一篇中的包外类，这种用法在AS中很常见。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">包是可以嵌套的，通常称其为</span></span><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">嵌套包</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">。嵌套包可以在逻辑上与父包相关，也可以不相关。有时我们定义嵌套包，仅仅是为了防止对同一类名的引用发生冲突。而且到</span></span><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">目前为止，AS的作者还未对包赋予任何类似类继承的概念</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">，例如下段代码。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">package samples.sample1</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    public class SampleCode</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    {</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">    }</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">当我们在程序中同时导入了两个包时，以下调用会发生名称错误：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var object:SampleCode = new SampleCode();</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">只有当使用完全限定名称时才能避免此错误：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var object:samples.SampleCode = new samples.SampleCode();</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">调用前一个类</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">调用包的方法也很简单，在程序头中输入以下代码：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">import samples.*;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">完整导入包</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">import samples.sample1.SampleCode;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">直接指定类</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">一般提倡程序员使用第二种方法导入包，否则可能会引发类名冲突等问题，这一点上与Java有一定区别。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">命名空间namespace</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">是一种用来控制类、类的属性及其方法可见性的标识符，它也是OOP中一项重要的讨论内容。AS3.0中的命名空间分为五种，其中内置包括了public、private、protected 和 internal四种，另一种则可以由用户自定义。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">首先介绍自定义的命名空间，我们通常需要三个简单步骤完成对命名空间的声明定义和使用，例如以下代码。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">namespace v1;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">声明一个命名空间</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">v1 function testNamespace():void{}</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">定义一个以v1为命名空间的函数</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">use namespace v1;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">调用具有命名空间v1的函数</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">testNamespace();</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">v1::testNamespace()</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">或者利用限定运算符直接引用该函数</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">自定义命名空间的目标是使程序员自己定义成员的可见性。例如我们有不同的类分别位于不同的包中，而这些包是由不同的程序调用的。当某个方法需要无条件被其它类使用时，程序员可以将其声明为自定义命名空间，这样即实现了既定目标，又不至于令该方法成为一个公共方法。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">变量</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">通过前面的例子我们可以知道，AS3.0中的变量声明基本遵循以下格式：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var i;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var i:int;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">其中标识符var必须作为声明语句开端，当我们要赋值时，其基本形式和一般语言是相通的：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var i:int=10;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">i=20;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">这表示变量既可以在声明时被赋值，也可以单独赋值。例如数组的声明时赋值：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var example:Array=["first","second","third"];</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">创建一个类的对象时var同样适用，例如：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var exam:ClassCode=new ClassCode();</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">多个变量的声明和赋值是可以放在同一语句内的，但细节上与其他语言有所区别。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var firstvar:int,secondvar:int,thirdvar:int;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var firstvar:int=1;secondvar:int=2,thirdvar:int=3;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">研究变量的作用域是个有趣的问题，因为它并不仅仅是全局变量和局部变量区别。例如在C++或Java中就对变量作用域做出了严格限制：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int cFunction(int input)</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">这是一个错误的语言示例</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">if(input&gt;0)</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 42pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int result=10;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">else</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 42pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">result=5;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">result=input+result;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">return result;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">以上程序段会发生编译错误，这是因为result声明的作用域仅仅在if语句块内，这就是所谓的块级作用域。而在AS3.0中并不错在类似的限制，这种情况的出现似乎得益于编译器对声明语句的“自动提升”机制，也就是说将函数中的全部变量声明语句自动提前到代码段前端执行，因此就导致了块级作用域的失效。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">但是，AS的编译器仅仅对声明语句具备自动提升的功能，对赋值语句而言并不存在这些“待遇”，因此我们可能会遇到如下语句段：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">function example:int()</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">num=10;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var num:int;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">声明语句滞后，但本段程序是可以通过编译的</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">return num;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3、</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">数据类型</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">AS3.0<span style="font-family: 宋体;">的数据类型种类较少，且比较特殊。不过值得注意的是，AS3.0的类型检查通常是在程序运行时执行的，这一类语言被称为动态类型语言（注意与动态语言的区别），例如Python。但是在Adobe Flash CS3 professional中编译器是可以选择运行在严格模式或标准模式下的（默认为严格模式），因此不同模式下编译器所遵循的编译规则也有不同。例如严格模式就要求在编译时也执行类型检查工作。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">AS3.0<span style="font-family: 宋体;">的编译器标准模式扩展了运行时类型检查机制，将其扩展到了对实例化对象的检查，即允许以基类声明的对象最终按子类实例化。我们知道，在过去的编译器中，动态语义分析是几乎不可能实现的，因此许多OO语言为了实现对象对基类和子类方法的动态选择问题，制定了动态绑定的规则。但这似乎在AS3.0中变得更为简便了。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">AS3.0<span style="font-family: 宋体;">共有七种基本数据类型，分别为：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Boolean</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">，包含true和false两个值，默认为false；</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">，表示32位整数，</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Null</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">，只包含一个值null，这是对String数据类型和定义所有复杂数据类型的初始值。null是一个极为特殊的值，如果将null赋给非String或复杂数据类型，则编译器会将其自动转换为相应的默认值；</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Number</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">，用于表示整数、无符号整数和浮点数，由于AS3.0本身含有int和uint类型，因此一般仅在需要用到浮点数表示时才会使用。Number的默认值为NaN，这在计算结果应当为数字而不是数字时返回的结果，例如除零运算；</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">String</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">，用于表示16位字符序列，字符串在内部存储为unicode字符，String的值是不能被更改的。其默认值为null，另外空字符串""与null尽管都表示无字符，但本质上并不相等；</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">uint</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用来表示32位无符号整数，默认为0；</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">void</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">仅包含一个值undefine，当使用无类型变量时可以赋予undefine，但一般情况下void仅能在声明返回值类型时使用。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">ActionScript<span style="font-family: 宋体;">内部类还定义了如下数据类型（尽管每种语言的表述方式可能不尽一致）：Object、Array、Date、Error、Function、RegExp、XML 和 XMLList，其中</span></span><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">object</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">是所有类的基类，其默认值为null。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4、</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">数据类型转换</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">AS3.0<span style="font-family: 宋体;">的类型转换相当方便，其主要分为两种形式：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1）</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">隐式转换，一般只在运行时发生。例如在赋值语句中、函数传参、函数返回值或者是表达式转换；</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2）</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">显示转换，一些转换在严格模式下并不能通过，例如下段代码：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var example:String="150";</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var intexample:int=example;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">这时只能应用显示转换来进行：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var intexample:int=int(example);</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">替换上段代码第二句</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">我们可以发现，AS3.0的显示类型转换是通过一种类似于类型名函数的方式进行的，事实上这些函数也是语言的内置函数，他们通过一类特殊算法实现了几乎所有类型的互相转换操作。但是一些转换规则需要引起注意：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int()<span style="font-family: 宋体;">和uint()执行浮点数“去尾制”，含有非数字字符则直接置0的规则。Boolean()只有在0时代表false，其余数字均代表true，通常值为null的字符串、未初始化的对象或空字符串（即值为""）也将转换为false，有时Boolean可直接通过隐式转换完成。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">在转换String()时，默认值为null的量将转换为"null"字符串，其他量直接转换为字符串类型。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">5、</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">动态类</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">动态类是一个特殊的机制。其作用是在运行时在对象中声明新的属性或方法，这在其他语言中还没有遇到（作者如此）。</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">动态类的声明需要关键字dynamic，例如：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">dynamic class exampleClass</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">public property:int=200;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">var varinstance:exampleClass=new exampleClass();</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">varinstance.property=100;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">varinstance.newproperty:int=200;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">新申请的属性</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">我们甚至可以为动态类定义新的方法：</span></span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">exampleClass.getValue = function()</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; margin-left: 21pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">return this.property;</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt; text-align: justify;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="p0" style="margin-top: 0pt; margin-bottom: 0pt;"><span style="font-weight: normal; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">应当注意这里用到了this关键字，这是因为通过动态类方式产生的属性或方法永远不能引用私有属性或方法，即使引用了公共属性或方法，也需要用this关键字，或者使用类名加限定符的方式。</span></span></p>
+
+
+
+
+<!--EndFragment-->
+
+]]></content>
+  </entry>
+  
+</feed>

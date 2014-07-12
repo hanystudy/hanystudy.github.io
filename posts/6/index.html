@@ -1,0 +1,752 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content=" 我们将把Qt(官方发音/kjuːt/，也有读作(/ˈkjuːti/)应用程序框架编程作为一个新的技术类固定专题。Qt是易于学习的，但却很难精通，大概主要是因为她把标准C++作为宿主语言的原因，不过这也恰恰成就了Qt不可阻挡的发展势头。  历史  1991年，挪威人Haavard &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/10/30/qt%25e6%259d%25a5%25e4%25ba%2586%25ef%25bc%2581/">
+		
+			Qt来了！</a>
+	</h2>
+	<div class="entry-content">
+		<p> 我们将把Qt(官方发音/kjuːt/，也有读作(/ˈkjuːti/)应用程序框架编程作为一个新的技术类固定专题。Qt是易于学习的，但却很难精通，大概主要是因为她把标准C++作为宿主语言的原因，不过这也恰恰成就了Qt不可阻挡的发展势头。</p>
+
+<p> <strong>历史</strong></p>
+
+<p> 1991年，挪威人Haavard Nord和Eirik Chambe-Eng设想开发一个跨平台的应用程序框架，从而方便程序员开发出能够同时运行在不同平台环境下的应用程序。仅三年时间梦想即成为现实，两人合作成立了Quasar Technologies公司专注于跨平台应用程序框架开发，这家公司也就是后来的Trolltech奇趣科技的前身。而对于Trolltech，除了旗下Qt框架和一整套嵌入式Linux开发平台Qtopia之外，著名的Linux桌面环境KDE就是基于Qt开发的。</p>
+
+<p> 2008年6月，芬兰手机厂商Nokia收购了Trolltech，其主要目的是将Qt框架技术与自身Symbian平台紧密整合。目前基于Qt的Nokia Qt SDK也已于早前正式发布。</p>
+
+<p> 如果说在移动平台领域S60似乎是岌岌可危的话，Qt未受丝毫影响，如AutoDesk计算机辅助设计系列软件、Google Earth、Adobe Photoshop Album甚至欧洲航天局、Skype等都使用了基于Qt的应用程序框架。</p>
+
+<p> <strong>设立专题的原因</strong></p>
+
+<p> 我们通常采用windows 7和microsoft visual studio 2010 ult作为主要开发环境，同时采用opensuse或其它Linux发行版作为测试环境，时间充足的话，也可能会尝试基于Nokia Qt SDK的移动设备软件开发。实际上，Qt大有作为的还是Linux及其嵌入式领域，而我们还是主要关注有关基于Qt的win32桌面软件，但并不表示我们将其视作MFC等类似这些经典框架的替代品，实际上通过早期了解后，我们发现Qt有她所擅长且表现出色的领域，但也并非全能。</p>
+
+<p> <strong>开发平台的选择</strong></p>
+
+<p> 上文指出我们将主要关注Qt在Windows系列平台上的表现，那么采用Microsoft主打的最新IDE及其编译程序是有必要的。至于一些其它方法，例如构建MinGW编译环境，就显得过于简略而给人一种直奔结果的感觉。当然我们可以将MinGW设置为Qt creator这种跨平台IDE的主编译环境，甚至可以在Qt creator中设置MSVC为主编译环境。类似这种组合可能比VS+Qt这种“重量级”组合轻巧的多，对开发过程而言也注定方便的多。然而我们还是建议选择自己喜爱的环境来工作，这不仅仅能保证基本的编码效率，更重要的是能保持一个良好的心情来面对复杂问题求解。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-30T02:40:54+08:00" pubdate data-updated="true">Oct 30<sup>th</sup>, 2010</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/qt/'>qt</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/10/24/%25e9%2581%2581%25e9%25b8%25bd%25e8%25ae%25b0%25e4%25b8%258b/">
+		
+			遁鸽记(下)</a>
+	</h2>
+	<div class="entry-content">
+		<p> 等我再回到学校，仍能在阳台的台阶上看见雨点。白鸽依然蜷缩在角落里，这次是不停发抖，不过脚绳被去掉了。</p>
+
+<p> 后来得知，白鸽被剪去了羽翼，由于操作不慎竟导致出血。仔细看下两边仍有一大片风干的血迹，墙角里铺的两页纸也沾满了血渍。据说后来还擦上了用于外伤的药&hellip;&hellip;</p>
+
+<p> 我颇有些无语，之前担心极擅飞翔的信鸽到了人的手里会被养成鸡，不想一语成谶，只怕连鸡都不如了。</p>
+
+<p> 我对白鸽和雨点之间的关系比较好奇。雨点自从在阳台上看见白鸽就从没彻夜不归过，平时天气好时也只飞出去几个小时。白鸽缺乏活力，雨点则相反，吃东西喝水都要活跃得多。天冷的时候两只鸽子喜欢趴在地上睡，倒少见金鸡独立了。</p>
+
+<p> 从资料上看，一个鸽舍内当然是雌雄自然配对，但当雌雄数量不平衡时，也可能发生同性配对的情况。</p>
+
+<p> 雨点因为白鸽的境遇而对我们感到不满，有时趁阳台门没关溜进屋内拉几泡屎就跑，这种行为对于白鸽是万万不敢越雷池一步的。</p>
+
+<p> 鸽屎多且难以处理，我拿纸擦了几次就感到不耐烦了，决定教训一下雨点。</p>
+
+<p> 我们阳台上有只基本不怎么用的垃圾筐，我把雨点“关”在角落里。白鸽看上去比较着急，在筐子旁边走来走去，它竭力想钻到筐子后面去——显然这不可能，因为筐子就在墙角下放着。</p>
+
+<p> 鸽子毕竟是天生要飞的，雨点当然不用担心，白鸽只剩下一对剪得破碎不堪的翅膀，见到人时更加吓得到处跑，连一只纸箱也飞不上去。</p>
+
+<p> 遗憾的是，本文名为“遁鸽记”，却无法见证一个令人期待的终局，遂匆忙收于此。只希望白鸽终有一日能归予原主，复回天空。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-24T01:47:12+08:00" pubdate data-updated="true">Oct 24<sup>th</sup>, 2010</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/10/15/%25e9%2581%2581%25e9%25b8%25bd%25e8%25ae%25b0%25e4%25b8%258a/">
+		
+			遁鸽记(上)</a>
+	</h2>
+	<div class="entry-content">
+		<p><code><code><code>[nggallery id=3 <strong>template=galleryview</strong> images=5]</code></code></code></p>
+
+<p> 10月10日晨，突降暴雨。</p>
+
+<p>  醒来发现天色仍很暗，电话开机一瞅——10点钟，又见阳台门被各种风敲得噼里啪啦，这才知道碰上难得的诡异天气了。到了中午，和阿仝吃饭回来，正要开写一个新专题。见德锋指着阳台门外道：咱们这来了只鸽子！遂隔着门窗看，确实，这雨来的十分突然，白鸽躲进阳台避雨也属正常，又见左足上似乎有足环，毕竟也是有主的了。</p>
+
+<p> 不会，众人决定邀鸽入室，但也知道执行起来有难度。这时佩哥二话不说冲出阳台，一把扑向白鸽，小白估计也是被雨打的秀逗的不行，等缓过神来时右脚已被栓到床边了。</p>
+
+<p> 仔细看了看白鸽的足环——中国种鸽880155，虽然查不出什么门道，恐怕也没少受鸽主的悉心照顾了。然而雨一直下，只好先将就一晚了。</p>
+
+<p> 晚饭出去给白鸽找玉米吃，无奈整天围着南门外叫嚷“热棒棒（平声）”的老太们竟没来做生意，只好在村里找了两只馒头回来。德锋已经从食堂带了粘玉米，众人把“大餐”铺好放至桌下，白鸽不但不理，更往衣柜下钻去。这一钻就再没出来过。</p>
+
+<p> 夜，鸽子咳嗽不停，可能患了病，不过似乎不严重。</p>
+
+<p> 次日上课回来，白鸽依旧畏缩，摆了一夜的“大餐”似乎没怎么动过，倒是上面沾了一泡鸽屎。</p>
+
+<p> 鸽子乃飞翔物，并非鸡鸭之流，我提议至少迁至阳台圈养再说。</p>
+
+<p> 白鸽重见天日心情也好了些，开始吃些大米，还有数天前剩的馒头了。</p>
+
+<p> 又过了两日，这次是翘了科社回来，瞥了眼鸽子——没异常。于是剥了一把馍渣撒在台阶上，平时白鸽见我走远了才会来吃，就顺手把阳台门关上。</p>
+
+<p> 一会回头看看，窗台上俨然不止白鸽一只——竟有只雨点也站在白鸽不远处。我惊异，但也不敢贸然去阳台。雨点转头看看白鸽脚上的绳子（普及下，鸽子的眼睛长在脑袋两边，故需要不停转动脑袋来感知景深信息），显然对窗台上新撒的馍渣更感兴趣。</p>
+
+<p> 两只鸽子吃食的场面显然更有活力一些，然而即使我的出现也没惊飞雨点，现在我开始对两只鸽子的性别感兴趣了。</p>
+
+<p> 鸽子的御寒能力不俗，因此德锋找来的纸箱始终没能派上用场，此外要说的是，鸽子的消化系统简直简单的可以，仅仅几天时间阳台就堆满了鸽子粪。</p>
+
+<p> 雨点喜欢在台阶上玩金鸡独立，这时脑袋差点就能缩到身体里去，想到白鸽可能也差不多，只是腿脚不太灵便&hellip;&hellip;</p>
+
+<p> 晚上两只鸽子贴在一起睡。</p>
+
+<p> 一天中午回来继续剥馍渣（雨点对馍渣的兴趣要远超过大米，这似乎也影响了白鸽起初的饮食习惯），无意中发现白鸽在轻啄雨点的脖子（这个鸽子有时也会对自己做同样的动作，但互相做的还真没见过）。</p>
+
+<p> 雨点在台阶下踱步时会时不时扇动一下翅膀，有时想飞到台阶上，但大部分尝试竟以失败告终&hellip;&hellip;</p>
+
+<p> 这天我怀揣馍渣来到阳台，雨点已经在台阶上原地扑扇了好几下，突然从3楼一个滑翔就没影了。</p>
+
+<p>（未完待续）</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-15T22:20:27+08:00" pubdate data-updated="true">Oct 15<sup>th</sup>, 2010</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/10/06/%25e5%258f%2588%25e8%25a7%2581%25e9%2593%25b6%25e5%25b9%2595%25e5%2592%258c%25e8%25b0%2590/">
+		
+			又见银幕和谐</a>
+	</h2>
+	<div class="entry-content">
+		<p> 之前的确听过《驯龙记》在国内上映的消息。Dream works虽然不比Disney/Pixar量产出诸多经典，但诸如马达加斯加、史莱克等已经完全可以与“总动员”系列比肩了，这还不包括变形金刚这种烧钱机器在更大范围内的影响力。
+ 影片宣扬的是一种普世的和谐，类似的主题近年来在银幕上经久不衰，动画片就更是如此了。驯龙记的故事也是精彩的，毕竟有儿童畅销书作后盾。从影片角色设定的角度来说，影片中的“龙”是与众不同的：多了些Q气，少了些邪气，关键是此消彼长得恰到好处，为上座率打下了坚实的基础。
+ 然而这部《驯龙记》却没能在名气上继承前辈们的衣钵，尽管在观影过程中让人给予了它愈多的厚望。问题在于，影片太注重于“和谐”的表达，尤其是到了影片中后期已然看点全无。就像人们刚刚被引起了政治、环境等方面的思考兴趣，却突然产生了大一统结局。这里又让人想起了宫崎吾朗的名著改编《地海战记》，原著当然是巨著，而这部毁誉参半的影片却因为极其含蓄的表达受到批评。实际上，对于“平衡”的理解，影片有义务留给观众思考的空间。这样的话，若干年后，人们突然发现，内涵电影终于被捧为经典。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-06T00:45:05+08:00" pubdate data-updated="true">Oct 6<sup>th</sup>, 2010</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/10/03/%25e4%25b8%2580%25e7%25a7%258d%25e6%2595%25b0%25e5%25ad%2597%25e5%259b%25be%25e5%2583%258f%25e6%2597%25a0%25e6%258d%259f%25e5%258e%258b%25e7%25bc%25a9%25e7%25ae%2597%25e6%25b3%2595%25e2%2580%2594%25e2%2580%2594%25e5%259f%25ba%25e4%25ba%258e%25e5%258a%25a8%25e6%2580%2581%25e8%25a7%2584%25e5%2588%2592%25e6%2596%25b9%25e6%25b3%2595/">
+		
+			一种数字图像无损压缩算法——基于动态规划方法</a>
+	</h2>
+	<div class="entry-content">
+		<h3>前言</h3>
+
+
+<p> 本文是基于9月29日的算法设计与分析课程上所讨论的内容总结而成的。因为受到ppt版面所限，原题目中并无“数字”两字，考虑到准确性这里重新补上。由于时间比较仓促且能力所限，意识到有些问题在课堂上可能没有阐述清楚，因此在这里把已经提到的和未能提到的问题汇总成篇，以备参考。</p>
+
+<p> 我本人的参考书是福州大学王晓东的《计算机算法设计与分析(第3版)》(下称“王书”)，本课对应于原书第三章第七节的部分内容，当然课堂上我们曾提出王书中有部分不妥之处，并提出了初步的改进建议，这里仍将保留该部分内容。</p>
+
+<h3>问题提出</h3>
+
+
+<p> 众所周知，数字图像压缩问题是随着网络通信技术的不断发展而提出的。通常把图像数据压缩方案分为两类：有损图像压缩和无损图像压缩。有损图像压缩通常能够达到很高的压缩率，但是其在采样和频域变换过程中损失了部分像素真值，从而导致图像质量有一定下降。当前常见的数字图像压缩技术有JPEG、MPEG（主要应用于运动图像压缩）等。无损图像压缩从字面意思上理解就是不会降低图像质量，但压缩率会变得不太稳定：典型的无损图像压缩实现有两个步骤：去相关性和编码。去相关性的目的就是为了减少图像冗余，这包含字、字节甚至是二进制位的冗余消除，当然消除冗余后的图像数据需要重新编码并给出相应的索引表，从而实现压缩和解压缩。</p>
+
+<p> 这里给出一种数字图像无损压缩方案。<strong>假设数字图像像素点灰度值序列为{p1,p2,&hellip;,pn}，其中整数pi(1≤i≤n)表示像素点i的灰度值，其范围通常为0~255。将像素点序列{p1,p2,&hellip;,pn}分割成m个连续段S1,S2,&hellip;,Sm。第i个像素段Si中(1≤i≤m)，有l[i]个像素，且该段中的所有像素灰度值只用b[i]位表示。确定像素序列{p1,p2,&hellip;,pn}的最优分段，使得依次分段所需的存储空间最小。</strong></p>
+
+<h3>初步分析</h3>
+
+
+<p> 设t[i]=∑l[k]，1≤k≤i-1，1≤i≤m，则第i个像素段Si为Si={Pt[i]+1,&hellip;,Pt[i]+l[i]}，1≤i≤m。另设hi=上界(log(max(Pk+1)))，其中t[i]+1≤k≤t[i]+l[i]，则有hi≤b[i]≤8。故b<a href="1%E2%89%A4i%E2%89%A4m">i</a>可用3个二进制位表示。另设1≤l[i]≤255，则需用8位表示l[i]，其中1≤i≤m。因此第i个像素段所需的存储空间为l[i]×b[i] +11位。故对于全部像素序列{p1, p2,&hellip;, pn}，需要∑l[i]×b[i]+11m，1≤i≤m。</p>
+
+<h3>确定最优子结构</h3>
+
+
+<p> 设l[i]，b[i]，1≤i≤m是{p1,p2,&hellip;,pn}的一个最优分段。显然，l[1],b[1]是{p1,&hellip;,pl[1]}的一个最优分段，且l[i],b[i]，2≤i≤m是{pl[1]+1,&hellip;,pn}的一个最优分段。</p>
+
+<p> 这部分的证明应用反证法，大体思路如下：已知{p1,p2,&hellip;,pn}有最优分段l[i],b<a href="1%E2%89%A4i%E2%89%A4%20m">i</a> ，最优总存储空间为Θ。假设上述结论中的l[1],b[1]和l[i],b[i]，2≤i≤m不全是相应序列的最优分段，由上部分最后一个公式可得该分段存储空间Θ&#8217;&gt;Θ，这与已知l[i],b<a href="1%E2%89%A4i%E2%89%A4%20m">i</a> 为最优分段相矛盾，故假设不成立。</p>
+
+<h3>重叠子问题和状态转移方程</h3>
+
+
+<p>设s[i]，1≤i≤n是像素序列{p1,p2,&hellip;,pn}的最优分段所需的存储位数。由最优子结构性质知：</p>
+
+<p>s[i]=min{s[i-k]+k*bmax(i-k+1,i)}+11，其中bmax(i,j)=上界(log(max{Pk}+1))，1≤k≤min(i,256)。</p>
+
+<h3>动态规划算法设计</h3>
+
+
+<p>[code]Compress(n,p,s,l,b)
+ for i &lt;&ndash; 1 to n
+  b[i] &lt;&ndash; length(p[i]); //length:log(p[i])
+  bmax &lt;&ndash; b[i];
+  s[i] &lt;&ndash; s[i-1] + bmax;
+  l[i] &lt;&ndash; 1;
+  for j &lt;&ndash; 2 to i and Lmax //Lmax=256
+   if bmax &lt; b[i-j+1]
+    then bmax &lt;&ndash; b[i-j+1];
+   if s[i] &gt; s[i-j] + j * bmax
+    then  s[i] &lt;&ndash; s[i-j] +j*bmax;
+     l[i] &lt;&ndash; j;
+  s[i] &lt;&ndash; s[i] + header; //header=11[/code]</p>
+
+<h3>计算复杂度</h3>
+
+
+<p> 空间复杂度O(n)。</p>
+
+<p> 时间复杂度分析：</p>
+
+<p>[code]for i &lt;&ndash; 1 to n
+  &hellip;
+  for j &lt;&ndash; 2 to i and Lmax //Lmax=256
+   &hellip;[/code]</p>
+
+<p>因此亦为O(n)。</p>
+
+<h3>构造最优解</h3>
+
+
+<p> 在构造出最优解之前我们先举例给出上述动态规划算法的结果。例如：</p>
+
+<p> 输入像素序列:196,120,48,5,2,1。 那么计算后得出：s={19,27,35,43,51,55}，l={1,2,3,4,5,3}，b={8,7,6,3,2,1}。由王书P71第二句知：“最优分段的最后一段的段长度和像素位数分别存储于l[n]和b[n]中”。简单验证可知，l的定义是正确的，<strong>但是b无法满足无损压缩的要求</strong>。这是因为，由王书算法计算后得出，{5,2,1}为最优分段的第二段，同时该段像素位数为1位，显然，1位空间仅能保留像素1的信息，而前面的5、2均会丢失。这就是我们指出的<strong>王书中可能存在的错误</strong>。如果沿用书中的动态规划算法，那么正确的描述应为：<strong>最优分段的最后一段的段长度存储于l[n]中，其相应的像素位数应是max{b[n-l[n]+1],&hellip;,b[n]}。其前一段的段长度应为l[n-l[n]]，而对应的像素位数如下：max{b[n-l[n-l[n]]+1],&hellip;b[n-l[n]]}。</strong></p>
+
+<p> 鉴于上述描述比较繁琐，又考虑到保证原算法的正确性，我们给出如下改进的动态规划算法：</p>
+
+<p>[code] declaration B[n]    // global
+Compress(n,p,s,l,b)
+ for i &lt;&ndash; 1 to n
+  b[i] &lt;&ndash; length(p[i]); //length:log(p[i])
+  bmax &lt;&ndash; b[i];
+  B[i] &lt;&ndash; b[i];
+  s[i] &lt;&ndash; s[i-1] + bmax;
+  l[i] &lt;&ndash; 1;
+  for j &lt;&ndash; 2 to i and Lmax //Lmax=256
+   if bmax &lt; b[i-j+1]
+    then bmax &lt;&ndash; b[i-j+1];
+   if s[i] &gt; s[i-j] + j * bmax
+    then  s[i] &lt;&ndash; s[i-j] +j*bmax;
+     l[i] &lt;&ndash; j;
+     for k&lt;&ndash; i-j+1 to i
+      B[i]&lt;-bmax;
+  s[i] &lt;&ndash; s[i] + header; //header=11[/code]
+ 其中数组B是一个全局量，我们用于存储最优分段中的像素位信息，同时在构造最优解的过程中用B替换b作为输入参数，经验证，该程序可以实现题目预设的目标。</p>
+
+<h3>结论</h3>
+
+
+<p> 我们应用动态规划方法解决了一个较为普通的最优化问题。事实上这种思想可以应用于许多具有类似特征的问题求解中。当然，我们学习动态规划的目的并非是为了求解类似算法竞赛难度的各类习题，而是将这种思想结合进平时对实际问题的解决中，这样的话，我想，DP的魅力将是无穷的。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-03T15:24:19+08:00" pubdate data-updated="true">Oct 3<sup>rd</sup>, 2010</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/suan-fa-tao-lun/'>算法讨论</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/09/04/%25e7%25bc%2598%25e5%2588%2586%25e5%258f%2588%25e5%25b0%25bd%25e4%25ba%2586/">
+		
+			缘分又尽了&#8230;</a>
+	</h2>
+	<div class="entry-content">
+		<p> 为什么要加个“又”呢，因为这已经不知道是我第几次afk了。</p>
+
+<p> 鉴于此，现大概回顾一下前几次的情况：</p>
+
+<p> 05年9月，史诗般的安其拉之战摆在眼前，06高考更摆在眼前，考虑再三之后还是忍痛割爱，转去踢实况了&hellip;</p>
+
+<p> 06年8月，一区红龙军团自筹公会失败，追随古殿前辈征战新魔剑亚服&hellip;到西大后因为各种条件限制最终放弃，亚服更是没坚持多久。不过9月wow推出随机战场，即转战至新7区。</p>
+
+<p> 在古加尔的近两年里经历过MC、BWL、TAQ、NAXX各种开荒，以及TBC初期的疯狂之后，08年初，自筹公会再次失败&hellip;后转经达文格尔，至灰谷，开始休闲之旅。</p>
+
+<p> 09年初，决定考研，处理并删除所有已知账号角色（原一区红龙军团号因时间久远忘记除外）。</p>
+
+<p> 如今，因cwlk回归二十多天之后，又要面临afk了。总结一下原因，大概每次afk都是形势所迫。至于回归，固然与04年起就充满期待并做足准备的事实密不可分，然而多数情况里的直接原因恐怕都差不多了。</p>
+
+<p> 我真的不想再做无谓的“回归”了。但试想一下，如果已经过去的数千小时没有wow，又会去做些什么。（未完）</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-09-04T00:37:26+08:00" pubdate data-updated="true">Sep 4<sup>th</sup>, 2010</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/08/12/%25e7%25ab%2599%25e7%2582%25b9%25e7%25bb%25b4%25e6%258a%25a4/">
+		
+			站点维护</a>
+	</h2>
+	<div class="entry-content">
+		<p> 今天扫除了所有已知的bug，包括slideshow和nav menu的问题。值得注意的是，在更新了pixopoint_menu后发生了未知的兼容错误，给出的free support声称是和某些主题的css设置发生冲突，这条信息确误导过我们一段时间。经过调试后发现问题和主题css设置无关，而是出在曾经采用的一段web图片效果脚本lightbox上。事实上我们早在一年多前就已经弃用lightbox，但是当时并未将脚本载入的代码注释掉，结果与新的menu插件发生冲突而导致menu无法访问的bug&hellip;无论如何，一切都成为过去了。</p>
+
+<p> 另外，最近在自学Numerical Methods和CG时突然发现以前学过的数学是极有用的，但是不得不反复学习&hellip;这再一次验证了我的观点：多数人学习前应当尽量培养兴趣，尤其是对理论应用于创新实践的憧憬。仅凭借对各种天才神童的吹捧，永远无法使我们在黑暗中找到光明。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-12T14:12:39+08:00" pubdate data-updated="true">Aug 12<sup>th</sup>, 2010</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>, <a class='category' href='/blog/categories/zhan-dian-ri-zhi/'>站点日志</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/08/08/%25e5%258f%25a4%25e5%2589%25911%25e9%2580%259a%25e5%2585%25b3/">
+		
+			古剑1通关</a>
+	</h2>
+	<div class="entry-content">
+		<p> 好吧，我的确是在期待尚在文案中的二代了。实际上终局似乎给出了一些后代的线索，当然另起一条线写过也是完全可以的，毕竟世界观框架已经建立好了。至于本代游戏的评测实在是没必要再写，编剧、音乐、美术、图形都还不错，其实动画可以加入配音的元素，程序的问题影响游戏普及率，制作团队自己要认真对待。</p>
+
+<p> 此外还要老生常谈创新这个东西，平心而论古剑1的创新列表还是不少，但无非都是“再创新”，而且还是自主发挥很少的那种。中文RPG似乎有种魔力，我开始前几天也只是按两个小时的限额玩，后来忍不住后续剧情的诱惑，最后就又成了连续作战，导致没过几天即到了终局&hellip;后来多数因为精力不支而长时间内无法来二周目&hellip;所以期待今后可以出现长期霸占硬盘的耐玩RPG，目前古1的DLC还未放出，因此不好评价这部分内容。</p>
+
+<p> 想起今晚终局了便去看才放出字幕的《哆啦A梦2010大长篇之大雄的人鱼大海战》，发现制作团队连三十周年的纪念剧都做的如此酱油，但他们又继承了何止三十年的家底，最近几年做的废柴倒也不会带来毁灭性的打击。国产团队一缺乏悠久历史，二缺乏雄厚资金，想打造经典必然不容易，但如果在前期就以次充好的话肯定无法长久。今天又看了看官方的企划日志，发现古剑ol居然都在日程了，一时竟不知说什么好。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-08T01:50:47+08:00" pubdate data-updated="true">Aug 8<sup>th</sup>, 2010</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/pcyou-xi/'>pc游戏</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/08/03/%25e5%258f%25a4%25e5%2589%2591%25e6%2597%25a0%25e6%2583%2585%25ef%25bc%258c%25e9%2581%2582%25e4%25b9%25a6%25e5%25a5%2587%25e8%25b0%25ad/">
+		
+			古剑无情，遂书奇谭</a>
+	</h2>
+	<div class="entry-content">
+		<p> 我终究是经受不了传统RPG的诱惑，十多年了仍然如此。这次游戏剧情据说有近百小时的巨量（当然各类修改器总能让这些剧情如便当一般），再加上脚伤要求至少制动一月以上，就当每天多两个小时休闲时间吧（当然这本就是不小的挑战，过去三十几个小时的剧情哪个不是两天就通关的？）。</p>
+
+<p> 促使我来的重要原因之一是八月一日的《电脑报》头版评论—《古剑奇谭击碎国产单机最后希望》，当然前面被迫回家乃是必要条件。当时就觉得，国产单机早就半死不活，如果还能被评为“最后希望”，这编辑恐怕是欲扬故抑，全然无视另两把剑的存在了。而在我看来，另起炉灶不久的制作团队这次是憋足了劲，希望能打造又一个金饭碗，却也忽略了一些不大不小的气候因素。</p>
+
+<p> 从小的方面来说，游戏销量轻松上30万，确是一个不俗的成绩。但背后却隐藏了一个问题，因为据说预售总和就不下20万套，相对近年来的其它同类游戏玩家信心堪称爆棚，实际上给“造碗”路上增添了不小的风险。后来正式发售果然还是出了不少问题，有很多还是硬伤，除去大小bug不谈，游戏设定的基本配置形同虚设，推荐配置成了最低要求。《魔兽世界》当初引来了全国范围的网吧升级潮，而《古剑》显然尚不具备如此实力，如果策划起初就设想出50万的销量，那么他对研发人员偷懒行为的姑息就实在让人有些不解了。</p>
+
+<p> 从大的方面看，PC上的单纯RPG模式确实已经江河日下了，这是世界范围内的趋势。而国产单机技术不如欧美，游戏性不如日系的劣势始终存在且差距在不断拉大，能产生的影响力也就可想而知。事实上，单机游戏在整个相关产业的人才培养上能起到非常重要的作用，尤其是在电影、网游、综艺娱乐等方面，国家理应加以支持。然而，现在的国产游戏似乎除了RPG还是RPG，连个ARPG都不敢尝试，更别说RTS、FPS了。而照我目前对计算机图形的粗浅理解，这几种类型不仅仅是游戏玩法上的区别，更体现了不同程度CG技术的实现，如此看来，RPG无疑是业界选择的最便捷的一条路，耍着这些小聪明还整天号称要挽回国产单机的尊严，简直无异痴人说梦了。</p>
+
+<p> 对我而言，我始终喜爱传统RPG，是因为富含民族传统文化的剧情设定让人沉醉其中。但也深深知道，要想吸引当今社会中坚力量的参与，这最重要的环节却也显得不是那么重要了。</p>
+
+<p> 古剑放在暑假，寒假就留给仙五吧。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-03T01:15:15+08:00" pubdate data-updated="true">Aug 3<sup>rd</sup>, 2010</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/pcyou-xi/'>pc游戏</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/07/28/%25e6%258a%2597%25e4%25b8%258d%25e4%25bd%258f%25e4%25ba%2586/">
+		
+			抗不住了</a>
+	</h2>
+	<div class="entry-content">
+		<p> 如果脚没废自认为还真能继续坚持一两个月。这下真挂了，上下楼可以靠电梯，总不能平时不走路吧，只好回家看书去了。</p>
+
+<p> 假期到目前为止最大的收获在于HKUST的大牛来实验室做讲座，虽然不及人家在BNU、ZJU的系列课程，但一些关于前沿技术的全貌还是了解到了。感触最深的是教授不经意间流露出对众师兄师姐们的“同情”之心了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-28T22:14:13+08:00" pubdate data-updated="true">Jul 28<sup>th</sup>, 2010</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="5" class="prev">Prev</a>
+    
+    
+        <a href="7" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

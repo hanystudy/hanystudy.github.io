@@ -1,0 +1,176 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>JNI技术初步(五)  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content=" 总的来说，JNI应当是java初学者须掌握的内容。尽管教科书中涉及的极少，JNI也破坏了java重要的可移植性，但JNI并未因此被弃用，反而被Sun列入JDK不可缺少的一部分——这至少说明了java并非像一些人说得那么神通广大。  正如原文作者最初所说的，JNI适用于许多程序设计语言， &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">JNI技术初步(五)</h2>
+	<div class="entry-content"><p> 总的来说，JNI应当是java初学者须掌握的内容。尽管教科书中涉及的极少，JNI也破坏了java重要的可移植性，但JNI并未因此被弃用，反而被Sun列入JDK不可缺少的一部分——这至少说明了java并非像一些人说得那么神通广大。</p>
+
+<p> 正如原文作者最初所说的，JNI适用于许多程序设计语言，甚至包括汇编程序。但理解了java内涵的人都会小心翼翼去使用JNI，而非将其当成是万能的解决方案。</p>
+
+<p> 感谢本系列第1-4篇文章的原作者，很多是被原文采纳，其余内容也做了详细的参考，在此一并感谢。</p>
+
+<p> cnweblog.com <span style="color: #000000;">刘正伟 </span><span style="color: #000000;"><a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#115;&#x75;&#110;&#100;&#x79;&#x32;&#54;&#x40;&#x31;&#50;&#x36;&#46;&#x63;&#x6f;&#109;">&#x73;&#x75;&#110;&#x64;&#121;&#x32;&#54;&#64;&#x31;&#50;&#x36;&#46;&#x63;&#111;&#109;</a></span></p>
+
+<p> blog.edu.cn  <span class="style3">xdsamuel</span></p>
+
+<p><span class="style3"> gceclub.sun.com.cn Sun中国技术社区 陈健明 华中师范大学网络与通讯研究所 <span style="color: #000000;"><a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#x63;&#x68;&#101;&#110;&#106;&#109;&#x32;&#48;&#48;&#48;&#x40;&#104;&#x6f;&#x74;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#x6f;&#x6d;">&#x63;&#x68;&#x65;&#110;&#x6a;&#109;&#x32;&#x30;&#x30;&#x30;&#64;&#x68;&#x6f;&#116;&#x6d;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a></span></span></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-18T16:59:48+08:00" pubdate data-updated="true">Oct 18<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

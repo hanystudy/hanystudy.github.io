@@ -1,0 +1,172 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>整站迁移完成  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="最近一直在考虑是不是该升级到vps了？毕竟单纯的空间已经远远无法满足现在互联网DIY的需求。然而思考再三，vps需要花更多时间去照顾，恰好在未来一段时间内又不会很轻松，只好先忍一忍。于是决定趁早先拿下新域名hanyi.name。结果问题就来了，国内的空间商要求新绑定域名必须重新备案， &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">整站迁移完成</h2>
+	<div class="entry-content"><p>最近一直在考虑是不是该升级到vps了？毕竟单纯的空间已经远远无法满足现在互联网DIY的需求。然而思考再三，vps需要花更多时间去照顾，恰好在未来一段时间内又不会很轻松，只好先忍一忍。于是决定趁早先拿下新域名hanyi.name。结果问题就来了，国内的空间商要求新绑定域名必须重新备案，否则按规定不予解析。还好我对这一套比较熟悉，屁颠儿跑去XX部网站办备案，结果被告知个人只允许备案1次，机构最多也只允许备案5次。而我前次备案是在08年，当时还是因为他们无故删除了我在06年就提交并审核通过的备案信息，悲剧的是他们这次居然成功保存了4年前的信息！回来找空间商商量，最简单的方法还是换别人的真实信息重新提交。顿时无语，原来早前CN域名开放是纯属坑人呢？进而有了将整站迁移至国外空间的想法。</p>
+
+<p>域名问题很好解决，许多国外知名域名商支持通过支付宝进行国际支付，加上pending共花了一天时间完成。缺点是DNS初解析较慢，平时用的CN域名的解析在国内几乎是实时更新的。另一方面采用了原空间商在国外的主机业务，用电信线路看主机的ping不错，不过迁移后发现明显还是慢了一个级别，目前看来只好通过在今后优化页面内容来改善了。好处是空间容量是以前的三倍，不过现在看来用处似乎不大。</p>
+
+<p>迁移工作还是颇费周折，现在看来wordpress迁移唯一必然的成功办法还是数据库内容链接的全文替换，否则只改几个字段可能会出现无法进入后台的情况。再加上周中实验室网络欠费，用了几天坑爹的“西大国内网”，很难顺利完成整站内容的迁移。于是只好把多余的时间用来进行一些反思：多年以来我做了许多自己感兴趣的工作，尽管无甚成果，但确实也学习了不少东西，总体上始终循着当初所谓“自由学习，自由思想”的理念，也从未遇过大的挫折。然而，出于一些忧虑和回避，自己有意无意忽视了平等交流：所谓平等交流，在我看来就是用自己的想法去换取别人的想法，并且所有人都认同且遵守唯一的道德准则。事实上，我对周围真实环境的了解程度非常低，某种程度上是基于以上原因。这也就导致了自己对身边事物的看法具有很强的不确定性，难以在自身问题上做出有效判断。另一方面也导致自己至今缺乏一些常识&hellip;&hellip;有些事在别人看来是显而易见，自己却不容易想明白。</p>
+
+<p>考虑到有些外链是指向原mp77.cn，本站仍会对继续支持这个域名，并持续至少1年时间。而hanyi.name会是我的永久性域名，今后也不会再向站外自动导出文章。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-07T21:20:38+08:00" pubdate data-updated="true">Jul 7<sup>th</sup>, 2012</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>, <a class='category' href='/blog/categories/zhan-dian-ri-zhi/'>站点日志</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,218 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>简单的词法分析程序和一种lex for win32用法示例（下）  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content=" 前面介绍了如何使用lex写一个词法分析器，为了证明上述程序的正确性，需生成与它对应的c语言代码，并编译成可执行程序。unix下使用这些工具非常简单（以至于两行commands就可以完成工作），在此就不做详细说明，接下来我们来面对ms留给我们的烂摊子&hellip;&hellip;   &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">简单的词法分析程序和一种lex for Win32用法示例（下）</h2>
+	<div class="entry-content"><p> 前面介绍了如何使用lex写一个词法分析器，为了证明上述程序的正确性，需生成与它对应的c语言代码，并编译成可执行程序。unix下使用这些工具非常简单（以至于两行commands就可以完成工作），在此就不做详细说明，接下来我们来面对ms留给我们的烂摊子&hellip;&hellip;</p>
+
+<p> 为了证明在win32下利用lex生成词法分析器有多复杂，我们选用parser generator 2和vc++6.0组合向大家展示ms强大的化神奇为腐朽的力量（依然不推荐win32用户使用vs平台进行此项工作）。</p>
+
+<p> parser generator可以在以下网址免费获取：<a href="http://www.bumblebeesoftware.com/downloads.htm"><a href="http://www.bumblebeesoftware.com/downloads.htm">http://www.bumblebeesoftware.com/downloads.htm</a></a></p>
+
+<p> vc++6.0？别告诉我你不知道怎么获取&hellip;&hellip;</p>
+
+<p> 首先启动pg2,要进行针对vc++6.0的配置工作:</p>
+
+<p> 选择menu下的project-&gt;LibBuilder,Complers选则Visual C++(32-bit),并点击compiler properties,这时在Options内作如下设置:</p>
+
+<p>Version:6</p>
+
+<p> Unicode:true</p>
+
+<p> treat wchar_t as Built-in type:False</p>
+
+<p> Compiler Bin directory: C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\BIN</p>
+
+<p> Compiler Bin directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\MSDEV98\BIN</p>
+
+<p> Compiler Include directory: C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\INCLUDE</p>
+
+<p> Compiler Include directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE</p>
+
+<p> Compiler Library directory:C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\LIB</p>
+
+<p> Compiler Library directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\LIB</p>
+
+<p> (注: 请读者按vc实际安装目录而定)选择完毕后点击OK,在父窗口中选择Build生成供vc使用的库文件.</p>
+
+<p> &hellip;&hellip;</p>
+
+<p> 经过漫长等待库文件终于生成了&hellip;现在回到主界面,选择project-&gt;parserWizard,填入自己的lex工程名,选择vc++6.0(32-bit),进入下一步.Files选lex file only,其它均保持默认即可.填入lex源文件名后即可选择complete.</p>
+
+<p> 这时程序会自动生成lex文件的框架,如果在前面的设置中还选择了create main function,文本中还会有几行简单的main函数.但是该文本对我们没有任何意义&hellip;直接将前文所述的源代码覆盖至此即可.</p>
+
+<p> 现在选择project-&gt;compile file,build后就会生成lex源码对应的c语言source和include文件了.接下来启动vc++6.0进行相关配置.</p>
+
+<p> 首先点击Tools-&gt;Options,切换至directory选项卡,分别在show directories for中的Include、Library和Source选项中添加如下信息（每项一条）：</p>
+
+<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\INCLUDE</p>
+
+<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\LIB\MSVC32</p>
+
+<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\SOURCE</p>
+
+<p>（注：应按pg的实际安装路径而定）现在新建win32 console application工程，并点击Project-&gt;Settings选项，Settings for先选择win32 debug。然后在C/C++选项卡的Proprocessor Definitions选项中添入,YYDEBUG，切换至Link选项卡在Object/library modules中添入yld.lib ylmtd.lib ylmtrd.lib。</p>
+
+<p> 将Settings for切换至win32 Release重复上述操作，就完成了整个前期的所有配置工作&hellip;&hellip;</p>
+
+<p> 在工程中添加前面生成的source和include文件，直接build即可。现在，我们就可以按照PL/0的基本关键词写出一些简单的程序并加以词法分析了（事实证明这时的编译功能还十分微弱，但却是向前迈出一大步了）。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-01T20:21:18+08:00" pubdate data-updated="true">May 1<sup>st</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/bian-yi-ji-zhu/'>编译技术</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

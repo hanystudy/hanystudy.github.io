@@ -1,0 +1,1040 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="源码、演示ppt及测试结果待续…
+民航订票系统项目计划书
+V2.0 Final 韩翼 王毅飞
+ 一、系统简介
+ 声明:本设计书最终版与配套源代码的实现有一定差距,这将在测试文档中详细说明,本文档仅在开发之前进行了整体的修改和完善,基本上展现了本系统的结构化设计.
+ 民航订票系统允许用户自由注册、 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/08/24/cc%25e5%25ae%259e%25e4%25b9%25a0%25e8%25ae%25be%25e8%25ae%25a1%25e6%2596%2587%25e6%25a1%25a3%25e2%2580%2594%25e2%2580%2594%25e5%259f%25ba%25e4%25ba%258ewin32-console-app%25e7%259a%2584%25e6%25b0%2591%25e8%2588%25aa%25e8%25ae%25a2%25e7%25a5%25a8%25e7%25b3%25bb%25e7%25bb%259f/">
+		
+			C++/C实习设计文档——基于Win32 Console App的民航订票系统</a>
+	</h2>
+	<div class="entry-content">
+		<div class="Section0" style="LAYOUT-GRID:  15.6pt none">
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><strong><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><strong>源码、演示ppt及测试结果待续…</strong></span></strong></span></span></p>
+<p class="0" style="TEXT-ALIGN: center"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><strong>民航订票系统项目计划书</strong></span></span></p>
+<p class="0" style="TEXT-ALIGN: center"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">V</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2.0 Final</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> <span style="font-family: 宋体;">韩翼 王毅飞</span></span></p>
+<p class="0"> <span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">一、系统简介</span></span></p>
+<p class="0"> <strong><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">声明:本设计书最终版与配套源代码的实现有一定差距,这将在测试文档中详细说明,本文档仅在开发之前进行了整体的修改和完善,基本上展现了本系统的结构化设计.</span></span></strong></p>
+<p class="0"> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">民航订票系统允许用户自由注册、登陆，用户权限分为三种级别，分别是一般浏览用户、注册用户、民航售票员和系统管理员，具体权限如下：</span></span></p>
+<p class="0" style="MARGIN-LEFT: 15.75pt; TEXT-INDENT: -15.75pt"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、一般浏览用户</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">（默认权限为r即只读），</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">可</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">按照各种方式查看</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">航班信息。</span></span></p>
+<p class="0"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、一般的注册用户</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">（默认权限为r即只读），</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">可</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">按照各种方式查看数据</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">。并且能查看自己的信息和订票情况，并且可以网上订票、退票，修改自己的信息等等功能</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">；</span></span></p>
+<p class="0"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、民航机票售票员，</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">除了可以查看数据外还能编辑</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">航班信息。</span></span></p>
+<p class="0"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、系统管理员，他可以拥有管理航班的所有功能，并且可以创建民航机票售票员，</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">授权用户权限</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">等功能</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">。</span></span></p>
+
+<p class="0">
+<div class="0"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">二、流程图设计</span></span>
+<div class="0"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></div>
+</span></span></div>
+<span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">
+<div class="Section0" style="layout-grid: 15.6pt none;">
+<p class="0"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">三、界面设计</span></span></p>
+<p class="0" style="line-height: 12pt;"> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">1、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">主菜单</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Register <span style="font-family: 宋体;">用户注册</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Login   <span style="font-family: 宋体;">用户登录</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Flight query   <span style="font-family: 宋体;">航班查询</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Quit    <span style="font-family: 宋体;">退出系统</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">2、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户注册</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">……</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Success <span style="font-family: 宋体;">返回主菜单</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Fail    <span style="font-family: 宋体;">返回主菜单</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">3、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户登录</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">User name <span style="font-family: 宋体;">用户名</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">User password <span style="font-family: 宋体;">用户密码</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">4、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">登陆界面</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Flight query <span style="font-family: 宋体;">航班查询</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Ticket info <span style="font-family: 宋体;">订票信息</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">U</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">pdate info <span style="font-family: 宋体;">修改信息</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">退出</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">5、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">航班查询</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Id <span style="font-family: 宋体;">航班代号</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Company <span style="font-family: 宋体;">航空公司</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Initial station <span style="font-family: 宋体;">起始站</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Destination <span style="font-family: 宋体;">终点站</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Price <span style="font-family: 宋体;">票价</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Discount <span style="font-family: 宋体;">打折信息</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Time <span style="font-family: 宋体;">飞行时间</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">6、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">管理登陆</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Admin login <span style="font-family: 宋体;">系统管理员</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Conductor <span style="font-family: 宋体;">售票员</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">7、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">系统管理员</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Flight query <span style="font-family: 宋体;">航班查询</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">U</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">pdate flight <span style="font-family: 宋体;">编辑航班</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Grant user  <span style="font-family: 宋体;">用户授权</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">8、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">售票员</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Flight query <span style="font-family: 宋体;">航班查询</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Update flight <span style="font-family: 宋体;">编辑航班</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">9、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">编辑航班</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Id <span style="font-family: 宋体;">航班代号</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Company <span style="font-family: 宋体;">航空公司</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Initial station <span style="font-family: 宋体;">起始站</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Destination <span style="font-family: 宋体;">终点站</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Price <span style="font-family: 宋体;">票价</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">DIscount <span style="font-family: 宋体;">打折信息</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Time <span style="font-family: 宋体;">飞行时间</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">10<span style="font-family: 宋体;">、用户授权</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">User name <span style="font-family: 宋体;">用户名</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">G</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">rant level <span style="font-family: 宋体;">授权级别</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">11<span style="font-family: 宋体;">、订票信息</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">12<span style="font-family: 宋体;">、网上订票</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">I</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">d <span style="font-family: 宋体;">航班代号</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Time <span style="font-family: 宋体;">飞行时间</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">13<span style="font-family: 宋体;">、修改信息</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">……</span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">四、模块设计</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">0<span style="font-family: 宋体;">、链表操作</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">1、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">航班模块</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">cl</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">as</span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">s</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> Flight</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">航班号</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Id</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">航线起始站</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Initial</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">航线终点站</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Destinition</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">飞行时间</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Time</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">成员订额</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int maxcount</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">票价</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">float Price</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">折扣信息</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int Discount</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">添加航班</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">AddFlight()</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">&amp;id,&amp;Initial,&amp;Destinition,&amp;Time,&amp;maxcount,&amp;Price,&amp;Discount</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">编辑航班</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">UpdateFlight</span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">()</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">&amp;id,&amp;Initial,&amp;Destinition,&amp;Time,&amp;maxcount,&amp;Price,&amp;Discount</span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">2、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">用户模块</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">C</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">lass Users</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">用户名 </span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Username</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">密码 </span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Password</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">权限</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">rank</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、//普通用户模块 </span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">User:Users,Flight</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">用户名</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Username</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">密码</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Password</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">性别</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Sex</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">民族</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">string</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> People</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">身份证号码</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">long Id</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">护照号码</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string VisaId</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">级别</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int Rank</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">注册用户</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Register()</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">用户登陆</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Login()</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">修改信息</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">UpdateInfo()</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">网上订票</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Tickets()</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">订票信息</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">TicketsInfo()</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">附加密模块:</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">M</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">d5()</span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">3、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">查询模块</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">C</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">lass Query</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">查询函数</span></span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">FlightIdQuery(&amp;id)</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightInitialQuery(&amp;Initial)</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightDestinitionQuery(&amp;Destinition)</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightTimeQuery(&amp;Time)</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightMaxcountQuery(&amp;maxcount)</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightPriceQuery(&amp;price)</span></p>
+<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightDiscountQuety(&amp;discount)</span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">7、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">排序模块</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">C</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">lass sort:</span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">排序函数</span></span></p>
+<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">8、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">统计模块</span></span></p>
+<p class="0" style="text-indent: 21pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">结合入各模块中</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">五、文件设计</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">1、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户表 user.txt</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">2、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">航班表 flight.txt</span></span></p>
+<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">3、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">订票信息 ticket.txt</span></span></p>
+
+</div>
+<div></div>
+</span></span></span><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">
+<div class="Section0" style="layout-grid: 15.6pt none;">
+<p class="0" style="line-height: 12pt;"> </p>
+
+</div>
+ 
+
+</span></span>
+<div class="Section0" style="layout-grid: 15.6pt none;">
+<p class="0" style="line-height: 12pt;"> </p>
+
+</div>
+</div>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-24T22:03:20+08:00" pubdate data-updated="true">Aug 24<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/08/16/mp77%25e7%259a%2584internet%25e4%25bb%25a3%25e7%25a0%2581%25e6%2594%25b6%25e9%259b%2586%25e7%25b3%25bb%25e7%25bb%259f%25e6%25b5%258b%25e8%25af%2595%25e5%2585%25ac%25e5%2591%258a/">
+		
+			Mp77的Internet代码收集系统测试公告</a>
+	</h2>
+	<div class="entry-content">
+		<p> 近期实在忙于软工实习，一个人写代码累得半死，就很少来更新blog。</p>
+
+<p> 另外我站的新功能“Mp77的Internet代码收集系统”已经同步开放测试，由于首页受限且尚无精力去做新的设计，因而系统入口就只能贴在这里了:</p>
+
+<p> <a href="http://www.hanyi.name/system" target="_blank">点此进入</a></p>
+
+<p>忙过这一段时间后我会考虑重写该系统的源代码，同时增强网站的整体美观性，但这期间数据库架构不会做任何破坏性更动，故用户大可放心上传数据的安全性。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-16T08:55:26+08:00" pubdate data-updated="true">Aug 16<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/07/25/mp77%25e7%259a%2584internet%25e4%25bb%25a3%25e7%25a0%2581%25e6%2594%25b6%25e9%259b%2586%25e7%25b3%25bb%25e7%25bb%259f%25e9%25a1%25b9%25e7%259b%25ae%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%25a6/">
+		
+			&#8220;Mp77的Internet代码收集系统&#8221;项目计划书(上)</a>
+	</h2>
+	<div class="entry-content">
+		<div class="Section0" style="layout-grid: 15.6pt none;">
+<p class="0" style="text-align: center;"><span style="font-weight: bold; font-size: 14pt; font-family: '黑体'; mso-spacerun: 'yes';">“Mp77的Internet代码收集系统”项目计划书</span><span style="font-weight: bold; font-size: 14pt; font-family: '黑体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-align: center;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">本系统将作为各类编程语言常用代码的网络收集解决方案。现已考虑在内的语言有C/C++、JAVA、PHP、HTML，并考虑为未来语种扩容留出接口，系统采用LAMP构架。前台使用PHP和HTML编写，后台数据库系统使用MySQL AB公司的知名数据库产品MySQL的The Open Source License版本，网页整合采用Namo </span></span><span style="font-size: 12pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">WebEditor</span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"> 2006 suite Trial<span style="font-family: 宋体;">（考虑到版权问题将不使用Adobe Dreamweaver开发）。预计功能包含函数查询、语法查询、常用数据结构以及部分用户讨论。</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">这套系统的特点是，通过限量授权的方式，使多数用户能参与代码收集整理工作，从而扩大数据库容量。</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">由于系统初步构架庞大，计划将采用分步开发的方法逐步进行。预计开发将分为五个阶段：</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">第一阶段，需求分析，系统架构设计，文档编写以及系统对硬件配置要求的评估。</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">第二阶段，完成模版规划，制作会员管理模块，代码收集、整理和查询模块，并进行相应测试。</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">第三阶段，完善用户界面，扩展编程语种种类，完善PHP和HTML两个代码数据库的基础数据，进行本地Alpha测试。</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">第四阶段，有限度地进行界面的美工设计，完善已容纳的编程语言代码数据库的基础数据，开放用户注册，采取搜索引擎优化等宣传措施，制作SQL script脚本和系统安装引导文件，进行Internet上的beta测试。</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">第五阶段，全面开放所有既定功能，进入运行维护阶段。</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">项目的成本考虑是不计成本，人力资源使用为1人，开发时间为学校假期，资金消耗主要在主机选用、域名等，但由于已考虑依托现有的hanyi.name平台，因此该部分将不计入最终成本。</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">本项目不含任何盈利计划，但考虑到可能由于资金有限的问题，主机条件将远不能及大型商用主机的配置，因此最终所达到的效果可能会有所折扣。</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">本项目的目的是学习使用Apache、MySQL、PHP进行internet应用开发，因此只要达到这一目的，本项目即宣告成功。</span></span><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-weight: bold; font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">附件1：系统整体架构-流程图</span></span><span style="font-weight: bold; font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-weight: bold; font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">附件2：数据表字段</span></span><span style="font-weight: bold; font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-weight: bold; font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">附件3：模块设计说明</span></span><span style="font-weight: bold; font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-weight: bold; font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">附件1 系统整体架构-流程图</span></span><span style="font-weight: bold; font-size: 12pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0"><span style="font-size: 10.5pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户权限分级：</span></span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">R</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">ank=0 <span style="font-family: 宋体;">未注册用户 可以使用查询功能</span></span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">R</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">ank=20 <span style="font-family: 宋体;">普通用户 可以使用查询和评论功能</span></span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">R</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">ank=40 <span style="font-family: 宋体;">中级用户 可以使用代码添加功能和包括下级用户所拥有的功能</span></span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">R</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">ank=60 <span style="font-family: 宋体;">高级用户 可以使用代码编辑功能和包括下级用户所拥有的功能</span></span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">R</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">ank=80 <span style="font-family: 宋体;">超级用户 可以使用审批代码、编辑评论功能和包括下级用户所拥有的功能</span></span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">R</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">ank=100 <span style="font-family: 宋体;">管理员  可以使用编辑用户功能和包括下级用户所拥有的功能</span></span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-weight: bold; font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">附件2 数据表字段：</span></span><span style="font-weight: bold; font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">create table users(</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">id bigint(20) unsigned </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">auto_increment</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> primary key ,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">user_login varchar(60),</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">user_pass varchar(64),</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">user_nickname varchar(50),</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">user_email  varchar(100),</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">user_registered datetime,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">user_rank int unsigned</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">);</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">create table comments(</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">comment_id </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">bigint(20)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">UNSIGNED</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">auto_increment</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> primary key,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">comment_code_name varchar</span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">(</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">60</span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">comment_author </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">varchar(50)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">comment_date</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">datetime</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">comment_content</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">text</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">);</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">create table link(</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">link_id bigint(20)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> primary key,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">link_url varchar(255)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">link_name varchar(255)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">primary key(</span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">link_id</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">);</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">create table code_type</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">(code_type_id </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">bigint(20)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">UNSIGNED</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">auto_increment</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> primary key,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">code_type_name </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">varchar(50)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">code_type_admin bigint(20)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">);</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">create table code</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">(code_id </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">bigint(20)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">UNSIGNED</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">auto_increment</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> primary key,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">code_name varchar(255),</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">code_content longtext,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">code_type_name </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">varchar(50)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">code_author varchar(60)<span style="font-family: 宋体;">，</span></span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">code_des longtext</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">);</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">create data_structure(</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">data_structure_id </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">bigint(20)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">UNSIGNED</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">auto_increment</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> primary key,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">data_structure_name </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">varchar(50)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">data_structure_content long</span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">text</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">data_structure_type </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">varchar(50),</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">);</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">create table affiche(</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">affiche_id </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">bigint(20)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">UNSIGNED</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">auto_increment</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> primary key,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">affiche_title varchar</span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">(</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">255</span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> ,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">affiche_author </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">varchar(50)</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">affiche</span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">_date</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">datetime</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">affiche</span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">_content</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"> long</span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">text</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">,</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">);</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-weight: bold; font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">附件3 模块设计说明</span></span><span style="font-weight: bold; font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="text-indent: 24pt;"><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">To be continued</span><span style="font-size: 12pt; color: #000000; font-family: 'Times New Roman'; mso-spacerun: 'yes';">…</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';">.</span><span style="font-size: 12pt; color: #000000; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+</div>
+
+
+<!--EndFragment-->
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-25T11:37:42+08:00" pubdate data-updated="true">Jul 25<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/07/21/%25e6%258e%25a9%25e5%25b8%2598%25e5%2590%2591%25e5%25ad%25a6/">
+		
+			掩帘向学</a>
+	</h2>
+	<div class="entry-content">
+		<p>  古有闭关修炼，今有掩帘向学。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-21T13:30:03+08:00" pubdate data-updated="true">Jul 21<sup>st</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/06/05/%25e6%25b7%25b1%25e5%25ba%25a6%25e8%25a7%25a3%25e5%25af%2586%25e2%2580%2594%25e2%2580%2594%25e6%2597%258b%25e8%25bd%25ac%25e7%259a%2584%25e8%2588%259e%25e5%25a5%25b3/">
+		
+			深度解密——旋转的舞女</a>
+	</h2>
+	<div class="entry-content">
+		<p> 近期事务又开始多起来，利用空余时间写了下面这篇文章，接下来就不能持续更新了。</p>
+
+<p> 前一阵看到一张图片，大概是一名舞女在灰白色的空间里旋转。起初没有感觉到什么异样，后来讨论的人多了，才逐渐发现：该舞女时而顺时针转，时而逆时针转，似乎观察的人都不清楚她是如何变换方向的。</p>
+
+<p> <img src="http://laiba.tianya.cn/laiba/images/21342/12125063130667060085/A/1/m.jpg" alt="旋转的舞女" width="300" height="400" /></p>
+
+<p> 当初对这张图很感兴趣，亦和坛友们讨论了一番，但其实都不知道个所以然，顶多讲一些自己注意到的细节，后来就没有深究了。</p>
+
+<p> 哪知近期本图似乎又死灰复燃，标上《心理测试：一张图分出你是用左脑还是右脑》的题目，在各大论坛上再次引起广泛讨论。我很感兴趣网友们是否较前阶段有了新的认识，看了大多数的回帖评论后发现，大家对本图的理解依然止步不前。这就使我增加了对其研究的动力。</p>
+
+<p> 首先将这张208kb的gif动画导入到Flash cs3，分解成34张静态位图。先是按照2fps的速度慢镜头测试影片，发现作者在手臂部分的处理上做的并不好。具体表现为：</p>
+
+<p> 1、整个gif动画是由34幅图片连续拼成，最后一张图和第一张恰能衔接起来，形成一个循环。手臂的交替主要表现在第7、24两帧附近，此时舞女正旋转至侧面。</p>
+
+<p> 2、一般来说，景物在人的视野中总是近大远小，较远侧的物体由于视角过小，其在视网膜上的像也就相应变小。将第7、24帧的静态图像截取出来（下图），我们可以发现，图中圈出的手臂都比相应的一只略小，那么这就和图像竭力所想表现的情况有所不符了。</p>
+
+<p><img src="http://www.hanyi.name/blog/wp-content/uploads/2008/06/1.jpg" alt="test" width="600" height="400" /></p>
+
+<p> 有网友指出，仔细观察几乎始终保持垂直于地面的下肢后发现，这只脚只是在做180度范围内的钟摆运动。经分析后我认为亦然，不仅如此，脚的摆动既可以认为是正对屏幕、也可以认为是背对屏幕（下图）。有时即容易被看作是在做360度旋转，且既可看成顺时针转、也可看成是逆时针转，这种情况在盖住图片膝部以上部分再观察后尤为明显。</p>
+
+<p> <img src="http://www.hanyi.name/blog/wp-content/uploads/2008/06/2.jpg" alt="feet" width="300" height="261" /></p>
+
+<p> 由此想到观察其它部位，包括头部、躯干部以及另一只始终保持凌空的下肢，在静态图片中都可以被看出可能面向的两个方向的。下面仅举一例：（其中黄色箭头表示该舞女分别面向的可能的两个方向）</p>
+
+<p> <img src="http://www.hanyi.name/blog/wp-content/uploads/2008/06/3.jpg" alt="girl" width="300" height="400" /></p>
+
+<p> 静态图片出现这种情况，主要是因为人体使用了纯黑色，其本身并没有光线层次的渲染，整体的立体感主要是由背景和阴影部分加以支撑的。这种纯色就有可能产生两种甚至多种不同的观察结果。</p>
+
+<p> 那么为何人们观察本幅图普遍的第一感觉是舞女在做“顺时针”或是“逆时针”的旋转呢？医学已经证明人体具有“视觉暂留”的特性，这大家可能都有所体会，因为24格电影的效果就是依据这一原理产生的，一般认为视网膜上“保留图像”的存在时间为0.1秒-0.4秒之间。那么34格、12fps的连续图像就足以形成一个人眼中完整的动作，由于视觉惰性的原因，假设你看到第一帧的感觉是舞女正面向A、B两个方向中的A方向，那么来不及你反应时在0.08秒以内已经切换到下一帧，你就会自然地认为A方向是唯一正确的方向，这也就是一般只会看到一个方向旋转的原因。</p>
+
+<p> 还有一种情况，就是可能会有一些人观察到舞女是在一个类似180度范围内的空间里来回旋转的（笔者在观察到第二阶段时亦曾出现这种情况），这种交替的分界在两个仅有的侧面图像后产生，其实应该是同前面一样的道理：因为无论如何，任何时间里的舞女都是存在向两个方向旋转的可能的。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-05T14:33:15+08:00" pubdate data-updated="true">Jun 5<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/06/03/powerbuilder%25e4%25b8%259b%25e8%25b0%2588/">
+		
+			PowerBuilder丛谈</a>
+	</h2>
+	<div class="entry-content">
+		<p> 我们知道，数据库应用是当前计算机应用的一个非常重要的方面，而在目前的数据库应用技术中普遍采用的就是客户机/服务器体系结构，在这种体系结构中，所有的数据和数据库管理系统都在服务器上，客户机通过采用标准的SQL语句等方式来访问服务器上数据库中的数据。由于这种体系结构把数据和对数据的管理都统一放在了服务器上。就保证了数据的安全性和完整性，同时也可以充分利用服务器高性能的特点。正因为客户机/服务器体系结构的这些优点，因而得到了非常广泛的应用。</p>
+
+<p> PowerBuilder是著名的数据库应用开发工具生产厂商PowerSoft公司推出的产品（PowerSoft现已被数据库厂商Sybase所收购），它完全按照客户机/服务器体系结构研制设计，在客户机/服务器结构中，它使用在客户机中，作为数据库应用程序的开发工具而存在。由于PowerBuilder采用了面向对象和可视化技术，提供可视化的应用开发环境，使得我们利用PowerBuilder，可以方便快捷地开发出利用后台服务器中的数据和数据库管理系统的数据库应用程序。</p>
+
+<p> 在当前，网络技术迅速发展，随之发展的还有OLE，OCX，跨平台等技术，而在PowerBuilder的最新版PowerBuilder 6.0中提供了对这些技术的全面支持。总之在数据库开发工具领域，PowerBuilder是其中非常优秀的一个，利用它我们可以开发出功能强大的数据库应用程序。</p>
+
+<p> PowerBuilder的特点</p>
+
+<p> PowerBuilder提供了对目前流行的大多数关系数据库管理系统的支持，由于在PowerBuilder的应用程序中对数据库访问的部分一般采用国际化标准数据库查询语言SQL，使得用PowerBuilder开发的应用程序可以不做修改或者只做少量的修改就可以在不同的后台数据库管理系统上使用。也就是说用PowerBuilder开发的应用程序是独立于服务器上的数据库管理系统的。</p>
+
+<p> 和大多数的WINDOWS应用程序一样，PowerBuilder也是事件驱动工作方式。在这种工作方式中，程序的运行没有固定的流程，程序中的代码也是为各种可能发生的事件编写的，当程序开始运行之后，它就可以接受来自系统，用户或者其它应用程序触发的事件，然后执行相应的事件代码。事件驱动的工作方式与面向对象技术是紧密相关的，在PowerBuilder应用程序中，接受发生的事件的往往就是程序界面中的各种可视化对象。</p>
+
+<p> PowerBuilder是一种面向对象的开发工具，各种WINDOWS应用程序中常见的窗口、菜单、控件等在PowerBuilder中都是一个个的对象。在PowerBuilder中我们还可以创建自己的用户对象。特别要指出的是PowerBuilder提供了对面向对象方法中的各种技术的全面支持，我们可以利用面向对象方法中的对象的封装性、继承性、多态性等特点使得我们开发的应用程序具有极大的可重用性和可扩展性，而这一点正是软件工程中对应用程序所提出的重要目标。</p>
+
+<p> 在当前，由于网络技术的发展，许多种不同的操作系统平台在INTERNET网上同时被使用，这对开发的应用程序的跨平台性提出了更高的要求，而PowerBuilder就提供了良好的跨平台性，比如在PowerBuilder中，利用WINDOWS平台开发的各种对象可以方便地应用到UNIX平台中，因为PowerBuilder支持对象的跨平台性。这样使得把应用程序从一个平台移到另一个平台变得并不复杂。</p>
+
+<p> 为了给用户提供各个方面的支持，PowerBuilder具有自己的编程语言POWERSCRIPT，这个语言除了提供基本的流程控制语句，还提供了几百个函数来操纵各种对象和提供诸如DDE，OLE等方面的支持。此外我们还可以定义自己的函数，处理特定的事件。学习PowerBuilder时相当一部分的时间就是用来了解和熟悉PowerBuilder提供的各种函数。</p>
+
+<p> PowerBuilder一个很大的特点就是提出了数据窗口对象的概念。数据窗口对象也是PowerBuilder中的一种对象类型，与其它对象不同的是数据窗口对象是专门为了访问后台的数据库服务的，在数据窗口对象中我们定义了数据的来源和数据的显示风格，这样在应用程序中我们就可以把精力完全放在程序的运行流程控制上，而不用关心具体数据的来源，因为我们在数据窗口对象中已经定义好了数据的来源。如果需要使用数据库中不同的数据也只要对数据窗口对象进行修改就可以了。特别要指出的是PowerBuilder在数据窗口对象中提供了丰富的数据显示方式，可以满足各种不同的需要。</p>
+
+<p> 在PowerBuilder较新的版本中提供了基础类库PFC，它为应用程序的开发提供了许多可重用的预定义类和对象，利用基本类库PFC可以快速开发出高质量重用性好的应用程序。真正发挥面向对象编程的巨大威力。</p>
+
+<p> 最后要指出的是PowerBuilder有三个不同的版本，分别为DESKTOP型，PROFESSIONAL型，和ENTERPRISE型，DESKTOP型是为个人使用的桌面型应用程序，在这里可以利用PowerBuilder内置的数据库管理系统SYBASE SQL ANYWHERE来创建和使用本地数据库，为个人的应用服务；PROFESSIONAL型的PowerBuilder最重要的一点就是提供了对MICROSOFT ODBC（数据库标准连接接口）的支持，在PROFESSIONAL版本中我们就可以使用PowerBuilder的继承，多态等绝大多数特性；在ENTERPRISE版本中最重要的一点就是提供了对开发大型的数据库应用程序的全面的支持，提供了开发大型应用程序的许多辅助的工具，比如C++ CLASS BUILDER等。</p>
+
+<p> PowerBuilder与数据库的连接</p>
+
+<p> 数据库前端开发工具与后台数据库管理系统的连接方式是一个很重要的课题。PowerBuilder提供了两种访问后台数据库的方式，一种是通过ODBC标准接口的方式，第二种是通过专用的接口与后台的数据库相连。</p>
+
+<p> ODBC的中文名字是开放式数据库连接，它是微软公司提出的数据库连接标准，使用ODBC方式连接数据库的第一步是创建数据源，比如我们可以利用WINDOWS下控制面板中的“32 BIT ODBC”选项来创建驱动某种数据库的数据源，创建好数据源之后，我们就可以在本地计算机中利用定义好的数据源存取后台数据库中的数据了。</p>
+
+<p> 我们还可以通过专用接口同后台的数据库相连，由于专用接口是针对特定的后台数据库管理系统而设计，因此这种方式存取数据的速度要比采用ODBC方式存取数据的速度要快一些，如果我们的应用程序只是针对特定类型的后台数据库，当然是采用专用接口访问后台数据更快一些。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-03T13:11:07+08:00" pubdate data-updated="true">Jun 3<sup>rd</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/06/02/%25e8%25a5%25bf%25e5%25a4%25a7%25e4%25b8%25a4%25e5%25b9%25b410%25e5%25ae%258c%25e7%25bb%2593%25e7%25af%2587/">
+		
+			西大两年(10)完结篇</a>
+	</h2>
+	<div class="entry-content">
+		<p> <strong>后记</strong></p>
+
+<p> 其实在刚开始写这些文章的时候,就想着如何结尾才好.本篇的诞生也就较前一篇晚了近一周的时间.</p>
+
+<p> 在我把第9篇存入之后,突然发现自己遗漏了太多内容.我并非愿意写冗长的东西,只是觉得这些远不足以对它们所跨越的时间和空间进行概括.换句话说,我也很难理解每篇文章的主题,即使是在写完几分钟之后就细读一遍.于是我决定以这十篇为纲,衍生出一篇完整的故事,虽然业余时间并不多,还是希望能在数月内使它面世.</p>
+
+<p> 我希望到时候真的能称它作《西大两年》,这是写在前面的话.</p>
+
+<p> 昨天研读了川端康成的成名之作《いずのおどりこ》,觉得豁然开朗起来.后来急着找电影版来看,虽然和原著有一定出入,但山口百惠和三浦友和的经典演绎仍然让人流连忘返.毕竟这只是一部中篇小说,&ldquo;我&#8221;和薰子真正相处也仅短短数天时间,然而大师级细致的描写使得文章给人以无限的遐想空间.和电影版不同的是,原著结局中的&#8221;我&#8221;虽然最终得以释怀,但给人感觉仍是绵绵忧伤的;电影中的表现则不同,它最终给人更多安慰,甚至加入了&#8221;我&#8221;为何必须尽快回到学校、学有所成的情节,似乎分别得如此心安理得,也让人难免联想到&#8221;我&#8221;是否真的会在寒假时踏上前往大岛的旅程,以及之后会发生的故事.</p>
+
+<p> 总体来说,《いずのおどりこ》一书中几乎没有任何感情爆发的情节,人们似乎是在某种重压下生活着,这也是几十年来文学评论家们所认同的.但我们为何不换一个角度,让《いずのおどりこ》脱离一次20世纪初日本的社会现实,而进入到川端康成真实的内心世界去呢?</p>
+
+<p> 同时我也在想,为什么最终&#8221;我&#8221;会释然,难道真的是主人公在这种情况下由于性格使然所采取的一些自我安慰措施吗?</p>
+
+<p> 我们不得不去关注一个细节.当&#8221;我&#8221;踏上舢板船并首次回望的时候,薰子依然&#8221;紧闭双唇向一边凝视着&#8221;,&ldquo;我抓住绳梯回过头来,想说一声再见,可是也没说出口,只是又一次地点了点头&rdquo;.待到我登上轮船,即将驶向入海口时,抬头望去,薰子已经&#8221;开始挥动白色的东西&#8221;,眼里想必是含满了泪的.此时&#8221;我&#8221;亦无法控制自己,&ldquo;泪水扑簌簌地滴在书包上&rdquo;&hellip;</p>
+
+<p> 人们向来认为这是悲伤之情所达高潮的地方.但我认为,自小抑郁的&#8221;我&#8221;最后在薰子奋力挥动白绸的一刹那间,突然有了感情爆发的最终动力,&ldquo;我&#8221;事后并不知道自己有没有挥动什么,或者后来电影中在手中飞舞的&#8221;学生帽&rdquo;.&ldquo;我&#8221;只是终于流下了泪,这泪隐藏了很久,最终它得以泉涌而出,并非常坦率地和边上的少年回答说:&#8221;不,刚刚和人告别&rdquo;.&ldquo;让人家见到自己在流泪,我也满不在乎.我什么都不想,只想在安逸的满足中静睡.&rdquo;</p>
+
+<p> 如此看来,&ldquo;我&#8221;和薰子之间的隔雾并非久久不能散去,&#8221;我&#8221;尽力拨开了它们,当&#8221;我&#8221;真正看到她时,即使已是告别的场景,但&#8221;我&#8221;已经对薰子有了更深一步的认识,也真正释放了自己心中所压抑的感情.是真正发自内心的&#8221;愉快&#8221;的.除此之外,还能如何呢.</p>
+
+<p> 我很羡慕他.</p>
+
+<p> 这就是最后的结语了.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-02T21:49:36+08:00" pubdate data-updated="true">Jun 2<sup>nd</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/06/01/%25e8%25a5%25bf%25e5%25a4%25a7%25e4%25b8%25a4%25e5%25b9%25b49/">
+		
+			西大两年(9)</a>
+	</h2>
+	<div class="entry-content">
+		<p> <strong>后来的事</strong></p>
+
+<p><strong> </strong>2006年9月,我来到了西北大学.</p>
+
+<p> 那个时候,我对网游的态度还是比较坚定的.事实上那时我已告别奋战在魔剑亚服里的公会,准备入学后休息一段时间.魔兽世界号称要新开辟的第七大区如期而至,我对这些没有任何准备.国庆假期和中学同学聚了次餐,才了解到昔日的战友已在新区拓荒,恰好刚入学又没什么事,我便答应要加入.很快我时隔两个月后重操旧业,玩起自己迄今为止已接触了近五年的精灵小德.</p>
+
+<p> 我们居住在西北大学的南校区,这里离市中心有超过公交车二十站的路程.虽然附近开发已有些年,但各种设施还是相对落后.进了学校后反差更为强烈,公寓楼相较于周边学校的来说还是极为简陋的.每间宿舍是六人规格,上床下桌,配备一个毫无用处的阳台&hellip;仅此而已.</p>
+
+<p> 可能有人会说,就这种条件,放到二十年前那也是想也不敢想的.其实后来我的确是抱有这种想法的.当然习惯之后自然也就无所谓了.</p>
+
+<p> 进入宿舍后顺时针方向分别是清哥、俣骚、我、昭哥、波哥和睿哥.很奇怪这样的称呼吧?其实我在宿舍里的年龄只是排到第四.</p>
+
+<p> 年龄最大的是波哥,来自宁夏.在上面几个“哥”中,可能只有波哥才是软件学院全院广泛认可的.起初似乎确实是因为年龄&hellip;波哥是高四毕业,故年龄上要比我们普遍大一年.而真正的情况是,在开学第一天的见面会上,辅导员找波哥上讲台作自我介绍,结果名字刚一喊出便掌声雷动,粉丝们高喊着&#8221;波哥、波哥&hellip;&ldquo;只见其双手一挥,全场即鸦雀无声.从此波哥的名号便是响当当的了.</p>
+
+<p> 睿哥虽然比波哥年轻,但事实上也是上了两年高三,家乡是在湖南省.睿哥是现任班长,也是学生会的部长.权威性和号召力上可称得上是首屈一指.由于当今某周姓天王级男歌手和睿哥相貌极其相似,睿哥在花草界也是出了名的人.</p>
+
+<p> 清哥是贵州人.尽管宿舍人给清哥的第一印象评价为&#8221;一个听话的好学生&#8221;,但随着后来的交流了解到,此君过去竟然是革命老区的帮派成员,说得好听点那就是除暴安良,难听点可称得上是无恶不作.后来不知道被谁招了安,跑到西安来上大学.清哥在院里也是出了名的帅,曾有同班女性同学托人示意,结果无奈名草有主, 如此良缘也就此殆尽.</p>
+
+<p> 昭哥同样来自湖南,是土家族.说实话尽管我知道我国有56个民族,但剩余的55个少数民族中我是很少听见过有土家族的.后来得知土家族人口众多,总数在少数民族中可排第六位.昭哥是我们宿舍勤奋的代表,这点在很多老师眼中亦同样如此.拿考试成绩来说,我班仅有的八名女生一般都会位于前九名,而他一般在前三的位置.昭哥还有个特殊的爱好,就是喜欢西方影视作品,当然是不分级别的那种,尽管在很多人看来,西片并不是很符合东方人的审美观&hellip;</p>
+
+<p> 俣骚这个名字不是我给起的,不过影响相当巨大.如果说睿清二哥的帅是能征服软件学院,那么俣骚足以走出西大,面向全国了,这决不是吹嘘.据我了解,此人有四分之一的俄罗斯血统,也就是古斯拉夫民族的后代,容貌也就颇为西化.本身家住西安,入学前已觅得一&#8221;妻&#8221;同读,生活恰是快哉.他在CS等竞技游戏上的天赋更是无人能及,自述早年险些进入职业队伍,初入西大时为校CS战队队长.竞技装备一般都是一月一个台阶,后来主力队员忙于毕业,他迷上了我当初玩的魔兽世界,直到现在.</p>
+
+<p> 我们同一层楼上还有很多好哥们,比如大灰狼、大斌等210舍系,或是东子的213舍系,党员的208舍系&hellip;其中对大灰狼这个名字的由来可能要费劲解释一下.</p>
+
+<p> 刚开学的时候,我们知道大灰狼家即住在西安,后来我慢慢发现同宿舍的人称他&#8221;大尾巴狼&#8221;,我当时并不明白其中的含义.后来从舍友处得知,灰狼经常不知道从何处掏来一包精装软中华到我们212来散发,品尝过程中还屡屡发出赞叹.后来舍友递给他一根楼下超市里卖的假红梅,他竟也连连点头,从此落得&#8221;雅号&#8221;.后来我觉得&#8221;大尾巴狼&#8221;不如&#8221;大灰狼&#8221;雅致,大家也觉得有趣,就从此改了称呼.</p>
+
+<p> 在大一时,如果有人要找一个叫&#8221;小波&#8221;的人,十有八九会走错来我们宿舍,但&#8221;小波&#8221;并不是指波哥,而是对面209的舍长、前任班长、前学生会希望之星&#8221;小波&#8221;&hellip;小波家在内蒙,曾服过兵役,由于成绩较好进入大学学习.小波开学之初能担任班长是有个缘由的.按照院辅导员的说法,每一届学生班长的选定是先由身高排队,惯例是选择次高的同学为班长.结果当初施行时出了点小意外,详子拒不担任此职,后来只得把班长交给1米90多的小波了.</p>
+
+<p> 小波为人不错,而且和我们舍的关系比自己舍的要好,没事干就会跑过来转转.后来按年龄辈分把自己和212的四个人排了一序,称兄道弟起来,时人戏称212的第七名舍员.</p>
+
+<p> 小波有个优点,就是在担任班级和学生会干部时工作都是一丝不苟,但有时这会引起不少人反感,半年后班里除了我们宿舍的人意外,基本都和他结了怨.他的四个&#8221;兄弟&#8221;起初看起来关系也很铁,经常一起外出活动.后来好像是都意识到了什么,便不和小波主动来往,一次小波又来转悠,被正告&#8221;以后没事干不要随便来了&#8221;,此道关系便就此结束.</p>
+
+<p> 不过令我们意外的是小波对游戏很痴迷,尤其是网络游戏.但确切地讲,在我这个资深玩家眼里他远称不上是玩家,但在在线时间上来说,他曾创造过连续13天网吧包天的记录,从此彻底堕落了&hellip;在我看来,虽然玩游戏有益身心健康,但网吧那种地方我还是去的不多,那里的公共环境我很难适应.</p>
+
+<p> 就这样,第一学期还是优秀班干部,并有希望次年担任学生会部长的小波,在寒假结束后的很长一段时期里都几乎在网吧度过.我们很难理解他真实的心情,后来除了209有同样爱好的小便以外,就几乎没有任何人与他有联系了.大一结束时,小波被告知由于累积挂科学分太高,和小便一样被强制留到07级.他的故事也就此结束.</p>
+
+<p> 在我们的班级里有一批特殊的同学,他们是05级的留级生,同样因为痴迷魔兽世界而留级,两个宿舍留了6人.而软件工程专业每年只招收78人.但他们和小波有所不同,因为他们似乎深知问题的严重性,虽然有时也玩,但毕竟该学的还是学一些,总之在我看来算是浪子回头了.</p>
+
+<p> 他们中的代表人物有毅飞、浩然二兄,以及GG同学.毅飞兄是典型的书迷,无论是上课睡觉还是吃饭手里都带着三样装备—电子书阅览器、mp4、触摸屏手机,在他看来可保证连续24小时内不会因为各种意外因素而打断阅读进程.你可能会说毅飞兄博览群书,其实他看得一般都是网上down下来的玄幻作品,基本都是YY的内容.据同舍的浩然兄透露,他每天的阅读时间从早上7点开始,晚3点结束,期间可能只有吃饭或是被点名时才被迫中断一会.</p>
+
+<p> GG同学被称之为神人.原因是他在电脑游戏,尤其是网游魔兽世界上的造诣,那可是闻名全国&hellip;身份为国服一区耐萨里奥服务器联盟著名公会Heroes的主力小德,与nga资深版主F牛为游戏中的对头兼好友.该会闻名的起因是拿到堕落的灰烬使者在国服的首次loot.副本进度也是领衔诸强,现金资产10wg起,装备水平始终保持全国前20.当然为了这些也是要付出很大的代价:在外租房半年期间,时差与外人相反,还要侍候同居的女友,身体健康每况愈下&hellip;后来冬天开始下雪,身为南方人的GG同学一时耐不住,卷着铺盖搬回了宿舍.此时距他第二次留级的学分限额只有0.5之多.</p>
+
+<p> 总的说来,我在大学的前两年还是遇到过很多奇人怪事的,但毕竟本文不是奇闻轶志,就不再多提了.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-01T12:27:13+08:00" pubdate data-updated="true">Jun 1<sup>st</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/05/31/%25e8%25a5%25bf%25e5%25a4%25a7%25e4%25b8%25a4%25e5%25b9%25b48/">
+		
+			西大两年(8)</a>
+	</h2>
+	<div class="entry-content">
+		<p> <strong>许多不确定的日子</strong></p>
+
+<p> 确切地讲,我在男女之间的感情问题上可谓是一窍不通,直到我完成这篇文章的时候.但另一方面,人们把爱情当作是自己一生中最重要的情感之一,我想对我来说亦同样如此,尽管我曾屡次被一同窗老友戏称作&#8221;不识人间烟火&#8221;&hellip;</p>
+
+<p> 然而总体看来,我对自己的情感还是控制在相当含蓄的范围之内的.直到现在,我依然无法理解自己十七岁时所发生的种种,我做错了吗?从没有人来帮助我解释到底发生了什么、什么又是真相.我曾经非常无助,我不知道该怎么办才是合适、恰当的做法,而使得若干年后回想此事时脸上依旧挂满笑容.事实是,我也经常冲动地做出令人惊讶的行为,却导致连自己都无法认识的后果.于是我决定尽力去遗忘,若干年后,当我从虚幻世界中走出来的时候,我发现,自己仿佛又回到了原点&hellip;</p>
+
+<p> 没有人曾告诉我感情是如何从这张不苟言笑的脸上流露出来的.记得上小学的时候,有一年暑假我跟随姑姑一家外出旅行,路途遥远且颠簸,行程大概有两个多星期的时间.同行除了表姐一家三口,还有姑父家亲戚的一双姐妹.妹妹年龄很小,大概只有一年级的光景,姐姐则比我大一级,其实年龄相差不多.姐妹俩是截然不同的性格,妹妹活泼好动,姐姐静如安澜.依照我的性格,在很短的时间里去注意一个女孩是相当不易的,但我必须承认,姐姐的形象深深吸引了我.</p>
+
+<p> 但无论如何我也是不可能有所表示的,即使是在现阶段的我看来依旧是如此.那时的场景堪用金庸小说《天龙八部》第二章玉璧月华明中的一段话来解释:</p>
+
+<p> <em>过了良久，只见那女子始终一动不动，他定睛看时，见这女子虽是仪态万方，却似并非活人，大着胆子再行细看，才瞧出乃是一座白玉雕成的玉像。这玉像与生人一般大小，身上一件淡黄色绸衫微微颤动；更奇的是一对眸子莹然有光，神彩飞扬。段誉口中只说：“对不住，对不住！我这般瞪眼瞧着姑娘，忒也无礼。”明知无礼，眼光却始终无法避开她这对眸子，也不知呆看了多少时候，才知这对眼珠乃是以黑宝石雕成，只觉越看越深，眼里隐隐有光彩流转。这玉像所以似极了活人，主因当在眼光灵动之故。</em></p>
+
+<p> <em>玉像脸上白玉的纹理中隐隐透出晕红之色，更与常人肌肤无异。段誉侧过身子看那玉像时，只见她眼光跟着转将过来，便似活了一般。他大吃一惊，侧头向右，玉像的眼光似乎也对着他移动。不论他站在那一边，玉像的眼光始终向着他，眼光中的神色更是难以捉摸，似喜似爱，似是情意深挚，又似黯然神伤。</em></p>
+
+<p> 恐怕正如段誉初遇神仙姊姊,惊慌激动之余,竟由爱生敬了.(友情提示,上段内容皆引用小说情节,故难免有夸张之嫌,切勿对号入座&hellip;)</p>
+
+<p> 但谁知十年之期未满,我竟遇到了金庸笔下描写同一个石洞仙子的描述:</p>
+
+<p> <em>藐姑射之山，有神人居焉，肌肤若雪，绰约若处子，不食五谷，吸风饮露。</em></p>
+
+<p> 依原文看似乎是《庄子》的内容,但我更喜欢用三国时文学家曹子建《洛神赋》中的一段来描绘她:</p>
+
+<p> <em>仿佛兮若轻云之蔽月，飘飘兮若流风之回雪。远而望之，皎若太阳升朝霞；迫而察之，灼若芙蕖出渌波。襛纤得衷，修短合度。肩若削成，腰如约素。延颈秀项，皓质呈露。</em></p>
+
+<p> 这就是我的真实感受.我绝非是腐朽不堪,而是恼于学浅才疏,竟无法用肺腑之辞来做表.</p>
+
+<p> 首次遇见是在开学那天,我一如既往地什么也没有留意.傍晚放学后,我依旧如今后若干年一样步行出校门.偶然抬头望去,突然颇有子建&#8221;俯则末察，仰以殊观&#8221;的意境.之后遂睹一丽人,抚着单车而来.我反应素来迟钝,待到缓过神来时,双眸已落在这边,紧接着又像是玉石仙子般的透着晕红,目光便消失在人海之中,一切便都了然于胸了.</p>
+
+<p> 但正如我前面所说,我当时确不知道她的真实来历.随后几日同样的场景重复了多次,数天过去竟才发现是同班.</p>
+
+<p> 我在人生中第二次遇到&#8221;神仙姊姊&#8221;,几乎就像小说里写的那样,她是活蹦乱跳出现在我眼前的.基于我的性格,如此短的时间里所发生的事情十有八九会淹没在我记忆的深处,直到若干年后才会浮出水面.然而事情向着失控的方向逐渐发展起来,我觉得我突然跌入到一个即使是笔头再刁钻的编剧也很难编出的剧本里,这种感触随着时间的推移愈为加深.我把自己隐蔽在漩涡之外,静静地观察着漩涡的中心.</p>
+
+<p> 虽然我似乎置身于事外,像一个极为陌生的角色.但我也有自己的毛病,那就是心情往往抵不住笔杆的诱惑力.我觉得如果我失去了笔墨,也许早就抵挡不住这个世界从四面八方所冲击来的压迫了.我定期地写一些想说的话,贴在我所能触及到互联网的任何位置上,但我从来不会贴出真名,也决不会伤及到任何人.</p>
+
+<p> 我想也许正是这样后来愈加毫无顾忌的挥洒,使得我心中东晋顾恺之的《洛神赋图》,突然变成似乎霎那间便触手可及,或又灰飞湮灭&hellip;至少在那时,我仍然不愿面对我认为完全没有把握能够驾驭的事情.但似乎我真的要真实而又真诚地面对这些了.</p>
+
+<p> 坦白地说,我在起初对事情能向好的方向发展的想法还是比较坚实的.我努力地利用各种渠道来表示我的想法,当然这里的&#8221;渠道&#8221;是指我&#8221;能力&#8221;范围之内的事,我尽力将一些东西做好,当然这些在我眼中看来是&#8221;合适恰当&#8221;的.后来一些行为有些失去理智,可能侵扰了一些与此不相干的人,这点我惟有表示真切的歉意.</p>
+
+<p> 我最终没能突破这些无形的障碍.多年以后,我逐渐明白,在现实社会人与人的互动关系中,&ldquo;各取所需&#8221;才是最终的目的.遗憾的是,迄今为止我都无法真正接受这一潜规则,更何况它建立在我深处的情感基础之上.我会执著于自己最初的印象,而却有意去忽视未来可能会发生些什么,现在想想,成年人的婚姻在当初的我看来几乎就是扯淡了.</p>
+
+<p> 记得在一次课堂上,思绪在不经意间被座位前面的这位白衣少女所吸引,我一时激动,真想去问问她真实的想法.我几乎是颤抖地叫她转过头来说了一些我当时都很难理解的话.我看到的是一片茫然,然后自己也陷入茫然.</p>
+
+<p> 后来在一次和朋友的谈话中,他大概了解此事的经过,便对我讲说:&ldquo;说实在,这样的事实几乎每天都在我们身边发生,每个人都会有自己独立的一套处理问题的办法,有时候在他人看起来这很简单,但显然,你不属于这种类型.&#8221;我知道这是安慰,类似的事实的确太多,我似乎也是芸芸中的一员.</p>
+
+<p> 两年前高考结束,我依旧选择网游作为止痛剂.对于游戏,我的确是不想深入太多的,然而夜以继日,也就习惯了熟悉.那一时期,我断绝了音乐或是电影,连游戏音效有时也不愿打开,否则接踵而来的会是从左胸腔到右手无名指尖的莫名抽搐,敏感而深刻.我不知道她是否已成为我生命中的历史.</p>
+
+<p> 进入大学前,我的QQ被她加为了好友.在现在的我看来,过去若干年中尽管我时而冲动、时而沉默、时而疯癫、时而悠然,但我始终未能真正了解这尊鲜活的&#8221;石洞仙子&#8221;的内涵所在,这在现在看来依然是让人感到十分遗憾的.通过网上的文字,我了解了她的学校、专业,以至于我们互留了联系方式.但我一度以为,十七岁那年我在无量玉璧中目睹的那位女子,她笑了,她活了过来,她似乎又远去了.</p>
+
+<p> 今天我写这篇文章,只是为了把我自己所经历过感受过的记录下来.套用多年前曾风靡中华大地的一部名著的节选:</p>
+
+<p> <em>人最宝贵的东西是生命，生命属于人只有一次。人的一生应该是这样度过的：当他回首往事的时候，他不会因为虚度年华而悔恨，也不会因为碌碌无为而羞耻。</em></p>
+
+<p><em> </em>只是我没有&#8221;为人类解放而斗争&#8221;的气魄和胆识,有时候我宁愿把记忆停留在那一幕瞬间,或许只有那样我才会觉得是释然的.再过若干年时间,当我回顾这段文字,会是如何一样复杂的心情,就不为今人所知了.</p>
+
+<p> 亦或者&hellip;&hellip;我想再不会有或者了吧.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-05-31T15:26:31+08:00" pubdate data-updated="true">May 31<sup>st</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/05/30/%25e8%25a5%25bf%25e5%25a4%25a7%25e4%25b8%25a4%25e5%25b9%25b47/">
+		
+			西大两年(7)</a>
+	</h2>
+	<div class="entry-content">
+		<p> <strong>P.E</strong></p>
+
+<p> 从二十多年前开始,人们见到我后的第一印象恐怕只能用一个字来形容.惊奇的是,这种现象在过去的岁月中几乎不曾改变过.按照常理来讲,一个人的体质情况可能会随着时间的推移发生变化,但似乎这并不适用于我.我向来对学习感觉不到困难,除了P.E体育课会有些许紧张&hellip;</p>
+
+<p> 记得若干年前,国内一家著名的报纸曾报道:某位伟人在其八十岁高龄时横渡某江,便给后人留下了&#8221;锻炼身体,保卫祖国&#8221;的终身口号.其实这是鼓励大众积极参加身体锻炼,倒也是无可厚非.然而其举国制的体育政策却引得不少非议,试想一下,中国运动员在国际赛场上取得更多的奖牌,除了进一步增强民众的爱国主义甚至是民族主义情绪,还有什么利在千秋的成就呢.国家近来一直强调全民健身、迎接奥运,细细品来,在某些掌权者的眼里.全民健身和奥运成绩又有什么直接的联系?</p>
+
+<p> 再者说了,锻炼身体的课从几十年前开始就上纲上线,达成了全国标准.再来看美国,我们并非要忽视经济基础的重要作用,美国法律规定了全国中小学的体育设施标准,这在我国就几乎和专业级运动员配套设施相同.国外对学生的体育考核标准是,统计一个学年中每个学生的体育活动出勤率,而学校每天都有规定相应的户外活动时间.而体育举国制的弊端也就在此:由于缺乏普通教学经费,中小学的体育课教学也在逐步缩水,相应的考核标准也在被迫降低,甚至使用更多的检测手段来迫使学生在课余时间进行锻炼.事实上,这在当前中国教育的现况下是根本无法实现的.</p>
+
+<p> 再来看一组新闻:</p>
+
+<p> <em>北京时间4月13日消息，英国科学家日前首次发现了肥胖基因，这一发现可解释为什么两个人在拥有同样生活方式的情况下，其中一人比另一人更容易变胖。研究发现，通过遗传继承了此基因的人肥胖概率比其他人高70%。有1/6的人拥有这种基因，他们的平均体重比不具有这种基因者重3千克，身体脂肪含量也会高15%。这是科学家首次发现基因与肥胖之间的直接联系，将为治疗与肥胖相关的疾病提供一种新的思路。</em></p>
+
+<p><em> </em>这是发布于2007年的一则科技新闻,我想说的是,尽管事实证明,肥胖所造成的一系列麻烦正逐渐威胁人类的健康.但我们不能由此而断定肥胖者一定是由后天养成的—这几乎成为人们思考的惯常方式.</p>
+
+<p> 正如一位心理学家所说的那样,我从小开始就消极地对待体育活动.现代心理学认为,肥胖者由于动作迟钝缓慢而拒绝参加体育活动,这一点上我也是很赞成的.但遗憾的是心理学的发展并没能推动对医学认识的进步,从而导致社会不能科学的对待此类问题.</p>
+
+<p> 1965年1月24日,英国历史上最伟大的首相之一—温斯顿.丘吉尔与世长辞,享年91岁.相信但凡有点历史常识的人,应当见识过这位枭雄的身躯&hellip;难道类似的情况都在挑战科学的权威吗?还是现在所谓的&#8221;科学&#8221;尚都是伪科学?我非医学家,也就没有权威回答此类问题了.</p>
+
+<p> 也欢迎对此感兴趣的读者来信讨论.</p>
+
+<p> 这就是本节的内容.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-05-30T12:44:32+08:00" pubdate data-updated="true">May 30<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="16" class="prev">Prev</a>
+    
+    
+        <a href="18" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

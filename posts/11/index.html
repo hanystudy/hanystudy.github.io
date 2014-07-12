@@ -1,0 +1,1892 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="1 一些概念 1.1 基本文件系统root file system UNIX的基本文件系统类型分为两大类，一是根文件系统（注意与本节标题的区别），顾名思义，此类文件系统无法被卸载umount。
+二是子文件系统，子文件系统以基本文件系统中某一子目录的身份出现：硬盘、软盘、USB盘、CD-ROM、 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/28/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b06/">
+		
+			mp77的UNIX课件笔记(6)</a>
+	</h2>
+	<div class="entry-content">
+		<p>1           一些概念</p>
+
+<p>1.1     基本文件系统root file system</p>
+
+<p>UNIX的基本文件系统类型分为两大类，一是根文件系统（注意与本节标题的区别），顾名思义，此类文件系统无法被卸载umount。
+二是子文件系统，子文件系统以基本文件系统中某一子目录的身份出现：硬盘、软盘、USB盘、CD-ROM、网络文件系统NFS等，不像DOS那样使用逻辑盘的概念。根文件系统和子文件系统都有自己独立的一套存储结构和目录结构，甚至文件系统的格式都不一样。</p>
+
+<p><a id="more"></a><a id="more-171"></a></p>
+
+<p>1.2     UNIX文件系统操作</p>
+
+<p>要创建一个文件系统，需要使用mkfs命令。如：</p>
+
+<h1>mkfs /dev/fd0135ds18</h1>
+
+<p>其中/dev/fd0135ds18表示一个3.5英寸容量为1.44MB的软盘。一般来说子文件系统需要用户自己加载，我们使用mount命令完成：</p>
+
+<h1>mount /dev/fd0135ds18 /mnt</h1>
+
+<p>当mount命令不带参数时意即列出当前本机所有的文件系统。如果要卸载某些文件系统，可以用umount（注意不是un）。</p>
+
+<p>1.3   NFS</p>
+
+<p>NFS即Network File System网络文件系统，目前是UNIX系统中的一个重要服务组件。它允许主机向外界共享目录和文件。
+现有一案例，主机C和主机S上均已安装好了NFS软件包，主机C期望共享主机S上的文件目录/usr/jiang。
+首先应在主机S的文件/etc/exports中添加行/usr/jiang。然后在主机C上执行下面的命令：</p>
+
+<h1>mount -f NFS 203.123.54.189:/usr/jiang /xbg</h1>
+
+<p>其中203.123.54.189是主机S的地址，/xbg是事先在主机C上已建好的空目录。此时主机C就能通过/xbg访问主机S的/usr/jiang中的目录或文件了。</p>
+
+<p>1.4   引用Windows格式分区举例</p>
+
+<p>Windows系统的分区格式一般为FAT、FAT32或NTFS，当机器安装了Linux+Windows双系统时无法直接看到对方的分区（一些较新的发行版已支持此类功能）。如果要在Linux中查看windows分区信息，则需要使用加载的方法解决。
+首先使用fdisk –l查看本机硬盘以及分区情况，系统一般会自动识别分区格式信息。然后在Linux系统中建立相应的空文件目录，使用mount载入即可。
+值得注意的是，mount的载入源必须是建立在块设备文件类型基础上的文件（也称设备）。也就是说例如其它字符设备文件无法通过mount形式加载。</p>
+
+<p>2         UNIX文件系统</p>
+
+<p>2.1       逻辑结构</p>
+
+<p>UNIX的文件系统是由一系列大小相同的块构成的，其类型为：引导boot块、超级块、Inodes以及数据块。boot block标记为0号块，用于启动系统时存放引导程序；superblock标记为1号块，存储与整个文件系统相关的配置信息；Inodes存放每个文件的inode节点信息；data blocks是由大小为512bytes的块构成的数据存储部分。
+值得注意的是，目录文件在UNIX中跟普通文件一样，存于“文件存储区”中，有自己的i节点。其基本组成单位是“目录项”，每个目录项由一个“文件名-i节点号”对构成，提高了目录检索的效率。</p>
+
+<p>2.2       索引结构</p>
+
+<p>文件名和对应的节点编号存储在目录文件中，从下面的inode结构信息可以看到，其主要目的是为了存储文件的全部属性，包括具体的块地址。
+inode为系统自定义的一种数据结构，其存放位置即相关定义的部分内容如下：
+/<em><em>/
+struct stat
+{
+……
+dev_t st_dev;       /</em>device of inode</em>/
+ino_t  st_ino;        /<em> inode  number</em>/
+mode_t st_mode;  /<em> mode bits </em>/
+nlink_t st_nlink;    /<em> number of links to file </em>/
+uid_t st_uid;         /<em> owener’s userid </em>/
+dev_t st_gid;        /<em> owener’s group id </em>/
+dev_t  st_rdev;     /<em> for special files </em>/
+off_t  st_size;      /<em>file size in characters </em>/
+time_t st_atime;   /<em>time file last read</em>/
+time_t st_mtime;   /<em>time file last written or created</em>/
+time_t st_ctime;    /<em>time file or inode last changed</em>/
+}
+通过inode中存放的磁盘文件表信息，可以直接定位至文件内容的起始位置。例如当我们需要定位/usr/ast/mbox时。对于根目录的inode来说，/usr的inode号为6，察看磁盘文件表知/usr实际在132块的位置，以同样的方法递归察看即可找到/usr/ast/mbox的起始块号。
+现在详细说明inode节点和物理块号之间的联系。通常inode节点有四个独立的属性，分别为直接索引地址、一级索引地址、二级索引地址和三级索引地址。其中直接索引地址事实上即10个具体的数据块号。此后为间接索引地址，其实质为在每一个地址指定的块号上再次指定一个磁盘文件表地址，实现嵌套存储。</p>
+
+<p>2.3       举例说明</p>
+
+<p>现用一个经典案例进一步解释文件系统的索引结构：一个inode节点有10个用于数据块的访问地址，以及一级索引、二级索引、三级索引块的地址。如果每个块有256个磁盘地址，假设一个磁盘块是1K，那么一个文件最大有多大？
+通过题设可知，inode除了直接索引的10个数据块外，还使用一级索引1<em>256个块、二级索引1</em>256<em>256个块、三级索引1</em>256<em>256</em>256个块，因此该系统中的一个文件大小最多有10+256+256<em>256+256</em>256*256= 16843018K。事实上该系统最大支持16TB的单独文件。</p>
+
+<p>3             与文件系统有关的应用</p>
+
+<p>3.1       察看磁盘使用信息</p>
+
+<h1>df</h1>
+
+<p>df即disk free space，它可以列出每个子文件系统的设备文件名，mount安装的路径，文件存储区和inode节点区的总长度以及空闲空间和百分比。
+-v: 选项使得系统显示更多的信息；
+-i: 显示与i节点有关的信息；</p>
+
+<h1>du</h1>
+
+<p>du即disk usage，显示所有下属子目录在内的某一目录中文件使用的块数。</p>
+
+<p>3.2       硬连接和符号连接</p>
+
+<p>每个目录项指定的文件名和inode节点号的映射关系，叫做硬连接hard link。同一inode节点被目录项引用的次数即为link数。建立硬连接使用ln命令进行，以下的示例能基本说明硬连接的作用。</p>
+
+<h1>ls –l chapt0</h1>
+
+<p>-rw-r&mdash;r&mdash;   1 kc   kermit  54332 Jun 01 12:28 chapt0</p>
+
+<h1>ln chapt0 intro</h1>
+
+<h1>ls -l intro chapt0</h1>
+
+<p>-rw-r&mdash;r&mdash;   2 kc   kermit  54332 Jun 01 12:28 chapt0
+-rw-r&mdash;r&mdash;   2 kc   kermit  54332 Jun 01 12:28 intro</p>
+
+<h1>ls -i intro chapt0</h1>
+
+<p>88077 chapt0
+88077 intro
+现在用vi对intro进行编辑，完成存盘退出。</p>
+
+<h1>ls -li intro chapt0</h1>
+
+<p>88077 -rw-r&mdash;r&mdash;   2 kc   kermit     54140 Jun 01 12:30 chapt0
+88077 -rw-r&mdash;r&mdash;   2 kc   kermit     54140 Jun 01 12:30 intro</p>
+
+<h1>rm chapt0</h1>
+
+<h1>ls -l intro</h1>
+
+<p>-rw-r&mdash;r&mdash;   1 kc   kermit         54140 Jun 01 12:30 intro
+用ln建立硬连接时，只限于文件，两个文件名的路径名也必须处于同一文件系统中。不允许对目录用ln命令建立硬连接。
+目录表也使用了硬连接的方法，但是对于任意目录来说，由于.和..文件被系统自动创建，使得其link数不低于2。例如对于/home、/home/bin、/home/jiang、/home/liu组成的/home目录表来说，由于/home/.、/home/bin/..、/home/jiang/..、/home/liu/..、/home均为/home的硬连接，因此其link数实际为5。
+符号连接symbolic 也叫软连接。
+符号连接的思想被广泛应用到用名字进行管理的信息系统中，符号连接允许给一个对象取多个符号名字，可以通过不同的路径名共享同一个信息对象。在UNIX中，用特殊文件“符号连接文件”来实现符号连接，符号连接文件中仅包括一个描述路径名的字符串。</p>
+
+<h1>ln –s</h1>
+
+<p>例如：</p>
+
+<h1>who &gt; users_on</h1>
+
+<h1>ln –s users_on active_users</h1>
+
+<h1>ls –l active_users</h1>
+
+<p>lrwxrwxrwx 1 fang kermit 8 Jul26 16:57 active_users-&gt;users_on
+以上内容透露出的信息是，active_users文件的i节点记录了文件类型为符号连接文件，用ls -l列出时，类型域为l。文件内容是users_on字符串，-&gt;后为符号连接文件的内容。符号连接文件的最后一次修改时间以后不再变化。
+当用户选择active_users进行操作时，系统实际打开users_on。将active_users展开成该符号连接文件存储的字符串users_on的操作，不是由shell完成，而是由OS的文件管理模块完成。文件管理模块处理符号连接的方法是，根据提供的路径名。在逐个翻译路径名中用斜线分割开的路径分量时，若系统发现符号连接，就把符号连接的内容加到路径名的剩余部分的前面,翻译这个名字产生结果路径名。若符号连接包含绝对路径名，使用绝对路径名。
+最后注意，系统在展开符号连接时，由于文件内容可能是绝对路径信息，也可能是相对路径信息，故须注意其中的区别。</p>
+
+<p>3.3       连接类型的区别和应用分析</p>
+
+<p>符号连接的特点是，对连接文件的访问实际上是访问源文件，当删除源文件后再访问连接文件将出现出错信息。又如对目录进行符号连接操作，则当cd 连接文件时，此时的目录环境与连接文件完全没有任何联系，即使执行cd ..，也只是切换至源文件的上层目录。
+而使用硬连接文件时，删除源文件并不影响连接文件继续对文件内容的访问。</p>
+
+<p>硬连接和符号连接的区别详细如下：
+1）硬连接利用文件系统的存储结构，实现信息共享。
+2）符号连接依靠操文件系统的软件处理，实现信息共享。
+3）硬连接只适用于文件，不允许用户通过命令对目录实现硬连接，以保障文件系统中目录的树形结构不被破坏。
+4）每个文件系统有自己的一套inode节点，不同子文件系统之间，不可能用硬连接实现文件的共享。
+5）符号连接完全适用于目录，也可以将符号连接文件和符号连接引用的文件安排在不同的文件系统中，比硬连接更灵活。</p>
+
+<p>连接的主要用途是节约存储和变更目录。
+案例1
+在一台家庭主机中，如果需要共同拥有一套照片文件，则既可以为其建立硬连接或者符号连接文件，但优劣在于：
+使用符号连接，删除某文件，系统会释放相应的空间，可能会导致某些引用这个文件的符号连接不再能正常打开文件；
+使用硬连接，需删除所有相关目录项才能释放文件的存储空间。</p>
+
+<p>案例2
+/usr/adm存储一些系统软件的日志
+/usr/tmp存放一些临时文件
+/usr/spool存放用户未读的邮件和打印任务队列
+某系统管理员希望将这些目录重新规划至/var中，为了不破坏原系统的功能调用，建立符号连接至/usr中就可以实现这些功能。</p>
+
+<h1>ln -s /var/adm /usr/adm</h1>
+
+<h1>ln -s /var/tmp /usr/tmp</h1>
+
+<h1>ln -s /var/spool /usr/spool</h1>
+
+<p>事实上读者可能会发现，符号连接酷似于Windows中的快捷方式。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-28T21:53:31+08:00" pubdate data-updated="true">May 28<sup>th</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/27/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b05/">
+		
+			mp77的UNIX课件笔记(5)</a>
+	</h2>
+	<div class="entry-content">
+		<p>原定本章介绍Unix的两个重要文本编辑程序——Vi和Emacs，但由于本系列篇幅限制不可能对这两种软件（尤其是后者）进行足够详细的讨论。事实上如果不能深入研究Emacs的话那么对我们来说是没有任何意义的，因此该部分内容被移至系列的最后进行讨论。
+本章开始我们将进入UNIX文件系统进行深入研究。</p>
+
+<p><a id="more"></a><a id="more-169"></a></p>
+
+<p>1         一些基本问题</p>
+
+<p>在UNIX系统中，几乎所有的数据、信息和计算机指令等等都以文件形式存储在外存secondary storage（also called auxiliary storage，vis a vis main memory）中，所有文件都是以目录为单位进行收集和组织的。在多用户系统（Multi-User）中，每一位用户都拥有自己独立的主目录。UNIX的用户和系统管理员按照等级树管理相应的文件或目录。
+当一名用户登录系统时，默认目录为用户的主目录，如果要显示当前工作目录，可以输入：</p>
+
+<h1>pwd</h1>
+
+<p>即打印当前工作目录（acronym for Print Work Directory）。
+UNIX是对大小写敏感的操作系统，而Windows并无这方面的要求。</p>
+
+<p>1.1   UNIX的文件类型</p>
+
+<p>UNIX的文件类型可以分为三大类别，分别是普通类型、目录类型以及特殊文件类型。
+普通类型包括ASCII文本、可执行程序（executable）、图像（jpeg）文件或html文件等等。
+目录类型，例如用户主目录~/.。
+特殊文件类型，UNIX中一种独特的文件类型。一类是硬件设备，例如/dev/lp0，一般接打印机等设备。另一类是逻辑设备，这里介绍两种UNIX常用的逻辑设备：
+/dev/null，它有一个形象的名字“黑洞”，即可以接受任何数据，而这些数据将不会在其它I/O操作中显示。例如：</p>
+
+<h1>netstat –an &amp;&gt; /dev/null</h1>
+
+<p>这时标准输出中不会显示任何信息，&gt;是重定向标示符，我们可能在msdos中遇到过command &gt; filename的情况，事实上其原理是一致的。另外还有一个相对应的&gt;&gt;意在filename末尾添加信息。&amp;表示标准输出和标准错误信息，如果仅仅想对标准输出信息进行操作可用1替换&amp;，如果只想屏蔽标准错误可输入2。
+/dev/zero，这是一种与/dev/null似乎完全相反的文件，它代替了一种标准输入，且此类输入仅仅包含二进制0，其ASCII字符为null。现在来看一种应用示例：</p>
+
+<h1>dd if=/dev/zero of=swap bs=1024 count=40</h1>
+
+<p>dd是UNIX命令，其作用是自定义一个输入流和一个输出流，并借此实现数据I/O。if指定输入流，此处来源/dev/zero。of指定输出流，此处定义名为swap的文件，bs即blocksize定义块大小，count定义块个数。执行此命令后，系统会建立一个名为swap的文件，此文件是由40个大小为1024字节且内容全部为null的空文件。
+以上两种文件类型在UNIX系统中起到了至关重要的作用。/dev/null主要应用于shell脚本，也几乎是shell脚本编程中最常使用的重定向输出之一。/dev/zero的用途更为广泛，系统管理员可以使用该功能为系统建立临时的交换文件（或称交换分区），因为其良好的结构恰恰对应与内存管理，因此可以明显提升某些数据服务器的工作效率。</p>
+
+<p>1.2   目录和文件的表示方法</p>
+
+<p>UNIX的目录管理是典型的树形结构，这里不再赘述。其命名规则并不很严格，大多支持200字符以上的长文件名，一个特点是除斜线slash（不包括backslash）以外的字符几乎都是合法被接受的（包括不可打印字符）。
+在shell中表示路径，可以采用/usr/home/guest/.profile的绝对路径（absolute）表示，也可以采用../httpd/bin/apachect1的相对路径（relative）表示。其中每个目录下均包含两个目录指示符.（指当前目录）和..（指上级目录）。如果用户使用csh，还能利用~/表示用户主目录。
+我们在前文提到正则表达式 （Regular expression）与通配符（wildcard）含义并不一致。这些通配符的意义是由shell程序进行分析和解释的。下面介绍几种简单的通配符：
+<em>，即任意长度字符串，唯一例外的是当</em>表示文件名头部时无法匹配以.起始的文件，如.profile；
+？，匹配任意单字符；
+[]，匹配括号内任意字符，也可以指定其范围。但[A-Z]*并不和正则表达式中的本式等同，这点需要注意。
+仍需补充的是，shell在处理含通配符或者多个项的命令时，一般先将目标目录下的文件名按字典顺序排序，然后逐一查找，因此输出的最终结果也是按字典序排序的。</p>
+
+<p>2         UNIX文件系统命令</p>
+
+<p>2.1   查看目录信息ls</p>
+
+<h1>ls</h1>
+
+<p>ls即list，列出当前目录的内容，同一个目录下即可能有文件，也可能有子目录，然而当单独使用ls时并不能对此类信息作出区分。
+ls有很多选项，且大多数都经常会用到，因此掌握ls是UNIX系统管理员的基本功之一。下面列出一些非常实用的ls选项：
+-a，列出所有本目录下文件，并包括所有文件名以.起始的文件。在UNIX中此类文件即是隐藏的，也就是说在不带-a的情况下ls无法查看这些隐藏文件。常见的隐藏文件如.profile、.bashrc等都是默认于用户主目录下，存储了该用户的自配置信息。
+-l，以长格式显示UNIX的文件类型、权限、硬连接数（hard links，后文介绍）、拥有者、拥有者所属组、大小、最后一次修改时间以及文件名等等。
+-F，在文件的尾部添加特殊字符以代表其文件类型，例如*表示可执行文件，/表示目录。    -R，同时列出所有的子目录信息。
+-d，列出目录内容的同时显示符号连接或目录的信息，包括了连接的目标并列出目录的内容。
+-I，列出所有文件的i-node号。
+现在我们给出执行ls –la命令后的结果示例：
+-rw&mdash;&mdash;&mdash;&ndash;              1     gambill    cls   10868     Jan 14     08:44      vm_mail
+drwxr-xr-x     2     gambill    stdt  96           Jun 13     1999       wvannot
+给出信息的第一列记录了文件类型和相关权限。其第一位字符通常表示文件类型，当文件类型为-时表示文本文件、可执行文件或硬连接文件；d表示目录；另外还有一些其它的文件类型标识，例如b块设备文件、l符号连接文件等等。
+第一列剩余的9位字符记录了该文件的许可权限，其中每三位分别记录r读、w写和x可执行三类权限，并相应于文件所有者、该文件所属的组、以及其他任何人的权限。第三列是指当前文件的连接数，gambill是文件的所有者、其后即gambill所在的组。然后是文件的大小（以bytes为单位）、最后一次修改时间以及其文件名。</p>
+
+<p>2.2   文件复制cp</p>
+
+<h1>cp option file1 file2</h1>
+
+<p>cp命令首先创建file2，然后将file1的数据拷贝至file2中。如果file2已存在，则覆盖源文件。选项i即当目标文件已存在时首先提示用户是否覆盖源文件，选项r支持拷贝目录及其全部内容至目标目录。</p>
+
+<p>2.3   文件转移mv</p>
+
+<h1>mv option file1 file2</h1>
+
+<p>mv可以将file1移至file2，同时删除原有file1文件。mv一个常用场合是在修改文件名的时候。使用选项i可在当file2已存在时询问用户是否覆盖源文件。</p>
+
+<p>2.4   文件删除rm</p>
+
+<h1>rm option files</h1>
+
+<p>rm命令删除files中列出的所有文件。选项i依然是在删除前询问用户是否删除该文件，选项r删除一个目录下的文件，并且删除其子目录下的所有文件，还有一个常用选项f即强制删除该文件且不用提示用户是否确认。
+当用户确认要删除一个目录时，最好的办法是使用rm –rf来实现。
+前面提到UNIX的文件名除字符slash外均可使用，假设pwd下某文件名为-i，那么按原方法应执行rm –i，鉴于i是rm的选项之一，因此这条command显然无法满足要求。因此大部分时间我们习惯将路径用.标识符标识：</p>
+
+<h1>rm ./-i</h1>
+
+<p>以上操作是没有任何问题的，但当我们使用grep搜索字符串-regulation时类似问题再次出现，且无法利用上述办法解决。为此UNIX的大部分命令约定&mdash;为选项域结束标志，那么这之后的-XXX就不会再被列入选项列表了，例如：</p>
+
+<h1>rm &mdash; -i</h1>
+
+<p>2.5   文件查找find</p>
+
+<p>find的功能是在类UNIX平台上通过目录查找目标文件，它可以根据指定的目录信息，以及用户定制的规则（Criteria，plurality for Criterion）查找相对应的文件。不仅如此，find还允许用户定制对目标文件进行操作。</p>
+
+<h1>find verl.d ver2.d -name &lsquo;*.c&rsquo; -print</h1>
+
+<p>以上是一个find应用示例，其选项含义如下：
+-name，文件名的匹配，允许使用文件名通配符 *、?和[ ]，文件名通配符描述串传递到find程序中，因此，应当用引号括起来，以免被shell展开。
+-type，类型，其中f：普通文件，d：目录，l：符号连接文件，c：字符设备文件，b：块设备文件，p：管道文件，如：-type d。
+-size，±n[c]，文件大小，正号表示大于，负号表示小于，无符号表示等于，其他与数量有关的选项，也采用这样的方式。
+-size +100             表示长度大于100块；
+-size -100                     长度小于100块；
+-size +100000c     表示长度大于100000字节；
+-size -100000c      表示长度小于100000字节；
+“操作”选项一般有以下几种常用内容：
+-print，打印查找到的符合条件的文件的路径名。
+-exec，-ok，对查找到的符合条件的文件执行某个命令。</p>
+
+<p>2.6   当前工作目录pwd</p>
+
+<p>pwd即print working directory。如果要选择进入不同目录，需要使用cd dname。</p>
+
+<p>2.7   创建目录mkdir</p>
+
+<h1>mkdir dname</h1>
+
+<p>在当前目录下创建新目录dname，相应还有一种删除目录rmdir，但由于rmdir只能够删除内容仅含..的目录，因此实际用途并不如rm -rf广泛。</p>
+
+<p>2.8   打包压缩工具tar和compress</p>
+
+<p>tar我们在连载三已有详细介绍，读者可前往查看：
+<a href="http://www.hanyi.name/blog/?p=161">http://www.hanyi.name/blog/?p=161</a>
+compress是早期UNIX的文件压缩工具，其相应的解压程序为uncompress，但随着gnuzip等更强大软件的出现此类工具已逐渐被淘汰，事实上近年来的发行版中均未附带compress工具。</p>
+
+<p>下一章我们将讨论UNIX文件系统的有关内容。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-27T22:27:50+08:00" pubdate data-updated="true">May 27<sup>th</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/23/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b04b/">
+		
+			mp77的UNIX课件笔记(4.b)</a>
+	</h2>
+	<div class="entry-content">
+		<p>二、常用UNIX系统工具</p>
+
+<p>UNIX已拥有许多功能强大的文本编辑器的支持，但对于系统管理人员来说，在shell级直接发送指令并准确获得自己所需的数据——这不失为一种提高效率的好办法。而UNIX附带的文本文件处理程序几乎就能完全实现这些功能，总的来说这些程序有如下特点：</p>
+
+<p><a id="more"></a><a id="more-167"></a></p>
+
+<p>1、默认从标准输入stdin获得数据；
+2、当指定文件名时，从文件中获取数据，可以同时指定多个文件；
+3、默认在标准输出stdout显示；
+下面将对这些直接针对文本进行操作（也可以通过管道重定向自其它位置，后文介绍）的程序逐一进行说明。</p>
+
+<p>1）基本文件操作</p>
+
+<h1>more</h1>
+
+<p>UNIX最基本的逐屏显示程序，当显示满一屏后最后一行显示为——more——，按任意键后跳至下一屏内容。Linux中还附带了一个功能更为强大的逐屏显示程序：</p>
+
+<h1>less</h1>
+
+<p>less不仅提供了more独特的逐屏显示功能，还支持键盘的方向键，或者j，k，类似vi的光标定位键以及PageUp、PageDown、Ctrl+F/B、Home和End键。
+UNIX中还有一个古老的逐屏显示程序pg，其显示方式与more接近，不过每屏显示后需要输入子命令来选择上滚或下翻操作，功能上与less相近，近年来的发行版中都已经用more/less代替了pg。</p>
+
+<h1>cat</h1>
+
+<p>cat类似于dos中的type命令，显示文本文件中的内容，其独特之处在于可以利用&gt;运算符将标准输入重定向至文件，直到Ctrl+D结束输入（亦或者是直接指定输入源文件），这是创建新文件一种较为简捷的方法。</p>
+
+<h1>echo</h1>
+
+<p>将命令行参数输出至标准输出，echo有很多备选选项，可以自由格式化输出结果。例如：</p>
+
+<h1>echo abcdABCD | od –x</h1>
+
+<p>od即octal dump，八进制输出。也就是说以字节为单位输出相关信息，上例中把echo输出的字符串重定向至od输入串，按字节分析后转换为十六进制打印结果如下：
+0000000 6162 6364 4142 4344 0a00</p>
+
+<h1>head -linecount</h1>
+
+<h1>tail -linecount</h1>
+
+<p>head和tail分别是查看文件头部/尾部的指定行数，这对程序主要用于查看一些严格按照格式书写的文件——例如公文、邮件等一些相关的设置信息。同时也是为避免查阅超大文件时效率低下的问题（但要真正实现随心所欲查看似乎仍然需要一些技巧）。例如：</p>
+
+<h1>netstat –s –p tcp | head –5</h1>
+
+<p>netstat指network statistics，是一种统计网络出入、路由表以及当前网络接口状态信息的程序。-s选项指定按协议输出每一条项目的详细数据，-p tcp只显示基于tcp协议的网络连接状态。head -5只显示前五行，即输出头部部分的全局信息。
+tail还有一个实用的选项-f（forever），意即实时显示文件新增加的内容，也就是说程序在首次输出完成后并不退出，而是对目标文件继续监听并输出新增内容，除非用户Ctrl+C强行中断程序运行。</p>
+
+<h1>wc</h1>
+
+<p>列出文件中一共有多少行，多少个单词、字符，当指定的文件数大于1时，最后还列出一个合计。也可以根据选项指定输出信息：-1文件行数；-c文件字符数；-w文件单词数。
+当同时处理多个文件时，wc会在最后一行列出每一项的totoal值。</p>
+
+<h1>sort</h1>
+
+<p>对文件内容进行排序，这种排序对大多数文件来说并没有太大意义，不过对于phonebook或者是checklist来说还算是比较方便的了（尽管现在恐怕已经很少有人再把这样的信息明文写在ASCII文本里了）。主要使用默认选项（按ASCII字符串比较方式）和-n（numberic）按数值均为从小到大排序。</p>
+
+<h1>tee</h1>
+
+<p>tee其实是英文字母T的单词形式，其形象描述了本程序的功能——将程序输出信息结果保存至指定文件。一般要和管道连用：</p>
+
+<h1>who | tee whois.log</h1>
+
+<p>2）高级文件操作</p>
+
+<p>接下来的问题涉及到模式搜索的范畴，其最便于使用的工具无非是正则表达式（Regular expression）。但是正则表达式正面临这样一种尴尬：入起门来十分容易，一旦深入研究就变得异常艰难，UNIX就是采用了正则表达式进行文本文件模式匹配的操作系统之一，尽管其起源于编译原理，但又有多少编译大拿真正把正则表达式融会贯通呢？
+幸好那些深入的工作离我们尚有不小的距离，能够熟练掌握如今这种被越来越多高级语言推崇的模式匹配工具，就已经足以使我们的技术水平更上数层台阶了。
+正则表达式中含有以下六个固定的元字符
+. * [ \ ^ $
+元字符代表特殊的含义，如$，只在出现至表达式最尾部时才表示行尾标志，否则与其自身匹配；
+^只有出现在表达式最首部时才有特殊意义，否则与其自身匹配；
+*匹配其前面的单字符出现0次或多次；
+句点.匹配任意单个字符（不能为空）；
+\（backslash）即转义字符，可以使元字符直接与自身匹配；
+[和]搭配使用时定义了一个集合，其可以匹配集合中描述的任意一个字符。
+其它符号与自身匹配（在扩展正则表达式和一些其它语言定义的正则表达式中，还包括一些额外的元字符）。需要注意的是，我们知道</p>
+
+<h1>ls *.[ch]</h1>
+
+<p>是指显示当前目录下后缀为.c和.h文件列表。正则表达式与此处的shell通配符意义并不相同，请读者稍加注意。</p>
+
+<p>现在我们介绍一些建立在正则表达式基础上的文本文件处理程序。</p>
+
+<h1>grep pattern file-list</h1>
+
+<p>global regular expression print，文本过滤程序，按正则表达式规则，筛选出含有指定模式字符串的文本行。当指定的文件数&gt;1，查找到指定字符串时，整个行，连同文件名一起显示。指定的文件数≤1，只列出含有指定模式的整个行的内容，不显示文件名。
+grep在默认情况下是不识别正则表达式的，例如：</p>
+
+<h1>grep O_RDWR /usr/include/*.h</h1>
+
+<p>显示O_RDWR定义的库文件位置。如果要使用正则表达式，需要在pattern项处用’regular expression’注明。
+egrep指扩充的（extended）正则表达式文本过滤程序，本程序比grep多出几个元字符：
+（），即一个字符串集合，这将更改原有*的定义；
++，表示其前面的单字符或串集合出现一次或多次；
+？，表示0次或1次出现，比句点.多出对空字符的匹配。
+在处理较多批次文件时应当考虑到egrep的算法时间复杂度问题。
+fgrep和前两个程序-f选项的功能基本一致，即不带正则表达式的字符串匹配，这是性能最好的一种过滤程序，同时也能快速匹配一些grep/egrep由于自身原因无法匹配的字符串。
+以上三个程序都共享一些常用的选项，例如-n每行显示行号；-i忽略字母的大小写；-v显示所有不包含模式的行。</p>
+
+<p>当我们利用grep来建立某些大规模文本过滤规则的时候，有时会要求一些具备精确结果的报表，而这是grep无法实现的功能。但此类功能对于管理员来说并不罕见，因而促使一些功能强大的同类工具的崛起。</p>
+
+<h1>awk ‘Program’ file-list</h1>
+
+<p>awk是以创建者Aho、Weinberger、Kernighan三人的姓名首字母命名的，其强大之处在于Program部分支持类似C语言、并吸收了许多同期语言优秀的语法规则，且同样识别’regular expression’。另外内置了多个全局变量：
+NR，No. of Record当前记录的记录号；
+$0，当前记录；
+$1，$2，…，当前记录中的域，通常以[{witespace}\t]等为token界限。
+FILENAME，当前输入的文件名。
+awk甚至还支持C语言中所有的关系运算符。下面给出一些awk程序示例：</p>
+
+<h1>date | awk &lsquo;{print $4}&rsquo;</h1>
+
+<p>未指定file-list，未指定条件，输出所有记录中第四个域（即当前系统时间）的内容。</p>
+
+<h1>who | awk &lsquo;/^ *zhang/ {printf(&ldquo;%s &rdquo;,$2)}&rsquo;</h1>
+
+<p>未指定file-list，未指定条件，使用正则表达式，输出所有记录中zhang姓用户登录的终端标识。</p>
+
+<h1>ls -s | awk &lsquo;$1&gt;2000 {print $2}&rsquo;</h1>
+
+<p>未指定file-list，指定条件为记录中第一域数据大于2000，输出所有记录中相应第二域的内容。
+另外，awk提供了-F选项供用户自定义域分隔符，例如：</p>
+
+<h1>awk –F : &lsquo;$2 ==〝〞&rsquo; /etc/passwd</h1>
+
+<h1>awk –F : &lsquo;$2 ~/^$/&rsquo; /etc/passwd</h1>
+
+<h1>awk –F : &lsquo;$2 !~/./&rsquo; /etc/passwd</h1>
+
+<h1>awk –F : &lsquo;length($2) == 0&rsquo; /etc/passwd</h1>
+
+<p>指定file-list为/etc/passwd，指定条件，其中~表示与正则表达式匹配，!~表示与正则表达式不匹配，模式的域分隔符由默认的[{witespace}\t]被用户指定为冒号:，如此以来就可以处理诸如/etc/passwd中的文本结构了。
+更令人惊讶的是，awk的-f支持用户载入自己定义的规则和报表格式文件，例如：</p>
+
+<h1>cat list.awk</h1>
+
+<p>BEGIN { printf(&ldquo;=====================================\n&rdquo;)
+printf(&ldquo;FILENAME %s\n&rdquo;, FILENAME)
+printf(&ldquo;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;\n&rdquo;)}
+END { printf(&ldquo;====================================\n&rdquo;) }
+{ printf(&ldquo;%3d: %s\n&rdquo;, NR, $0) }
+其中BEGIN和END分别定义了报表头部和尾部的输出规则，最后是报表内容的输出规则。</p>
+
+<h1>awk –f list.awk md5.c</h1>
+
+<p>=====================================</p>
+
+<h2>FILENAME md5.c</h2>
+
+<p>1:
+2: #include &ldquo;md5.h&rdquo;
+3:
+4: /<em> forward declaration </em>/
+5: static void Transform ();
+6:
+7: /<em> F, G, H and I are basic MD5 functions </em>/
+8: #define F(x, y, z) (((x) &amp; (y)) | ((~x) &amp; (z)))
+……
+298: buf[2] += c;
+299: buf[3] += d;
+300: }</p>
+
+<h1>301:</h1>
+
+<p>如今awk在开发者的不断发展下功能已经日趋多样化，甚至还拥有了自身独有的程序设计语言——awk语言。
+有了awk作为强有力的文本过滤工具，就不能缺少其在shell脚本方面的王牌搭档——sed。
+sed全称stream editor，很简单即流编辑器，但其功能绝非简单而已。sed的两种命令方法都与awk类似，且完全可以参考后者：</p>
+
+<h1>sed ‘Program’ file-list</h1>
+
+<h1>sed –f filename file-list</h1>
+
+<p>这里只解析sed的一条语句。</p>
+
+<h1>tail –f pppd.log | sed &rsquo;s/145.37.123.26/QiaoXi/g&#8217;</h1>
+
+<p>上面这条命令的目的是开启一个pppd连接日志的实时监控窗口，并将其中的IP地址转换为QiaoXi输出。其中s命令是“替换（substitute）”，正slash分割正则表达式，后半部分是替换字符串QiaoXi，g指global flag，使得s命令在一行中遇到多个模式描述的字符串时，都替换为QiaoXi，否则，一行仅替换一次。
+事实上awk和sed作为UNIX脚本编程的利器已经雄霸了多年，直到最近二十年，各种继承先哲的OO scripting languages如Perl、Ruby以及Python等异军突起，迅速征服了大量技术人员，后来人们还发现这些脚本语言能很好地用于软件工程快速原型设计。关于awk+sed的脚本编程读者可以参考经典书籍，我们今后也会有shell编程方面的详细讨论。</p>
+
+<p>最后，我们来看两条令人轻松的程序。</p>
+
+<h1>tr string1 string2</h1>
+
+<p>单纯地将在字符串string1中出现的输入字符被替换为字符串string2中的对应字符。</p>
+
+<h1>cat telnos | tr UVX uvx</h1>
+
+<h1>cat report | tr &lsquo;[a-z]&rsquo; &lsquo;[A-Z]&rsquo;</h1>
+
+<h1>cat file1 | tr % &lsquo;\012&rsquo; //将%改为换行符</h1>
+
+<h1>cat myap.c | tr &lsquo;\015&rsquo; &lsquo; &rsquo; &gt; myap1.c //将文件中多余的回车改为空格，回车的ASCII码是八进制的015</h1>
+
+<p>仍然要注意的是不要漏掉必需的单引号。</p>
+
+<h1>cmp file1 file2</h1>
+
+<p>顾名思义，cmp就是比较两个任意类型的文件，并将结果输出在标准输出中。默认情况下，当两个文件完全一致时不会返回任何信息，否则返回不一致的行数和首字符位置信息。还有一种基于两个文件不一致性处理的程序diff。</p>
+
+<h1>diff file1 file2</h1>
+
+<p>11a12,13
+diff不仅有对比两个任意文件（包括文本文件、二进制文件等）的功能，而且可以指定对其中不一致的地方进行增删改操作。如以上命令行在file1中的11行之后append文件2中的12、13行，类似的还有c（change）即将file1中的某行替换为file2中的某行，以及d（delete）即删除file1中的指定内容并加入file2中的指定内容。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-23T22:26:31+08:00" pubdate data-updated="true">May 23<sup>rd</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/23/%25e3%2580%258a%25e5%258d%2597%25e4%25ba%25ac%25ef%25bc%2581%25e5%258d%2597%25e4%25ba%25ac%25ef%25bc%2581%25e3%2580%258b%25e4%25bc%259a%25e6%2588%2590%25e4%25b8%25ba%25e4%25bc%25a0%25e4%25b8%2596%25e7%25bb%258f%25e5%2585%25b8%25ef%25bc%259f/">
+		
+			《南京！南京！》会成为传世经典？</a>
+	</h2>
+	<div class="entry-content">
+		<p> 首先原谅我依然是躲在家里看dygod刚出炉的dvd&hellip;&hellip;大部分是因为最近一段时间连看一部电影都会让人产生极度奢侈的罪恶感。</p>
+
+<p> “南京”对于近代以来的中国人来说始终有说不尽的话题。导演起初筹拍影片的时候我还在上高二，当初就对片名中的两个叹号有些感兴趣，甚至还写了一篇同名文章（恕我已经忘却大半内容）记述自己浅显的理解。</p>
+
+<p> 如果我没有记错的话，多年来国人对南京浩劫的理解始终处于中学历史教科书的阶段。且不论教科书式的历史仅仅是为了记录历史事实，或是被东瀛一些民族极端人士称为又一个民族极端产物，我们对南京浩劫的印象恐怕就只有两种形态：</p>
+
+<p> 1、数十万同胞们可怜，他们是侵略战争最直接和最残酷的受害者，也是让后代们久久不能释怀的首要原因；</p>
+
+<p> 2、侵略军的可恨，他们是战争进行过程中的杀人机器，同时也是毫无人性地残害普通贫民的刽子手。</p>
+
+<p> 如此一来教育达到了两个目的：千万不要忘记那些死难者，他们是我们的同胞；侵略者曾对我们犯下了滔天罪行，这是任何挽救都永远无法弥补的。然而很少有人去提及历史的警世作用，我们也并不希望观众们仅仅是怀着一种单纯的愤慨与哀思夹杂的感情去观赏该片，事实上它是一部深刻的教育片——与以往不同的是，影片所展现出的教育主题几乎超过了多年来国产电影长期形成的一种束缚。这种束缚是一种对人天性向往和平的回避，以及抛开政治、文化之外人性共通的否认。</p>
+
+<p>  我认为《南京！南京》和稍早前的《鬼子来了！》表达了相类似的主题，尤其是对比观看之后这种特征就愈发明显。但相较于《南京！南京！》，《鬼子来了！》是建立在一个完全虚构的小说的基础上，剧情甚至有些荒诞（但又让人无法找出批驳的理由来），前者的史实基础是有目共睹的，相信导演三年筹拍的艰辛并没有白费。我们看到，已经有许多评论者认为影片达到甚至超越了世界级《辛德勒的名单》的水平。</p>
+
+<p> 就影片本身而言，观影之中我就感觉到一些差距，最后仍然坚定了这种信念。这种差距并非关于经济、演员或者是导演，而是我认为影片中最重要的因素——剧本。据说该片大热后引起了一些历史原型相关者的不满，一些纪念馆的负责人认为影片并没有完全依据历史事实——在我看来是完全可以接受的，因为若要考虑到导演一心向往传世之作的心情，就不难理解部分情节适当的艺术化了。</p>
+
+<p> 但颇令人遗憾的要属影片对人物的描绘。首先看侵略方主角角川正雄：一个在家乡接受了良好教育的年轻士兵，第一次开枪“误杀”了贫民，这使他开始感到惶恐——没什么问题。关于百合子的分支，无论是由于长期离乡而怀有深深的孤独感，亦或是别的什么原因，男主角居然就顿生情愫，声称要和她“结婚”，实在令人难以想得通，况且后来证明百合子对这位“初次”的士兵并无太多印象，这点的重要性直接关系到后来百合子病逝，男主角认为自己失去了挚爱的“妻子”而更加陷入了深深的矛盾与痛苦之中。</p>
+
+<p> 再来看中方男主角唐先生，影片中此人并未被描写成英雄，他只是一个深爱着自己身边每一位亲人的男人，为了妻女他甚至可以向侵略者委屈求全，面对侵略者始终是低声下气，后来甚至说服Mr.Rabe携自己一家离开南京——当然这一切都在最后一刻戏剧性地变化，唐先生自愿把唯一的离开名额让给了化妆成仆从的中国军官，自己重回险境——有人说他是在此完成了最后一次的自我救赎，并没有不合理之处，但考虑到唐先生早先失去了自己的亲生女儿——这恐怕是对一名父亲来说足以使其丧失生活勇气的了，更何况临死前他还自豪地告诉侵略者说她妻子又怀上了他的孩子。问题在于唐先生确定自己一定会死，侵略者军官事先也暗示他若回来一定会死——但依然让人难以理解，为什么一个看起来似乎还帮助侵略者清剿伤兵的“朋友”，会很快不明不白地被执行枪决，他的死不会令人意外，只是这种“死法”的确让人“意外”了一把。</p>
+
+<p> 最后来看侵略者军官，他似乎已经是影片中最为“残暴”的人，然而还是始终摆脱不了男主角心中的那种“矛盾”，包括他最终枪杀的那个痴迷越剧《梁祝》的闺门小旦“小妹”，理由竟是她太漂亮，死了要比这样活着更好。片尾还特意给出了他洗澡的镜头，和片尾发生的故事同处一个背景，人物并不一定想着不同的事。在这一点上，就又很难让人理解他的暴行到底来源于何处，真是“杀红了眼所以丧心病狂”？这也太小看人类的EQ和IQ了吧。</p>
+
+<p> 尽管在剧本上影片依然给人带来了些许遗憾，但从选材、场景、故事上本片都足以达到世界级。庆幸的是本片包含了一个关键的侵略者视角，使得众人可以较为清楚的看看，到底战争的本质为何，到底人性的本质为何，到底导致这场灾难的源头为何，到底片中民族个性的差距为何。这恐怕就是影片所要体现出的教育意义吧。</p>
+
+<p> 但若想成为传世经典？最起码的，这段尘封七十年之久的历史需得形成全人类的共识再说了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-23T02:58:24+08:00" pubdate data-updated="true">May 23<sup>rd</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/21/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b04a/">
+		
+			mp77的UNIX课件笔记(4.a)</a>
+	</h2>
+	<div class="entry-content">
+		<div class="Section0">
+<p class="0"><span style="font-family: 宋体;">了解UNIX的文件系统是必要的，就像对于windows我们所了解到的。但二者最大的区别就在于熟知前者会对进一步的工作有决定性的推动作用；后者呢？最终还是无奈地回归平台。原定于本节详细介绍文件系统，但为了提升实用效果我们决定先插入一章全面介绍UNIX基本应用程序的内容（由于本节内容过于冗长，分两部分加以说明）。</span></p>
+<p class="0"> </p>
+<p class="0">一、 <span style="font-family: 宋体;">常用UNIX系统命令</span></p>
+<p class="0"> </p>
+<p class="0">1、 man<span style="font-family: 宋体;">，即mannual，可以通过此命令查看UNIX在线文档并查找关于本系统的命令、工具、开发函数的详细介绍、选项及使用方法。甚至对于man本身，可以输入：</span></p>
+<p class="0"># man man</p>
+<p class="0"><span style="font-family: 宋体;">即可查阅man命令有关的系统手册信息。</span></p>
+<p class="0"><span style="font-family: 宋体;">事实上还有一些更为常用的查看帮助方法，这在执行一些特定工作时能大大提高查找效率。例如：</span></p>
+<p class="0"># command &#8211;help</p>
+<p class="0">&#8211;help<span style="font-family: 宋体;">本身是查看命令帮助的选项，少数命令还支持-h选项。&#8211;help的好处是只列出命令的输入格式以及全部选项说明，也就是最常用的一种帮助查看方式。</span></p>
+<p class="0"># info command</p>
+<p class="0">info<span style="font-family: 宋体;">是GNU下的一个文本工具，Linux中涵盖了大量的系统开发信息，包含几乎所有man和&#8211;help中的内容，一般只有专业人员才会用到。</span></p>
+<p class="0"># which command</p>
+<p class="0"><span style="font-family: 宋体;">显示命令的具体目录。</span></p>
+<p class="0"> </p>
+<p class="0">2、 <span style="font-family: 宋体;">显示系统信息。基本系统信息包括了系统时间、在线用户以及当前连接的终端设备。</span></p>
+<p class="0"># date</p>
+<p class="0"><span style="font-family: 宋体;">查看系统日期，其强大之处在于可以定制输出格式，自身甚至可以进行大量实用运算。</span></p>
+<p class="0"><span style="font-family: 宋体;">例如输入：</span></p>
+<p class="0"># date &#8221;+%Y.%m.%d %H:%M:%S Day %j&#8221;</p>
+<p class="0">2009.5.20 17:51:05 Day 140</p>
+<p class="0">&#8220;%j&#8221;<span style="font-family: 宋体;">记录已经历当年的天数，更多参数可在&#8211;help中查询。</span></p>
+<p class="0"># cal</p>
+<p class="0"><span style="font-family: 宋体;">查看某月日历，空参数则直接返回当月日历，另外可以用</span></p>
+<p class="0"># cal month year</p>
+<p class="0"><span style="font-family: 宋体;">指定查看日历。</span></p>
+<p class="0"># who</p>
+<p class="0"><span style="font-family: 宋体;">查看在线用户，显示用户ID、登录终端以及登录时间，如果用户通过网络登录，还会附带显示登录主机名称。</span></p>
+<p class="0"><span style="font-family: 宋体;">这里需要解释一下“登录终端”功能。Linux采用了虚拟终端技术，这种技术可以使得用户在虚拟shell对远程主机进行操作，即Virtual Terminal。具体来讲，就是通过键盘Alt+F1-F6键在6个不同的shell间进行切换，每个shell的登录用户是任意的（甚至是可以相同的）。平时没事的时候，我们可以在不同的终端登录不同用户，并互相进行一些用户间操作（显得有些浪费时间&#8230;&#8230;）。关于Virtual Terminal的设置在/etc/inittab中，如下内容：</span></p>
+<p class="0"># Run gettys in standard runlevels</p>
+<p class="0">1:2345:respawn:/sbin/mingetty tty1</p>
+<p class="0">2:2345:respawn:/sbin/mingetty tty2</p>
+<p class="0">3:2345:respawn:/sbin/mingetty tty3</p>
+<p class="0">4:2345:respawn:/sbin/mingetty tty4</p>
+<p class="0">5:2345:respawn:/sbin/mingetty tty5</p>
+<p class="0">6:2345:respawn:/sbin/mingetty tty6</p>
+<p class="0"> </p>
+<p class="0">ttyX<span style="font-family: 宋体;">指定相关终端的名称，minigetty将终端与login进行连接，实现验证登录用户的功能。另外如果系统安装了X-window，那么该系统启动后占用下一个未被占用的终端（如果/etc/inittab中x值为5默认启动X-window模式的话，则该系统占用tty1终端）。另外如果在X-window系统中使用ctrl+alt+F1-F6依然可以进行文本、X-window模式间的切换（理论上是可行的，但笔者在Virtual Machine 6.5挂载redhat 9.0中似乎无法实现此功能，或者是因为切换成本太高，有时甚至会导致X-window崩溃<span style="color: #ff0000;">5.23备注:家里的ubuntu8.1完全是可行的</span>）。</span></p>
+<p class="0"># who am i</p>
+<p class="0"># whoami</p>
+<p class="0"><span style="font-family: 宋体;">以上两条命令显示当前主机登录用户情况。</span></p>
+<p class="0"># w</p>
+<p class="0"><span style="font-family: 宋体;">显示当前系统的详细状态，包括运行时间、在线用户数量、IDLE（该终端空闲时间）、JCPU（该终端的所有作业占用的CPU时间）、PCPU（该终端的前台作业占用的CPU时间）以及what（显示该终端当前正在运行的命令或程序）。</span></p>
+<p class="0"># uptime</p>
+<p class="0"><span style="font-family: 宋体;">仅仅显示w命令的表头内容，如系统时间、在线用户数量、平均CPU占用时间等等。</span></p>
+<p class="0"># tty</p>
+<p class="0"><span style="font-family: 宋体;">显示当前终端的设备文件名。</span></p>
+<p class="0"> </p>
+<p class="0">3、 <span style="font-family: 宋体;">更新用户信息。</span></p>
+<p class="0"># usermod</p>
+<p class="0"><span style="font-family: 宋体;">该命令只能被root用户使用，可以更改指定用户的用户名、密码等信息。普通用户使用时会显示command not found错误。</span></p>
+<p class="0"># passwd</p>
+<p class="0"><span style="font-family: 宋体;">全用户使用，简易更新当前用户的登录密码，并且有评价当前密码复杂度的功能。</span></p>
+<p class="0"> </p>
+<p class="0">4、 <span style="font-family: 宋体;">与其他用户通信。</span></p>
+<p class="0"># write mp77</p>
+<p class="0">Hello world!</p>
+<p class="0"><span style="font-family: 宋体;">可以向正在登录的用户发送消息，消息可以换行，Ctrl+D结束发送，可以使用&lt;重定向文档中的内容。</span></p>
+<p class="0"># talk mp77</p>
+<p class="0"><span style="font-family: 宋体;">如果接收方允许接收对话，则屏幕分成上下两部分，两用户可以以键盘会话。终止talk的执行按Ctrl+C键或Ctrl+D键。</span></p>
+<p class="0"><span style="font-family: 宋体;">如果对方此时没有登录系统或者虽已登录但拒绝消息，通信失败。与其他UNIX系统上的用户会话的talk命令中应有对方主机名，如cdc.xynet.edu.cn主机上的用户wang通信，执行下列命令：</span></p>
+<p class="0"># talk wang@cdc.xynet.edu.cn</p>
+<p class="0"><span style="font-family: 宋体;">设置本机是否允许接收消息，则输入以下命令：</span></p>
+<p class="0"># mesg</p>
+<p class="0"><span style="font-family: 宋体;">显示当前mesg状态。</span></p>
+<p class="0"># mesg y</p>
+<p class="0"><span style="font-family: 宋体;">将mesg状态置为yes，允许接收消息。</span></p>
+<p class="0"># mesg n</p>
+<p class="0"><span style="font-family: 宋体;">拒绝接收消息，但任何时候都无法拒绝root向用户发送的消息。</span></p>
+<p class="0"># wall</p>
+<p class="0"><span style="font-family: 宋体;">即write to all，广播方式向所有已登录用户发送消息，该命令无法被屏蔽，默认使用权限为所有用户，因此很多系统管理员需设置禁止普通用户使用该命令。</span></p>
+<p class="0"> </p>
+<p class="0">5、 mail</p>
+<p class="0">mail<span style="font-family: 宋体;">是一种系统应用程序，从理论上说，mail也是用户间通信的一种方式（但不限于此功能），鉴于其功能强大且比较复杂，移至本段说明。</span></p>
+<p class="0"># mail -s &#8221;title&#8221; username@hostname.address</p>
+<p class="0"><span style="font-family: 宋体;">向username发送一封邮件，可以通过重定向输入文件，邮件内容按Ctrl+D结束输入。</span></p>
+<p class="0"><span style="font-family: 宋体;">紧接着会出现Cc:即Carbon copy，建立副本并抄送往其他用户。如果要发送带附件的邮件，建议安装更为强大的electronic mail agent，例如mutt（Redhat 9.0附带此软件包）：</span></p>
+<p class="0"># mutt -a [appendix] -s [title]</p>
+<p class="0"><span style="font-family: 宋体;">接着按提示操作即可，注意mutt编辑邮件内容时会自动调用vi，完成后需要保存退出并自动退回mutt界面，按y完成发送。</span></p>
+<p class="0"><span style="font-family: 宋体;">如果用户接收到新邮件，则每次登录时系统会提示You have new mail。输入mail即可。</span></p>
+<p class="0"><span style="font-family: 宋体;">此时会进入&amp;的命令提示符状态，并且只会解释mail中定义的一些命令或选项，查看帮助输入?即可。</span></p>
+<p class="0"><span style="font-family: 宋体;">所有未读邮件会在提示符上方列表中显示，顶行的箭头指示当前操作对应于某邮件，事实上我们也可以使用后面的ID直接指定操作对象，现说明几种常用功能：</span></p>
+<p class="0"># q</p>
+<p class="0"><span style="font-family: 宋体;">阅读当前邮件，如果删除则输入d，所有未读邮件保存在/var/spool/mail/username中。</span></p>
+<p class="0"><span style="font-family: 宋体;">对邮件操作结束后有两种退出模式：</span></p>
+<p class="0"># x //<span style="font-family: 宋体;">不存档退出，即还原之前的所有操作，已读邮件仍被列为未读。</span></p>
+<p class="0"># q //<span style="font-family: 宋体;">存档退出，已读邮件会从/var/spool/mail/username中删除，并存入该用户主目录下的mbox中。</span></p>
+<p class="0"> </p>
+<p class="0">6、 <span style="font-family: 宋体;">远程数据交流，包括远程登录和远程文件传输两种功能。</span></p>
+<p class="0"><span style="font-family: 宋体;">远程登录有rlogin、telnet等命令。</span></p>
+<p class="0"># rlogin hostname</p>
+<p class="0"># telnet localhost</p>
+<p class="0"><span style="font-family: 宋体;">前文提到rlogin因为缺乏安全性支持，已经不被推荐使用，因而主流依然是telnet。</span></p>
+<p class="0"><span style="font-family: 宋体;">连接成功后会提示输入login name以及password，验证成功后会直接进入Virtual terminal模式进行远程控制。期间输入^]可以挂起远程terminal进入telnet&gt;命令提示符，输入help可以查看命令帮助，z挂起telnet回到VT模式，close关闭当前连接，quit直接退出telnet。</span></p>
+<p class="0"># rcp username@hostname:directory dstdirectory</p>
+<p class="0">rcp<span style="font-family: 宋体;">即remote file copy远程文件复制，本功能类似windows中的共享功能，且仅能在UNIX主机间使用。需要注意的是，rcp需要提前预知远程主机用户名，以及拥有远程复制的权限。此外还可以-x开启传输加密功能（增加主机负担）。</span></p>
+<p class="0"><span style="font-family: 宋体;">更为强大灵活的工具要依赖ftp，其基本格式类似telnet，但内部命令完全不同。</span></p>
+<p class="0"># ftp hostname</p>
+<p class="0">ftp<span style="font-family: 宋体;">登录远程主机，连接成功后提示输入用户名和密码，并进入ftp&gt;命令提示符。也可以在提示符内输入open hostname连接目标主机。help可以查看ftp命令集，常用的有get（下载）、put（上传）、delete（删除）、bye（断开）等。</span></p>
+<p class="0"><span style="font-family: 宋体;">这里值得注意的是ftp的ascii和binary两种传输模式。</span></p>
+<p class="0">ftp<span style="font-family: 宋体;">默认使用ascii传输文件，这是因为在不同系统环境中传输数据时，有可能会遇到双方主机文本格式不同的问题，因此需要通过ftp对源文本文件进行转译以适应这种变化。但当传输的内容是直接建立在二进制基础上时，这种转译就有可能破坏所传输文件。这时切换至binary模式可以解决此类问题。</span></p>
+<p class="0"><span style="font-family: 宋体;">对ftp感兴趣的读者可以参考RFC 959，空闲时间按标准自己做个ftp客户端玩玩（强调是空闲时间&#8230;）。</span></p>
+
+<p class="0"><span style="font-family: 宋体;">
+</span>
+<p class="0"> </p>
+
+</div>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-21T12:39:49+08:00" pubdate data-updated="true">May 21<sup>st</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/19/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b03/">
+		
+			mp77的UNIX课件笔记(3)</a>
+	</h2>
+	<div class="entry-content">
+		<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">一、</span> <span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">UNIX<span style="font-family: 宋体;">的安装</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+<div class="Section0">
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">需要提前说明的是，本段内容并不会包含某个UNIX发行版本的完整安装教程，而是总结了UNIX安装的一般步骤及其常用的解决方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">一般说来UNIX的安装需要经过三个阶段：准备阶段、内核系统安装阶段以及用户系统安装阶段。在准备阶段中，首先应确定的是系统所处的硬件环境，例如硬盘接口类型、RAID控制器驱动、网卡驱动、硬件的启动顺序以及现有系统的备份及安装顺序；随后获取系统软件（GNU/Linux通常可以在网上直接获得ISO文件）；配置准备需要制定出分区规划、SWAP分区大小、root及普通用户口令、网络配置等。在系统安装阶段可以根据相关引导方式逐步进行，包括硬盘分区、加载硬件驱动等，需要注意的是在安装双系统（包含Windows时）需要先安装Windows再安装Unix。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">系统安装完成后需要先检查硬件是否全部安装正常，通常有两种查看方式：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">lspci -b -v<span style="font-family: 宋体;">，列出本机上所有PCI总线上连接的设备，其中-b查看相关设备在PCI总线上的地址信息，-v显示相关详细信息verbose。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">dmesg<span style="font-family: 宋体;">，显示linux启动信息，通常在系统启动时会自动检测硬件设备，dmesg允许用户随时查看该检测列表。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">检查正常后可对系统做以下配置工作（可选）：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、配置防火墙，开放/关闭有关端口；调整服务，禁用不必要服务；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、运行系统更新程序，修补系统漏洞；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、配置X-windows，或将X关闭，通过对以下文件进行修改可以指定Linux的启动模式：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">./etc/inittab</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//X=3</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">text mode</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//X=5</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">x-window</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、增加管理用户，配置远程登录；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">5<span style="font-family: 宋体;">、进行用户磁盘限额配置；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">6<span style="font-family: 宋体;">、应用程序的安装和编译等；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">7<span style="font-family: 宋体;">、对系统主要的配置文件进行备份；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">通常要对系统做远程登陆配置工作，当然这是根据不同用户需求而定的。远程登录一般分为远程登录管理和远程文件交流管理两种工作。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">远程登录服务器进行管理的方式主要包括rsh，rlogin，telnet，ssh（字符终端方式），远程Xwindows，VNC（图形终端）等。不过仍然需要注意以下问题：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、rsh/rlogin等协议由于安全性差等原因已面临被淘汰；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、telnet协议认证过程用户名/密码明文传输，存在安全隐患，一般也不允许root用户从telnet登录，su命令可以实现用户身份的转换；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、Ssh（Secure shell）采用ssl协议对通信进行加密，可有效保障用户名/密码泄漏；.</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、常用的SSH客户端有NetTerm，SecureCRT，PuTTY等；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">5<span style="font-family: 宋体;">、VNC/远程Xwindows可实现远程使用图形界面GUI；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">远程文件交流管理一般包含以下几种基本方式：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、FTP，要求开放服务器的20,21的端口和ftp服务.，常见的ftp客户端有CuteFTP；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、SCP，集成在ssh服务中，无需开放ftp服务，推荐使用WinSCP；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、NFS，Network File System，适合UNIX服务之间的文件传递；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、Samba，方便UNIX和Windows系统之间交换文件；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">5<span style="font-family: 宋体;">、HTTP，适合下载文件，UNIX平台下的wget工具，可将整个目录下载下来；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">二、</span> <span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户系统安装</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户系统涉及到常用软件的安装设置，尽管许多UNIX/Linux发行版中已内置了大量的软件包，但仍无法确保满足所有用户的需要（如一些商业软件）。其安装方式也分三种具体途径：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">拷贝运行，针对一些文件包可以直接运行，可以直接拷贝的方式，一般采用压缩包传输到服务器上解压执行，可能需要修改权限。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">编译安装方式，采用源代码编译，要求安装编译器（需gcc、make等工具支持，一些发行版的workstation模式即附带开发者GNU工具），编译过程相对复杂，需要一定经验和技巧，但更灵活。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">实践证明，有时编译一些规模较大的程序时耗时会非常长，其唯一的好处就是可以自己配置相应的程序——这通常只有专业人员才会用到&#8230;&#8230;程序员算不算专业人员？你认为呢？</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">现在来看Linux中编译安装一个新内核的具体过程&#8230;&#8230;编译内核？好吧&#8230;&#8230;我们只需要了解编译安装的一般流程和方法即可，对于某些软件的编译安装可能需要其相关的高端硬件或软件知识作为支撑，当然忽略所有设置进行简单的内核升级还是不复杂的。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">那么，我们转而来了解一下编译安装mysql数据库系统的基本流程&#8230;&#8230;</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"># tar -zxvf mysql-5.0.45.tar.gz</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　# cd mysql-5.0.45</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　# ./configure –prefix=/usr/local/mysql –with-charset=utf8 –with-collation=utf8_general_ci –with-extra-charsets=latin1</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　# make</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"># make install</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">由上可知编译安装时应先释放相应软件包，进入安装目录，并配置configure生成相应的makefile或Makefile文件（相关参数需要提前了解），并不是所有的程序都自带configure，因而必要时makefile或Makefile需要自己制作。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">然后利用make根据刚才生成的规则文件编译相关源代码文件，并编译安装install即可。（注：本段文字的目的仅为了演示编译安装的一般规则，并不包含具体的mysql安装方法，包括安装完成后的配置工作）。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">软件包安装方式，直接将编译好的软件包安装在UNIX系统上，类似于Windows平台下用setup命令安装一个软件包。安装过程简单，但包和包之间存在一定的依赖性关系，不同的Unix支持的软件包格式不相同。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">在Linux下，软件包的格式略有不同，常用的包格式有rpm（Redhat Package Manager）、deb（Debian下利用dpkg工具以tar或tar.gz方式制作的软件包）、tar.gz、tar.z、tar.bz2（以上三种是一般Linux自带的打包工具）。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">根据Linux主流发行版的不同，流行的软件包格式分别是rpm（Redhat</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、SuSE、Fedora等采用</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">）和deb（一种流行的debian的衍生版本ubuntu采用）。尽管有alien（一种支持包格式转换的工具），但某些情况下依然无法实现不同包的跨系统正常安装。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">）RPM命令的主要选项有：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-i <span style="font-family: 宋体;">安装软件。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-t <span style="font-family: 宋体;">测试安装，不是真的安装。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-p <span style="font-family: 宋体;">显示安装进度。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-f <span style="font-family: 宋体;">忽略任何错误。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-U <span style="font-family: 宋体;">升级安装。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">V </span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">检测套件是否正确安装。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">）dpkg命令的主要选项有：</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-i 安装一个Debian软件包。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-c 列出的内容。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-I 从中提取包裹信息。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-r 移除一个已安装的包裹。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-P 完全清除一个已安装的包裹。和remove不同的是，remove只是删掉数据和可执行文件，purge另外还删除所有的配制文件。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-L 列出安装的所有文件清单。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-s 显示已安装包裹的信息。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-reconfigure 重新配制一个已经安装的包裹，如果它使用的是 debconf (debconf 为包裹安装提供了一个统一的配制界面)。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">三、UNIX备份方案</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">以上工作安装完毕并调试正常后，就可以为系统建立首次安装备份了。某些系统可能配备了相类似功能，部分商业版本同时也支持GHOST镜像。下面按照方法分类介绍一些简单有效的备份方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">直接文件备份，意即使用系统自带的档案压缩工具对待备份文件进行打包存储。在早期的UNIX系统中有compress命令可以使用，然而在目前大多数的UNIX/Linux中多数是tar一统天下了。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar<span style="font-family: 宋体;">的选项众多，一般情况下使用的是：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-c</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">创建一个新的档案；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-f</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">使用的源档案文件；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-v</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">verbose<span style="font-family: 宋体;">列出tar处理的序列；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-z</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">使用gnuzip对档案附带压缩；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-x</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">释放源文件中的内容；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">例如对/etc目录进行备份，有如下命令行：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zcvf /etc-backup.tar.gz /etc</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">恢复配置：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zxvf </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">/etc-backup.tar.gz /etc</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-restore</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">通过网络备份，这在一些服务器环境中经常用到。其中和不同主机进行数据文件交流的途径也不尽相同：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">和Windows服务器：CIFS，Samba；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">和UNIX类服务器：NFS；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">其他解决方案：FTP，HTTP；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">现在以跨系统主机备份为例，介绍一种简单有效的远程备份方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">“<span style="font-family: 宋体;">某图书馆Web服务器操作系统为Windows 2003, 备份服务器为Linux,需要定时（每天）将Web服务器上的数据备份到Linux服务器上。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Web<span style="font-family: 宋体;">服务器IP: 202.1.1.1；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Linux<span style="font-family: 宋体;">备份服务器IP: 202.1.1.2；”</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1）</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">基于samba实现，samba是一种可供不同主机进行数据文件交流的系统工具，它是基于SMB（Server Message Block）协议（ms后来改名为CIFS，Common Internet File System）的一种通用解决方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">首先应对Windows主机上的数据目录进行共享，必要时可设置密码；通常还需要建立一个供backup专用的系统账户，这里设置为username：backup，password：backit，共享点为backit。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">在Linux主机上建立相应的shell脚本（具体教程在后文中有详细说明）：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">/backup/backupweb.sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">#!/bin/sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">mkdir -p /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">cd /backup</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">mount -t smbfs -o username=backup,password=backit //201.1.1.1/backupweb /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zcvf `date +%Y%m%d`.webbackup.tar.gz /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">umount /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">由于要求使用计划任务，在/etc/cron.daily/中加入backupweb.sh的符号连接，以实现每天一次的自动备份：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">cd /etc/cron.daily/</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">ln -s /backup/backupweb.sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">这里就是一次简单的web服务器备份流程了。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2）</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">基于FTP实现。相应于samba，FTP的适用性和稳定性似乎更为优秀，另外在一些安全性较高的系统中还可以采用SSL或者TLS协议加密传输。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">首先需要将待备份目录映射至FTP中的backupweb目录，这方面的工作在web服务器中完成。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Linux<span style="font-family: 宋体;">服务器中建立备份脚本backupweb-ftp.sh：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">#!/bin/sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">cd /tmp</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">wget -m -np \ftp://username:password@202.1.1.1/backupweb/</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zcvf /backup/`date +%Y%m%d`.webbackup.tar.gz /tmp/202.1.1.1/backupweb</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">rm -rf /tmp/202.1.1.1/backupweb</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">后续操作参考方案1即可。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">至于Linux在进行系统备份时具体涉及到哪些系统文件，会在下节有详细说明。以上就是Linux中常用的一些文件备份解决方案的介绍，在实际应用中应根据具体情况灵活使用。</span> </span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+</div>
+
+
+<!--EndFragment-->
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-19T14:24:42+08:00" pubdate data-updated="true">May 19<sup>th</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/15/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b02/">
+		
+			mp77的UNIX课件笔记(2)</a>
+	</h2>
+	<div class="entry-content">
+		<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">第一章</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;"> UNIX</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的前世今生</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 0cm; mso-list: l1 level1 lfo1;"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;">一、</span></span><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">UNIX</span></strong></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">起源</span></strong><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Unix</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的诞生离不开一种于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1965</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年由</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Advance research project agency(United States Department of Defence)</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">支持，并聚集</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MIT</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">以及通用电气共同参与开发的分时系统</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS (MULTiplexed Information and Computing Service)</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的主要设计目标是：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、便利的终端使用——大量远程终端通过电话线接入计算机主机</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、高可靠的大型文件系统——大容量的用户信息共享；存储和构造层次化信息结构的能力</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">然而</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">研制难度超出所有人的预料，长期的研制工作达不到预期目标，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1969</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">4</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">月</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">退出，通用电气公司也退出。最终，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MIT</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">坚持下来，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">成功运行，成为商业产品。事实上</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">运行直到</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">2000</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年，加拿大国防部关闭了最后一个正常运行中的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">系统。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的开发及其研究成果对随后的计算机操作系统有着巨大影响。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1969</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年，已退出</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">项目的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">研究员人员</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Ken Thompson</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Dennis M. Ritchie </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在一台无人用的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">DEC PDP-7</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">上，重新摆弄原先在</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">项目上设计的“空间旅行”游戏。为了使游戏能够在</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">PDP-7</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">上顺利运行，他们陆续开发了浮点运算软件包、显示驱动软件，设计了文件系统、实用程序、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">shell </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和汇编程序。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1970</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年，在一切完成后，给新系统起了个同</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">音相近的名字</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">最初的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是使用汇编语言编写，其中一些系统应用是使用</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">B</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言和汇编语言混合编写的，鉴于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">B</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言并不善于进行系统编程，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Ken Thompson</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Dennis M. Ritchie</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在此基础上做了大量改进工作，并于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1971</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年发明了</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1973</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">用</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言全部重写，自此，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">正式诞生。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1977</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Unix</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">被几乎完全不变的移植到非</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">PDP-7</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">机上，开始广泛应用于各种大学和科研机构。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">从历史上看，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的流行具备以下几点重要因素：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">首先，由于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是用</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言编写，因此它是可移植的，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是世界上唯一能在笔记本计算机、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">PC</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">机、工作站直至巨型机上运行的操作系统；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">第二，系统源代码非常有效，系统容易适应特殊的需求；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">最后，也是最重要的一点，它是一个良好的、通用的、多用户、多任务、分时操作系统；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Ken Thompson</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Dennis M. Ritchie</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">因为其卓越的贡献于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1983</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年获得图灵奖，并于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1999</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年获得美国国家技术金奖。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">然而由于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">强大的商业潜力，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1979</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年发布了最后一个</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">广泛版本</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX 7</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1982</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年发布的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX III</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">最终停止了向各个研究机构发布</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">源代码的做法，而改为商业销售。随后又综合各个大学的研究版本发布了</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX Syetem V Release 1</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Berkeley</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">商业化后延续了其</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">BSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">研究版的开发，其创立的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">TCP/IP</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">协议机制几乎是现有所有系统</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">TCP/IP</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">实现的鼻祖。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1989</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年开发了</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX Syetem V Release 4</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，并集成了当时多种</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">变种版本，成为目前多数变种系统的前身。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">与</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Berkeley</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">BSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是否侵权的问题上长期存在争执，直到</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">被卖给</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Novell</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，双方最终才达成妥协，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">BSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">得以在删除所有</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">源代码的前提下继续开发。使得</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">最终形成了两大技术流派：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX SVRx</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">以及</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Berkeley Software Distribution</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 0cm; mso-list: l1 level1 lfo1;"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;">二、</span></span><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">UNIX</span></strong></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">发行版的比较</span></strong><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的发行版本众多，不过可以分为硬件流和软件流两种流派。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt; mso-list: l2 level1 lfo2;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;">1、</span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">硬件流派</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">硬件流是指厂商所发布的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">仅能在自己研制的硬件系统中使用，硬件流的主要特点是：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">系统和自家的硬件捆绑销售；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">相对较封闭，不同厂家之间无法二进制兼容；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">适合企业级应用；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">性能和稳定性满足关键业务需求；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">对管理员要求最高，但享有较好的维护支持；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">总拥有成本</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">(TCO)</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">较高；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">目前硬件流的代表有</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">IBM</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">SUN</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Solaris</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">以及</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">HP</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">HP/UX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt; mso-list: l2 level1 lfo2;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;">2、</span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">软件流派</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">源代码目前的版权属于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">SCO Group</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，并在此基础上发布了</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">SCO Unix</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，其作为唯一合法的纯商业</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">系统软件具有以下特点：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">较好的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">x86</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">平台兼容性，适合多种硬件架构；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">适合网络服务的多种应用；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">有版权；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">对管理员要求较高，但也有部分商业支持；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">总拥有成本</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">(TCO)</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">一般；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">另外，开源项目中的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">版本已成为目前</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">广泛流行的主要推动力量。包括了</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">BSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">衍生而来的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">FreeBSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">OpenBSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">NetBSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，以及</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">衍生来的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">RedHat</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（自</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">v9.0</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">后终止研发桌面版，进而开发</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">RedHat Enterprise Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">商业系统）、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Fedora</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">RedHat v9.0</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">后由</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">RedHat Inc.</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">支持的开源项目）、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Debian </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（早期的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">发行版之一，拥有数量惊人的软件包支持）、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">SUSE</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（现由</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Novell</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">维护的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">发行版）、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Ubuntu</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Debian</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">衍生而来的一种较新的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">发行版）、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Mandriva</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（即</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Mandrake Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，一种最初基于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">RedHat</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的衍生版本，其维护方</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Mandrakesoft Inc.</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">2005</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年被</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Conective Inc.</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">收购）。开源项目下的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">BSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">具有以下特点：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">较好的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">x86</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">平台兼容性，适合多种硬件；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">从桌面到网络服务，适合多种应用，应用软件丰富；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">源代码开放，不存在版权问题；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">对管理员要求较高，商业支持少，但有社区支持；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">总拥有成本</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">(TCO)</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">较低；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">具有潜在的行业趋势；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 0cm; mso-list: l0 level1 lfo3;"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;">三、</span></span><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">UNIX</span></strong></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span></strong><span style="font-family: Times New Roman;"><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">Linux</span></strong><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Unix</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的主要特点如下：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、开放性</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">遵循世界标准规范，特别是遵循开放系统互连</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">OSI</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">国际标准。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、多任务</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">允许多个程序同时执行。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">3</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、多用户</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">允许多个用户从相同或不同终端上同时使用同一台计算机。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">4</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、良好可移植性、高稳定性和强安全性</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">编译大都相同，具备良好的可移植性，历经长久考验，稳定安全。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">5</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、功能强大、实现高效</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">使用户能方便地、快速地完成许多其他操作系统难以实现的功能。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt; tab-stops: 298.5pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">6</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、卷式文件结构及外部设备文件化</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">                                      </span></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">具有可装卸的树型分层结构文件系统</span><span style="mso-bidi-font-size: 10.5pt;"><span style="font-family: Times New Roman;"> </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，并分别赋予外部设备对应的文件名，用户可以像使用文件那样使用任一设备。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的特点如下：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">继承性</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">作为</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的子集，具备多任务，多用户，良好稳定性，良好安全性，符合</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">POSIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">标准等（</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">POSIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">可移植操作系统接口</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Portable Operating System Interface</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，缩写为</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;"> POSIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，是为了读音更像</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。电气和电子工程师协会</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Institute of Electrical and Electronics Engineers</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">IEEE</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">最初开发</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;"> POSIX </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">标准，是为了提高</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;"> UNIX </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">环境下应用程序的可移植性）。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、多平台</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">支持各种</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">CPU</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，包括</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Intel</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AMD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">PowerPC</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，甚至</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">SUN sparc</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">等。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">3</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、完善的网络协议</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">具备</span><span style="mso-bidi-font-size: 10.5pt;"><span style="font-family: Times New Roman;"> </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">从</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">IPv4</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">到</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">IPv6,</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">内置</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">IPSEC, netfilter</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">防火墙。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">4</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、多种友好用户界面</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Shell</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">GNOME, KDE</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">等。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">5</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、核心与应用分离、遵循</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">GNU</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">协议（</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">GNU&#8217;s Not UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，由</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Richard Matthew Stallman</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1983</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年发起的类</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">组织，旨在推广自由软件系统，该协议框架下包含了许多著名软件</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">GNU/Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Emacs</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、以及</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">编译器</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">GCC</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">等）。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">采用核心与应用分离，核心（</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Kernel</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">），围绕核心的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">shell</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">x-windows</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，以及应用软件共同构成</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">系统。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">接下来介绍</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的配置方法和常用领域的解决方案。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-15T20:56:32+08:00" pubdate data-updated="true">May 15<sup>th</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/15/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b01/">
+		
+			mp77的UNIX课件笔记(1)</a>
+	</h2>
+	<div class="entry-content">
+		<p> 对于UNIX我们不得不说，初次接触的兴奋和期望，半小时过去即烟消云散，恐怕还免不了赶紧回去膜拜ms大神。但当初步了解了这套已历经整整四十个春秋的体系冰山一角，看上去尚能自我安慰的知识框架仿佛突然变得渺小与脆弱：它拥有比ms丰富得多的经历和各领域科学家，它也从来不拒绝商业化——事实上它本来就是“商业”的，更为重要的是，未来似乎无论如何也和它脱离不了干系——只要在有“芯”的地方皆是如此。</p>
+
+<p> 即日起我们将花一些时间连载一部有关于UNIX的文章，她是笔者根据宝贵的课件资料以及《Beginning Unix 1st》(清华译版)、《<span style="font-size: x-small;">Advanced Programming in the UNIX Environment 2nd </span>》（cp电子版，原谅我对众多大部头实在头疼&hellip;）中的一些浅显易懂的内容总结而来的。其中覆盖了Unix介绍、配置、用户系统、文件系统、高级工具/命令、进程管理、shell/shell脚本编程、网络配置等纷繁复杂的内容，应用部分力争做到与c源程序并发讨论。</p>
+
+<p> 连载的目的是深入对UNIX的理解并熟悉Linux编程，高手就不必在这里浪费时间&hellip;新手读者可以凑合看看。我们强调实践，但并不等于在屏幕前发呆，无论如何，手边一本名著经典和随时思考都是必不可少的。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-15T17:13:02+08:00" pubdate data-updated="true">May 15<sup>th</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/01/%25e7%25ae%2580%25e5%258d%2595%25e7%259a%2584%25e8%25af%258d%25e6%25b3%2595%25e5%2588%2586%25e6%259e%2590%25e7%25a8%258b%25e5%25ba%258f%25e5%2592%258c%25e4%25b8%2580%25e7%25a7%258dlex-for-win32%25e7%2594%25a8%25e6%25b3%2595%25e7%25a4%25ba%25e4%25be%258b%25ef%25bc%2588%25e4%25b8%258b%25ef%25bc%2589/">
+		
+			简单的词法分析程序和一种lex for Win32用法示例（下）</a>
+	</h2>
+	<div class="entry-content">
+		<p> 前面介绍了如何使用lex写一个词法分析器，为了证明上述程序的正确性，需生成与它对应的c语言代码，并编译成可执行程序。unix下使用这些工具非常简单（以至于两行commands就可以完成工作），在此就不做详细说明，接下来我们来面对ms留给我们的烂摊子&hellip;&hellip;</p>
+
+<p> 为了证明在win32下利用lex生成词法分析器有多复杂，我们选用parser generator 2和vc++6.0组合向大家展示ms强大的化神奇为腐朽的力量（依然不推荐win32用户使用vs平台进行此项工作）。</p>
+
+<p> parser generator可以在以下网址免费获取：<a href="http://www.bumblebeesoftware.com/downloads.htm"><a href="http://www.bumblebeesoftware.com/downloads.htm">http://www.bumblebeesoftware.com/downloads.htm</a></a></p>
+
+<p> vc++6.0？别告诉我你不知道怎么获取&hellip;&hellip;</p>
+
+<p> 首先启动pg2,要进行针对vc++6.0的配置工作:</p>
+
+<p> 选择menu下的project-&gt;LibBuilder,Complers选则Visual C++(32-bit),并点击compiler properties,这时在Options内作如下设置:</p>
+
+<p>Version:6</p>
+
+<p> Unicode:true</p>
+
+<p> treat wchar_t as Built-in type:False</p>
+
+<p> Compiler Bin directory: C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\BIN</p>
+
+<p> Compiler Bin directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\MSDEV98\BIN</p>
+
+<p> Compiler Include directory: C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\INCLUDE</p>
+
+<p> Compiler Include directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE</p>
+
+<p> Compiler Library directory:C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\LIB</p>
+
+<p> Compiler Library directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\LIB</p>
+
+<p> (注: 请读者按vc实际安装目录而定)选择完毕后点击OK,在父窗口中选择Build生成供vc使用的库文件.</p>
+
+<p> &hellip;&hellip;</p>
+
+<p> 经过漫长等待库文件终于生成了&hellip;现在回到主界面,选择project-&gt;parserWizard,填入自己的lex工程名,选择vc++6.0(32-bit),进入下一步.Files选lex file only,其它均保持默认即可.填入lex源文件名后即可选择complete.</p>
+
+<p> 这时程序会自动生成lex文件的框架,如果在前面的设置中还选择了create main function,文本中还会有几行简单的main函数.但是该文本对我们没有任何意义&hellip;直接将前文所述的源代码覆盖至此即可.</p>
+
+<p> 现在选择project-&gt;compile file,build后就会生成lex源码对应的c语言source和include文件了.接下来启动vc++6.0进行相关配置.</p>
+
+<p> 首先点击Tools-&gt;Options,切换至directory选项卡,分别在show directories for中的Include、Library和Source选项中添加如下信息（每项一条）：</p>
+
+<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\INCLUDE</p>
+
+<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\LIB\MSVC32</p>
+
+<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\SOURCE</p>
+
+<p>（注：应按pg的实际安装路径而定）现在新建win32 console application工程，并点击Project-&gt;Settings选项，Settings for先选择win32 debug。然后在C/C++选项卡的Proprocessor Definitions选项中添入,YYDEBUG，切换至Link选项卡在Object/library modules中添入yld.lib ylmtd.lib ylmtrd.lib。</p>
+
+<p> 将Settings for切换至win32 Release重复上述操作，就完成了整个前期的所有配置工作&hellip;&hellip;</p>
+
+<p> 在工程中添加前面生成的source和include文件，直接build即可。现在，我们就可以按照PL/0的基本关键词写出一些简单的程序并加以词法分析了（事实证明这时的编译功能还十分微弱，但却是向前迈出一大步了）。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-01T20:21:18+08:00" pubdate data-updated="true">May 1<sup>st</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/bian-yi-ji-zhu/'>编译技术</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/01/%25e7%25ae%2580%25e5%258d%2595%25e7%259a%2584%25e8%25af%258d%25e6%25b3%2595%25e5%2588%2586%25e6%259e%2590%25e7%25a8%258b%25e5%25ba%258f%25e5%2592%258c%25e4%25b8%2580%25e7%25a7%258dlex-for-win32%25e7%2594%25a8%25e6%25b3%2595%25e7%25a4%25ba%25e4%25be%258b/">
+		
+			简单的词法分析程序和一种lex for Win32用法示例（上）</a>
+	</h2>
+	<div class="entry-content">
+		<p> 学计算机的同学都要学习编译原理，理论是抽象了点，但最终目的毕竟只是让我们了解一下程序语言编译器的构造原理。</p>
+
+<p> 尽管没有充分的证据显示lex+yacc能证明一个人学习cp程度的好坏（考试的作用就更难以拿来说明这些了），但好歹大家学过nfa，学过确定化，学过dfa化简，用c语言大概可以写出设定简单的词法分析程序了。</p>
+
+<p> 然而教材上都是一些纯理论性的内容，实现技术的精粹还得去找洋人学。因而本科生只需掌握lex和yacc——这已经是为极限，再低就难以搞清楚cp和programming有什么关系&hellip;再高？说实话暂时已是心有余而力不足了&hellip;</p>
+
+<p> 那么lex的作用大概就是这些，尽管在几乎所有的程序设计语言编译器中词法分析都是由语法分析程序不断调用而生效，但对于我们来说分别实现并作演示是再好不过。这就是本文介绍词法分析器lex的目的。</p>
+
+<p> 一个lex源程序由四部分构成，基本框架如下：</p>
+
+<p>%{</p>
+
+<p>//包含的头文件、函数声明以及一些全局量的声明</p>
+
+<p>%}</p>
+
+<p>//词法定义</p>
+
+<p>%%</p>
+
+<p>//规则定义</p>
+
+<p>%%</p>
+
+<p>//自定义程序</p>
+
+<p> 需要注意的是，带有%的分隔符必须顶格书写，词法分析和规则定义的基本形式为正规式。为了显示词法分析的最终成果，需要定义一个二元结构体，分别存储其单词内容以及归属类别，并存入定义好的目标文件中，同时按国际惯例显示源代码出错信息。</p>
+
+<p> 现在给出一个PL/0语言（pascal语言的一种子集）的EBNF描述：</p>
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;prog&gt; → program &lt;id&gt;；&lt;block&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;block&gt; → [&lt;condecl&gt;][&lt;vardecl&gt;][&lt;proc&gt;]&lt;body&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;condecl&gt; → const &lt;const&gt;{，&lt;const&gt;}</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;const&gt; → &lt;id&gt;:=&lt;integer&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;vardecl&gt; → var &lt;id&gt;{，&lt;id&gt;}</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;proc&gt; → procedure &lt;id&gt;（&lt;id&gt;{，&lt;id&gt;}）;&lt;block&gt;{;&lt;proc&gt;}</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;body&gt; → begin &lt;statement&gt;{;&lt;statement&gt;}end</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;statement&gt; → &lt;id&gt; := &lt;exp&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |if &lt;lexp&gt; then &lt;statement&gt;[else &lt;statement&gt;]</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |while &lt;lexp&gt; do &lt;statement&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |call &lt;id&gt;[（&lt;exp&gt;{，&lt;exp&gt;}）]</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |&lt;body&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |read (&lt;id&gt;{，&lt;id&gt;})</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |write (&lt;exp&gt;{，&lt;exp&gt;})</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;lexp&gt; → &lt;exp&gt; &lt;lop&gt; &lt;exp&gt;|odd &lt;exp&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;exp&gt; → [+|-]&lt;term&gt;{&lt;aop&gt;&lt;term&gt;}</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;term&gt; → &lt;factor&gt;{&lt;mop&gt;&lt;factor&gt;}</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;factor&gt;→&lt;id&gt;|&lt;integer&gt;|(&lt;exp&gt;)</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;lop&gt; → =|&lt;&gt;|&lt;|&lt;=|&gt;|&gt;=</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;aop&gt; → +|-</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;mop&gt; → *|/</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;id&gt; → l{l|d}   （注：l表示字母）</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;integer&gt; → d{d} </p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;"> </p>
+
+
+<p style="margin: 0cm 0cm 0pt; mso-pagination: widow-orphan;">注释：</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;prog&gt;：程序 ；&lt;block&gt;：块、程序体 ；&lt;condecl&gt;：常量说明；&lt;const&gt;：常量；</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;vardecl&gt;：变量说明 ；&lt;proc&gt;：分程序 ； &lt;body&gt;：复合语句 ；&lt;statement&gt;：语句；</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;exp&gt;：表达式 ；&lt;lexp&gt;：条件 ；&lt;term&gt;：项； &lt;factor&gt;：因子 ；&lt;aop&gt;：加法运算符；</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;mop&gt;：乘法运算符； &lt;lop&gt;：关系运算符</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">odd：判断表达式的奇偶性。</p>
+
+
+<p> 利用上述文字中提取出的词法信息，我们可以建立一个简单的词法分析程序：</p>
+
+<p>%{
+/<em>
+ </em>
+ <em> coded by 韩翼 from nwu    Email:8621316@qq.com
+ </em>
+ */</p>
+
+<h1>include &lt;stdio.h&gt;</h1>
+
+<h1>include &lt;stdlib.h&gt;</h1>
+
+<h1>include &lt;string.h&gt;</h1>
+
+<h1>define MAX_COUNT 10000     //最大可接受id数</h1>
+
+<p>int process();       //处理函数
+int main(int argc,char <strong>argv);
+int nowline = 1;      //当前行数计数器
+int errorno = 0;      //出错计数器
+int flag = 0;       //分支标识
+int count = 0;       //id计数器
+char desfilename[32];     //目标文件名
+char <em>srcfilename;      //源文件名
+FILE </em>srcfile;       //源文件缓冲指针
+FILE <em>desfile;       //目标文件缓冲指针
+struct result       //id标记二元组
+{
+ char </em>content;
+ char <em>description;
+}result[MAX_COUNT];
+%}
+d [0-9]         
+l [a-zA-Z]
+wr ([0-9]+)<a href="[a-zA-Z]|[0-9]">a-zA-Z</a></em>
+integer [0-9]+
+id <a href="[a-zA-Z]|[0-9]">a-zA-Z</a><em>
+anotherline [\n]
+whitespace [\t]+
+%%
+&ldquo;program&rdquo; { flag = 0; process(); }
+&ldquo;const&rdquo; { flag = 1; process(); }
+&ldquo;:=&rdquo; { flag = 2; process(); }
+&ldquo;var&rdquo; { flag = 3; process(); }
+&ldquo;procedure&rdquo; { flag = 4; process(); }
+&ldquo;begin&rdquo; |
+&ldquo;end&rdquo; { flag = 5; process(); }
+&ldquo;if&rdquo; |
+&ldquo;then&rdquo; |
+&ldquo;else&rdquo; |
+&ldquo;while&rdquo; |
+&ldquo;call&rdquo; |
+&ldquo;read&rdquo; |
+&ldquo;write&rdquo; { flag = 6; process(); }
+&ldquo;+&rdquo; |
+&ldquo;&ndash;&rdquo; { flag = 7; process(); }
+&ldquo;</em>&rdquo; |
+&ldquo;/&rdquo; { flag = 8; process(); }
+&ldquo;=&rdquo; |
+&ldquo;&lt;&gt;&rdquo; |
+&ldquo;&lt;&rdquo; |
+&ldquo;&lt;=&rdquo; |
+&ldquo;&gt;&rdquo; |
+&ldquo;&gt;=&rdquo; { flag = 9; process(); }
+&ldquo;(&rdquo; |
+&ldquo;)&rdquo; |
+&ldquo;,&rdquo; |
+&ldquo;;&rdquo; { flag = 10; process(); }
+{wr} { flag = 13; process(); }
+{id} { flag = 11; process(); }
+{integer} { flag = 12; process(); }
+{anotherline} { nowline++; }
+{whitespace} { ; }
+&ldquo; &rdquo; { ; }
+. { flag = 14; process(); }
+%%
+int process()
+{
+ switch(flag)
+ {
+ case 0:
+  result[count].description = &ldquo;&lt;prog&gt;&rdquo;;
+  break;
+ case 1:
+  result[count].description = &ldquo;&lt;condecl&gt;&rdquo;;
+  break;  
+ case 2:
+  result[count].description = &ldquo;&lt;op&gt;&rdquo;;
+  break;
+ case 3:
+  result[count].description = &ldquo;&lt;vardecl&gt;&rdquo;;
+  break;
+ case 4:
+  result[count].description = &ldquo;&lt;proc&gt;&rdquo;;
+  break;
+ case 5:
+  result[count].description = &ldquo;&lt;body&gt;&rdquo;;
+  break;
+ case 6:
+  result[count].description = &ldquo;&lt;statement&gt;&rdquo;;
+  break;
+ case 7:
+  result[count].description = &ldquo;&lt;aop&gt;&rdquo;;
+  break;
+ case 8:
+  result[count].description = &ldquo;&lt;mop&gt;&rdquo;;
+  break;
+ case 9:
+  result[count].description = &ldquo;&lt;lop&gt;&rdquo;;
+  break;
+ case 10:
+  result[count].description = &ldquo;&lt;bop&gt;&rdquo;;
+  break;
+ case 11:
+  result[count].description = &ldquo;&lt;identifier&gt;&rdquo;;
+  break;
+ case 12:
+  result[count].description = &ldquo;&lt;integer&gt;&rdquo;;
+  break;
+ case 13:
+  errorno++;
+  result[count].description = &ldquo;&lt;wrong integer or id&gt;&rdquo;;
+  printf(&ldquo;%s(%d) : error &lsquo;%s&rsquo; : wrong integer or identifier\n&rdquo;,srcfilename,nowline,yytext);
+  break;
+ case 14:
+  errorno++;
+  result[count].description = &ldquo;&lt;unknown identifier&gt;&rdquo;;
+  printf(&ldquo;%s(%d) : error &lsquo;%s&rsquo; : unknown identifier\n&rdquo;,srcfilename,nowline,yytext);
+  break;
+ }
+ result[count].content = yytext;
+ fprintf(desfile,&ldquo;%d: %s\t%s \n&rdquo;,count+1,result[count].content,result[count].description);
+ count++;
+ return 0;
+}
+int main(int argc,char </strong>argv)
+{ 
+ int i = 0;
+ if( argc != 2)
+ {
+  printf(&ldquo;No sourcecode processed : parameter error\n&rdquo;);
+  return 0;
+ }
+ srcfilename = argv[1];
+ strcat(desfilename,argv[1]);
+ while (desfilename[i] != &lsquo;.&rsquo;)
+ {
+  i++;
+ }
+ desfilename[i] = &lsquo;\0&rsquo;;
+ strcat(desfilename,&ldquo;.pl0&rdquo;);
+ if( (srcfile = fopen(argv[1],&ldquo;r&rdquo;)) == NULL )
+ {
+  printf(&ldquo;No sourcecode processed : cannot open the file \&rdquo;%s\&ldquo;\n&rdquo;,argv[1]);
+  return 0;
+ }
+ if( (desfile = fopen(desfilename,&ldquo;a&rdquo;)) == NULL )
+ {
+  printf(&ldquo;No sourcecode processed : cannot write the file \&rdquo;%s\&ldquo;\n&rdquo;,desfilename);
+  return 0;
+ }
+ yyin = srcfile;
+ yylex();
+ fprintf(desfile,&ldquo;\n&rdquo;);
+ fprintf(desfile,&ldquo;completed! welcome to lex by mp77,this is only a demo for compile principle.\n&rdquo;);
+ printf(&ldquo;%s &ndash; %d error(s)\n&rdquo;,desfilename,errorno);
+ printf(&ldquo;completed! welcome to lex by mp77,this is only a demo for compile principle.\n&rdquo;);
+ fclose(desfile);
+ fclose(srcfile);
+ return 0;
+}</p>
+
+<p> 接下来我们会介绍如何利用lex工具生成本代码的C语言源代码，并使用vc6.0编译成win32 console程序。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-01T19:25:02+08:00" pubdate data-updated="true">May 1<sup>st</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/bian-yi-ji-zhu/'>编译技术</a>
+
+</div>
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="10" class="prev">Prev</a>
+    
+    
+        <a href="12" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

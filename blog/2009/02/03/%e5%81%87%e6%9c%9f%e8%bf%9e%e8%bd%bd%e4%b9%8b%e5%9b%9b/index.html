@@ -1,0 +1,500 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>假期连载之四  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="（限定性线性表——栈，栈的递归应用）        五）限定性线性表——栈和队列          前面我们介绍了几种简单线性表的抽象数据结构及其基本运算，在一些应用中，通常还有一些逻辑结构与线性表相同，但含额外运算限制的数据结构需求，例如栈和队列。        栈        &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">假期连载之四</h2>
+	<div class="entry-content"><p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">（<strong style="mso-bidi-font-weight: normal;">限定性线性表——栈，栈的递归应用</strong>）</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-size: small; font-family: Times New Roman;">       </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">五）限定性线性表——栈和队列</span><span lang="EN-US"></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">前面我们介绍了几种简单线性表的抽象数据结构及其基本运算，在一些应用中，通常还有一些逻辑结构与线性表相同，但含额外运算限制的数据结构需求，例如栈和队列。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-size: small; font-family: Times New Roman;">       </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">栈</span><span lang="EN-US"></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">栈</span><span lang="EN-US"><span style="font-family: Times New Roman;">Stack</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">被广泛应用于计算机基础应用中，例如汇编程序中的中断、句法识别以及表达式运算，函数的传参、函数值返回等各种机制。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">栈的定义是<strong style="mso-bidi-font-weight: normal;">一种只允许在表的末端进行插入和删除的线性表</strong>。通常允许相关操作的一端称为栈顶</span><span lang="EN-US"><span style="font-family: Times New Roman;">Top</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，而不允许进行插入和删除操作的一端称为栈底</span><span lang="EN-US"><span style="font-family: Times New Roman;">bottom</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。当栈中没有任何元素时称为空栈。由栈的定义可知，栈又是一种后进先出（</span><span lang="EN-US"><span style="font-family: Times New Roman;">LIFO</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span lang="EN-US"><span style="font-family: Times New Roman;">Last In First Out</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）的线性表。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">栈的抽象数据类型定义与普通线性表相类似，例如下面的</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言形式描述：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>ADT Stack</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数据元素：可以是任意类型的数据，但必须属于同一个数据对象。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">结点关系：栈中数据元素之间是线性关系。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>InitStack(S);<span style="mso-tab-count: 2;">          </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">初始化空栈</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>ClearStack(S);<span style="mso-tab-count: 2;">              </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">将</span><span lang="EN-US"><span style="font-family: Times New Roman;">S</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">置为空栈</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>IsEmpty(S);<span style="mso-tab-count: 2;">           </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">判断是否栈空，是则返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">TRUE</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，否则返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">FALSE</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>IsFull(S);<span style="mso-tab-count: 3;">               </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">判断是否栈满，与上类似。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>Push(S,x);<span style="mso-tab-count: 2;">             </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在</span><span lang="EN-US"><span style="font-family: Times New Roman;">S</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">栈顶压入元素</span><span lang="EN-US"><span style="font-family: Times New Roman;">x</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，成功返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">TRUE</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，否则返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">FALSE</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>Pop(S,x);<span style="mso-tab-count: 3;">                     </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在</span><span lang="EN-US"><span style="font-family: Times New Roman;">S</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">栈顶弹出元素，并保存入</span><span lang="EN-US"><span style="font-family: Times New Roman;">x</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">返回，与上类似。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>GetTop(S,x);<span style="mso-tab-count: 2;">         </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">取</span><span lang="EN-US"><span style="font-family: Times New Roman;">S</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">栈顶元素并保存入</span><span lang="EN-US"><span style="font-family: Times New Roman;">x</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">返回，但不弹出该值，与上类似。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">通常对于一种线性表，一般具备顺序存储和链式存储两种形式，栈相应分为顺序栈和链栈。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">顺序栈按定义可知其是建立在顺序存储结构的基础上，通常用一维数组表示。下面是顺序栈的结构类型定义：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">#define Stack_Size 50</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">typedef struct</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>stackElementType elements[Stack_Size];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>int top;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">用</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">描述的顺序栈初始化构造函数如下：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">template &lt;class T&gt;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">seqStack&lt;T&gt;::SeqStack(int sz):top(-1), Stack_Size (sz)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>elements = new T[Stack_Size];</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>assert(elements != NULL);<span style="mso-tab-count: 1;">    </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">判断动态存储分配是否成功</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">上段程序需要注意的是，构造函数在声明部分就初始化了数据成员的值，并在参数部分声明了一个局部变量，这里的</span><span lang="EN-US"><span style="font-family: Times New Roman;">Stack_Size</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">并非</span><span lang="EN-US"><span style="font-family: Times New Roman;">const</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类型，这可以使用户自己定义顺序栈空间的大小，</span><span lang="EN-US"><span style="font-family: Times New Roman;">top=-1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">表示栈顶指针指空，这种<strong style="mso-bidi-font-weight: normal;">写法需要注意</strong>。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">下面以链栈为例，给出栈的几种基本运算的伪码描述。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）进栈操作</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>Push(top,x)<span style="mso-tab-count: 6;">                                       </span>//top</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为栈顶指针，</span><span lang="EN-US"><span style="font-family: Times New Roman;">x</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为数据元素值，下同</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>temp=(LinkStackNode *)malloc(sizeof(LinkStackNode));</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>if temp==NULL then</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>return FALSE;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>else then</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>temp-&gt;data=x;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>temp-&gt;next=top-&gt;next;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>top-&gt;next=temp;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>return TRUE;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）出栈操作</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>Pop(top,*x)</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>temp=top-&gt;next;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>if temp==NULL then</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>return FALSE;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>else then</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>top-&gt;next=temp-&gt;next;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>*x=temp-&gt;data;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>free(temp);</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>return TRUE;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在以上两例中，栈由带头结点</span><span lang="EN-US"><span style="font-family: Times New Roman;">top</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的单链表实现，具体操作时采用了头插法入栈。实际应用中还可以采用尾指针进行尾插法入栈。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">3</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）多栈共享</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在实际应用中，可能会遇到一个程序使用多个栈的情况。当使用顺序栈时，会由于栈空间预估不足，造成有的栈溢出、有的栈空闲过多等问题，为了解决上述问题，通常采用多个数组共享一个数组空间，并利用栈操作的特性对其存储空间互相补充，这就是多栈共享技术。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">多栈共享中又存在两种情况，其一是程序需要使用最多两个栈的情况，通常采用双端栈技术予以解决，这种栈的特点如下：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo1; tab-stops: list 39.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">1、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">首先申请一个数组空间</span><span lang="EN-US"><span style="font-family: Times New Roman;">S[M]</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，将两个栈的栈底分别放在一维数组的两端，分别为</span><span lang="EN-US"><span style="font-family: Times New Roman;">0</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span lang="EN-US"><span style="font-family: Times New Roman;">M-1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo1; tab-stops: list 39.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">2、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">通过简单对比可知，由于栈顶动态变化，两栈在空间上形成互补关系，逻辑上实现了栈空间由其所需求空间动态决定的机制，从而提高了空间利用率。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo1; tab-stops: list 39.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">3、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">在实际应用中通常将两个栈编号标记，方便调用。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">另一种情况，是当程序需求两个以上栈的情况。显然双端栈无法满足这一需求。因此当我们遇到这种情况时，一般采用链栈形式，并用一个统一的一维结构指针数组管理每个栈的栈顶指针。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">栈与递归</span><span lang="EN-US"></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">递归</span><span lang="EN-US"><span style="font-family: Times New Roman;">recurve</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在数学和计算机科学中有着十分重要的作用。在计算机科学中，递归从编译原理的句法定义，到数据结构中的树形结构搜索、排序等问题，都是必不可少的应用。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">递归在数学及程序设计方法学中的定义是：若一个对象部分地包含它自己，或用它自己给自己定义，则称这个对象是递归的，而且若一个过程直接地或间接地调用自己，则称这个过程是递归过程。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-spacerun: yes;"><span style="font-family: Times New Roman;"> </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">有人可能注意到了“直接”或“间接”的表述，“直接递归函数”顾名思义就是在自己的定义中直接调用自己的方法函数。“间接”主要是指方法函数通过一系列的中间语句，通过其它函数调用自己。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">一般在以下</span><span lang="EN-US"><span style="font-family: Times New Roman;">3</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">种情况下，需要使用递归方法。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）定义上是递归的</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">例如数学上常用的阶乘函数、幂函数、</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">斐波拉契数列等，其定义运算都是递归的。例如斐波那契数列，这是一个从前两项为自然数</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，第三项开始为前两项之和的无穷数列，即：</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">3</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">5</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">8</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">13</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">…</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。在计算机实现时，我们只需给出此数列的递归关系“</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">f(n)=f(n-1)+f(n-2)</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，其中</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n&gt;=2<span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial;" lang="EN-US"><span lang="EN-US">”</span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial;" lang="EN-US">，即可实现递归运算。</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">）数据结构是递归的</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在我们已经讨论过的单链表结构中，可以明显地看到一种递归关系。即</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">LinkNode</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">由数据域</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">data</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">和指针域</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">next</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">构成，而</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">next</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">又由</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">LinkNode</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">定义。利用递归关系我们可以写出寻找单链表中某一结点的算法的递归形式。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">3</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">）问题的解法是递归的</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">递归是解决一些应用问题唯一有效的解决方案。典型例题即是著名的汉诺塔</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">Tower of Hanoi</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">问题。问题介绍可以看</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">wiki</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">：</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><a href="http://zh.wikipedia.org/w/index.php?title=%E6%B1%89%E8%AF%BA%E5%A1%94&amp;variant=zh-cn"><span style="font-size: small; color: #800080;">http://zh.wikipedia.org/w/index.php?title=%E6%B1%89%E8%AF%BA%E5%A1%94&amp;variant=zh-cn</span></a></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">这里给出简单的伪码演示：</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>Hanoi(n,A,B,C)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>If n==1 then printf Move top disk from A to C;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>Else then</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>Hanoi(n-1,A,C,B);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>printf Move top disk from A to C;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>Hanoi(n-1,B,A,C);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">这里重申递推和递归的关系，递推是利用问题本身所具有的递推关系对问题求解的一种方法，而这种递推性质决定了已知</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">i-1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的解，由此可求得</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">…</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">i-1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的一系列的解，其问题规模为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，例如</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n!</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">问题。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">递推问题通常可以用递归方法求解，同时也可以使用循环迭代的方法求解</span></strong><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在程序设计语言中，递归的实现主要得益于递归工作栈的工作原理。每一层递归调用所需要保存的的信息包括：</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">）返回地址，即上一层中本次调用自己的语句的后继语句处。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">）在本次过程调用时，为与形参结合的实参创建副本。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">3</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">）本层的局部变量。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在每进入一层递归时，系统就要建立一个新的工作记录，把上述项目登入并加入到递归工作栈的栈顶位置。每退出一层递归，就从递归工作栈退出一个工作记录。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在实际应用中，递归通常体现出两个特性：</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">）递归算法简单有效，通常可用来解决一些复杂问题。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span>2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">）由于实现机制的问题，递归算法效率较低。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">因此在求解一些问题时，我们一般用递归方法分析问题，而使用非递归方法求解相关问题。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">）用栈实现递归过程的非递归算法</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">一般的递归过程可以用递归调用树进行表示，因此可以由栈代替递归算法实现树的运算，这将在以后树结构的介绍中作一说明。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span>2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">）用迭代法实现递归过程</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">实际上就是使用循环结构，有一类递归可以使用循环结构简单表示，即单向递归。单向递归是指递归函数中虽然有一处以上的递归调用语句，但各次递归调用语句的参数只和主调用函数有关，相互之间参数无关，并且这些递归调用的语句处于算法的最后，例如斐波那契数列。还有一种递归，指递归调用语句只有一个，而且是处于算法最后，显然这是单向递归的一个特例，称为尾递归。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">无论使用何种非递归方法实现递归过程，一般应先根据递归算法画出程序流程图，然后建立起循环结构。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在下一节，我们将继续扩展递归应用，使用回溯法</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">backracking</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">解决较复杂的迷宫</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">Maze</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">问题，并对几种高级编程技术进行介绍，并加以综合利用。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">（未完待续）</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-03T16:39:55+08:00" pubdate data-updated="true">Feb 3<sup>rd</sup>, 2009</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,692 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Visual C++动态链接库编程（五）  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="　　前文我们对非MFC DLL和MFC规则DLL进行了介绍，现在开始详细分析DLL的最后一种类型――MFC扩展DLL。 　　6.1概论 　　MFC扩展DLL与MFC规则DLL的相同点在于在两种DLL的内部都可以使用MFC类库，其不同点在于MFC扩展DLL与应用程序的接口可以是MFC的。 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Visual C++动态链接库编程（五）</h2>
+	<div class="entry-content"><p>　　前文我们对非MFC DLL和MFC规则DLL进行了介绍，现在开始详细分析DLL的最后一种类型――MFC扩展DLL。</p>
+
+<p>　　<strong>6.1概论</strong></p>
+
+<p>　　MFC扩展DLL与MFC规则DLL的相同点在于在两种DLL的内部都可以使用MFC类库，其不同点在于MFC扩展DLL与应用<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>的接口可以是MFC的。MFC扩展DLL的含义在于它是MFC的扩展，其主要功能是实现从现有MFC库类中派生出可重用的类。MFC扩展DLL使用MFC 动态链接库版本，因此只有用共享MFC 版本生成的MFC 可执行文件（应用程序或规则DLL）才能使用MFC扩展DLL。</p>
+
+<p class="guanggao">　　从前文可知，MFC规则DLL被MFC向导自动添加了一个CWinApp的对象，而MFC扩展DLL则不包含该对象，它只是被自动添加了DllMain 函数。对于MFC扩展DLL，开发人员必须在DLL的DllMain函数中添加初始化和结束代码。</p>
+
+
+<p>　　从下表我们可以看出三种DLL对DllMain入口函数的不同处理方式：</p>
+
+<p><p class="guanggao">
+<table border="1" align="center" width="90%" cellPadding="2" cellSpacing="0">
+<tr>
+<td>DLL类型</td>
+<td>入口函数</td>
+</tr>
+<tr>
+<td>非 MFC DLL</td>
+<td>编程者提供DllMain函数</td>
+</tr>
+<tr>
+<td>MFC规则 DLL</td>
+<td>CWinApp对象的InitInstance 和 ExitInstance</td>
+</tr>
+<tr>
+<td>MFC扩展 DLL</td>
+<td>MFC DLL向导生成DllMain 函数</td>
+</tr>
+</table>
+<p class="guanggao">　　对于MFC扩展DLL，系统会自动在工程中添加如下表所示的宏，这些宏为DLL和应用程序的编写提供了方便。像AFX_EXT_CLASS、AFX_EXT_API、AFX_EXT_DATA这样的宏，在DLL和应用程序中将具有不同的定义，这取决于<em>AFXEXT宏是否被定义。这使得在DLL和应用程序中，使用统一的一个宏就可以表示出输出和输入的不同意思。在DLL中，表示输出（因为</em>AFXEXT被定义，通常是在编译器的标识参数中指定/D_AFXEXT）；在应用程序中，则表示输入（_AFXEXT没有定义）。</p></p>
+
+<p><p class="guanggao">
+<table border="1" align="center" width="90%" cellPadding="2" cellSpacing="0">
+<tr>
+<td>宏</td>
+<td>定义</td>
+</tr>
+<tr>
+<td>AFX_CLASS_IMPORT</td>
+<td><strong>declspec(dllexport)</td>
+</tr>
+<tr>
+<td>AFX_API_IMPORT</td>
+<td></strong>declspec(dllexport)</td>
+</tr>
+<tr>
+<td>AFX_DATA_IMPORT</td>
+<td><strong>declspec(dllexport)</td>
+</tr>
+<tr>
+<td>AFX_CLASS_EXPORT</td>
+<td></strong>declspec(dllexport)</td>
+</tr>
+<tr>
+<td>AFX_API_EXPORT</td>
+<td><strong>declspec(dllexport)</td>
+</tr>
+<tr>
+<td>AFX_DATA_EXPORT</td>
+<td></strong>declspec(dllexport)</td>
+</tr>
+<tr>
+<td>AFX_EXT_CLASS</td>
+<td>#ifdef _AFXEXT
+　AFX_CLASS_EXPORT</p>
+
+<h1>else</h1>
+
+<p>　AFX_CLASS_IMPORT</td>
+</tr>
+<tr>
+<td>AFX_EXT_API</td>
+<td>#ifdef _AFXEXT
+　AFX_API_EXPORT</p>
+
+<h1>else</h1>
+
+<p>　AFX_API_IMPORT</td>
+</tr>
+<tr>
+<td>AFX_EXT_DATA</td>
+<td>#ifdef _AFXEXT
+　AFX_DATA_EXPORT</p>
+
+<h1>else</h1>
+
+<p>　AFX_DATA_IMPORT</td>
+</tr>
+</table>
+<p class="guanggao">　　<strong>6.2 MFC扩展DLL导出MFC派生类</strong></p>
+　　在这个例子中，我们将产生一个名为“ExtDll”的MFC扩展DLL工程，在这个DLL中导出一个对话框类，这个对话框类派生自MFC类CDialog。</p>
+
+<p>　　使用MFC向导生成MFC扩展DLL时，系统会自动添加如下代码：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>static AFX_EXTENSION_MODULE ExtDllDLL = { NULL, NULL };
+extern &ldquo;C&rdquo; int APIENTRYDllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
+{
+　// Remove this if you use lpReserved</p>
+
+<p>　UNREFERENCED_PARAMETER( lpReserved );</p>
+
+<p>　//说明：lpReserved是一个被系统所保留的参数，对于隐式链接是一个非零值，对于显式链接值是零</p>
+
+<p>　if (dwReason == DLL_PROCESS_ATTACH)
+　{
+　　TRACE0( &ldquo;EXTDLL.DLL Initializing!\n&rdquo; );
+　　// Extension DLL one-time initialization
+　　if ( !AfxInitExtensionModule( ExtDllDLL, hInstance ))
+　　　return 0;
+　　　// Insert this DLL into the resource chain
+　　new CDynLinkLibrary( ExtDllDLL );
+　}
+　else if (dwReason == DLL_PROCESS_DETACH)
+　{
+　　TRACE0( &ldquo;EXTDLL.DLL Terminating!\n&rdquo; );
+　　// Terminate the library before destructors are called
+　　AfxTermExtensionModule( ExtDllDLL );
+　}
+　return 1; // ok
+}</td>
+</tr>
+</table>
+<p class="guanggao">　　这一段代码含义晦涩，我们需要对其进行解读：</p>
+　　（1）上述代码完成MFC扩展DLL的初始化和终止处理；</p>
+
+<p>　　（2）初始化期间所创建的 CDynLinkLibrary 对象使MFC扩展 DLL 可以将 DLL中的CRuntimeClass 对象或资源导出到应用程序；</p>
+
+<p>　　（3）AfxInitExtensionModule函数捕获模块的CRuntimeClass 结构和在创建 CDynLinkLibrary 对象时使用的对象工厂（COleObjectFactory 对象）；</p>
+
+<p>　　（4）AfxTermExtensionModule函数使 MFC 得以在每个进程与扩展 DLL 分离时（进程退出或使用AfxFreeLibrary卸载DLL时）清除扩展 DLL；</p>
+
+<p>　　（5）第一条语句static AFX_EXTENSION_MODULE ExtDllDLL = { NULL, NULL };定义了一个AFX_EXTENSION_MODULE类的静态全局对象，AFX_EXTENSION_MODULE的定义如下：</p>
+
+<p><p class="guanggao">
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>struct AFX_EXTENSION_MODULE
+{
+　BOOL bInitialized;
+　HMODULE hModule;
+　HMODULE hResource;
+　CRuntimeClass<em> pFirstSharedClass;
+　COleObjectFactory</em> pFirstSharedFactory;
+};</td>
+</tr>
+</table>
+<p class="guanggao">　　由AFX_EXTENSION_MODULE的定义我们可以更好的理解（2）、（3）、（4）点。</p>
+　　在资源编辑器中添加一个如图15所示的对话框，并使用MFC类向导为其添加一个对应的类CExtDialog，系统自动添加了ExtDialog.h和ExtDialog.cpp两个头文件。
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="376" src="http://dev.yesky.com/imagelist/05/10/z44bxd805tf3.jpg" height="219" /><img border="0" width="376" src="http://dev.yesky.com/imagelist/05/10/z44bxd805tf3.jpg" height="219" />
+图15 MFC扩展DLL中的对话框</td>
+</tr>
+</table>
+<p class="guanggao">　　修改ExtDialog.h中CExtDialog类的声明为：</p></p>
+
+<p><p class="guanggao">
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>class AFX_EXT_CLASS CExtDialog : public CDialog
+{
+　public:
+　　CExtDialog( CWnd<em> pParent = NULL );
+　　enum { IDD = IDD_DLL_DIALOG };
+　protected:
+　　virtual void DoDataExchange( CDataExchange</em> pDX );
+　　DECLARE_MESSAGE_MAP()
+};</td>
+</tr>
+</table>
+<p class="guanggao">　　这其中最主要的改变是我们在class AFX_EXT_CLASS CExtDialog语句中添加了“AFX_EXT_CLASS”宏，则使得DLL中的CExtDialog类被导出。</p>
+<p class="guanggao">　　<strong>6.3 MFC扩展DLL的加载</strong></p>
+　　6.3.1 隐式加载</p>
+
+<p>　　我们在6.2工程所在的工作区中添加一个LoadExtDllDlg工程，用于演示MFC扩展DLL的加载。在LoadExtDllDlg工程中添加一个如图16所示的对话框，这个对话框上包括一个“调用DLL”按钮。
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="394" src="http://dev.yesky.com/imagelist/05/10/4o3b052d7377.jpg" height="138" /><img border="0" width="394" src="http://dev.yesky.com/imagelist/05/10/4o3b052d7377.jpg" height="138" />
+图16 MFC扩展DLL调用工程中的对话框</td>
+</tr>
+</table>
+　　在与图16对应对话框类实现文件的头部添加：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>// LoadExtDllDlg.cpp : implementation file
+//#include &ldquo;..\ExtDialog.h&rdquo;</p>
+
+<h1>pragma comment( lib, &ldquo;ExtDll.lib&rdquo; )</h1>
+
+<p>而“调用DLL”按钮的单击事件的消息处理函数为：</p>
+
+<p>void CLoadExtDllDlg::OnDllcallButton()
+{
+　CExtDialog extDialog;
+　extDialog.DoModal();
+}</td>
+</tr>
+</table>
+　　当我们单击“调用DLL”的时候，弹出了如图15的对话框。</p>
+
+<p>　　为提供给用户隐式加载（MFC扩展DLL一般使用隐式加载，具体原因见下节），MFC扩展DLL需要提供三个文件：</p>
+
+<p>　　（1）描述DLL中扩展类的头文件；</p>
+
+<p>　　（2）与动态链接库对应的.LIB文件；</p>
+
+<p>　　（3）动态链接库.DLL文件本身。</p>
+
+<p>　　有了这三个文件，应用<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>的开发者才可充分利用MFC扩展DLL。</p>
+
+<p>　　6.3.2 显示加载</p>
+
+<p>　　显示加载MFC扩展DLL应使用MFC全局函数AfxLoadLibrary而不是WIN32 API中的LoadLibrary。AfxLoadLibrary 最终也调用了 LoadLibrary这个API，但是在调用之前进行了线程同步的处理。</p>
+
+<p>　　AfxLoadLibrary 的函数原型与 LoadLibrary完全相同，为：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>HINSTANCE AFXAPI AfxLoadLibrary( LPCTSTR lpszModuleName );</td>
+</tr>
+</table>
+　　与之相对应的是，MFC 应用程序应使用AfxFreeLibrary 而非FreeLibrary 卸载MFC扩展DLL。AfxFreeLibrary的函数原型也与 FreeLibrary完全相同，为：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>BOOL AFXAPI AfxFreeLibrary( HINSTANCE hInstLib );</td>
+</tr>
+</table>
+　　如果我们把上例中的“调用DLL”按钮单击事件的消息处理函数改为：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>void CLoadExtDllDlg::OnDllcallButton()
+{
+　HINSTANCE hDll = AfxLoadLibrary( &ldquo;ExtDll.dll&rdquo; );
+　if(NULL == hDll)
+　{
+　　AfxMessageBox( &ldquo;MFC扩展DLL动态加载失败&rdquo; );
+　　return;
+　}　CExtDialog extDialog;
+　extDialog.DoModal();
+　AfxFreeLibrary(hDll);
+}</td>
+</tr>
+</table>
+　　则工程会出现link错误：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>LoadExtDllDlg.obj : error LNK2001: unresolved external symbol &ldquo;<strong>declspec(dllimport) public: virtual </strong>thiscall CExtDialog::~CExtDialog(void)&rdquo; (<strong>imp_??1CExtDialog@@UAE@XZ)LoadExtDllDlg.obj : error LNK2001: unresolved external symbol &ldquo;</strong>declspec(dllimport) public: <strong>thiscall CExtDialog::CExtDialog(class CWnd *)&rdquo; (</strong>imp_??0CExtDialog@@QAE@PAVCWnd@@@Z)</td>
+</tr>
+</table>
+　　提示CExtDialog的构造函数和析构函数均无法找到！是的，对于派生MFC类的MFC扩展DLL，当我们要在应用程序中使用DLL中定义的派生类时，我们不宜使用动态加载DLL的方法。</p>
+
+<p>　　<strong>6.4 MFC扩展DLL加载MFC扩展DLL</strong></p>
+
+<p>　　我们可以在MFC扩展DLL中再次使用MFC扩展DLL，但是，由于在两个DLL中对于AFX_EXT_CLASS、AFX_EXT_API、AFX_EXT_DATA宏的定义都是输出，这会导致调用的时候出现问题。</p>
+
+<p>　　我们将会在调用MFC扩展DLL的DLL中看到link错误：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>error LNK2001: unresolved external symbol …&hellip;&hellip;.</td>
+</tr>
+</table>
+　　因此，在调用MFC扩展DLL的MFC扩展DLL中，在包含被调用DLL的头文件之前，需要临时重新定义AFX_EXT_CLASS的值。下面的例子显示了如何实现：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>//临时改变宏的含义“输出”为“输入”#undef AFX_EXT_CLASS</p>
+
+<h1>undef AFX_EXT_API</h1>
+
+<h1>undef AFX_EXT_DATA</h1>
+
+<h1>define AFX_EXT_CLASS AFX_CLASS_IMPORT</h1>
+
+<h1>define AFX_EXT_API AFX_API_IMPORT</h1>
+
+<h1>define AFX_EXT_DATA AFX_DATA_IMPORT</h1>
+
+<p>//包含被调用MFC扩展DLL的头文件</p>
+
+<h1>include &ldquo;CalledDLL.h&rdquo;</h1>
+
+<p>//恢复宏的含义为输出</p>
+
+<h1>undef AFX_EXT_CLASS</h1>
+
+<h1>undef AFX_EXT_API</h1>
+
+<h1>undef AFX_EXT_DATA</h1>
+
+<h1>define AFX_EXT_CLASS AFX_CLASS_EXPORT</h1>
+
+<h1>define AFX_EXT_API AFX_API_EXPORT</h1>
+
+<h1>define AFX_EXT_DATA AFX_DATA_EXPORT</td></h1>
+
+<p></tr>
+</table>
+　　<strong>6.5 MFC扩展DLL导出函数和变量</strong></p>
+
+<p>　　MFC扩展DLL导出函数和变量的方法也十分简单，下面我们给出一个简单的例子。</p>
+
+<p>　　我们在MFC向导生成的MFC扩展DLL工程中添加gobal.h和global.cpp两个文件：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>//global.h:MFC扩展DLL导出变量和函数的声明extern &ldquo;C&rdquo;
+{
+　int AFX_EXT_DATA total; //导出变量
+　int AFX_EXT_API add( int x, int y ); //导出函数
+}</p>
+
+<p>//global.cpp:MFC扩展DLL导出变量和函数定义</p>
+
+<h1>include &ldquo;StdAfx.h&rdquo;</h1>
+
+<h1>include &ldquo;global.h&rdquo;</h1>
+
+<p>extern &ldquo;C&rdquo; int total;
+int add(int x,int y)
+{
+　total = x + y;
+　return total;
+}</td>
+</tr>
+</table>
+　　编写一个简单的控制台<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>来调用这个MFC扩展DLL：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>#include &lt;iostream.h&gt;</p>
+
+<h1>include &lt;afxver<em>.h&gt;//AFX_EXT_DATA、AFX_EXT_API宏的定义在afxver</em>.h头文件中</h1>
+
+<h1>pragma comment ( lib, &ldquo;ExtDll.lib&rdquo; )</h1>
+
+<h1>include &ldquo;..\global.h&rdquo;</h1>
+
+<p>int main(int argc, char* argv[])
+{
+　cout &lt;&lt; add(2,3) &lt;&lt; endl;
+　cout &lt;&lt; total;
+　return 0;
+}</td>
+</tr>
+</table>
+　　运行程序，在控制台上看到：</p>
+
+<p>　　5</p>
+
+<p>　　5</p>
+
+<p>　　另外，在Visual C++下建立MFC扩展DLL时，MFC DLL向导会自动生成.def文件。因此，对于函数和变量，我们除了可以利用AFX_EXT_DATA、AFX_EXT_API宏导出以外，在.def文件中定义导出也是一个很好的办法。与之相比，在.def文件中导出类却较麻烦。通常需要从工程生成的.map文件中获得类的所有成员函数被C++编译器更改过的标识符，并且在.def文件中导出这些“奇怪”的标识符。因此，MFC扩展DLL通常以AFX_EXT_CLASS宏直接声明导出类。</p>
+
+<p>　　<strong>6.6 MFC扩展DLL的应用</strong></p>
+
+<p>　　上述各小节所举MFC扩展DLL的例子均只是为了说明某方面的问题，没有真实地体现“MFC扩展” 的内涵，譬如6.2派生自CDialog的类也不具备比CDialog更强的功能。MFC扩展DLL的真实内涵体现在它提供的类虽然派生自MFC类，但是提供了比MFC类更强大的功能、更丰富的接口。下面我们来看一个具体的例子（<a target="_blank" href="http://www.mydown.com/code/244/244724.html"><font color="#dd2222">单击此处下载本工程</font></a>）。</p>
+
+<p>　　我们知道static控件所对应的CStatic类不具备设置背景和文本颜色的接口，这使得我们不能在对话框或其它用户界面上自由灵活地修改static控件的颜色风格，因此我们需要一个提供了SetBackColor和SetTextColor接口的CStatic派生类CMultiColorStatic。
+　
+　　这个类的声明如下：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>class AFX_EXT_CLASS CMultiColorStatic : public CStatic
+{
+　// Construction　public:
+　　CMultiColorStatic();
+　　virtual ~CMultiColorStatic();
+　　// Attributes
+　protected:
+　　CString m_strCaption;
+　　COLORREF m_BackColor;
+　　COLORREF m_TextColor;
+　　// Operations
+　public:
+　　void SetTextColor( COLORREF TextColor );
+　　void SetBackColor( COLORREF BackColor );
+　　void SetCaption( CString strCaption );</p>
+
+<p>　　// Generated message map functions
+　protected:
+　　afx_msg void OnPaint();
+　　DECLARE_MESSAGE_MAP()
+};</td>
+</tr>
+</table>
+　　在这个类的实现文件中，我们需要为它提供WM_PAINT消息的处理函数（这是因为颜色的设置依赖于WM_PAINT消息）：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>BEGIN_MESSAGE_MAP(CMultiColorStatic, CStatic)//{ {AFX_MSG_MAP(CMultiColorStatic)
+　ON_WM_PAINT() //为这个类定义WM_PAINT消息处理函数
+//}}AFX_MSG_MAP
+END_MESSAGE_MAP()</td>
+</tr>
+</table>
+　　下面是这个类中的重要成员函数：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>//为CMultiColorStatic类添加“设置文本颜色”接口void CMultiColorStatic::SetTextColor( COLORREF TextColor )
+{
+　m_TextColor = TextColor; //设置文字颜色
+}</p>
+
+<p>//为CMultiColorStatic类添加“设置背景颜色”接口</p>
+
+<p>void CMultiColorStatic::SetBackColor( COLORREF BackColor )
+{
+　m_BackColor = BackColor; //设置背景颜色
+}</p>
+
+<p>//为CMultiColorStatic类添加“设置标题”接口</p>
+
+<p>void CMultiColorStatic::SetCaption( CString strCaption )
+{
+　m_strCaption = strCaption;
+}</p>
+
+<p>//重画Static，颜色和标题的设置都依赖于这个函数</p>
+
+<p>void CMultiColorStatic::OnPaint()
+{
+　CPaintDC dc(this); // device context for painting
+　CRect rect;
+　GetClientRect( &amp;rect );
+　dc.SetBkColor( m_BackColor );
+　dc.SetBkMode( TRANSPARENT );
+　CFont <em>pFont = GetParent()&ndash;&gt;GetFont();//得到父窗体的字体
+　CFont </em>pOldFont;
+　pOldFont = dc.SelectObject( pFont );//选用父窗体的字体
+　dc.SetTextColor( m_TextColor );//设置文本颜色
+　dc.DrawText( m_strCaption, &amp;rect, DT_CENTER );//文本在Static中央
+　dc.SelectObject( pOldFont );
+}</td>
+</tr>
+</table>
+　　为了验证CMultiColorStatic类，我们制作一个基于对话框的应用程序，它包含一个如图17所示的对话框。该对话框上包括一个static控件和三个按钮，这三个按钮可分别把static控件设置为“红色”、“蓝色”和“绿色”。
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="333" src="http://dev.yesky.com/imagelist/05/10/ui4t07vro853.jpg" height="166" /><img border="0" width="333" src="http://dev.yesky.com/imagelist/05/10/ui4t07vro853.jpg" height="166" />
+图17 扩展的CStatic类调用演示</td>
+</tr>
+</table>
+　　下面看看应如何编写与这个对话框对应的类。</p>
+
+<p>　　包含这种Static的对话框类的声明如下：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>#include &ldquo;..\MultiColorStatic.h&rdquo;</p>
+
+<h1>pragma comment ( lib, &ldquo;ColorStatic.lib&rdquo; )// CCallDllDlg dialog</h1>
+
+<p>class CCallDllDlg : public CDialog
+{
+　public:
+　　CCallDllDlg(CWnd<em> pParent = NULL); // standard constructor
+　　enum { IDD = IDD_CALLDLL_DIALOG };
+　　CMultiColorStatic m_colorstatic; //包含一个CMultiColorStatic的实例
+　protected:
+　　virtual void DoDataExchange(CDataExchange</em> pDX);//DDX/DDV support
+　　HICON m_hIcon;</p>
+
+<p>　// Generated message map functions
+　//{ {AFX_MSG(CCallDllDlg)</p>
+
+<p>　virtual BOOL OnInitDialog();
+　afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+　afx_msg void OnPaint();
+　afx_msg HCURSOR OnQueryDragIcon();
+　afx_msg void OnRedButton();
+　afx_msg void OnBlueButton();
+　afx_msg void OnGreenButton();
+//}}AFX_MSG
+DECLARE_MESSAGE_MAP()
+};</td>
+</tr>
+</table>
+　　下面是这个类中与使用CMultiColorStatic相关的主要成员函数：
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>void CCallDllDlg::DoDataExchange(CDataExchange* pDX)
+{
+　CDialog::DoDataExchange(pDX);
+　//{ {AFX_DATA_MAP(CCallDllDlg)
+　　DDX_Control(pDX, IDC_COLOR_STATIC, m_colorstatic);
+　//使m_colorstatic与IDC_COLOR_STATIC控件关联
+　//}}AFX_DATA_MAP
+}BOOL CCallDllDlg::OnInitDialog()
+{
+　…
+　// TODO: Add extra initialization here</p>
+
+<p>　// 初始static控件的显示</p>
+
+<p>　m_colorstatic.SetCaption(&ldquo;最开始为黑色&rdquo;);
+　m_colorstatic.SetTextColor(RGB(0,0,0));
+　return TRUE; // return TRUE unless you set the focus to a control
+}</p>
+
+<p>//设置static控件文本颜色为红色</p>
+
+<p>void CCallDllDlg::OnRedButton()
+{
+　m_colorstatic.SetCaption( &ldquo;改变为红色&rdquo; );
+　m_colorstatic.SetTextColor( RGB( 255, 0, 0 ) );
+　Invalidate( TRUE ); //导致发出WM_PAINT消息
+}</p>
+
+<p>//设置static控件文本颜色为蓝色</p>
+
+<p>void CCallDllDlg::OnBlueButton()
+{
+　m_colorstatic.SetCaption( &ldquo;改变为蓝色&rdquo; );
+　m_colorstatic.SetTextColor( RGB( 0, 0, 255 ) );
+　Invalidate( TRUE ); //导致发出WM_PAINT消息
+}</p>
+
+<p>//设置static控件文本颜色为绿色</p>
+
+<p>void CCallDllDlg::OnGreenButton()
+{
+　m_colorstatic.SetCaption( &ldquo;改变为绿色&rdquo; );
+　m_colorstatic.SetTextColor( RGB(0,255,0) );
+　Invalidate( TRUE ); //导致发出WM_PAINT消息
+}</td>
+</tr>
+</table>
+　　至此，我们已经讲解完成了所有类型的动态链接库，即非MFC DLL、MFC规则DLL和MFC扩展DLL。下一节将给出DLL的三个工程实例，与读者朋友们共同体会DLL的应用范围和使用方法。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-05T15:14:54+08:00" pubdate data-updated="true">Apr 5<sup>th</sup>, 2008</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

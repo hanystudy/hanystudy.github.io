@@ -1,0 +1,202 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>可爱的TSP  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content=" 有意思的是，我接触到的第一个算法问题就是TSP（旅行商问题），自此以后我开始热衷于计算机科学，遗憾的是至今也未有什么收获。但是很显然，TSP及其衍生问题始终是横亘面前的一座高峰，对每一个人—包括所有计算机科学家，都是那么的不可逾越。也许真要等超越阿兰图灵的大师出现—我等凡人恐怕是看不到这一天了 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">可爱的TSP</h2>
+	<div class="entry-content"><p> 有意思的是，我接触到的第一个算法问题就是TSP（旅行商问题），自此以后我开始热衷于计算机科学，遗憾的是至今也未有什么收获。但是很显然，TSP及其衍生问题始终是横亘面前的一座高峰，对每一个人—包括所有计算机科学家，都是那么的不可逾越。也许真要等超越阿兰图灵的大师出现—我等凡人恐怕是看不到这一天了。</p>
+
+<p> 不过这里仍要说明的是，我们学习和体会TSP，并不是为了吃饱撑的自虐，也非为了搬弄别人整出的玩意来给自己凑文章。TSP的解法之多令人惊讶，各种方法—即使是一名高中生和一位大学教授所掌握的，在TSP面前似乎都一律平等。但它为我们巩固和发掘基本算法提供了确切的衡量准则，我想这才应该是凡人研究TSP的真正目的。</p>
+
+<p> TSP问题最初的形式来源于爱尔兰数学家W. R. Hamilton发明的智力迷绳游戏，即在一张无向图中找到一条Hamilton回路。也就是从无向图中任意起点处找到一条路径，该路径唯一地穿过图中的每个顶点，最终回到起点。通常Hamilton回路也被称为Hamilton圈。经过若干年演进，普林斯顿大学的Hassler Whitney首次将该系列问题命名为Travelling Salesman Problem，即TSP，此时问题不仅限于找到一条回路了—而是要求找到花费尽可能少的解。1972年，伯克利的Richard M. Karp证明了Hamilton回路问题是NP完备的，那么作为Hamilton回路的扩展—TSP问题也至少具有NP难的特性。截止目前，应用传统方法解决TSP问题的有动态规划法、贪心法、回溯法、分支限界法、线性规划方法以及采用混合策略；而对于在有限时间内寻找尽可能优解的大规模TSP问题，目前更多的倾向于采用随机组合优化搜索方法，如模拟退火、禁忌搜索、神经网络、蚁群算法、遗传算法以及混合策略等。</p>
+
+<p> 应当注意的是，一个实用的TSP解决方案，通常包括了两个阶段的改进算法，即第一步的初始路径生成和第二步的优化算法。当然，由于本文并非是研究某种特定的算法及其改进，因此并不会突出介绍其中某一个阶段。下面我们就常用的解决方法进行介绍并做简单评价。</p>
+
+<p> <strong>动态规划</strong></p>
+
+<p><span style="color: #000000;"> DP思路清晰，易于实现。显然很方便就能找到TSP的最优子结构，从而给出基本的状态转移方程Mk(i,V) = min(Mk-1(j,V{j}),dij)。需要指出的是，DP解决这一类图论问题都具有较高的时间和空间复杂度，一般可用于求解问题规模较小的TSP问题。</span></p>
+
+<p><span style="color: #000000;"> <strong>贪心思想</strong></span></p>
+
+<p><span style="color: #000000;"> Greedy为我们贡献了许多著名的图论算法，如Dijkstra的SSP、Prim和Kruskal的MST等等。然而贪心多用于求近似解，而非定格于最优值。目前贪心思想常用于辅助随机搜索算法，类似一种启发式机制，但初始解在许多情况下与最优解相距较远。</span></p>
+
+<p><span style="color: #000000;"> <strong>回溯法</strong></span></p>
+
+<p><span style="color: #000000;"> 一般的TSP问题可以简单归纳为排列树问题，那么应用回溯法的确可以得出最优解。问题在于，回溯法的解空间非常庞大，一般的剪枝方法并不十分有效，其时间复杂度上界甚至达到n!。然而通过DP思想的启发，我们可以尝试设计一种自顶向下的动态规划算法解决TSP问题，即备忘录方法。备忘录方法相当于搜索和DP的一种折衷，但也丝毫没有改善较高空间复杂度的问题。</span></p>
+
+<p><span style="color: #000000;"> <strong>分支限界法</strong></span></p>
+
+<p><span style="color: #000000;"> BB也是一种解空间搜索方法，但和回溯法有明显区别。回溯法通常是一种DFS搜索方法，而BB实际上是一种BFS方法。其中采用队列式的BB方法本质上就是BFS，只不过添加了一定程度上的剪枝策略。而采用优先队列的BB倾向于寻找一个最优解，在许多最优化问题中，如果限界函数和优先队列设计得当，那么BB的性能要优秀许多。然而不可否认，BB的时间复杂度上界实际上并不比回溯法低。</span></p>
+
+<p><span style="color: #000000;"> <strong>整数线性规划</strong></span></p>
+
+<p><span style="color: #000000;"> 线性规划方法本身就要比TSP问题复杂得多，这里不得不提LP的原因在于，诞生以来计算机科学本应是崇尚应用的科学，尽管学科本身目前还比不上数学、物理学的历史悠久和博大精深，但后者如今基本上需要计算机来完成从理论到实践的跨越。我认为如果一位科学家只热衷于研究理论，那么他应被称作是数学家或者物理学家。</span></p>
+
+<p><span style="color: #000000;"> 这里所说的整数线性规划ILP解决TSP问题，实际上是由美国兰德公司的科学家在上世纪50年代提出的。如今ILP被用于许多学科，最直观的—如现代物流专业，TSP是其必须解决的基本问题之一，目前ILP已成为运筹学中的专门课题。ILP问题描述如下：</span></p>
+
+<p><span style="color: #000000;"> 试求min(c<strong>x</strong>)，使其满足A<strong>x</strong>=<strong>b</strong>，其中A为m*n矩阵，<strong>x</strong>为n维列向量，<strong>x</strong>&gt;=0。</span></p>
+
+<p><span style="color: #000000;"> 根据数据特征的不同，ILP问题又可分为0-1ILP问题、混合ILP问题和纯ILP问题。一般的TSP问题可描述为典型的0-1ILP问题，故可用各种基于线性规划单纯形算法的割平面方法尝试解决。</span></p>
+
+<p> 实际上，针对大规模TSP问题，现有的确定性方法已经很难在规定时间内得出较好的解—当然，如果不计耗费，那么上述算法恐怕还是得到最优解的截至目前的绝对保证，其花费甚至达到了数百CPU年。那么，许多智能算法的大行其道也就有其合理性了。唯一的问题在于，大部分智能算法来源于生物、物理学仿真和人工智能，学习和理解起来并不容易，更何况要用于解决实际问题。况且当前智能算法的“遍地开花”也表明，此类方法的稳定性和准确性还需得到进一步检验和完善。</p>
+
+<p> 由于时间紧张（万恶的项目居然又延期&hellip;），我们这里无法再就智能算法做进一步展开了。下个月的文章里，我们将尝试介绍并实现一种应用确定性方法和智能算法解决类TSP（难度超过非对称TSP）问题的例子。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-09T15:21:00+08:00" pubdate data-updated="true">Apr 9<sup>th</sup>, 2011</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/suan-fa-tao-lun/'>算法讨论</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> --->
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

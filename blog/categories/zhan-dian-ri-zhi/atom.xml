@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 站点日志 | Wing of Dream 梦境之翼]]></title>
+  <link href="http://www.hanyi.name/blog/categories/zhan-dian-ri-zhi/atom.xml" rel="self"/>
+  <link href="http://www.hanyi.name/"/>
+  <updated>2014-07-12T22:04:54+08:00</updated>
+  <id>http://www.hanyi.name/</id>
+  <author>
+    <name><![CDATA[Han Yi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[喜讯：热烈祝贺本站正式被OOXX！！]]></title>
+    <link href="http://www.hanyi.name/blog/2012/10/13/%25e5%2596%259c%25e8%25ae%25af%25ef%25bc%259a%25e7%2583%25ad%25e7%2583%2588%25e7%25a5%259d%25e8%25b4%25ba%25e6%259c%25ac%25e7%25ab%2599%25e6%25ad%25a3%25e5%25bc%258f%25e8%25a2%25abooxx%25ef%25bc%2581%25ef%25bc%2581/"/>
+    <updated>2012-10-13T01:05:39+08:00</updated>
+    <id>http://www.hanyi.name/blog/2012/10/13/%e5%96%9c%e8%ae%af%ef%bc%9a%e7%83%ad%e7%83%88%e7%a5%9d%e8%b4%ba%e6%9c%ac%e7%ab%99%e6%ad%a3%e5%bc%8f%e8%a2%abooxx%ef%bc%81%ef%bc%81</id>
+    <content type="html"><![CDATA[<p>经向有关部门了解，本站已被GFW屏蔽，具体原因不明。大家今后VPN见！百度的朋友就对不住啦&hellip;&hellip;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[整站迁移完成]]></title>
+    <link href="http://www.hanyi.name/blog/2012/07/07/%25e6%2595%25b4%25e7%25ab%2599%25e8%25bf%2581%25e7%25a7%25bb%25e5%25ae%258c%25e6%2588%2590/"/>
+    <updated>2012-07-07T21:20:38+08:00</updated>
+    <id>http://www.hanyi.name/blog/2012/07/07/%e6%95%b4%e7%ab%99%e8%bf%81%e7%a7%bb%e5%ae%8c%e6%88%90</id>
+    <content type="html"><![CDATA[<p>最近一直在考虑是不是该升级到vps了？毕竟单纯的空间已经远远无法满足现在互联网DIY的需求。然而思考再三，vps需要花更多时间去照顾，恰好在未来一段时间内又不会很轻松，只好先忍一忍。于是决定趁早先拿下新域名hanyi.name。结果问题就来了，国内的空间商要求新绑定域名必须重新备案，否则按规定不予解析。还好我对这一套比较熟悉，屁颠儿跑去XX部网站办备案，结果被告知个人只允许备案1次，机构最多也只允许备案5次。而我前次备案是在08年，当时还是因为他们无故删除了我在06年就提交并审核通过的备案信息，悲剧的是他们这次居然成功保存了4年前的信息！回来找空间商商量，最简单的方法还是换别人的真实信息重新提交。顿时无语，原来早前CN域名开放是纯属坑人呢？进而有了将整站迁移至国外空间的想法。</p>
+
+<p>域名问题很好解决，许多国外知名域名商支持通过支付宝进行国际支付，加上pending共花了一天时间完成。缺点是DNS初解析较慢，平时用的CN域名的解析在国内几乎是实时更新的。另一方面采用了原空间商在国外的主机业务，用电信线路看主机的ping不错，不过迁移后发现明显还是慢了一个级别，目前看来只好通过在今后优化页面内容来改善了。好处是空间容量是以前的三倍，不过现在看来用处似乎不大。</p>
+
+<p>迁移工作还是颇费周折，现在看来wordpress迁移唯一必然的成功办法还是数据库内容链接的全文替换，否则只改几个字段可能会出现无法进入后台的情况。再加上周中实验室网络欠费，用了几天坑爹的“西大国内网”，很难顺利完成整站内容的迁移。于是只好把多余的时间用来进行一些反思：多年以来我做了许多自己感兴趣的工作，尽管无甚成果，但确实也学习了不少东西，总体上始终循着当初所谓“自由学习，自由思想”的理念，也从未遇过大的挫折。然而，出于一些忧虑和回避，自己有意无意忽视了平等交流：所谓平等交流，在我看来就是用自己的想法去换取别人的想法，并且所有人都认同且遵守唯一的道德准则。事实上，我对周围真实环境的了解程度非常低，某种程度上是基于以上原因。这也就导致了自己对身边事物的看法具有很强的不确定性，难以在自身问题上做出有效判断。另一方面也导致自己至今缺乏一些常识&hellip;&hellip;有些事在别人看来是显而易见，自己却不容易想明白。</p>
+
+<p>考虑到有些外链是指向原mp77.cn，本站仍会对继续支持这个域名，并持续至少1年时间。而hanyi.name会是我的永久性域名，今后也不会再向站外自动导出文章。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[即日起开始同步分发blog数据]]></title>
+    <link href="http://www.hanyi.name/blog/2011/04/09/%25e5%258d%25b3%25e6%2597%25a5%25e8%25b5%25b7%25e5%25bc%2580%25e5%25a7%258b%25e5%2590%258c%25e6%25ad%25a5%25e5%2588%2586%25e5%258f%2591blog%25e6%2595%25b0%25e6%258d%25ae/"/>
+    <updated>2011-04-09T22:50:17+08:00</updated>
+    <id>http://www.hanyi.name/blog/2011/04/09/%e5%8d%b3%e6%97%a5%e8%b5%b7%e5%bc%80%e5%a7%8b%e5%90%8c%e6%ad%a5%e5%88%86%e5%8f%91blog%e6%95%b0%e6%8d%ae</id>
+    <content type="html"><![CDATA[<p> 本博即将迎来第300篇文章了。重建三年多来我做过多次较大的改动，这一版本无疑是维持较久的（已超过一年时间）。目前觉得对大家有所帮助的还是有关于技术方面的文章，但显然技术需要“交流”才能进步。不过有趣的是本博自诩为“交流频道”，却几乎没有相关交流的内容——这其实与我始终坚守这个独立的小站点有关，更何况百度根本不买我等穷弱儒的账。</p>
+
+<p> 然而独立建站是我十余年的信念，岂能轻易废止。在300篇纪念之际我决定争取彻底改变多年来封闭写作的习惯，将原创文章第一时间推送至renren.com和qqzone，同时进一步向google提交新摘要数据并加强seo。另一方面，由于时间的原因，我能拥有的亲自撰写文章的时间越来越少，但潜在的阅读量仍十分可观。因此决定今后在三个不同的blog上提交侧重不同的数据：</p>
+
+<p> <a href="http://">http://</a><a href="http://www.hanyi.name">www.hanyi.name</a> mp77的技术交流频道：主站点，注重原创文章，实际上目前已很少有转载内容了。</p>
+
+<p> <a href="http://8621316.qzone.qq.com"><a href="http://8621316.qzone.qq.com">http://8621316.qzone.qq.com</a></a> QQ空间日志：重点转载文章，内容将多样化。</p>
+
+<p> <a href="http://blog.renren.com/micropotato"><a href="http://blog.renren.com/micropotato">http://blog.renren.com/micropotato</a></a> 人人网日志：同步hanyi.name数据，并记录转载+评论的短篇文章。</p>
+
+<p> 采取以上策略的原因在于，由于长时间逐渐减少，在短时间的条件下通过压缩原创篇幅来扩大信息量。如果有朝一日非主站点的数据量足够吸引人的话，我仍会选择将其中数据反导入到主站点中。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[站点维护]]></title>
+    <link href="http://www.hanyi.name/blog/2010/08/12/%25e7%25ab%2599%25e7%2582%25b9%25e7%25bb%25b4%25e6%258a%25a4/"/>
+    <updated>2010-08-12T14:12:39+08:00</updated>
+    <id>http://www.hanyi.name/blog/2010/08/12/%e7%ab%99%e7%82%b9%e7%bb%b4%e6%8a%a4</id>
+    <content type="html"><![CDATA[<p> 今天扫除了所有已知的bug，包括slideshow和nav menu的问题。值得注意的是，在更新了pixopoint_menu后发生了未知的兼容错误，给出的free support声称是和某些主题的css设置发生冲突，这条信息确误导过我们一段时间。经过调试后发现问题和主题css设置无关，而是出在曾经采用的一段web图片效果脚本lightbox上。事实上我们早在一年多前就已经弃用lightbox，但是当时并未将脚本载入的代码注释掉，结果与新的menu插件发生冲突而导致menu无法访问的bug&hellip;无论如何，一切都成为过去了。</p>
+
+<p> 另外，最近在自学Numerical Methods和CG时突然发现以前学过的数学是极有用的，但是不得不反复学习&hellip;这再一次验证了我的观点：多数人学习前应当尽量培养兴趣，尤其是对理论应用于创新实践的憧憬。仅凭借对各种天才神童的吹捧，永远无法使我们在黑暗中找到光明。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[WordPress 3.0beta1 Arrived！]]></title>
+    <link href="http://www.hanyi.name/blog/2010/04/04/wordpress-3-0beta1-arrived%25ef%25bc%2581/"/>
+    <updated>2010-04-04T17:46:27+08:00</updated>
+    <id>http://www.hanyi.name/blog/2010/04/04/wordpress-3-0beta1-arrived%ef%bc%81</id>
+    <content type="html"><![CDATA[<p> 伟大的WP在北京时间3日夜间抢先发布了里程碑式的3.0 beta1，此次更新包括了Custom Menu、WP/MU merge等我们一贯关注的内容（这也是我们日常促进程序自定义化的重点内容）。</p>
+
+<p> 从test things上来看，新的缺省主题2010将支持自定义背景图片和页眉选项，对我们这些希望保持WP一贯风格的伪劣designer来说，真正支持傻瓜式DIY风格也是不错的思路。</p>
+
+<p> 另外，3.0中会提供一个代码级功能，即Custom Post Types。从介绍来看这一功能仅仅是一个进行基本Types分类的便捷工具，熟悉tumblr的用户可能会乐于享受这种相当程度上的自动化。不过Kovshenin向我们展示了该扩展更为广阔的前景，WP在未来的持续扩张似乎已经不可避免了。</p>
+
+<p> 下面是关于本文的一些链接：</p>
+
+<p> <a href="http://wordpress.org/development/2010/04/wordpress-3-0-beta-1/"><a href="http://wordpress.org/development/2010/04/wordpress-3-0-beta-1/">http://wordpress.org/development/2010/04/wordpress-3-0-beta-1/</a></a></p>
+
+<p> <a href="http://kovshenin.com/archives/custom-post-types-in-wordpress-3-0/"><a href="http://kovshenin.com/archives/custom-post-types-in-wordpress-3-0/">http://kovshenin.com/archives/custom-post-types-in-wordpress-3-0/</a></a></p>
+
+<p> 对于我们来说，目前尚无足够的精力来全力体验和测试该早期beta版本，因此希望很快就能有更加稳定的版本释出。</p>
+
+<p> 还有，别忘了我们的接头暗号：Touch it, Squeeze it, Turn it, Flip it!</p>
+]]></content>
+  </entry>
+  
+</feed>
