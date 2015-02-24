@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 转载 | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/zhuan-zai/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[flowingdata:2010年的10个最佳数据可视化工程]]></title>
-    <link href="http://www.hanyi.name/blog/2011/02/27/flowingdata2010%25e5%25b9%25b4%25e7%259a%258410%25e4%25b8%25aa%25e6%259c%2580%25e4%25bd%25b3%25e6%2595%25b0%25e6%258d%25ae%25e5%258f%25af%25e8%25a7%2586%25e5%258c%2596%25e5%25b7%25a5%25e7%25a8%258b/"/>
+    <link href="http://www.hanyi.name/blog/2011/02/27/flowingdata-2010-de-10-10-zui-zui-jia-shu-ju-ke-shi-hua-gong/"/>
     <updated>2011-02-27T12:06:30+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/02/27/flowingdata2010%e5%b9%b4%e7%9a%8410%e4%b8%aa%e6%9c%80%e4%bd%b3%e6%95%b0%e6%8d%ae%e5%8f%af%e8%a7%86%e5%8c%96%e5%b7%a5%e7%a8%8b</id>
+    <id>http://www.hanyi.name/blog/2011/02/27/flowingdata-2010-de-10-10-zui-zui-jia-shu-ju-ke-shi-hua-gong</id>
     <content type="html"><![CDATA[<p> 本周是开学第一周，事务繁多，故无暇进行相关专题讨论了。这里仅转载一篇来自flowingdata的有趣文章，值得一提的是，数据可视化、可视分析等都是最近几年才逐渐兴起的新兴科学，尽管下面这篇文章仅仅能代表原作者的个人观点，但我们似乎能从中一窥可视化技术在未来的科学和经济价值。</p>
 
 <p> <a href="http://flowingdata.com/2010/12/14/10-best-data-visualization-projects-of-the-year-%E2%80%93-2010/" target="_blank">10 Best Data Visualization Projects of the Year – 2010</a></p>
@@ -42,9 +42,9 @@
   
   <entry>
     <title type="html"><![CDATA[Qt与现有系统字符集的兼容问题研究]]></title>
-    <link href="http://www.hanyi.name/blog/2011/02/18/qt%25e4%25b8%258e%25e7%258e%25b0%25e6%259c%2589%25e7%25b3%25bb%25e7%25bb%259f%25e5%25ad%2597%25e7%25ac%25a6%25e9%259b%2586%25e7%259a%2584%25e5%2585%25bc%25e5%25ae%25b9%25e9%2597%25ae%25e9%25a2%2598/"/>
+    <link href="http://www.hanyi.name/blog/2011/02/18/Qt-yu-xian-you-xi-tong-zi-fu-ji-de-jian-rong-wen-ti-yan-jiu/"/>
     <updated>2011-02-18T19:04:07+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/02/18/qt%e4%b8%8e%e7%8e%b0%e6%9c%89%e7%b3%bb%e7%bb%9f%e5%ad%97%e7%ac%a6%e9%9b%86%e7%9a%84%e5%85%bc%e5%ae%b9%e9%97%ae%e9%a2%98</id>
+    <id>http://www.hanyi.name/blog/2011/02/18/Qt-yu-xian-you-xi-tong-zi-fu-ji-de-jian-rong-wen-ti-yan-jiu</id>
     <content type="html"><![CDATA[<p>本文是假期完成的最后一篇文章，之后我将回到学校，届时更新频率将恢复为每周0-2篇左右。</p>
 
 <p>众所周知，Qt在国际化方面的实现是非常方便的。但有时我们会面临一些问题，如在Windows系统中GB2312/GBK和unicode字符集的不兼容，以及在与现有网络程序实现通信的过程中发生的字符集不兼容问题。当然，此类问题可能比较罕见，而且事实上不只Qt面临这一棘手的情况。经过查阅一些资料并进行实践开发，我们相信Qt提供了目前最为便捷的字符集兼容解决方案。我们的最终应用是实现与Unix/Windows主机上的现有服务端程序进行通信，以实现如http、ftp等低级别应用层协议。</p>
@@ -196,9 +196,9 @@ const char* string = &quot;mp77的技术交流频道&quot;;
   
   <entry>
     <title type="html"><![CDATA[NURBS简介]]></title>
-    <link href="http://www.hanyi.name/blog/2009/01/01/nurbs%25e7%25ae%2580%25e4%25bb%258b/"/>
+    <link href="http://www.hanyi.name/blog/2009/01/01/NURBS-jian-jie/"/>
     <updated>2009-01-01T20:59:29+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/01/01/nurbs%e7%ae%80%e4%bb%8b</id>
+    <id>http://www.hanyi.name/blog/2009/01/01/NURBS-jian-jie</id>
     <content type="html"><![CDATA[<p> 非均匀有理样条（NURBS）（non uniform rational B-spline），是在<span style="color: #000000;">计算机图形学</span>中常用的数学模型，用于产生和表示曲线及曲面。</p>
 
 <p> NURBS的发展始于1950年代，它是由需要像在车体和船壳中使用的自由曲面的数学上的精确表示的工程师们所发现的，它可以在任何技术上需要的时候精确的复制出来。以前这类曲面的表示只存在于设计者创建的实体模型。该发展的先驱包括：皮埃尔·贝兹（Pierre Bézier）， 他曾是Renault的工程师，以及Paul de Casteljau，他在Peugeot工作，两个都是法国的。贝兹基本是和de Casteljau独立发展的，两人互相不知道对方的工作。但是因为贝兹发表了他的工作的结果，今天的一般的计算机图形学用户认为样条 &ndash; 通过在曲线上的控制点表示的那类 - 为贝兹样条，而de Casteljau的名字仅作为他为计算参数化曲面所设计的算法而为人所知。在1960年代，人们认识到非均匀有理基本样条是贝兹曲线的一个推广，而贝兹曲线可以视为均匀非有理B样条。</p>
@@ -246,20 +246,20 @@ const char* string = &quot;mp77的技术交流频道&quot;;
   
   <entry>
     <title type="html"><![CDATA[JNI技术初步(五)]]></title>
-    <link href="http://www.hanyi.name/blog/2008/10/18/jni%25e6%258a%2580%25e6%259c%25af%25e5%2588%259d%25e6%25ad%25a5%25e4%25ba%2594/"/>
+    <link href="http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-wu/"/>
     <updated>2008-10-18T16:59:48+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/10/18/jni%e6%8a%80%e6%9c%af%e5%88%9d%e6%ad%a5%e4%ba%94</id>
+    <id>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-wu</id>
     <content type="html"><![CDATA[<p> 总的来说，JNI应当是java初学者须掌握的内容。尽管教科书中涉及的极少，JNI也破坏了java重要的可移植性，但JNI并未因此被弃用，反而被Sun列入JDK不可缺少的一部分——这至少说明了java并非像一些人说得那么神通广大。</p>
 
 <p> 正如原文作者最初所说的，JNI适用于许多程序设计语言，甚至包括汇编程序。但理解了java内涵的人都会小心翼翼去使用JNI，而非将其当成是万能的解决方案。</p>
 
 <p> 感谢本系列第1-4篇文章的原作者，很多是被原文采纳，其余内容也做了详细的参考，在此一并感谢。</p>
 
-<p> cnweblog.com <span style="color: #000000;">刘正伟 </span><span style="color: #000000;"><a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#115;&#x75;&#x6e;&#100;&#x79;&#x32;&#x36;&#64;&#49;&#x32;&#54;&#x2e;&#x63;&#x6f;&#109;">&#115;&#117;&#x6e;&#100;&#x79;&#x32;&#54;&#64;&#x31;&#50;&#x36;&#46;&#x63;&#x6f;&#109;</a></span></p>
+<p> cnweblog.com <span style="color: #000000;">刘正伟 </span><span style="color: #000000;"><a href="&#109;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#115;&#x75;&#x6e;&#100;&#x79;&#50;&#54;&#x40;&#x31;&#x32;&#x36;&#46;&#x63;&#x6f;&#109;">&#x73;&#117;&#x6e;&#100;&#121;&#50;&#x36;&#64;&#49;&#50;&#x36;&#x2e;&#99;&#x6f;&#109;</a></span></p>
 
 <p> blog.edu.cn  <span class="style3">xdsamuel</span></p>
 
-<p><span class="style3"> gceclub.sun.com.cn Sun中国技术社区 陈健明 华中师范大学网络与通讯研究所 <span style="color: #000000;"><a href="&#109;&#x61;&#x69;&#x6c;&#116;&#111;&#58;&#x63;&#104;&#101;&#110;&#106;&#109;&#x32;&#48;&#48;&#x30;&#64;&#x68;&#111;&#x74;&#109;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;">&#x63;&#104;&#101;&#110;&#x6a;&#x6d;&#50;&#48;&#48;&#x30;&#64;&#104;&#x6f;&#x74;&#109;&#97;&#x69;&#108;&#46;&#x63;&#x6f;&#109;</a></span></span></p>
+<p><span class="style3"> gceclub.sun.com.cn Sun中国技术社区 陈健明 华中师范大学网络与通讯研究所 <span style="color: #000000;"><a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#58;&#x63;&#104;&#x65;&#x6e;&#x6a;&#x6d;&#50;&#x30;&#x30;&#x30;&#x40;&#104;&#x6f;&#x74;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x63;&#104;&#101;&#x6e;&#106;&#109;&#50;&#x30;&#48;&#48;&#x40;&#x68;&#x6f;&#116;&#109;&#x61;&#x69;&#108;&#46;&#99;&#111;&#x6d;</a></span></span></p>
 ]]></content>
   </entry>
   

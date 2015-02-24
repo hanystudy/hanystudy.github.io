@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 可视化 | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/ke-shi-hua/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Kinect的三维重建(1)]]></title>
-    <link href="http://www.hanyi.name/blog/2012/06/22/kinect%25e7%259a%2584%25e4%25b8%2589%25e7%25bb%25b4%25e9%2587%258d%25e5%25bb%25ba1/"/>
+    <link href="http://www.hanyi.name/blog/2012/06/22/Kinect-de-san-wei-chong-jian-1/"/>
     <updated>2012-06-22T20:35:07+08:00</updated>
-    <id>http://www.hanyi.name/blog/2012/06/22/kinect%e7%9a%84%e4%b8%89%e7%bb%b4%e9%87%8d%e5%bb%ba1</id>
+    <id>http://www.hanyi.name/blog/2012/06/22/Kinect-de-san-wei-chong-jian-1</id>
     <content type="html"><![CDATA[<p>有关Kinect应用开发正日新月异，稍有懈怠就会被远远甩在身后。不过，Kinect目前带给我们的仍只是一个充满无限可能的远景，正如App store能吸引年仅<a href="http://www.cnbeta.com/articles/161695.htm">11岁的开发者</a>一样，Kinect未来将对“全民开发者”产生重要推动作用。另一方面，一些基于Kinect的应用研究仍颇复杂，主要是因为一些关键环节的滞后而导致的。2011年的siggraph talks上，<a href="http://research.microsoft.com/en-us/projects/surfacerecon/">KinectFusion</a>首次展示了实时、廉价、轻便的室内场景三维重建，使得我们向着“无处不在的数字化”迈进了一大步。该项目主要由微软剑桥研究院的研究人员发起实施，研究小组目前公开发表了两篇文章：</p>
 
 <p>Shahram Izadi, David Kim, Otmar Hilliges, David Molyneaux, Richard Newcombe, Pushmeet Kohli, Jamie Shotton, Steve Hodges, Dustin Freeman, Andrew Davison, and Andrew Fitzgibbon, <strong>KinectFusion: Real-time 3D Reconstruction and Interaction Using a Moving Depth Camera</strong>, ACM Symposium on User Interface Software and Technology, October 2011</p>
@@ -60,9 +60,9 @@
   
   <entry>
     <title type="html"><![CDATA[TangleTracer(Basic edition/B) 1.0 beta开源发布]]></title>
-    <link href="http://www.hanyi.name/blog/2012/06/08/tangletacerbasic-editionb-1-0-beta%25e5%25bc%2580%25e6%25ba%2590%25e5%258f%2591%25e5%25b8%2583/"/>
+    <link href="http://www.hanyi.name/blog/2012/06/08/tangletacerbasic-editionb-1-0-TangleTracer-Basic-edition-B-1-0-beta-kai/"/>
     <updated>2012-06-08T22:32:17+08:00</updated>
-    <id>http://www.hanyi.name/blog/2012/06/08/tangletacerbasic-editionb-1-0-beta%e5%bc%80%e6%ba%90%e5%8f%91%e5%b8%83</id>
+    <id>http://www.hanyi.name/blog/2012/06/08/tangletacerbasic-editionb-1-0-TangleTracer-Basic-edition-B-1-0-beta-kai</id>
     <content type="html"><![CDATA[<p>TangleTracer是一个实验性光线跟踪渲染平台，目的在于为真实感绘制技术的初学者提供完备的学习例程和友好的实验接口。系统设计思路主要源于Kevin Suffern的《Ray tracing from the Ground Up》一书，同时部分参考了著名的真实感绘制圣经《PBRT 2nd》。从今年三月中旬起我们就开始了前期的技术储备工作，该项目由四月初正式开始，截至目前完成代码近9万行，系统框架基本完善，实现并调试通过了440个demo或Kevin书中的习题（这部分代码超过4万行）。与K书中提供的原型系统不同，项目开发平台选择了Microsoft Visual Studio 2010和Qt framework 4.7.3，为快速开发提供了良好基础。
 由于系统和部分框架来源于K书，我们循例采用GPLv2开源发布。此次发布的主要内容是系统的代码部分，为便于大家测试，我们稍后会提供基于win32平台的二进制版本（目前正在进行兼容性测试），运行系统内置的全部例程需要同时满足以下条件：
 1.下载例程所需的纹理包：<a href="http://www.raytracegroundup.com/downloads/TextureImages.zip%EF%BC%9B">http://www.raytracegroundup.com/downloads/TextureImages.zip%EF%BC%9B</a>
@@ -75,9 +75,9 @@
   
   <entry>
     <title type="html"><![CDATA[参数化设计/建模及其在艺术创作领域的应用前景]]></title>
-    <link href="http://www.hanyi.name/blog/2012/02/02/%25e5%258f%2582%25e6%2595%25b0%25e5%258c%2596%25e8%25ae%25be%25e8%25ae%25a1%25e5%25bb%25ba%25e6%25a8%25a1%25e5%258f%258a%25e5%2585%25b6%25e5%259c%25a8%25e8%2589%25ba%25e6%259c%25af%25e5%2588%259b%25e4%25bd%259c%25e9%25a2%2586%25e5%259f%259f%25e7%259a%2584%25e5%25ba%2594%25e7%2594%25a8%25e5%2589%258d%25e6%2599%25af/"/>
+    <link href="http://www.hanyi.name/blog/2012/02/02/can-shu-hua-she-ji-jian-mo-ji-qi-zai-yi-shu-chuang-zuo-ling-yu-de-ying-yong-qian-jing/"/>
     <updated>2012-02-02T20:58:30+08:00</updated>
-    <id>http://www.hanyi.name/blog/2012/02/02/%e5%8f%82%e6%95%b0%e5%8c%96%e8%ae%be%e8%ae%a1%e5%bb%ba%e6%a8%a1%e5%8f%8a%e5%85%b6%e5%9c%a8%e8%89%ba%e6%9c%af%e5%88%9b%e4%bd%9c%e9%a2%86%e5%9f%9f%e7%9a%84%e5%ba%94%e7%94%a8%e5%89%8d%e6%99%af</id>
+    <id>http://www.hanyi.name/blog/2012/02/02/can-shu-hua-she-ji-jian-mo-ji-qi-zai-yi-shu-chuang-zuo-ling-yu-de-ying-yong-qian-jing</id>
     <content type="html"><![CDATA[<p><strong>一、概述</strong></p>
 
 <p>迄今为止，参数化设计/建模仍代表一种理念，尽管这种理念已经经历了CAD/CAM近五十年的发展历程。系统化的CAD/CAM技术包含两种基本思路，一是使用二维几何原语如点、线或样条表示三维物体，如Bezier、De Casteljau以及Sutherland这些先驱们的工作；明暗处理的需求接着被提出，从而出现了早期着色模型的研究（本文将不涉及这部分内容）；即使是目前最广泛使用的Nurbs，也是A.R. Forrest早在1980年就已经完成了。</p>
@@ -122,9 +122,9 @@
   
   <entry>
     <title type="html"><![CDATA[从SIGGRAPH'11看《Rango》]]></title>
-    <link href="http://www.hanyi.name/blog/2011/10/22/%25e4%25bb%258esiggraph11%25e7%259c%258b%25e3%2580%258arango%25e3%2580%258b/"/>
+    <link href="http://www.hanyi.name/blog/2011/10/22/cong-SIGGRAPH-11-Rango/"/>
     <updated>2011-10-22T02:45:54+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/10/22/%e4%bb%8esiggraph11%e7%9c%8b%e3%80%8arango%e3%80%8b</id>
+    <id>http://www.hanyi.name/blog/2011/10/22/cong-SIGGRAPH-11-Rango</id>
     <content type="html"><![CDATA[<p>一年前，我们曾介绍并讨论了展示在siggraph&#8217;10 Talks上、作为Disney&rsquo;s 50th Feature Animation的《Tangled》。在今年8月7日至11日的温哥华siggraph&#8217;11大会上，工业光魔携首部动画长篇《Rango》成为了“Let there be light”（加点儿灯光？）单元当之无愧的主角（尽管去年的Tangled和今年的Cars 2同时均有入选）。</p>
 
 <p>《Rango》中文译名“兰戈”，由执导了前三部加勒比海盗系列的Gore Verbinski担任导演，该片作为工业光魔在Feature Animation（FA）领域的处女之作，使得后者在首次试水FA后即登上了巅峰。影片主要讲述了一只不慎被遗失在西部荒漠中的蜥蜴，历经艰难、最终找回自我的故事。影片无论在情节构思、画面、配乐上的精细程度都堪称前所未有。本文依旧从Siggraph&#8217;11上的三篇文章出发，试图探索堪称计算机图形学史上迄今最先进的工业级CG技术。</p>
@@ -191,9 +191,9 @@
   
   <entry>
     <title type="html"><![CDATA[GL终究还是来了]]></title>
-    <link href="http://www.hanyi.name/blog/2011/05/28/gl%25e7%25bb%2588%25e7%25a9%25b6%25e8%25bf%2598%25e6%2598%25af%25e6%259d%25a5%25e4%25ba%2586/"/>
+    <link href="http://www.hanyi.name/blog/2011/05/28/GL-zhong-jiu-hai-shi-lai-le/"/>
     <updated>2011-05-28T10:18:36+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/05/28/gl%e7%bb%88%e7%a9%b6%e8%bf%98%e6%98%af%e6%9d%a5%e4%ba%86</id>
+    <id>http://www.hanyi.name/blog/2011/05/28/GL-zhong-jiu-hai-shi-lai-le</id>
     <content type="html"><![CDATA[<p>本文算是最近三周内的第三个“来了”系列（博主是不是整天无所事事？）&hellip;不过这次的确是因为工作需要的原因，GL的主题将会持续一段时间。至于为什么我习惯称之gl，那么请留意gl的发音/gl/，前面再加个open&hellip;总会有人真正体会到她的魅力所在的。不过这也确实不是我第一次尝试学习gl了：一年前我曾冒着烈日学习nehe怎么用gl画会转的三角形&hellip;两天后被迫放假回家，于是又练了个新号，直到前几天又被个文明贼盗了2w多g&hellip;这里似乎离题了！总之现在就算不上是gl新手了吧&hellip;</p>
 
 <p>上述事实再次告诉我们，当你像我这么老的时候，好奇心就不能再是生活的第一目标了，而应优先满足需求&hellip;在满足各种实际需求的过程中，我们永远的好奇心也将逐步得到慰藉。</p>

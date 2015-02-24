@@ -4,7 +4,7 @@
   <title><![CDATA[Category: c++/c | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/c-plus-plus-slash-c/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[C++学习笔记(重温计划之六)]]></title>
-    <link href="http://www.hanyi.name/blog/2008/04/20/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e5%2585%25ad/"/>
+    <link href="http://www.hanyi.name/blog/2008/04/20/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-liu/"/>
     <updated>2008-04-20T22:56:01+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/04/20/c%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e9%87%8d%e6%b8%a9%e8%ae%a1%e5%88%92%e4%b9%8b%e5%85%ad</id>
+    <id>http://www.hanyi.name/blog/2008/04/20/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-liu</id>
     <content type="html"><![CDATA[<p>4、函数性质</p>
 
 <p> 1）函数形态</p>
@@ -90,9 +90,9 @@
   
   <entry>
     <title type="html"><![CDATA[C++学习笔记(重温计划之五)]]></title>
-    <link href="http://www.hanyi.name/blog/2008/04/11/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e4%25ba%2594/"/>
+    <link href="http://www.hanyi.name/blog/2008/04/11/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-wu/"/>
     <updated>2008-04-11T11:44:32+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/04/11/c%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e9%87%8d%e6%b8%a9%e8%ae%a1%e5%88%92%e4%b9%8b%e4%ba%94</id>
+    <id>http://www.hanyi.name/blog/2008/04/11/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-wu</id>
     <content type="html"><![CDATA[<p>3、数据类型（下）</p>
 
 <p> 1)向量(Vectors)</p>
@@ -218,9 +218,9 @@ if(a==b) cout &lt;&lt; &ldquo;equal&rdquo;;            //向量的比
   
   <entry>
     <title type="html"><![CDATA[C++学习笔记(重温计划之四)]]></title>
-    <link href="http://www.hanyi.name/blog/2008/04/08/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e5%259b%259b/"/>
+    <link href="http://www.hanyi.name/blog/2008/04/08/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-si/"/>
     <updated>2008-04-08T10:49:37+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/04/08/c%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e9%87%8d%e6%b8%a9%e8%ae%a1%e5%88%92%e4%b9%8b%e5%9b%9b</id>
+    <id>http://www.hanyi.name/blog/2008/04/08/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-si</id>
     <content type="html"><![CDATA[<p>3、数据类型（中）</p>
 
 <p> 1）C-串与string</p>
@@ -335,9 +335,9 @@ int main(void){
   
   <entry>
     <title type="html"><![CDATA[C++学习笔记(重温计划之三)]]></title>
-    <link href="http://www.hanyi.name/blog/2008/03/31/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e4%25b8%2589/"/>
+    <link href="http://www.hanyi.name/blog/2008/03/31/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-san/"/>
     <updated>2008-03-31T11:05:59+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/03/31/c%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e9%87%8d%e6%b8%a9%e8%ae%a1%e5%88%92%e4%b9%8b%e4%b8%89</id>
+    <id>http://www.hanyi.name/blog/2008/03/31/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-san</id>
     <content type="html"><![CDATA[<p>3、数据类型(上)</p>
 
 <p> c++中的数据类型,主要分为内部数据类型和外部数据类型两大类。其中，内部数据类型主要有：</p>
@@ -569,9 +569,9 @@ int main(void){
   
   <entry>
     <title type="html"><![CDATA[C++学习笔记(重温计划之二)]]></title>
-    <link href="http://www.hanyi.name/blog/2008/03/30/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e4%25ba%258c/"/>
+    <link href="http://www.hanyi.name/blog/2008/03/30/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-er/"/>
     <updated>2008-03-30T12:53:46+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/03/30/c%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e9%87%8d%e6%b8%a9%e8%ae%a1%e5%88%92%e4%b9%8b%e4%ba%8c</id>
+    <id>http://www.hanyi.name/blog/2008/03/30/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-er</id>
     <content type="html"><![CDATA[<p>2、基本编程语句</p>
 
 <p> 沿用c语言的方法,c++包含了说明语句、赋值语句、表达式语句、过程控制语句。其中，过程控制语句又分为条件语句、循环语句和转移语句。</p>

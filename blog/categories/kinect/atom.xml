@@ -4,7 +4,7 @@
   <title><![CDATA[Category: kinect | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/kinect/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Kinect的三维重建(1)]]></title>
-    <link href="http://www.hanyi.name/blog/2012/06/22/kinect%25e7%259a%2584%25e4%25b8%2589%25e7%25bb%25b4%25e9%2587%258d%25e5%25bb%25ba1/"/>
+    <link href="http://www.hanyi.name/blog/2012/06/22/Kinect-de-san-wei-chong-jian-1/"/>
     <updated>2012-06-22T20:35:07+08:00</updated>
-    <id>http://www.hanyi.name/blog/2012/06/22/kinect%e7%9a%84%e4%b8%89%e7%bb%b4%e9%87%8d%e5%bb%ba1</id>
+    <id>http://www.hanyi.name/blog/2012/06/22/Kinect-de-san-wei-chong-jian-1</id>
     <content type="html"><![CDATA[<p>有关Kinect应用开发正日新月异，稍有懈怠就会被远远甩在身后。不过，Kinect目前带给我们的仍只是一个充满无限可能的远景，正如App store能吸引年仅<a href="http://www.cnbeta.com/articles/161695.htm">11岁的开发者</a>一样，Kinect未来将对“全民开发者”产生重要推动作用。另一方面，一些基于Kinect的应用研究仍颇复杂，主要是因为一些关键环节的滞后而导致的。2011年的siggraph talks上，<a href="http://research.microsoft.com/en-us/projects/surfacerecon/">KinectFusion</a>首次展示了实时、廉价、轻便的室内场景三维重建，使得我们向着“无处不在的数字化”迈进了一大步。该项目主要由微软剑桥研究院的研究人员发起实施，研究小组目前公开发表了两篇文章：</p>
 
 <p>Shahram Izadi, David Kim, Otmar Hilliges, David Molyneaux, Richard Newcombe, Pushmeet Kohli, Jamie Shotton, Steve Hodges, Dustin Freeman, Andrew Davison, and Andrew Fitzgibbon, <strong>KinectFusion: Real-time 3D Reconstruction and Interaction Using a Moving Depth Camera</strong>, ACM Symposium on User Interface Software and Technology, October 2011</p>
@@ -60,9 +60,9 @@
   
   <entry>
     <title type="html"><![CDATA[有关Beta 2和Kinect for Windows商用前瞻]]></title>
-    <link href="http://www.hanyi.name/blog/2011/11/13/%25e6%259c%2589%25e5%2585%25b3beta-2%25e5%2592%258ckinect-for-windows%25e5%2595%2586%25e7%2594%25a8%25e5%2589%258d%25e7%259e%25bb/"/>
+    <link href="http://www.hanyi.name/blog/2011/11/13/you-guan-Beta-2-he-Kinect-for-Windows-shang-yong-qian-zhan/"/>
     <updated>2011-11-13T00:07:03+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/11/13/%e6%9c%89%e5%85%b3beta-2%e5%92%8ckinect-for-windows%e5%95%86%e7%94%a8%e5%89%8d%e7%9e%bb</id>
+    <id>http://www.hanyi.name/blog/2011/11/13/you-guan-Beta-2-he-Kinect-for-Windows-shang-yong-qian-zhan</id>
     <content type="html"><![CDATA[<p>在本月初Kinect正式发布一周年之际，微软公司副总裁Frank X. Shaw在公司官方博客上发表纪念文章“<a href="http://blogs.technet.com/b/microsoft_blog/archive/2011/10/31/feeling-the-kinect-effect.aspx" target="_blank">Feeling the Kinect Effect</a>”，并透露Kinect的商用计划“Kinect for Windows commercial program”，该项目将于2012年初正式公布。文章称专门负责商用计划的团队已获得来自超过25个国家的知名公司共超过200项商业应用申请，这些应用覆盖了20多个不同领域，这恐怕会令即将到来的2012年成为名副其实的“Kinect年”。</p>
 
 <p>而在上个月27号，微软注册了kinectforwindows.org域名并将其作为Kinect for Windows项目新的官方网站，紧接着Kinect for Windows SDK 1.0 Beta 2在本月5号正式发布。相较于8月份后就再没更新过的Beta 1，新版本SDK在以下功能上进行了持续改进：</p>
@@ -95,9 +95,9 @@
   
   <entry>
     <title type="html"><![CDATA[KINECT来了——解析SDK(MS SDK 2)]]></title>
-    <link href="http://www.hanyi.name/blog/2011/09/24/kinect%25e6%259d%25a5%25e4%25ba%2586-%25e8%25a7%25a3%25e6%259e%2590sdkms-sdk-2/"/>
+    <link href="http://www.hanyi.name/blog/2011/09/24/KINECT-lai-le-jie-xi-jie-xi-SDK/"/>
     <updated>2011-09-24T23:09:39+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/09/24/kinect%e6%9d%a5%e4%ba%86-%e8%a7%a3%e6%9e%90sdkms-sdk-2</id>
+    <id>http://www.hanyi.name/blog/2011/09/24/KINECT-lai-le-jie-xi-jie-xi-SDK</id>
     <content type="html"><![CDATA[<p><strong>NUI图像数据流概述</strong></p>
 
 <p>NUI的流数据是通过连续静态图像序列传递的。在上下文初始化阶段，应用程序将识别需要读取的流数据，并对其进行附加的流相关设置，包括数据解析度、图像类型、用于存储输入帧的缓冲区数量等内容。在应用程序检索并释放相关帧之前，如果运行时数据占满了缓冲区，那么系统将自动丢弃最旧的帧并重用缓冲区，也就是说，帧数据是可被丢弃的。同时系统最多允许请求四个缓冲区，而在大多数应用情形下通常只需要其中的两个。应用程序可通过API获取如下类型的图像信息：彩色图像数据、深度图像数据、用户分割数据等。下面将分别对上述三种类型的数据进行一些说明。</p>
@@ -152,9 +152,9 @@
   
   <entry>
     <title type="html"><![CDATA[KINECT来了——解析SDK(MS SDK 1)]]></title>
-    <link href="http://www.hanyi.name/blog/2011/09/17/kinect%25e6%259d%25a5%25e4%25ba%2586-%25e8%25a7%25a3%25e6%259e%2590sdkms-sdk-1/"/>
+    <link href="http://www.hanyi.name/blog/2011/09/17/KINECT-lai-le-jie-xi-jie-xi-SDK/"/>
     <updated>2011-09-17T23:41:18+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/09/17/kinect%e6%9d%a5%e4%ba%86-%e8%a7%a3%e6%9e%90sdkms-sdk-1</id>
+    <id>http://www.hanyi.name/blog/2011/09/17/KINECT-lai-le-jie-xi-jie-xi-SDK</id>
     <content type="html"><![CDATA[<p>在8月初的<a href="http://www.hanyi.name/blog/?p=330" target="_blank">文章</a>里，我们曾对Microsoft推出的官方Kinect SDK beta进行了初步介绍，本文将在此基础上对其做出进一步说明。值得注意的是对托管代码和非托管代码的选择，从社区反馈看来似乎前者占据了绝对上风，coding4fun推荐的项目也基本都是以WPF编程为主。不过考虑到平台的潜在可扩展，这里还是推荐使用标准C++构建非托管程序。下面先给出两种编程方式在VS2010中的配置方法：</p>
 
 <p>对于托管C#程序，添加Add Reference中.Net标签页的Microsoft.Research.Kinect.dll，使用using Microsoft.Research.Kinect.Nui引用NUI API的声明文件，如果还要引用音频API，还要加上using Microsoft.Research.Kinect.Audio。</p>
@@ -237,9 +237,9 @@
   
   <entry>
     <title type="html"><![CDATA[Kinect来了——解析SDK(OpenNI Framework 4)]]></title>
-    <link href="http://www.hanyi.name/blog/2011/09/03/kinect%25e6%259d%25a5%25e4%25ba%2586-%25e8%25a7%25a3%25e6%259e%2590sdkopenni-framework-4/"/>
+    <link href="http://www.hanyi.name/blog/2011/09/03/Kinect-lai-le-jie-xi-jie-xi-SDK/"/>
     <updated>2011-09-03T21:48:15+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/09/03/kinect%e6%9d%a5%e4%ba%86-%e8%a7%a3%e6%9e%90sdkopenni-framework-4</id>
+    <id>http://www.hanyi.name/blog/2011/09/03/Kinect-lai-le-jie-xi-jie-xi-SDK</id>
     <content type="html"><![CDATA[<p><strong>配置工作节点的一般方法</strong></p>
 
 <p>前文的例子中已经说明了在程序中动态配置节点信息的一般过程，节点配置完成的主要标志一般是对xn::Generator::StartGenerating()函数的调用。除此之外，OpenNI还提供了基于外置XML文件的节点配置方法，使用XML配置文件能够显著降低代码复杂度，同时提高应用程序的可用性和灵活性，本文将主要讨论上述方式结合OpenNI编程。</p>

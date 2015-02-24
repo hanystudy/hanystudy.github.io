@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[web开发的若干安全问题小结]]></title>
-    <link href="http://www.hanyi.name/blog/2011/04/17/web%25e5%25bc%2580%25e5%258f%2591%25e7%259a%2584%25e8%258b%25a5%25e5%25b9%25b2%25e5%25ae%2589%25e5%2585%25a8%25e9%2597%25ae%25e9%25a2%2598%25e5%25b0%258f%25e7%25bb%2593/"/>
+    <link href="http://www.hanyi.name/blog/2011/04/17/web-kai-fa-de-ruo-gan-an-quan-wen-ti-xiao-jie/"/>
     <updated>2011-04-17T00:59:26+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/04/17/web%e5%bc%80%e5%8f%91%e7%9a%84%e8%8b%a5%e5%b9%b2%e5%ae%89%e5%85%a8%e9%97%ae%e9%a2%98%e5%b0%8f%e7%bb%93</id>
+    <id>http://www.hanyi.name/blog/2011/04/17/web-kai-fa-de-ruo-gan-an-quan-wen-ti-xiao-jie</id>
     <content type="html"><![CDATA[<p> 万恶的项目终于要结题了&hellip;这时无论如何确该总结一下。实际上这次项目最大的收获有两部分，本文仅介绍其中之一—Web开发中的一些安全问题及其解决策略。</p>
 
 <p> 项目的安全问题起源于首次测试版本提交。测试方使用了IBM Rational Appscan扫描提交的两部分应用程序，每个应用程序返回了将近二十个安全问题，具体列表这里先省略。Appscan是IBM旗下知名的web安全自动化测试工具，同类产品中较知名的还有HP的Webinspect。测试方回复的意思是说所有安全问题在项目验收前必须全部解决，而事实上本项目从设计阶段起就没有考虑过应用程序级的安全问题，对方也从未提出过此类要求。不过我们还是尝试先在逻辑上处理部分问题，自测后发现所有问题依然存在，包括众所周知且已有很多解决方案的Injection。</p>

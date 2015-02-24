@@ -4,7 +4,7 @@
   <title><![CDATA[Category: java | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Windows下的j2se时钟示例]]></title>
-    <link href="http://www.hanyi.name/blog/2008/10/23/windows%25e4%25b8%258b%25e7%259a%2584j2se%25e6%2597%25b6%25e9%2592%259f%25e7%25a4%25ba%25e4%25be%258b/"/>
+    <link href="http://www.hanyi.name/blog/2008/10/23/Windows-xia-de-j2se-shi-zhong-shi-li/"/>
     <updated>2008-10-23T21:04:54+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/10/23/windows%e4%b8%8b%e7%9a%84j2se%e6%97%b6%e9%92%9f%e7%a4%ba%e4%be%8b</id>
+    <id>http://www.hanyi.name/blog/2008/10/23/Windows-xia-de-j2se-shi-zhong-shi-li</id>
     <content type="html"><![CDATA[<p>demo里原本有个applet，不过难看又没什么新意，加上了一些功能，其中利用到了JNI，dll文件的源码由于太短就不晒出来了&hellip;</p>
 
 <p>/<em><em>
@@ -265,28 +265,28 @@ public class clock extends JFrame implements Runnable{
   
   <entry>
     <title type="html"><![CDATA[JNI技术初步(五)]]></title>
-    <link href="http://www.hanyi.name/blog/2008/10/18/jni%25e6%258a%2580%25e6%259c%25af%25e5%2588%259d%25e6%25ad%25a5%25e4%25ba%2594/"/>
+    <link href="http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-wu/"/>
     <updated>2008-10-18T16:59:48+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/10/18/jni%e6%8a%80%e6%9c%af%e5%88%9d%e6%ad%a5%e4%ba%94</id>
+    <id>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-wu</id>
     <content type="html"><![CDATA[<p> 总的来说，JNI应当是java初学者须掌握的内容。尽管教科书中涉及的极少，JNI也破坏了java重要的可移植性，但JNI并未因此被弃用，反而被Sun列入JDK不可缺少的一部分——这至少说明了java并非像一些人说得那么神通广大。</p>
 
 <p> 正如原文作者最初所说的，JNI适用于许多程序设计语言，甚至包括汇编程序。但理解了java内涵的人都会小心翼翼去使用JNI，而非将其当成是万能的解决方案。</p>
 
 <p> 感谢本系列第1-4篇文章的原作者，很多是被原文采纳，其余内容也做了详细的参考，在此一并感谢。</p>
 
-<p> cnweblog.com <span style="color: #000000;">刘正伟 </span><span style="color: #000000;"><a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x73;&#x75;&#x6e;&#x64;&#x79;&#50;&#54;&#x40;&#49;&#50;&#x36;&#46;&#x63;&#x6f;&#x6d;">&#115;&#117;&#110;&#x64;&#121;&#50;&#54;&#64;&#49;&#x32;&#x36;&#46;&#99;&#111;&#109;</a></span></p>
+<p> cnweblog.com <span style="color: #000000;">刘正伟 </span><span style="color: #000000;"><a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x73;&#x75;&#x6e;&#x64;&#x79;&#50;&#x36;&#x40;&#49;&#50;&#x36;&#46;&#x63;&#111;&#x6d;">&#x73;&#117;&#110;&#x64;&#121;&#50;&#x36;&#x40;&#49;&#x32;&#54;&#46;&#99;&#x6f;&#109;</a></span></p>
 
 <p> blog.edu.cn  <span class="style3">xdsamuel</span></p>
 
-<p><span class="style3"> gceclub.sun.com.cn Sun中国技术社区 陈健明 华中师范大学网络与通讯研究所 <span style="color: #000000;"><a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x63;&#104;&#x65;&#x6e;&#x6a;&#x6d;&#50;&#48;&#48;&#48;&#64;&#104;&#x6f;&#x74;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#109;">&#x63;&#104;&#x65;&#110;&#106;&#x6d;&#x32;&#x30;&#48;&#48;&#x40;&#x68;&#x6f;&#116;&#109;&#97;&#105;&#108;&#46;&#x63;&#x6f;&#109;</a></span></span></p>
+<p><span class="style3"> gceclub.sun.com.cn Sun中国技术社区 陈健明 华中师范大学网络与通讯研究所 <span style="color: #000000;"><a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#58;&#99;&#x68;&#x65;&#110;&#106;&#x6d;&#x32;&#48;&#x30;&#x30;&#64;&#x68;&#111;&#x74;&#109;&#x61;&#105;&#108;&#46;&#99;&#111;&#109;">&#x63;&#104;&#101;&#110;&#x6a;&#109;&#x32;&#x30;&#x30;&#48;&#64;&#104;&#111;&#116;&#x6d;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;</a></span></span></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[JNI技术初步(四)]]></title>
-    <link href="http://www.hanyi.name/blog/2008/10/18/jni%25e6%258a%2580%25e6%259c%25af%25e5%2588%259d%25e6%25ad%25a5%25e5%259b%259b/"/>
+    <link href="http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-si/"/>
     <updated>2008-10-18T16:31:47+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/10/18/jni%e6%8a%80%e6%9c%af%e5%88%9d%e6%ad%a5%e5%9b%9b</id>
+    <id>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-si</id>
     <content type="html"><![CDATA[<p>//返回一个结构数组，返回一个硬盘信息的结构数组
 JNIEXPORT jobjectArray JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_getStructArray
 (JNIEnv *env, jobject _obj)
@@ -417,9 +417,9 @@ System.out.println(&ldquo;Serial:&rdquo; + diskList[i].serial);
   
   <entry>
     <title type="html"><![CDATA[JNI技术初步(三)]]></title>
-    <link href="http://www.hanyi.name/blog/2008/10/18/jni%25e6%258a%2580%25e6%259c%25af%25e5%2588%259d%25e6%25ad%25a5%25e4%25b8%2589/"/>
+    <link href="http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-san/"/>
     <updated>2008-10-18T16:29:57+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/10/18/jni%e6%8a%80%e6%9c%af%e5%88%9d%e6%ad%a5%e4%b8%89</id>
+    <id>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-san</id>
     <content type="html"><![CDATA[<p>全部的C/C++方法实现代码如下:
 /<strong>//<em>
 *
@@ -431,7 +431,7 @@ System.out.println(&ldquo;Serial:&rdquo; + diskList[i].serial);
 *
 * @author 刘正伟(sundy)
 * @see <a href="http://www.cnweblog.com/sundy">http://www.cnweblog.com/sundy</a>
-* @see <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#115;&#x75;&#110;&#x64;&#121;&#x32;&#x36;&#64;&#49;&#50;&#54;&#46;&#x63;&#x6f;&#x6d;">&#x73;&#x75;&#x6e;&#x64;&#x79;&#50;&#54;&#64;&#49;&#50;&#54;&#46;&#x63;&#111;&#x6d;</a>
+* @see <a href="&#109;&#97;&#105;&#108;&#116;&#x6f;&#58;&#115;&#x75;&#x6e;&#x64;&#x79;&#x32;&#54;&#64;&#x31;&#50;&#x36;&#x2e;&#99;&#x6f;&#x6d;">&#x73;&#117;&#x6e;&#x64;&#x79;&#50;&#54;&#x40;&#x31;&#50;&#x36;&#46;&#99;&#x6f;&#x6d;</a>
 * @version 1.0
 * @since 2005-4-30
 *
@@ -567,9 +567,9 @@ jfieldID ival = (env)-&gt;GetFieldID(objectClass,&ldquo;serial&rdquo;,&ldquo;I&r
   
   <entry>
     <title type="html"><![CDATA[JNI技术初步(二)]]></title>
-    <link href="http://www.hanyi.name/blog/2008/10/18/jni%25e6%258a%2580%25e6%259c%25af%25e5%2588%259d%25e6%25ad%25a5%25e4%25b8%2580/"/>
+    <link href="http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-er/"/>
     <updated>2008-10-18T16:24:55+08:00</updated>
-    <id>http://www.hanyi.name/blog/2008/10/18/jni%e6%8a%80%e6%9c%af%e5%88%9d%e6%ad%a5%e4%b8%80</id>
+    <id>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-er</id>
     <content type="html"><![CDATA[<p><span style="FONT-SIZE: 10pt"><strong></strong></span></p>
 
 <p><strong><span style="FONT-SIZE: 10pt">在C/C++中实现本地方法</span></strong></p>

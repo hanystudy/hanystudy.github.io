@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 数据结构 | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/shu-ju-jie-gou/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[假期连载之十五]]></title>
-    <link href="http://www.hanyi.name/blog/2009/02/21/%25e5%2581%2587%25e6%259c%259f%25e8%25bf%259e%25e8%25bd%25bd%25e4%25b9%258b%25e5%258d%2581%25e4%25ba%2594/"/>
+    <link href="http://www.hanyi.name/blog/2009/02/21/jia-qi-lian-zai-zhi-shi-wu/"/>
     <updated>2009-02-21T22:23:25+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/02/21/%e5%81%87%e6%9c%9f%e8%bf%9e%e8%bd%bd%e4%b9%8b%e5%8d%81%e4%ba%94</id>
+    <id>http://www.hanyi.name/blog/2009/02/21/jia-qi-lian-zai-zhi-shi-wu</id>
     <content type="html"><![CDATA[<p class="MsoNormal" style="margin: 0cm 0cm 0pt; tab-stops: 93.75pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">（树、图补完篇）</span></strong><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
 
 
@@ -331,9 +331,9 @@
   
   <entry>
     <title type="html"><![CDATA[假期连载之十四]]></title>
-    <link href="http://www.hanyi.name/blog/2009/02/13/%25e5%2581%2587%25e6%259c%259f%25e8%25bf%259e%25e8%25bd%25bd%25e4%25b9%258b%25e5%258d%2581%25e5%259b%259b/"/>
+    <link href="http://www.hanyi.name/blog/2009/02/13/jia-qi-lian-zai-zhi-shi-si/"/>
     <updated>2009-02-13T22:24:05+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/02/13/%e5%81%87%e6%9c%9f%e8%bf%9e%e8%bd%bd%e4%b9%8b%e5%8d%81%e5%9b%9b</id>
+    <id>http://www.hanyi.name/blog/2009/02/13/jia-qi-lian-zai-zhi-shi-si</id>
     <content type="html"><![CDATA[<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">(</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">图—图的遍历、应用<span lang="EN-US">)</span></span></strong></span></p>
 
 
@@ -638,9 +638,9 @@
   
   <entry>
     <title type="html"><![CDATA[假期连载之十三]]></title>
-    <link href="http://www.hanyi.name/blog/2009/02/13/%25e5%2581%2587%25e6%259c%259f%25e8%25bf%259e%25e8%25bd%25bd%25e4%25b9%258b%25e5%258d%2581%25e4%25b8%2589/"/>
+    <link href="http://www.hanyi.name/blog/2009/02/13/jia-qi-lian-zai-zhi-shi-san/"/>
     <updated>2009-02-13T16:49:46+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/02/13/%e5%81%87%e6%9c%9f%e8%bf%9e%e8%bd%bd%e4%b9%8b%e5%8d%81%e4%b8%89</id>
+    <id>http://www.hanyi.name/blog/2009/02/13/jia-qi-lian-zai-zhi-shi-san</id>
     <content type="html"><![CDATA[<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">（图—图的基本概念、<span lang="EN-US">ADT</span>、存储结构表示）</span></span></strong></p>
 
 
@@ -840,9 +840,9 @@
   
   <entry>
     <title type="html"><![CDATA[假期连载之十二(100)]]></title>
-    <link href="http://www.hanyi.name/blog/2009/02/12/%25e5%2581%2587%25e6%259c%259f%25e8%25bf%259e%25e8%25bd%25bd%25e4%25b9%258b%25e5%258d%2581%25e4%25ba%258c100/"/>
+    <link href="http://www.hanyi.name/blog/2009/02/12/jia-qi-lian-zai-zhi-shi-er-100/"/>
     <updated>2009-02-12T21:19:53+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/02/12/%e5%81%87%e6%9c%9f%e8%bf%9e%e8%bd%bd%e4%b9%8b%e5%8d%81%e4%ba%8c100</id>
+    <id>http://www.hanyi.name/blog/2009/02/12/jia-qi-lian-zai-zhi-shi-er-100</id>
     <content type="html"><![CDATA[<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">（树形结构—树和森林、哈夫曼树）<span lang="EN-US"></span></span></span></strong></p>
 
 
@@ -1117,9 +1117,9 @@
   
   <entry>
     <title type="html"><![CDATA[假期连载之十一]]></title>
-    <link href="http://www.hanyi.name/blog/2009/02/12/%25e5%2581%2587%25e6%259c%259f%25e8%25bf%259e%25e8%25bd%25bd%25e4%25b9%258b%25e5%258d%2581%25e4%25b8%2580/"/>
+    <link href="http://www.hanyi.name/blog/2009/02/12/jia-qi-lian-zai-zhi-shi-yi/"/>
     <updated>2009-02-12T17:13:00+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/02/12/%e5%81%87%e6%9c%9f%e8%bf%9e%e8%bd%bd%e4%b9%8b%e5%8d%81%e4%b8%80</id>
+    <id>http://www.hanyi.name/blog/2009/02/12/jia-qi-lian-zai-zhi-shi-yi</id>
     <content type="html"><![CDATA[<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">（树形结构—二叉树）<span lang="EN-US"></span></span></span></strong></p>
 
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: gpu/gpgpu | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/gpu-slash-gpgpu/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[CUDA学习的现状和困扰]]></title>
-    <link href="http://www.hanyi.name/blog/2011/05/21/cuda%25e5%25ad%25a6%25e4%25b9%25a0%25e7%259a%2584%25e7%258e%25b0%25e7%258a%25b6%25e5%2592%258c%25e5%259b%25b0%25e6%2589%25b0/"/>
+    <link href="http://www.hanyi.name/blog/2011/05/21/CUDA-xue-xi-de-xian-zhuang-he-kun-rao/"/>
     <updated>2011-05-21T23:01:52+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/05/21/cuda%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%8e%b0%e7%8a%b6%e5%92%8c%e5%9b%b0%e6%89%b0</id>
+    <id>http://www.hanyi.name/blog/2011/05/21/CUDA-xue-xi-de-xian-zhuang-he-kun-rao</id>
     <content type="html"><![CDATA[<p>首先需要说明的是，CUDA并非GPGPU（GPU通用计算）的全部。但是我们仍然应该首先感谢Nvidia，因为CUDA使GPGPU走向大众化，使得我等终于也能从中一窥究竟了。不过随之而来的疑问却是，CUDA真能担负得起GPGPU的重担吗？至少在目前看来，答案并不太明显。</p>
 
 <p><strong>战前准备</strong></p>

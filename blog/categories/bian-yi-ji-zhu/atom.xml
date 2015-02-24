@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 编译技术 | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/bian-yi-ji-zhu/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[简单的词法分析程序和一种lex for win32用法示例（下）]]></title>
-    <link href="http://www.hanyi.name/blog/2009/05/01/%25e7%25ae%2580%25e5%258d%2595%25e7%259a%2584%25e8%25af%258d%25e6%25b3%2595%25e5%2588%2586%25e6%259e%2590%25e7%25a8%258b%25e5%25ba%258f%25e5%2592%258c%25e4%25b8%2580%25e7%25a7%258dlex-for-win32%25e7%2594%25a8%25e6%25b3%2595%25e7%25a4%25ba%25e4%25be%258b%25ef%25bc%2588%25e4%25b8%258b%25ef%25bc%2589/"/>
+    <link href="http://www.hanyi.name/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-xia/"/>
     <updated>2009-05-01T20:21:18+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/05/01/%e7%ae%80%e5%8d%95%e7%9a%84%e8%af%8d%e6%b3%95%e5%88%86%e6%9e%90%e7%a8%8b%e5%ba%8f%e5%92%8c%e4%b8%80%e7%a7%8dlex-for-win32%e7%94%a8%e6%b3%95%e7%a4%ba%e4%be%8b%ef%bc%88%e4%b8%8b%ef%bc%89</id>
+    <id>http://www.hanyi.name/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-xia</id>
     <content type="html"><![CDATA[<p> 前面介绍了如何使用lex写一个词法分析器，为了证明上述程序的正确性，需生成与它对应的c语言代码，并编译成可执行程序。unix下使用这些工具非常简单（以至于两行commands就可以完成工作），在此就不做详细说明，接下来我们来面对ms留给我们的烂摊子&hellip;&hellip;</p>
 
 <p> 为了证明在win32下利用lex生成词法分析器有多复杂，我们选用parser generator 2和vc++6.0组合向大家展示ms强大的化神奇为腐朽的力量（依然不推荐win32用户使用vs平台进行此项工作）。</p>
@@ -76,9 +76,9 @@
   
   <entry>
     <title type="html"><![CDATA[简单的词法分析程序和一种lex for win32用法示例（上）]]></title>
-    <link href="http://www.hanyi.name/blog/2009/05/01/%25e7%25ae%2580%25e5%258d%2595%25e7%259a%2584%25e8%25af%258d%25e6%25b3%2595%25e5%2588%2586%25e6%259e%2590%25e7%25a8%258b%25e5%25ba%258f%25e5%2592%258c%25e4%25b8%2580%25e7%25a7%258dlex-for-win32%25e7%2594%25a8%25e6%25b3%2595%25e7%25a4%25ba%25e4%25be%258b/"/>
+    <link href="http://www.hanyi.name/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-shang/"/>
     <updated>2009-05-01T19:25:02+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/05/01/%e7%ae%80%e5%8d%95%e7%9a%84%e8%af%8d%e6%b3%95%e5%88%86%e6%9e%90%e7%a8%8b%e5%ba%8f%e5%92%8c%e4%b8%80%e7%a7%8dlex-for-win32%e7%94%a8%e6%b3%95%e7%a4%ba%e4%be%8b</id>
+    <id>http://www.hanyi.name/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-shang</id>
     <content type="html"><![CDATA[<p> 学计算机的同学都要学习编译原理，理论是抽象了点，但最终目的毕竟只是让我们了解一下程序语言编译器的构造原理。</p>
 
 <p> 尽管没有充分的证据显示lex+yacc能证明一个人学习cp程度的好坏（考试的作用就更难以拿来说明这些了），但好歹大家学过nfa，学过确定化，学过dfa化简，用c语言大概可以写出设定简单的词法分析程序了。</p>

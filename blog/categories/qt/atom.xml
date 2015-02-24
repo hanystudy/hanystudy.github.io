@@ -4,7 +4,7 @@
   <title><![CDATA[Category: qt | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/qt/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Qt与现有系统字符集的兼容问题研究]]></title>
-    <link href="http://www.hanyi.name/blog/2011/02/18/qt%25e4%25b8%258e%25e7%258e%25b0%25e6%259c%2589%25e7%25b3%25bb%25e7%25bb%259f%25e5%25ad%2597%25e7%25ac%25a6%25e9%259b%2586%25e7%259a%2584%25e5%2585%25bc%25e5%25ae%25b9%25e9%2597%25ae%25e9%25a2%2598/"/>
+    <link href="http://www.hanyi.name/blog/2011/02/18/Qt-yu-xian-you-xi-tong-zi-fu-ji-de-jian-rong-wen-ti-yan-jiu/"/>
     <updated>2011-02-18T19:04:07+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/02/18/qt%e4%b8%8e%e7%8e%b0%e6%9c%89%e7%b3%bb%e7%bb%9f%e5%ad%97%e7%ac%a6%e9%9b%86%e7%9a%84%e5%85%bc%e5%ae%b9%e9%97%ae%e9%a2%98</id>
+    <id>http://www.hanyi.name/blog/2011/02/18/Qt-yu-xian-you-xi-tong-zi-fu-ji-de-jian-rong-wen-ti-yan-jiu</id>
     <content type="html"><![CDATA[<p>本文是假期完成的最后一篇文章，之后我将回到学校，届时更新频率将恢复为每周0-2篇左右。</p>
 
 <p>众所周知，Qt在国际化方面的实现是非常方便的。但有时我们会面临一些问题，如在Windows系统中GB2312/GBK和unicode字符集的不兼容，以及在与现有网络程序实现通信的过程中发生的字符集不兼容问题。当然，此类问题可能比较罕见，而且事实上不只Qt面临这一棘手的情况。经过查阅一些资料并进行实践开发，我们相信Qt提供了目前最为便捷的字符集兼容解决方案。我们的最终应用是实现与Unix/Windows主机上的现有服务端程序进行通信，以实现如http、ftp等低级别应用层协议。</p>
@@ -144,9 +144,9 @@ const char* string = &quot;mp77的技术交流频道&quot;;
   
   <entry>
     <title type="html"><![CDATA[Qt的命运]]></title>
-    <link href="http://www.hanyi.name/blog/2011/02/11/qt%25e7%259a%2584%25e5%2591%25bd%25e8%25bf%2590/"/>
+    <link href="http://www.hanyi.name/blog/2011/02/11/Qt-de-ming-yun/"/>
     <updated>2011-02-11T23:25:12+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/02/11/qt%e7%9a%84%e5%91%bd%e8%bf%90</id>
+    <id>http://www.hanyi.name/blog/2011/02/11/Qt-de-ming-yun</id>
     <content type="html"><![CDATA[<p>Nokia的自救终于有了实质性的举动，那就是放弃Meego、过渡Symbian、抵制Android、拥抱WP。相应的，主要用于S60和Meego的Qt将会面临更加严峻的形势。</p>
 
 <p>当然，在经过2011-2012年的Microkia过渡期之后，Qt未必就和移动设备彻底无缘。然而事实是Qt似乎又一次丧失了进军主流消费市场的机会，并被打回到开发者社区的襁褓之中。人们完全可以理解Nokia的举动——这几乎关系到其自身的生死存亡，但这一次Nokia像是有些孤注一掷了：毕竟Microsoft在本次合作中所承受的风险要比合作伙伴低很多，而潜在受益则又高很多。不过，WP本身就是killer OS，只不过受制于载体而令销量裹足不前，既然Moto能携Android焕发第二春，Nokia又何尝没有机会东山再起呢。但试想一下，即使Nokia真的凭借WP上演王者归来，那么到那时“王者”的定义恐怕就完全与当初不可同日而语了。</p>
@@ -161,9 +161,9 @@ const char* string = &quot;mp77的技术交流频道&quot;;
   
   <entry>
     <title type="html"><![CDATA[Qt初揭秘——终结篇]]></title>
-    <link href="http://www.hanyi.name/blog/2010/11/20/qt%25e5%2588%259d%25e6%258f%25ad%25e7%25a7%2598%25e2%2580%2594%25e2%2580%2594%25e7%25bb%2588%25e7%25bb%2593%25e7%25af%2587/"/>
+    <link href="http://www.hanyi.name/blog/2010/11/20/Qt-chu-jie-mi-zhong-jie-zhong/"/>
     <updated>2010-11-20T17:52:27+08:00</updated>
-    <id>http://www.hanyi.name/blog/2010/11/20/qt%e5%88%9d%e6%8f%ad%e7%a7%98%e2%80%94%e2%80%94%e7%bb%88%e7%bb%93%e7%af%87</id>
+    <id>http://www.hanyi.name/blog/2010/11/20/Qt-chu-jie-mi-zhong-jie-zhong</id>
     <content type="html"><![CDATA[<p> 我们最近花了几周时间详细介绍Qt的特性，她无疑是目前最能体现大多数程序员编程理想的优秀程序框架之一。</p>
 
 <p> 尽管从市场趋势来看，智能移动终端乱战可能将由RIM Blackberry，IPhone，Android，WP，PALM继续主导，前两者在发达国家仍然占有举足轻重的地位，而Google发起的Open Handset Alliance及其力推的Android无疑将横扫新兴市场国家，WP的问题或许就出在缺少前面的特定市场定位，但的确也不能排除WP未来通吃的可能（当然这种可能性是微乎其微的）。 而Nokia面临的危机是实在的，迟到的Symbian<sup>3</sup>在中高端市场上表现依然乏力，同时在开发者社区的支持率也被大量蚕食。MeeGo的开发现状和前景亦不被多数人所看好。这就直接导致Qt如今似乎处于一个尴尬的地位：毕竟移动市场的诱惑力已远远超越了桌面市场。</p>
@@ -194,9 +194,9 @@ const char* string = &quot;mp77的技术交流频道&quot;;
   
   <entry>
     <title type="html"><![CDATA[关于Qt的一切(续)]]></title>
-    <link href="http://www.hanyi.name/blog/2010/11/20/%25e5%2585%25b3%25e4%25ba%258eqt%25e7%259a%2584%25e4%25b8%2580%25e5%2588%2587%25e7%25bb%25ad/"/>
+    <link href="http://www.hanyi.name/blog/2010/11/20/guan-yu-Qt-de-yi-qie-xu/"/>
     <updated>2010-11-20T15:58:20+08:00</updated>
-    <id>http://www.hanyi.name/blog/2010/11/20/%e5%85%b3%e4%ba%8eqt%e7%9a%84%e4%b8%80%e5%88%87%e7%bb%ad</id>
+    <id>http://www.hanyi.name/blog/2010/11/20/guan-yu-Qt-de-yi-qie-xu</id>
     <content type="html"><![CDATA[<p>(前文<a href="http://www.hanyi.name/blog/?p=263" target="_self">见此</a>)</p>
 
 <p><strong> 网页内容和本地代码的紧密集成</strong></p>
@@ -263,9 +263,9 @@ const char* string = &quot;mp77的技术交流频道&quot;;
   
   <entry>
     <title type="html"><![CDATA[关于Qt的一切]]></title>
-    <link href="http://www.hanyi.name/blog/2010/11/14/%25e5%2585%25b3%25e4%25ba%258eqt%25e7%259a%2584%25e4%25b8%2580%25e5%2588%2587/"/>
+    <link href="http://www.hanyi.name/blog/2010/11/14/guan-yu-Qt-de-yi-qie/"/>
     <updated>2010-11-14T12:49:43+08:00</updated>
-    <id>http://www.hanyi.name/blog/2010/11/14/%e5%85%b3%e4%ba%8eqt%e7%9a%84%e4%b8%80%e5%88%87</id>
+    <id>http://www.hanyi.name/blog/2010/11/14/guan-yu-Qt-de-yi-qie</id>
     <content type="html"><![CDATA[<p> Qt在中国程序员人群中兴起较早，Trolltech亦对中国市场颇为重视。2005年，Trolltech在北京成立代表处，旨在向中国用户提供Qtopia相关的销售服务、培训以及技术支持。同年Qt官网也首次加入双语页面——英语和汉语两种版本（而非现在的多国语言）。</p>
 
 <p> 不甚了解Qt的同学可能会对Qt的功能产生怀疑：Qt难道不是简单的GUI框架吗？为了能更好的解答这个问题，我特从ArsTechnica.com编译了一篇由Ryan Paul撰写的关于深度透视Qt4.4的文章，尽管Qt开发团队刚刚发布了4.7.1的新版本，我依然认为Qt今后的发展趋势将是沿着2005年夏天Qt4.0发布所带来革命性影响的延续，这也是软件工程理论与实践证明目前最好的技术框架之一。同时文后我们也将推荐其它几篇Qt阶段性介绍的文章，值得注意的是，作者原文较为冗长，我们将分两期刊出，以飨读者。</p>

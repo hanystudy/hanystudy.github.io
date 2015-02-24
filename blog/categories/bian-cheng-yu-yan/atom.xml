@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 编程语言 | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/bian-cheng-yu-yan/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[AS3.0学习笔记(1)]]></title>
-    <link href="http://www.hanyi.name/blog/2009/02/16/as30%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b01/"/>
+    <link href="http://www.hanyi.name/blog/2009/02/16/AS3-0-xue-xi-bi-ji/"/>
     <updated>2009-02-16T21:21:08+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/02/16/as30%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b01</id>
+    <id>http://www.hanyi.name/blog/2009/02/16/AS3-0-xue-xi-bi-ji</id>
     <content type="html"><![CDATA[<div class="Section0" style="layout-grid: 15.6pt none;">
 <p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">即日起我们推出一部新的连载系列——《AS3.0》，原有的“假期系列”改为周末仍以假期形式不间断放出。</span></span></p>
 <p class="p0" style="margin-top: 0pt; margin-bottom: 0pt; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">ActionScript<span style="font-family: 宋体;">是针对Adobe Flash Player运行时环境的编程语言。它实现了Flash在动画制作、图像处理、数据处理以及人机交互等方面的众多功能。ActionScript是由Flash Player中的ActionScript虚拟机AVM来执行的，与Java类似，AS的程序代码通常被IDE内嵌的编译器编译成“字节码格式”并放入swf最终文件中，最后由Flash Player统一执行。</span></span></p>

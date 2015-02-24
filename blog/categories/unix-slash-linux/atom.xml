@@ -4,7 +4,7 @@
   <title><![CDATA[Category: unix/linux | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/unix-slash-linux/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-02-24T09:13:18+08:00</updated>
+  <updated>2015-02-25T01:01:15+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[MP77的UNIX课件笔记(12)]]></title>
-    <link href="http://www.hanyi.name/blog/2009/06/15/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b012/"/>
+    <link href="http://www.hanyi.name/blog/2009/06/15/MP77-de-UNIX-ke-jian-bi-ji-12/"/>
     <updated>2009-06-15T20:44:03+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/06/15/mp77%e7%9a%84unix%e8%af%be%e4%bb%b6%e7%ac%94%e8%ae%b012</id>
+    <id>http://www.hanyi.name/blog/2009/06/15/MP77-de-UNIX-ke-jian-bi-ji-12</id>
     <content type="html"><![CDATA[<p>本章介绍socket网络编程，socket是当前计算机网络中最流行的编程接口，同时也是UNIX系统应用中必不可少的关键模块之一。我们会介绍计算机网络的基本概念和原理，但仍然需要读者具备一定的计算机网络通信基础知识。在后继连载中，会经常引用本文讨论的内容。</p>
 
 <p><a id="more"></a><a id="more-180"></a></p>
@@ -490,9 +490,9 @@ new_fd = accept(sockfd, &amp;their_addr, &amp;sin_size);</p>
   
   <entry>
     <title type="html"><![CDATA[MP77的UNIX课件笔记(11)]]></title>
-    <link href="http://www.hanyi.name/blog/2009/06/13/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b011/"/>
+    <link href="http://www.hanyi.name/blog/2009/06/13/MP77-de-UNIX-ke-jian-bi-ji-11/"/>
     <updated>2009-06-13T23:24:07+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/06/13/mp77%e7%9a%84unix%e8%af%be%e4%bb%b6%e7%ac%94%e8%ae%b011</id>
+    <id>http://www.hanyi.name/blog/2009/06/13/MP77-de-UNIX-ke-jian-bi-ji-11</id>
     <content type="html"><![CDATA[<p>3 进程与文件描述符</p>
 
 <p>3.1 内核中的文件打开结构</p>
@@ -655,9 +655,9 @@ new_fd = accept(sockfd, &amp;their_addr, &amp;sin_size);</p>
   
   <entry>
     <title type="html"><![CDATA[MP77的UNIX课件笔记(10)]]></title>
-    <link href="http://www.hanyi.name/blog/2009/06/09/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b010/"/>
+    <link href="http://www.hanyi.name/blog/2009/06/09/MP77-de-UNIX-ke-jian-bi-ji-10/"/>
     <updated>2009-06-09T10:21:41+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/06/09/mp77%e7%9a%84unix%e8%af%be%e4%bb%b6%e7%ac%94%e8%ae%b010</id>
+    <id>http://www.hanyi.name/blog/2009/06/09/MP77-de-UNIX-ke-jian-bi-ji-10</id>
     <content type="html"><![CDATA[<p>上一章讨论了Unix进程控制机制和具体实现，在此基础上我们将进一步研究进程间通信的原理和方法。</p>
 
 <p>2 信号Signal</p>
@@ -1244,9 +1244,9 @@ new_fd = accept(sockfd, &amp;their_addr, &amp;sin_size);</p>
   
   <entry>
     <title type="html"><![CDATA[MP77的UNIX课件笔记(9)]]></title>
-    <link href="http://www.hanyi.name/blog/2009/06/07/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b09/"/>
+    <link href="http://www.hanyi.name/blog/2009/06/07/MP77-de-UNIX-ke-jian-bi-ji-9/"/>
     <updated>2009-06-07T09:49:39+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/06/07/mp77%e7%9a%84unix%e8%af%be%e4%bb%b6%e7%ac%94%e8%ae%b09</id>
+    <id>http://www.hanyi.name/blog/2009/06/07/MP77-de-UNIX-ke-jian-bi-ji-9</id>
     <content type="html"><![CDATA[<p>本章和下一章讨论UNIX进程控制和进程间通信机制和相关System call。从“操作系统原理”中我们了解到，进程是OS进行系统资源管理的基本单位。其具体的内容则不属于本章讨论范围，但我们假设读者已经阅读过有关操作系统进程管理方面的文献。</p>
 
 <p><a id="more"></a><a id="more-177"></a></p>
@@ -1670,9 +1670,9 @@ new_fd = accept(sockfd, &amp;their_addr, &amp;sin_size);</p>
   
   <entry>
     <title type="html"><![CDATA[MP77的UNIX课件笔记(8)]]></title>
-    <link href="http://www.hanyi.name/blog/2009/06/03/mp77%25e7%259a%2584unix%25e8%25af%25be%25e4%25bb%25b6%25e7%25ac%2594%25e8%25ae%25b08/"/>
+    <link href="http://www.hanyi.name/blog/2009/06/03/MP77-de-UNIX-ke-jian-bi-ji-8/"/>
     <updated>2009-06-03T17:11:21+08:00</updated>
-    <id>http://www.hanyi.name/blog/2009/06/03/mp77%e7%9a%84unix%e8%af%be%e4%bb%b6%e7%ac%94%e8%ae%b08</id>
+    <id>http://www.hanyi.name/blog/2009/06/03/MP77-de-UNIX-ke-jian-bi-ji-8</id>
     <content type="html"><![CDATA[<p>本章主要介绍目录和文件的状态信息，这些是大量系统功能应用的基础。后续文章会针对前次连载的文件系统、System call等内容进行部分常用程序的设计以及分析工作。</p>
 
 <p><a id="more"></a><a id="more-175"></a></p>
