@@ -1,0 +1,274 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>C++学习笔记(重温计划之四)  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="3、数据类型（中）  1）C-串与string    c++的字符串分两类，一种是由c语言沿袭而来，称为c-串。例如，    char buffer[7]=&ldquo;Hello!&rdquo;; //由于所有字符串必须以\0为结束符，则长度定义必须比实际元素个数多1    事实上， &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">C++学习笔记(重温计划之四)</h2>
+	<div class="entry-content"><p>3、数据类型（中）</p>
+
+<p> 1）C-串与string</p>
+
+<p>   c++的字符串分两类，一种是由c语言沿袭而来，称为c-串。例如，</p>
+
+<p>   char buffer[7]=&ldquo;Hello!&rdquo;; //由于所有字符串必须以\0为结束符，则长度定义必须比实际元素个数多1</p>
+
+<p>   事实上，字符数组的实际类型为char<em>，或const char</em>，称为字符型指针。实际应用中我们做如下定义:</p>
+
+<p>   char<em> str=&ldquo;Hello!&rdquo;;//输出</em>str时为&#8221;H&#8221;，str则为&#8221;Hello&#8221;</p>
+
+<p>   在c库函数中，又定义了字符串操作函数，例如strcmp(比较)、strcpy(复制)、strcat(连接)、strrev(倒置)、strset(设置)、strstr/strchr(查找串或字符)。通常我们需要指定头文件string.h，标准c++将其嵌套入iostream中，即省略了这一调用。</p>
+
+<p>  其实，C++中提供了另一种高效可行的字符串类型，即string类型。string类是标准c++中的基础类，这在后文中我们会有详细解释。string的目的是使字符串操作更加方便安全。</p>
+
+<h1>include&#8221;iostream&#8221;</h1>
+
+<h1>include&#8221;algorithm&#8221;</h1>
+
+<p>using namespace std;</p>
+
+<p>int main(){</p>
+
+<p>   string a,s1 = &ldquo;Hello!&rdquo;;</p>
+
+<p>   string s2 = &ldquo;123&rdquo;;</p>
+
+<p>   a=s1;                                                                                    //复制</p>
+
+<p>   cout &lt;&lt; (a==s1 ? &ldquo; &rdquo; : &ldquo;not&rdquo;) &lt;&lt; &ldquo;equal\n&rdquo;;                          //比较</p>
+
+<p>   cout &lt;&lt; a+s2 &lt;&lt;endl;                                                         //连接</p>
+
+<p>   reverse(a.begin(),a.end());                                                     //倒置串</p>
+
+<p>   cout &lt;&lt;a &lt;&lt; endl;</p>
+
+<p>   cout &lt;&lt; a.replace(0,9,9,&lsquo;c&rsquo;)&lt;&lt;endl;                                     //设置</p>
+
+<p>   cout &lt;&lt; (s1.find(&ldquo;ell&rdquo;)!= -1 ? &ldquo;&rdquo; : &ldquo;not&rdquo;) &lt;&lt; &ldquo;found\n&rdquo;;        //查找串</p>
+
+<p>   cout &lt;&lt; (s1.find(&lsquo;c&rsquo;)!= -1 ? &ldquo;&rdquo; : &ldquo;not&rdquo;) &lt;&lt; &ldquo;found\n&rdquo;);          //查找字符</p>
+
+<p>}</p>
+
+<p>   由上基本可以看出，string在与c-串对比中是明显有优势的。而且，c-串可以随时赋值给string变量，具有相当的亲和程度.</p>
+
+<p>  现在讨论string与c-串在输入输出中的c++用法.</p>
+
+<p>   当输入时,我们以:</p>
+
+<p>   fot(string s;cin &gt;&gt; s;)            //string s可以替换为char s[10]</p>
+
+<p>   cout &lt;&lt; s &lt;&lt;&ldquo; &rdquo;;</p>
+
+<p>   cout &lt;&lt; endl; </p>
+
+<p>   cin &gt;&gt;在读入时一般过滤前导空格,包括空格、回车、水平/垂直制表符等等。</p>
+
+<p>  我们同样可以采用非循环的方式。例如:</p>
+
+<p>   string s;                           //在字符数组中，可以定义char s[10]</p>
+
+<p>   getline(cin,s);                   //相应可以改为cin.getline(s,10)</p>
+
+<p>   cout &lt;&lt; s &lt;&lt;endl;           //getline的好处是，在读入多行字符时，程序可以将内容逐行分解操作</p>
+
+<p>  下面假设，存在一个文件aaa.txt,文件内有若干行整数，并且每行整数个数未知。这时求每行的整数和。</p>
+
+<h1>include&lt;iostream&gt;                      //该程序已调试通过</h1>
+
+<h1>include&lt;sstream&gt;</h1>
+
+<h1>include&lt;fstream&gt;</h1>
+
+<p>using namespace std;
+int main(void){
+ ifstream in(&ldquo;aaa.txt&rdquo;);
+ for(string s;getline(in,s);){              //逐行读入的循环
+  int a, sum = 0;
+  for(istringstream sin(s);sin&gt;&gt;a;sum+=a);          //istringstream sin(s)意在创建输入string流sin()，sin&gt;&gt;即从string流中将整数输入到a中进行运算
+  cout &lt;&lt; sum &lt;&lt; endl;
+ }
+ getchar();
+ return 0;
+}</p>
+
+<p>  上面的程序体现了string流的概念，进一步体现了string字符串型的优势和特点。</p>
+
+<p>  2）数组</p>
+
+<p>   int a[5];   //即定义了一个数组，5代表了数组中元素个数。并且[ ]内必须为常量表达式，通常我们可以使用const int定义。</p>
+
+<p>   数组的初始化过程中，有如下几种方式进行:</p>
+
+<p>   int iArray[10] = {1,2,3,4,5,6,7,8,9,10};</p>
+
+<p>   请注意，以上方式禁止的有:元素个数大于定义数、中途有元素定义为空、元素省略&hellip;不过实际操作中可以使元素个数少于定义数，比如  int iArray[10] = {1,2,3,4,5,6,7,8}; 这是允许的。</p>
+
+<p>　int iArray[] = {1,2,3,4,5,6,7,8,9,10};  //虽然没有定义常量值，但初始化值的个数已经做出说明了。</p>
+
+<p>　我们还能用到sizeof(a[n])来返回a[n]元素所占空间的字节数。</p>
+
+<p>　下面来探测未初始化数组元素的默认值情况。计算机把这一类数组区分为全局数组或静态数组、局部数组。在全局数组和静态数组中，未定义情况下的元素值恒为０，而在局部数组中则变成不确定数。</p>
+
+<p>　数组也有多位数组的形式，可定义为:</p>
+
+<p>   int a[3][5];   //这是一个２维数组，其输入输出方式和１维数组是相同的</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-08T10:49:37+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

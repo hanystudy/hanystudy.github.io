@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: gpu/gpgpu | Wing of Dream 梦境之翼]]></title>
+  <link href="http://www.hanyi.name/blog/categories/gpu-slash-gpgpu/atom.xml" rel="self"/>
+  <link href="http://www.hanyi.name/"/>
+  <updated>2015-02-24T09:13:18+08:00</updated>
+  <id>http://www.hanyi.name/</id>
+  <author>
+    <name><![CDATA[Han Yi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CUDA学习的现状和困扰]]></title>
+    <link href="http://www.hanyi.name/blog/2011/05/21/cuda%25e5%25ad%25a6%25e4%25b9%25a0%25e7%259a%2584%25e7%258e%25b0%25e7%258a%25b6%25e5%2592%258c%25e5%259b%25b0%25e6%2589%25b0/"/>
+    <updated>2011-05-21T23:01:52+08:00</updated>
+    <id>http://www.hanyi.name/blog/2011/05/21/cuda%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%8e%b0%e7%8a%b6%e5%92%8c%e5%9b%b0%e6%89%b0</id>
+    <content type="html"><![CDATA[<p>首先需要说明的是，CUDA并非GPGPU（GPU通用计算）的全部。但是我们仍然应该首先感谢Nvidia，因为CUDA使GPGPU走向大众化，使得我等终于也能从中一窥究竟了。不过随之而来的疑问却是，CUDA真能担负得起GPGPU的重担吗？至少在目前看来，答案并不太明显。</p>
+
+<p><strong>战前准备</strong></p>
+
+<p>当然，要使用到CUDA，最好还是拥有一块N系列的显卡，尽管CUDA支持emu模式（该模式将把cuda程序完全放在CPU中运行），但device加速计算才是我们真正的目的。拥有并装配任意一块GeForce 8、9、GTX或Quadro、Tesla系列显卡后，在NVIDIA的网站上下载最新适用的driver、toolkit和sdk，安装在相应的平台上就可以了。下图简示了cuda应用程序的软硬件体系结构：</p>
+
+<p>[singlepic id=31 w=320 h=240 mode=watermark float=center]</p>
+
+<p>图中我们可以看出GPU在现行体系结构的计算机中所扮演的角色，以及cuda应用程序驱动GPU设备的控制流。上述环境搭建好后，就可以进入程序设计阶段了（的确，这才刚刚开始）——实际上当前cuda应用中还普遍存在一个问题，即在当前ide中配置应用程序框架以便于开发，针对该问题我们将在今后的文章中做一些说明。</p>
+
+<p><strong>CUDA的extended C基本组成</strong></p>
+
+<p><strong>1、基本结构和kernel function</strong></p>
+
+<p>这里给出一段简单易懂的基于cuda的C语言程序模板：</p>
+
+<p>[c]</p>
+
+<p>Main(){</p>
+
+<p>//Allocate memory on GPU</p>
+
+<p>float *Md;</p>
+
+<p>cudaMalloc((void**)&amp;Md, size);</p>
+
+<p>//Copy data from CPU to GPU</p>
+
+<p>cudaMemcpy(Md, M, size, cudaMemcpyHostToDevice);</p>
+
+<p>//Call GPU kernel function</p>
+
+<p>kernel&lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt; (arguments);</p>
+
+<p>//Copy data from GPU back to CPU</p>
+
+<p>CopyFromDeviceMatrix(M, Md);</p>
+
+<p>//Free device matrices</p>
+
+<p>FreeDeviceMatrix(Md);</p>
+
+<p>}</p>
+
+<p>[/c]</p>
+
+<p>从这段程序中我们可以看出cuda编程的两大特点：一是在显存中的空间分配操作和CPU操作内存的思路基本一致，同时避免不了Host与Device之间的大规模数据交换；二是GPU计算的算法核心在于核函数kernel function的设计。通过核函数的调用方式kernel&lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt; (arguments)可以看出，kernel是自定义的核函数名，符号“&lt;&lt;&lt;”和“&gt;&gt;&gt;”中含有两个参数，分别是Grid维数和Block维数，在cuda中Grid表示一个block组，而Block表示一个thread组，显然参数dimGrid和dimBlock分别定义了Grid和Block的规模，其维数均可达到三维。下面是一个定义Grid和Block的例子：</p>
+
+<p>[c]</p>
+
+<p>dim3 dimGrid(2, 2);</p>
+
+<p>dim3 dimBlock(4, 2, 2);</p>
+
+<p>[/c]</p>
+
+<p>应当注意，每一个thread block最多只能分配512个threads，其中每调用一次kernel函数就相当于在GPU上分配了一个Grid。此外，为了使线程内部处理各自的数据块，核函数内部还有为每个线程分配的threadIdx、blockIdx、threadDim和blockDim信息，示例程序如下：</p>
+
+<p>[c]</p>
+
+<p>//CUDA program</p>
+
+<p><strong>global</strong> void inc_gpu(float <em>a, float </em>b, int N)</p>
+
+<p>{</p>
+
+<p>for (intidx = 0; idx&lt;N; idx++)</p>
+
+<p>a[idx] = a[idx] + b;</p>
+
+<p>}</p>
+
+<p>int idx =blockIdx.x* blockDim.x+ threadIdx.x;</p>
+
+<p>if (idx &lt; N)</p>
+
+<p>a[idx] = a[idx] + b;</p>
+
+<p>}</p>
+
+<p>void main()</p>
+
+<p>{</p>
+
+<p>&hellip;</p>
+
+<p>dim3 dimBlock (blocksize);</p>
+
+<p>dim3 dimGrid( ceil( N / (float)blocksize) );</p>
+
+<p>inc_gpu&lt;&lt;&lt;dimGrid, dimBlock&gt;&gt;&gt;(a, b, N);</p>
+
+<p>}</p>
+
+<p>[/c]</p>
+
+<p><strong>2、类型关键字</strong></p>
+
+<p>为了处理Grid、Block、Thread层级内的内存共享和线程通信问题，cuda特别给出了自有的声明关键字：</p>
+
+<p><strong>device</strong></p>
+
+<p>该空间储存于GPU上，属于全局可读写空间，和应用程序具有相同的生命期，且可被grid中所有线程存取，CPU代码通过runtime函数存取。</p>
+
+<p><strong>constant</strong></p>
+
+<p>该空间储存于GPU上，属于全局只读空间，和应用程序具有相同的生命期，且可被grid中所有线程存取，CPU代码通过runtime函数存取。</p>
+
+<p><strong>shared</strong></p>
+
+<p>该空间存储于GPU上Block内的共享存储器，和Block具有相同的生命期，只能被Block内的全部线程存取。</p>
+
+<p>Local变量</p>
+
+<p>储存于SM内的寄存器和local memory中，和thread具有相同的生命期，Thread私有。</p>
+
+<p>同时CUDA还引入了几个新的内置数据类型，除了前面已经给出的dim3外，还针对C语言的内置数据类型进行了进一步扩展，如int4四维向量，其四个维数分别存储于int4.w、int4.x、int4.y、int4.z中。此外还有一个独特的Texture type，其一般声明表达式为texture&lt;Type, Dim, ReadMode&gt; texRef，其中type为C的内置数据类型，维数最多为3，ReadMode包括了cudaReadModeNormalizedFloat和cudaReadModeElementType两种形式。</p>
+
+<p>CUDA在函数声明中也引入了新的关键字：</p>
+
+<p><strong>device</strong> float DeviceFunc()</p>
+
+<p>该类型函数只能在GPU内部被调用，且只能在GPU内部运行。device函数不能使用&amp;取存储器地址、不支持递归、不支持静态变量，也不支持变长参数的声明方式。</p>
+
+<p><strong>global</strong> void KernelFunc()</p>
+
+<p>一般为核函数，在CPU内调用，但在GPU内运行，且返回值只能为void。前文已经详细说明了核函数的一般使用方法，应注意核函数还拥有一个配置参数，其调用方式一般如下：</p>
+
+<p>[c]</p>
+
+<p>&hellip;&hellip;</p>
+
+<p>size_t SharedMemBytes = 64; // 64 bytes of shared memory</p>
+
+<p>KernelFunc&lt;&lt;&lt; DimGrid, DimBlock, SharedMemBytes &gt;&gt;&gt;(&hellip;);</p>
+
+<p>[/c]</p>
+
+<p><strong>host</strong> float HostFunc()</p>
+
+<p>只在CPU中调用和运行的程序。</p>
+
+<p>还有一种声明方式，即<strong>device</strong>和<strong>host</strong> 组合使用，那么函数分别在CPU和GPU中被编译保存。</p>
+
+<p>CUDA还有自己一套非常实用的数学函数库，其功能包括pow, sqrt, cbrt, hypot, exp, exp2, expm1, log, log2, log10,log1p, sin, cos, tan,asin, acos, atan, atan2, sinh, cosh,tanh, asinh, acosh, atanh, ceil, floor, trunc, round, etc。但是上述函数都不能像matlab中一样进行向量运算（但是有了GPU和Kernel&hellip;呵呵），此外在函数名前方加入__前缀就可以达到更快的速度，但会损失一定精度。</p>
+
+<p><strong>CUDA Libraries</strong></p>
+
+<p>如果只有CUDA drivers API，那么我们对CUDA的研究可能真的要止步于此了，因为基于GPGPU的程序设计目前还缺乏方法论支持——当然这是科学家的义务（如果我们要想在此做一些贡献，可能不会先发在blog上:）。不过正是因为更多有趣的Libraries，使我们不得不对CUDA继续感起兴趣，尽管这种编程方式的难度与matlab相比远高了许多数量级。笔者使用的CUDA Toolkit 4.0 RC2（发布于2011年4月）大体上包含了四个CUDA应用库，包括GPU-accelerated BLAS library基础线性代数子程函数库、GPU-accelerated FFT library快速傅里叶变换函数库、GPU-accelerated Sparse Matrix library稀疏矩阵函数库、GPU-accelerated RNG library随机数生成函数库。</p>
+
+<p>最常用的函数库是CUBLAS基础线性代数子程函数库， 其基本功能是进行矩阵运算。有经验的读者可能会想到直接用CUDA API编写矩阵运算程序可能并不复杂，但是鉴于面对的是建立在本身就不怎么友好的标准C之上的CUDA，CUBLAS还是吸引了众多关注。这里给出基于CUDA 4.0 CUBLAS（CUBLAS v2.0）程序的基本结构：</p>
+
+<p>[c]</p>
+
+<p>cublasHandle_t handle ;</p>
+
+<p>stat = cublasCreate(&amp;handle ) ;</p>
+
+<p>stat = cublasSetMatrix ( M , N , s i z e o f (* a ) , a , M , devPtrA , M ) ;</p>
+
+<p>modify ( handle , devPtrA , M , N , 2 , 3 , 1 6.0 f , 12.0 f ) ;</p>
+
+<p>stat = cublasGetMatrix ( M , N , s i z e o f (* a ) , devPtrA , M , a , M ) ;</p>
+
+<p>cudaFree ( devPtrA ) ;</p>
+
+<p>cublasDestroy ( handle ) ;</p>
+
+<p>[/c]</p>
+
+<p>这段代码摘自CUBLAS Library手册中的Example code，其功能是将当前矩阵改为以1为起始索引。handle是CUBLAS新版本中加入的线程安全句柄，这保证了CUBLAS库函数的可重入性，从而允许其在CPU的不同线程中被安全调用。需要注意的是，CUBLAS采用了以列为主序、1为起始索引的存储结构，以便更大程度上兼容Fortran编程环境，然而数据组织这种方式与C/C++完全不同，这就需要在向存储器中填入数据时考虑选择列为主序的问题，其中官方手册上也做了如下说明：</p>
+
+<p>当应用程序的形式是在C中嵌入的Fortran代码，那么为了适应索引由1起始的习惯和以列为主序的存储方式，可使用以下宏调用进行数组操作：</p>
+
+<p>[c]</p>
+
+<h1>define IDX2F( i , j , ld ) ( ( ( ( j )-1) *( ld ) )+(( i )-1) )</h1>
+
+<p>[/c]</p>
+
+<p>如果使用的是本地C/C++代码，那么可使用以下宏调用进行数组操作：</p>
+
+<p>[c]</p>
+
+<h1>define IDX2C( i , j , ld ) ( (( j) * (ld))+( i) )</h1>
+
+<p>[/c]</p>
+
+<p>上述两段宏定义的“id”是指矩阵的主维数，如当矩阵是以行为主序存储时，主维数id即为列数，反之亦然，主维数在CUBLAS库函数中被大量使用。</p>
+
+<p><strong>后记</strong></p>
+
+<p>CUDA入门时问题往往集中在基本的extended C以及库函数的调用，其次就是编译、链接和调试了。但是当我们真正熟悉它的基本使用方法，才发现CUDA的难度集中在算法和程序设计乃至优化等方面，要知道，在传统CPU上许多数值计算方法都尚未得到高效的解决，更何况要让众多的开发者把精力投入到这种新的思考模式——也许这正是AMD至今把GPGPU捧在科学研究之巅的原因。目前，CUDA在GPGPU上的主要应用还是基本的数值计算，我们知道在纯粹的浮点运算上GPU已经把CPU远远抛在了后面，但处于冯诺依曼体系下的GPGPU仍然需要唯CPU马首是瞻，这就引出Host和Device间数据传输瓶颈的问题。即使是在PCI-E 2.0理论传输峰值达到8.0g/s的情况下，仍然与高端GPU动辄上百g/s的片内存储带宽相距甚远。更何况CUDA的数据传输机制为了避免Host对Memory的影响，往往先在Memory中申请一块独占空间再进行DMA传输——这也是往往使用cudaMallocHost的page locked内存空间申请模式的原因。</p>
+
+<p>因此，我认为，如果作为一名普通爱好者，那么学习CUDA、偶尔加速并优化自己的实际工作——如快速视频编解转码，也小有一番风味。但如果热衷于高性能计算特别是GPGPU的研究，那么是否采用CUDA——这个让GPU走下神坛的“利器”并借助它去接近理想，恐怕还是有待商榷的。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: 编译技术 | Wing of Dream 梦境之翼]]></title>
+  <link href="http://www.hanyi.name/blog/categories/bian-yi-ji-zhu/atom.xml" rel="self"/>
+  <link href="http://www.hanyi.name/"/>
+  <updated>2015-02-24T09:13:18+08:00</updated>
+  <id>http://www.hanyi.name/</id>
+  <author>
+    <name><![CDATA[Han Yi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[简单的词法分析程序和一种lex for win32用法示例（下）]]></title>
+    <link href="http://www.hanyi.name/blog/2009/05/01/%25e7%25ae%2580%25e5%258d%2595%25e7%259a%2584%25e8%25af%258d%25e6%25b3%2595%25e5%2588%2586%25e6%259e%2590%25e7%25a8%258b%25e5%25ba%258f%25e5%2592%258c%25e4%25b8%2580%25e7%25a7%258dlex-for-win32%25e7%2594%25a8%25e6%25b3%2595%25e7%25a4%25ba%25e4%25be%258b%25ef%25bc%2588%25e4%25b8%258b%25ef%25bc%2589/"/>
+    <updated>2009-05-01T20:21:18+08:00</updated>
+    <id>http://www.hanyi.name/blog/2009/05/01/%e7%ae%80%e5%8d%95%e7%9a%84%e8%af%8d%e6%b3%95%e5%88%86%e6%9e%90%e7%a8%8b%e5%ba%8f%e5%92%8c%e4%b8%80%e7%a7%8dlex-for-win32%e7%94%a8%e6%b3%95%e7%a4%ba%e4%be%8b%ef%bc%88%e4%b8%8b%ef%bc%89</id>
+    <content type="html"><![CDATA[<p> 前面介绍了如何使用lex写一个词法分析器，为了证明上述程序的正确性，需生成与它对应的c语言代码，并编译成可执行程序。unix下使用这些工具非常简单（以至于两行commands就可以完成工作），在此就不做详细说明，接下来我们来面对ms留给我们的烂摊子&hellip;&hellip;</p>
+
+<p> 为了证明在win32下利用lex生成词法分析器有多复杂，我们选用parser generator 2和vc++6.0组合向大家展示ms强大的化神奇为腐朽的力量（依然不推荐win32用户使用vs平台进行此项工作）。</p>
+
+<p> parser generator可以在以下网址免费获取：<a href="http://www.bumblebeesoftware.com/downloads.htm"><a href="http://www.bumblebeesoftware.com/downloads.htm">http://www.bumblebeesoftware.com/downloads.htm</a></a></p>
+
+<p> vc++6.0？别告诉我你不知道怎么获取&hellip;&hellip;</p>
+
+<p> 首先启动pg2,要进行针对vc++6.0的配置工作:</p>
+
+<p> 选择menu下的project-&gt;LibBuilder,Complers选则Visual C++(32-bit),并点击compiler properties,这时在Options内作如下设置:</p>
+
+<p>Version:6</p>
+
+<p> Unicode:true</p>
+
+<p> treat wchar_t as Built-in type:False</p>
+
+<p> Compiler Bin directory: C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\BIN</p>
+
+<p> Compiler Bin directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\MSDEV98\BIN</p>
+
+<p> Compiler Include directory: C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\INCLUDE</p>
+
+<p> Compiler Include directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE</p>
+
+<p> Compiler Library directory:C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\LIB</p>
+
+<p> Compiler Library directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\LIB</p>
+
+<p> (注: 请读者按vc实际安装目录而定)选择完毕后点击OK,在父窗口中选择Build生成供vc使用的库文件.</p>
+
+<p> &hellip;&hellip;</p>
+
+<p> 经过漫长等待库文件终于生成了&hellip;现在回到主界面,选择project-&gt;parserWizard,填入自己的lex工程名,选择vc++6.0(32-bit),进入下一步.Files选lex file only,其它均保持默认即可.填入lex源文件名后即可选择complete.</p>
+
+<p> 这时程序会自动生成lex文件的框架,如果在前面的设置中还选择了create main function,文本中还会有几行简单的main函数.但是该文本对我们没有任何意义&hellip;直接将前文所述的源代码覆盖至此即可.</p>
+
+<p> 现在选择project-&gt;compile file,build后就会生成lex源码对应的c语言source和include文件了.接下来启动vc++6.0进行相关配置.</p>
+
+<p> 首先点击Tools-&gt;Options,切换至directory选项卡,分别在show directories for中的Include、Library和Source选项中添加如下信息（每项一条）：</p>
+
+<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\INCLUDE</p>
+
+<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\LIB\MSVC32</p>
+
+<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\SOURCE</p>
+
+<p>（注：应按pg的实际安装路径而定）现在新建win32 console application工程，并点击Project-&gt;Settings选项，Settings for先选择win32 debug。然后在C/C++选项卡的Proprocessor Definitions选项中添入,YYDEBUG，切换至Link选项卡在Object/library modules中添入yld.lib ylmtd.lib ylmtrd.lib。</p>
+
+<p> 将Settings for切换至win32 Release重复上述操作，就完成了整个前期的所有配置工作&hellip;&hellip;</p>
+
+<p> 在工程中添加前面生成的source和include文件，直接build即可。现在，我们就可以按照PL/0的基本关键词写出一些简单的程序并加以词法分析了（事实证明这时的编译功能还十分微弱，但却是向前迈出一大步了）。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[简单的词法分析程序和一种lex for win32用法示例（上）]]></title>
+    <link href="http://www.hanyi.name/blog/2009/05/01/%25e7%25ae%2580%25e5%258d%2595%25e7%259a%2584%25e8%25af%258d%25e6%25b3%2595%25e5%2588%2586%25e6%259e%2590%25e7%25a8%258b%25e5%25ba%258f%25e5%2592%258c%25e4%25b8%2580%25e7%25a7%258dlex-for-win32%25e7%2594%25a8%25e6%25b3%2595%25e7%25a4%25ba%25e4%25be%258b/"/>
+    <updated>2009-05-01T19:25:02+08:00</updated>
+    <id>http://www.hanyi.name/blog/2009/05/01/%e7%ae%80%e5%8d%95%e7%9a%84%e8%af%8d%e6%b3%95%e5%88%86%e6%9e%90%e7%a8%8b%e5%ba%8f%e5%92%8c%e4%b8%80%e7%a7%8dlex-for-win32%e7%94%a8%e6%b3%95%e7%a4%ba%e4%be%8b</id>
+    <content type="html"><![CDATA[<p> 学计算机的同学都要学习编译原理，理论是抽象了点，但最终目的毕竟只是让我们了解一下程序语言编译器的构造原理。</p>
+
+<p> 尽管没有充分的证据显示lex+yacc能证明一个人学习cp程度的好坏（考试的作用就更难以拿来说明这些了），但好歹大家学过nfa，学过确定化，学过dfa化简，用c语言大概可以写出设定简单的词法分析程序了。</p>
+
+<p> 然而教材上都是一些纯理论性的内容，实现技术的精粹还得去找洋人学。因而本科生只需掌握lex和yacc——这已经是为极限，再低就难以搞清楚cp和programming有什么关系&hellip;再高？说实话暂时已是心有余而力不足了&hellip;</p>
+
+<p> 那么lex的作用大概就是这些，尽管在几乎所有的程序设计语言编译器中词法分析都是由语法分析程序不断调用而生效，但对于我们来说分别实现并作演示是再好不过。这就是本文介绍词法分析器lex的目的。</p>
+
+<p> 一个lex源程序由四部分构成，基本框架如下：</p>
+
+<p>%{</p>
+
+<p>//包含的头文件、函数声明以及一些全局量的声明</p>
+
+<p>%}</p>
+
+<p>//词法定义</p>
+
+<p>%%</p>
+
+<p>//规则定义</p>
+
+<p>%%</p>
+
+<p>//自定义程序</p>
+
+<p> 需要注意的是，带有%的分隔符必须顶格书写，词法分析和规则定义的基本形式为正规式。为了显示词法分析的最终成果，需要定义一个二元结构体，分别存储其单词内容以及归属类别，并存入定义好的目标文件中，同时按国际惯例显示源代码出错信息。</p>
+
+<p> 现在给出一个PL/0语言（pascal语言的一种子集）的EBNF描述：</p>
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;prog&gt; → program &lt;id&gt;；&lt;block&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;block&gt; → [&lt;condecl&gt;][&lt;vardecl&gt;][&lt;proc&gt;]&lt;body&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;condecl&gt; → const &lt;const&gt;{，&lt;const&gt;}</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;const&gt; → &lt;id&gt;:=&lt;integer&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;vardecl&gt; → var &lt;id&gt;{，&lt;id&gt;}</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;proc&gt; → procedure &lt;id&gt;（&lt;id&gt;{，&lt;id&gt;}）;&lt;block&gt;{;&lt;proc&gt;}</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;body&gt; → begin &lt;statement&gt;{;&lt;statement&gt;}end</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;statement&gt; → &lt;id&gt; := &lt;exp&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |if &lt;lexp&gt; then &lt;statement&gt;[else &lt;statement&gt;]</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |while &lt;lexp&gt; do &lt;statement&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |call &lt;id&gt;[（&lt;exp&gt;{，&lt;exp&gt;}）]</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |&lt;body&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |read (&lt;id&gt;{，&lt;id&gt;})</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |write (&lt;exp&gt;{，&lt;exp&gt;})</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;lexp&gt; → &lt;exp&gt; &lt;lop&gt; &lt;exp&gt;|odd &lt;exp&gt;</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;exp&gt; → [+|-]&lt;term&gt;{&lt;aop&gt;&lt;term&gt;}</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;term&gt; → &lt;factor&gt;{&lt;mop&gt;&lt;factor&gt;}</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;factor&gt;→&lt;id&gt;|&lt;integer&gt;|(&lt;exp&gt;)</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;lop&gt; → =|&lt;&gt;|&lt;|&lt;=|&gt;|&gt;=</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;aop&gt; → +|-</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;mop&gt; → *|/</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;id&gt; → l{l|d}   （注：l表示字母）</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;integer&gt; → d{d} </p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;"> </p>
+
+
+<p style="margin: 0cm 0cm 0pt; mso-pagination: widow-orphan;">注释：</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;prog&gt;：程序 ；&lt;block&gt;：块、程序体 ；&lt;condecl&gt;：常量说明；&lt;const&gt;：常量；</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;vardecl&gt;：变量说明 ；&lt;proc&gt;：分程序 ； &lt;body&gt;：复合语句 ；&lt;statement&gt;：语句；</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;exp&gt;：表达式 ；&lt;lexp&gt;：条件 ；&lt;term&gt;：项； &lt;factor&gt;：因子 ；&lt;aop&gt;：加法运算符；</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;mop&gt;：乘法运算符； &lt;lop&gt;：关系运算符</p>
+
+
+<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">odd：判断表达式的奇偶性。</p>
+
+
+<p> 利用上述文字中提取出的词法信息，我们可以建立一个简单的词法分析程序：</p>
+
+<p>%{
+/<em>
+ </em>
+ <em> coded by 韩翼 from nwu    Email:8621316@qq.com
+ </em>
+ */</p>
+
+<h1>include &lt;stdio.h&gt;</h1>
+
+<h1>include &lt;stdlib.h&gt;</h1>
+
+<h1>include &lt;string.h&gt;</h1>
+
+<h1>define MAX_COUNT 10000     //最大可接受id数</h1>
+
+<p>int process();       //处理函数
+int main(int argc,char <strong>argv);
+int nowline = 1;      //当前行数计数器
+int errorno = 0;      //出错计数器
+int flag = 0;       //分支标识
+int count = 0;       //id计数器
+char desfilename[32];     //目标文件名
+char <em>srcfilename;      //源文件名
+FILE </em>srcfile;       //源文件缓冲指针
+FILE <em>desfile;       //目标文件缓冲指针
+struct result       //id标记二元组
+{
+ char </em>content;
+ char <em>description;
+}result[MAX_COUNT];
+%}
+d [0-9]         
+l [a-zA-Z]
+wr ([0-9]+)<a href="[a-zA-Z]|[0-9]">a-zA-Z</a></em>
+integer [0-9]+
+id <a href="[a-zA-Z]|[0-9]">a-zA-Z</a><em>
+anotherline [\n]
+whitespace [\t]+
+%%
+&ldquo;program&rdquo; { flag = 0; process(); }
+&ldquo;const&rdquo; { flag = 1; process(); }
+&ldquo;:=&rdquo; { flag = 2; process(); }
+&ldquo;var&rdquo; { flag = 3; process(); }
+&ldquo;procedure&rdquo; { flag = 4; process(); }
+&ldquo;begin&rdquo; |
+&ldquo;end&rdquo; { flag = 5; process(); }
+&ldquo;if&rdquo; |
+&ldquo;then&rdquo; |
+&ldquo;else&rdquo; |
+&ldquo;while&rdquo; |
+&ldquo;call&rdquo; |
+&ldquo;read&rdquo; |
+&ldquo;write&rdquo; { flag = 6; process(); }
+&ldquo;+&rdquo; |
+&ldquo;-&rdquo; { flag = 7; process(); }
+&ldquo;</em>&rdquo; |
+&ldquo;/&rdquo; { flag = 8; process(); }
+&ldquo;=&rdquo; |
+&ldquo;&lt;&gt;&rdquo; |
+&ldquo;&lt;&rdquo; |
+&ldquo;&lt;=&rdquo; |
+&ldquo;&gt;&rdquo; |
+&ldquo;&gt;=&rdquo; { flag = 9; process(); }
+&ldquo;(&rdquo; |
+&ldquo;)&rdquo; |
+&ldquo;,&rdquo; |
+&ldquo;;&rdquo; { flag = 10; process(); }
+{wr} { flag = 13; process(); }
+{id} { flag = 11; process(); }
+{integer} { flag = 12; process(); }
+{anotherline} { nowline++; }
+{whitespace} { ; }
+&ldquo; &rdquo; { ; }
+. { flag = 14; process(); }
+%%
+int process()
+{
+ switch(flag)
+ {
+ case 0:
+  result[count].description = &ldquo;&lt;prog&gt;&rdquo;;
+  break;
+ case 1:
+  result[count].description = &ldquo;&lt;condecl&gt;&rdquo;;
+  break;  
+ case 2:
+  result[count].description = &ldquo;&lt;op&gt;&rdquo;;
+  break;
+ case 3:
+  result[count].description = &ldquo;&lt;vardecl&gt;&rdquo;;
+  break;
+ case 4:
+  result[count].description = &ldquo;&lt;proc&gt;&rdquo;;
+  break;
+ case 5:
+  result[count].description = &ldquo;&lt;body&gt;&rdquo;;
+  break;
+ case 6:
+  result[count].description = &ldquo;&lt;statement&gt;&rdquo;;
+  break;
+ case 7:
+  result[count].description = &ldquo;&lt;aop&gt;&rdquo;;
+  break;
+ case 8:
+  result[count].description = &ldquo;&lt;mop&gt;&rdquo;;
+  break;
+ case 9:
+  result[count].description = &ldquo;&lt;lop&gt;&rdquo;;
+  break;
+ case 10:
+  result[count].description = &ldquo;&lt;bop&gt;&rdquo;;
+  break;
+ case 11:
+  result[count].description = &ldquo;&lt;identifier&gt;&rdquo;;
+  break;
+ case 12:
+  result[count].description = &ldquo;&lt;integer&gt;&rdquo;;
+  break;
+ case 13:
+  errorno++;
+  result[count].description = &ldquo;&lt;wrong integer or id&gt;&rdquo;;
+  printf(&ldquo;%s(%d) : error &lsquo;%s&rsquo; : wrong integer or identifier\n&rdquo;,srcfilename,nowline,yytext);
+  break;
+ case 14:
+  errorno++;
+  result[count].description = &ldquo;&lt;unknown identifier&gt;&rdquo;;
+  printf(&ldquo;%s(%d) : error &lsquo;%s&rsquo; : unknown identifier\n&rdquo;,srcfilename,nowline,yytext);
+  break;
+ }
+ result[count].content = yytext;
+ fprintf(desfile,&ldquo;%d: %s\t%s \n&rdquo;,count+1,result[count].content,result[count].description);
+ count++;
+ return 0;
+}
+int main(int argc,char </strong>argv)
+{ 
+ int i = 0;
+ if( argc != 2)
+ {
+  printf(&ldquo;No sourcecode processed : parameter error\n&rdquo;);
+  return 0;
+ }
+ srcfilename = argv[1];
+ strcat(desfilename,argv[1]);
+ while (desfilename[i] != &lsquo;.&rsquo;)
+ {
+  i++;
+ }
+ desfilename[i] = &lsquo;\0&rsquo;;
+ strcat(desfilename,&ldquo;.pl0&rdquo;);
+ if( (srcfile = fopen(argv[1],&ldquo;r&rdquo;)) == NULL )
+ {
+  printf(&ldquo;No sourcecode processed : cannot open the file \&rdquo;%s\&ldquo;\n&rdquo;,argv[1]);
+  return 0;
+ }
+ if( (desfile = fopen(desfilename,&ldquo;a&rdquo;)) == NULL )
+ {
+  printf(&ldquo;No sourcecode processed : cannot write the file \&rdquo;%s\&ldquo;\n&rdquo;,desfilename);
+  return 0;
+ }
+ yyin = srcfile;
+ yylex();
+ fprintf(desfile,&ldquo;\n&rdquo;);
+ fprintf(desfile,&ldquo;completed! welcome to lex by mp77,this is only a demo for compile principle.\n&rdquo;);
+ printf(&ldquo;%s - %d error(s)\n&rdquo;,desfilename,errorno);
+ printf(&ldquo;completed! welcome to lex by mp77,this is only a demo for compile principle.\n&rdquo;);
+ fclose(desfile);
+ fclose(srcfile);
+ return 0;
+}</p>
+
+<p> 接下来我们会介绍如何利用lex工具生成本代码的C语言源代码，并使用vc6.0编译成win32 console程序。</p>
+]]></content>
+  </entry>
+  
+</feed>

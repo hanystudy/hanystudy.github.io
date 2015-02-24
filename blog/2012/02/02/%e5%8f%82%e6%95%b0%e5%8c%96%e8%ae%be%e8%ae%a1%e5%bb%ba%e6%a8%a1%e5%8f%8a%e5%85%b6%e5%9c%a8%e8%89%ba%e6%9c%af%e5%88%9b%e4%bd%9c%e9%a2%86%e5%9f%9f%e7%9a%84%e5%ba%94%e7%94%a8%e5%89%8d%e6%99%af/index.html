@@ -1,0 +1,204 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>参数化设计/建模及其在艺术创作领域的应用前景  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="一、概述 迄今为止，参数化设计/建模仍代表一种理念，尽管这种理念已经经历了CAD/CAM近五十年的发展历程。系统化的CAD/CAM技术包含两种基本思路，一是使用二维几何原语如点、线或样条表示三维物体，如Bezier、De Casteljau以及Sutherland这些先驱们的工作； &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">参数化设计/建模及其在艺术创作领域的应用前景</h2>
+	<div class="entry-content"><p><strong>一、概述</strong></p>
+
+<p>迄今为止，参数化设计/建模仍代表一种理念，尽管这种理念已经经历了CAD/CAM近五十年的发展历程。系统化的CAD/CAM技术包含两种基本思路，一是使用二维几何原语如点、线或样条表示三维物体，如Bezier、De Casteljau以及Sutherland这些先驱们的工作；明暗处理的需求接着被提出，从而出现了早期着色模型的研究（本文将不涉及这部分内容）；即使是目前最广泛使用的Nurbs，也是A.R. Forrest早在1980年就已经完成了。</p>
+
+<p>另一种思路是使用体素构造表示（CSG）进行实体建模（该技术实际上也诞生于60年代初期），其基本方法是使用一组基本几何体，如球、柱体、椎体等，对其执行交、并、补等布尔运算序列，从而构建复杂三维物体，通常再使用B-Reps表示最终生成的三维模型。这种方法由于能够保持模型拓扑的欧拉示性数V-F+E，有助于满足三维物体的基本几何特征，因而得到了广泛应用。</p>
+
+<p>现在看来，CAD/CAM的关键技术似乎早在30年前就已经比较完整了，那么继续该领域的研究还存在哪些意义？事实上，CAD/CAM目前仍面临许多瓶颈，这些瓶颈已经影响了目前广泛采用此类技术的汽车制造、电子和建筑等行业的进一步发展。例如面向三维模型的可编辑性，模型编辑的目的通常有两类：一是用户设计意图发生变化，需要变更现有设计；二是模型的适用条件发生变化，不得不做出调整以适应新变化：如某些工业组件所面临的不同规格需求。在参数化设计提出之前，针对三维模型的编辑主要采用直观交互式的方法进行，其复杂程度甚至超过最初的建模过程。一些行业专家分析，模型编辑的主要难点在于该过程既要保持原组件的局部特征，还要适应新的条件，同时还要确保这种编辑不会影响组件之间的相互关系；特别重要的是，在整个设计、建模、编辑的过程中要保证一定的数据精度。提高可编辑性一度成为现有CAD/CAM技术的重要研究方向。</p>
+
+<p><strong>二、参数化设计的发展和现状</strong></p>
+
+<p>参数化设计的最初目标就是解决CAD/CAM的上述问题，并取得了一定成果，特别是在建筑业。参数化设计的本质就是使用一系列参数定义三维模型的基本特征，包括基本尺寸、各组件间关系等。在一些文献中，参数化设计也被称为关系型建模或是变量化设计。在参数化设计中，建模原语通过一组参数表示，如使用位置、长度和方向参数表示空间线段，而如果仅涉及到这部分，那么参数化设计似乎与传统的交互式设计并无不同。更进一步，为了保证模型在一定条件下的可编辑性，参数化设计要求用户建立建模规则的参数化表示。如AutoDesk推出的AutoLisp语言，实际上是通过编写脚本制定规则，而把输入参数转化成三维模型的应用在目前已经十分流行了。然而对于绝大多数设计师而言，学习编程语言其实没有太多必要，同样对于一些复杂模型的构造，编程实现会真正意味着缘木求鱼。因此参数化设计需要进一步的形式化、领域化和直观化，才有可能被大多数设计师所接受。</p>
+
+<p>“约束”是参数化设计的一个重要概念，不过其提出要比“参数化设计”本身还早。约束表示针对一个或一组实体的行为关系限定。实体可看作是三维模型的一个组件，实体行为则代表该组件在不同参数下表现出的状态。例如&#8221;一组线段相互平行、垂直或共线&#8221;就是一种约束描述，每条线段受相应参数控制其行为，而各线段的参数却受到“平行、垂直或共线”的关系限定。在带约束的设计和建模过程中，无论是施约束端还是受约束端，都需要得到完整的参数列表才能进行，由于约束的存在，某些参数实际上需要通过“推理”进行估计和计算，这种推理估算参数的过程在很大程度上影响了建模效率。当前应用中普遍存在两类约束：几何约束和物理或称工程约束。平行、垂直、共线、相邻、尺寸等都属于几何约束，此外包括一些物理方程、条件关系等则属于后者。这类方法需要用户在建模初期提供实体类型、空间位置和尺寸参数，然后通过一些具体方法描述实体关系，如前面所述的编程脚本。</p>
+
+<p>1982年，Gossard和Light首次提出了“变量化设计”的概念。此后十年间，由于几何造型、自由曲面和实体建模技术的迅速发展，出现了愈多针对交互性及可编辑性的改进需求。大量工作开始致力于该领域中，如前面介绍的变量化编程的提出，通过编写一段程序脚本控制建模过程，这种方法实际上并不能有效解决存在的问题。而为了保证用户设计意图的准确实现，直观交互通常是必须的，因此提供领域化的参数化设计工具是较为合理的选择。</p>
+
+<p>1、基于时序的约束建模，即记录用户交互式建模时产生的参数集时序变化，在修正设计时，通过随机选取并更改时序中的参数变化内容，实现参数化设计。这种方法要求模型的构建过程保证良好的层次性；</p>
+
+<p>2、变量几何和变量化设计，即通过构建基于参变量的建模公式进行参数化设计，例如利用简单解析式创建二次曲面。对于复杂模型而言，其构建公式的有效性就成为实现参数化设计的基础；</p>
+
+<p>3、基于规则的变量化设计，前面两种方法在实际应用中很难真正实现，出于实用的考虑，人们首先建立基本规则库，利用人工智能方法进行推理并最终得出约束条件。例如，对于两个实体而言，系统内置了有关实体位置参数的规则，通过推理即可得出实体间的相对位置关系（对于直线段可能就是平行、垂直、共线、相交或其它情况）。实际上，该方法目前仍是参数化设计的研究热点之一；</p>
+
+<p>4、基于特征的参数化设计，从视觉上看，特征指模型在某些观察角度下所呈现出的特殊现象。而在参数化设计中，特征包括了与其相关的实体、参数和关系式，特征是相对于变量或规则的更高级别的语义描述，例如描述物体表面有一处“凹陷”，这就是一种特征。但是，良好的基于特征的设计需要精心设计特征库。</p>
+
+<p><strong>三、参数化设计的应用现状</strong></p>
+
+<p>尽管参数化设计目前已经深入工业设计和制造业，但最令人瞩目的则是其在建筑设计领域中的应用。应注意的是，由于建筑设计本身带有艺术气质和时代特征，引领前端的通常都是著名研究机构或设计公司，而更多的从业人员仅仅是采用稍成熟方法满足需求即可，因此参数化设计在该领域存在着两种截然不同的应用思路。</p>
+
+<p>毫无疑问，最早提出的变量化编程已经为大多数CAD建筑设计师所知了，如AutoLisp。另一方面，参数化设计在这一阶段的主要工作是实现2D和3D的协同设计，具体方法可以是时序法或变量几何。在这期间许多计算机科学家努力向领域专家们推荐各种工具和应用，如William Mitchell于1987年推出的《The Art of Computer Graphics Programming. A structured introduction for Architects and Designers》，书中使用了流行的Pascal语言描述建模脚本。</p>
+
+<p>在许多人看来，上述编程建立三维模型的应用过于抽象，可行性极低。事实亦如此，变量化编程目前已经成为参数化设计领域的非主流技术，而对我们来说更加常见的可能就是诸如ArchiCad或3DStudio Max：直观的交互式界面，以及大量参数输入对话框，该模式至今仍占据绝对优势。后者的缺点是，用户很难针对复杂模型整体进行参数化考虑，除非建模阶段存在非常精妙的参数设计，而这往往是不现实的。一种解决方法是确保层次化建模，例如K. Martini试图采用面向对象程序设计中的层次化类结构模拟建模过程。由此我们可以联想到一系列层次化方法，如集合、树等；另一方面，考虑到层次化建模的可行性尚未得到证明，我们还可以考虑使用图表示参数化设计中实体之间的约束关系。针对这方面的讨论目前仍是非常开放的问题。</p>
+
+<p><strong>四、艺术创作中的参数化设计思想和实践</strong></p>
+
+<p>首先，这里所说的艺术创作实际上包括前文提到的工业设计；另一方面，我们希望能在更多的艺术设计领域引入参数化的元素，其目的在于：1、大部分现有的艺术创作实际上与商业应用相关，原创效率和大规模应用能力将成为关键的风险因素；2、参数化设计为创作前所未有的艺术形式提供了新途径，而并非字面上的对艺术创作施加“约束”的意思。</p>
+
+<p>达芬奇的《维特鲁威人》堪称把建筑学和人体解剖学相结合的传世名著，而这种艺术上的联系同样也反映到现代CAD/CAM技术中。香港中文大学的王昌凌(Charlie C. L. Wang)就在现代服装设计中引入参数化设计技术，并提出了一种新的基于人体特征的参数化设计方法。该方法从人体点云中提取相关特征，并在参数化模型（注意这里的参数化与“参数化设计”的区别）的基础上使用参数化设计创建新的模型。其中人体模型的参数化包含两个主要阶段，首先使用激光扫描仪获取人体点云，根据语义特征提取并重构人体的特征线框；其次，对人体网格曲面的对称信息进行建模，在特征线框上通过曲线插值生成Gregory曲面片。然后利用一种体素算法在G1连续的曲面上添加细节点云；最后再调整网格曲面的对称性。在完成人体模型参数化后，根据用户输入参数采用参数化设计方法把样例模型映射至参数化模型中，同时对样例模型的选用需依据相关策略进行。与普通的数值插值函数相比，该方法具有较低的出错率，能够保证参数化模型的正确性。基于正确的参数化模型，即可在人体上自动导入使用参数化设计方法在样例模型上设计的服装模型。</p>
+
+<p>事实上，关于服装的参数化设计在最近十年已成为CAD的热点之一，并取得了一些研究成果，但仍鲜见规模化应用。而对于参数化设计技术本身而言，能否继续扩展其应用范围、并在此过程中完善自身的方法论，将成为CAD发展的一个未知数。不过，进一步扩展出有效的杀手级应用则是当务之急。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-02T20:58:30+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

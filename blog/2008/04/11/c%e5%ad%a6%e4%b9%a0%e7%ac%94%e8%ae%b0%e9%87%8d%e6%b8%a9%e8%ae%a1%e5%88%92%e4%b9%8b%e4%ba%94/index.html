@@ -1,0 +1,285 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>C++学习笔记(重温计划之五)  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="3、数据类型（下）  1)向量(Vectors)    Vector是C++标准模板类库的重要组成部分,使用时需要包含头文件vector.主要定义方式如下:     vector &lt;int&gt; a(10);                     //定义了10个整数元素,但没有赋初值 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">C++学习笔记(重温计划之五)</h2>
+	<div class="entry-content"><p>3、数据类型（下）</p>
+
+<p> 1)向量(Vectors)</p>
+
+<p>   Vector是C++标准模板类库的重要组成部分,使用时需要包含头文件vector.主要定义方式如下:</p>
+
+<p>    vector &lt;int&gt; a(10);                     //定义了10个整数元素,但没有赋初值</p>
+
+<p>    vector &lt;int&gt; b(10,1);                  //定义了10个整数元素,且每个元素的初值为1</p>
+
+<p>    vector &lt;int&gt; c(b);                       //用一个现成的向量创建一个向量</p>
+
+<p>    vector &lt;int&gt; d(b.begin(),b.begin()+3);             //定义了一个其值为向量b前3个值的向量</p>
+
+<p> 我们知道,当输出一个数组时我们一般用循环实现.在vector中,有相应的遍历器函数,形式为vector&lt;int&gt;::iterator,例如:</p>
+
+<p>   for(vector&lt;int&gt;::iterator it = a.begin(); it != a.end() ; ++it)</p>
+
+<p>    cout &lt;&lt;*it &lt;&lt;&ldquo; &rdquo;;</p>
+
+<p>   有关向量的其他操作如下:</p>
+
+<p>a.assign(b.begin(),b.begin()+3);     //将b的0-2元素构成的向量赋给a
+a.assign(4,2);                       //将a向量只含0-3元素,且赋为值2
+int x = a.back();                    //将a的最后一个向量元素值赋给整数变量x
+a.clear();                           //a向量元素清空
+if(a.empty()) cout &lt;&lt; &ldquo;empty&rdquo;;       //a.empty()作为条件判断空或非空
+int y = a.front();                   //将a的第一个向量元素赋给整数变量
+ya.pop_back;                         //删除a向量的最后一个元素
+a.push_back(5);                      //在a向量最后插入一个元素,其值为5
+a.resize(10);                        //将向量元素个数调至10个,多则删,少则补,其值随机
+a.resize(10,2);                      //将向量元素个数调至10个,多则删,少则补,其值为2
+if(a==b) cout &lt;&lt; &ldquo;equal&rdquo;;            //向量的比较操作还有!=,&lt;,&lt;=,&gt;,&gt;=</p>
+
+<p>   向量与数组相比的好处是,其空间大小不需要提前指定,可以不断添加新的元素.但是,向量初始化时会分配一定的预留空间,如果添加元素的个数超过了预留空间,则需要扩容.内存意义上的扩容需要删除原空间并添加新的空间,这就必然增加向量操作的负担,因此在预计添加元素个数较多的情况下,我们还是需要给定向量的初始化大小.</p>
+
+<p>   和数组类似,向量也存在2维向量乃至多维向量.我们通常使用 vector&lt;vector&lt;int&gt;&gt; 的形式声明一个2维向量,其一般操作和1维向量的方法是一致的.</p>
+
+<p> 2)指针与引用</p>
+
+<p>   c++的指针应用几乎是必不可少,我们将用较大篇幅来研究指针的用法.</p>
+
+<p> a.指针的定义</p>
+
+<p>   如下的定义方式都是正确的</p>
+
+<p>   int * p;</p>
+
+<p>   char *cp;</p>
+
+<p>   float* fp;</p>
+
+<p>   double*dp;</p>
+
+<p>   我们也可以定义一个二级指针</p>
+
+<p>   int ** iip;</p>
+
+<p>   但需要注意的是,一个*只能修饰一个指针,例如</p>
+
+<p>   int* ip,iq;   //其中ip为指针变量,而iq为整形变量</p>
+
+<p>   在指针初始化的过程中,有下面的形式:</p>
+
+<p>   int* ip;</p>
+
+<p>   int iCount = 18;</p>
+
+<p>   int* iPtr = &amp;iCount;       //初始化,&amp;表示实体的地址,&amp;后可以是一个变量,但不能是具体数值</p>
+
+<p>   ip = &amp;iCount;;              //赋值</p>
+
+<p>   须注意,int<em> ip = &amp;iCount; 与 </em>ip = &amp;iCount; 并不相同,前者为初始化并赋值,后者本身形式错误.诸如 int<em> iPtr; </em>iPtr = 58;的语句也是毫无意义的.</p>
+
+<p> b.指针类型</p>
+
+<p>  指针是有类型的,其类型也必须是一致的.在c语言中,有强制类型转换(int *),但事实上,c++有自身的强制转换函数.例如:</p>
+
+<p>   int<em> ip = reinterpret_cast&lt;int</em>&gt;(&amp;f);           //reinterpret的含义本身是&#8221; 重解释&#8221;,因而将float型指针无条件转换为整形指针.</p>
+
+<p> c.指针运算</p>
+
+<p>   #include&lt;iostream&gt;
+   using namespace std;
+   int main(void){
+     int iArray[6];
+     for(int i=0;i&lt;6;++i) iArray[i]= i<em>2;
+     for(int</em> iP=iArray; iP&lt;iArray+6; iP+=1)
+     cout&lt;&lt;iP&lt;&lt;&ldquo;: &rdquo;&lt;&lt;*iP&lt;&lt;endl;
+   }</p>
+
+<p>   上面的程序例中,指针运算在数组中的应用已有了初步展现.同时对于不同类型的指针,相应的运算操作也有不同的数据变化.但是,在指针进行超过数组范围的操作时是非常危险的.</p>
+
+<p> d.指针限定</p>
+
+<p>   我们知道,一个指针可以表示两个实体,即地址值和间仿值.因而,指针本身也分为指针常量和常量指针.</p>
+
+<p>   const int a = 78;</p>
+
+<p>   int b = 10;</p>
+
+<p>   int c = 18;</p>
+
+<p>   const int* ip = &amp;a;                  //const 修饰指向的实体类型 常量指针 无法修改数值</p>
+
+<p>   int<em> const cp = &amp;b;                 //const 修饰指针</em>cp 指针常量 无法修改地址</p>
+
+<p>   int const* dp = &amp;b;                 //同上</p>
+
+<p>   const int *const icp = &amp;c;       //常量指针常量 均无法修改</p>
+
+<p> e.引用</p>
+
+<p>   引用定义为:</p>
+
+<p>   int someInt = 5,anyInt = 8;</p>
+
+<p>   int &amp; rInt = someIne;    //引用的作用类似别名,但值得注意的是, 如果重定义 rInt = anyInt,则rInt地址不变,值变为8,引用与指针的差别也就在于此了.即引用无法更改所引用的地址.通常我们也能使用const int &amp; rInt = someIne使上述语句无法运行.但实体本身的操作someInt = 8同样能达到目的.</p>
+
+<p>   引用的主要作用是进行参数传递,这在后文中将有较为详细深入的介绍.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-11T11:44:32+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

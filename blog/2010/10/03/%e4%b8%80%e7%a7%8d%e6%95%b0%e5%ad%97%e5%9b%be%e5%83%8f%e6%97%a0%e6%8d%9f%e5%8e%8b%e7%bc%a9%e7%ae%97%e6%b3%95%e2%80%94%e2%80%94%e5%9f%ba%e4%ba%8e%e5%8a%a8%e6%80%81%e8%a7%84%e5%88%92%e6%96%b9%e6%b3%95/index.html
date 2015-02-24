@@ -1,0 +1,261 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>一种数字图像无损压缩算法——基于动态规划方法  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="前言  本文是基于9月29日的算法设计与分析课程上所讨论的内容总结而成的。因为受到ppt版面所限，原题目中并无“数字”两字，考虑到准确性这里重新补上。由于时间比较仓促且能力所限，意识到有些问题在课堂上可能没有阐述清楚，因此在这里把已经提到的和未能提到的问题汇总成篇，以备参考。   &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">一种数字图像无损压缩算法——基于动态规划方法</h2>
+	<div class="entry-content"><h3>前言</h3>
+
+
+<p> 本文是基于9月29日的算法设计与分析课程上所讨论的内容总结而成的。因为受到ppt版面所限，原题目中并无“数字”两字，考虑到准确性这里重新补上。由于时间比较仓促且能力所限，意识到有些问题在课堂上可能没有阐述清楚，因此在这里把已经提到的和未能提到的问题汇总成篇，以备参考。</p>
+
+<p> 我本人的参考书是福州大学王晓东的《计算机算法设计与分析(第3版)》(下称“王书”)，本课对应于原书第三章第七节的部分内容，当然课堂上我们曾提出王书中有部分不妥之处，并提出了初步的改进建议，这里仍将保留该部分内容。</p>
+
+<h3>问题提出</h3>
+
+
+<p> 众所周知，数字图像压缩问题是随着网络通信技术的不断发展而提出的。通常把图像数据压缩方案分为两类：有损图像压缩和无损图像压缩。有损图像压缩通常能够达到很高的压缩率，但是其在采样和频域变换过程中损失了部分像素真值，从而导致图像质量有一定下降。当前常见的数字图像压缩技术有JPEG、MPEG（主要应用于运动图像压缩）等。无损图像压缩从字面意思上理解就是不会降低图像质量，但压缩率会变得不太稳定：典型的无损图像压缩实现有两个步骤：去相关性和编码。去相关性的目的就是为了减少图像冗余，这包含字、字节甚至是二进制位的冗余消除，当然消除冗余后的图像数据需要重新编码并给出相应的索引表，从而实现压缩和解压缩。</p>
+
+<p> 这里给出一种数字图像无损压缩方案。<strong>假设数字图像像素点灰度值序列为{p1,p2,&hellip;,pn}，其中整数pi(1≤i≤n)表示像素点i的灰度值，其范围通常为0~255。将像素点序列{p1,p2,&hellip;,pn}分割成m个连续段S1,S2,&hellip;,Sm。第i个像素段Si中(1≤i≤m)，有l[i]个像素，且该段中的所有像素灰度值只用b[i]位表示。确定像素序列{p1,p2,&hellip;,pn}的最优分段，使得依次分段所需的存储空间最小。</strong></p>
+
+<h3>初步分析</h3>
+
+
+<p> 设t[i]=∑l[k]，1≤k≤i-1，1≤i≤m，则第i个像素段Si为Si={Pt[i]+1,&hellip;,Pt[i]+l[i]}，1≤i≤m。另设hi=上界(log(max(Pk+1)))，其中t[i]+1≤k≤t[i]+l[i]，则有hi≤b[i]≤8。故b<a href="1%E2%89%A4i%E2%89%A4m">i</a>可用3个二进制位表示。另设1≤l[i]≤255，则需用8位表示l[i]，其中1≤i≤m。因此第i个像素段所需的存储空间为l[i]×b[i] +11位。故对于全部像素序列{p1, p2,&hellip;, pn}，需要∑l[i]×b[i]+11m，1≤i≤m。</p>
+
+<h3>确定最优子结构</h3>
+
+
+<p> 设l[i]，b[i]，1≤i≤m是{p1,p2,&hellip;,pn}的一个最优分段。显然，l[1],b[1]是{p1,&hellip;,pl[1]}的一个最优分段，且l[i],b[i]，2≤i≤m是{pl[1]+1,&hellip;,pn}的一个最优分段。</p>
+
+<p> 这部分的证明应用反证法，大体思路如下：已知{p1,p2,&hellip;,pn}有最优分段l[i],b<a href="1%E2%89%A4i%E2%89%A4%20m">i</a> ，最优总存储空间为Θ。假设上述结论中的l[1],b[1]和l[i],b[i]，2≤i≤m不全是相应序列的最优分段，由上部分最后一个公式可得该分段存储空间Θ&#8217;&gt;Θ，这与已知l[i],b<a href="1%E2%89%A4i%E2%89%A4%20m">i</a> 为最优分段相矛盾，故假设不成立。</p>
+
+<h3>重叠子问题和状态转移方程</h3>
+
+
+<p>设s[i]，1≤i≤n是像素序列{p1,p2,&hellip;,pn}的最优分段所需的存储位数。由最优子结构性质知：</p>
+
+<p>s[i]=min{s[i-k]+k*bmax(i-k+1,i)}+11，其中bmax(i,j)=上界(log(max{Pk}+1))，1≤k≤min(i,256)。</p>
+
+<h3>动态规划算法设计</h3>
+
+
+<p>[code]Compress(n,p,s,l,b)
+ for i &lt;- 1 to n
+  b[i] &lt;- length(p[i]); //length:log(p[i])
+  bmax &lt;- b[i];
+  s[i] &lt;- s[i-1] + bmax;
+  l[i] &lt;- 1;
+  for j &lt;- 2 to i and Lmax //Lmax=256
+   if bmax &lt; b[i-j+1]
+    then bmax &lt;- b[i-j+1];
+   if s[i] &gt; s[i-j] + j * bmax
+    then  s[i] &lt;- s[i-j] +j*bmax;
+     l[i] &lt;- j;
+  s[i] &lt;- s[i] + header; //header=11[/code]</p>
+
+<h3>计算复杂度</h3>
+
+
+<p> 空间复杂度O(n)。</p>
+
+<p> 时间复杂度分析：</p>
+
+<p>[code]for i &lt;- 1 to n
+  &hellip;
+  for j &lt;- 2 to i and Lmax //Lmax=256
+   &hellip;[/code]</p>
+
+<p>因此亦为O(n)。</p>
+
+<h3>构造最优解</h3>
+
+
+<p> 在构造出最优解之前我们先举例给出上述动态规划算法的结果。例如：</p>
+
+<p> 输入像素序列:196,120,48,5,2,1。 那么计算后得出：s={19,27,35,43,51,55}，l={1,2,3,4,5,3}，b={8,7,6,3,2,1}。由王书P71第二句知：“最优分段的最后一段的段长度和像素位数分别存储于l[n]和b[n]中”。简单验证可知，l的定义是正确的，<strong>但是b无法满足无损压缩的要求</strong>。这是因为，由王书算法计算后得出，{5,2,1}为最优分段的第二段，同时该段像素位数为1位，显然，1位空间仅能保留像素1的信息，而前面的5、2均会丢失。这就是我们指出的<strong>王书中可能存在的错误</strong>。如果沿用书中的动态规划算法，那么正确的描述应为：<strong>最优分段的最后一段的段长度存储于l[n]中，其相应的像素位数应是max{b[n-l[n]+1],&hellip;,b[n]}。其前一段的段长度应为l[n-l[n]]，而对应的像素位数如下：max{b[n-l[n-l[n]]+1],&hellip;b[n-l[n]]}。</strong></p>
+
+<p> 鉴于上述描述比较繁琐，又考虑到保证原算法的正确性，我们给出如下改进的动态规划算法：</p>
+
+<p>[code] declaration B[n]    // global
+Compress(n,p,s,l,b)
+ for i &lt;- 1 to n
+  b[i] &lt;- length(p[i]); //length:log(p[i])
+  bmax &lt;- b[i];
+  B[i] &lt;- b[i];
+  s[i] &lt;- s[i-1] + bmax;
+  l[i] &lt;- 1;
+  for j &lt;- 2 to i and Lmax //Lmax=256
+   if bmax &lt; b[i-j+1]
+    then bmax &lt;- b[i-j+1];
+   if s[i] &gt; s[i-j] + j * bmax
+    then  s[i] &lt;- s[i-j] +j*bmax;
+     l[i] &lt;- j;
+     for k&lt;- i-j+1 to i
+      B[i]&lt;-bmax;
+  s[i] &lt;- s[i] + header; //header=11[/code]
+ 其中数组B是一个全局量，我们用于存储最优分段中的像素位信息，同时在构造最优解的过程中用B替换b作为输入参数，经验证，该程序可以实现题目预设的目标。</p>
+
+<h3>结论</h3>
+
+
+<p> 我们应用动态规划方法解决了一个较为普通的最优化问题。事实上这种思想可以应用于许多具有类似特征的问题求解中。当然，我们学习动态规划的目的并非是为了求解类似算法竞赛难度的各类习题，而是将这种思想结合进平时对实际问题的解决中，这样的话，我想，DP的魅力将是无穷的。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-10-03T15:24:19+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/suan-fa-tao-lun/'>算法讨论</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

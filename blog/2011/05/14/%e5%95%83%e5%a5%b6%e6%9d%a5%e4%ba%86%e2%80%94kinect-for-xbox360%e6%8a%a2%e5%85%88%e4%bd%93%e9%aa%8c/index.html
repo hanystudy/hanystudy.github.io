@@ -1,0 +1,190 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>啃奶来了—Kinect for Windows抢先体验  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="如果说微软将“被迫”开放Kinect for Windows SDK，无疑这次是PrimeSense立了首功。然而要不是我冒着生命危险在鸟不拉屎的地方蹲守了近十天，终于在一个学院林立的院落里拿下Kinect for Taiwan Only，并跋涉1200公里侥幸逃生的话， &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">啃奶来了—Kinect for Windows抢先体验</h2>
+	<div class="entry-content"><p>如果说微软将“被迫”开放Kinect for Windows SDK，无疑这次是PrimeSense立了首功。然而要不是我冒着生命危险在鸟不拉屎的地方蹲守了近十天，终于在一个学院林立的院落里拿下Kinect for Taiwan Only，并跋涉1200公里侥幸逃生的话，本文的出炉可能还要推迟一个月左右。总之无论如何，感谢MS，感谢PS，感谢万恶的铁道部，我终于活着且独立完成了这篇文章。</p>
+
+<p>Kinect到底好不好玩，我不知道。不过我知道为了测试一个hand tracker手臂举得酸痛，然而结果就像是我们数年前的理想如今突然变成了现实，而且这种久逢甘霖的冲动仍在持续，套用某牛逼CEO创业时的一句话：“说实话，我们并不清楚它未来将会变成什么。”由于微软将于2011年5月16日正式开放Kinect for Windows SDK beta，尽管是non-commercial use，但对我们来说已经足矣。本文在某种程度上是基于已有hacker的经验谈，基本框架一般是OpenNI+SensorKinect+NITE这样的半官方组合，而要想全面入门体感开发还是需要先研读一下OpenNI UserGuide这种小部头。</p>
+
+<p>下面是啃奶来自NiViewer的第一张深度对比图：</p>
+
+<p>[singlepic id=30 w=320 h=240 mode=watermark float=center]</p>
+
+<p>根据PS的说法，自然交互（Natural Interaction）就是一种基于声音和视觉等人类体感信息的人机交互方式。目前看来，NI设备完全可以取代如遥控器、鼠标等远程控制外设。当前日常生活中常见的自然交互方式包括：</p>
+
+<p>演说以及口令识别，NI设备通过声音接收装置接收语音指令；</p>
+
+<p>手势识别，通过预设计一定的交互范型，人们可以通过简单的手势控制一般设备，如卧室的光照强度；</p>
+
+<p>躯体运动跟踪，NI设备通过识别当前图像中的完整人类躯体，快速分析躯体骨架信息，并将实际躯体运动姿态转换为骨架运动信息。</p>
+
+<p>值得注意的是，前面的图中展示了一张Kinect的深度对比图，也就是说大多数NI设备通过技术手段可以感应物体的空间深度信息，目前已有利用Kinect进行三维场景重建和空间交互的hacker例子。下图是利用NITE的StickFigure追踪人体骨架姿态信息的例子：</p>
+
+<p>[singlepic id=28 w=320 h=240 mode=watermark float=center]</p>
+
+<p>简单修改一下NITE的PointViewer例子，我们可以把手势跟踪进一步改进为手势鼠标控制（已做消除抖动处理），如下图：</p>
+
+<p>[singlepic id=29 w=320 h=240 mode=watermark float=center]</p>
+
+<p>由于目前官方SDK尚未推出，基于Kinect的开发框架方案已有许多，但缺乏权威性。较令人信服的组合除了我们上述建议的三件套，再加上OpenCV算法包和OpenGL库就足以做出十分不错的应用了。即日起本站新增加Kinect项目板块，将重点关注基于Kinect的应用开发。值得一提的是，目前在kinect开发领域拥有一个人气不错的中文社区<a href="http://www.cnkinect.com%EF%BC%8C%E8%BF%99%E5%9C%A8%E5%9B%BD%E5%86%85%E5%AD%A6%E9%99%A2%E6%B4%BE%E6%97%A5%E7%9B%8A%E8%A1%B0%E5%BE%AE%E7%9A%84%E4%BB%8A%E5%A4%A9%E7%BB%9D%E5%AF%B9%E6%98%AF%E9%9A%BE%E8%83%BD%E5%8F%AF%E8%B4%B5%E7%9A%84%EF%BC%8C%E4%BB%8A%E5%90%8E%E6%88%91%E4%BB%AC%E4%B9%9F%E5%B0%86%E6%8C%81%E7%BB%AD%E5%85%B3%E6%B3%A8%E8%BF%99%E4%B8%80%E7%A4%BE%E5%8C%BA%E7%9A%84%E5%8A%A8%E6%80%81%E3%80%82">http://www.cnkinect.com%EF%BC%8C%E8%BF%99%E5%9C%A8%E5%9B%BD%E5%86%85%E5%AD%A6%E9%99%A2%E6%B4%BE%E6%97%A5%E7%9B%8A%E8%A1%B0%E5%BE%AE%E7%9A%84%E4%BB%8A%E5%A4%A9%E7%BB%9D%E5%AF%B9%E6%98%AF%E9%9A%BE%E8%83%BD%E5%8F%AF%E8%B4%B5%E7%9A%84%EF%BC%8C%E4%BB%8A%E5%90%8E%E6%88%91%E4%BB%AC%E4%B9%9F%E5%B0%86%E6%8C%81%E7%BB%AD%E5%85%B3%E6%B3%A8%E8%BF%99%E4%B8%80%E7%A4%BE%E5%8C%BA%E7%9A%84%E5%8A%A8%E6%80%81%E3%80%82</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-14T20:46:15+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kinect/'>kinect</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

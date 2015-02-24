@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: c++/c | Wing of Dream 梦境之翼]]></title>
+  <link href="http://www.hanyi.name/blog/categories/c-plus-plus-slash-c/atom.xml" rel="self"/>
+  <link href="http://www.hanyi.name/"/>
+  <updated>2015-02-24T09:13:18+08:00</updated>
+  <id>http://www.hanyi.name/</id>
+  <author>
+    <name><![CDATA[Han Yi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[C++学习笔记(重温计划之六)]]></title>
+    <link href="http://www.hanyi.name/blog/2008/04/20/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e5%2585%25ad/"/>
+    <updated>2008-04-20T22:56:01+08:00</updated>
+    <id>http://www.hanyi.name/blog/2008/04/20/c%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e9%87%8d%e6%b8%a9%e8%ae%a1%e5%88%92%e4%b9%8b%e5%85%ad</id>
+    <content type="html"><![CDATA[<p>4、函数性质</p>
+
+<p> 1）函数形态</p>
+
+<p>   C++中的函数分为“求值”和“返回值为空”两种类型。当函数有返回值时，须定义函数的返回值类型，为空时须定义为void。理论上说，函数只对输入参数和输出返回值负责，至于函数内部的细节程序本身并不干预。编程的原则是优先调用c++库函数，而后再进行手写，这有助于提升编程效率。</p>
+
+<p> 2）传值参数</p>
+
+<p>   参数通过传值机制进入函数内部。传值的具体方法是，在程序中遇到函数被调用时，实参被克隆为形参并参加函数运算。须注意的是，参数个数不宜过多。</p>
+
+<p> 3）指针参数</p>
+
+<p>   在面向对象编程中，我们通常使用指针参数的形式来进行传参。这样的好处是，指针参数其实赋予了函数操作异地数据的能力，使得函数不再需要返回具体值，而已经在函数运行中产生结果了。我们给出一个传递数组的方法:</p>
+
+<p>   void mySort (int* b,int size);</p>
+
+<p>   void f(){</p>
+
+<p>    int a[]={3，4，5，1，7，2，9};</p>
+
+<p>    mySort(a,sizeof(a)/sizeof(a[0]));</p>
+
+<p>    //&hellip;</p>
+
+<p>   }</p>
+
+<p>   而事实上，数组也就只能使用传递地址一种方法来达到传递的目的。在实际编程中，传递指针和引用的特性广受欢迎。但是，传递指针和引用在一定程度上破坏了函数的黑盒性，不排除造成灾难性错误的可能，这就引起了一些麻烦。当然我们也可以利用一些手段来避免此类问题，例如:当传递引用时，使用const修饰符限制函数对参数的操作等等。</p>
+
+<p> 4）函数的栈机制</p>
+
+<p>   一般情况下，每当一个程序要运行时，操作系统会自动在内存中生成一个随时可以运行的进程空间。空间中分四个区域，分别是代码区、全局数据区、堆区和栈区。在栈区中，动态地存放了程序运行中的函数状态，利用这一点，我们可以进一步研究函数机制。</p>
+
+<p>   平时在编写函数时，我们会给局部变量赋初值。这是因为c++的栈机制决定的。由于系统并不存在所谓的清理机制，每当运行一个新的程序时，旧的栈区中的数据将保留下来，而未得到初值的变量也就无可奈何了。</p>
+
+<p>   以上也同样展现了指针的负面效应，甚至当我们知道数据确切地存放地址时，就可以任意而直接地改变地址中的数值了。</p>
+
+<p> 5）函数指针</p>
+
+<p>   函数指针主要有以下几种声明方法:</p>
+
+<p>   int* f(int a);</p>
+
+<p>   int *gp(int) ;</p>
+
+<p>   int g(int);                  //这是另一种声明和定义区分开的例子</p>
+
+<p>   int (<em>gp)(int) =g;       //我们可以写成 int (</em>gp)(int); int gp =g;</p>
+
+<p> 需要注意，在声明或定义函数指针时，其参数的类型须为一致，否则编译不能通过。函数指针的主要作用是用来进行参数传递，且一般为bool(const T&amp;,const T&amp;)形式。在函数指针数组中，一些特定的操作将被简化和易于维护，例如:</p>
+
+<p>  //&hellip; </p>
+
+<p>  typedef void (*MenuFun)();</p>
+
+<p>   MenuFun fun[] = {f1,f2,f3};</p>
+
+<p>   cin&gt;&gt;choice;</p>
+
+<p>   switch(choice){</p>
+
+<p>   case 1:fun<a href="">0</a>;break;</p>
+
+<p>   //&hellip;</p>
+
+<p>   }//&hellip;</p>
+
+<p>   函数指针还使得C++有了沟通其它语言编写程序的能力，同时作为面向对象编程机制中的重要手段，在高级编程诸如动态链接库编程中都有广泛应用。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[C++学习笔记(重温计划之五)]]></title>
+    <link href="http://www.hanyi.name/blog/2008/04/11/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e4%25ba%2594/"/>
+    <updated>2008-04-11T11:44:32+08:00</updated>
+    <id>http://www.hanyi.name/blog/2008/04/11/c%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e9%87%8d%e6%b8%a9%e8%ae%a1%e5%88%92%e4%b9%8b%e4%ba%94</id>
+    <content type="html"><![CDATA[<p>3、数据类型（下）</p>
+
+<p> 1)向量(Vectors)</p>
+
+<p>   Vector是C++标准模板类库的重要组成部分,使用时需要包含头文件vector.主要定义方式如下:</p>
+
+<p>    vector &lt;int&gt; a(10);                     //定义了10个整数元素,但没有赋初值</p>
+
+<p>    vector &lt;int&gt; b(10,1);                  //定义了10个整数元素,且每个元素的初值为1</p>
+
+<p>    vector &lt;int&gt; c(b);                       //用一个现成的向量创建一个向量</p>
+
+<p>    vector &lt;int&gt; d(b.begin(),b.begin()+3);             //定义了一个其值为向量b前3个值的向量</p>
+
+<p> 我们知道,当输出一个数组时我们一般用循环实现.在vector中,有相应的遍历器函数,形式为vector&lt;int&gt;::iterator,例如:</p>
+
+<p>   for(vector&lt;int&gt;::iterator it = a.begin(); it != a.end() ; ++it)</p>
+
+<p>    cout &lt;&lt;*it &lt;&lt;&ldquo; &rdquo;;</p>
+
+<p>   有关向量的其他操作如下:</p>
+
+<p>a.assign(b.begin(),b.begin()+3);     //将b的0-2元素构成的向量赋给a
+a.assign(4,2);                       //将a向量只含0-3元素,且赋为值2
+int x = a.back();                    //将a的最后一个向量元素值赋给整数变量x
+a.clear();                           //a向量元素清空
+if(a.empty()) cout &lt;&lt; &ldquo;empty&rdquo;;       //a.empty()作为条件判断空或非空
+int y = a.front();                   //将a的第一个向量元素赋给整数变量
+ya.pop_back;                         //删除a向量的最后一个元素
+a.push_back(5);                      //在a向量最后插入一个元素,其值为5
+a.resize(10);                        //将向量元素个数调至10个,多则删,少则补,其值随机
+a.resize(10,2);                      //将向量元素个数调至10个,多则删,少则补,其值为2
+if(a==b) cout &lt;&lt; &ldquo;equal&rdquo;;            //向量的比较操作还有!=,&lt;,&lt;=,&gt;,&gt;=</p>
+
+<p>   向量与数组相比的好处是,其空间大小不需要提前指定,可以不断添加新的元素.但是,向量初始化时会分配一定的预留空间,如果添加元素的个数超过了预留空间,则需要扩容.内存意义上的扩容需要删除原空间并添加新的空间,这就必然增加向量操作的负担,因此在预计添加元素个数较多的情况下,我们还是需要给定向量的初始化大小.</p>
+
+<p>   和数组类似,向量也存在2维向量乃至多维向量.我们通常使用 vector&lt;vector&lt;int&gt;&gt; 的形式声明一个2维向量,其一般操作和1维向量的方法是一致的.</p>
+
+<p> 2)指针与引用</p>
+
+<p>   c++的指针应用几乎是必不可少,我们将用较大篇幅来研究指针的用法.</p>
+
+<p> a.指针的定义</p>
+
+<p>   如下的定义方式都是正确的</p>
+
+<p>   int * p;</p>
+
+<p>   char *cp;</p>
+
+<p>   float* fp;</p>
+
+<p>   double*dp;</p>
+
+<p>   我们也可以定义一个二级指针</p>
+
+<p>   int ** iip;</p>
+
+<p>   但需要注意的是,一个*只能修饰一个指针,例如</p>
+
+<p>   int* ip,iq;   //其中ip为指针变量,而iq为整形变量</p>
+
+<p>   在指针初始化的过程中,有下面的形式:</p>
+
+<p>   int* ip;</p>
+
+<p>   int iCount = 18;</p>
+
+<p>   int* iPtr = &amp;iCount;       //初始化,&amp;表示实体的地址,&amp;后可以是一个变量,但不能是具体数值</p>
+
+<p>   ip = &amp;iCount;;              //赋值</p>
+
+<p>   须注意,int<em> ip = &amp;iCount; 与 </em>ip = &amp;iCount; 并不相同,前者为初始化并赋值,后者本身形式错误.诸如 int<em> iPtr; </em>iPtr = 58;的语句也是毫无意义的.</p>
+
+<p> b.指针类型</p>
+
+<p>  指针是有类型的,其类型也必须是一致的.在c语言中,有强制类型转换(int *),但事实上,c++有自身的强制转换函数.例如:</p>
+
+<p>   int<em> ip = reinterpret_cast&lt;int</em>&gt;(&amp;f);           //reinterpret的含义本身是&#8221; 重解释&#8221;,因而将float型指针无条件转换为整形指针.</p>
+
+<p> c.指针运算</p>
+
+<p>   #include&lt;iostream&gt;
+   using namespace std;
+   int main(void){
+     int iArray[6];
+     for(int i=0;i&lt;6;++i) iArray[i]= i<em>2;
+     for(int</em> iP=iArray; iP&lt;iArray+6; iP+=1)
+     cout&lt;&lt;iP&lt;&lt;&ldquo;: &rdquo;&lt;&lt;*iP&lt;&lt;endl;
+   }</p>
+
+<p>   上面的程序例中,指针运算在数组中的应用已有了初步展现.同时对于不同类型的指针,相应的运算操作也有不同的数据变化.但是,在指针进行超过数组范围的操作时是非常危险的.</p>
+
+<p> d.指针限定</p>
+
+<p>   我们知道,一个指针可以表示两个实体,即地址值和间仿值.因而,指针本身也分为指针常量和常量指针.</p>
+
+<p>   const int a = 78;</p>
+
+<p>   int b = 10;</p>
+
+<p>   int c = 18;</p>
+
+<p>   const int* ip = &amp;a;                  //const 修饰指向的实体类型 常量指针 无法修改数值</p>
+
+<p>   int<em> const cp = &amp;b;                 //const 修饰指针</em>cp 指针常量 无法修改地址</p>
+
+<p>   int const* dp = &amp;b;                 //同上</p>
+
+<p>   const int *const icp = &amp;c;       //常量指针常量 均无法修改</p>
+
+<p> e.引用</p>
+
+<p>   引用定义为:</p>
+
+<p>   int someInt = 5,anyInt = 8;</p>
+
+<p>   int &amp; rInt = someIne;    //引用的作用类似别名,但值得注意的是, 如果重定义 rInt = anyInt,则rInt地址不变,值变为8,引用与指针的差别也就在于此了.即引用无法更改所引用的地址.通常我们也能使用const int &amp; rInt = someIne使上述语句无法运行.但实体本身的操作someInt = 8同样能达到目的.</p>
+
+<p>   引用的主要作用是进行参数传递,这在后文中将有较为详细深入的介绍.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[C++学习笔记(重温计划之四)]]></title>
+    <link href="http://www.hanyi.name/blog/2008/04/08/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e5%259b%259b/"/>
+    <updated>2008-04-08T10:49:37+08:00</updated>
+    <id>http://www.hanyi.name/blog/2008/04/08/c%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e9%87%8d%e6%b8%a9%e8%ae%a1%e5%88%92%e4%b9%8b%e5%9b%9b</id>
+    <content type="html"><![CDATA[<p>3、数据类型（中）</p>
+
+<p> 1）C-串与string</p>
+
+<p>   c++的字符串分两类，一种是由c语言沿袭而来，称为c-串。例如，</p>
+
+<p>   char buffer[7]=&ldquo;Hello!&rdquo;; //由于所有字符串必须以\0为结束符，则长度定义必须比实际元素个数多1</p>
+
+<p>   事实上，字符数组的实际类型为char<em>，或const char</em>，称为字符型指针。实际应用中我们做如下定义:</p>
+
+<p>   char<em> str=&ldquo;Hello!&rdquo;;//输出</em>str时为&#8221;H&#8221;，str则为&#8221;Hello&#8221;</p>
+
+<p>   在c库函数中，又定义了字符串操作函数，例如strcmp(比较)、strcpy(复制)、strcat(连接)、strrev(倒置)、strset(设置)、strstr/strchr(查找串或字符)。通常我们需要指定头文件string.h，标准c++将其嵌套入iostream中，即省略了这一调用。</p>
+
+<p>  其实，C++中提供了另一种高效可行的字符串类型，即string类型。string类是标准c++中的基础类，这在后文中我们会有详细解释。string的目的是使字符串操作更加方便安全。</p>
+
+<h1>include&#8221;iostream&#8221;</h1>
+
+<h1>include&#8221;algorithm&#8221;</h1>
+
+<p>using namespace std;</p>
+
+<p>int main(){</p>
+
+<p>   string a,s1 = &ldquo;Hello!&rdquo;;</p>
+
+<p>   string s2 = &ldquo;123&rdquo;;</p>
+
+<p>   a=s1;                                                                                    //复制</p>
+
+<p>   cout &lt;&lt; (a==s1 ? &ldquo; &rdquo; : &ldquo;not&rdquo;) &lt;&lt; &ldquo;equal\n&rdquo;;                          //比较</p>
+
+<p>   cout &lt;&lt; a+s2 &lt;&lt;endl;                                                         //连接</p>
+
+<p>   reverse(a.begin(),a.end());                                                     //倒置串</p>
+
+<p>   cout &lt;&lt;a &lt;&lt; endl;</p>
+
+<p>   cout &lt;&lt; a.replace(0,9,9,&lsquo;c&rsquo;)&lt;&lt;endl;                                     //设置</p>
+
+<p>   cout &lt;&lt; (s1.find(&ldquo;ell&rdquo;)!= -1 ? &ldquo;&rdquo; : &ldquo;not&rdquo;) &lt;&lt; &ldquo;found\n&rdquo;;        //查找串</p>
+
+<p>   cout &lt;&lt; (s1.find(&lsquo;c&rsquo;)!= -1 ? &ldquo;&rdquo; : &ldquo;not&rdquo;) &lt;&lt; &ldquo;found\n&rdquo;);          //查找字符</p>
+
+<p>}</p>
+
+<p>   由上基本可以看出，string在与c-串对比中是明显有优势的。而且，c-串可以随时赋值给string变量，具有相当的亲和程度.</p>
+
+<p>  现在讨论string与c-串在输入输出中的c++用法.</p>
+
+<p>   当输入时,我们以:</p>
+
+<p>   fot(string s;cin &gt;&gt; s;)            //string s可以替换为char s[10]</p>
+
+<p>   cout &lt;&lt; s &lt;&lt;&ldquo; &rdquo;;</p>
+
+<p>   cout &lt;&lt; endl; </p>
+
+<p>   cin &gt;&gt;在读入时一般过滤前导空格,包括空格、回车、水平/垂直制表符等等。</p>
+
+<p>  我们同样可以采用非循环的方式。例如:</p>
+
+<p>   string s;                           //在字符数组中，可以定义char s[10]</p>
+
+<p>   getline(cin,s);                   //相应可以改为cin.getline(s,10)</p>
+
+<p>   cout &lt;&lt; s &lt;&lt;endl;           //getline的好处是，在读入多行字符时，程序可以将内容逐行分解操作</p>
+
+<p>  下面假设，存在一个文件aaa.txt,文件内有若干行整数，并且每行整数个数未知。这时求每行的整数和。</p>
+
+<h1>include&lt;iostream&gt;                      //该程序已调试通过</h1>
+
+<h1>include&lt;sstream&gt;</h1>
+
+<h1>include&lt;fstream&gt;</h1>
+
+<p>using namespace std;
+int main(void){
+ ifstream in(&ldquo;aaa.txt&rdquo;);
+ for(string s;getline(in,s);){              //逐行读入的循环
+  int a, sum = 0;
+  for(istringstream sin(s);sin&gt;&gt;a;sum+=a);          //istringstream sin(s)意在创建输入string流sin()，sin&gt;&gt;即从string流中将整数输入到a中进行运算
+  cout &lt;&lt; sum &lt;&lt; endl;
+ }
+ getchar();
+ return 0;
+}</p>
+
+<p>  上面的程序体现了string流的概念，进一步体现了string字符串型的优势和特点。</p>
+
+<p>  2）数组</p>
+
+<p>   int a[5];   //即定义了一个数组，5代表了数组中元素个数。并且[ ]内必须为常量表达式，通常我们可以使用const int定义。</p>
+
+<p>   数组的初始化过程中，有如下几种方式进行:</p>
+
+<p>   int iArray[10] = {1,2,3,4,5,6,7,8,9,10};</p>
+
+<p>   请注意，以上方式禁止的有:元素个数大于定义数、中途有元素定义为空、元素省略&hellip;不过实际操作中可以使元素个数少于定义数，比如  int iArray[10] = {1,2,3,4,5,6,7,8}; 这是允许的。</p>
+
+<p>　int iArray[] = {1,2,3,4,5,6,7,8,9,10};  //虽然没有定义常量值，但初始化值的个数已经做出说明了。</p>
+
+<p>　我们还能用到sizeof(a[n])来返回a[n]元素所占空间的字节数。</p>
+
+<p>　下面来探测未初始化数组元素的默认值情况。计算机把这一类数组区分为全局数组或静态数组、局部数组。在全局数组和静态数组中，未定义情况下的元素值恒为０，而在局部数组中则变成不确定数。</p>
+
+<p>　数组也有多位数组的形式，可定义为:</p>
+
+<p>   int a[3][5];   //这是一个２维数组，其输入输出方式和１维数组是相同的</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[C++学习笔记(重温计划之三)]]></title>
+    <link href="http://www.hanyi.name/blog/2008/03/31/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e4%25b8%2589/"/>
+    <updated>2008-03-31T11:05:59+08:00</updated>
+    <id>http://www.hanyi.name/blog/2008/03/31/c%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e9%87%8d%e6%b8%a9%e8%ae%a1%e5%88%92%e4%b9%8b%e4%b8%89</id>
+    <content type="html"><![CDATA[<p>3、数据类型(上)</p>
+
+<p> c++中的数据类型,主要分为内部数据类型和外部数据类型两大类。其中，内部数据类型主要有：</p>
+
+<p>  1）整数类型int;</p>
+
+<p>   计算机内部是以二进制补码的形式表示整数的。从十进制转换的具体方法为除二取余、高位补零、再取反。整形数的表示范围如下:</p>
+
+<table align="center" style="border-collapse: collapse">
+<tr>
+<td rowSpan="2" width="122" vAlign="top" style="padding-right: 5.4pt; padding-left: 5.4pt; padding-bottom: 0pt; width: 91.6pt; padding-top: 0pt; border: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">类型</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td rowSpan="2" width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">字节数</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td rowSpan="2" width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">位数</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td colSpan="2" width="184" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 138.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">表示范围</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td rowSpan="2" width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">解释</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">下限</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">上限</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">char</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">1</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">8</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-128</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">128</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^7~(2^7-1)</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">signed char</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">1</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">8</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-128</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">128</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^7~(2^7-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">un</span><span style="font-size: 10.5pt; font-family: '宋体'">signed char</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">1</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">8</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">255</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0~(2^8-1)</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">short int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">16</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-32768</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32767</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^15~(2^15-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">signed short int</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">16</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-32768</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32767</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^15~(2^15-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">un</span><span style="font-size: 10.5pt; font-family: '宋体'">signed short int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">16</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">65535</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0~(2^16-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2147483648</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2147483647</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^31~(2^31-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">signed int</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2147483648</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2147483647</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^31~(2^31-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">un</span><span style="font-size: 10.5pt; font-family: '宋体'">signed int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4294967295</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0~(2^32-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">long int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2147483648</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2147483647</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^31~(2^31-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">signed long int</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2147483648</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">2147483647</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">-2^31~(2^31-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="122" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 91.6pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">unsigned long int</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="67" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 50.4pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">32</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="92" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 69pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">4294967295</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="100" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 75pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0~(2^32-1)</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'"><o:p></o:p></span></td>
+</tr>
+</table>
+
+
+<p> 不过，随着64位cpu的应用，上表内容将有进一步扩充。同时在进位计数制中，以0起始的数字表示八进制，以0x起始表示十六进制。在基本取余运算%中，余数的符号决定于被除数的符号。<!--EndFragment--></p>
+
+<p>  2）字符类型char;</p>
+
+<p>   ASCII码有128个字符，字符型需加&#8217; &lsquo;。例如ASCII码为65的字符&#8217;A&#8217;。下面是除此之外的转义字符。</p>
+
+<table align="center" style="border-collapse: collapse">
+<tr>
+<td width="94" vAlign="top" style="padding-right: 5.4pt; padding-left: 5.4pt; padding-bottom: 0pt; width: 71pt; padding-top: 0pt; border: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">字符形式</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">整数值</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">代表符号</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">字符形式</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">整数值</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: #000000 0.5pt solid; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">代表符号</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\a</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x07</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">响铃bell</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">&#34;</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x22</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">双引号</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\b</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x08</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">退格backspace</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">&#39;</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x27</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">单引号</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\t</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x09</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">水平制表符HT</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\?</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x3F</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">问号</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\n</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x0A</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">换行return</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">&#92;</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x5C</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">反斜杠字符</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\v</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x0B</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">垂直制表符VT</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\ddd</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0ddd</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">1~3<font face="宋体">位八进制数</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+<tr>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: #000000 0.5pt solid; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\r</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="62" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 46.85pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0x0C</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="126" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 95.15pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'"><font face="宋体">回车</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="94" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 71pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">\xhh</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="65" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 49.1pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">0xhh</span> <span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+<td width="124" vAlign="top" style="border-right: #000000 0.5pt solid; padding-right: 5.4pt; border-top: medium none; padding-left: 5.4pt; padding-bottom: 0pt; border-left: medium none; width: 93pt; padding-top: 0pt; border-bottom: #000000 0.5pt solid"><span style="font-size: 10.5pt; font-family: '宋体'">1~2<font face="宋体">位十六进制数</font> </span><span style="font-size: 10.5pt; font-family: '宋体'"><o:p></o:p></span></td>
+</tr>
+</table>
+
+
+<!--EndFragment-->
+
+
+<!--EndFragment-->
+
+
+<p>  3）枚举类型enum;</p>
+
+<p>   枚举型是对整数区间的自定义类型，通常用于整数常量。例如：</p>
+
+<p>   enum Week{mon,tue,wed,thu.fri,sat,sun};</p>
+
+<p>   默认第一个枚举符mon=0,以此类推。或者：</p>
+
+<p>   enum Color{Red=5,Green,Yellow,Blue=20,Orange};</p>
+
+<p>   由上可知，Green=6&hellip;Orange=21;枚举的好处是，在代替整数常量的过程中，枚举不需要初始化常量而直接使用，提高编写效率。</p>
+
+<p>  4）布尔类型bool;</p>
+
+<p>   布尔类型实际的存在意义为:</p>
+
+<p>   enum bool{false,true};</p>
+
+<p>   因此可以进行0或1的逻辑运算。例如：</p>
+
+<p>   bool a = 3;  //a为true;</p>
+
+<p>   在i/o流中，cout&lt;&lt;boolalpha&lt;&lt;a&lt;&lt;endl;//输出结果为false，如果不做boolalpha设置则输出为0;</p>
+
+<p>  5）浮点型;</p>
+
+<p>   浮点型包含单精度浮点float、双精度浮点double以及长双精度浮点long double。其中float、double、long double的十进制有效位数分别为7位、15位和19位。</p>
+
+<p>  外部数据类型等变异类型：</p>
+
+<p>  1）整形数组int[];</p>
+
+<p>  2）浮点应用double&amp;;</p>
+
+<p>  3）字符指针char*;</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[C++学习笔记(重温计划之二)]]></title>
+    <link href="http://www.hanyi.name/blog/2008/03/30/c%25e5%25ad%25a6%25e4%25b9%25a0%25e7%25ac%2594%25e8%25ae%25b0%25e9%2587%258d%25e6%25b8%25a9%25e8%25ae%25a1%25e5%2588%2592%25e4%25b9%258b%25e4%25ba%258c/"/>
+    <updated>2008-03-30T12:53:46+08:00</updated>
+    <id>http://www.hanyi.name/blog/2008/03/30/c%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0%e9%87%8d%e6%b8%a9%e8%ae%a1%e5%88%92%e4%b9%8b%e4%ba%8c</id>
+    <content type="html"><![CDATA[<p>2、基本编程语句</p>
+
+<p> 沿用c语言的方法,c++包含了说明语句、赋值语句、表达式语句、过程控制语句。其中，过程控制语句又分为条件语句、循环语句和转移语句。</p>
+
+<p> 2.1 说明语句(略)</p>
+
+<p> 2.2 条件语句</p>
+
+<p>  1）if语句: if(条件) 语句 or if(条件) 语句1 else 语句2；</p>
+
+<p>  2）条件表达式:（条件）?表达式1:表达式2</p>
+
+<p>  3）switch语句:switch(表达式){</p>
+
+<p>                                                          case 常量表达式1:语句1;break;</p>
+
+<p>                                                          case 常量表达式1:语句2;break;</p>
+
+<p>                                                          // &hellip;</p>
+
+<p>                                                          case 常量表达式n:语句n;break;</p>
+
+<p>                                                          default:                   语句n+1;break;</p>
+
+<p>                                                       }</p>
+
+<p> 2.3循环语句</p>
+
+<p>  1)for循环结构:for(i=0;i&lt;n;i++){ 语句};</p>
+
+<p>  2)while循环结构:while(条件){语句};</p>
+
+<p>  3)do-while循环结构:do{语句}while(条件);</p>
+
+<p> 2.4输入输出语句</p>
+
+<p>  1)标准I\O流:cout&lt;&lt;类型&lt;&lt;内容&lt;&lt;格式&lt;&lt;(条件判断);</p>
+
+<p>  2)设置参数 setw(int)宽度、setfill(char)填充字符、setprecision(int)设置精度和有效位数;</p>
+
+<p>  3)文件流:ifstream fin(filename,openmode=ios::in);</p>
+
+<p>                  ofstream fout(filename,openmode=ios::out);</p>
+
+<p> 2.5转移语句</p>
+
+<p>  1)break语句:跳出本级循环；</p>
+
+<p>  2)continue语句:结束本次循环，直接进入下次循环。</p>
+
+<p>  3)goto语句:略。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,763 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="Nokia的自救终于有了实质性的举动，那就是放弃Meego、过渡Symbian、抵制Android、拥抱WP。相应的，主要用于S60和Meego的Qt将会面临更加严峻的形势。 当然，在经过2011-2012年的Microkia过渡期之后，Qt未必就和移动设备彻底无缘。 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/02/11/qt%25e7%259a%2584%25e5%2591%25bd%25e8%25bf%2590/">
+		
+			Qt的命运</a>
+	</h2>
+	<div class="entry-content">
+		<p>Nokia的自救终于有了实质性的举动，那就是放弃Meego、过渡Symbian、抵制Android、拥抱WP。相应的，主要用于S60和Meego的Qt将会面临更加严峻的形势。</p>
+
+<p>当然，在经过2011-2012年的Microkia过渡期之后，Qt未必就和移动设备彻底无缘。然而事实是Qt似乎又一次丧失了进军主流消费市场的机会，并被打回到开发者社区的襁褓之中。人们完全可以理解Nokia的举动——这几乎关系到其自身的生死存亡，但这一次Nokia像是有些孤注一掷了：毕竟Microsoft在本次合作中所承受的风险要比合作伙伴低很多，而潜在受益则又高很多。不过，WP本身就是killer OS，只不过受制于载体而令销量裹足不前，既然Moto能携Android焕发第二春，Nokia又何尝没有机会东山再起呢。但试想一下，即使Nokia真的凭借WP上演王者归来，那么到那时“王者”的定义恐怕就完全与当初不可同日而语了。</p>
+
+<p>话说回来，Qt自身的魅力本不在寄宿于S60或是一直处在传说中的Meego，而在其新颖的核心机制，华丽的UI资源，丰富的功能模块和强大的跨平台特性。预测今后的移动消费市场，如果不出意外最晚在2013年起（到时候可能WP8早就继位了），天下三分的局面就将形成。届时大部分求变的动力将主要来自三家内部，而Qt有绝佳的机会成为联系三大体系的唯一技术解决方案（当然目前这只是一厢情愿的YY&hellip;）。</p>
+
+<p>对我们自己而言，大多数爱好者毕竟不是真的靠Qt吃饭，少量利益相关的开发者也并未只从事移动领域的开发工作。作为一名工匠，人们往往乐于使用自己喜欢的工具谋生，但现实经常是，大部分人正在从事的并非是自己所认为的最佳选择。Qt在过去和现在所扮演的角色，今后很长一段时间恐怕还要继续下去。</p>
+
+<p>出于对Qt的欣赏和喜爱，本博将在今后继续坚持Qt专题的写作。但愿Nokia的决定不至于严重影响现有的Qt开发者团队。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-11T23:25:12+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/qt/'>qt</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/02/02/2010%25e5%25b9%25b4%25e7%25bb%2588%25e6%2580%25bb%25e7%25bb%2593%25e6%259a%25a8mp77-cn%25e9%2587%258d%25e5%25bb%25ba%25e4%25b8%2589%25e5%25b9%25b4%25e7%25ba%25aa%25e5%25bf%25b5%25e6%259a%25a8/">
+		
+			2010年终总结暨hanyi.name重建三年纪念暨&#8230;&#8230;</a>
+	</h2>
+	<div class="entry-content">
+		<p>本博并非是什么牛博。</p>
+
+<p>从2010年5月初百度统计上线ip数据至2010年12月31日，有效访问ip也仅2003个，且相信其中相当一部分流量来源于本人。此外，去年明显对此博怠慢许多，全年文章数竟还不到40篇，其中纯粹的技术类更是寥寥&hellip;&hellip;究其原因，恐怕是心有余而力不足，本文从抬笔到发布也整整磨蹭了一周时间。</p>
+
+<p>我自小就懒，主要是懒得动，中学以前就退而求其次喜爱上画画，然而画作没有丝毫技术含量，也基本没人能看得懂。不想后来导致钢笔字惨不忍睹，人称“狗爬体”——于是小学师傅劝家里送我去学书法。谁知这玩意技术含量颇高，课堂作品往往又被人称作“骨头体”——人看了不适狗看了兴奋，就无奈放弃了。然而这次小经历让我认识了颜公真卿和他的颜勤礼碑，以及笔墨宣纸等物，好不风雅!后来一次随家人出游，沿着溪边摸到一碗鹅卵石，寻思着揣回去做砚台用（后来想想可能还真不如墨盒实用），用旧报纸包了回家藏好，可惜很快还是被主人家当做垃圾清理了。</p>
+
+<p>大概十年前，我的初中语文老师教我养成了写文章的嗜好，每周一至两篇，题目体裁不限，大概每节课前要众同学轮流上去宣读自己的文章。然而真正自己写文章的并不多，坚持每次都自己写的就更少，我向来不喜去抄别人的文章：名作太长且不易蒙混过关，其余作者大家水平都是一般，何必互相抄来抄去呢——于是就慢慢习惯了。 记得当时我在那小册子上也是无所不写，下至童话短篇，上至新闻政治，无所不包。后来因此事必躬亲遭人讥讽，遂题名“孤芳自赏集”聊以自慰。有幸在台上宣读了两篇，直捣得众人时而笑得前仰后合，连绵不绝，整整占去了半节课的光景，教师也毫不在意。不幸的是这两本小册子在上次搬家时不知所踪，四年前突闻启蒙师长英年早逝，实在令人惋惜， 然而写文章的习惯就自此保留至今了。</p>
+
+<p>惭愧的是，自2007年底至今的三年多时间里，本博共发布的文章尚不足三百篇，且不少还是所谓的“纯技术类”。这与我2008年决定真正从事计算机，并决定读研是有关系的：试想我与“高档”计算机“共事”也有十二、三年，接触带个芯片就能做字处理的机器就更久了，然而竟从来不能真正令其思己所想，做己所作，纵然“人机”相识也已近七十年，在各个领域离各路专家宣扬的“和谐共生”也还差得极远。换句话说，这领域尚有如此多的文章可做，何愁今后没有文章可写呢？</p>
+
+<p>如果在此概括的话，2010年确是荒废之年。那么2010年荒废在何处呢？</p>
+
+<p>首先是年初面临研究生入学考试，这一折腾至少要到5月份才逐渐平息，实在是没有必要且浪费时间（当然也有到二月底就长痛不如短痛的猛士了）。其间夹杂着做了毕设，找老师选了题目，先是坦白自己基本零基础，编程大概只会部分html这种伪语言，其余只能承认课堂上貌似有介绍过了。老师倒也不介意，邮件给发个网址kitware，自己回去琢磨去吧。我倒是对这老师万分感激，起码最后至少也给评了“优”。然而后来发现，教师行业如今也是背景为上，资历次之，学识为轻——这绝非偶然现象，只是如果现世皆如此，众生倒也见怪不怪了。</p>
+
+<p>毕设时对vtk/itk/gdcm/CT/MRI感兴趣，于是开了vtk的话题，并入可视化部分，但是没好好写过几篇。5月份报了驾校，教练倒是君子，只是不时骂的狗血喷头，无奈此时已晚报了一个多月，入夏以后再就没去过，如今校长三天两头催着考科二科三，只好待开春以后再说了。</p>
+
+<p>毕设结束就意味着毕业，兄弟各自谋生的谋生、奔前程的奔前程、泡妞的泡妞，我在家休息了半天就重新拉回学校干活，热翻整个七月。七月份唯一有意思的是和阿仝在东哥宿舍留宿了几周，话说近年来我已少有在夏天出门了。不过东哥找工作的压力还不小，我只好逼着他把天龙八部删了又删，只留下一个自己突然颇感兴趣的连连看，可恶越往后打越难，可在整个七月份那就是唯一的乐趣了。</p>
+
+<p>八月份带着半残疾回家休整，恰逢又一款中文RPG发售，和年初的云之遥呈现交相辉映之势。赶紧把游戏通了关，又听闻wlk要推出。wow这个东西简直让人又爱又恨，从2003年听说到崇拜，2004年随公会打进wowar、nga，建模拟器抢先体验，经历2005年初的万人号，2006年的折磨到疯狂，2007年的放弃到回归，2008年的再放弃到再回归，2009年的彻底决裂，直到2010年的八月又被暴雪这帮奸商给拉了回去。不过我似乎已经不属于这个游戏所处的时空维度了，wow的元素在我看来已成为了精致的计算机图形学工程产品，其中蕴含的才是我应当追求的。  12月是失去的月份，本应当去体验一下久违一年的自习之趣，无奈俗务缠身，差点考试都没法应付，然而又让我彻底与wow隔绝了。</p>
+
+<p>这就是我的一篇针对2010年的粗粒度总结。值得一提的是，今年（2011）2月5日，本博将迎来三周年，记得一周年（2009）时我略数了下大概有文章百篇，到了今年竟只有250、260篇左右，文章数显得略少。后来想想，本博的观者每天也不到十人，而且跳出率有十分之九那么高，著书立说实在谈不上，倒不如写写杂记，技术上的东西有了足够积累才能有所领悟，倒也不愿强求指标了。</p>
+
+<p>2010唯一郁闷的就是，某官方名为扫黄打非实际醉翁之意不在酒，先是恐吓着要封了全国的个人网站，后来又威胁要夺我的cn域名，我这域名没什么普世寓意本值不了多少钱，结果硬是被他们挥刀自宫，毁掉了我们在高速发展的互联网上弘扬自己悠久历史文化的契机和未来，而这点仅存的果实，如今竟也变成了紧俏货。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-02T19:11:11+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/01/26/%25e4%25bb%258esiggraph%25e7%259c%258b%25e3%2580%258atangled%25e3%2580%258b/">
+		
+			从SIGGRAPH看《Tangled》</a>
+	</h2>
+	<div class="entry-content">
+		<p>2010年11月24日，Disney的第五十部动画长片《tangled》（中译：魔发奇缘）在北美公映。尽管影片剧情与格林童话原作《Rapunzel》相差了十万八千里，但是观众口碑颇佳，本作被公认为Disney近年来少有的佳作，超过了《Tinker bell》系列和09年的《The Princess and the Frog》。值得关注的是，本片由于未能通过中国大陆有关部门的审查而无法在内地公映。而从近年的动画大片票房趋势来看，Disney的童话系列往往叫好不叫座；Dreamworks的《shrek》系列已经显现疲软，今明两年的《Kung Fu Panda 2》和《Madagascar 3》将担负SKG的重任；与前两者相比，Blue sky的《ice age》显得势单力薄一些。而目前动画片既叫好又叫座的盟主恐怕非pixar莫属了——这恰恰印证了创意与技术的完美结合——才是当代动画产业的关键路径。</p>
+
+<p>本文是在SIGGRAPH2010年会发布的一篇讨论文章《Simulating Rapunzel’s Hair in Disney’s Tangled》的基础上完成的，在此感谢原作者Kelly Ward、 Maryann Simmons、Andy Milne、Hidetaka Yosumi和Xinmin Zhao。针对与此相关的一篇正式论文研究将提交至本站新推出的<a href="http://www.hanyi.name/wiki" target="_blank">mp77&rsquo;s paper review</a>子站中。鉴于acm和ieee等组织的版权和一些其它因素，今后涉及有关已正式发表的论文的研究文章将提交至上述受限站点，同时我们也欢迎与有类似专业兴趣的同学展开交流，我目前的研究方向是计算机三维人物头发的模拟技术。2010年SIGGRAPH年会是于2010年7月25日-29日在美国加州洛杉矶举办的。</p>
+
+<p>众所周知，头发模拟是动画制作中难以解决的问题。在《Tangled》中我们（这里的“我们”是指walt disney animation studio的相关工作人员）更是遇到了一个“极限任务”——模拟影片女主角Rapunzel长达70英尺的头发。除了头发精密且蓬松的结构和特点，如此长度的头发还对相关的模拟技术提出了许多特殊的挑战。此外，影片特定的艺术指导也进一步增加了模拟工作的复杂程度。</p>
+
+<p>我们使用了自主研发的基于弹簧质点系统生成动态曲线的头发模拟软件dynamicWires来模拟Rapunzel的头发。 在应对Rapunzel独特头发的过程中，我们对dynamicWires进行了一些改进。</p>
+
+<p><strong>头发堆叠和形态保持</strong></p>
+
+<p>影片中Rapunzel的头发经常堆叠在场景中的地面或其它物体和角色上。在模拟过程中，把弹力应用于当头发处于飞行过程中的碰撞部分，以维持相应的形态，并起到头发股之间相互作用和分离时所产生的摩擦力效果。这种弹力只有在曲线段之间的运动距离超过了一定阈值，并引发直接接触和分离时才会生效，该阈值是基于足以令头发股间发生滑动和粘连程度值而界定的。考虑到实时性，我们通过首先生成较为稀疏的引导曲线集来降低模拟海量长发的复杂度，该集合的容量在200条左右。这种低密度的曲线集覆盖在人物的头部最显著区域，使得外层显著区域的头发能够轻易落入头发体内部底层的空隙中。为了解决这一问题，我们引入了额外的碰撞支持机制以填充头发体内部的空隙：首先连接相邻曲线的控制点，并使这些线段与现有系统发生一般碰撞关系，已生成的模拟曲线再和上述机制发生碰撞关系即可。</p>
+
+<p><strong>轻松拖拽</strong></p>
+
+<p>在现实中，Rapunze恐怕需要比较费力地拖拽她后面的长发。影片的艺术指导要求Rapunze能够熟练地拖动这些长发，且当女主角移动时头发需要平稳地在人物身上滑动，并避免人物动作因负重而显得僵硬，在人物停止运动时还需要一定的喘息。</p>
+
+<p>为了控制头发拉动的程度，我们增加了一个切向摩擦参数，以模拟发生地面接触时沿头发股各个切线方向的摩擦力分量。这种切向摩擦分量随后会被比之少两个数量级的其余摩擦力削减一部分。头发就能够根据其长度进行平稳滑动，而非当人物停止运动时，拖动在地面的头发就会立即停止滑动。</p>
+
+<p><strong>模拟冻结</strong></p>
+
+<p>考虑到头发的可见长度和动作以及最小长度需要在每个镜头发生变化，我们采用了模拟冻结机制以降低对头发背面的模拟程度，这种机制允许我们在每一幅画面调整头发模拟的长度，并且显著提升头发模拟的速度。</p>
+
+<p>在某些场景中长发的背面并不可见，然而人物却仍然非常活跃的情况下，将那些不可见且不进行模拟的部分头发与其余头发分离，令其不再成为有效的部分。当这种分离令头发的浓度过于稀疏时，为了保证长发具有一定的浓度错觉，需要强制停止模拟的部分缓慢恢复状态。</p>
+
+<p>有时当大量可见头发拖在地面上且没有任何动作时，头发的这些无效的部分仍然与有效部分发生视觉联系，我们通过保持相关的模拟冻结区域并使用弹力，使模拟部分和非模拟部分能够平滑地混合在一起。那么头发模拟的计算资源就可以被高效地用于高度活跃的头发区域——而不是在不运动的头发模拟上浪费时间。</p>
+
+<p><strong>头发的内部约束机制</strong></p>
+
+<p>头发的内部约束机制能够使其在特殊情形下仍可以自然地运动。我们在相邻的曲线间加入了较小的弹力，以精确控制头发使其保持相对静止的状态，避免其轻易四散开来：例如散落在人物的肩部、面部和身体部分。根据一个特定的距离分离参数，这些约束机制能够在超过一定距离时自动减弱它们的强度，并在超越另一距离值时令其完全分离。这就保证头发通常能处于聚集状态而非迫使其发生单股头发的运动，并且能够根据人物整体动作的程度自然而然地允许部分头发分离成不同的部分。</p>
+
+<p><strong>结语</strong></p>
+
+<p>上述的模拟特性帮助我们实现了对Rapunzel超乎寻常长发的模拟。模拟冻结和碰撞支持机制允许我们只需要在每个镜头中模拟人物的一部分头发，减少大量头发模拟的复杂性负担。轻松拖拽和头发的内部约束机制使我们能够严格根据影片艺术指导的要求控制头发的自然运动。</p>
+
+<p>应当注意，本文仅仅是针对《Tangled》中的关键需求所提出的技术解决方案的粗略讨论，而非真正提供详细的实现。我幸运地在makingof上找到了针对本文原作者之一Kelly Ward女士的<a href="http://www.makingof.com/posts/watch/2648/-tangled-hair-demo-with-kelly-ward">视频讲解</a>，由于我们缺乏SIGGRAPH现场视频资料，相信这部长约14分钟的视频能给我们带来更深层次的启发。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-26T00:50:27+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/01/24/%25e5%2590%2591%25e5%2589%258d%25e7%25ba%25bf%25e8%25bf%259b%25e5%258f%2591%25ef%25bc%259awebgl%25e5%2588%259d%25e8%25af%2595/">
+		
+			向前线进发：WebGL初试</a>
+	</h2>
+	<div class="entry-content">
+		<p>非常幸运的是，我们生活在一个正处于高速变革中的时代里。新的技术、理念乃至行业标准即将定稿，虽然我们无从参与任何权威文件的最终发布，却能全程体验这一史无前例的飞速发展的全貌。</p>
+
+<p>从1996年VRML1.0发布时起，Web3D就追赶上了互联网高速发展的黄金时期。然而端上的资源匮乏严重制约了VRML前进的脚步，这期间又经历了针对Java Applet的普遍质疑。如今，除了Princeton 3D Model Search Engine闻名于学术界以外，似乎就很难再找到如此振奋人心的killer platform了。 2004年，w3c开始着手筹备html5。一系列高级功能，如表单控制、应用程序接口(APIs)、多媒体、结构化和语义化等计划被引入新的标准。由于这些全新概念的引入（实际上在pc领域这些早已算不上是“全新”了），Web3D的支持者们终于看到了新的突破点：直接在浏览器中引入3D API，再通过一系列底层优化，甚至采用硬件加速来提升效率和稳定性。这次Khronos Group终于可以携自己的OpenGL ES 2.0大展身手了。本文的目的旨在向读者介绍WebGL当前的标准制定和研发进度，并提供一些关于平台demo的建议。本文剩余的内容是基于learningwebgl.com整合而成的，在此对相关作者表示感谢。</p>
+
+<p>首先要说明的是，要想率先体验WebGL所带来全新的视觉冲击力，你至少需要安装一款支持它的浏览器。幸运的是，目前除了微软的IE系列，几乎所有主流浏览器的开发版本都支持WebGL。那么我们如今的问题就变成了：如何为你现有的系统配置一款WebGL支持良好的浏览器。</p>
+
+<p>对于windows操作系统而言，如果你拥有一块性能不差的ATI或Nvidia显卡，那么试着安装Firefox或是Chromium，它们也是目前win系统上最好的浏览器。如果你的机器只配置了一套来自Intel的集成图形芯片组（目前普通笔记本电脑普遍集成了这种配置），那么情况可能变得有些糟：这是因为Intel的图形硬件驱动并不能很好地支持OpenGL，而事实上目前的WebGL主要是基于OpenGL的（尽管这种情况在今后将会有所改善）。在这种情况下即使你安装了Firefox或Chromium，浏览器可能还是不会正常地运行WebGL程序——当然对此有更好的解决办法，我们可以使用带软件渲染的Firefox浏览器（这种软件渲染方式即把针对3D图形的运算全部交由CPU执行而非显卡，这将大大降低WebGL的运行效率&hellip;&hellip;但至少我们很大程度上解决了这一问题）。</p>
+
+<p>在Macintosh系统中，如果你采用了Snow Leopard操作系统（版本号OS X 10.6），那么我建议你使用WebKit的开发版本，它将是Safari的替代版本。如果你使用的是Leopard （版本号OS X 10.5），你可能无法运行WebKit开发版，那么Firefox或Chromium就是你最好的选择。当然，Snow Leopard的用户也可以采用上述两款浏览器。遗憾的是，我目前尚无法确定WebKit在更旧版本的Mac操作系统上的运行情况。</p>
+
+<p>如果你正在使用Linux，那么解决方案可能和windows差不多。但需要注意，如果你的集成显卡不能很好地支持WebGL，那么在采用软件渲染之前，你需要安装Mesa，然后再安装最新版本的Firefox即可。</p>
+
+<p>由于笔者的配置环境是ATI HD5650/Windows 7 ultimate，故我们以chromium浏览器的安装为例介绍这一流程。</p>
+
+<p>目前chrome的开发者强烈建议用户使用Chromium的nightly build版本，它可以看成是chrome的一种实验版本，由于nightly build版本的存在使得其发展速度要全面领先于chrome，后者的缺点主要是功能较前者而言欠缺一些，但运行更加稳定。chromium的安装因操作系统的差异有所区别，这里我们仅给出windows操作系统的chromium安装流程。</p>
+
+<p>1、首先下载chrome-win32.zip并解压之；</p>
+
+<p>2、运行chrome.exe;</p>
+
+<p>3、开始在google上搜索WebGL纷繁复杂的demo欣赏吧！</p>
+
+<p>值得一提的是，本站的首页采用了WebGL的展示技术，如果你的浏览器不支持WebGL，今后可能就无法正常浏览这里的全部信息了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-24T22:29:16+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/01/17/%25e5%25a4%25a9%25e5%2590%25af%25e8%25bf%2598%25e6%2598%25af%25e8%2587%25aa%25e5%2586%25b3/">
+		
+			天启还是自决</a>
+	</h2>
+	<div class="entry-content">
+		<p> 我之前从未接触过导演Stanley Kubrick的作品，虽然至少也听闻过《lolita》、《发条橙》、《2001》这些，但也仅限于少量的影评而已。过去喜欢看科幻片，以为这些只是异人们想象力四溢的结果，后来发现科幻片大师普遍更加看好影片所蕴含的metaphor，动机大概都不是太纯的——然而这才是真正的大师之路。</p>
+
+<p> 《2001:a space odyssey》是一部让人非常熟悉但又陌生的影片，熟悉大概是以前找科幻片看时总会见到它的介绍，但看看出品时间——1968——比Neil Armstrong‎登月还早个将近一年，于是只好放弃。前几天在emule上找《发条橙》，又见到了该片，可惜源比较少，网络居然有个在线的但很不清楚，玷污了名作，等等倒也值得。但在看影片的过程中发现这厮根本不是什么科幻，开始就是黑屏加诡异音乐，以为又浪费一个2g的假源——快进几分钟后来发现确实是有画面——几只明显是人扮的假黑猩猩讲进化，就是人类降临。后来讲一堆科学家去到月亮上去挖石头，照集体相留个念一个个还被突然的鬼叫吓得半死。第三部分是后续——木星任务，牛逼电脑差点造反成功，最后令人心酸地“死去”。最后生还的科学家抵达目的地，却被石头引入各种幻觉、诡异、以及较现代片子更细粒度的生殖场景，也有一说是玩起了穿越——因为更老的科学家本人接连出现，吃饭、饮水、睡觉、等死——终于最后时刻到来，一切仿佛又回到了原点。</p>
+
+<p> 当年影片的票房不错，估计还是因为画面和科技元素带给人巨大的震撼力——想想四十年前的“我们”。然而影片的科技情节都呈现的颇具艺术性，包括画面和配乐，这些手法在后来的《star wars》、《eva》，以及前段时间有趣的《moon》都令人感到似曾相识，“开山鼻祖”一说看来真的不假。但是剧情方面让人看着有点摸不到头脑，各种各样metaphor的充斥考验着观众，也成就了导演本人。尽管影片公映至今已超过四十年，但却没有一个人敢声称自己了解了导演真正的意图。我认为，《2001》之所以聚集了现代社会的根本基奠——宗教、科学和艺术，把这些内容按是否取决于人自身的意志的标准进行分类，我们可以看到人的命运既有天启的成分，也有人类自决的成分。人类面对天启是毫无招架之力的、甚至连亵渎与蔑视都不要想。对于人类可以自决的部分，往往在为人类服务的同时又引入新的问题，那么这种双刃剑到底有没有解决起码部分问题呢？</p>
+
+<p> 答案似乎是肯定的，毕竟人类凭借智慧统治着这个星球。《2001》中的黑猩猩起初是和野猪？一样只吃草的，只是意外掌握了大杀器才能真正开回荤，野猪毕竟是野猪，依旧在黑猩猩周围平静地吃草——尽管自己的同类正被当作猩猩们的午餐。于是差距不断扩大，直到当年未开化的恶邻变成如今的主宰。然而主宰的行为如今可能危及整个生态系统，甚至引起这些行为所导致的后果反噬主体自身。这就令人期待如何能把握天启和自决间的平衡：之所以是把握而非控制，是因为天启对人而言似乎是不可随便预知的，那么我们对天平另一端的控制也似乎缺少了点自信。</p>
+
+<p> 因此要谨慎地观察、并把握时机，人们往往崇尚“凤凰涅盘”和“浴火重生”，然而如果火候没把握住，最后甚至连渣都不剩了，“不死鸟”恐怕未免复活的也尴尬。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-17T23:08:36+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/12/31/%25e5%25bf%2599/">
+		
+			忙</a>
+	</h2>
+	<div class="entry-content">
+		<p> 上月底就草写的两篇Qt文章始终无法发布&hellip;&hellip;最近甚至忙得连考试都顾不上了，赶紧收工放假吧。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-31T20:30:32+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/11/28/%25e3%2580%258a%25e4%25bb%2599%25e5%2589%2591%25e5%25a5%2587%25e4%25be%25a0%25e4%25bc%25a0%25e4%25ba%2594%25e3%2580%258b%25e6%25b6%2588%25e6%2581%25af/">
+		
+			《仙剑奇侠传五》消息</a>
+	</h2>
+	<div class="entry-content">
+		<p> 周末竟去上京兜了一圈，真有些不可思议&hellip;&hellip;回来后唯一的感觉是，仙五离我们更近了。</p>
+
+<p> 11月26日，仙五官网和官博同时发布了仙剑奇侠传五的女主角设定，官网还发布了女主角的动作设定手稿。官方还透露，游戏目前已转入bug修复、配置测试以及性能优化等阶段，其中优化是较受关注的环节——尽管该环节对于缺乏积累的业界来说能最终达到的效用是微乎其微的。</p>
+
+<p> 尽管如此，按官方的口吻，明年2月份之前上市应该是问题不大，广大仙迷们也可以开始着手预定各种首发版了。不过今天回来特意翻了翻北京软星近期的作品，似乎仍有些惨不忍睹&hellip;&hellip;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-28T00:15:45+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/pcyou-xi/'>pc游戏</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/11/20/qt%25e5%2588%259d%25e6%258f%25ad%25e7%25a7%2598%25e2%2580%2594%25e2%2580%2594%25e7%25bb%2588%25e7%25bb%2593%25e7%25af%2587/">
+		
+			Qt初揭秘——终结篇</a>
+	</h2>
+	<div class="entry-content">
+		<p> 我们最近花了几周时间详细介绍Qt的特性，她无疑是目前最能体现大多数程序员编程理想的优秀程序框架之一。</p>
+
+<p> 尽管从市场趋势来看，智能移动终端乱战可能将由RIM Blackberry，IPhone，Android，WP，PALM继续主导，前两者在发达国家仍然占有举足轻重的地位，而Google发起的Open Handset Alliance及其力推的Android无疑将横扫新兴市场国家，WP的问题或许就出在缺少前面的特定市场定位，但的确也不能排除WP未来通吃的可能（当然这种可能性是微乎其微的）。 而Nokia面临的危机是实在的，迟到的Symbian<sup>3</sup>在中高端市场上表现依然乏力，同时在开发者社区的支持率也被大量蚕食。MeeGo的开发现状和前景亦不被多数人所看好。这就直接导致Qt如今似乎处于一个尴尬的地位：毕竟移动市场的诱惑力已远远超越了桌面市场。</p>
+
+<p> 但如果历史在2008年发生扭转，Qt甚至可能还不会得到这种全面进军移动领域的机遇。在我看来，Qt在移动领域看似生不逢时，实际上此时却也是群雄逐鹿的历史转折点，Qt何去何从，我们只当拭目以待。</p>
+
+<p> 我们选择编译Ryan Paul的这篇文章的原因在于他为我们展现了Qt提供给开发人员的一些更为直观的好处，事实上，ars technia在开源领域具有独特且精彩的第三方评论，无论是过去还是现在，编辑们都坚持为可爱的开源软件项目摇旗呐喊，不遗余力。下面仅给出前面两篇文章的原文地址，以及原作者近期对Qt新发行版的深度评论。</p>
+
+<p> <strong>Troll treasure: an in-depth look at Qt 4.4</strong></p>
+
+<p> <a href="http://arstechnica.com/open-source/news/2008/05/troll-treasure-qt44-in-depth.ars/2"><a href="http://arstechnica.com/open-source/news/2008/05/troll-treasure-qt44-in-depth.ars/2">http://arstechnica.com/open-source/news/2008/05/troll-treasure-qt44-in-depth.ars/2</a></a></p>
+
+<p> <strong>Qt gets cuter: 4.6 brings expanded platform support</strong></p>
+
+<p> <a href="http://arstechnica.com/open-source/news/2009/12/qt-gets-cuter-46-brings-expanded-platform-support.ars"><a href="http://arstechnica.com/open-source/news/2009/12/qt-gets-cuter-46-brings-expanded-platform-support.ars">http://arstechnica.com/open-source/news/2009/12/qt-gets-cuter-46-brings-expanded-platform-support.ars</a></a></p>
+
+<p> <strong>Nokia releases Qt 4.7 with terrific new mobile UI framework</strong></p>
+
+<p> <a href="http://arstechnica.com/open-source/news/2010/09/nokias-cross-platform-development-strategy-evolves-with-qt-47.ars"><a href="http://arstechnica.com/open-source/news/2010/09/nokias-cross-platform-development-strategy-evolves-with-qt-47.ars">http://arstechnica.com/open-source/news/2010/09/nokias-cross-platform-development-strategy-evolves-with-qt-47.ars</a></a></p>
+
+<p> <strong>How Qt could bring better third-party software to Ubuntu</strong></p>
+
+<p> <a href="http://arstechnica.com/open-source/news/2010/10/canonical-cto-contemplates-qt-we-think-it-has-a-lot-to-offer-ubuntu.ars"><a href="http://arstechnica.com/open-source/news/2010/10/canonical-cto-contemplates-qt-we-think-it-has-a-lot-to-offer-ubuntu.ars">http://arstechnica.com/open-source/news/2010/10/canonical-cto-contemplates-qt-we-think-it-has-a-lot-to-offer-ubuntu.ars</a></a></p>
+
+<p> 今后，我们的Qt专题将着重于讨论技术细节。对于未来，我们只好交由历史自己去判断。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-20T17:52:27+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/qt/'>qt</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/11/20/%25e5%2585%25b3%25e4%25ba%258eqt%25e7%259a%2584%25e4%25b8%2580%25e5%2588%2587%25e7%25bb%25ad/">
+		
+			关于Qt的一切(续)</a>
+	</h2>
+	<div class="entry-content">
+		<p>(前文<a href="http://www.hanyi.name/blog/?p=263" target="_self">见此</a>)</p>
+
+<p><strong> 网页内容和本地代码的紧密集成</strong></p>
+
+<p> Qt4.4另一个令人非常兴奋的特性在于新的QtWebKit模块，它允许开发人员实现HTML内容和本地工具组件的无缝结合。WebKit是一种基于KDE社区KHTML框架的开源HTML渲染器，最初是由苹果为Safari开发的。WebKit轻量、可移植、且易于嵌入的特性使得其越来越多地被Nokia、Adobe、Google等公司引入到其产品中。</p>
+
+<p><a href="null"><img class="aligncenter" title="http://media.arstechnica.com/news.media/450/webkit-architecture.png" src="http://media.arstechnica.com/news.media/450/webkit-architecture.png" alt="" width="450" height="281" /></a></p>
+
+<p> 全新的QWebView工具组件通过一系列携带signal和property的高层Qt API来展现web功能，其底层是一种完全基于WebKit的HTML渲染引擎。QWebView工具组件可以在Designer工具中像其它工具组件一样被轻松置入Qt form中。它支持从本地或远程URIs或字符串中载入HTML内容。</p>
+
+<p><a href="null"><img class="alignnone" title="http://media.arstechnica.com/news.media/450/qt440_webkit_designer.png" src="http://media.arstechnica.com/news.media/450/qt440_webkit_designer.png" alt="" width="450" height="354" /></a></p>
+
+<p> QtWebKit允许开发人员能够轻松地将其本地代码方法和JavaScript紧密结合，并通过本地代码对QWebView中上下文的JavaScript代码进行评估。这就意味着其支持一种双向集成：开发人员能够将本地Qt工具组件嵌入至网页内容中，甚至可以给JavaScript函数绑定Qt signals。Trolltech开发人员Kent Hansen的<a href="http://labs.trolltech.com/blogs/page/2/" target="_blank">博客</a>在上周明确展示了QWebKit是如何在本地代码中使用的：他演示了一种如何把Qt Designer用户接口描述文件动态集成到QWebView中，并使用QtScript演示了整个过程。正如上述概念所示，他能把Qt tutorials中的一张截图替换成具有完整功能的应用程序版本，并直接嵌入至HTML页面。</p>
+
+<p><a href="null"><img class="aligncenter" title="http://media.arstechnica.com/news.media/450/qtwebkitplug.png" src="http://media.arstechnica.com/news.media/450/qtwebkitplug.png" alt="" width="450" height="425" /></a></p>
+
+<p> 如同hansen展示的这种开发技术已经大大扩展了Qt在未来的潜力。这种方法可以用于构建快速原型，并为应用程序提供更多扩展能力。正如我们今年早前一篇文章中介绍的关于在linux中利用WebKit创建RIAs的主题，Trolltech的方法比起Adobe的AIR这种完全自给自足的模式使得RIAs开发更为灵活、更具有扩展性并且更加易于代码重用。</p>
+
+<p> 除了提供HTML渲染功能以外，QWebKit也提供一种用于处理其它面向浏览器功能如代理、cookies、网络以及SSL支持的完整组件堆栈。Trolltech的开发人员Benjamin Meyer已经在开发一种完全基于Qt的名叫Arora的工具，它是一种可用于概念验证（Proof of Concept ）的网页浏览器。 </p>
+
+<p> <a href="null"><img class="aligncenter" title="http://media.arstechnica.com/news.media/450/browserdemo.png" src="http://media.arstechnica.com/news.media/450/browserdemo.png" alt="" width="450" height="411" /></a></p>
+
+<p> Qt4.4中的WebKit版本大约于六个月前发布。Meyer声称Trolltech计划将为Qt 4.5提供更多基于新版WebKit的改进。苹果的WebKit最近在Acid 3的CSS测试中达到了百分之百通过，且在最近几个月又加入了大量绚丽丰富的特性，如CSS渐变(gradients)和图像倒影(reflection)功能。</p>
+
+<p> Trolltech同时计划在Qt工具组件中实现对标准浏览器插件如Flash、Java applets的支持，以使其能够嵌入至Qt应用程序中。规划中的另一个特性是开发一种基于Qt的API以简化对网页内容的操作，如标准DOM API，但更加轻量级。关于QtWebKit的更多细节，请查阅Trolltech<a href="http://dist.trolltech.com/pdf/qt-webkit-feb-2008-whitepaper-a4.pdf" target="_blank">白皮书</a>。（译注：Trolltech白皮书非周期性发布，经验证源地址已无效，目前在<a href="http://qt.nokia.com/files/pdf"><a href="http://qt.nokia.com/files/pdf">http://qt.nokia.com/files/pdf</a></a>可以看到所有的pdf资源，包括Qt4.4的whitepaper，如果对Qt的roadmap感兴趣可以查看这里<a href="http://qt.nokia.com/developer/qt-roadmap"><a href="http://qt.nokia.com/developer/qt-roadmap">http://qt.nokia.com/developer/qt-roadmap</a></a>，当然最佳的做法是加入官方maillist，我们将在文后提供相关信息）</p>
+
+<p> <strong>QGraphicsView工具组件</strong></p>
+
+<p> QGraphicsView canvas工具组件在Qt4.4中得到了重大改进，包括对全部本地Qt工具组件的支持。具有完整交互功能的工具组件能被直接添加进canvas中并向其它任何canvas绘制组件一样运行。这种特性能够实现工具组件的移动动画，并提供更加复杂的视觉效果。Trolltech的开发人员实现了对输入重定向的完整支持，这意味着用户可以和基于QGraphicsView canvas的Qt工具组件任意交互，甚至当这些组件处于各种动画效果时亦如此。</p>
+
+<p><a href="null"><img class="aligncenter" title="http://media.arstechnica.com/news.media/450/dialogdemo.png" src="http://media.arstechnica.com/news.media/450/dialogdemo.png" alt="" width="450" height="222" /></a></p>
+
+<p> “Graphics View并不会自身提供工具组件如QLineEdit或者QComboBox，相反，你应当把现有的工具组件嵌入到场景中（事实上，任何用户自定义的工具组件皆能如此），这一功能可以通过调用QGraphicsScene::addWidget()实现。”Trolltech的Andreas Hanssen的<a href="http://labs.trolltech.com/blogs/2007/11/22/widgets-on-the-canvas-integrated/" target="_blank">博客</a>在去年阐述了这种功能。“如果你还想传入Qt::Window标识，”你的工具组件甚至将类似QMdiSubWindow一样获得窗口装饰效果。你可以拖动、自定义大小、旋转、缩放或者结合工具组件和其它组件生成极具想象力的修饰或效果转换。</p>
+
+<p> QGraphicsView支持添加Qt工具组件的功能为更加丰富的用户界面创造了无穷的潜力：这些界面将不再受传统布局框架的局限。工具组件可以在角度变换中漂浮、自由旋转、或者根据用户交互信息变换。桌面上存在大量可供canvas工具组件渲染的位置将提供更多的实用性。例如，在KDE桌面环境中将把这种特性应用于Plasma desktop shell。（译注：Plasma即是KDE的桌面组件）</p>
+
+<p> 当我们在去年首次试验这种新特性时，我们查看了Trolltech的示例代码以确定它是如何工作的，之后我们创建了一个测试应用程序以展示在QGraphcisView中变更角度以缩放和渲染一个QWebView工具组件。这一过程非常易于操作，且仅需要少量代码即可实现。</p>
+
+<p> <a href="null"><img class="aligncenter" title="http://media.arstechnica.com/news.media/450/qt440_browser_demo.png" src="http://media.arstechnica.com/news.media/450/qt440_browser_demo.png" alt="" width="450" height="325" /></a></p>
+
+<p> 在我们的测试中发现了极少量的技术缺陷问题，如下拉列表菜单工具组件的定位bug——似乎在4.4发行版中得到修复。开发人员目前已经在很大程度上修正了我们之前测试中提出的性能问题，并且很<a href="http://labs.trolltech.com/blogs/2008/02/04/qt-44-and-painting-performance/" target="_blank">负责地</a>对这一问题做出更进一步的改进。</p>
+
+<p> <strong>用Phonon播放音乐</strong></p>
+
+<p> Phonon是一种跨平台的多媒体抽象层，它提供了一些轻量级的API以支持简单的音频或视频片段的录放功能。它支持多后台运行，并且允许应用程序能够实现跨平台地多媒体处理功能，而非不得不去单独处理特定平台的实现细节问题。</p>
+
+<p> Phonon最初是由KDE开发社区为KDE4开发的，且其最初只支持Xine后台（译注：一种类UNIX平台上的GPL多媒体播放引擎）运行。后来Trolltech决定将其引入Qt，因此他们开发了其他后台支持如GStreamer、Windows的DirecShow 9以及Mac Os X的QuickTime 7。Trolltech已经把这些后台的上行数据流和Phonon集成以便能够得到KDE社区的持续性开发和维护支持。</p>
+
+<p> 由于Trolltech引入的这些后台引擎使得Phonon能够与Windows和Mac OS X等操作系统中的本地多媒体框架无缝整合，Phonon自然将支持相关平台提供的任何解码器和多媒体格式。由于Phonon提供自身独立的抽象层，同样的代码可在Qt应用程序中实现基本多媒体操作的跨平台重用。</p>
+
+<p> <a href="null"><img class="aligncenter" title="http://media.arstechnica.com/news.media/450/mediaplayer-demo.png" src="http://media.arstechnica.com/news.media/450/mediaplayer-demo.png" alt="" width="332" height="166" /></a></p>
+
+<p> <strong>其它零碎工作</strong></p>
+
+<p> 在一篇文章内完成Qt4.4所有改进特性的讨论几乎是无法实现的任务，至此我们也只是提供了一些最为显著的特性概览。一些其它同样精彩的特性，如新的并发框架——它可以简化多线程Qt应用程序开发，以及一个支持XQuery标准实现内容操作的XML框架。Qt4.4同时还包括了大量的性能改进和大范围的bug修复工作。</p>
+
+<p> 正如我们上周注意到的，Qt4.4已经被KDE所采用并将用于几个KDE4.1发行版的新特性中。采用Qt作为其跨平台桌面音乐端软件的社交音乐网站Last.fm，也已经在测试Qt4.4，新的Qt发行版将使Last.fm有潜力为Windows Mobile移动设备提供客户端应用软件。</p>
+
+<p> <strong>（正文完）</strong></p>
+
+<p> 编后：下篇文章中，我们将继续贴出其它部分的Qt在线资料。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-20T15:58:20+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/qt/'>qt</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/11/14/%25e5%2585%25b3%25e4%25ba%258eqt%25e7%259a%2584%25e4%25b8%2580%25e5%2588%2587/">
+		
+			关于Qt的一切</a>
+	</h2>
+	<div class="entry-content">
+		<p> Qt在中国程序员人群中兴起较早，Trolltech亦对中国市场颇为重视。2005年，Trolltech在北京成立代表处，旨在向中国用户提供Qtopia相关的销售服务、培训以及技术支持。同年Qt官网也首次加入双语页面——英语和汉语两种版本（而非现在的多国语言）。</p>
+
+<p> 不甚了解Qt的同学可能会对Qt的功能产生怀疑：Qt难道不是简单的GUI框架吗？为了能更好的解答这个问题，我特从ArsTechnica.com编译了一篇由Ryan Paul撰写的关于深度透视Qt4.4的文章，尽管Qt开发团队刚刚发布了4.7.1的新版本，我依然认为Qt今后的发展趋势将是沿着2005年夏天Qt4.0发布所带来革命性影响的延续，这也是软件工程理论与实践证明目前最好的技术框架之一。同时文后我们也将推荐其它几篇Qt阶段性介绍的文章，值得注意的是，作者原文较为冗长，我们将分两期刊出，以飨读者。</p>
+
+<p><strong> Troll精品:深度解析Qt4.4（原题:Troll treasure:an in-depth look at Qt4.4）</strong> </p>
+
+<p> <strong>文/图 Ryan Paul 编译 mp77</strong></p>
+
+<p> Trolltech刚刚宣布了Qt4.4的官方发布版（译注：这里是指2008年5月），这是对Trolltech出品的最受欢迎的、跨平台的应用程序框架的一次备受期待的更新。Qt多许可证分发的模式允许其即可用于开源项目，亦可进行专有的商业开发。她广泛应用于Linux平台，并为KDE桌面环境提供了基础工具包。同时，Qt亦用于许多商业软件如Skype,GoogleEarth以及Adobe Photoshop套件中。</p>
+
+<p> Qt4.4最受瞩目的更新内容主要包括了多媒体抽象层、基于WebKit的HTML渲染器、一种新的并发框架以及支持基于工具包内的drawing canvas技术渲染工具组件。这也是Qt首次包含对Windows CE和Windows Mobile的支持。</p>
+
+<p> 去年在测试Qt4.4预释放版时我们曾经向您提供了一些早期的功能预览。在目前开发工作已经全部完成、功能较完备的情况下，我们进一步审视了Qt4.4。最终，我们进行了大量测试以探究这些新技术的实现原理。同时，我们也和Trolltech的首席执行官Benoit Schillings一起讨论了Qt4.4，Benoit Schillings向我们分享了一些关于Qt4.4的技术内幕，并且给出了Qt未来版本趋势的一些建议。</p>
+
+<p> <strong>桥接桌面与移动设备的鸿沟</strong></p>
+
+<p> Qt支持所有主流的桌面操作系统，包括Linux、Mac OS X和Windows。她使用本地API渲染工具组件，这就意味着大多数的Qt应用程序具有基于操作系统的外观一致性。Trolltech同时提供了Qtopia——一个基于Linux移动操作系统的综合开发平台，Qtopia亦被广泛应用于如Sony Mylo、一些Motorola mobile phone handsets中。Qt4.4通过引入对Windows CE的完整支持扩充了自身的可移植性。开发人员现在可以用Qt编写任何一段应用程序代码，就可以完全移植到任何所支持的操作系统中去。</p>
+
+<p> Qt为Windows CE提供了大量功能，且能很好地适用于创建基于图形的触摸式用户界面。开发人员声称Qt表现出良好的性能和对本地外观和平台体验的强力支持。Trolltech同时发布了可以使Qt与Visual Studio紧密集成的工具，这样能够让现有Windows CE程序员轻松适应这个应用程序框架。</p>
+
+<p> <a href="null"><img class="aligncenter" title="qt44structure" src="http://media.arstechnica.com/news.media/450/qt44structure.png.png" alt="" width="450" height="283" /></a></p>
+
+<p> Qt支持Windows CE所带来的潜在好处是，其允许程序员能够将现有的KDE或Qt程序移植到更多的环境中，这将大大扩展目前开源软件在操作系统支持方面的生态系统。我确信自己会非常乐意在Windows Mobile设备中运行基于Qtopia的软件如FBReader，Trolltech的开发人员也已经在实验性地将相对复杂的KDE4应用程序移植到Windows Mobile中。例如，Thomas Hartmann在上个月撰写的<a href="http://labs.trolltech.com/blogs/2008/04/04/marble-running-on-windows-ce/" target="_blank">博客</a>展示了一种基于KDE4软件的移植，这个软件是一种复杂地图系统绘制系统，它能够在多种Windows设备中流畅地运行。</p>
+
+<p><a href="null"><img class="aligncenter" title="qtmarble" src="http://media.arstechnica.com/news.media/450/qtmarble.png" alt="" width="450" height="309" /></a></p>
+
+<p>这种来自Qt更高级别的可移植性吸引了移动设备巨头Nokia，后者正在进行对Trolltech的收购进程中（译注:收购已于2008年结束）。</p>
+
+<p> 这项交易仍然处于欧盟审查之中。今年早先的一项声明指出，Nokia宣称将力促Qt成为一种跨平台的软件开发平台，它将可以在大多数移动和桌面平台上运行。 Nokia也已计划将Qt引入S60和Maemo移动操作系统的（译注：这项计划目前已实现）。</p>
+
+<p><strong> （未完待续）</strong></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-14T12:49:43+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/qt/'>qt</a>
+
+</div>
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="4" class="prev">Prev</a>
+    
+    
+        <a href="6" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,1680 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="//返回一个结构数组，返回一个硬盘信息的结构数组
+JNIEXPORT jobjectArray JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_getStructArray
+(JNIEnv *env, jobject _obj)
+{
+// &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/10/18/jni%25e6%258a%2580%25e6%259c%25af%25e5%2588%259d%25e6%25ad%25a5%25e5%259b%259b/">
+		
+			JNI技术初步(四)</a>
+	</h2>
+	<div class="entry-content">
+		<p>//返回一个结构数组，返回一个硬盘信息的结构数组
+JNIEXPORT jobjectArray JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_getStructArray
+(JNIEnv *env, jobject _obj)
+{
+//申明一个object数组
+jobjectArray args = 0;</p>
+
+<p>//数组大小
+jsize len = 5;</p>
+
+<p>//获取object所属类,一般为ava/lang/Object就可以了
+jclass objClass = (env)-&gt;FindClass(&ldquo;java/lang/Object&rdquo;);</p>
+
+<p>//新建object数组
+args = (env)-&gt;NewObjectArray(len, objClass, 0);</p>
+
+<p>/<em><em>//</em> 下面为获取到Java中对应的实例类中的变量</em>/</p>
+
+<p>//获取Java中的实例类
+jclass objectClass = (env)-&gt;FindClass(&ldquo;com/sundy/jnidemo/DiskInfo&rdquo;);</p>
+
+<p>//获取类中每一个变量的定义
+//名字
+jfieldID str = (env)-&gt;GetFieldID(objectClass,&ldquo;name&rdquo;,&ldquo;Ljava/lang/String;&rdquo;);
+//序列号
+jfieldID ival = (env)-&gt;GetFieldID(objectClass,&ldquo;serial&rdquo;,&ldquo;I&rdquo;);</p>
+
+<p>//给每一个实例的变量付值，并且将实例作为一个object，添加到objcet数组中
+for(int i=0; i &lt; len; i++ )
+{
+//给每一个实例的变量付值
+jstring jstr = WindowsTojstring(env,&ldquo;我的磁盘名字是 D:&rdquo;);
+//(env)-&gt;SetObjectField(<em>obj,str,(env)-&gt;NewStringUTF(&ldquo;my name is D:&rdquo;));
+(env)-&gt;SetObjectField(</em>obj,str,jstr);
+(env)-&gt;SetShortField(_obj,ival,10);</p>
+
+<p>//添加到objcet数组中
+(env)-&gt;SetObjectArrayElement(args, i, _obj);
+}
+//返回object数组
+return args;</p>
+
+<p>}</p>
+
+<p>//将jstring类型转换成windows类型
+char<em> jstringToWindows( JNIEnv </em>env, jstring jstr )
+{
+int length = (env)-&gt;GetStringLength(jstr );
+const jchar<em> jcstr = (env)-&gt;GetStringChars(jstr, 0 );
+char</em> rtn = (char<em>)malloc( length</em>2+1 );
+int size = 0;
+size = WideCharToMultiByte( CP_ACP, 0, (LPCWSTR)jcstr, length, rtn,(length<em>2+1), NULL, NULL );
+if( size &lt;= 0 )
+return NULL;
+(env)-&gt;ReleaseStringChars(jstr, jcstr );
+rtn[size] = 0;
+return rtn;
+}
+//将windows类型转换成jstring类型
+jstring WindowsTojstring( JNIEnv</em> env, char<em> str )
+{
+jstring rtn = 0;
+int slen = strlen(str);
+unsigned short * buffer = 0;
+if( slen == 0 )
+rtn = (env)-&gt;NewStringUTF(str );
+else
+{
+int length = MultiByteToWideChar( CP_ACP, 0, (LPCSTR)str, slen, NULL, 0 );
+buffer = (unsigned short </em>)malloc( length<em>2 + 1 );
+if( MultiByteToWideChar( CP_ACP, 0, (LPCSTR)str, slen, (LPWSTR)buffer, length ) &gt;0 )
+rtn = (env)-&gt;NewString( (jchar</em>)buffer, length );
+}
+if( buffer )
+free( buffer );
+return rtn;
+}</p>
+
+<p>Java 测试native代码
+这没有什么多说的，看代码吧
+//主测试程序
+public static void main(String[] args) {
+ChangeMethodFromJni changeJni = new ChangeMethodFromJni();</p>
+
+<p>//输入常用的数值类型(string int boolean)
+System.out
+.println(&ldquo;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;输入常用的数值类型(string int boolean)&mdash;&mdash;&mdash;&ndash;&rdquo;);
+changeJni.displayParms(&ldquo;Hello World!&rdquo;, 100, true);</p>
+
+<p>//调用一个静态方法
+System.out.println(&ldquo;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;调用一个静态方法&mdash;&mdash;&mdash;&ndash;&rdquo;);
+int ret = changeJni.add(12, 20);
+System.out.println(&ldquo;The result is: &rdquo; + String.valueOf(ret));</p>
+
+<p>//输入一个数组
+System.out.println(&ldquo;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;输入一个数组&mdash;&mdash;&mdash;&ndash;&rdquo;);
+boolean[] blList = new boolean[] { true, false, true };
+changeJni.setArray(blList);</p>
+
+<p>//返回一个字符串数组
+System.out.println(&ldquo;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;返回一个字符串数组&mdash;&mdash;&mdash;&ndash;&rdquo;);
+String[] strList = changeJni.getStringArray();
+for (int i = 0; i &lt; strList.length; i++) {
+System.out.print(strList[i]);
+}
+System.out.println();</p>
+
+<p>System.out.println(&ldquo;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;返回一个结构&mdash;&mdash;&mdash;&ndash;&rdquo;);</p>
+
+<p>//返回一个结构
+DiskInfo disk = changeJni.getStruct();
+System.out.println(&ldquo;name:&rdquo; + disk.name);
+System.out.println(&ldquo;Serial:&rdquo; + disk.serial);</p>
+
+<p>//返回一个结构数组</p>
+
+<p>System.out.println(&ldquo;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;返回一个结构数组 &mdash;&mdash;&mdash;&ndash;&rdquo;);
+DiskInfo[] diskList = changeJni.getStructArray();
+for (int i = 0; i &lt; diskList.length; i++) {
+System.out.println(&ldquo;name:&rdquo; + diskList[i].name);
+System.out.println(&ldquo;Serial:&rdquo; + diskList[i].serial);
+}</p>
+
+<p>}
+注:本程序在VS2003,eclipse (jse5.0) winxp sp2编译通过</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-18T16:31:47+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/10/18/jni%25e6%258a%2580%25e6%259c%25af%25e5%2588%259d%25e6%25ad%25a5%25e4%25b8%2589/">
+		
+			JNI技术初步(三)</a>
+	</h2>
+	<div class="entry-content">
+		<p>全部的C/C++方法实现代码如下:
+/<strong>//<em>
+*
+* 一缕阳光(sundy)版权所有，保留所有权利。
+</em>/
+/</strong>//<em>*
+*
+* TODO Jni 中一个从Java到C/C++参数传递测试类
+*
+* @author 刘正伟(sundy)
+* @see <a href="http://www.cnweblog.com/sundy">http://www.cnweblog.com/sundy</a>
+* @see <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#115;&#x75;&#110;&#100;&#121;&#50;&#54;&#x40;&#x31;&#x32;&#x36;&#x2e;&#99;&#111;&#109;">&#115;&#117;&#x6e;&#100;&#121;&#x32;&#x36;&#x40;&#x31;&#50;&#x36;&#46;&#99;&#111;&#109;</a>
+* @version 1.0
+* @since 2005-4-30
+*
+* 修改记录：
+*
+* 日期 修改人 描述
+* &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-
+*
+*
+*
+</em>/
+// JniManage.cpp : 定义 DLL 应用程序的入口点。
+//
+package com.sundy.jnidemo;
+＃i nclude &ldquo;stdafx.h&#8221;＃i nclude &lt;stdio.h&gt;
+＃i nclude &lt;math.h&gt;
+＃i nclude &#8220;jni.h&rdquo;
+＃i nclude &ldquo;jni_md.h&rdquo;</p>
+
+<p>＃i nclude &ldquo;./head/Base.h&rdquo;
+＃i nclude &ldquo;head/wmi.h&rdquo;
+＃i nclude &ldquo;head/com_sundy_jnidemo_ChangeMethodFromJni.h&rdquo; //通过javah -jni javactransfer 生成
+＃i nclude &lt;stdio.h&gt;
+＃i nclude &ldquo;stdlib.h&rdquo;
+＃i nclude &ldquo;string.h&rdquo;</p>
+
+<h1>pragma comment (lib,&ldquo;BaseInfo.lib&rdquo;)</h1>
+
+<h1>pragma comment (lib,&ldquo;jvm.lib&rdquo;)</h1>
+
+<p>//硬盘信息
+struct {
+char name[256];
+int serial;
+}DiskInfo;
+/<em><em>//</em>BOOL APIENTRY DllMain( HANDLE hModule,
+DWORD ul_reason_for_call,
+LPVOID lpReserved
+)
+{
+LPTSTR strName = new CHAR[256] ;
+(</em>GetHostName)(strName);
+printf(&ldquo;%s\n&rdquo;,strName);
+delete [] strName;</p>
+
+<p>return TRUE;
+}<em>/
+//将jstring类型转换成windows类型
+char</em> jstringToWindows( JNIEnv <em>env, jstring jstr );
+//将windows类型转换成jstring类型
+jstring WindowsTojstring( JNIEnv</em> env, char* str );</p>
+
+<p>//主函数
+BOOL WINAPI DllMain(HANDLE hHandle, DWORD dwReason, LPVOID lpReserved)
+{
+return TRUE;
+}
+//输入常用的数值类型 Boolean,Byte,Char,Short,Int,Float,Double
+JNIEXPORT void JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_displayParms
+(JNIEnv <em>env, jobject obj, jstring s, jint i, jboolean b)
+{
+const char</em> szStr = (env)-&gt;GetStringUTFChars(s, 0 );
+printf( &ldquo;String = [%s]\n&rdquo;, szStr );
+printf( &ldquo;int = %d\n&rdquo;, i );
+printf( &ldquo;boolean = %s\n&rdquo;, (b==JNI_TRUE ? &ldquo;true&rdquo; : &ldquo;false&rdquo;) );
+(env)-&gt;ReleaseStringUTFChars(s, szStr );
+}</p>
+
+<p>//调用一个静态方法,只有一个简单类型输出
+JNIEXPORT jint JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_add
+(JNIEnv *env, jobject, jint a, jint b)
+{
+int rtn = (int)(a + b);
+return (jint)rtn;
+}</p>
+
+<p>/<em><em>/////输入一个数组,这里输入的是一个Boolean类型的数组
+JNIEXPORT void JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_setArray
+(JNIEnv </em>env, jobject, jbooleanArray ba)
+{
+jboolean</em> pba = (env)-&gt;GetBooleanArrayElements(ba, 0 );
+jsize len = (env)-&gt;GetArrayLength(ba);
+int i=0;
+// change even array elements
+for( i=0; i &lt; len; i+=2 )
+{
+pba[i] = JNI_FALSE;
+printf( &ldquo;boolean = %s\n&rdquo;, (pba[i]==JNI_TRUE ? &ldquo;true&rdquo; : &ldquo;false&rdquo;) );
+}
+(env)-&gt;ReleaseBooleanArrayElements(ba, pba, 0 );
+}</p>
+
+<p>/<em><em>/////返回一个字符串数组
+JNIEXPORT jobjectArray JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_getStringArray
+(JNIEnv </em>env, jobject)
+{
+jstring str;
+jobjectArray args = 0;
+jsize len = 5;
+char</em> sa[] = { &ldquo;Hello,&rdquo;, &ldquo;world!&rdquo;, &ldquo;JNI&rdquo;, &ldquo;is&rdquo;, &ldquo;fun&rdquo; };
+int i=0;
+args = (env)-&gt;NewObjectArray(len,(env)-&gt;FindClass(&ldquo;java/lang/String&rdquo;),0);
+for( i=0; i &lt; len; i++ )
+{
+str = (env)-&gt;NewStringUTF(sa[i] );
+(env)-&gt;SetObjectArrayElement(args, i, str);
+}
+return args;
+}</p>
+
+<p>//返回一个结构,这里返回一个硬盘信息的简单结构类型
+JNIEXPORT jobject JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_getStruct
+(JNIEnv <em>env, jobject obj)
+{
+/**//</em> 下面为获取到Java中对应的实例类中的变量*/</p>
+
+<p>//获取Java中的实例类
+jclass objectClass = (env)-&gt;FindClass(&ldquo;com/sundy/jnidemo/DiskInfo&rdquo;);</p>
+
+<p>//获取类中每一个变量的定义
+//名字
+jfieldID str = (env)-&gt;GetFieldID(objectClass,&ldquo;name&rdquo;,&ldquo;Ljava/lang/String;&rdquo;);
+//序列号
+jfieldID ival = (env)-&gt;GetFieldID(objectClass,&ldquo;serial&rdquo;,&ldquo;I&rdquo;);
+//给每一个实例的变量付值
+(env)-&gt;SetObjectField(obj,str,(env)-&gt;NewStringUTF(&ldquo;my name is D:&rdquo;));
+(env)-&gt;SetShortField(obj,ival,10);</p>
+
+<p>return obj;
+}</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-18T16:29:57+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/10/18/jni%25e6%258a%2580%25e6%259c%25af%25e5%2588%259d%25e6%25ad%25a5%25e4%25b8%2580/">
+		
+			JNI技术初步(二)</a>
+	</h2>
+	<div class="entry-content">
+		<p><span style="FONT-SIZE: 10pt"><strong></strong></span></p>
+
+<p><strong><span style="FONT-SIZE: 10pt">在C/C++中实现本地方法</span></strong></p>
+
+<p>生成C/C++头文件之后，你就需要写头文件对应的本地方法。注意：所有的本地方法的第一个参数都是指向<em>JNIEnv</em>结构的。这个结构是用来调用JNI函数的。第二个参数jclass的意义，要看方法是不是静态的（static）或者实例（Instance）的。前者，jclass代表一个类对象的引用，而后者是被调用的方法所属对象的引用。</p>
+
+<p><span style="color: #000000; background-color: #ee82ee;">返回值和参数类型</span>根据等价约定映射到本地C/C++类型，如表<span style="color: #0000ff;">JNI类型映射</span>所示。有些类型，在本地代码中可直接使用，而其他类型只有通过JNI调用操作。</p>
+
+<p align="center"><strong>表A</strong></p>
+
+
+
+
+<div>
+<table class="text1" border="1" cellspacing="0" cellpadding="0" width="544">
+<tbody>
+<tr>
+<td width="131" valign="top"><strong>Java</strong><strong>类型</strong></td>
+<td width="149" valign="top"><strong>本地类型</strong></td>
+<td width="256" valign="top"><strong>描述</strong></td>
+</tr>
+<tr>
+<td width="131" valign="top">boolean</td>
+<td width="149" valign="top">jboolean</td>
+<td width="256" valign="top">C/C++8位整型</td>
+</tr>
+<tr>
+<td width="131" valign="top">byte</td>
+<td width="149" valign="top">jbyte</td>
+<td width="256" valign="top">C/C++带符号的8位整型</td>
+</tr>
+<tr>
+<td width="131" valign="top">char</td>
+<td width="149" valign="top">jchar</td>
+<td width="256" valign="top">C/C++无符号的16位整型</td>
+</tr>
+<tr>
+<td width="131" valign="top">short</td>
+<td width="149" valign="top">jshort</td>
+<td width="256" valign="top">C/C++带符号的16位整型</td>
+</tr>
+<tr>
+<td width="131" valign="top">int</td>
+<td width="149" valign="top">jint</td>
+<td width="256" valign="top">C/C++带符号的32位整型</td>
+</tr>
+<tr>
+<td width="131" valign="top">long</td>
+<td width="149" valign="top">jlong</td>
+<td width="256" valign="top">C/C++带符号的64位整型e</td>
+</tr>
+<tr>
+<td width="131" valign="top">float</td>
+<td width="149" valign="top">jfloat</td>
+<td width="256" valign="top">C/C++32位浮点型</td>
+</tr>
+<tr>
+<td width="131" valign="top">double</td>
+<td width="149" valign="top">jdouble</td>
+<td width="256" valign="top">C/C++64位浮点型</td>
+</tr>
+<tr>
+<td width="131" valign="top">Object</td>
+<td width="149" valign="top">jobject</td>
+<td width="256" valign="top">任何Java对象，或者没有对应java类型的对象</td>
+</tr>
+<tr>
+<td width="131" valign="top">Class</td>
+<td width="149" valign="top">jclass</td>
+<td width="256" valign="top">Class对象</td>
+</tr>
+<tr>
+<td width="131" valign="top">String</td>
+<td width="149" valign="top">jstring</td>
+<td width="256" valign="top">字符串对象</td>
+</tr>
+<tr>
+<td width="131" valign="top">Object[]</td>
+<td width="149" valign="top">jobjectArray</td>
+<td width="256" valign="top">任何对象的数组</td>
+</tr>
+<tr>
+<td width="131" valign="top">boolean[]</td>
+<td width="149" valign="top">jbooleanArray</td>
+<td width="256" valign="top">布尔型数组</td>
+</tr>
+<tr>
+<td width="131" valign="top">byte[]</td>
+<td width="149" valign="top">jbyteArray</td>
+<td width="256" valign="top">比特型数组</td>
+</tr>
+<tr>
+<td width="131" valign="top">char[]</td>
+<td width="149" valign="top">jcharArray</td>
+<td width="256" valign="top">字符型数组</td>
+</tr>
+<tr>
+<td width="131" valign="top">short[]</td>
+<td width="149" valign="top">jshortArray</td>
+<td width="256" valign="top">短整型数组</td>
+</tr>
+<tr>
+<td width="131" valign="top">int[]</td>
+<td width="149" valign="top">jintArray</td>
+<td width="256" valign="top">整型数组</td>
+</tr>
+<tr>
+<td width="131" valign="top">long[]</td>
+<td width="149" valign="top">jlongArray</td>
+<td width="256" valign="top">长整型数组</td>
+</tr>
+<tr>
+<td width="131" valign="top">float[]</td>
+<td width="149" valign="top">jfloatArray</td>
+<td width="256" valign="top">浮点型数组</td>
+</tr>
+<tr>
+<td width="131" valign="top">double[]</td>
+<td width="149" valign="top">jdoubleArray</td>
+<td width="256" valign="top">双浮点型数组</td>
+</tr>
+</tbody></table>
+</div>
+
+
+<p><p align="center">※     <span style="color: #000000;">JNI类型映射
+</span>
+<h5>使用数组：</h5>
+JNI通过JNIEnv提供的操作Java数组的功能。它提供了两个函数：一个是操作java的简单型数组的，另一个是操作对象类型数组的。</p>
+
+<p>因为速度的原因，简单类型的数组作为指向本地类型的指针暴露给本地代码。因此，它们能作为常规的数组存取。这个指针是指向实际的Java数组或者Java数组的拷贝的指针。另外，数组的布置保证匹配本地类型。</p>
+
+<p>为了存取Java简单类型的数组，你就要要使用<em>GetXXXArrayElements</em>函数（见<strong>表</strong><strong>B</strong>），XXX代表了数组的类型。这个函数把Java数组看成参数，返回一个指向对应的本地类型的数组的指针。
+<p align="center"><strong>表B</strong></p></p>
+
+<p><div>
+<table class="text1" border="1" cellspacing="0" cellpadding="0" width="535">
+<tbody>
+<tr>
+<td width="193" valign="top"><strong>函数</strong></td>
+<td width="113" valign="top"><strong>Java</strong><strong>数组类型</strong></td>
+<td width="90" valign="top"><strong>本地类型</strong></td>
+</tr>
+<tr>
+<td width="193" valign="top">GetBooleanArrayElements</td>
+<td width="113" valign="top">jbooleanArray</td>
+<td width="90" valign="top">jboolean</td>
+</tr>
+<tr>
+<td width="193" valign="top">GetByteArrayElements</td>
+<td width="113" valign="top">jbyteArray</td>
+<td width="90" valign="top">jbyte</td>
+</tr>
+<tr>
+<td width="193" valign="top">GetCharArrayElements</td>
+<td width="113" valign="top">jcharArray</td>
+<td width="90" valign="top">jchar</td>
+</tr>
+<tr>
+<td width="193" valign="top">GetShortArrayElements</td>
+<td width="113" valign="top">jshortArray</td>
+<td width="90" valign="top">jshort</td>
+</tr>
+<tr>
+<td width="193" valign="top">GetIntArrayElements</td>
+<td width="113" valign="top">jintArray</td>
+<td width="90" valign="top">jint</td>
+</tr>
+<tr>
+<td width="193" valign="top">GetLongArrayElements</td>
+<td width="113" valign="top">jlongArray</td>
+<td width="90" valign="top">jlong</td>
+</tr>
+<tr>
+<td width="193" valign="top">GetFloatArrayElements</td>
+<td width="113" valign="top">jfloatArray</td>
+<td width="90" valign="top">jfloat</td>
+</tr>
+<tr>
+<td width="193" valign="top">GetDoubleArrayElements</td>
+<td width="113" valign="top">jdoubleArray</td>
+<td width="90" valign="top">jdouble</td>
+</tr>
+</tbody></table>
+</div>
+<p align="center">JNI数组存取函数</p></p>
+
+<p>当你对数组的存取完成后，要确保调用相应的<em>ReleaseXXXArrayElements</em>函数，参数是对应Java数组和<em>GetXXXArrayElements</em>返回的指针。如果必要的话，这个释放函数会复制你做的任何变化（这样它们就反射到java数组），然后释放所有相关的资源。</p>
+
+<p>为了使用java对象的数组，你必须使用<em>GetObjectArrayElement</em>函数和<em>SetObjectArrayElement</em>函数，分别去get，set数组的元素。<em>GetArrayLength</em>函数会返回数组的长度。
+<h5>使用对象</h5>
+JNI提供的另外一个功能是在本地代码中使用Java对象。通过使用合适的JNI函数，你可以创建Java对象，get、set 静态(static)和实例（instance）的域，调用静态(static)和实例（instance）函数。JNI通过ID识别域和方法，一个域或方法的ID是任何处理域和方法的函数的必须参数。</p>
+
+<p><strong>表C</strong>列出了用以得到静态(static)和实例（instance）的域与方法的JNI函数。每个函数接受（作为参数）域或方法的类，它们的名称，符号和它们对应返回的<em>jfieldID</em>或<em>jmethodID</em><em>。</em>
+<p align="center"><strong>表C</strong></p></p>
+
+<p><div>
+<table class="text1" border="1" cellspacing="0" cellpadding="0" width="535">
+<tbody>
+<tr>
+<td width="168" valign="top"><strong>函数</strong></td>
+<td width="217" valign="top">描述</td>
+</tr>
+<tr>
+<td width="168" valign="top">GetFieldID</td>
+<td width="217" valign="top">得到一个实例的域的ID</td>
+</tr>
+<tr>
+<td width="168" valign="top">GetStaticFieldID</td>
+<td width="217" valign="top">得到一个静态的域的ID</td>
+</tr>
+<tr>
+<td width="168" valign="top">GetMethodID</td>
+<td width="217" valign="top">得到一个实例的方法的ID</td>
+</tr>
+<tr>
+<td width="168" valign="top">GetStaticMethodID</td>
+<td width="217" valign="top">得到一个静态方法的ID</td>
+</tr>
+</tbody></table>
+</div>
+<p align="center">※域和方法的函数</p></p>
+
+<p>如果你有了一个类的实例，它就可以通过方法<em>GetObjectClass</em>得到，或者如果你没有这个类的实例，可以通过<em>FindClass</em>得到。符号是从域的类型或者方法的参数，返回值得到字符串，如<strong>表</strong><strong>D</strong>所示。
+<p align="center"><strong>表D</strong></p></p>
+
+<p><div>
+<table class="text1" border="1" cellspacing="0" cellpadding="0" width="535">
+<tbody>
+<tr>
+<td width="103" valign="top"><strong>Java </strong><strong>类型</strong></td>
+<td width="426" valign="top"><strong>符号</strong></td>
+</tr>
+<tr>
+<td width="103" valign="top">boolean</td>
+<td width="426" valign="top">Z</td>
+</tr>
+<tr>
+<td width="103" valign="top">byte</td>
+<td width="426" valign="top">B</td>
+</tr>
+<tr>
+<td width="103" valign="top">char</td>
+<td width="426" valign="top">C</td>
+</tr>
+<tr>
+<td width="103" valign="top">short</td>
+<td width="426" valign="top">S</td>
+</tr>
+<tr>
+<td width="103" valign="top">int</td>
+<td width="426" valign="top">I</td>
+</tr>
+<tr>
+<td width="103" valign="top">long</td>
+<td width="426" valign="top">L</td>
+</tr>
+<tr>
+<td width="103" valign="top">float</td>
+<td width="426" valign="top">F</td>
+</tr>
+<tr>
+<td width="103" valign="top">double</td>
+<td width="426" valign="top">D</td>
+</tr>
+<tr>
+<td width="103" valign="top">void</td>
+<td width="426" valign="top">V</td>
+</tr>
+<tr>
+<td width="103" valign="top">objects对象</td>
+<td width="426" valign="top">Lfully-qualified-class-name;L类名</td>
+</tr>
+<tr>
+<td width="103" valign="top">Arrays数组</td>
+<td width="426" valign="top">[array-type [数组类型</td>
+</tr>
+<tr>
+<td width="103" valign="top">methods方法</td>
+<td width="426" valign="top">(argument-types)return-type(参数类型)返回类型</td>
+</tr>
+</tbody></table>
+</div>
+<p align="center">※确定域和方法的符号</p></p>
+
+<p>下面我们来看看，如果通过使用数组和对象，从C++中的获取到Java中的DiskInfo 类对象，并返回一个DiskInfo数组:
+<div style="padding-right: 5.4pt; padding-left: 5.4pt; background: #e6e6e6; padding-bottom: 4px; width: 98%; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" /><span style="color: #008000;">//</span><span style="color: #008000;">返回一个结构数组，返回一个硬盘信息的结构数组</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" /></span><span style="color: #000000;">JNIEXPORT jobjectArray JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_getStructArray
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />(JNIEnv </span><span style="color: #000000;"><em></span><span style="color: #000000;">env, jobject _obj)
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedBlockStart.gif" alt="" align="top" /><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ContractedBlock.gif" alt="" align="top" /></span><span id="Codehighlighter1_142_1059_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff"><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/dot.gif" alt="" /></span><span id="Codehighlighter1_142_1059_Open_Text"><span style="color: #000000;">{
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">申明一个object数组 </span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    jobjectArray args </span><span style="color: #000000;">=</span><span style="color: #000000;"> </span><span style="color: #000000;">0</span><span style="color: #000000;">;
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />  <br/>
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">数组大小</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    jsize        len </span><span style="color: #000000;">=</span><span style="color: #000000;"> </span><span style="color: #000000;">5</span><span style="color: #000000;">;
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">获取object所属类,一般为ava/lang/Object就可以了</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    jclass objClass </span><span style="color: #000000;">=</span><span style="color: #000000;"> (env)</span><span style="color: #000000;">-&gt;</span><span style="color: #000000;">FindClass(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">java/lang/Object</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">新建object数组</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    args </span><span style="color: #000000;">=</span><span style="color: #000000;"> (env)</span><span style="color: #000000;">-&gt;</span><span style="color: #000000;">NewObjectArray(len, objClass, </span><span style="color: #000000;">0</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedSubBlockStart.gif" alt="" align="top" /><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ContractedSubBlock.gif" alt="" align="top" />    </span><span id="Codehighlighter1_380_405_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">/**/</span><span id="Codehighlighter1_380_405_Open_Text"><span style="color: #008000;">/</em></span><span style="color: #008000;"> 下面为获取到Java中对应的实例类中的变量</span><span style="color: #008000;"><em>/</span></span><span style="color: #000000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">获取Java中的实例类</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    jclass objectClass </span><span style="color: #000000;">=</span><span style="color: #000000;"> (env)</span><span style="color: #000000;">-&gt;</span><span style="color: #000000;">FindClass(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">com/sundy/jnidemo/DiskInfo</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />  <br/>
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">获取类中每一个变量的定义
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">名字</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    jfieldID str </span><span style="color: #000000;">=</span><span style="color: #000000;"> (env)</span><span style="color: #000000;">-&gt;</span><span style="color: #000000;">GetFieldID(objectClass,</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">name</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">,</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">Ljava/lang/String;</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">序列号</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    jfieldID ival </span><span style="color: #000000;">=</span><span style="color: #000000;"> (env)</span><span style="color: #000000;">-&gt;</span><span style="color: #000000;">GetFieldID(objectClass,</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">serial</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">,</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">I</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">给每一个实例的变量付值，并且将实例作为一个object，添加到objcet数组中</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">for</span><span style="color: #000000;">(</span><span style="color: #0000ff;">int</span><span style="color: #000000;">  i</span><span style="color: #000000;">=</span><span style="color: #000000;">0</span><span style="color: #000000;">; i </span><span style="color: #000000;">&lt;</span><span style="color: #000000;"> len; i</span><span style="color: #000000;">++</span><span style="color: #000000;"> )
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedSubBlockStart.gif" alt="" align="top" /><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ContractedSubBlock.gif" alt="" align="top" />    </span><span id="Codehighlighter1_738_1027_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff"><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/dot.gif" alt="" /></span><span id="Codehighlighter1_738_1027_Open_Text"><span style="color: #000000;">{
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        </span><span style="color: #008000;">//</span><span style="color: #008000;">给每一个实例的变量付值</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">        jstring jstr </span><span style="color: #000000;">=</span><span style="color: #000000;"> WindowsTojstring(env,</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">我的磁盘名字是 D:</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        </span><span style="color: #008000;">//</span><span style="color: #008000;">(env)-&gt;SetObjectField(<em>obj,str,(env)-&gt;NewStringUTF(&ldquo;my name is D:&rdquo;));</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">        (env)</span><span style="color: #000000;">-&gt;</span><span style="color: #000000;">SetObjectField(</em>obj,str,jstr);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        (env)</span><span style="color: #000000;">-&gt;</span><span style="color: #000000;">SetShortField(<em>obj,ival,</span><span style="color: #000000;">10</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        </span><span style="color: #008000;">//</span><span style="color: #008000;">添加到objcet数组中</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">        (env)</span><span style="color: #000000;">-&gt;</span><span style="color: #000000;">SetObjectArrayElement(args, i, </em>obj);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" alt="" align="top" />    }</span></span><span style="color: #000000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">返回object数组</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">return</span><span style="color: #000000;"> args;
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedBlockEnd.gif" alt="" align="top" /> }</span></span></div>
+</div>
+<strong><span style="FONT-SIZE: 10pt">Java 测试native代码</span></strong>
+这没有什么多说的，看代码吧
+<div style="padding-right: 5.4pt; padding-left: 5.4pt; background: #e6e6e6; padding-bottom: 4px; width: 98%; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" /><span style="color: #008000;">//</span><span style="color: #008000;">主测试程序</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedBlockStart.gif" alt="" align="top" /><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ContractedBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> </span><span style="color: #0000ff;">static</span><span style="color: #000000;"> </span><span style="color: #0000ff;">void</span><span style="color: #000000;"> main(String[] args) </span><span id="Codehighlighter1_48_1352_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff"><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/dot.gif" alt="" /></span><span id="Codehighlighter1_48_1352_Open_Text"><span style="color: #000000;">{
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        ChangeMethodFromJni changeJni </span><span style="color: #000000;">=</span><span style="color: #000000;"> </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> ChangeMethodFromJni();
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        </span><span style="color: #008000;">//</span><span style="color: #008000;">输入常用的数值类型(string int boolean)</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />                .println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;输入常用的数值类型(string int boolean)&mdash;&mdash;&mdash;&ndash;</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        changeJni.displayParms(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">Hello World!</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">, </span><span style="color: #000000;">100</span><span style="color: #000000;">, </span><span style="color: #0000ff;">true</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        </span><span style="color: #008000;">//</span><span style="color: #008000;">调用一个静态方法</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;调用一个静态方法&mdash;&mdash;&mdash;&ndash;</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        </span><span style="color: #0000ff;">int</span><span style="color: #000000;"> ret </span><span style="color: #000000;">=</span><span style="color: #000000;"> changeJni.add(</span><span style="color: #000000;">12</span><span style="color: #000000;">, </span><span style="color: #000000;">20</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">The result is: </span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;"> </span><span style="color: #000000;">+</span><span style="color: #000000;"> String.valueOf(ret));
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        </span><span style="color: #008000;">//</span><span style="color: #008000;">输入一个数组</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;输入一个数组&mdash;&mdash;&mdash;&ndash;</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedSubBlockStart.gif" alt="" align="top" /><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ContractedSubBlock.gif" alt="" align="top" />        boolean[] blList </span><span style="color: #000000;">=</span><span style="color: #000000;"> </span><span style="color: #0000ff;">new</span><span style="color: #000000;"> boolean[] </span><span id="Codehighlighter1_571_591_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff"><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/dot.gif" alt="" /></span><span id="Codehighlighter1_571_591_Open_Text"><span style="color: #000000;">{ </span><span style="color: #0000ff;">true</span><span style="color: #000000;">, </span><span style="color: #0000ff;">false</span><span style="color: #000000;">, </span><span style="color: #0000ff;">true</span><span style="color: #000000;"> }</span></span><span style="color: #000000;">;
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        changeJni.setArray(blList);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        </span><span style="color: #008000;">//</span><span style="color: #008000;">返回一个字符串数组</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;返回一个字符串数组&mdash;&mdash;&mdash;&ndash;</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        String[] strList </span><span style="color: #000000;">=</span><span style="color: #000000;"> changeJni.getStringArray();
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedSubBlockStart.gif" alt="" align="top" /><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ContractedSubBlock.gif" alt="" align="top" />        </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> i </span><span style="color: #000000;">=</span><span style="color: #000000;"> </span><span style="color: #000000;">0</span><span style="color: #000000;">; i </span><span style="color: #000000;">&lt;</span><span style="color: #000000;"> strList.length; i</span><span style="color: #000000;">++</span><span style="color: #000000;">) </span><span id="Codehighlighter1_795_832_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff"><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/dot.gif" alt="" /></span><span id="Codehighlighter1_795_832_Open_Text"><span style="color: #000000;">{
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />            System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.print(strList[i]);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" alt="" align="top" />        }</span></span><span style="color: #000000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println();
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;返回一个结构&mdash;&mdash;&mdash;&ndash;</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        </span><span style="color: #008000;">//</span><span style="color: #008000;">返回一个结构</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">        DiskInfo disk </span><span style="color: #000000;">=</span><span style="color: #000000;"> changeJni.getStruct();
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">name:</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;"> </span><span style="color: #000000;">+</span><span style="color: #000000;"> disk.name);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">Serial:</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;"> </span><span style="color: #000000;">+</span><span style="color: #000000;"> disk.serial);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        </span><span style="color: #008000;">//</span><span style="color: #008000;">返回一个结构数组</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;返回一个结构数组 &mdash;&mdash;&mdash;&ndash;</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;">);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />        DiskInfo[] diskList </span><span style="color: #000000;">=</span><span style="color: #000000;"> changeJni.getStructArray();
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedSubBlockStart.gif" alt="" align="top" /><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ContractedSubBlock.gif" alt="" align="top" />        </span><span style="color: #0000ff;">for</span><span style="color: #000000;"> (</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> i </span><span style="color: #000000;">=</span><span style="color: #000000;"> </span><span style="color: #000000;">0</span><span style="color: #000000;">; i </span><span style="color: #000000;">&lt;</span><span style="color: #000000;"> diskList.length; i</span><span style="color: #000000;">++</span><span style="color: #000000;">) </span><span id="Codehighlighter1_1238_1348_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff"><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/dot.gif" alt="" /></span><span id="Codehighlighter1_1238_1348_Open_Text"><span style="color: #000000;">{
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />            System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">name:</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;"> </span><span style="color: #000000;">+</span><span style="color: #000000;"> diskList[i].name);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />            System.</span><span style="color: #0000ff;">out</span><span style="color: #000000;">.println(</span><span style="color: #000000;">&ldquo;</span><span style="color: #000000;">Serial:</span><span style="color: #000000;">&rdquo;</span><span style="color: #000000;"> </span><span style="color: #000000;">+</span><span style="color: #000000;"> diskList[i].serial);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedSubBlockEnd.gif" alt="" align="top" />        }</span></span><span style="color: #000000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedBlockEnd.gif" alt="" align="top" />    }</span></span></div>
+</div>
+注:本程序在VS2003,eclipse (jse5.0) winxp sp2编译通过
+<h5>定义Native Java类：</h5>
+如果你习惯了使用JNI，你就不会觉得它难了。既然本地方法是由其他语言实现的，它们在Java中没有函数体。但是，所有本地代码必须用本地关键词声明，成为Java类的成员。假设我们在C++中有这么一个结构，它用来描述硬盘信息：
+<div style="padding-right: 5.4pt; padding-left: 5.4pt; background: #e6e6e6; padding-bottom: 4px; width: 98%; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" /><span style="color: #008000;">//</span><span style="color: #008000;">硬盘信息</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedBlockStart.gif" alt="" align="top" /><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ContractedBlock.gif" alt="" align="top" /></span><span style="color: #0000ff;">struct</span><span style="color: #000000;">  </span><span id="Codehighlighter1_15_47_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff"><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/dot.gif" alt="" /></span><span id="Codehighlighter1_15_47_Open_Text"><span style="color: #000000;">{
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #0000ff;">char</span><span style="color: #000000;"> name[</span><span style="color: #000000;">256</span><span style="color: #000000;">];
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #0000ff;">int</span><span style="color: #000000;"> serial;
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedBlockEnd.gif" alt="" align="top" />}</span></span><span style="color: #000000;">DiskInfo;</span></div>
+</div>
+那么我们需要在Java中定义一个类来与之匹配，声明可以写成这样：
+<div style="padding-right: 5.4pt; padding-left: 5.4pt; background: #e6e6e6; padding-bottom: 4px; width: 98%; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedBlockStart.gif" alt="" align="top" /><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ContractedBlock.gif" alt="" align="top" /><span style="color: #0000ff;">class</span><span style="color: #000000;"> DiskInfo </span><span id="Codehighlighter1_15_72_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff"><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/dot.gif" alt="" /></span><span id="Codehighlighter1_15_72_Open_Text"><span style="color: #000000;">{
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">名字</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> String name;
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">序列号</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/InBlock.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> </span><span style="color: #0000ff;">int</span><span style="color: #000000;"> serial;
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedBlockEnd.gif" alt="" align="top" />}</span></span></div>
+</div>
+在这个类中，申明一些Native的本地方法，来测试方法参数的传递，分别定义了一些函数，用来传递结构或者结构数组，具体定义如下面代码：
+<div style="padding-right: 5.4pt; padding-left: 5.4pt; background: #e6e6e6; padding-bottom: 4px; width: 98%; word-break: break-all; padding-top: 4px; border: windowtext 0.5pt solid;">
+<div><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ExpandedBlockStart.gif" alt="" align="top" /><img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/ContractedBlock.gif" alt="" align="top" /><span id="Codehighlighter1_0_47_Closed_Text" style="BORDER-RIGHT: #808080 1px solid; BORDER-TOP: #808080 1px solid; DISPLAY: none; BORDER-LEFT: #808080 1px solid; BORDER-BOTTOM: #808080 1px solid; BACKGROUND-COLOR: #ffffff">/**/</span><span id="Codehighlighter1_0_47_Open_Text"><span style="color: #008000;">/</em></span><span style="color: #008000;"><strong><strong><strong><strong><strong><strong><strong><strong><em> 定义本地方法 </em></strong></strong></strong></strong></strong></strong></strong></strong><em>*</span><span style="color: #008000;"></em>/</span></span><span style="color: #000000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">输入常用的数值类型(Boolean,Byte,Char,Short,Int,Float,Double)</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> native </span><span style="color: #0000ff;">void</span><span style="color: #000000;"> displayParms(String showText, </span><span style="color: #0000ff;">int</span><span style="color: #000000;"> i, boolean bl);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">调用一个静态方法</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> native </span><span style="color: #0000ff;">int</span><span style="color: #000000;"> add(</span><span style="color: #0000ff;">int</span><span style="color: #000000;"> a, </span><span style="color: #0000ff;">int</span><span style="color: #000000;"> b);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">输入一个数组</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> native </span><span style="color: #0000ff;">void</span><span style="color: #000000;"> setArray(boolean[] blList);
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">返回一个字符串数组</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> native String[] getStringArray();
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">返回一个结构</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> native DiskInfo getStruct();
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" />    </span><span style="color: #008000;">//</span><span style="color: #008000;">返回一个结构数组</span><span style="color: #008000;">
+<img style="CURSOR: pointer" onclick="window.open(this.src);" src="http://www.cnweblog.com/Images/OutliningIndicators/None.gif" alt="" align="top" /></span><span style="color: #000000;">    </span><span style="color: #0000ff;">public</span><span style="color: #000000;"> native DiskInfo[] getStructArray();</span></div>
+</div>
+<strong><span style="FONT-SIZE: 10pt">编译生成C/C++头文件</span></strong></p>
+
+<p>定义好了Java类之后，接下来就要写本地代码。本地方法符号提供一个满足约定的头文件，使用<a href="http://java.sun.com/j2se/1.3/docs/tooldocs/solaris/javah.html">Java工具Javah</a>可以很容易地创建它而不用手动去创建。你对Java的class文件使用javah命令，就会为你生成一个对应的C/C++头文件。
+1、在控制台下进入工作路径，本工程路径为：E:\work\java\workspace\JavaJni。
+2、运行javah 命令：javah -classpath E:\work\java\workspace\JavaJni com.sundy.jnidemo ChangeMethodFromJni
+本文生成的C/C++头文件名为: com_sundy_jnidemo_ChangeMethodFromJni.h</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-18T16:24:55+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/10/18/jni%25e6%258a%2580%25e6%259c%25af%25e5%2588%259d%25e6%25ad%25a5/">
+		
+			JNI技术初步(一)</a>
+	</h2>
+	<div class="entry-content">
+		<p>最近做到一个windows应用时需要调用系统api，苦于java实在是初学，因而不得不上网找些资料，下面即是个人认为不错的技术文章，不仅包括了dll与java的联用，在通信方面也做了比较详细的介绍。幸好当初做vc时接触过dll，觉得jni还是比较简单的。但回过头来想想，恐怕不会真有很多人去拿java做系统应用吧？故对此技术也就再没有深究。</p>
+
+<p>按照惯例，首先来看wiki：</p>
+
+<p><em>JNI是Java Native Interface的缩写。从Java 1.1开始，Java Native Interface (JNI)标准成为java平台的一部分，它允许Java代码和其他语言写的代码进行交互。JNI一开始是为了本地已编译语言，尤其是C和C++而设计的，但是它并不妨碍你使用其他语言，只要调用约定受支持就可以了。
+</em><em>使用java与本地已编译的代码交互，通常会丧失平台可移植性。但是，有些情况下这样做是可以接受的，甚至是必须的，比如，使用一些旧的库，与硬件、操作系统进行交互，或者为了提高程序的性能。JNI标准至少保证本地代码能工作在任何Java 虚拟机实现下。</em></p>
+
+<p><span style="font-family: Verdana;"><strong>一、JNI（Java Native Interface）的设计目的</strong></span></p>
+
+<div>
+<div><span style="font-family: Verdana;">·The standard Java class library may not support the platform-dependent features needed by your application.
+·You may already have a library or application written in another programming language and you wish to make it accessible to Java applications
+·You may want to implement a small portion of time-critical code in a lower-level programming language, such as assembly, and then have your Java application call these functions
+<strong>二、JNI（Java Native Interface）的书写步骤</strong></span></div>
+<div><span style="font-family: Verdana;">·编写带有native声明的方法的java类
+·使用javac命令编译所编写的java类
+·使用javah ?jni java类名生成扩展名为h的头文件
+·使用C/C++实现本地方法
+·将C/C++编写的文件生成动态连接库</span></div>
+<span style="font-family: Verdana;">·ok
+1) 编写java程序：
+这里以HelloWorld为例。
+代码1：
+class HelloWorld {
+public native void displayHelloWorld();
+
+static {
+System.loadLibrary(&#8220;hello&#8221;);
+}
+
+public static void main(String[] args) {
+new HelloWorld().displayHelloWorld();
+}
+}
+声明native方法：如果你想将一个方法做为一个本地方法的话，那么你就必须声明改方法为native的，并且不能实现。其中方法的参数和返回值在后面讲述。
+Load动态库：System.loadLibrary(&#8220;hello&#8221;);加载动态库（我们可以这样理解：我们的方法displayHelloWorld()没有实现，但是我们在下面就直接使用了，所以必须在使用之前对它进行初始化）这里一般是以static块进行加载的。同时需要注意的是System.loadLibrary();的参数“hello”是动态库的名字。
+main()方法
+2) 编译没有什么好说的了
+javac HelloWorld.java
+3) 生成扩展名为h的头文件
+javah ?jni HelloWorld
+头文件的内容：
+/* DO NOT EDIT THIS FILE - it is machine generated */
+＃i nclude
+/* Header for class HelloWorld */
+
+#ifndef _Included_HelloWorld
+#define _Included_HelloWorld
+#ifdef __cplusplus
+extern &#8220;C&#8221; {
+#endif
+/*
+* Class: HelloWorld
+* Method: displayHelloWorld
+* Signature: ()V
+*/
+JNIEXPORT void JNICALL Java_HelloWorld_displayHelloWorld
+(JNIEnv *, jobject);
+
+#ifdef __cplusplus
+}
+#endif
+#endif
+（这里我们可以这样理解：这个h文件相当于我们在java里面的接口，这里声明了一个Java_HelloWorld_displayHelloWorld (JNIEnv *, jobject);方法，然后在我们的本地方法里面实现这个方法，也就是说我们在编写C/C++程序的时候所使用的方法名必须和这里的一致）。
+4) 编写本地方法
+实现和由javah命令生成的头文件里面声明的方法名相同的方法。
+代码2：
+1 ＃i nclude
+2 ＃i nclude &#8220;HelloWorld.h&#8221;
+3 ＃i nclude
+
+4 JNIEXPORT void JNICALL Java_HelloWorld_displayHelloWorld(JNIEnv *env, jobject obj)
+{
+printf(&#8220;Hello world!\n&#8221;);
+return;
+}
+注意代码2中的第1行，需要将jni.h（该文件可以在%JAVA_HOME%/include文件夹下面找到）文件引入，因为在程序中的JNIEnv、jobject等类型都是在该头文件中定义的；另外在第2行需要将HelloWorld.h头文件引入（我是这么理解的：相当于我们在编写java程序的时候，实现一个接口的话需要声明才可以，这里就是将HelloWorld.h头文件里面声明的方法加以实现。当然不一定是这样）。然后保存为HelloWorldImpl.c就ok了。
+5) 生成动态库
+这里以在Windows中为例，需要生成dll文件。在保存HelloWorldImpl.c文件夹下面，使用VC的编译器cl成。
+cl -I%java_home%\include -I%java_home%\include\win32 -LD HelloWorldImp.c -Fehello.dll
+注意：生成的dll文件名在选项-Fe后面配置，这里是hello，因为在HelloWorld.java文件中我们loadLibary的时候使用的名字是hello。当然这里修改之后那里也需要修改。另外需要将-I%java_home%\include -I%java_home%\include\win32参数加上，因为在第四步里面编写本地方法的时候引入了jni.h文件。
+6) 运行程序
+java HelloWorld就ok。^_^
+<strong>三、JNI（Java Native Interface）的简要使用例子</strong>
+
+下面是一个简单的例子实现打印一句话的功能，但是用的c的printf最终实现。一般提供给java的jni接口包括一个so文件（封装了c函数的实现）和一个java文件（需要调用path的类）。
+
+1． JNI的目的是使java方法中能够调用c实现的一些函数，比如以下的java类，就需要调用一个本地函数testjni（一般声明为private native类型），首先需要创建文件weiqiong.java，内容如下：
+class weiqiong
+{
+static
+{
+System.loadLibrary(&#8220;testjni&#8221;);//载入静态库，test函数在其中实现
+}
+private native void testjni(); //声明本地调用
+public void test()
+{
+testjni();
+}
+public static void main(String args[])
+{
+weiqiong haha = new weiqiong();
+haha.test();
+}
+}
+
+2．然后执行javac weiqiong.java，如果没有报错，会生成一个weiqiong.class。
+
+3．然后执行javah weiqiong，会生成一个文件weiqiong.h文件，其中有一个函数的声明如下：
+JNIEXPORT void JNICALL Java_weiqiong_testjni
+(JNIEnv *, jobject);
+
+4．创建文件testjni.c将上面那个函数实现，内容如下：
+＃i nclude
+＃i nclude
+JNIEXPORT void JNICALL Java_weiqiong_testjni
+(JNIEnv *env, jobject obj)
+{
+printf(&#8220;haha&#8212;&#8212;&#8212;go into c!!!\n&#8221;);
+}
+
+5．为了生成.so文件，创建makefile文件如下：
+libtestjni.so:testjni.o makefile
+gcc -Wall -rdynamic -shared -o libtestjni.so testjni.o
+testjni.o:testjni.c weiqiong.h
+gcc -Wall -c testjni.c -I./ -I/usr/java/j2sdk1.4.0/include -I/usr/java/j2sdk1.4.0/include/linux
+cl:
+rm -rf *.o *.so
+注意：gcc前面是tab空，j2sdk的目录根据自己装的j2sdk的具体版本来写，生成的so文件的名字必须是loadLibrary的参数名前加“lib”。
+
+6．export LD_LIBRARY_PATH=.，由此设置library路径为当前目录，这样java文件才能找到so文件。一般的做法是将so文件copy到本机的LD_LIBRARY_PATH目录下。
+
+7．执行java weiqiong，打印出结果：“haha&#8212;&#8212;&#8212;go into c!!!”
+
+<strong>四．JNI（Java Native Interface）调用中考虑的问题</strong>
+
+在首次使用JNI的时候有些疑问，后来在使用中一一解决，下面就是这些问题的备忘：
+
+1。 java和c是如何互通的？
+其实不能互通的原因主要是数据类型的问题，jni解决了这个问题，例如那个c文件中的jstring数据类型就是java传入的String对象，经过jni函数的转化就能成为c的char*。
+对应数据类型关系如下表：
+Java 类型 本地c类型 说明
+boolean jboolean 无符号，8 位
+byte jbyte 无符号，8 位
+char jchar 无符号，16 位
+short jshort 有符号，16 位
+int jint 有符号，32 位
+long jlong 有符号，64 位
+float jfloat 32 位
+double jdouble 64 位
+void void N/A
+
+JNI 还包含了很多对应于不同 Java 对象的引用类型如下图：
+2. 如何将java传入的String参数转换为c的char*，然后使用?
+java传入的String参数，在c文件中被jni转换为jstring的数据类型，在c文件中声明char* test，然后test = (char*)(*env)-&gt;GetStringUTFChars(env, jstring, NULL);注意：test使用完后，通知虚拟机平台相关代码无需再访问：(*env)-&gt;ReleaseStringUTFChars(env, jstring, test);
+
+3. 将c中获取的一个char*的buffer传递给java？
+这个char*如果是一般的字符串的话，作为string传回去就可以了。如果是含有’\0’的buffer，最好作为bytearray传出，因为可以制定copy的length，如果copy到string，可能到’\0’就截断了。
+有两种方式传递得到的数据：
+一种是在jni中直接new一个byte数组，然后调用函数(*env)-&gt;SetByteArrayRegion(env, bytearray, 0, len, buffer);将buffer的值copy到bytearray中，函数直接return bytearray就可以了。
+一种是return错误号，数据作为参数传出，但是java的基本数据类型是传值，对象是传递的引用，所以将这个需要传出的byte数组用某个类包一下，如下：
+class RetObj
+{
+public byte[] bytearray;
+}
+这个对象作为函数的参数retobj传出，通过如下函数将retobj中的byte数组赋值便于传出。代码如下：
+jclass cls;
+jfieldID fid;
+jbyteArray bytearray;
+bytearray = (*env)-&gt;NewByteArray(env,len);
+(*env)-&gt;SetByteArrayRegion(env, bytearray, 0, len, buffer);
+cls = (*env)-&gt;GetObjectClass(env, retobj);
+fid = (*env)-&gt;GetFieldID(env, cls, &#8220;retbytes&#8221;, &#8220;[B&#8221;]);
+(*env)-&gt;SetObjectField(env, retobj, fid, bytearray);
+
+4. 不知道占用多少空间的buffer，如何传递出去呢？
+在jni的c文件中new出空间，传递出去。java的数据不初始化，指向传递出去的空间即可。
+
+<strong>五．JNI中对JAVA传入数据的处理</strong>
+
+1． 如果传入的是bytearray的话，作如下处理得到buffer：
+char *tmpdata = (char*)(*env)-&gt;GetByteArrayElements(env, bytearray, NULL);
+(*env)-&gt;ReleaseByteArrayElements(env, bytearray, tmpdata, 0);
+
+ 
+
+ 
+
+</span></div>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-18T16:19:29+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/10/17/%25e5%25a6%2582%25e4%25bd%2595%25e6%2588%2590%25e4%25b8%25ba%25e6%258a%2580%25e6%259c%25af%25e9%25a2%2586%25e8%25a2%2596%25ef%25bc%259f/">
+		
+			如何成为技术领袖？</a>
+	</h2>
+	<div class="entry-content">
+		<p> 回家拿到10月的《Programmer》，上面就有寇卫东博士的一篇同题文章。</p>
+
+<p> 不得不说明的是，作为西电毕业的我国第一位<span style="color: #000000;">通讯与信息系统学</span>博士，寇卫东在我心目中不得不被惊为天人。事实上令人敬重的并不在于他特殊的博士头衔，而是他三十年传奇般的技术生涯。</p>
+
+<p> 在这位现任ibm软件大中华区总架构师看来，技术领袖所应具备的素质包含了5个维度：高、宽、深、时间和阅历，前三者都与个人的技术能力息息相关，接下来就是后天成长的经历和累积了。文章有一段话值得注意：“技术领袖，不是领导给的称号，而是靠自己的影响力建立起来的地位，影响力能够超出职位的限制，即便没有那个称号，也会有一批人尊重你并愿意跟随你”。事实上，无论是cto、技术总监或是首席科学家，“影响力”就几乎是这些头衔下面的坚实基础，而“影响力”又来自技术能力的支撑。</p>
+
+<p> 其实这一段时间以来都在寻找前辈们的足迹，可能是由于过分追捧技术的缘故，这些人往往被称为“天才”。博士头衔都不必多说，腾讯的张志东也有硕士学位，可见“天才”都需要更多的时间来充实自己，更何况剩下的这些“庸才”们了。</p>
+
+<p> 这大概也是我寻求考研之路的一个原因吧。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-17T22:03:46+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kao-yan-slash-bo/'>考研/bo?</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/10/09/%25e5%2586%25b3%25e5%25ae%259a%25e8%2580%2583%25e7%25a0%2594/">
+		
+			决定考研</a>
+	</h2>
+	<div class="entry-content">
+		<p>依照现在的情况来看，我觉得有必要再拿出至少三年的时间来继续学业，以便使自己更了解自己所钟爱的一切。</p>
+
+<p>因为我担心这些东西在将来可能的实际工作中是很难被获得的，况且这其中的某些观点和父母早已不谋而合。</p>
+
+<p>无论如何，15个月的倒计时就此开启。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-09T17:22:14+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kao-yan-slash-bo/'>考研/bo?</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/10/03/%25e5%259f%25ba%25e4%25ba%258ej2se%25e7%259a%2584%25e7%25a8%258b%25e5%25ba%258f%25e8%25ae%25be%25e8%25ae%25a1/">
+		
+			基于J2se的程序设计</a>
+	</h2>
+	<div class="entry-content">
+		<p>闲暇时候考虑着sccs重构的思路，其余时间就是java了。目前至少在j2se阶段，我认为c++/c的魅力还是要比其它语言大很多的，尽管从行业的角度来说，java携j2ee占据着主流，.net压根没碰过，就不好对这两方作一比较。</p>
+
+<p>不过截至目前的感觉是，jdk集成了太多的东西，就好比一棵树苗，在成长阶段给予了过多的束缚，其远景并不能使人太过看好。况且仅依据当下市场的需求就做出一些下意识的决定，这不能不说是太不冷静了。</p>
+
+<p>期中实习的题目是ATM模拟器和一个CLOCK模拟器，后者是当初和老师讨论过demo里面的一个相似物，或许就成了如今的创意&hellip;原物稍后即会放出。</p>
+
+<p>其实我还是喜欢php和vc。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-03T00:53:43+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/09/14/%25e4%25bf%25ae%25e6%25ad%25a3%25e5%259f%25ba%25e6%259c%25ac%25e7%25bb%2593%25e6%259d%259f%25ef%25bc%258c%25e8%258a%2582%25e6%2597%25a5%25e8%25ae%25a1%25e5%2588%2592%25e6%2590%2581%25e6%25b5%2585/">
+		
+			修正基本结束，节日计划搁浅</a>
+	</h2>
+	<div class="entry-content">
+		<p>利用在家短暂的2天时间基本完成了网站的整修工作，不过却错过了中秋节游戏专题的制作时间&hellip;因而此计划被迫中止，以后有什么节且闲下来了再说。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-14T17:15:03+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/09/13/%25e9%25a6%2596%25e9%25a1%25b5%25e6%259b%25b4%25e6%2596%25b0%25e5%25b7%25a5%25e4%25bd%259c%25e5%2588%259d%25e6%25ad%25a5%25e5%25ae%258c%25e6%2588%2590/">
+		
+			首页更新工作初步完成</a>
+	</h2>
+	<div class="entry-content">
+		<p>新更新的首页flash配置添加了应用系统入口，正在尝试利用xml摘取部分信息作为首页调用。另外sccs源码的重写和优化工作将于近期启动，同样会有新版的项目计划书出炉，目前正在恶补javascript&hellip;</p>
+
+<p>另也不能忘了学校的课啊&hellip;还有cet6&hellip;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-13T11:51:25+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/zhan-dian-ri-zhi/'>站点日志</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/08/29/cc%25e5%25ae%259e%25e4%25b9%25a0%25e6%258a%25a5%25e5%2591%258a%25e2%2580%2594%25e2%2580%2594%25e5%259f%25ba%25e4%25ba%258ewin32-console-app%25e7%259a%2584%25e6%25b0%2591%25e8%2588%25aa%25e8%25ae%25a2%25e7%25a5%25a8%25e7%25b3%25bb%25e7%25bb%259f/">
+		
+			C++/C实习报告——基于Win32 Console App的民航订票系统</a>
+	</h2>
+	<div class="entry-content">
+		<p><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><strong><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><strong>源码、演示ppt及测试结果待续…</strong></span></strong></span></span></p>
+
+<div><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">
+<div><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"></span></span></div>
+</span></span></span></div>
+
+
+<p><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></p>
+
+<h3 style="text-align: center;"><span style="font-weight: bold; font-size: 16pt; font-family: Lucida Sans Unicode; mso-spacerun: 'yes';">
+<h3 style="text-align: left;"><span style="font-weight: bold; font-size: 14pt; font-family: '宋体'; mso-spacerun: 'yes';">               索创软件项目实习报告 V1.3 Final</span></h3>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">项目名称：民航飞机订票系统</span></p>
+<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">项目组成员:</span></p>
+<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">韩翼  王毅飞</span></p>
+<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">完成日期：2008年8月28日</span></p>
+<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">学校名称；西北大学 软件工程2班</span></p>
+
+<h5 style="text-align: left;"><a name="_Toc138694584"></a><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><a name="_Toc68487027"></a><a name="_Toc68101079"></a><a name="_Toc68086907"></a><a name="_Toc68086792"></a><a name="_Toc68086676"></a><a name="_Toc68081420"></a><a name="_Toc67967754"></a><a name="_Toc67967386"></a><a name="_Toc67967308"></a><a name="_Toc67888486"></a><a name="_Toc67888393"></a><a name="_Toc48465492">1．需求分析</a></span></h5>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">民航订票系统允许用户自由注册、登陆，用户权限分为三种级别，分别是一般浏览用户、注册用户、民航售票员和系统管理员。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">(1) 所有模块程序均使用c++/c语言编写，使用Microsoft Visual C++ 6.0编译，运行环境需Windows98操作系统或以上。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">(2) 本系统采用菜单操作方法，每个菜单都有相应的帮助，用户分三种权限：一般的浏览用户，注册用户、民航机票售票员，系统管理员。 根据登陆方式，选择相应的操作方式；如果是一般的浏览用户，只能按照各种方式查看航班信息。如果是一般的注册用户，不但具有一般的浏览用户所有功能，还具有查看自己的信息和订票情况，可以网上订票、退票，修改自己的信息等；如果是民航机票售票员，可以查看数据和编辑航班信息。如果是系统管理员，他拥有管理航班的所有功能，并可创建民航机票售票员，授权用户权限等功能。登录的用户名和密码应该存储在单独的文件中，有加密算法可以进行统计，查找，排序等功能。</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"> </p>
+
+<h5 style="text-align: left;"><a name="_Toc138694585"></a><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><a name="_Toc68487028"></a><a name="_Toc68101080"></a><a name="_Toc68086908"></a><a name="_Toc68086793"></a><a name="_Toc68086677"></a><a name="_Toc68081421"></a><a name="_Toc67967755"></a><a name="_Toc67967387"></a><a name="_Toc67967309"></a><a name="_Toc67888487"></a><a name="_Toc67888394"></a><a name="_Toc48465493"></a><a name="_Hlt138694662">2．概要设计</a></span></h5>
+<p class="0" style="text-align: left;"> </p>
+
+<h5 style="text-align: left;"><a name="_Toc138694586"></a><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><a name="_Toc68487029"></a><a name="_Toc68101081"></a><a name="_Toc68086909"></a><a name="_Toc68086794"></a><a name="_Toc68086678"></a><a name="_Toc68081422"></a><a name="_Toc67967756"></a><a name="_Toc67967388"></a><a name="_Toc67967310"></a><a name="_Toc67888488"></a><a name="_Toc67888395"></a><a name="_Toc48465494">3．详细设计</a></span></h5>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">程序主要有3个模块，机票模块FTicket.cpp/FTicket.h，用户模块FUser.cpp/FUser.h和航班模块FLight.cpp/FLight.h。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">各自有一个文件来储存各自内容(用户表 users.txt航班表 flight.txt订票信息 ticket.txt).。以链表形式在文件中存储。</span></p>
+<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">航班模块实现功能有</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//航班链表初始化</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">FlightNode* Flight::InitialFlightNode(FlightNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输入链表从文件</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">FlightNode* Flight::ReCheck(FlightNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//添加航班</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::InputFlight(FlightNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输出链表到文件</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::OutPutFlight(FlightNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//航班查询</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::FlightQuery(FlightNode* head) </span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//修改航班</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::UpdateFlight(FlightNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//删除航班,级联删除票务信息</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::DeleteFlight(FlightNode* head,TicketNode* thead)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//航班统计</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::FlightStat(FlightNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//订票情况统计</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::TicketQueryStat(FlightNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//热门航班统计</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::HotFlight(FlightNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//冷门航班统计</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::ColdFlight(FlightNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//打折航班统计</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::DiscountFlightStat(FlightNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">其中</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//输入链表从文件]与[//输出链表到文件]为文件操作，同文件航班表flight.txt相关连，功能为欲将内存中的链表存入文件中和将文件中的链表存入内存。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//航班链表初始化]为链表操作。功能是在内存中新建一个链表，为之后操作作准备。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//添加航班][ //航班查询][ //修改航班]为链表操作，功能是增加链表节点，查询链表节点，与修改链表节点内容。  </span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//删除航班,级联删除票务信息]也为链表操作。功能为删除列表节点。同时连接函数ticket.DeleteTicket(Idtmp,thead)，当删除航班时同时删除被删航班得订票信息，借此避免数据的非一致性错误。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//航班统计] [//订票统计] [//热门航班统计][//冷门航班统计][//打折航班统计]为统计部分。[//航班统计]为累加器统计，利用累加器来统计航班数量。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//热门航班统计]和[//冷门航班统计]首先使列表按订票排序，然后为输出排序后前十得航班。如果按升序排列，前十就是冷门航班，降序前十就是热门航班。其中冷门航班添加判断语句，当入座率都在50%以上时无冷门航班。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//订票情况统计]与[//打折航班统计]为链表内容输出，当指定航班时输出相应航班内容。</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">用户模块实现功能有</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//用户链表初始化</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">UserNode* User::InitialUserNode(UserNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输入链表从文件</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">void User::ReCheck(UserNode* head) </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//添加用户</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::RegisterUser(UserNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输出链表到文件</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::OutPutUser(UserNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//用户登录</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int User::CheckAdmin(UserNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//更改密码</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::UpdatePass(UserNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//用户授权</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::GrantUser(UserNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//删除用户（级联删除订票信息）</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::DeleteUser(UserNode* head,TicketNode* thead)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//用户列表</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::UserList(UserNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//用户消费查询</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::UserConsumption(UserNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">其中</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//输入链表从文件]与[//输出链表到文件]为文件操作，同文件用户表user.txt相关连，功能为欲将内存中的链表存入文件中和将文件中的链表存入内存。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//航班链表初始化]为链表操作。功能是在内存中新建一个链表，为之后操作作准备。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//添加用户] [//用户列表] [ //更改密码] [//用户授权]为链表操作，功能是增加链表节点，查看链表全部节点与修改链表节点内容。其中[//添加用户]由用户本人注册来实现，[//更改密码]由用户自己来更改，需要权限较低。[//用户列表]与[//用户授权]由管理员完成。需要权限较高。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//用户登录]对比链表节点，当用户名与密码对应上时可以进行下一步操作。由用户本人来实现。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//删除用户（级联删除订票信息）]为链表操作。功能为删除列表节点。同时连接函数ticket.DeleteuTicket(Idtmp,thead)，当删除用户时，同时删除此用户得订票信息，借此避免数据的非一致性错误。此功能也为管理员功能，需要权限为高。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//用户消费查询] 首先使列表按消费排序，然后为输出排序后前5的用户，作为本月消费前5名输出，此功能也为管理员功能。需要权限较高。</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">机票模块实现功能有</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//机票链表初始化</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">TicketNode* Ticket::InitialTicketNode(TicketNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输入链表从文件</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">TicketNode* Ticket::ReCheck(TicketNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//级联删除订票信息（删除航班时）</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::DeleteTicket(char* Idtmp,TicketNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//级联删除订票信息（删除用户时）</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::DeleteuTicket(char* Idtmp,TicketNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输出链表到文件</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::OutPutTicket(TicketNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//网上订票</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::InputTicket(TicketNode* head,UserNode* uhead,FlightNode* fhead)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//退订机票</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::TicketQuery(TicketNode* head,UserNode* uhead,FlightNode* fhead)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//订票查询</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::TicketStat(TicketNode* head)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">其中</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//输入链表从文件]与[//输出链表到文件]为文件操作，同文件订票信息 ticket.txt相关连，功能为欲将内存中的链表存入文件中和将文件中的链表存入内存。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//机票链表初始化]为链表操作。功能是在内存中新建一个链表，为之后操作作准备。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//网上订票] [//退订机票]为链表操作，功能是增加链表节点与删除链表节点。[//网上订票][//退订机票]皆由用户本人进行操作。权限较低。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//级联删除订票信息（删除航班时）][//级联删除订票信息（删除用户时）]都为级联删除的一部分，嵌套在用户模块与航班模块中，减少由于数据不一致而产生的错误。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//订票查询] 为链表内容输出，当指定用户时输出相应用户订票内容。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">排序功能FSort.cpp用函数实现。查找功能整合在各自模块中。    </span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">密码部分调用SHA1加密模块实现加密。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">   程序运行时首先先将用户表 user.txt航班表 flight.txt订票信息 ticket.txt这3个文件中得内容读取到内存中去，一切链表计算全在内存中，运行完成后，将新的链表存储到文件中覆盖旧的文件，达到更改数据的目的。需要注意的是关于有联系的相应项目的删除要注意级联删除相应项目，防止程序出错。</span></p>
+<p class="0" style="text-align: left;"> </p>
+
+<h5 style="text-align: left;"><a name="_Toc138694587"></a><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><a name="_Toc68487030"></a><a name="_Toc68101082"></a><a name="_Toc68086910"></a><a name="_Toc68086795"></a><a name="_Toc68086679"></a><a name="_Toc68081423"></a><a name="_Toc67967757"></a><a name="_Toc67967389"></a><a name="_Toc67967311"></a><a name="_Toc67888489"></a><a name="_Toc67888396"></a><a name="_Toc48465495">4．测试分析</a></span></h5>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">算法分析</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、冒泡排序算法</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">使用了C++链表形式的冒泡排序方法，具体实现方法例:</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">while(head-&gt;link != tail)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">p = head;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">while( p -&gt; link -&gt;link != tail &amp;&amp; p -&gt;link-&gt;link !=NULL)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">p = p -&gt; link;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(Id,p-&gt;Id);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(Id0,p-&gt;link-&gt;Id);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">if(Id[0]&gt;=Id0[0])</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">q = new FlightNode;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">节点数据交换</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">delete q;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tail = p-&gt;link;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> 其中tail为尾部监视指针，类似于计数器，在首轮冒泡结束后tail会自动提前一位，确保外部循环进行到总结点数减1轮次时结束排序。结点交换方法为结点交换或是数据交换，本例中采取的是数据交换方法，形式较为繁琐，不过达到了冒泡排序的目的。</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、统计算法——直接插入排序</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">由于统计功能与排序有相似之处，故统计中采用了一定的排序算法，具体方法是链表的直接插入排序。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">例如统计热门航班前十名的算法：</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">FlightNode *p,*q,*h,*t;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">p=head;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">q=new FlightNode;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">q-&gt;link = NULL;</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">p=p-&gt;link;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h=new FlightNode;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;Id,p-&gt;Id);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;TicketNum,p-&gt;TicketNum);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;MaxNum,p-&gt;MaxNum);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h-&gt;link = q-&gt;link;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">q-&gt;link=h;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool a=false;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">while( p-&gt;link != NULL)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">p=p-&gt;link;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">t=q;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">t=t-&gt;link;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">while(atoi(p-&gt;TicketNum) &lt; atoi(t-&gt;link-&gt;TicketNum))</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">if(t-&gt;link==NULL)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">goto loop;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">t=t-&gt;link;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">if(t-&gt;link==NULL)</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">break;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h=new FlightNode;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;Id,p-&gt;Id);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;TicketNum,p-&gt;TicketNum);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;MaxNum,p-&gt;MaxNum);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h-&gt;link=t-&gt;link;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">t-&gt;link=h;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">continue;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">loop:</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h=new FlightNode;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;Id,p-&gt;Id);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;TicketNum,p-&gt;TicketNum);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;MaxNum,p-&gt;MaxNum);</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">t-&gt;link-&gt;link=h;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h=t-&gt;link;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">continue;</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">直接插入排序形式上比冒泡排序较为复杂，但时间复杂度有很大降低，同时可以方便地进行限制范围的排序，降低空间复杂度。事实上本算法在形式上也有很大的提升空间。</span></p>
+<p class="0" style="text-align: left;"> </p>
+
+<h5 style="text-align: left;"><a name="_Toc138694588"></a><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><a name="_Toc68487031"></a><a name="_Toc68101083"></a><a name="_Toc68086911"></a><a name="_Toc68086796"></a><a name="_Toc68086680"></a><a name="_Toc68081424"></a><a name="_Toc67967758"></a><a name="_Toc67967390"></a><a name="_Toc67967312"></a><a name="_Toc67888490"></a><a name="_Toc67888397"></a><a name="_Toc48465496">5．用户使用说明</a></span></h5>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">主界面（本部分图均略）</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">可以使用括号中的大写字母来选择自己所要的功能。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">一般浏览用户可以直接点Q来查询航班信息。</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">这时点击任意键确认</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">可以按要求查询航班。按B可以返回上一界面</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">想要订票首先要成为注册用户登录。如果不是注册用户要先注册</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">在主菜单中点R注册进入注册界面。</span></p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">然后按要求输入你想要的用户名与密码。如果提示用户名重复请重新输入一个新的用户名与密码如下图</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">成功后进入用户登录界面进行订票等操作</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">购票员与管理员可以进入管理员登录界面进入各自登录界面</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">购票员界面</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">管理员界面</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">进行各自的操作</span></p>
+<p class="0" style="text-align: left;"> </p>
+<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">源程序清单附电子版后</span></p>
+
+<!--EndFragment--> 
+
+<span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span>
+
+</span></h3>
+
+
+<p></span></span></span></span></span></span></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-29T22:06:44+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+</div></article>
+
+<nav id="pagenavi">
+    
+        <a href="15" class="prev">Prev</a>
+    
+    
+        <a href="17" class="next">Next</a>
+    
+    <div class="center"><a href="/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

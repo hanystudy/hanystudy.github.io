@@ -1,0 +1,244 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Kinect来了——解析SDK(OpenNI Framework 1)  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="本文和后文主要介绍PrimeSense OpenNI Framework的基本架构和设计思路，以及应用开发方面的一些基本问题。应注意这两篇文章不能完全替代官方User Guide的作用，但能帮助读者快速理解并上手OpenNI。此外，由于截至目前微软并不承认除Microsoft Kinect SDK &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Kinect来了——解析SDK(OpenNI Framework 1)</h2>
+	<div class="entry-content"><p>本文和后文主要介绍PrimeSense OpenNI Framework的基本架构和设计思路，以及应用开发方面的一些基本问题。应注意这两篇文章不能完全替代官方User Guide的作用，但能帮助读者快速理解并上手OpenNI。此外，由于截至目前微软并不承认除Microsoft Kinect SDK beta之外的其它中间件和应用层API产品，使用OpenNI研究Kinect技术只能局限于研究学习活动，而且此举潜在风险尚无法完全暴露出来。</p>
+
+<p><strong> 1 概述</strong></p>
+
+<p>OpenNI实际上首先指开放自然交互联盟，该组织由PrimeSense于2010年底发起，现有成员包括一家核心技术提供商、两家应用开发商和一家设备制造商。OpenNI目前致力于构建OpenNI自然交互应用程序框架，这个框架包括与底层视频和音频传感器进行通信的接口，以及建立其上的高级中间件构件，例如视觉计算和语音识别技术等。下图大致说明了OpenNI体系的层次抽象视图：</p>
+
+<p>[singlepic id=42 w=320 h=240 mode=watermark float=center]</p>
+
+<p>上图的底层设备主要是指视频/深度、音频传感器等，但不仅限于此；OpenNI API主要扮演了与底层设备和顶层应用程序通信的角色，这部分的设计将直接影响应用程序的构建和部署；中间件构件实际上囊括了自然交互所有的核心技术，它的作用就是针对OpenNI采集的原始数据，利用先进的视觉和语音识别算法对原始数据进行精确分析和计算，并生成能够反映真实世界中人物（或其它任何物体）的空间位置、姿态、语音特征，再通过模式分类算法对上述特征进行有效识别和归纳，最终返回有知识意义的N维离散信息。OpenNI定义的中间件构件应包括以下几个部分：</p>
+
+<p>1、全身分析中间件：该组件从原始数据中提取并生成与人体相关的离散信息，这里典型的数据结构包括对关节点、朝向、质心等的描述；</p>
+
+<p>2、手部分析中间件：该组件从原始数据中提取并生成与手部相关的位置信息，该信息通常是指一个点的三维坐标；</p>
+
+<p>3、姿态检测中间件：该组件从原始数据中提取并分析与人体姿态相关的视频信息，并通过分类算法对其进行标识，并反馈识别结果（例如对一个挥手动作的识别，该组件应能及时反馈目标挥手的通知信息）；</p>
+
+<p>4、场景分析中间件：该组件从原始数据中提取并分析整个场景信息，并从中分离出有意义的前景（如人物）和背景信息、场景的平面坐标表示、以及对场景中人物个体的识别。</p>
+
+<p>OpenNI API将这些后处理信息提交至上层应用程序，相关应用程序根据已知的自然交互信息和自身的决策算法进行相应的计算和反馈。</p>
+
+<p>由于PrimeSense的关系，OpenNI目前只支持PS提供的<a href="http://www.hanyi.name/blog/?p=335" target="_blank">硬件方案</a>，但这并不意味着今后的OpenNI只会向着一个方向发展（实际上OpenNI组织的建立恐怕就是考虑到这一点）。不过目前OpenNI只支持3D传感器、RGB摄像头、红外摄像头以及音频传感器设备（也就是说，如果你能够自己凑齐上述物件，那么结合OpenNI构建自然交互程序并不困难，Kinect只是一种便利廉价的硬件方案之一）。</p>
+
+<p><strong> 2 工作节点（Production Nodes）</strong></p>
+
+<p>OpenNI使用了工作节点的定义来描述自己的工作流，所谓的工作节点就是能够接收并产生数据的组件，每一个工作节点均可以调用底层节点提供的数据（甚至更改节点配置），并能将数据传递至上层节点。若干工作节点的有效串联就构成了一个工作链，工作链描述了OpenNI中各工作节点的拓扑关系，并提供了一种可行的工作流模型。</p>
+
+<p>对应OpenNI的层次抽象设计，工作节点被分为两大类：一种是传感器节点，另一种是中间件节点。</p>
+
+<p>1、传感器节点：</p>
+
+<p>设备节点，该节点表示某一个硬件设备，如RPG摄像头，设备节点主要用于对相关硬件进行配置；</p>
+
+<p>深度生成节点，能够产生场景的深度映射数据，该节点可由与OpenNI体系保持兼容的任意3D传感器实现；</p>
+
+<p>图像生成节点，产生RGB彩色图像，该节点可由与OpenNI体系保持兼容的任意视频传感器实现；</p>
+
+<p>红外数据生成节点，产生红外图像映射数据，该节点可由与OpenNI体系保持兼容的任意红外传感器实现；</p>
+
+<p>音频生成节点，产生音频数据流，该节点可由与OpenNI体系保持兼容的任意音频传感器实现；</p>
+
+<p>2、中间件节点</p>
+
+<p>姿态警告节点，当某一特定姿态被识别时会产生特殊的回调信息；</p>
+
+<p>场景分析节点，分析场景，分离前景和背景、识别场景中的人物、检测水平面。该节点会生成一个已识别的深度映射数据，其中的每个像素都被标记为不同状态以标识人物和背景部分；</p>
+
+<p>手部生成节点，支持手部的检测和跟踪，当手部被检测到时会产生特殊的回调信息，当手部被持续跟踪时实时更改其位置信息；</p>
+
+<p>用户生成节点，产生一个三维场景中的身体信息表示。</p>
+
+<p>值得一提的是，OpenNI还定义了数据回放接口，其中包括数据记录、回放和记录的编解码操作接口。</p>
+
+<p><strong> 3 节点特性</strong></p>
+
+<p>OpenNI为每个工作节点配置了特性属性，特性类似于一种扩展功能。对每个工作节点来说，这些特性的配置非常灵活，不同的中间件提供商可根据需要对自己开发的工作节点进行相应的配置。同时，每个工作节点所对应的特性集合是可选的，用户可根据自身需要对其进行合理配置。应注意，目前OpenNI所提供的几种节点特性并不是固定的设计，在今后会添加更多的节点特性并对已有特性进行调整，现在看来这部分可能是未来设计时需要慎重考虑的地方之一。</p>
+
+<p>关于节点的可用特性列表，读者可查阅OpenNI的官方网站和用户指南。</p>
+
+<p><strong> 4 其它</strong></p>
+
+<p>除上述基本属性组成外，OpenNI还设计了若干机制以扩展其上层应用的适应性。</p>
+
+<p><strong>模拟节点</strong> 模拟节点实际上是指空节点，也就是不实现任何数据生成的逻辑代码，而类似一种抽象的数据接口层。这种设计往往被用于应用程序的构建当中。</p>
+
+<p>应用程序间的设备共享和节点锁定 OpenNI的工作节点所产生的数据通常只来源于唯一的硬件设备，而该设备可能同时被若干个应用程序所调用。这也就意味着OpenNI的工作节点需要具备一定的同步机制以保证上述任务的并发执行。</p>
+
+<p>就OpenNI这种应用程序框架而言，实现操作系统的进程级并发是很困难的。因此这里OpenNI默认所有的设备节点处于全局共享模式，即任何应用程序均可更改节点配置，同时节点配置一旦发生变更则立即产生回调信息，并通知所有注册至该节点的应用程序。另外，所有工作节点还可处于一种锁定模式，在该模式下OpenNI将屏蔽对应节点&#8221;Set&#8221;方法的调用，如果该节点恰是设备节点，那么就意味着该设备节点的“Lock Aware”特性被开启。</p>
+
+<p><strong>许可机制</strong> OpenNI提供了一种模块与应用间简单的许可机制，任何一个OpenNI上下文对象均保有一份当前已载入的许可证列表，在任何层次均可检查该列表，并搜索特定的许可证。许可证一般由发行商名称和许可证编号组成，发行商可以利用该许可机制控制其知识产权的使用权。</p>
+
+<p><strong> 通用框架工具集</strong> OpenNI集成该工具集的目的是降低跨平台构建应用程序的复杂度，而事实上标准的OpenNI并没有包含这一部分，因此该部分仅仅处于概念阶段。</p>
+
+<p><strong>记录</strong> 记录经常被用于调试操作。OpenNI支持记录整个工作链，包括每个工作节点的配置信息和节点间的数据流。OpenNI包含一套完整的记录和回放机制，标准API中是由nimRecorder模块实现的，该模块还定义了一个新的文件格式“.ONI”，用以保存上述信息。</p>
+
+<p><strong>工作节点的异常状态反馈</strong> 每一个工作节点均包含相应的异常或错误状态定义。默认的异常状态为“OK”，只有当出现真正的异常或错误时，该状态才会变为Error Status中定义的任何一种信息，同时没有实现异常状态反馈机制节点的异常状态将始终为“OK”。应用程序可以通过为每一个节点注册回调函数以接收其异常状态反馈。此外还可以通过定义全局异常状态来接收任何节点的异常信息，后者的方法通常是最容易实现的。</p>
+
+<p><strong>向后兼容性</strong> OpenNI需要保证完全的向后兼容，这就意味着所有当前构建的应用程序均能完美运行在后续版本的OpenNI框架中，而无需重新编码或编译。</p>
+
+<p>下面我们将重点关注OpenNI的具体API设计和程序基本框架。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-21T20:46:27+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kinect/'>kinect</a>, <a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>

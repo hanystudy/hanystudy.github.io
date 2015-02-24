@@ -1,0 +1,203 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>医学影像的基本文件存储格式与vtk集成方法  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content=" 毫无疑问，PACS已经是现代乃至未来医疗机构里不可或缺的基础设施之一，医学影像的基本存储格式就成为了标准化过程中的关键环节。  ACR/NEMA联合发布了数字医学影像和通信标准，即DICOM。DICOM涉及的领域非常之多，NEMA上公布了DICOM的全部文档信息：  http://medical &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">医学影像的基本文件存储格式与vtk集成方法</h2>
+	<div class="entry-content"><p> 毫无疑问，PACS已经是现代乃至未来医疗机构里不可或缺的基础设施之一，医学影像的基本存储格式就成为了标准化过程中的关键环节。</p>
+
+<p> ACR/NEMA联合发布了数字医学影像和通信标准，即DICOM。DICOM涉及的领域非常之多，NEMA上公布了DICOM的全部文档信息：</p>
+
+<p> <a href="http://medical.nema.org/"><a href="http://medical.nema.org/">http://medical.nema.org/</a></a></p>
+
+<p> 此外，通常我们研究DICOM存储格式主要是为了实现文件压缩格式的转换，这里建议参考一些额外信息，以避免受到DICOM海量文档的困扰：</p>
+
+<p> <a href="http://www.dclunie.com/medical-image-faq/html/part8.html"><a href="http://www.dclunie.com/medical-image-faq/html/part8.html">http://www.dclunie.com/medical-image-faq/html/part8.html</a></a> </p>
+
+<p> 这里我们主要讨论vtk对DICOM标准的支持情况。在早期vtk版本中并未直接提供对DICOM的IO支持，读取DICOM文件通常要借助vtkVolume16Reader来完成，但要涉及一系列复杂问题，我们使用如下示例说明：</p>
+
+<p>[c]
+vtkVolume16Reader *Reader = vtkVolume16Reader::New();
+Reader-&gt;SetDataDimensions(256,256);
+//图像尺寸
+Reader-&gt;SetDataByteOrderToLittleEndian ();
+Reader-&gt;SetFilePrefix (&quot;E:\ct&quot;);
+//路径
+Reader-&gt;SetImageRange(1, 93);
+//切片起始段
+Reader-&gt;SetDataSpacing (0.8, 0.8, 1.5);
+//切片间距
+[/c]</p>
+
+<p> 另外，该方法也不支持对压缩数据或多帧影像进行IO操作。</p>
+
+<p> 从vtk4.4起，一个直接针对DICOM文件读取的类被引入vtkDICOMImageReader，从而完全替代了vtkVolume16Reader的历史地位。vtkDICOMImageReader的重要改进在于，其直接支持DICOM，避免了许多没有必要的前置操作。</p>
+
+<p> <a href="http://www.vtk.org/doc/nightly/html/classvtkDICOMImageReader.html"><a href="http://www.vtk.org/doc/nightly/html/classvtkDICOMImageReader.html">http://www.vtk.org/doc/nightly/html/classvtkDICOMImageReader.html</a></a></p>
+
+<p> 但在实际应用中vtkDICOMImageReader仍然无法满足需求，如不支持查看完整的meta file，也不支持压缩数据和多帧影像。</p>
+
+<p> 为了全面支持DICOM 3.0标准，开发者必须借助外部组件辅助IO。我们在起初提出引入ITK是一种有效的改进方法，这里推荐另外一个重要的开源项目GrassrootDCM基层dicom库，简称GDCM。</p>
+
+<p> GDCM旨在对DICOM文件编码进行处理，提供DICOM标准中各类编码格式的相互转换操作，包括将各种文件编码转换为RAW原始数据文件。目前GDCM已经提供了针对vtk的DICOM文件IO接口，结合vtk和gdcm，我们就可以完全实现稳定的dicom文件IO操作了。</p>
+
+<p> 但是将GDCM纳入现有工程项目中并非易事，我们将在后续文章中就gdcm做一些说明。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-18T17:32:52+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+<!---	<a class="addthis_counter addthis_pill_style"></a> &#8212;>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+
+
+
+
+</body>
+</html>
