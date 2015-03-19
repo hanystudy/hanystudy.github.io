@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 本文的目的旨在对vtk的渲染系统做一简要概述，并引入一些示例。如果读者已经阅读过官方出品的System Overview，文中的示例对初学者来说仍然具有一定意义。  vtk包含两个基层子系统：一个已编译的C++类库，以及一个解释封装层。后者可以使用户能够使用Java、 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 毫无疑问，PACS已经是现代乃至未来医疗机构里不可或缺的基础设施之一，医学影像的基本存储格式就成为了标准化过程中的关键环节。  ACR/NEMA联合发布了数字医学影像和通信标准，即DICOM。DICOM涉及的领域非常之多，NEMA上公布了DICOM的全部文档信息：  http:// &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,85 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/04/18/yi-xue-ying-xiang-de-ji-ben-wen-jian-cun-chu-ge-shi-yu-vtk-ji-cheng-fang-fa/">
+		
+			医学影像的基本文件存储格式与vtk集成方法</a>
+	</h2>
+	<div class="entry-content">
+		<p> 毫无疑问，PACS已经是现代乃至未来医疗机构里不可或缺的基础设施之一，医学影像的基本存储格式就成为了标准化过程中的关键环节。</p>
+
+<p> ACR/NEMA联合发布了数字医学影像和通信标准，即DICOM。DICOM涉及的领域非常之多，NEMA上公布了DICOM的全部文档信息：</p>
+
+<p> <a href="http://medical.nema.org/"><a href="http://medical.nema.org/">http://medical.nema.org/</a></a></p>
+
+<p> 此外，通常我们研究DICOM存储格式主要是为了实现文件压缩格式的转换，这里建议参考一些额外信息，以避免受到DICOM海量文档的困扰：</p>
+
+<p> <a href="http://www.dclunie.com/medical-image-faq/html/part8.html"><a href="http://www.dclunie.com/medical-image-faq/html/part8.html">http://www.dclunie.com/medical-image-faq/html/part8.html</a></a> </p>
+
+<p> 这里我们主要讨论vtk对DICOM标准的支持情况。在早期vtk版本中并未直接提供对DICOM的IO支持，读取DICOM文件通常要借助vtkVolume16Reader来完成，但要涉及一系列复杂问题，我们使用如下示例说明：</p>
+
+<p>[c]
+vtkVolume16Reader *Reader = vtkVolume16Reader::New();
+Reader-&gt;SetDataDimensions(256,256);
+//图像尺寸
+Reader-&gt;SetDataByteOrderToLittleEndian ();
+Reader-&gt;SetFilePrefix (&quot;E:\ct&quot;);
+//路径
+Reader-&gt;SetImageRange(1, 93);
+//切片起始段
+Reader-&gt;SetDataSpacing (0.8, 0.8, 1.5);
+//切片间距
+[/c]</p>
+
+<p> 另外，该方法也不支持对压缩数据或多帧影像进行IO操作。</p>
+
+<p> 从vtk4.4起，一个直接针对DICOM文件读取的类被引入vtkDICOMImageReader，从而完全替代了vtkVolume16Reader的历史地位。vtkDICOMImageReader的重要改进在于，其直接支持DICOM，避免了许多没有必要的前置操作。</p>
+
+<p> <a href="http://www.vtk.org/doc/nightly/html/classvtkDICOMImageReader.html"><a href="http://www.vtk.org/doc/nightly/html/classvtkDICOMImageReader.html">http://www.vtk.org/doc/nightly/html/classvtkDICOMImageReader.html</a></a></p>
+
+<p> 但在实际应用中vtkDICOMImageReader仍然无法满足需求，如不支持查看完整的meta file，也不支持压缩数据和多帧影像。</p>
+
+<p> 为了全面支持DICOM 3.0标准，开发者必须借助外部组件辅助IO。我们在起初提出引入ITK是一种有效的改进方法，这里推荐另外一个重要的开源项目GrassrootDCM基层dicom库，简称GDCM。</p>
+
+<p> GDCM旨在对DICOM文件编码进行处理，提供DICOM标准中各类编码格式的相互转换操作，包括将各种文件编码转换为RAW原始数据文件。目前GDCM已经提供了针对vtk的DICOM文件IO接口，结合vtk和gdcm，我们就可以完全实现稳定的dicom文件IO操作了。</p>
+
+<p> 但是将GDCM纳入现有工程项目中并非易事，我们将在后续文章中就gdcm做一些说明。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-18T17:32:52+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -643,49 +722,6 @@ TARGET_LINK_LIBRARIES(ItkRegMFC ${ITK_LIBRARIES} )
 <div class="tags">
 
 	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>, <a class='category' href='/blog/categories/zhan-dian-ri-zhi/'>站点日志</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/02/10/gou-jian-reng-zai-ji-xu/">
-		
-			构建仍在继续</a>
-	</h2>
-	<div class="entry-content">
-		<p> 最近两天重写了一部分后台代码，为新架构上线做最后准备。由于专业的限制，前端我们只能以简洁为主，如今看来倒形成了一定“风格”。三款浏览器兼容的问题目前已经基本解决了，接下来的主要任务是上线数据后台，由于该部分设计比较完整，预计工作将很快完成。
-ps.无意中发现《云之遥》的第一部资料片已于早前首发，看来手上的工作又可以放一放了&hellip;&hellip;</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-02-10T17:14:29+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/zhan-dian-ri-zhi/'>站点日志</a>
 
 </div>
 

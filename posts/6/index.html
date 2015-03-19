@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 两个看似低端的桌面软件之争最近颇引人瞩目，原因在于双方的用户均数以亿计，随着事态发展也着实影响了一批“用户”。事实上，在桌面软件行将消亡的最后数年里，崇尚“人治”的国家出现此类闹剧倒也不足为奇了。  然而，作为中国最早成功的一批程序员，当事双方的核心人物在关键时刻均撇下职业道德，各种攻击、口水 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" Qt在中国程序员人群中兴起较早，Trolltech亦对中国市场颇为重视。2005年，Trolltech在北京成立代表处，旨在向中国用户提供Qtopia相关的销售服务、培训以及技术支持。同年Qt官网也首次加入双语页面——英语和汉语两种版本（而非现在的多国语言）。   &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,78 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/11/14/guan-yu-Qt-de-yi-qie/">
+		
+			关于Qt的一切</a>
+	</h2>
+	<div class="entry-content">
+		<p> Qt在中国程序员人群中兴起较早，Trolltech亦对中国市场颇为重视。2005年，Trolltech在北京成立代表处，旨在向中国用户提供Qtopia相关的销售服务、培训以及技术支持。同年Qt官网也首次加入双语页面——英语和汉语两种版本（而非现在的多国语言）。</p>
+
+<p> 不甚了解Qt的同学可能会对Qt的功能产生怀疑：Qt难道不是简单的GUI框架吗？为了能更好的解答这个问题，我特从ArsTechnica.com编译了一篇由Ryan Paul撰写的关于深度透视Qt4.4的文章，尽管Qt开发团队刚刚发布了4.7.1的新版本，我依然认为Qt今后的发展趋势将是沿着2005年夏天Qt4.0发布所带来革命性影响的延续，这也是软件工程理论与实践证明目前最好的技术框架之一。同时文后我们也将推荐其它几篇Qt阶段性介绍的文章，值得注意的是，作者原文较为冗长，我们将分两期刊出，以飨读者。</p>
+
+<p><strong> Troll精品:深度解析Qt4.4（原题:Troll treasure:an in-depth look at Qt4.4）</strong> </p>
+
+<p> <strong>文/图 Ryan Paul 编译 mp77</strong></p>
+
+<p> Trolltech刚刚宣布了Qt4.4的官方发布版（译注：这里是指2008年5月），这是对Trolltech出品的最受欢迎的、跨平台的应用程序框架的一次备受期待的更新。Qt多许可证分发的模式允许其即可用于开源项目，亦可进行专有的商业开发。她广泛应用于Linux平台，并为KDE桌面环境提供了基础工具包。同时，Qt亦用于许多商业软件如Skype,GoogleEarth以及Adobe Photoshop套件中。</p>
+
+<p> Qt4.4最受瞩目的更新内容主要包括了多媒体抽象层、基于WebKit的HTML渲染器、一种新的并发框架以及支持基于工具包内的drawing canvas技术渲染工具组件。这也是Qt首次包含对Windows CE和Windows Mobile的支持。</p>
+
+<p> 去年在测试Qt4.4预释放版时我们曾经向您提供了一些早期的功能预览。在目前开发工作已经全部完成、功能较完备的情况下，我们进一步审视了Qt4.4。最终，我们进行了大量测试以探究这些新技术的实现原理。同时，我们也和Trolltech的首席执行官Benoit Schillings一起讨论了Qt4.4，Benoit Schillings向我们分享了一些关于Qt4.4的技术内幕，并且给出了Qt未来版本趋势的一些建议。</p>
+
+<p> <strong>桥接桌面与移动设备的鸿沟</strong></p>
+
+<p> Qt支持所有主流的桌面操作系统，包括Linux、Mac OS X和Windows。她使用本地API渲染工具组件，这就意味着大多数的Qt应用程序具有基于操作系统的外观一致性。Trolltech同时提供了Qtopia——一个基于Linux移动操作系统的综合开发平台，Qtopia亦被广泛应用于如Sony Mylo、一些Motorola mobile phone handsets中。Qt4.4通过引入对Windows CE的完整支持扩充了自身的可移植性。开发人员现在可以用Qt编写任何一段应用程序代码，就可以完全移植到任何所支持的操作系统中去。</p>
+
+<p> Qt为Windows CE提供了大量功能，且能很好地适用于创建基于图形的触摸式用户界面。开发人员声称Qt表现出良好的性能和对本地外观和平台体验的强力支持。Trolltech同时发布了可以使Qt与Visual Studio紧密集成的工具，这样能够让现有Windows CE程序员轻松适应这个应用程序框架。</p>
+
+<p> <a href="null"><img class="aligncenter" title="qt44structure" src="http://media.arstechnica.com/news.media/450/qt44structure.png.png" alt="" width="450" height="283" /></a></p>
+
+<p> Qt支持Windows CE所带来的潜在好处是，其允许程序员能够将现有的KDE或Qt程序移植到更多的环境中，这将大大扩展目前开源软件在操作系统支持方面的生态系统。我确信自己会非常乐意在Windows Mobile设备中运行基于Qtopia的软件如FBReader，Trolltech的开发人员也已经在实验性地将相对复杂的KDE4应用程序移植到Windows Mobile中。例如，Thomas Hartmann在上个月撰写的<a href="http://labs.trolltech.com/blogs/2008/04/04/marble-running-on-windows-ce/" target="_blank">博客</a>展示了一种基于KDE4软件的移植，这个软件是一种复杂地图系统绘制系统，它能够在多种Windows设备中流畅地运行。</p>
+
+<p><a href="null"><img class="aligncenter" title="qtmarble" src="http://media.arstechnica.com/news.media/450/qtmarble.png" alt="" width="450" height="309" /></a></p>
+
+<p>这种来自Qt更高级别的可移植性吸引了移动设备巨头Nokia，后者正在进行对Trolltech的收购进程中（译注:收购已于2008年结束）。</p>
+
+<p> 这项交易仍然处于欧盟审查之中。今年早先的一项声明指出，Nokia宣称将力促Qt成为一种跨平台的软件开发平台，它将可以在大多数移动和桌面平台上运行。 Nokia也已计划将Qt引入S60和Maemo移动操作系统的（译注：这项计划目前已实现）。</p>
+
+<p><strong> （未完待续）</strong></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-14T12:49:43+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/qt/'>qt</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -661,58 +733,6 @@ Compress(n,p,s,l,b)
 
 
 <time datetime="2010-08-08T01:50:47+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/pcyou-xi/'>pc游戏</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/08/03/gu-jian-wu-qing-sui-shu-qi-tan/">
-		
-			古剑无情，遂书奇谭</a>
-	</h2>
-	<div class="entry-content">
-		<p> 我终究是经受不了传统RPG的诱惑，十多年了仍然如此。这次游戏剧情据说有近百小时的巨量（当然各类修改器总能让这些剧情如便当一般），再加上脚伤要求至少制动一月以上，就当每天多两个小时休闲时间吧（当然这本就是不小的挑战，过去三十几个小时的剧情哪个不是两天就通关的？）。</p>
-
-<p> 促使我来的重要原因之一是八月一日的《电脑报》头版评论—《古剑奇谭击碎国产单机最后希望》，当然前面被迫回家乃是必要条件。当时就觉得，国产单机早就半死不活，如果还能被评为“最后希望”，这编辑恐怕是欲扬故抑，全然无视另两把剑的存在了。而在我看来，另起炉灶不久的制作团队这次是憋足了劲，希望能打造又一个金饭碗，却也忽略了一些不大不小的气候因素。</p>
-
-<p> 从小的方面来说，游戏销量轻松上30万，确是一个不俗的成绩。但背后却隐藏了一个问题，因为据说预售总和就不下20万套，相对近年来的其它同类游戏玩家信心堪称爆棚，实际上给“造碗”路上增添了不小的风险。后来正式发售果然还是出了不少问题，有很多还是硬伤，除去大小bug不谈，游戏设定的基本配置形同虚设，推荐配置成了最低要求。《魔兽世界》当初引来了全国范围的网吧升级潮，而《古剑》显然尚不具备如此实力，如果策划起初就设想出50万的销量，那么他对研发人员偷懒行为的姑息就实在让人有些不解了。</p>
-
-<p> 从大的方面看，PC上的单纯RPG模式确实已经江河日下了，这是世界范围内的趋势。而国产单机技术不如欧美，游戏性不如日系的劣势始终存在且差距在不断拉大，能产生的影响力也就可想而知。事实上，单机游戏在整个相关产业的人才培养上能起到非常重要的作用，尤其是在电影、网游、综艺娱乐等方面，国家理应加以支持。然而，现在的国产游戏似乎除了RPG还是RPG，连个ARPG都不敢尝试，更别说RTS、FPS了。而照我目前对计算机图形的粗浅理解，这几种类型不仅仅是游戏玩法上的区别，更体现了不同程度CG技术的实现，如此看来，RPG无疑是业界选择的最便捷的一条路，耍着这些小聪明还整天号称要挽回国产单机的尊严，简直无异痴人说梦了。</p>
-
-<p> 对我而言，我始终喜爱传统RPG，是因为富含民族传统文化的剧情设定让人沉醉其中。但也深深知道，要想吸引当今社会中坚力量的参与，这最重要的环节却也显得不是那么重要了。</p>
-
-<p> 古剑放在暑假，寒假就留给仙五吧。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-08-03T01:15:15+08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
