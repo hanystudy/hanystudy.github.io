@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-03-19T23:41:16+08:00</updated>
+  <updated>2015-03-24T00:43:50+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,83 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Sessioncam: Introduction&Principle]]></title>
+    <link href="http://www.hanyi.name/blog/2015/03/23/guide-for-sessioncam/"/>
+    <updated>2015-03-23T23:43:49+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/03/23/guide-for-sessioncam</id>
+    <content type="html"><![CDATA[<p>Recently we used an online user session recording service in one of our project, which caused my interests and push me to do some spike on such tool —— sessioncam. In this article, I will give an introduction as simple as I can, then try to dig deep into its design and implementation.</p>
+
+<h3>1.What is sessioncam in one sentence?</h3>
+
+<p>SessionCam is a leading “software as a service” session replay product used by clients to record and replay website sessions. you can visit <a href="http://www.sessioncam.com/">http://www.sessioncam.com/</a> for more detail.</p>
+
+<h3>2.Basic features list about sessioncam.</h3>
+
+<h4>i.Session replay</h4>
+
+<p>Almost any behaviour of customers will be recorded and can be replayed by developers, including mouse clicks, movements, scrolling, form inputs, or any other actions on page, similar to specific actions on mobile devices. Developers can replay the recordings like playing videos by their sessioncam account with various speed.</p>
+
+<h4>ii.Heatmaps</h4>
+
+<p>User can generate website heatmaps for mouse movement(M), mouse clicks&copy;, page scrolling(S) and browser attention(A).</p>
+
+<h4>iii.Funnels, Form Analytics, Field Drop-Off</h4>
+
+<p>A kind of analytics tool to filter out useless data, improve conversion through assessing drop-off of users behaviour, such as page accessing or form inputing.</p>
+
+<h4>iv.API and integration</h4>
+
+<p>User can integrate sessioncam with their own analytics tool, such as Google Analytics, Campaign Monitor, CheetahMail and Olark.</p>
+
+<h3>3.How to start?</h3>
+
+<p>You must register an account on sessioncam <a href="http://www.sessioncam.com/plans/">http://www.sessioncam.com/plans/</a> , there are also free plan <a href="http://www.sessioncam.com/free-account-request/">http://www.sessioncam.com/free-account-request/</a> , with limited page count per month.</p>
+
+<p>About which plan to choose, from our experience you can hardly use non-enterprise edition if all site visitors are planned to be recorded. Therefore, it depends on the scale of your site. If you only have hundreds users and each users will take hundreds page views on your site per month, that means medium edition is better for your situation.</p>
+
+<p>There are many ways to deploy sessioncam to your website, most of them are very easy work with only a few javascript needed on your page. Refer to <a href="https://help.sessioncam.com/hc/en-gb/articles/200863126-Adding-SessionCam-to-your-website">https://help.sessioncam.com/hc/en-gb/articles/200863126-Adding-SessionCam-to-your-website</a> .</p>
+
+<p>Login to your sessioncam account console and turn on recording, <a href="https://console.sessioncam.com/Dashboard/Manage/HostnameManagement.aspx?accountAdmin">https://console.sessioncam.com/Dashboard/Manage/HostnameManagement.aspx?accountAdmin</a> sessioncam will start working.</p>
+
+<h3>4. How does it work?</h3>
+
+<h4>Step 1. IO initialisation</h4>
+
+<p>Reading and executing script from //d2oh4tlt9mrke9.cloudfront.net/Record/js/sessioncam.recorder.js, through which it will request for <a href="https://ws.sessioncam.com/Record/config.aspx">https://ws.sessioncam.com/Record/config.aspx</a> to initialise a sessionCamRecorder object, with tracking configurations from sessioncam server.</p>
+
+<h4>Step 2. Run</h4>
+
+<p>(Please refer to sessioncam.recorder.js when you reading this part)</p>
+
+<p>Sessioncam will capture and clone the whole document inner html at line 5920(function SessionCamRecorder.prototype.ml), during this a pre-processing job should be done at line 6568. Below shows basic workflow:</p>
+
+<ol type="a">
+<li><p>Replace script, object, image, or any useless target element with short strings. The processed document content will be kept in SessionCamRecorder.hK.</p></li>
+<li><p>Check whether sessionCamDebug is opened .</p></li>
+<li><p>Initialise data structure which stores form data at line 5847.</p></li>
+<li><p>Config for mobile device.</p></li>
+<li><p>Check XHttpRequest configuration, if disabled by browser it will try swfhttprequest.</p></li>
+<li><p>Bind any document interactive events in sessionCamRecorder.cU, line 7631.</p></li>
+<li><p>Once any event triggered, sessioncam will collect event data and push them into IO pool, in SessionCamRecorder.prototype.gG, line 7279.</p></li>
+<li><p>Looping scan all doms of page per 250ms, record any dom and its xpath value who is different from 250ms before into IO pool. line 6855-6878.</p></li>
+<li><p>Looping check IO pool and send existed data flow by time to sessioncam server, in SessionCamRecorder.prototype.jM, line 8106.</p></li>
+<li><p>Send data to sessioncam server per second, in SessionCamRecorder.prototype.lh, line 8584.</p></li>
+</ol>
+
+
+<h4>Step 3. Replay</h4>
+
+<p>According to step 2, sessioncam almost collects all the user&rsquo;s browser data at milliseconds level, it&rsquo;s easy to replay the session by time flow. Actually, for session replay there is an iframe element which always figuring to remote getpage.aspx, with parameters like PageId, SessionId, starttime, EventId, HostnameId, etc. Javascript can play this iframe just as animation easily.</p>
+
+<h3>5.Miscellaneous</h3>
+
+<p>Sessioncam identify data only by website domain, which means you must register sessioncam account by a domain, and once such domain has been taken, new account can not set same domain unless the first user permits it.</p>
+
+<p>Session data may contain some user privacy data, but sessioncam will ignore most common item like password, credentials. But admin can still config some privacy fields to be ignored.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[web开发的若干安全问题小结]]></title>
