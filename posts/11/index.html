@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="本章和下一章讨论UNIX进程控制和进程间通信机制和相关System call。从“操作系统原理”中我们了解到，进程是OS进行系统资源管理的基本单位。其具体的内容则不属于本章讨论范围，但我们假设读者已经阅读过有关操作系统进程管理方面的文献。 1 进程控制 进程是如何创建的？ &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="上一章讨论了Unix进程控制机制和具体实现，在此基础上我们将进一步研究进程间通信的原理和方法。 2 信号Signal 2.1 信号的基本概念 信号是进程间通信的方法之一，它用以指示某些事件的发生。信号提供了一种异步事件处理的方法。 信号可以由系统核心程序发出，也可以由某些进程发出， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,628 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/06/09/MP77-de-UNIX-ke-jian-bi-ji-10/">
+		
+			MP77的UNIX课件笔记(10)</a>
+	</h2>
+	<div class="entry-content">
+		<p>上一章讨论了Unix进程控制机制和具体实现，在此基础上我们将进一步研究进程间通信的原理和方法。</p>
+
+<p>2 信号Signal</p>
+
+<p>2.1 信号的基本概念</p>
+
+<p><a id="more"></a><a id="more-178"></a></p>
+
+<p>信号是进程间通信的方法之一，它用以指示某些事件的发生。信号提供了一种异步事件处理的方法。</p>
+
+<p>信号可以由系统核心程序发出，也可以由某些进程发出，但大部分时候是由核心程序发出的。</p>
+
+<p>如系统核心程序在下面几种情况会向进程发信号：</p>
+
+<p>1、程序有异常行为，如企图处以零。（SIGFPE）</p>
+
+<p>2、系统测出一个可能出现的电源故障。（SIGPWR）</p>
+
+<p>3、该进程的子进程执行终止。（SIGCHLD）</p>
+
+<p>4、用户由终端对目标进程输入中断(delete或ctrl-c)，退出(ctrl-)等键。</p>
+
+<p>5、进程调用kill函数可以将信号发送给一个进程或进程组。</p>
+
+<p>6、用户可以用kill命令将信号发送给其他进程。</p>
+
+<p>同时系统中很多条件下会产生一个信号，它们分别被赋予不同的含义：</p>
+
+<p>7、按键产生信号。</p>
+
+<p>SIGINT：Ctrl+C（有的系统是Del键），默认情况下中止当前的进程。</p>
+
+<p>SIGQUIT：Ctrl+\键，默认情况下中止当前进程，但额外生成一个记录进程的内存存储图像的core文件，调试程序可以使用core文件检查进程在终止时的状态。</p>
+
+<p>SIGTSTP信号：在支持作业控制的系统中，终端上按下“挂起键”（一般是 Ctrl+Z键），会产生SIGTSTP信号，默认处理是暂停当前进程的执行，挂起（suspend）当前进程。</p>
+
+<p>8、硬件异常产生信号。</p>
+
+<p>SIGSEGV：内存越界或者试图写只读存储区的存储单元，CPU中的内存管理单元MMU的内存保护机制会引发一个软件中断，操作系统内核在中断服务程序中向进程发送段违例信号（segmentation violation）。</p>
+
+<p>SIGFPE:CPU产生中断最终导致内核向进程发送浮点溢出信号SIGFPE通知用户态的进程。</p>
+
+<p>SIGBUS：早期的RISC结构CPU要求一个4B整数的地址必须能被4整除。</p>
+
+<p>SIGILL：用户状态下的CPU不允许执行硬件I/O指令和其他特权指令。如果用户程序代码中有这样的指令，或者是非法的指令编码，CPU就会产生软中断，最终内核的处理就是送达进程SIGILL信号。默认处理是进程终止。</p>
+
+<p>9、事件产生的信号，当某些事件发生，内核监测到某种条件时，也会给进程发出信号。</p>
+
+<p>SIGALRM：当进程设置的闹钟时间到时会收到该信号。</p>
+
+<p>SIGPIPE：两进程用管道进行通信，从管道读取数据的进程关闭了管道，向管道的写操作进程收到SIGPIPE信号。</p>
+
+<p>SIGTTIN：后台进程试图读终端，会导致终端向其发送SIGTTIN信号，默认处理是进程终止。</p>
+
+<p>SIGHUP：发生在用户从当前终端退出登录的时候，运行在该终端上的程序，会收到SIGHUP信号。</p>
+
+<p>SIGCLD：子进程终止时会产生僵尸进程，内核向父进程发送该信号，通知父进程用wait()调用来获取子进程的终止状态，并销毁僵尸进程，释放僵尸进程占用的资源。</p>
+
+<p>10、其他进程发送来的信号。</p>
+
+<p>用户直接使用kill命令，或者，程序中使用kill()函数，向其他进程发送信号。</p>
+
+<p>发送的信号可以是任意信号类型。发送信号的进程和接收信号的进程必须是同一个用户的进程，或者，发信号的进程是超级用户。以防止不同用户间的恶意干扰。</p>
+
+<p>2.2 SIGNAL定义</p>
+
+<p>SIGNAL标识定义在/usr/include/sys/signal.h头文件中，给每个信号都定义了一个宏名字，这些宏名字都是以SIG开头，这些信号都被定义为正整数（信号编号）。例如delete键和ctrl-c产生的信号是SIGINT，退出(ctrl-)产生的信号是SIGQUIT等，SIGINT的值为2，SIGQUIT的值为3。</p>
+
+<p>SIGNAL类型有很多，这里不再详细介绍。读者可以参考以下较常用的值：</p>
+
+<p>名字 说明 缺省动作</p>
+
+<p>SIGALRM 用户用alarm设置时钟，定时器到时 终止</p>
+
+<p>SIGCHLD 子进程消亡，向父进程发此信号 忽略</p>
+
+<p>SIGCONT 使暂停进程继续 忽略</p>
+
+<p>SIGFPE 算术异常，如除以0 终止w/core</p>
+
+<p>SIGILL 当硬件检查到非法指令时，发送该信号 终止w/core</p>
+
+<p>SIGINT 用delete或ctrl_c 终止，发送到终端相连的所有进程 终止</p>
+
+<p>SIGKILL 杀死进程,不能被捕获或忽略,发生紧急事件用 终止</p>
+
+<p>SIGQUIT 用户用ctrl-\终止程序 终止w/core</p>
+
+<p>SIGUSR1 用户自定义信号1 终止</p>
+
+<p>SIGUSR2 用户自定义信号1 终止</p>
+
+<p>SIGHUP 一个终端切断时,发送信号到该终端相连的所有进程 终止</p>
+
+<p>SIGTERM 由kill命令发送的系统默认终止信号 终止</p>
+
+<p>SIGPIPE 写管道错，进程向没有任何读进程的管道中写数据 终止</p>
+
+<p>2.3 kill发送信号</p>
+
+<p>kill命令和kill函数的功能仅仅是将一个信号送达一个进程或者进程组内的所有进程。</p>
+
+<p>尽管多数的默认情况下，用户直接使用kill命令，不附带任何选项，会给进程送达一个SIGTERM信号。对于那些终端失去控制的进程无法用Ctrl+C键终止，那么，就可以从其他终端上登录，用ps命令查出进程的PID，然后用kill命令发送信号给进程，如果终端还不能恢复正常，甚至可以用kill命令发送信号给这个终端上的shell进程。</p>
+
+<p>但是，该信号是否确实能够将进程“杀死”还要看信号的类型以及进程自身的行为，是否安排了捕捉这个信号。</p>
+
+<p>2.3.1 kill命令</p>
+
+<h1>kill -signal PID-list</h1>
+
+<h1>kill 1275 1277</h1>
+
+<p>默认信号为15（SIGTERM），一般会导致进程终止。</p>
+
+<h1>kill -9 1326</h1>
+
+<p>向进程1326发送一个信号9（SIGKILL），会导致该进程死亡。</p>
+
+<p>在kill命令中，指定进程号PID时，可使用特殊的PID号0，$kill 0 或</p>
+
+<h1>kill -9 0</h1>
+
+<p>向与本进程同组的所有进程发送信号。</p>
+
+<p>2.3.2 会晤组和进程组</p>
+
+<p>UNIX为每个进程在其PCB中设置了两个字段，进程组号PGID（process group ID），会晤组号SID（session ID）。</p>
+
+<p>进程的PGID是创建子进程的时候从父进程那里继承来的，PGID相同的所有进程构成一个“进程组”。PID号和PGID相等的进程是进程组的组长。组长进程终止后，进程组照样可以存在。</p>
+
+<p>从进程的组织结构上看，一个会晤组由一个或者多个进程组构成。</p>
+
+<p>进程的SID也是创建子进程时从父进程那继承来的，SID相同的所有进程构成一个“会晤组”。PID和SID相等的进程是会晤组首进程。也可能会出现没有首进程的会晤组。</p>
+
+<p>ps命令的j选项（job）可以打印出进程的PGID和SID。</p>
+
+<h1>ps -j -u fang</h1>
+
+<p>查阅用户fang的所有进程，每个进程都打印出PGID和SID。</p>
+
+<p>一个会晤组由多个进程组构成。进程组分两类，前台进程组和后台进程组。前台进程组最多只有一个，后台进程组可以有多个。</p>
+
+<p>例如在shell中，从当前登录shell启动的所有进程都属于一个会晤组，会晤组首进程是登录shell自己。通常在一个tty中，进程的标准输出会输出到tty，tty上的按键产生的SIGINT和SIGQUIT信号，只送到前台进程组。如果后台进程企图从tty上获取输入如：scanf()，gets()，进程就会收到SIGTTIN信号，默认处理是终止进程。</p>
+
+<p>2.3.2.1 SIGHUP信号</p>
+
+<p>SIGHUP信号的产生有两种不同的情况:</p>
+
+<p>1、如果控制终端突然断开，那么，内核负责向会晤组首进程发送SIGHUP信号。会晤组首进程终止，内核仅负责向会晤组内的前台进程组发送SIGHUP信号，但不发送到后台进程组。会晤组首进程终止还会导致原会晤组内的所有进程组都失去控制终端。</p>
+
+<p>控制终端突然断开的情况发生在连接终端的调制解调器断线，或者使用网络虚拟终端时，TCP连接断开。TCP连接断开的原因会是由于网络故障，或者TELNET客户端使用TELNET自身的close命令关闭连接。</p>
+
+<p>2、会晤组首进程的终止，包括自愿终止和被迫终止。在登录shell中执行exit或logout，作为会晤组首进程的shell就会终止。被迫终止:在其他终端上使用kill -9命令，或者会晤组首进程中的软件故障导致内存越权访问而收到内核发来的SIGSEGV信号而终止。</p>
+
+<p>会晤组首进程终止后，残留的后台进程组就失去了控制终端，用ps命令列出的进程的TTY属性打印的是问号(?)。即使同一个用户再次从这个终端登录，也不会成为这些进程的控制终端。</p>
+
+<p>失去控制终端的进程中访问终端的操作read(0,buf,nbytes)会导致read返回0，这会影响scanf,gets等函数；写操作write(1,buf,nbytes)会失败返回-1，errno为EIO，没有任何输出，这影响printf等函数。</p>
+
+<p>2.3.2.2 不同shell的PGID与SID区别</p>
+
+<p>会晤组，前台进程组，后台进程组，进程的这些组织关系，是由UNIX的相关系统调用实现的。</p>
+
+<p>上述的这些处理方式，在C-shell, K-shell, bash中相同。</p>
+
+<p>在不支持作业控制的传统的Bourne Shell中，处理就会有些不同。它作为登录shell时，在一个终端上启动的所有进程，包括像前面使用&amp;元字符启动的进程，以及前台进程，都属于同一个进程组。登录shell进程做组长。也就是说会晤组内只有一个进程组，而且作为前台进程组。</p>
+
+<p>SIGHUP信号的发送时机与会晤组，进程组，控制终端的关系，以及进程组织关系的安排，在不同的系统或者不同的shell中会有些差异。有的UNIX不支持作业控制功能，没有会晤组（session）的概念，但是都支持进程组的概念。</p>
+
+<p>2.3.2.3 setpgid</p>
+
+<p>进程组的最主要作用就是进程组的成员可以一起接收到相同的信号。这样便于一起管理共同协作的多个进程。</p>
+
+<p>UNIX提供了系统调用函数setpgid()，可以修改进程的PGID。</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<p>int setpgid(pid_t pid, pid_t pgid);</p>
+
+<p>将进程pid组号设为pgid。成功函数返回0；失败返回–1。</p>
+
+<p>如果参数pid设为0，使用进程自己的PID；参数pgid设为0，使用pid指定进程的PID做组号。</p>
+
+<p>为了安全起见，系统只允许进程修改它自己和它的子进程的PGID，而且，在子进程调用了exec之后，就不能再改变子进程的PGID。</p>
+
+<p>如果fork之后再由父进程修改子进程的PGID就可能会出问题。如果子进程赶在父进程修改PGID之前执行了exec，那么父进程的修改就会失败。所以，fork之后，子进程修改自己的PGID后再执行exec就可以避免这样的情况发生。</p>
+
+<p>2.3.2.4 setsid</p>
+
+<p>一般的程序员对setpgid()调用不是很感兴趣，这常常由shell程序使用。</p>
+
+<p>一般程序员更感兴趣的是系统调用函数setsid()。它设置进程的SID和PGID都为自己的PID，而且脱离控制终端。系统调用的函数原型是：</p>
+
+<p>pid_t setsid(void);</p>
+
+<p>调用这个函数的进程必须不是组长进程，调用才能成功。</p>
+
+<p>调用结束后，事实上创建了新的会晤组和进程组，并失去控制终端。</p>
+
+<p>当前进程成为了新会晤组和新进程组的惟一成员，既是会晤组首进程又是进程组组长。这样，脱离了原来的会晤组和进程组关系之后，原终端退出登录，原进程组群发信号，当前进程都不会再受到干扰。</p>
+
+<p>2.3.3 kill系统调用</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<p>int kill(pid_t pid,int signo);</p>
+
+<p>把信号signo发送给进程标识号为pid的相关进程。成功时间返回0，失败返回-1。</p>
+
+<p>pid取值情况：</p>
+
+<p>正数：将信号发送给指定的进程；</p>
+
+<p>0：   将信号发送给调用进程的同组进程；</p>
+
+<p>负数：向以-pid为组长的所有进程发信号sig。</p>
+
+<p>2.4 信号的捕捉与处理</p>
+
+<p>2.4.1 信号的捕捉</p>
+
+<p>进程接收到信号后，处理的方式有三种：</p>
+
+<p>1、忽略方式</p>
+
+<p>进程在接收到一个被指明忽略的信号后，则将该信号清除后，立即返回，不进行其他处理。但信号SIGKILL和SIGSTOP是不能被忽略的。原因是，它们向超级用户提供一种使进程终止的方式。</p>
+
+<p>signal(SIGINT,SIG_IGN);</p>
+
+<p>signal的第一个参数是要忽略的信号名字，第二个参数是宏SIG_IGN。执行了这个调用后,进程就不再收到SIGINT信号。</p>
+
+<p>如果进程忽略SIGCLD信号，子进程终止后，系统会自动销毁僵尸子进程。</p>
+
+<p>信号被忽略，作为进程的一种属性，会被它的子进程所继承。</p>
+
+<p>Unix提供一种系统命令来实现SIG_IGN的效果，即nohup。</p>
+
+<p>用nohup来运行一个命令可以使得程序的执行免于SIGHUP信号的打扰，在终端注销后继续运行。</p>
+
+<p>上面的例子，没有修改xyz.c中的任何程序，单独启动xyz时，可以被kill命令终止，从abc进程中启动时，又不能被kill命令终止。</p>
+
+<p>如果使用类似上述方式，不需要修改命令程序，也可以做到让启动的命令进程忽略SIGHUP信号。这样，终端被挂断时，就不会终止正在运行的命令。这就是nohup命令的基本做法。</p>
+
+<p>nohup 命令 命令参数</p>
+
+<p>$nohup find / -name data -print&gt;f.res 2&gt;/dev/null &amp;</p>
+
+<p>find命令就在后台运行，终端注销时进程也不会终止。如果上述命令的输出没有重定向，nohup自动将find命令的输出重定向到nohup.out文件中。</p>
+
+<p>2、默认方式</p>
+
+<p>大多数信号的系统默认动作是终止该进程。</p>
+
+<p>signal(SIGINT,SIG_DFL);</p>
+
+<p>signal的第一个参数是信号的宏名字，第二个参数是宏SIG_DFL。</p>
+
+<p>由于信号的处理属性会从父进程继承，所以，程序运行初始，信号的处理方式不见得会是一种默认方式。如果要求必须是默认处理方式，那么，就必须执行这个函数调用。</p>
+
+<p>3、捕捉方式</p>
+
+<p>进程在接收到该信号时，执行用户设置的信号处理函数，执行完毕，恢复现场，然后继续往下执行。</p>
+
+<h1>include</h1>
+
+<p>singal(int signo, *func)</p>
+
+<p>signo是除SIGKILL和SIGSTOP以外的任何一种信号。</p>
+
+<p>func定义了该信号的处理方式，它的值可以是:</p>
+
+<p>SIG_IGN</p>
+
+<p>SIG_DFL</p>
+
+<p>当指使定函数时，我们称为捕捉此信号，对应的函数称为signal handler or signal-catching function。</p>
+
+<p>signal调用成功的返回值总是进程上次对指定信号的处理方式。失败时返回-1。</p>
+
+<p>例如下段程序捕捉按下Ctrl+C键时和Ctrl+\键时产生的信号。</p>
+
+<h1>include</h1>
+
+<p>void sig_handle(int sig)</p>
+
+<p>{printf(&ldquo;HELLO! Signal %d catched.\n&rdquo;, sig);}</p>
+
+<p>main(){</p>
+
+<p>int i;</p>
+
+<p>signal(SIGINT, sig_handle);</p>
+
+<p>signal(SIGQUIT, sig_handle);</p>
+
+<p>for (i = 0; ; i++) {</p>
+
+<p>printf(&ldquo;i=%d\n&rdquo;, i);</p>
+
+<p>sleep(1);}</p>
+
+<p>}</p>
+
+<p>UNIX中一个捕捉的信号在处理它的用户函数被调用之前，首先被内核重置到它的默认行为。因此，第一次按下Ctrl+\ 时，执行sig_handle()之前，已被置为默认行为。从此之后，只要再按Ctrl+\ 键，仍按默认行为处理，导致进程终止。</p>
+
+<p>2.4.2 捕捉处理方式</p>
+
+<p>当造成信号的事件发生时，将为进程产生一个信号（或向一个进程发送一个信号）在信号产生时，内核通常在进程表中设置对应于该信号的的位。</p>
+
+<p>如当系统运行一个需要较长时间的程序时，我们发现有错误产生，并断定该程序最终要失败。为了节省时间，可以按ctrl-c终止该程序的运行。这一过程的实现就用到了信号。</p>
+
+<p>响应键盘输入的核心部分发现了中断ctrl-c后，就向发中断字符的终端上运行的所有进程发送一个SIGINT信号。该进程接收到此信号时，就完成与SIGINT有关的工作，然后终止。该终端上的shell进程也会收到内核发来的SIGINT信号，由于它必须执行，以解释以后键入的系统命令，所以它会忽略这个信号。当然程序也可以捕获这个信号。</p>
+
+<p>2.4.3 SIGCLD信号的处理</p>
+
+<p>将信号处理函数第一行写为重新设置信号处理函数的语句signal，可以减少风险。</p>
+
+<p>需要特别注意的是SIGCLD信号的处理。当一个子进程终止后产生了僵尸子进程，父进程会收到信号SIGCLD。信号处理函数必须在完成了wait()调用销毁了僵尸进程之后，才可以再次调用类似下面的语句来重新设定SIGCLD信号的用户处理函数。</p>
+
+<p>signal(SIGCLD, &hellip;);</p>
+
+<p>因为在调用signal(SIGCLD,&hellip;)时，内核将检查当前是否已经有僵尸子进程，如果现有的僵尸子进程尚未用wait()调用销毁，内核会立刻发送SIGCLD信号。再次进入信号处理函数，信号处理函数的第一行，又重复这样的操作，于是进入死循环，进程堆栈不停地增长，最终程序被终止。所以，必须在用wait()调用销毁了僵尸子进程之后才可以再次重置SIGCLD的处理函数。</p>
+
+<p>如果进程不设置对SIGCLD信号的处理，而且也不在子进程终止后去调用wait()，那么，子进程终止后的僵尸进程就一直存在。</p>
+
+<p>2.4.4 进程收尸</p>
+
+<p>上节最后提到子进程终止后的僵尸进程将一直存在，那么我们需要试图为其“收尸”以释放系统资源。</p>
+
+<p>ps命令可以看到子进程是僵尸（defunct）进程，kill -9命令无法销毁它。</p>
+
+<p>kill将其父进程终止后，僵尸进程变成孤儿进程，由操作系统的1进程领养，新的父进程负责销毁僵尸进程。于是，最后的ps命令发现僵尸进程已经被销毁。如果用户进程是个长期运行的进程，一直作为僵尸进程的父进程，那么，僵尸进程就一直存在。</p>
+
+<p>程序中应当捕捉SIGCLD，在信号处理函数中执行wait调用销毁僵尸进程。如果进程对它的子进程终止状态毫无兴趣，在System V中，可以直接使用：</p>
+
+<p>signal(SIGCLD, SIG_IGN);</p>
+
+<p>忽略SIGCLD信号，这样，子进程产生的僵尸就被系统自动销毁了，不会再有僵尸子进程出现。</p>
+
+<p>.2.5 全局跳转longjmp</p>
+
+<p>经常需要一个类似于SIGINT这样的信号来只终止当前的活动，而不是整个进程。这时，当进程捕捉信号后必须跳到主循环，或者在某个地方恢复执行。例如如下程序：</p>
+
+<p>main(){</p>
+
+<p>int c;</p>
+
+<p>for (;;) {</p>
+
+<p>printf(&ldquo;Input a command:&rdquo;);</p>
+
+<p>c = getchar();</p>
+
+<p>switch &copy; {</p>
+
+<p>case ’Q’: return(0);</p>
+
+<p>case ’A’: func_a();   break;</p>
+
+<p>case ’B’: func_b();   break;</p>
+
+<p>&hellip;        }</p>
+
+<p>}</p>
+
+<p>}</p>
+
+<p>这段程序先是提示用户输入一条命令，然后根据命令的不同，执行不同的内容。</p>
+
+<p>例如用户输入A，就执行函数func_a()，假设该函数的处理非常复杂，需要完成共10个阶段非常复杂的计算，大约总共需要5~10min。</p>
+
+<p>有时，用户在输入了命令A后又反悔了，希望中止func_a()对命令A的处理，而要重新选择另一条命令。这就要求中止func_a()的执行而返回到前面的printf语句去执行。下面程序改成：</p>
+
+<h1>include</h1>
+
+<p>void main_control(int sig){</p>
+
+<p>int c;</p>
+
+<p>signal(sig, main_control);</p>
+
+<p>for(;;) {</p>
+
+<p>printf(&ldquo;Input  a command:&rdquo;);</p>
+
+<p>c = getchar();</p>
+
+<p>switch &copy; {</p>
+
+<p>case &lsquo;Q&rsquo;: return 0;</p>
+
+<p>case &lsquo;A&rsquo;: func_a();  break;</p>
+
+<p>case &lsquo;B&rsquo;: func_b();  break;</p>
+
+<p>M</p>
+
+<p>} }｝</p>
+
+<p>int main(void){</p>
+
+<p>main_control(SIGINT);}</p>
+
+<p>这样，在进行func_a()处理期间，用户按中断键Ctrl+C，就会终止func_a()处理，再次出现Input a command：的提示，可以重新输入命令。但是，这有严重的缺陷。</p>
+
+<p>（1）每次敲击中断键，程序都停留在信号捕捉函数中，且嵌套得越来越深，这样就会有越来越多的内容压在堆栈中，可能在一段时间内工作得还行，但占用的栈空间越来越多，最终可能会导致该进程用户栈空间溢出。</p>
+
+<p>（2）main_control()一旦返回，进程的执行将根据堆栈中记录的状态，返回到当初被SIGINT中断的地方恢复刚才的执行，会让用户感到迷惑不解：刚才的动作已打断而且又已经开始了新的工作，可过一段时间后死灰复燃。</p>
+
+<p>那么该问题的解决办法就是把堆栈恢复为第一次调用main_control()时的状态，再调用main_control()去重新执行。</p>
+
+<h1>include</h1>
+
+<p>int setjmp(jmp_buf env);  /<em> 返回值为0，或者是longjmp提供的值</em>/</p>
+
+<p>void longjmp(jmp_buf env, int val);</p>
+
+<p>其中setjmp将当前栈状态保存入env中，longjmp负责将当前的执行流程转为调用setjmp的地方，同时堆栈状态也恢复至目标位置的状态。程序改进后如下：</p>
+
+<h1>include</h1>
+
+<h1>include</h1>
+
+<p>static jmp_buf jmpbuf;</p>
+
+<p>void intr_proc(int sig)</p>
+
+<p>{</p>
+
+<p>printf(&ldquo;\n&hellip;INTERRUPT\n&rdquo;)</p>
+
+<p>longjmp(jmpbuf, 1);</p>
+
+<p>}</p>
+
+<p>main(){</p>
+
+<p>int c;</p>
+
+<p>setjmp(jmpbuf);</p>
+
+<p>signal(SIGINT, intr_proc);</p>
+
+<p>for (;;) {</p>
+
+<p>printf(&ldquo;Input a command:&rdquo;);</p>
+
+<p>c = getchar();</p>
+
+<p>switch &copy; {</p>
+
+<p>case &lsquo;Q&rsquo;: return 0;</p>
+
+<p>case &lsquo;A&rsquo;: func_a();  break;</p>
+
+<p>case &lsquo;B: func_b();  break;</p>
+
+<p>&hellip;     }</p>
+
+<p>}</p>
+
+<p>｝</p>
+
+<p>2.6 信号对进程执行的影响</p>
+
+<p>可以捕捉一个信号，为这个信号设置一个程序员自定义的处理函数。当一个信号到达进程的时候，执行这个处理函数。有两种可能的情况：</p>
+
+<p>第一种情况是进程正在执行用户态程序指令。这包括程序员自编的程序代码和库程序代码，在处理上等同看待，不做区分，也无法区分。这种情况下，信号到达时，进程正在执行的代码被暂停，执行完信号处理函数之后，除非信号处理函数中exit()终止当前进程或者longjmp跳转到别的地方，否则恢复到被信号中断的位置继续执行，这种做法跟中断服务程序类似。</p>
+
+<p>第二种情况是进程正在执行系统调用。传统的UNIX内核，进程在执行内核代码时，是不可被其他进程打断的，只有在系统调用结束或者进程在核心态代码中调用sleep原语睡眠，自愿让出CPU时，进程调度才会发生。所以，只需要考虑进程睡眠时收到信号的处理，其他时间是不可被信号打断的。</p>
+
+<p>进程在执行系统调用而睡眠时收到信号，有两种处理方法。对于像磁盘操作那样的快速的I/O，进程睡眠时间很短暂，这些系统调用不会被信号操作打断。</p>
+
+<p>但是，对于那些慢速的I/O，如：终端读写或者从网络接收数据，wait()等待子进程结束，进程间通信的函数，这些操作，只要条件不满足，进程会睡眠很长时间。终端读入时如果终端上的用户离开终端很长时间，进程等待的时间就会很长，甚至会无限期等待。慢速I/O的系统调用导致进程睡眠时，到达的信号就会打断这个系统调用，返回到用户态程序，系统调用返回–1，标志系统调用出错，errno中记录的出错代码是EINTR。</p>
+
+<p>程序员应当处理这样的错误，并且根据需要重新开始系统调用，或者完成其他的操作。</p>
+
+<p>2.7 sleep，pause与alarm</p>
+
+<p>2.7.1 sleep</p>
+
+<p>int sleep(int seconds);</p>
+
+<p>sleep不是系统调用，而是一个库函数。函数的返回值是剩余的秒数。由于信号会打断睡眠进程，所以，sleep()不见得会睡足指定的时间。</p>
+
+<p>使用sleep函数应注意的问题。</p>
+
+<h1>cat slp.c</h1>
+
+<h1>include</h1>
+
+<p>void handler(int sig){</p>
+
+<p>signal(SIGINT, handler);}</p>
+
+<p>int main(void){</p>
+
+<p>int n;</p>
+
+<p>signal(SIGINT, handler);</p>
+
+<p>n = sleep(3600);</p>
+
+<p>printf(&ldquo;n = %d\n&rdquo;, n);</p>
+
+<p>}</p>
+
+<h1>./slp</h1>
+
+<p>^Cn = 3596</p>
+
+<p>程序执行4s后，按Ctrl+C 键就会打印出上述信息，就执行了sleep之后的printf函数，而没有持续等待一个小时。如果进程一定要睡眠一个小时，并且有可能会到达信号，那么，程序该自己设法继续睡眠。把上述程序的最后两条语句改为：</p>
+
+<p>for (n = 3600; n &gt; 0; n = sleep(n))</p>
+
+<p>printf(&ldquo;Timeout will occur in %d seconds.\n&rdquo;, n);</p>
+
+<p>那么，每按一次Ctrl+C键，sleep调用就返回一次，程序打印出剩余的秒数。极端情况下，上述循环不见得会让程序在这个循环等待一个小时。解决这样的问题，可以采用time()获取时间坐标，决定sleep时长。这里不再给出改进后的程序。</p>
+
+<p>2.7.2 pause</p>
+
+<p>系统调用pause()的功能有点类似sleep函数，只是指定的秒数是无穷大∞。</p>
+
+<p>pause会使得进程一直睡眠。一旦收到信号，从信号捕捉函数返回后，pause()才返回。一般用pause()无限期等待一个信号。</p>
+
+<p>int pause(void);</p>
+
+<p>pause函数返回值只可能是-1，errno为EINTR。</p>
+
+<p>2.7.3 alarm</p>
+
+<p>alarm调用用于设置进程自己的报警时钟（闹钟），函数原型为：</p>
+
+<p>int alarm(int seconds);</p>
+
+<p>每个进程都有一个报警时钟，存储在它内核中的PCB中。当报警时钟走完时，就向自己发送SIGALRM信号。子进程继承父进程的报警时钟值。报警时钟在exec执行期间仍保持这一设置。进程收到SIGALRM后的默认处理是终止进程。使用这种功能，程序中在fork语句后exec语句前加上alarm(n);语句，就会使得一个不对SIGALRM信号进行任何处理设置的命令的执行时间限制为n秒。</p>
+
+<p>alarm参数seconds为秒数。当seconds&gt;0时，将闹钟设置成seconds指定的秒数。当seconds=0时，关闭报警时钟。</p>
+
+<p>例如，程序要求操作员在5s内输入一命令。超时了使用默认命令CMDA。</p>
+
+<h1>include</h1>
+
+<p>static char cmd[256];</p>
+
+<p>void default_cmd(int sig){</p>
+
+<p>strcpy(cmd, &ldquo;CMDA&rdquo;);}</p>
+
+<p>int main(void)</p>
+
+<p>{</p>
+
+<p>signal(SIGALRM, default_cmd);</p>
+
+<p>printf(&ldquo;Input command : &rdquo;);</p>
+
+<p>alarm(5);</p>
+
+<p>scanf(&ldquo;%s&rdquo;, cmd);</p>
+
+<p>alarm(0);</p>
+
+<p>printf(&ldquo;cmd=[%s]\n&rdquo;, cmd);</p>
+
+<p>&hellip;</p>
+
+<p>}</p>
+
+<p>由于库函数scanf会调用read系统调用从当前终端读取数据，进程睡眠时收到SIGALRM信号系统调用就会返回。这个程序的一个最糟糕情况是，用户输入了命令，但是在执行语句alarm(0)之前正好闹钟到期，输入无效。</p>
+
+<p>Linux默认情况下，从终端读的系统调用不可被SIGALRM中断，上述程序在Linux中成功运行，还需要在程序中增加下面的语句，以允许SIGALRM信号可以打断对终端的read()系统调用：</p>
+
+<p>siginterrupt(SIGALRM, 1);</p>
+
+<p>第二个参数1表明允许SIGALRM信号打断系统调用；如果为0，表明不许打断系统调用。</p>
+
+<p>在连载11中，我们将进一步对进程间通信进行讨论，并且介绍利用中间介质进行进程间通信的原理和基本方法。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-09T10:21:41+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -2433,277 +3055,6 @@ diff不仅有对比两个任意文件（包括文本文件、二进制文件等�
 
 
 <time datetime="2009-05-19T14:24:42+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/05/15/mp77-de-UNIX-ke-jian-bi-ji-2/">
-		
-			mp77的UNIX课件笔记(2)</a>
-	</h2>
-	<div class="entry-content">
-		<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">第一章</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;"> UNIX</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的前世今生</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></strong></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 0cm; mso-list: l1 level1 lfo1;"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;">一、</span></span><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">UNIX</span></strong></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">起源</span></strong><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Unix</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的诞生离不开一种于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1965</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年由</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Advance research project agency(United States Department of Defence)</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">支持，并聚集</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MIT</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">以及通用电气共同参与开发的分时系统</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS (MULTiplexed Information and Computing Service)</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的主要设计目标是：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、便利的终端使用——大量远程终端通过电话线接入计算机主机</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、高可靠的大型文件系统——大容量的用户信息共享；存储和构造层次化信息结构的能力</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">然而</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">研制难度超出所有人的预料，长期的研制工作达不到预期目标，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1969</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">4</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">月</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">退出，通用电气公司也退出。最终，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MIT</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">坚持下来，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">成功运行，成为商业产品。事实上</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">运行直到</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">2000</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年，加拿大国防部关闭了最后一个正常运行中的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">系统。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的开发及其研究成果对随后的计算机操作系统有着巨大影响。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1969</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年，已退出</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">项目的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">研究员人员</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Ken Thompson</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Dennis M. Ritchie </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在一台无人用的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">DEC PDP-7</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">上，重新摆弄原先在</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">项目上设计的“空间旅行”游戏。为了使游戏能够在</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">PDP-7</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">上顺利运行，他们陆续开发了浮点运算软件包、显示驱动软件，设计了文件系统、实用程序、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">shell </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和汇编程序。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1970</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年，在一切完成后，给新系统起了个同</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">MULTICS</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">音相近的名字</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">最初的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是使用汇编语言编写，其中一些系统应用是使用</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">B</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言和汇编语言混合编写的，鉴于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">B</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言并不善于进行系统编程，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Ken Thompson</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Dennis M. Ritchie</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在此基础上做了大量改进工作，并于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1971</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年发明了</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1973</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">用</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言全部重写，自此，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">正式诞生。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1977</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Unix</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">被几乎完全不变的移植到非</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">PDP-7</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">机上，开始广泛应用于各种大学和科研机构。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">从历史上看，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的流行具备以下几点重要因素：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">首先，由于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是用</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言编写，因此它是可移植的，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是世界上唯一能在笔记本计算机、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">PC</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">机、工作站直至巨型机上运行的操作系统；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">第二，系统源代码非常有效，系统容易适应特殊的需求；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">最后，也是最重要的一点，它是一个良好的、通用的、多用户、多任务、分时操作系统；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Ken Thompson</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Dennis M. Ritchie</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">因为其卓越的贡献于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1983</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年获得图灵奖，并于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1999</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年获得美国国家技术金奖。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">然而由于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">强大的商业潜力，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1979</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年发布了最后一个</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">广泛版本</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX 7</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1982</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年发布的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX III</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">最终停止了向各个研究机构发布</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">源代码的做法，而改为商业销售。随后又综合各个大学的研究版本发布了</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX Syetem V Release 1</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Berkeley</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">商业化后延续了其</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">BSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">研究版的开发，其创立的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">TCP/IP</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">协议机制几乎是现有所有系统</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">TCP/IP</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">实现的鼻祖。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1989</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年开发了</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX Syetem V Release 4</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，并集成了当时多种</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">变种版本，成为目前多数变种系统的前身。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">与</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Berkeley</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">BSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是否侵权的问题上长期存在争执，直到</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">被卖给</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Novell</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，双方最终才达成妥协，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">BSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">得以在删除所有</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AT&amp;T</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">源代码的前提下继续开发。使得</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">最终形成了两大技术流派：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX SVRx</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">以及</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Berkeley Software Distribution</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 0cm; mso-list: l1 level1 lfo1;"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;">二、</span></span><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">UNIX</span></strong></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">发行版的比较</span></strong><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的发行版本众多，不过可以分为硬件流和软件流两种流派。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt; mso-list: l2 level1 lfo2;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;">1、</span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">硬件流派</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">硬件流是指厂商所发布的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">仅能在自己研制的硬件系统中使用，硬件流的主要特点是：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">系统和自家的硬件捆绑销售；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">相对较封闭，不同厂家之间无法二进制兼容；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">适合企业级应用；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">性能和稳定性满足关键业务需求；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">对管理员要求最高，但享有较好的维护支持；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">总拥有成本</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">(TCO)</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">较高；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">目前硬件流的代表有</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">IBM</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">SUN</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Solaris</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">以及</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">HP</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">HP/UX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt; mso-list: l2 level1 lfo2;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt; mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;">2、</span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">软件流派</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">源代码目前的版权属于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">SCO Group</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，并在此基础上发布了</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">SCO Unix</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，其作为唯一合法的纯商业</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">系统软件具有以下特点：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">较好的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">x86</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">平台兼容性，适合多种硬件架构；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">适合网络服务的多种应用；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">有版权；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">对管理员要求较高，但也有部分商业支持；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">总拥有成本</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">(TCO)</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">一般；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">另外，开源项目中的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">版本已成为目前</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">广泛流行的主要推动力量。包括了</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">BSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">衍生而来的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">FreeBSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">OpenBSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">NetBSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，以及</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">衍生来的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">RedHat</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（自</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">v9.0</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">后终止研发桌面版，进而开发</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">RedHat Enterprise Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">商业系统）、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Fedora</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">RedHat v9.0</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">后由</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">RedHat Inc.</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">支持的开源项目）、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Debian </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（早期的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">发行版之一，拥有数量惊人的软件包支持）、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">SUSE</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（现由</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Novell</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">维护的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">发行版）、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Ubuntu</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Debian</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">衍生而来的一种较新的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">发行版）、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Mandriva</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（即</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Mandrake Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，一种最初基于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">RedHat</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的衍生版本，其维护方</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Mandrakesoft Inc.</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">2005</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年被</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Conective Inc.</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">收购）。开源项目下的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">BSD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">具有以下特点：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">较好的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">x86</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">平台兼容性，适合多种硬件；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">从桌面到网络服务，适合多种应用，应用软件丰富；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">源代码开放，不存在版权问题；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">对管理员要求较高，商业支持少，但有社区支持；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">总拥有成本</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">(TCO)</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">较低；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">具有潜在的行业趋势；</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 0cm; mso-list: l0 level1 lfo3;"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;">三、</span></span><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">UNIX</span></strong></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span></strong><span style="font-family: Times New Roman;"><strong style="mso-bidi-font-weight: normal;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">Linux</span></strong><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Unix</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的主要特点如下：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、开放性</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">遵循世界标准规范，特别是遵循开放系统互连</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">OSI</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">国际标准。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、多任务</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">允许多个程序同时执行。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">3</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、多用户</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">允许多个用户从相同或不同终端上同时使用同一台计算机。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">4</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、良好可移植性、高稳定性和强安全性</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">编译大都相同，具备良好的可移植性，历经长久考验，稳定安全。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">5</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、功能强大、实现高效</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">使用户能方便地、快速地完成许多其他操作系统难以实现的功能。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt; tab-stops: 298.5pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">6</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、卷式文件结构及外部设备文件化</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">                                      </span></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">具有可装卸的树型分层结构文件系统</span><span style="mso-bidi-font-size: 10.5pt;"><span style="font-family: Times New Roman;"> </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，并分别赋予外部设备对应的文件名，用户可以像使用文件那样使用任一设备。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的特点如下：</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">继承性</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">作为</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的子集，具备多任务，多用户，良好稳定性，良好安全性，符合</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">POSIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">标准等（</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">POSIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">可移植操作系统接口</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Portable Operating System Interface</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，缩写为</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;"> POSIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，是为了读音更像</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。电气和电子工程师协会</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Institute of Electrical and Electronics Engineers</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">IEEE</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">最初开发</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;"> POSIX </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">标准，是为了提高</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;"> UNIX </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">环境下应用程序的可移植性）。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、多平台</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">支持各种</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">CPU</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，包括</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Intel</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">AMD</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">PowerPC</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，甚至</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">SUN sparc</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">等。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">3</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、完善的网络协议</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">具备</span><span style="mso-bidi-font-size: 10.5pt;"><span style="font-family: Times New Roman;"> </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">从</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">IPv4</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">到</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">IPv6,</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">内置</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">IPSEC, netfilter</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">防火墙。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">4</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、多种友好用户界面</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Shell</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">GNOME, KDE</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">等。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">5</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、核心与应用分离、遵循</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">GNU</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">协议（</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">GNU&#8217;s Not UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，由</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Richard Matthew Stallman</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">于</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">1983</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年发起的类</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">组织，旨在推广自由软件系统，该协议框架下包含了许多著名软件</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">GNU/Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Emacs</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、以及</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">编译器</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">GCC</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">等）。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">采用核心与应用分离，核心（</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Kernel</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">），围绕核心的</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">shell</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">x-windows</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，以及应用软件共同构成</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">Linux</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">系统。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">接下来介绍</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-family: Times New Roman;">UNIX</span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的配置方法和常用领域的解决方案。</span><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-15T20:56:32+08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
