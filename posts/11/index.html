@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="上一章讨论了Unix进程控制机制和具体实现，在此基础上我们将进一步研究进程间通信的原理和方法。 2 信号Signal 2.1 信号的基本概念 信号是进程间通信的方法之一，它用以指示某些事件的发生。信号提供了一种异步事件处理的方法。 信号可以由系统核心程序发出，也可以由某些进程发出， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="3 进程与文件描述符 3.1 内核中的文件打开结构 我们已经在前文中介绍过有关文件描述符的概念。在OS文件系统中，为了提高文件访问的效率，在访问一个文件时，将文件的inode节点读入内核内存，在整个文件访问期间使用内存中的inode节点。由于同一个进程可以访问多个文件，多个进程可以同时访问文件， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,204 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/06/13/MP77-de-UNIX-ke-jian-bi-ji-11/">
+		
+			MP77的UNIX课件笔记(11)</a>
+	</h2>
+	<div class="entry-content">
+		<p>3 进程与文件描述符</p>
+
+<p>3.1 内核中的文件打开结构</p>
+
+<p>我们已经在前文中介绍过有关文件描述符的概念。在OS文件系统中，为了提高文件访问的效率，在访问一个文件时，将文件的inode节点读入内核内存，在整个文件访问期间使用内存中的inode节点。由于同一个进程可以访问多个文件，多个进程可以同时访问文件，因此在内核中构建了“活动文件目录AFD”active file directory，文件描述符即该文件目录的索引。</p>
+
+<p><a id="more"></a><a id="more-179"></a></p>
+
+<p>从内核的角度来看，AFD是一个三级存储结构，它包括了如下几个部分：</p>
+
+<p>1、进程PCB的user结构中有一整型数组u_ofile，记录当前进程打开的文件。所谓的文件描述符fd，实际上就是user结构中u_ofile数组的下标值。每个进程有一个u_ofile数组。当然，无论是动态分配还是静态分配，系统不可能允许这个数组无限大，这就是每个进程最多可以打开的文件个数限制。</p>
+
+<p>2、u_ofile数组中的元素值，是一个整数，这个整数是file数组的一个下标。file定义在/usr/include/sys/file.h中，主要包含以下几个域：</p>
+
+<p>struct file{</p>
+
+<p>char f_flag; //开启文件的读写操作要求</p>
+
+<p>char f_count; //引用计数</p>
+
+<p>int f_inode; //内核中inode数组的下标，可找到已读入内核中的文件inode节点</p>
+
+<p>offset_t f_offset; //文件读写位置指针，系统在此记录文件读写位置</p>
+
+<p>}</p>
+
+<p>3、内存inode表在整个系统也只有一张，是外存中inode的缓冲。在内存inode中也有一个引用计数字段，统计有多少个file结构引用它。</p>
+
+<p>在具体的OS实现中，尽管可能使用了更复杂的引用类型，但整体三级结构的框架是不变的。</p>
+
+<p>内存AFD三级存储结构的构建，与文件描述符的有关操作密切相关。</p>
+
+<p>例如open调用，其实质是增加了活动文件目录，在三级表格中增加原始条目。在open层次上已经将设备虚拟得跟普通磁盘文件一样。</p>
+
+<p>又例如管道操作pipe，网络通信socket，都是创建文件描述符，系统把它们虚拟得跟普通文件一样，随后利用read、write像访问普通磁盘文件一样访问管道，或者在网络连接上收发数据。fork导致的子进程继承也会增加条目。</p>
+
+<p>而close调用实质是AFD的删除操作，直接消除u_ofile项，根据引用计数，可能会引发file，inode结构的释放。进程正常地或者异常地终止，内核都会根据进程user结构中u_file的记载，自动关闭已打开的所有文件。</p>
+
+<p>3.2 文件描述符的继承和复制</p>
+
+<p>3.2.1 文件描述符的继承</p>
+
+<p>根据上节介绍的AFD原理，我们很容易能理解fork和exec对已打开文件的影响。这里仍有必要对此进行进一步说明。</p>
+
+<p>fork创建子进程后，子进程继承父进程已打开的所有文件描述符。具体做法就是，子进程user结构中的u_ofile是父进程这个数组的复制。为了防止随后各自独立执行的父子进程close调用会带来的影响，进行了这样的复制后，所有打开文件描述符对应file结构中的f_count都加1。这样，父子进程可以独立地关闭各自的文件，而对另一个进程不产生影响。这种做法还使得父子进程共用文件的读写位置。</p>
+
+<p>由于fork后父进程的文件描述符被子进程继承，因此子进程不需要再次执行open调用，就可以直接使用这些文件描述符，由于exec系统调用不会创建任何进程，执行exec系统调用也不影响文件描述符。</p>
+
+<p>shell程序正是利用了文件描述符的继承机制，向子进程自动文件描述符0、1、2，分别表示标准输入、标准输出和标准错误输出，确保该进程的上述操作均关联至当前tty。</p>
+
+<p>3.2.2 close-on-exec标志</p>
+
+<p>在有的情况下，我们希望在执行exec时自动关闭某些文件描述符。这就需要为已经打开的文件设置close-on-exec标志。</p>
+
+<p>内核为每个文件描述符记录了一个文件描述符标志字，标志字的第0比特是close-on-exec标志。默认情况下，该标志位被清除，因此如果要求文件描述符在exec时自动关闭，必须取出这个文件描述符的标志字，将第0比特设置为1，标志字的其他比特保持原值，然后重新设置文件描述符的标志字。</p>
+
+<p>获取文件描述符标志字，使用系统调用函数fcntl，函数原型如下：</p>
+
+<h1>include</h1>
+
+<p>int fcntl(int fd,int cmd,&hellip;);</p>
+
+<p>fcntl有很多功能，这里用到的仅仅是获取和设置文件描述符控制字的功能，后面的文件和记录锁定，以及设置无阻塞I/O时，还会用到这个函数。</p>
+
+<p>flags = fcntl(fd,F_GETFD,0);</p>
+
+<p>flags |= FD_CLOEXEC;</p>
+
+<p>fcntl(fd,F_SETFD,flags);</p>
+
+<p>上述程序演示了获取文件描述符关键字、置位close-on-exec标志，然后重新设置文件描述符控制字。F_GETFD和F_SETFD都是中定义的宏。为了程序的可读性，不直接操作第0比特，而是使用宏FD_CLOEXEC，清除该标志应当使用下面的语句：</p>
+
+<p>flags &amp;= ~FD_CLOEXEC;</p>
+
+<p>3.2.3 文件描述符的复制</p>
+
+<p>fork在创建新进程时复制所有文件描述符，如果只需要复制一个文件描述符，需要使用到System call为dup2。</p>
+
+<p>int dup2(int fd1,int fd2);</p>
+
+<p>复制文件描述符fd1到fd2，fd2可以是空闲的文件描述符，如果fd2是已打开的文件，则先关闭原先的fd2，如果fd1不是有效的描述符，则不关闭fd2，调用失败。dup2的返回值为-1时，标志调用失败。</p>
+
+<p>3.3 管道操作</p>
+
+<p>3.3.1 创建管道</p>
+
+<p>进程使用fork创建子进程后，父子进程就有各自独立的存储空间，互不影响。两个进程之间交换数据就不可能像进程内的函数调用那样，通过传递参数或者使用全局变量实现，必须通过其它的方式。</p>
+
+<p>管道是一种历史悠久的进程间通信机制，在shell中通常使用元字符|连接两个命令，就是基于管道机制而实现的。</p>
+
+<p>管道创建后会在内核中生成一个管道对象，进程可以得到两个文件描述符，然后程序就像访问文件一样访问管道。write调用将数据写入管道，read调用从管道中读出写入的内容。读入的顺序和写入的顺序相同。</p>
+
+<p>int pipe(int pfd[2]);</p>
+
+<p>当创建管道失败时，pipe返回-1。创建管道成功后，获得两个文件描述符pfd[0]和pfd[1]，分别用于读管道和写管道。这样如果进程向pfd[1]写入数据，那么就会从pfd[0]顺序读出来。</p>
+
+<p>管道实现的基本思路是，当使用fork创建子进程后，文件描述符被继承，这样父进程冲pfd[1]写入的数据，子进程就可以从pfd[0]读出，从而实现父子进程之间的通信。</p>
+
+<p>一般情况下，父子进程就可以关闭不再需要的文件描述符。</p>
+
+<p>3.3.2 管道读写操作</p>
+
+<p>对于写操作write来说，由于管道是内核中的一个缓冲区，缓冲区不可能无限大，或者说管道不可能长度无限。若管道已满，则write操作会导致进程被阻塞，直到管道另一端read将已进入管道的数据取走后，内核才把阻塞在write的写端进程唤醒。管道容量依赖于Unix系统的实现，一般至少为4096B。</p>
+
+<p>管道的读操作分三种情况。</p>
+
+<p>第一种情况，管道为空，则read调用会将进程阻塞，而不是返回0.进程会一直等待到管道写端向管道写入了数据，才会醒来，read调用返回。类似的情况还有终端读，以及网络通信socket读，在终端没有按键，或者网络上尚未有数据到达的时候，read一样会将进程睡眠等待，而不是返回0。</p>
+
+<p>第二种情况，管道不为空，返回读取的内容，read调用的形式为：</p>
+
+<p>n = read(fd,buf,m);</p>
+
+<p>read的第三个参数m是最多可以读取的字节数。如果管理中实际有n个字节，那么如果m&gt;=n，则读n个；如果m</p>
+
+<p>第三种情况，管道写端已关闭，则返回0。类似的，终端文件和网络socket，终端上按ctrl+D键或者网络连接被关闭，read也是返回0。</p>
+
+<p>两个独立的进程对管道的读写操作，如果未写之前，读先行一步，那么，操作系统内核在系统调用read中让读端进程睡眠，等待写端送来数据。同样，如果写端的数据太多或者写得太快，读端来不及读，管道满了之后操作系统内核就会在系统调用write中让写端进程睡眠，等待读端独奏数据。这种同步机制，在读写速度不匹配时不会丢失数据。</p>
+
+<p>3.3.3 管道的关闭</p>
+
+<p>只有所有进程中引用管道写端的文件描述符都关闭了，读端read调用才返回0。</p>
+
+<p>关闭读端，不再有任何进程读，则导致写端write调用返回-1。errno被设为EPIPE，在写端write函数退出前进程还会收到SIGPIPE信号，默认处理是终止进程，该信号可以被捕捉。</p>
+
+<p>3.3.4 管道通信应注意的问题</p>
+
+<p>1、管道传输的是一个无记录边界的字节流。写端的一次write所发送的数据，读端可能需要多次read才能读取，如一次写64KB数据。也有可能写端的多次write所发送的数据，读端一次就全部读出积压在管道中的所有数据。使用TCP协议的网络socket操作也存在同样的问题。</p>
+
+<p>2、父子进程需要双向通信时，应采用两个管道。父子进程只使用一个管道进行双向数据传送时会存在问题导致数据流混乱。</p>
+
+<p>3、父子进程使用两个管道传递数据，安排不当就有可能产生死锁。死锁出现的原因是，如果父进程一次性将若干处理请求写至管道A，然后读管道B等待这个请求的处理结果。子进程先读管道A得到处理请求，但是每次只从管道A中读走一个请求，将处理结果写到管道B。如果因为某个处理请求的数据过大，写管道A满而导致父进程被阻塞，而子进程因要向父进程写回一个体积较大的数据而导致写管道B也被阻塞，这时死锁出现。</p>
+
+<p>4、管道的缺点，管道是半双工的通信通道，数据只能在一个方向上流动，且只限于父子进程或同祖先进程间通信，而且没有保留记录边界。</p>
+
+<p>3.3.5 命名管道</p>
+
+<p>命名管道允许没有共同祖先的不相干进程访问一个FIFO管道。首先用命令：</p>
+
+<p>mknod pipe0 p</p>
+
+<p>创建一个文件，pipe0是文件名，p是文件类型标识。</p>
+
+<p>这时在文件系统中就存在一个命名管道，向这个文件中写入数据，就是向管道内写数据，从这个文件中读取数据，就是从管道中读取数据。</p>
+
+<p>发送者调用：</p>
+
+<p>fd = open(&ldquo;pipe0&rdquo;,O_WRONLY);</p>
+
+<p>write(fd,buf,len);</p>
+
+<p>接受者调用：</p>
+
+<p>fd = open(&ldquo;pipe0&rdquo;,O_RDONLY);</p>
+
+<p>len = read(fd,buf,sizeof buf );</p>
+
+<p>总的来说，管道是最早用于进程之间通信的手段，包括后来增加的命名管道。而Unix从System V开始增强了进程之间的通信机制IPC(inter-process communication)，提供了消息队列message、信号量semaphore和共享内存share memory等多种通信方式，限于篇幅我们不可能一一列举，读者也可以根据需要随时查阅相关资料。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-13T23:24:07+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -2873,188 +3071,6 @@ diff不仅有对比两个任意文件（包括文本文件、二进制文件等�
 
 
 <time datetime="2009-05-21T12:39:49+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/05/19/mp77-de-UNIX-ke-jian-bi-ji-3/">
-		
-			mp77的UNIX课件笔记(3)</a>
-	</h2>
-	<div class="entry-content">
-		<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-
-
-<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-
-
-<p><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">一、</span> <span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">UNIX<span style="font-family: 宋体;">的安装</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-
-<div class="Section0">
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">需要提前说明的是，本段内容并不会包含某个UNIX发行版本的完整安装教程，而是总结了UNIX安装的一般步骤及其常用的解决方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">一般说来UNIX的安装需要经过三个阶段：准备阶段、内核系统安装阶段以及用户系统安装阶段。在准备阶段中，首先应确定的是系统所处的硬件环境，例如硬盘接口类型、RAID控制器驱动、网卡驱动、硬件的启动顺序以及现有系统的备份及安装顺序；随后获取系统软件（GNU/Linux通常可以在网上直接获得ISO文件）；配置准备需要制定出分区规划、SWAP分区大小、root及普通用户口令、网络配置等。在系统安装阶段可以根据相关引导方式逐步进行，包括硬盘分区、加载硬件驱动等，需要注意的是在安装双系统（包含Windows时）需要先安装Windows再安装Unix。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">系统安装完成后需要先检查硬件是否全部安装正常，通常有两种查看方式：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">lspci -b -v<span style="font-family: 宋体;">，列出本机上所有PCI总线上连接的设备，其中-b查看相关设备在PCI总线上的地址信息，-v显示相关详细信息verbose。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">dmesg<span style="font-family: 宋体;">，显示linux启动信息，通常在系统启动时会自动检测硬件设备，dmesg允许用户随时查看该检测列表。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">检查正常后可对系统做以下配置工作（可选）：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、配置防火墙，开放/关闭有关端口；调整服务，禁用不必要服务；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、运行系统更新程序，修补系统漏洞；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、配置X-windows，或将X关闭，通过对以下文件进行修改可以指定Linux的启动模式：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">./etc/inittab</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//X=3</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">text mode</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//X=5</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">x-window</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、增加管理用户，配置远程登录；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">5<span style="font-family: 宋体;">、进行用户磁盘限额配置；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">6<span style="font-family: 宋体;">、应用程序的安装和编译等；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">7<span style="font-family: 宋体;">、对系统主要的配置文件进行备份；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">通常要对系统做远程登陆配置工作，当然这是根据不同用户需求而定的。远程登录一般分为远程登录管理和远程文件交流管理两种工作。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">远程登录服务器进行管理的方式主要包括rsh，rlogin，telnet，ssh（字符终端方式），远程Xwindows，VNC（图形终端）等。不过仍然需要注意以下问题：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、rsh/rlogin等协议由于安全性差等原因已面临被淘汰；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、telnet协议认证过程用户名/密码明文传输，存在安全隐患，一般也不允许root用户从telnet登录，su命令可以实现用户身份的转换；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、Ssh（Secure shell）采用ssl协议对通信进行加密，可有效保障用户名/密码泄漏；.</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、常用的SSH客户端有NetTerm，SecureCRT，PuTTY等；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">5<span style="font-family: 宋体;">、VNC/远程Xwindows可实现远程使用图形界面GUI；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">远程文件交流管理一般包含以下几种基本方式：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、FTP，要求开放服务器的20,21的端口和ftp服务.，常见的ftp客户端有CuteFTP；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、SCP，集成在ssh服务中，无需开放ftp服务，推荐使用WinSCP；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、NFS，Network File System，适合UNIX服务之间的文件传递；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、Samba，方便UNIX和Windows系统之间交换文件；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">5<span style="font-family: 宋体;">、HTTP，适合下载文件，UNIX平台下的wget工具，可将整个目录下载下来；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">二、</span> <span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户系统安装</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户系统涉及到常用软件的安装设置，尽管许多UNIX/Linux发行版中已内置了大量的软件包，但仍无法确保满足所有用户的需要（如一些商业软件）。其安装方式也分三种具体途径：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">拷贝运行，针对一些文件包可以直接运行，可以直接拷贝的方式，一般采用压缩包传输到服务器上解压执行，可能需要修改权限。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">编译安装方式，采用源代码编译，要求安装编译器（需gcc、make等工具支持，一些发行版的workstation模式即附带开发者GNU工具），编译过程相对复杂，需要一定经验和技巧，但更灵活。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">实践证明，有时编译一些规模较大的程序时耗时会非常长，其唯一的好处就是可以自己配置相应的程序——这通常只有专业人员才会用到&#8230;&#8230;程序员算不算专业人员？你认为呢？</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">现在来看Linux中编译安装一个新内核的具体过程&#8230;&#8230;编译内核？好吧&#8230;&#8230;我们只需要了解编译安装的一般流程和方法即可，对于某些软件的编译安装可能需要其相关的高端硬件或软件知识作为支撑，当然忽略所有设置进行简单的内核升级还是不复杂的。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">那么，我们转而来了解一下编译安装mysql数据库系统的基本流程&#8230;&#8230;</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"># tar -zxvf mysql-5.0.45.tar.gz</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　# cd mysql-5.0.45</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　# ./configure –prefix=/usr/local/mysql –with-charset=utf8 –with-collation=utf8_general_ci –with-extra-charsets=latin1</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　# make</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"># make install</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">由上可知编译安装时应先释放相应软件包，进入安装目录，并配置configure生成相应的makefile或Makefile文件（相关参数需要提前了解），并不是所有的程序都自带configure，因而必要时makefile或Makefile需要自己制作。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">然后利用make根据刚才生成的规则文件编译相关源代码文件，并编译安装install即可。（注：本段文字的目的仅为了演示编译安装的一般规则，并不包含具体的mysql安装方法，包括安装完成后的配置工作）。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">软件包安装方式，直接将编译好的软件包安装在UNIX系统上，类似于Windows平台下用setup命令安装一个软件包。安装过程简单，但包和包之间存在一定的依赖性关系，不同的Unix支持的软件包格式不相同。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">在Linux下，软件包的格式略有不同，常用的包格式有rpm（Redhat Package Manager）、deb（Debian下利用dpkg工具以tar或tar.gz方式制作的软件包）、tar.gz、tar.z、tar.bz2（以上三种是一般Linux自带的打包工具）。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">根据Linux主流发行版的不同，流行的软件包格式分别是rpm（Redhat</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、SuSE、Fedora等采用</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">）和deb（一种流行的debian的衍生版本ubuntu采用）。尽管有alien（一种支持包格式转换的工具），但某些情况下依然无法实现不同包的跨系统正常安装。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">）RPM命令的主要选项有：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-i <span style="font-family: 宋体;">安装软件。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-t <span style="font-family: 宋体;">测试安装，不是真的安装。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-p <span style="font-family: 宋体;">显示安装进度。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-f <span style="font-family: 宋体;">忽略任何错误。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-U <span style="font-family: 宋体;">升级安装。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">V </span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">检测套件是否正确安装。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">）dpkg命令的主要选项有：</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-i 安装一个Debian软件包。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-c 列出的内容。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-I 从中提取包裹信息。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-r 移除一个已安装的包裹。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-P 完全清除一个已安装的包裹。和remove不同的是，remove只是删掉数据和可执行文件，purge另外还删除所有的配制文件。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-L 列出安装的所有文件清单。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-s 显示已安装包裹的信息。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-reconfigure 重新配制一个已经安装的包裹，如果它使用的是 debconf (debconf 为包裹安装提供了一个统一的配制界面)。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">三、UNIX备份方案</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">以上工作安装完毕并调试正常后，就可以为系统建立首次安装备份了。某些系统可能配备了相类似功能，部分商业版本同时也支持GHOST镜像。下面按照方法分类介绍一些简单有效的备份方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">直接文件备份，意即使用系统自带的档案压缩工具对待备份文件进行打包存储。在早期的UNIX系统中有compress命令可以使用，然而在目前大多数的UNIX/Linux中多数是tar一统天下了。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar<span style="font-family: 宋体;">的选项众多，一般情况下使用的是：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-c</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">创建一个新的档案；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-f</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">使用的源档案文件；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-v</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">verbose<span style="font-family: 宋体;">列出tar处理的序列；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-z</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">使用gnuzip对档案附带压缩；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-x</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">释放源文件中的内容；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">例如对/etc目录进行备份，有如下命令行：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zcvf /etc-backup.tar.gz /etc</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">恢复配置：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zxvf </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">/etc-backup.tar.gz /etc</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-restore</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">通过网络备份，这在一些服务器环境中经常用到。其中和不同主机进行数据文件交流的途径也不尽相同：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">和Windows服务器：CIFS，Samba；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">和UNIX类服务器：NFS；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">其他解决方案：FTP，HTTP；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">现在以跨系统主机备份为例，介绍一种简单有效的远程备份方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">“<span style="font-family: 宋体;">某图书馆Web服务器操作系统为Windows 2003, 备份服务器为Linux,需要定时（每天）将Web服务器上的数据备份到Linux服务器上。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Web<span style="font-family: 宋体;">服务器IP: 202.1.1.1；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Linux<span style="font-family: 宋体;">备份服务器IP: 202.1.1.2；”</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1）</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">基于samba实现，samba是一种可供不同主机进行数据文件交流的系统工具，它是基于SMB（Server Message Block）协议（ms后来改名为CIFS，Common Internet File System）的一种通用解决方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">首先应对Windows主机上的数据目录进行共享，必要时可设置密码；通常还需要建立一个供backup专用的系统账户，这里设置为username：backup，password：backit，共享点为backit。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">在Linux主机上建立相应的shell脚本（具体教程在后文中有详细说明）：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">/backup/backupweb.sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">#!/bin/sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">mkdir -p /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">cd /backup</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">mount -t smbfs -o username=backup,password=backit //201.1.1.1/backupweb /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zcvf `date +%Y%m%d`.webbackup.tar.gz /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">umount /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">由于要求使用计划任务，在/etc/cron.daily/中加入backupweb.sh的符号连接，以实现每天一次的自动备份：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">cd /etc/cron.daily/</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">ln -s /backup/backupweb.sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">这里就是一次简单的web服务器备份流程了。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2）</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">基于FTP实现。相应于samba，FTP的适用性和稳定性似乎更为优秀，另外在一些安全性较高的系统中还可以采用SSL或者TLS协议加密传输。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">首先需要将待备份目录映射至FTP中的backupweb目录，这方面的工作在web服务器中完成。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Linux<span style="font-family: 宋体;">服务器中建立备份脚本backupweb-ftp.sh：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">#!/bin/sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">cd /tmp</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">wget -m -np \ftp://username:password@202.1.1.1/backupweb/</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zcvf /backup/`date +%Y%m%d`.webbackup.tar.gz /tmp/202.1.1.1/backupweb</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">rm -rf /tmp/202.1.1.1/backupweb</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">后续操作参考方案1即可。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">至于Linux在进行系统备份时具体涉及到哪些系统文件，会在下节有详细说明。以上就是Linux中常用的一些文件备份解决方案的介绍，在实际应用中应根据具体情况灵活使用。</span> </span></p>
-<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
-
-</div>
-
-
-<!--EndFragment-->
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-19T14:24:42+08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">

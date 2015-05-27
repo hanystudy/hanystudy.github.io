@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="前文主要介绍了OpenNI FrameWork的基本概念和整体构架，在正式进入API概览之前，我们需要对工作节点（Production Nodes）进行一些补充说明。 工作节点的数据创建/销毁机制 通常把能够输出数据的工作节点称为“生成器”，这里我们可以把“生成器”看作一个对象。而当“生成器” &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="基本编程方法 本节的主要内容是结合OpenNI编程。 首先假设使用MS VS作为开发工具，那么应先在工程中配置OpenNI库：其中分别需要添加环境变量$(OPEN_NI_INCLUDE)和$(OPEN_NI_LIB)，以及静态链接库OpenNI.lib；此外代码文件中还要添加相应的头文件， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,171 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/08/24/Kinect-lai-le-jie-xi-jie-xi-SDK/">
+		
+			Kinect来了——解析SDK(OpenNI Framework 3)</a>
+	</h2>
+	<div class="entry-content">
+		<p><strong>基本编程方法</strong></p>
+
+<p>本节的主要内容是结合OpenNI编程。</p>
+
+<p>首先假设使用MS VS作为开发工具，那么应先在工程中配置OpenNI库：其中分别需要添加环境变量$(OPEN_NI_INCLUDE)和$(OPEN_NI_LIB)，以及静态链接库OpenNI.lib；此外代码文件中还要添加相应的头文件，C语言工程需包含XnOpenNI.h，C++工程为XnCppWrapper.h。</p>
+
+<p>下面的代码段演示了如何初始化一个上下文对象，并从深度节点中创建和读取数据：</p>
+
+<p>[c]XnStatus nRetVal = XN_STATUS_OK;
+xn::Context context;       //声明上下文对象
+nRetVal = context.Init();        //初始化并返回异常编码
+xn::DepthGenerator depth;        //声明深度生成器节点</p>
+
+<p>nRetVal = depth.Create(context);        //初始化节点，返回异常编码
+nRetVal = context.StartGeneratingAll();        //启动深度节点数据生成
+while (bShouldRun)
+{
+nRetVal = context.WaitOneUpdateAll(depth);        //等待数据更新
+if (nRetVal != XN_STATUS_OK)        //数据更新异常
+{
+printf(&quot;Failed updating data: %s\n&quot;,xnGetStatusString(nRetVal));
+continue;        //不间断通信
+}
+//深度数据获取正常
+const XnDepthPixel* pDepthMap = depth.GetDepthMap();        //获取数据缓冲区指针
+}
+context.Shutdown();        //关闭上下文对象[/c]</p>
+
+<p>通常配置一个工作链需要实现大量代码，OpenNI提供了工作链查询接口，使得程序员可以通过查询关键字的形式找到系统内已有的相关工作链配置信息，考虑到符合查询条件的结果数量可能不唯一，OpenNI的查询机制结果总是以集合的形式返回。下面给出相关代码：</p>
+
+<p>[c]//创建查询对象
+xn::Query query;
+nRetVal = query.SetVendor(&quot;MyVendor&quot;);        //设置查询条件，这里设置了有关提供商名称
+query.AddSupportedCapability(XN_CAPABILITY_SKELETON);        //这里的查询条件指定数字骨架数据支持
+xn::NodeInfoList possibleChains;
+nRetVal = context.EnumerateProductionTrees(XN_NODE_TYPE_USER, &amp;query, possibleChains, NULL);        //根据查询对象枚举全部的工作链配置
+xn::NodeInfo selected = *possibleChains.Begin();        //返回最相似的查询结果，此时仍是但节点信息
+nRetVal = context.CreateProductionTree(selected);        //根据节点信息创建相应工作节点
+xn::UserGenerator userGen;
+nRetVal = selected.GetInstance(userGen);        //获取节点实例
+&hellip;&hellip;        //进一步操作[/c]</p>
+
+<p>实际上上述代码在OpenNI编程中非常常见，因为通过编程配置有关工作链实际上是一件很烦琐的事情。但显然对相关节点的查询并不一定能得到理想的结果，有时确实会发生查询结果为零的情况。例如该功能类型的节点尚未配置入系统中，或者节点的许可证序号不一致等异常情况。为方便查看节点测试失败的原因，OpenNI提供了一种针对节点类型的全局测试机制，该机制允许记录节点初始化失败的原因。相关代码如下：</p>
+
+<p>[c]xn::EnumerationErrors errors;        //实际上是一个异常结果集合
+xn::HandsGenerator handsGen;
+nRetVal = context.CreateAnyProductionTree(XN_NODE_TYPE_HANDS, NULL, handsGen, &amp;errors);
+//如果没有一个节点测试成功
+if (nRetVal == XN_STATUS_NO_NODE_PRESENT) {
+//遍历所有的异常信息，并输出
+for (xn::EnumerationErrors::Iterator it = errors.Begin(); it != errors.End(); ++it) {
+XnChar strDesc[512];
+xnProductionNodeDescriptionToString(&amp;it.Description(), strDesc, 512);
+printf(&quot;%s failed to enumerate: %s\n&quot;, xnGetStatusString(it.Error()));
+}
+return (nRetVal);
+}
+//如果存在相关节点，但无法验证
+else if (nRetVal != XN_STATUS_OK) {
+printf(&quot;Create failed: %s\n&quot;, xnGetStatusString(nRetVal)); return (nRetVal);
+}[/c]</p>
+
+<p>下面这段代码演示了从创建深度生成器，到节点设置配置信息，再从中获取数据并最终显示的全过程。</p>
+
+<p>[c]XnStatus nRetVal = XN_STATUS_OK;
+Context context;
+nRetVal = context.Init();        //创建上下文
+DepthGenerator depth;
+nRetVal = depth.Create(context); //创建深度生成器
+XnMapOutputMode mapMode;
+mapMode.nXRes = XN_VGA_X_RES;
+mapMode.nYRes = XN_VGA_Y_RES;
+mapMode.nFPS = 30;
+nRetVal = depth.SetMapOutputMode(mapMode);        //设置其输出模式为VGA+30FPS，
+nRetVal = context.StartGeneratingAll();        //开始获取数据
+XnUInt32 nMiddleIndex = XN_VGA_X_RES * XN_VGA_Y_RES/2 + XN_VGA_X_RES/2;        //计算中心像素索引
+while (TRUE) {
+nRetVal = context.WaitOneUpdateAll(depth);       //刷新数据缓冲区
+const XnDepthPixel* pDepthMap = depth.GetDepthMap();
+printf(&quot;Middle pixel is %u millimeters away\n&quot;, pDepthMap[nMiddleIndex]);        //输出中心像素的深度值
+}
+context.Shutdown();[/c]</p>
+
+<p>音频生成器（AG）的操作与其它节点相比有一定区别，原因在于当程序执行UpdateData()方法后AG才会将之前记录的音频数据存入数据缓冲区中，而且许多情况下音频生成器的数据缓冲区大小是未知的，因此需要经常使用xn::AudioGenerator::GetDataSize()方法获取当前环境下的数据缓冲区大小。下面的例子中首先创建了一个AG，然后对其进行配置，最后读取音频数据。</p>
+
+<p>[c]Context context;
+nRetVal = context.Init();        //初始化上下文
+AudioGenerator audio;
+nRetVal = audio.Create(context);         //初始化AG
+XnWaveOutputMode waveMode;
+waveMode.nSampleRate = 44100;
+waveMode.nChannels = 2;
+waveMode.nBitsPerSample = 16;
+nRetVal = audio.SetWaveOutputMode(waveMode);        //设置AG配置属性
+while (TRUE) {
+nRetVal = context.WaitOneUpdateAll(audio);        //刷新数据缓冲区
+const XnUChar* pAudioBuf = audio.GetAudioBuffer();
+XnUInt32 nBufSize = audio.GetDataSize();        //获取当前数据大小
+}
+context.Shutdown();[/c]</p>
+
+<p>最后，我们来看看OpenNI提供的录制与缩放功能（NSSDK未提供该功能）。执行录制的前提是首先创建一个Recorder节点对象,并设置好它的待保存文件名。然后应用程序在该节点中添加需要进行录制目标节点，当在Recorder中加入一个节点后，Recorder将首先保存其配置信息，然后对其进行记录。同时Recorder会持续监听目标节点的所有触发事件，以便当节点配置发生改变时能及时获得响应。一旦所有节点添加至Recorder中，应用程序就可以使用Recorder记录节点的数据流了。需要注意的是，针对数据的记录可以使用xn::Recorder::Record()方法，或者通过UpdateAll函数进行。</p>
+
+<p>此外，使用外部XML文件初始化的OpenNI程序可方便地记录其session信息，从而避免修改相应代码。具体只需要在XML文件中为Recorder创建一个新的节点，并将所有节点添加至其中，每当应用程序调用一类UpdataAll函数时均会自动触发记录操作。下面的代码演示了记录一个深度生成器的操作：</p>
+
+<p>[c]DepthGenerator depth;
+nRetVal = depth.Create(context);          // 创建深度生成器
+RetVal = context.StartGeneratingAll();
+Recorder recorder;
+nRetVal = recorder.Create(context);        //创建一个Recorder
+nRetVal = recorder.SetDestination(XN_RECORD_MEDIUM_FILE, &quot;c:\temp\tempRec.oni&quot;);        //配置Recorder属性
+nRetVal = recorder.AddNodeToRecording(depth, XN_CODEC_16Z_EMB_TABLES);        //将深度节点加入Recorder
+while (TRUE) {
+nRetVal = context.WaitOneUpdateAll(depth);        //注意UpdataAll函数既刷新了数据缓冲区，同时对其中的帧数据进行了记录
+}[/c]</p>
+
+<p>录制数据的重放需要首先调用xn::Context::OpenFileRecording()函数，OpenNI读入该文件后先针对文件中的每一个节点创建一个对应的模拟节点，然后使用记录的配置信息进行重配置。应用程序可以随时调用xn::Context::FindExistingNode()获取任何需要的节点，并能像正常节点一样使用。但是应注意，由播放器创建的节点处于锁定状态，且无法被更改，因此其配置信息只能维持记录中保存的状态。同时 ，使用XML文件的OpenNI程序可以轻松替换其载入录制内容，即直接从XML的Recorder节点中读取相应数据。下面的代码就演示了如何载入录制文件，并获取其中保存的深度节点信息。</p>
+
+<p>[c]Context context;
+nRetVal = context.Init();        //初始化上下文
+nRetVal = context.OpenFileRecording(&quot;c:\temp\tempRec.oni&quot;);        //载入录制文件
+DepthGenerator depth;
+nRetVal = context.FindExistingNode(XN_NODE_TYPE_DEPTH, depth);        //获取已录制的深度生成器节点[/c]
+ 在关于OpenNI的最后一篇文章中，我们将重点关注有关节点配置的内容。</pre></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-24T23:24:07+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kinect/'>kinect</a>, <a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -843,64 +1008,6 @@ $(document).ready(
 
 
 <time datetime="2011-07-02T16:46:29+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/06/25/gong-qi-jun-he-ta-de-zi-ran-fa-ze/">
-		
-			宫崎骏和他的自然法则</a>
-	</h2>
-	<div class="entry-content">
-		<p>宫老的片子我向来都是力挺，这次也不例外。</p>
-
-<p>尽管比起三年前的《金鱼姬》还差了近六十亿本土票房，然而无论是宫崎吾朗还是米林宏昌，吉卜力近几次由新人扛鼎的作品丝毫都不失其国民级动画的风范。此外依旧不变的是，我仍可耻地等到一年后的DVD发行版面市——还得是由热心网友在第一时间提供抓轨下载&hellip;&hellip;不过，相较于宫老过去的几部作品，这次从影片《借りぐらしのアリエッティ》中看到了吉卜力试图淡化创作者的个人情绪，且期望承担更多社会责任——这恐怕也是影片缺少几分灵气的重要原因吧！</p>
-
-<p>无论如何，观影的过程还是让人感到舒适和温馨的。整个故事以男主角翔的独白倒叙展开，翔当时正准备接受心脏病手术，而此时父母离婚，母亲也远走国外，姥姥便专程驱车带翔到东京都附近的家中静养一周。不过姥姥的这栋住宅却不一般：宅基下面住了三代的小小人族，这些小小人族通常必须用“借”的方式从人类家中获得生活必需品，其独特的生存方式充满挑战却倒也其乐融融，唯一的禁忌就是不能被人类发现，否则就必须被迫搬离住所。</p>
-
-<p>翔已经是母亲家族在此居住的第四代，据说姥姥的父亲曾在屋内见到小小人族，当即就从英国购置了一套华美精致的人偶房屋，希望小小人族能搬到这个“新家”中。遗憾的是除了翔的母亲和姥姥的父亲以外，家中再没人能亲眼见到过小小人族，而能请小小人族们在人偶房屋居住——到翔这代已经是四代家人的一个梦想了。</p>
-
-<p>十分幸运的是，翔刚到姥姥家的第一天就无意中撞见了偷跑出来的小小人族女孩Arrietty，但也只是一个一闪而过的身影而已。而当晚上Arrietty跟随父亲又来翔的家中“借东西”，突然意识到翔这个人类发现了自己的存在，便匆忙和父亲跑回家中。其实当天晚上翔只是安静看着Arrietty的一举一动，从未有过恶意的想法。早上起来翔发现Arrietty临走时不小心丢下的一块方糖——于是把糖块放回到小小人族们经常出没的地方。Arrietty的家人知道了翔留下的方糖，认为是人类为了抓捕小小人族而设置的陷阱，父亲遂决定举家搬迁。</p>
-
-<p>尽管Arrietty不愿搬离，但也无奈于对家人安全的考虑。然而故事还未结束，翔姥姥家的管家春发现了小小人族的秘密，春是本片唯一的麻烦制造者——不对，还有一只狂暴乌鸦&hellip;&hellip;这在片头就有明确的表示了。春决定抓住家中所有小小人族，趁Arrietty搬家之际抓走了Arrietty的母亲荷蜜莉，并请来了捕鼠公司帮忙。Arrietty情急之下向翔求助，翔不顾病重和春周旋，并帮助Arrietty救出了荷蜜莉。而春也因为抓捕小小人族的计划失败而懊恼不已。</p>
-
-<p>夜，Arrietty和家人准备顺溪而下迁往森林的另一边。此时的翔同样夜不能寐，终于在家猫尼亚的带领下及时赶到并与Arrietty做了最后告别。</p>
-
-<p>现在回想一下，宫老过去二、三十年的影片不是自然题材就是生活题材。而最近的几部片子，比如《崖の上のポニョ》和本片，都尽量要做到自然与生活的统一，事实上脚本构思的也十分巧妙——尤其是三年前的那只金鱼姬和她的奇幻水世界。而这部改编自英国上世纪50年代儿童作家的作品，只是在主题上更加明确和深化了：这世间的物种无一不享有最平等的生存权利，尽管面临进化和自然选择，但各物种无不全力以赴，力争生存，而这星球上拥六十七亿之众的人类，也应该始终保有一颗对其他物种的尊重和对自然的敬畏之心。而对于从小就患有心脏疾病的翔来说，Arrietty和小小人族们永不放弃的勇气也坚定了自己面对未来的信心。</p>
-
-<p>最后，我们回到技术上看。宫老对CG的反感是出了名的，尽管近年来吉卜力的作品一直都在试图引入CG技术，但其小心翼翼的步伐也使得宫老近三十年来的动画技术几乎没有太多突破——这绝非是为了说明手绘动画已经过时，毕竟宫老和吉卜力的影响力是有目共睹的——我们看看更大众化的哆啦a梦系列，三十年如一日的机器猫剧场版在技术上始终走在业界前列，但愈发缺少原著的灵魂了。不过如果我们将视界扩展至全球，CG动画的市场份额仍然在不断扩大，老牌手绘Disney也不得不和着Pixar的脚步做起了全三维CG并横扫世界，尽管Disney还在坚持制作自己的手绘影片，然而其是否宁愿赔本赚吆喝到底也不为人知。我相信，随着CG技术在艺术表现力上突飞猛进式的发展，我们终将有机会踏入这个现实世界中的梦幻王国。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-06-25T17:44:13+08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">

@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="遥想四年前，乃至七年、更远至十年以前，结局无非是瞥一眼成绩单，膜拜着英明无比的就近入学政策，与心目中真正的素质教育失之交臂。再加上天生郁闷的性格，使得自己在与青春期时代严重不符的资料和书海中沉溺了这十年。最终造成自己异于同龄人的心智模式（mental modal）。 这就造成了一个悲剧， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 今后几个月的时间里，我们将深入研究itk和vtk在计算机医学图像处理技术中的应用。itk是由美国国家医学图书馆发起的开源软件项目，该项目旨在促进人体信息数字化研究(Visible Human Project)，是未来进行人体机能智能模拟工程的基础性研究项目。 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,56 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/03/05/ji-yu-ITK-VTK-ji-ji-suan-ji-yi-xue-tu-xiang-chu-li-ji-shu-yan-jiu-xi-lie-wen/">
+		
+			基于ITK+VTK的计算机医学图像处理技术研究(系列文章)</a>
+	</h2>
+	<div class="entry-content">
+		<p> 今后几个月的时间里，我们将深入研究itk和vtk在计算机医学图像处理技术中的应用。itk是由美国国家医学图书馆发起的开源软件项目，该项目旨在促进人体信息数字化研究(Visible Human Project)，是未来进行人体机能智能模拟工程的基础性研究项目。vtk则是致力于计算机图形图像处理和可视化的开源软件项目。</p>
+
+<p> 一般而言，vtk(Visualization Tookit)本身即是一款强大的可视化软件系统，本系列引入itk(Insight Segmentation and Registration Toolkit)，主要考虑有二：</p>
+
+<p> 1、itk专注于医学图像分割与配准技术，在医用方面是对vtk很好的补充，也非常利于未来的功能扩展。</p>
+
+<p> 2、当前版本的vtk(5.4.2)对DICOM通用标准医学图像的io支持性不佳。在已经进行的一系列试验中，vtk产生了一些不稳定状况，这可能会影响到本项研究今后的进展。</p>
+
+<p> 下面我们将介绍各种软件系统的安装配置流程，我们预设的编译平台为Microsoft Visual Studio 6。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-05T10:03:40+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -522,60 +572,6 @@ ps.无意中发现《云之遥》的第一部资料片已于早前首发，看�
 <div class="tags">
 
 	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/10/01/shi-zhou-nian-yun-zhi-yao/">
-		
-			十周年，云之遥</a>
-	</h2>
-	<div class="entry-content">
-		<p>十年前，云和山的彼端首发，从此双剑归来不玩它了。</p>
-
-<p>十年后，又是云，依然是外传，又似乎是汉之云续—云之遥。</p>
-
-<p><em>大宇資訊著名的經典RPG《軒轅劍》系列，繼2007年推出的《軒轅劍外傳：漢之雲》大受好評後，「DOMO 小組」經過兩年的激盪研發後，預計於今年年底推出最新力作《軒轅劍外傳：雲之遙》，此次「DOMO 小組」為了讓玩家們能先一睹《軒轅劍外傳：雲之遙》機密內容，首度曝光的一段開場動畫，帶領玩家們進入《軒轅劍外傳：雲之遙》的世界。 </em></p>
-
-<p><em>神秘洛陽少年　再次掀起三國風雲
-此次世界觀與《軒轅劍外傳：漢之雲》的故事背景相同，都是以漢、魏、吳三國鼎立，三分天下為背景。
-曹操死後，長子曹丕繼立，強逼漢帝禪讓，終於紀元二二○年正式篡位稱帝，國號「魏」。自稱有漢室劉氏皇族血脈之劉備，誓言捍衛大漢王朝正統，也於次年稱帝，國號仍為「漢」。而原本臣服大魏、受其冊封為「吳王」之孫權，亦于紀元二二二年宣告獨立，並於數年後也順勢稱帝，國號「吳」。歷史上知名之「三國時代」，於焉揭幕。
-主角洛陽少年（將會在官網上線時揭曉主角名稱），幼時遭逢變故，流落荒野，幸得魏國前御史中丞徐庶所救，將之收為義子，撫養成人。十年匆匆，少年如今已是英姿煥發、名滿洛陽的少年劍客，但為求精進，少年始終勤練劍術，希望有朝一日能以一身武藝協助恩師張郃，報效朝廷…
-《軒轅劍外傳：雲之遙》將與《軒轅劍外傳：漢之雲》產生怎麼樣的關聯呢？</em></p>
-
-<p>我一向很支持轩系列的作品，DOMO大力发扬国粹，走自己的路，自然剔除一些日式游戏迷也是好事。考虑到时间因素，有可能的话预订一套繁中就好了。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-10-01T23:44:39+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/pcyou-xi/'>pc游戏</a>
 
 </div>
 
