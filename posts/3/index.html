@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="基本编程方法 本节的主要内容是结合OpenNI编程。 首先假设使用MS VS作为开发工具，那么应先在工程中配置OpenNI库：其中分别需要添加环境变量$(OPEN_NI_INCLUDE)和$(OPEN_NI_LIB)，以及静态链接库OpenNI.lib；此外代码文件中还要添加相应的头文件， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="配置工作节点的一般方法 前文的例子中已经说明了在程序中动态配置节点信息的一般过程，节点配置完成的主要标志一般是对xn::Generator::StartGenerating()函数的调用。除此之外，OpenNI还提供了基于外置XML文件的节点配置方法，使用XML配置文件能够显著降低代码复杂度， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,126 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/09/03/Kinect-lai-le-jie-xi-jie-xi-SDK/">
+		
+			Kinect来了——解析SDK(OpenNI Framework 4)</a>
+	</h2>
+	<div class="entry-content">
+		<p><strong>配置工作节点的一般方法</strong></p>
+
+<p>前文的例子中已经说明了在程序中动态配置节点信息的一般过程，节点配置完成的主要标志一般是对xn::Generator::StartGenerating()函数的调用。除此之外，OpenNI还提供了基于外置XML文件的节点配置方法，使用XML配置文件能够显著降低代码复杂度，同时提高应用程序的可用性和灵活性，本文将主要讨论上述方式结合OpenNI编程。</p>
+
+<p>OpenNI支持的XML脚本功能非常强大，仅使用外置的文件就能够实现节点的创建、配置，甚至操作上下文属性（例如增加相应的许可证等）。通常可以使用xn::Context::RunXmlScript()直接执行脚本字符串，或通过xn::Context::RunXmlScriptFromFile()调用外部文件。</p>
+
+<p>一个XML内容中必须包含一个OpenNI结点，该结点内共包含三个子结点：Licenses，Log和Production Nodes。其中Licenses结点提供了系统需要的额外的许可证，其格式一般如下：</p>
+
+<p>[c]&lt;Licenses&gt;
+&lt;License vendor=&quot;vendor1&quot; key=&quot;key1&quot;/&gt;
+&lt;License vendor=&quot;vendor2&quot; key=&quot;key2&quot;/&gt;
+&lt;/Licenses&gt;[/c]</p>
+
+<p>Log结点用于配置OpenNI的日志系统，该结点内可添加下列可选元素属性：writeToConsole，设置日志信息是否在控制台中显示，默认为false。writeToFile:，设置日志信息是否将被写入文件，该文件将被放置在工作目录下，默认为false。writeLineInfo，设置是否每一条日志记录都需要包含文件名和行信息，默认为true。此外，Log还包含三个子结点：LogLevel，携带value属性，其值为0 (verbose), 1 (info), 2 (warnings) or 3 (errors)，其中3为默认值，该结点决定了日志记录的粒度。Masks，包含一个mask元素列表，设置相应mask的开启和关闭。Dumps，包含一个dump元素列表，设置相应dump的开启和关闭。下面的XML脚本演示了一段日志配置信息：</p>
+
+<p>[c]&lt;Log writeToConsole=&quot;false&quot; writeToFile=&quot;false&quot; writeLineInfo=&quot;true&quot;&gt;
+&lt;LogLevel value=&quot;3&quot;/&gt;
+&lt;Masks&gt; &lt;Mask name=&quot;ALL&quot; on=&quot;true&quot; /&gt; &lt;/Masks&gt;
+&lt;Dumps&gt; &lt;Dump name=&quot;SensorTimestamps&quot; on=&quot;false&quot; /&gt; &lt;/Dumps&gt;
+&lt;/Log&gt;[/c]</p>
+
+<p>ProductionNodes结点包含了工作结点的创建和配置信息，它包括了若干个子结点：
+GlobalMirror，设置Global Mirror属性的开启和关闭，相当于调用xn::Context::SetGlobalMirror()函数；
+Recording，设置是否启动一个记录，其file属性包括了记录文件名；
+Node，该子结点可以包含多个，它将引导OpenNI枚举并创建一个工作结点，其作用类似xn::Context::CreateAnyProductionTree()函数。其type属性表示枚举类型，值可包括下列内容：Device (XN_NODE_TYPE_DEVICE)</p>
+
+<p>Depth (XN_NODE_TYPE_DEPTH)</p>
+
+<p>Image (XN_NODE_TYPE_IMAGE)</p>
+
+<p>IR (XN_NODE_TYPE_IR)</p>
+
+<p>Audio (XN_NODE_TYPE_AUDIO)</p>
+
+<p>Gesture (XN_NODE_TYPE_GESTURE)</p>
+
+<p>User (XN_NODE_TYPE_USER)</p>
+
+<p>Scene (XN_NODE_TYPE_SCENE)</p>
+
+<p>Hands (XN_NODE_TYPE_HANDS)</p>
+
+<p>Recorder (XN_NODE_TYPE_RECORDER)</p>
+
+<p>Node结点的name属性允许设置一个工作节点名称。</p>
+
+<p>Query，Node还含有一个Query子结点，用于枚举时的查询操作。Query可包含下列子结点：&#8221;Vendor&#8221;、&#8221;Name&#8221;、&#8221;MinVersion&#8221;、&#8221;MaxVersion&#8221;、&#8221;Capabilities&#8221;、&#8221;MapOutputModes&#8221;、&#8221;MinUserPositions&#8221;、&#8221;NeededNodes&#8221;，上述结点均可设置不同的子结点和属性，用于查询条件的选择，如果有多个子结点同时出现，那么OpenNI将按照AND进行逻辑整合。下列XML脚本演示了创建一个自定义属性的深度生成器：</p>
+
+<p>[c]&lt;Node type=&quot;Depth&quot; name=&quot;MyDepth&quot;&gt;
+&lt;Query&gt;
+&lt;Vendor&gt;vendor1&lt;/Vendor&gt;
+&lt;Name&gt;name1&lt;/Name&gt;
+&lt;MinVersion&gt;1.0.0.0&lt;/MinVersion&gt;
+&lt;MaxVersion&gt;3.1.0.5&lt;/MaxVersion&gt;
+&lt;Capabilities&gt; &lt;Capability&gt;UserPosition&lt;/Capability&gt; &lt;Capability&gt;Mirror&lt;/Capability&gt; &lt;/Capabilities&gt;
+&lt;MapOutputModes&gt; &lt;MapOutputMode xRes=&quot;640&quot; yRes=&quot;480&quot; FPS=&quot;30&quot;/&gt; &lt;/MapOutputModes&gt; &lt;MinUserPositions&gt;2&lt;/MinUserPositions&gt;
+&lt;NeededNodes&gt; &lt;Node&gt;MyDevice&lt;/Node&gt;&lt;/NeededNodes&gt;
+&lt;/Query&gt;
+&lt;/Node&gt;[/c]</p>
+
+<p>Configuration子结点实际上代表了对工作节点的动态配置，其指令内容将是顺序执行的。同时，该结点几乎对应了OpenNI所有的Set配置操作，下面的例子演示了分别创建图像、深度和音频节点的过程：</p>
+
+<p>[c]&lt;ProductionNodes&gt; &lt;Node type=&quot;Image&quot;&gt;
+&lt;Query&gt;
+&lt;MapOutputModes&gt; &lt;MapOutputMode xRes=&quot;320&quot; yRes=&quot;240&quot; FPS=&quot;60&quot;/&gt; &lt;/MapOutputModes&gt;
+&lt;Capabilities&gt; &lt;Capability&gt;Cropping&lt;/Capability&gt; &lt;Capability&gt;Mirror&lt;/Capability&gt; &lt;/Capabilities&gt;
+&lt;/Query&gt;
+&lt;Configuration&gt; &lt;MapOutputMode xRes=&quot;320&quot; yRes=&quot;240&quot; FPS=&quot;60&quot;/&gt; &lt;PixelFormat&gt;RGB24&lt;/PixelFormat&gt; &lt;Cropping enabled=&quot;true&quot; xOffset=&quot;28&quot; yOffset=&quot;28&quot; xSize=&quot;200&quot; ySize=&quot;160&quot; /&gt; &lt;Mirror on=&quot;true&quot; /&gt; &lt;/Configuration&gt;
+&lt;/Node&gt; &lt;Node type=&quot;Depth&quot;&gt;
+&lt;Query&gt; &lt;Vendor&gt;VendorX&lt;/Vendor&gt; &lt;MapOutputModes&gt; &lt;MapOutputMode xRes=&quot;640&quot; yRes=&quot;480&quot; FPS=&quot;30&quot;/&gt; &lt;/MapOutputModes&gt;&lt;Capabilities&gt; &lt;Capability&gt;UserPosition&lt;/Capability&gt; &lt;/Capabilities&gt;
+&lt;/Query&gt;
+&lt;Configuration&gt; &lt;MapOutputMode xRes=&quot;640&quot; yRes=&quot;480&quot; FPS=&quot;30&quot;/&gt; &lt;UserPosition index=&quot;0&quot;&gt; &lt;Min x=&quot;128&quot; y=&quot;128&quot; z=&quot;500&quot;/&gt; &lt;Max x=&quot;600&quot; y=&quot;400&quot; z=&quot;2000&quot;/&gt; &lt;/UserPosition&gt; &lt;Property type=&quot;int&quot; name=&quot;VendorXDummyProp&quot; value=&quot;3&quot; /&gt; &lt;/Configuration&gt;
+&lt;/Node&gt;
+&lt;Node type=&quot;Audio&quot;&gt;
+&lt;Configuration&gt; &lt;WaveOutputMode sampleRate=&quot;44100&quot; bitsPerSample=&quot;16&quot; channels=&quot;2&quot; /&gt; &lt;/Configuration&gt;
+&lt;/Node&gt;
+&lt;/ProductionNodes&gt;[/c]</p>
+
+<p>通常在上述配置信息载入后，应手动调用xn::Context::StartGeneratingAll()函数启动数据流。然而也可以在XML中加入默认的Start信息，即在ProductionNodes和其Node子结点中均包含有startGenerating属性，其中如果前者的该属性为true，那么将意味着执行StartGeneratingAll()，否则只执行相应为true的工作节点。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-03T21:48:15+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kinect/'>kinect</a>, <a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -952,62 +1072,6 @@ nRetVal = context.FindExistingNode(XN_NODE_TYPE_DEPTH, depth);        //获取�
 
 
 <time datetime="2011-07-25T00:15:39+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/07/02/dai-ma-ru-shi-yin-ci-qing-bu-yao-dai-ma-ru-Shi/">
-		
-			代码如诗，因此请不要代码如Shi</a>
-	</h2>
-	<div class="entry-content">
-		<p>下周久违的仙五就要到家了，因此本文是我这周末在学校作完，下周休息且将专注通关，那么隔周的文章就会是相关的体验和评测了。</p>
-
-<p>打开这个blog所依赖的wordpress项目<a href="http://www.wordpress.org" target="_blank">官网</a>，首页下方常年静静地躺着这么一句话：CODE IS POETRY（代码如诗）。</p>
-
-<p>如今，编码已是大部分程序员仅有的几个生存技能之一了。程序员写代码的目的无非是养家糊口，费尽脑汁地想方设法满足需求，做到让客户满意，老板放心，以此换来一份还算体面的工作和报酬。除此之外 ，罕见的假期和无尽的加班——这既是冰冷的deadline要求，如今也已成为这个竞争严酷的行业的一个标志性特征。</p>
-
-<p>我第一次听说“IT工业”这个词汇时就产生一些疑惑，这个看似一（多）人一（多）本打天下的行业怎么能和生产高度社会化的大工业联系在一起——后来等逐渐快“想明白”了，现在又普遍表达为“IT服务业”。可见我们自己都时常纠结于这些政治和经济词汇中，对个人修行又有什么好处。 因此我认为，程序员的工作应归属于文学类，确切地讲是代码诗人。</p>
-
-<p>若干年前，我也曾写过许多如今看来颇幼稚可笑的诗歌，现在想想文学作品的任务不外就是叙述事实，表达观点或抒发情感，作家的阅历和天赋决定了读者的口碑。相比较而言，代码是程序员用来叙述事实，表达观点的终端工具，功能上和文学的区别似乎不大。唯一不同之处就在于，读者通过文字大概就可以了解作家，用户却只能通过综合的产品体验去评价程序员，在某种意义上说，程序员要比作家难作的多！另一方面，文学往往惊艳于作家的灵光一闪，而代码却更多依赖于理性和经验，源泉不同，其表现却是相同：同样一幅场景，无论使用文字还是代码，都有无限可能的表达方式。</p>
-
-<p>而且，代码还不能仅仅等同于一般意义上的文学作品。计算语言学（或计算机语言学）特别注重强调形式化，这是使用计算语言表示数理方法的基础。然而形式化并不意味着必须符号化，否则使用计算语言的优势也无法得以体现。现代计算语言的发展也证明了计算语言是朝着形式化与拟人化双重目标前进的。而文学作品中形式化最为深刻的体裁恐怕就是那些诗词歌赋了——这难道不是代码如诗的又一力证！</p>
-
-<p>此时我又想起了数年前的那数十篇诗歌，无一不是逃离理性的表达。如今我所能做的，竟也只是纯粹理性状态下才能写下的一行行字符。尽管意境不同，美好却是不变。于是强迫自己亲手写下每一行代码，过程艰辛，却也心安理得，纵使独臂难支，体验依旧。</p>
-
-<p>最后，代码于我如诗，于众则未必。我喜欢读如诗的代码，却非常厌恶如Shi的代码，也许无论是现在或未来，我都不会成为一名代码诗人，但这却不影响我作为如诗代码的读者之一。我唯一的愿望就是：眼前这篇代码能多些诗一般的灵气和酣畅，少些Shi一样的世俗和愚蠢。若能如是，还有什么兴趣爱好堪比与此呢。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-07-02T16:46:29+08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">

@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="1、C++新特点  这里所说的新特点,是相较于C语言而言的.本笔记旨在加强记忆和理解,本身内容并未超出教材的范围.我们仍将沿用《面向对象程序设计c++版》（刘振安，机械工业出版）和《c++程序设计教程第二版》（钱能，清华大学出版社）的基本思路，开始都是最基本的东西。  C++与C语言的关系， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="2、基本编程语句  沿用c语言的方法,c++包含了说明语句、赋值语句、表达式语句、过程控制语句。其中，过程控制语句又分为条件语句、循环语句和转移语句。  2.1 说明语句(略)  2.2 条件语句   1）if语句: if(条件) 语句 or if(条件) 语句1 else 语句2；   2） &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,98 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/03/30/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-er/">
+		
+			C++学习笔记(重温计划之二)</a>
+	</h2>
+	<div class="entry-content">
+		<p>2、基本编程语句</p>
+
+<p> 沿用c语言的方法,c++包含了说明语句、赋值语句、表达式语句、过程控制语句。其中，过程控制语句又分为条件语句、循环语句和转移语句。</p>
+
+<p> 2.1 说明语句(略)</p>
+
+<p> 2.2 条件语句</p>
+
+<p>  1）if语句: if(条件) 语句 or if(条件) 语句1 else 语句2；</p>
+
+<p>  2）条件表达式:（条件）?表达式1:表达式2</p>
+
+<p>  3）switch语句:switch(表达式){</p>
+
+<p>                                                          case 常量表达式1:语句1;break;</p>
+
+<p>                                                          case 常量表达式1:语句2;break;</p>
+
+<p>                                                          // &hellip;</p>
+
+<p>                                                          case 常量表达式n:语句n;break;</p>
+
+<p>                                                          default:                   语句n+1;break;</p>
+
+<p>                                                       }</p>
+
+<p> 2.3循环语句</p>
+
+<p>  1)for循环结构:for(i=0;i&lt;n;i++){ 语句};</p>
+
+<p>  2)while循环结构:while(条件){语句};</p>
+
+<p>  3)do-while循环结构:do{语句}while(条件);</p>
+
+<p> 2.4输入输出语句</p>
+
+<p>  1)标准I\O流:cout&lt;&lt;类型&lt;&lt;内容&lt;&lt;格式&lt;&lt;(条件判断);</p>
+
+<p>  2)设置参数 setw(int)宽度、setfill(char)填充字符、setprecision(int)设置精度和有效位数;</p>
+
+<p>  3)文件流:ifstream fin(filename,openmode=ios::in);</p>
+
+<p>                  ofstream fout(filename,openmode=ios::out);</p>
+
+<p> 2.5转移语句</p>
+
+<p>  1)break语句:跳出本级循环；</p>
+
+<p>  2)continue语句:结束本次循环，直接进入下次循环。</p>
+
+<p>  3)goto语句:略。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-03-30T12:53:46+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -869,62 +961,6 @@ Wish that I could be like Fred
 <div class="tags">
 
 	<a class='category' href='/blog/categories/guan-dian/'>观点</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/02/13/wu/">
-		
-			雾</a>
-	</h2>
-	<div class="entry-content">
-		<p>假期闲来无聊，茶余饭后便和人聊起天来。请看下文:</p>
-
-<p>三巡过，路人甲忽曰:吾愚矣，曾有自曰XX者凭电来信，盼汝回复焉。</p>
-
-<p>吾悟而思之:料其时已早，无大意耳。仍曰:此事据此年之有余乎？</p>
-
-<p>甲抚额而答:然也。</p>
-
-<p>吾叹起，拂袖而去。</p>
-
-<p>后人以此行文，有诗为证:</p>
-
-<p>暮夜稀星月如舟,升平歌舞绕孤楼。</p>
-
-<p>一语道破寒依旧,朝出雾弥言尽收。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-02-13T19:21:33+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
 
 </div>
 
