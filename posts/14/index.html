@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="（数组和广义表）       本节介绍线性表的两个推广结构—数组和广义表，这也是线性结构和表结构部分最后两个重要内容。       数组       我们在介绍线性表基本存储结构时曾提到数组，这是因为在大多数高级程序设计语言中，数组即被用来表示一段连续的存储空间， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="(树形结构—树的基本概念及抽象数据类型)       树形结构的亮点在于其应用广泛。尽管本节仅介绍概念以及理论上的内容，但无论如何都不能忽视对实际应用的渗入，否则将失去其本身研究的意义。       树的基本概念       在计算机科学中，树作为组织信息的重要形式之一， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,235 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/02/12/jia-qi-lian-zai-zhi-shi/">
+		
+			假期连载之十</a>
+	</h2>
+	<div class="entry-content">
+		<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">(</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">树形结构—树的基本概念及抽象数据类型<span lang="EN-US">)</span></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">树形结构的亮点在于其应用广泛。尽管本节仅介绍概念以及理论上的内容，但无论如何都不能忽视对实际应用的渗入，否则将失去其本身研究的意义。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">树的基本概念<span lang="EN-US"></span></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">在计算机科学中，树作为组织信息的重要形式之一，代表了非线性数据结构的一般特征。这里有两种基本的树，一种被称为自由树<span lang="EN-US">free tree</span>。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">自由树</span></strong><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">指定义一个二元组<span lang="EN-US">Tf=(V,E)</span>，其中<span lang="EN-US">V={v1,v2,…,vn}</span>是由<span lang="EN-US">n</span>个结点构成的优先集合<span lang="EN-US">(n&gt;=0)</span>，称为顶点集合<span lang="EN-US">vertex</span>，<span lang="EN-US">vi</span>称为顶点，其中<span lang="EN-US">1&lt;=i&lt;=n</span>。<span lang="EN-US">E={(vi,vj)|vi,vj</span>属于<span lang="EN-US">V</span>，且<span lang="EN-US">i&gt;=1,j&lt;=n}</span>是由<span lang="EN-US">n-1</span>个元素组成的序对集合，称为边集合。<span lang="EN-US">E</span>中的元素<span lang="EN-US">(vi,vj)</span>为边<span lang="EN-US">edge</span>的分支<span lang="EN-US">branch</span>。<span lang="EN-US">E</span>使得<span lang="EN-US">Tf</span>成为一个连通图。综上可知，自由树的概念类似于图，且对其讨论的范围仅限于图论部分的内容，本文不作涉及。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">另一种树称为<strong style="mso-bidi-font-weight: normal;">有根树</strong><span lang="EN-US">rooted tree</span>。一棵有根树<span lang="EN-US">T</span>，简称为树，它是由<span lang="EN-US">n&gt;=0</span>个结点的有限集合。当<span lang="EN-US">n=0</span>时，<span lang="EN-US">T</span>称为空树，否则<span lang="EN-US">T</span>是非空树，记作：<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span><span style="mso-spacerun: yes;">   </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">Φ<span lang="EN-US">,<span style="mso-tab-count: 3;">          </span>n=0</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">T={r,T1,…,Tn},n&gt;0</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">其中<span lang="EN-US">r</span>是<span lang="EN-US">T</span>的一个特殊结点，称为根<span lang="EN-US">root</span>。<span lang="EN-US">T1,…,Tn</span>是除<span lang="EN-US">r</span>之外其它结点构成的互不相交的<span lang="EN-US">m&gt;=0</span>个子集合。每个子集合也是一棵树，称为根的子树<span lang="EN-US">subtree</span>。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">每棵子树的根结点有且仅有一个直接前驱，但可以有<span lang="EN-US">0</span>个或多个直接后继，<span lang="EN-US">m</span>称为<span lang="EN-US">r</span>的分支数。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">在计算机系统和其它领域中，树的表示方法不尽相同。基本上有以下几种方法：<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo1; tab-stops: list 39.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">1、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">倒置树结构，即最常用的树形表示方法。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo1; tab-stops: list 39.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">2、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">文氏图表示法，使用嵌套集合的形式。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo1; tab-stops: list 39.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">3、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">广义表形式，即嵌套括号的表示方法。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo1; tab-stops: list 39.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">4、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">凹入表示法，用位置的缩进表示其层次，如目录表的编排格式。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">树的一些基本术语<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">结点<span lang="EN-US">node</span>，包含一个数据元素及若干指向其它结点的分支信息。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">结点的度<span lang="EN-US">degree</span>，是一个结点所拥有的子树的棵数。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">叶结点<span lang="EN-US">leaf</span>，指度为<span lang="EN-US">0</span>的结点，也称为终端结点。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">分支结点<span lang="EN-US">branch</span>，除叶结点以外的其它结点，也称为非终端结点。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">结点层次<span lang="EN-US">level</span>，从根结点开始，根结点层次为<span lang="EN-US">1</span>，根结点的直接后继层次为<span lang="EN-US">2</span>，依次类推。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">结点的层序编号<span lang="EN-US">No.of node</span>，是指按从上层到下层，同层从左至右的顺序对结点以自然数编号。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">树的度<span lang="EN-US">degree</span>，树中所有结点度的最大值。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">树的高度<span lang="EN-US">height</span>，树中所有结点层次的最大值。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">有序树<span lang="EN-US">ordered tree</span>，在树<span lang="EN-US">T</span>中，若各子树<span lang="EN-US">Ti</span>之间是有先后次序的，称为有序树。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">森林<span lang="EN-US">forest</span>，指<span lang="EN-US">m&gt;=0</span>棵不相交的树的集合。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">同构<span lang="EN-US">isomorphism</span>，对于两棵树，通过对结点适当地重命名，就可以使两棵树完全相等，则称这两棵树同构。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">为了描述结点之间层次关系，我们还借助人类家族术语进行定义：<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">子女结点<span lang="EN-US">child</span>，一个结点的直接后继称为这个结点的<span lang="EN-US">child</span>。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">父结点<span lang="EN-US">parent</span>，一个结点的直接前驱称为这个结点的<span lang="EN-US">parent</span>。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">兄弟结点<span lang="EN-US">sibling</span>，同一双亲结点的子女结点之间互称为<span lang="EN-US">sibling</span>。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">祖先结点<span lang="EN-US">ancestor</span>，一个结点的祖先结点是指从根结点到该结点路径上的所有结点。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">子孙结点<span lang="EN-US">descendant</span>，一个结点的直接后继和间接后继称为该结点的子孙结点。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">另外，按照结点序号的大小，结点又可以前辈、后辈表示，父结点为兄弟结点的子女结点之间互称为堂兄弟结点。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">树的抽象数据类型<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">ADT Tree</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">数据对象<span lang="EN-US">D:</span>一个集合，该集合中的所有元素具有相同特性<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">数据关系<span lang="EN-US">R:</span>见树的定义<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">基本操作<span lang="EN-US">:</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>InitTree(Tree);<span style="mso-tab-count: 4;">             </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">初始化<span lang="EN-US">Tree</span>为空树<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>DestoryTree(Tree);<span style="mso-tab-count: 3;">          </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">销毁树<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>CreateTree(Tree);<span style="mso-tab-count: 3;">           </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">创建树<span lang="EN-US">Tree</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>TreeEmpty(Tree);<span style="mso-tab-count: 3;">            </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">若<span lang="EN-US">Tree</span>为空，返回<span lang="EN-US">TRUE</span>，否则返回<span lang="EN-US">FALSE</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>Root(Tree);<span style="mso-tab-count: 5;">                 </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">返回树<span lang="EN-US">Tree</span>的根<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>Parent(Tree,x);<span style="mso-tab-count: 4;">             </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">树<span lang="EN-US">Tree</span>存在，<span lang="EN-US">x</span>是<span lang="EN-US">Tree</span>中的某个结点，若<span lang="EN-US">x</span>为非根结点，则返回其父结点，否则返回空<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>FirstChild(Tree,x);<span style="mso-tab-count: 3;">         </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">树<span lang="EN-US">Tree</span>存在，<span lang="EN-US">x</span>是<span lang="EN-US">Tree</span>中的某个结点，若<span lang="EN-US">x</span>为非叶结点，则返回其第一个孩子结点，否则返回空<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>NextSibling(Tree,x);<span style="mso-tab-count: 2;">        </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">树<span lang="EN-US">Tree</span>存在，<span lang="EN-US">x</span>是<span lang="EN-US">Tree</span>中的某个结点，若<span lang="EN-US">x</span>为不是父结点的最后一个子女结点，则返回其下一个兄弟结点，否则返回空<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>InsertChild(Tree,p,Child);<span style="mso-tab-count: 1;">  </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">树<span lang="EN-US">Tree</span>存在，<span lang="EN-US">p</span>指向<span lang="EN-US">Tree</span>中的某个结点，非空树<span lang="EN-US">Child</span>与<span lang="EN-US">Tree</span>不相交，将<span lang="EN-US">Child</span>插入<span lang="EN-US">Tree</span>中，其中<span lang="EN-US">p</span>是该子树的根结点<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 42pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">DeleteChild(Tree,p,i);<span style="mso-tab-count: 2;">      </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">树<span lang="EN-US">Tree</span>存在，<span lang="EN-US">p</span>指向<span lang="EN-US">Tree</span>中的某个结点<span lang="EN-US">1&lt;=i&lt;=d</span>，<span lang="EN-US">d</span>为<span lang="EN-US">p</span>所指向结点的度，删除<span lang="EN-US">Tree</span>中<span lang="EN-US">p</span>所指向结点的第<span lang="EN-US">i</span>棵子树<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 42pt; mso-char-indent-count: 4.0;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">TraverseTree(Tree,Visit());<span style="mso-tab-count: 1;"> </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">树<span lang="EN-US">Tree</span>存在，<span lang="EN-US">Visit()</span>是对结点进行访问的函数，按照某种次序对<span lang="EN-US">Tree</span>的每个结点调用<span lang="EN-US">Visit()</span>函数最多访问一次，若<span lang="EN-US">Visit()</span>失败，则操作失败<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">鉴于树结构重要性，我们将本块内容分成多个连载分别进行讨论，方便读者进行整理。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">(</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">未完待续<span lang="EN-US">)</span></span></strong></span></p>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-12T14:06:35+08:00" pubdate data-updated="true">2009-02-12</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
+
+</div>
+
+
+	
+</div></article>
 
 
     <article class="post">
@@ -689,7 +918,7 @@ $(document).ready(
   
 
 
-<time datetime="2009-02-11T20:26:19+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2009-02-11T20:26:19+08:00" pubdate data-updated="true">2009-02-11</time></div>
 	
 
 <div class="tags">
@@ -1119,7 +1348,7 @@ $(document).ready(
   
 
 
-<time datetime="2009-02-10T16:47:33+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2009-02-10T16:47:33+08:00" pubdate data-updated="true">2009-02-10</time></div>
 	
 
 <div class="tags">
@@ -1597,7 +1826,7 @@ $(document).ready(
   
 
 
-<time datetime="2009-02-09T17:15:54+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2009-02-09T17:15:54+08:00" pubdate data-updated="true">2009-02-09</time></div>
 	
 
 <div class="tags">
@@ -1667,7 +1896,7 @@ $(document).ready(
   
 
 
-<time datetime="2009-02-07T00:09:45+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2009-02-07T00:09:45+08:00" pubdate data-updated="true">2009-02-07</time></div>
 	
 
 <div class="tags">
@@ -2031,7 +2260,7 @@ $(document).ready(
   
 
 
-<time datetime="2009-02-05T18:05:10+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2009-02-05T18:05:10+08:00" pubdate data-updated="true">2009-02-05</time></div>
 	
 
 <div class="tags">
@@ -2404,7 +2633,7 @@ $(document).ready(
   
 
 
-<time datetime="2009-02-04T23:30:57+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2009-02-04T23:30:57+08:00" pubdate data-updated="true">2009-02-04</time></div>
 	
 
 <div class="tags">
@@ -2780,7 +3009,7 @@ $(document).ready(
   
 
 
-<time datetime="2009-02-03T16:39:55+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2009-02-03T16:39:55+08:00" pubdate data-updated="true">2009-02-03</time></div>
 	
 
 <div class="tags">
@@ -3039,7 +3268,7 @@ $(document).ready(
   
 
 
-<time datetime="2009-01-26T19:31:32+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2009-01-26T19:31:32+08:00" pubdate data-updated="true">2009-01-26</time></div>
 	
 
 <div class="tags">
@@ -3085,7 +3314,7 @@ $(document).ready(
   
 
 
-<time datetime="2009-01-26T00:44:14+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2009-01-26T00:44:14+08:00" pubdate data-updated="true">2009-01-26</time></div>
 	
 
 <div class="tags">
@@ -3098,442 +3327,14 @@ $(document).ready(
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/01/25/jia-qi-lian-zai-zhi-er/">
-		
-			假期连载之二</a>
-	</h2>
-	<div class="entry-content">
-		<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（<strong style="mso-bidi-font-weight: normal;">线性表的基本运算算法分析</strong>，<strong style="mso-bidi-font-weight: normal;">线性表的链式存储—单链表</strong>）</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">前面我们介绍了线性表的顺序存储中有关数据结构以及其常用运算，接下来我们将对其中涉及搜索、插入和删除部分的代码进行性能分析。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-size: small; font-family: Times New Roman;">       </span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">首先对于上节使用的伪码描述的</span><span lang="EN-US"><span style="font-family: Times New Roman;">Locate(L,e)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">搜索算法进行分析，该算法的核心思想是，从表</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的开始位置起，根据给定的值</span><span lang="EN-US"><span style="font-family: Times New Roman;">e</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，逐个与各表项的值进行比较，若给定值与表中某个值相等，则算法报告搜索成功，并输入该表项的具体位置，如果查遍所有表项仍不符合要求，则返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">null</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。<strong style="mso-bidi-font-weight: normal;">通常衡量搜索代码的时间代价时使用数据比较次数的数值</strong>，在搜索成功的情况下，若要找的正好是表中的第一项，则搜索比较次数为</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，若为最后的第</span><span lang="EN-US"><span style="font-family: Times New Roman;">n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">项，则比较次数为</span><span lang="EN-US"><span style="font-family: Times New Roman;">n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，这是最坏的情况，因此若要计算平均数据比较次数，需要考虑到各个表项的搜索概率</span><span style="font-family: Times New Roman;"><span lang="EN-US">p</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">以及找到该表项时的数据比较次数</span><span style="font-family: Times New Roman;"><span lang="EN-US">c</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。因此搜索的平均数据比较次数</span><span lang="EN-US"><span style="font-family: Times New Roman;">ACN(Average comparing number)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 6;">                                          </span>ACN=</span></span><span style="font-family: 宋体;">∑</span><span style="font-family: Times New Roman;"><span lang="EN-US">p</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub></span><span style="font-family: 宋体;">*</span><span style="font-family: Times New Roman;"><span lang="EN-US">c</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i<span style="mso-spacerun: yes;">  </span></span></sub></span><span style="font-family: 宋体;">(i=1,2,3,…,n)</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体;"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体;">通常我们仅考虑搜索项中相等概率的情形，即每个表项被选择的概率均为<span lang="EN-US">1/n</span>，且搜索第一个表项的搜索比较次数为<span lang="EN-US">1</span>，之后依次类推。则：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体;"><span style="mso-tab-count: 3;">            </span></span><span lang="EN-US"><span style="font-family: Times New Roman;">ACN=</span></span><span style="font-family: 宋体;">∑</span><span style="font-family: Times New Roman;"><span lang="EN-US">p</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub></span><span style="font-family: 宋体;">*</span><span style="font-family: Times New Roman;"><span lang="EN-US">c</span><sub><span style="mso-bidi-font-size: 10.5pt;" lang="EN-US">i</span></sub></span><span style="font-family: 宋体;">=(1/n)(1+2+,…,+n)=(1/n)*(1+n)*n/2=(1+n)/2</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体;"><span style="font-size: small;">即需要比较<span lang="EN-US">(1+n)/2</span>个表项。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体;"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体;">相反，如果搜索不成功即整个表都检测一遍，因此<span lang="EN-US">ACN</span>将为<span lang="EN-US">n</span>。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体;"><span style="font-size: small;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体;"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体;">在执行顺序表的插入或删除运算时，需要注意，此时表的长度是会发生改变的，因此为了在执行这一类操作过程中不改变原表项的位置关系，通常需要成块移动表项。例如在插入运算中，必须先将第<span lang="EN-US">i</span>个到第<span lang="EN-US">n</span>个所有表项成块后移一位，以空出可供插入新表项的位置。而当删除操作时，在删除第<span lang="EN-US">i</span>个表项后，需要将从<span lang="EN-US">i+1</span>到<span lang="EN-US">n-1</span>的所有表项向前移动一位，覆盖原位置。在这两种操作中，<strong style="mso-bidi-font-weight: normal;">表项移动的方向是恰好相反的</strong>。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体;"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体;"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体;">因此在分析顺序表的插入和删除操作时，<strong style="mso-bidi-font-weight: normal;">其时间代价主要是以循环内表项的移动次数来衡量的</strong>。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体;"><span style="font-size: small;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体;"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体;">例如</span><span lang="EN-US"><span style="font-family: Times New Roman;">InsList(L,i,e)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">插入运算，在插入数据之前，必须先从后往前循环，将第</span><span lang="EN-US"><span style="font-family: Times New Roman;">n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">项到</span><span lang="EN-US"><span style="font-family: Times New Roman;">n-i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">项均向后移动一位。因此最好的情形是在第</span><span lang="EN-US"><span style="font-family: Times New Roman;">n+1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">位插入新表项，此时表项移动个数为</span><span lang="EN-US"><span style="font-family: Times New Roman;">0</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。最差情况是在第</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个位置插入新表项，即在</span><span lang="EN-US"><span style="font-family: Times New Roman;">0</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">之后。移动表项个数为</span><span lang="EN-US"><span style="font-family: Times New Roman;">n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。因此平均数据移动次数</span><span lang="EN-US"><span style="font-family: Times New Roman;">AMN(Average moving number)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在各表项的插入概率相等时为：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>AMN=(1/(n+1))*</span></span><span style="font-family: 宋体;"> </span><span style="font-family: 宋体;">∑<span lang="EN-US">(n-i)=(1/(n+1))*(n+…+1+0)=n/2(i=1,2,…,n+1)</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体;"><span style="font-size: small;">因此就整体性能来说，插入时有<span lang="EN-US">i+1</span>个插入位置，平均移动<span lang="EN-US">n/2</span>个表项。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体;"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体;"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体;">同时对于删除操作而言，当删除第<span lang="EN-US">i</span>个表项时，需要移动第<span lang="EN-US">i+1</span>到第<span lang="EN-US">n</span>个总共<span lang="EN-US">n-1</span>个表项。另外对于插入操作所不同的是，删除操作并不涉及到第<span lang="EN-US">n+1</span>项的情况，因此上式<span lang="EN-US">AMN</span>中<span lang="EN-US">i</span>的情况应为<span lang="EN-US">1,2,…,n</span>即可，所以：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体;"><span style="mso-tab-count: 3;"><span style="font-size: small;">            </span></span></span><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">AMN=(n-1)/2<br style="mso-special-character: line-break;" /><br style="mso-special-character: line-break;" /></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">当然在一些算法中并不要求插入时并不必须在表末进行，或者删除时可以将最后一个表项填到第</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个空位中去，则此时的插入</span><span lang="EN-US"><span style="font-family: Times New Roman;">AMN</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">固定为</span><span lang="EN-US"><span style="font-family: Times New Roman;">0</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，而删除</span><span lang="EN-US"><span style="font-family: Times New Roman;">AMN</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">固定为</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; mso-list: l0 level1 lfo1; tab-stops: list 18.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">2、</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表的链式存储</span></strong><span lang="EN-US"><span style="font-family: Times New Roman;">(Linked List)</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">在线性表的顺序存储中，我们使用了基于数组的存储结构，即其物理位置上为邻接关系，这使得顺序表具有如下优点：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt; text-indent: -18pt; mso-list: l0 level3 lfo1; tab-stops: list 60.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">1）</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">无需为表示结点间的逻辑关系而增加额外的存储空间，存储利用率提高。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt; text-indent: -18pt; mso-list: l0 level3 lfo1; tab-stops: list 60.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">2）</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">可以方便地随机存取表中的任一结点，存取速度快。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">但是，这也不可避免地带来的一些缺点：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt; text-indent: -18pt; mso-list: l1 level1 lfo2; tab-stops: list 60.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">1）</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">在表中插入新元素或删除无用元素时，为了保持其他元素的相对次序不变，平均需要移动一半元素，运行效率较低。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 60pt; text-indent: -18pt; mso-list: l1 level1 lfo2; tab-stops: list 60.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">2）</span><span style="font-family: &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">由于顺序表要求占用连续空间，我们在</span><span lang="EN-US"><span style="font-family: Times New Roman;">Operating System</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中了解到，当内存空间使用</span><span lang="EN-US"><span style="font-family: Times New Roman;">Static allocation</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">时，当表的长度变化较大，则难以确定合适的存储空间大小，容易造成内存空间的浪费或溢出。如果采用</span><span lang="EN-US"><span style="font-family: Times New Roman;">Dynamic allocation</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">策略使用动态存储模式，则可以使用新数组替换原数组，尽管在空间上能够得到有效利用，但会造成较大的时间开销。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为了克服顺序表的缺点，在一些插入</span><span lang="EN-US"><span style="font-family: Times New Roman;">/</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">删除操作频繁从而导致空间需求不定的情况中，我们采用链接方式来存储线性表。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">从链表的<strong style="mso-bidi-font-weight: normal;">实现角度</strong>来看，链表分为<strong style="mso-bidi-font-weight: normal;">静态链表</strong>的<strong style="mso-bidi-font-weight: normal;">动态链表</strong>两类。而从<strong style="mso-bidi-font-weight: normal;">链接方式</strong>来看，链表分为<strong style="mso-bidi-font-weight: normal;">单链表</strong>、<strong style="mso-bidi-font-weight: normal;">循环链表</strong>、<strong style="mso-bidi-font-weight: normal;">双向链表</strong>三类。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在链表结构中，其存储表项可以是物理连续的，也可以是非连续的，甚至呈零散分布，故其结点的逻辑次序和物理顺序不一定相同。为了正确表示出单链表的逻辑关系，我们必须在存储每个表项数据元素值的同时，存储指示其后继结点的地址信息，我们把这两部分信息组成的存储映像称为结点</span><span lang="EN-US"><span style="font-family: Times New Roman;">(Node)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，通常也称为域</span><span lang="EN-US"><span style="font-family: Times New Roman;">(Field)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">结点包含了两个域：数据域和指针域，他们分别用来结点的值和直接后继结点的地址。在单链表</span><span lang="EN-US"><span style="font-family: Times New Roman;">Single linked list</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中，每一个结点中只有一个</span><span lang="EN-US"><span style="font-family: Times New Roman;">next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指向其直接后继。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值得注意的是，我们在构建一个链表时，为了存放第一个结点的地址，因此<strong style="mso-bidi-font-weight: normal;">通常设置一个头指针</strong></span><strong style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="font-family: Times New Roman;">H</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指向第一个结点并作为其直接前驱，而最后一个结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">next</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指针直接设置为空</span><span lang="EN-US"><span style="font-family: Times New Roman;">null</span></span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">下面我们给出</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言方法描述的单链表存储结构：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>typedef struct Node</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>ElemType data;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>struct Node *next;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">}Node,*LinkList;<span style="mso-tab-count: 3;">                  </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">这里的</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkList</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span lang="EN-US"><span style="font-family: Times New Roman;">Node *</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">等价，通常使用</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkList</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">强调头指针，而</span><span lang="EN-US"><span style="font-family: Times New Roman;">Node*</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">来定义指向任意结点的指针。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的面向对象方法中，我们通常使用两个类即结点类和链表类来定义单链表。而其具体实现的方法又有</span><span lang="EN-US"><span style="font-family: Times New Roman;">4</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">种。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: -18pt; mso-list: l0 level4 lfo1; tab-stops: list 81.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">1)</span><span style="font-family: &quot;Times New Roman&quot;;">      </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">复合类，在</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类中声明友元类</span><span lang="EN-US"><span style="font-family: Times New Roman;">List</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，从而使得</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类和</span><span lang="EN-US"><span style="font-family: Times New Roman;">List</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类都能访问</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类的私有数据成员。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: -18pt; mso-list: l0 level4 lfo1; tab-stops: list 81.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">2)</span><span style="font-family: &quot;Times New Roman&quot;;">      </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">嵌套类，在</span><span lang="EN-US"><span style="font-family: Times New Roman;">List</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类定义的内部对</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类进行定义，则必须将</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类定义在其</span><span lang="EN-US"><span style="font-family: Times New Roman;">private</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">部分，从而确保</span><span lang="EN-US"><span style="font-family: Times New Roman;">List</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类的外部对象和函数不能直接接触到</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类的对象，但</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类的数据成员则必须放在</span><span lang="EN-US"><span style="font-family: Times New Roman;">public</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">部分，使得</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类和</span><span lang="EN-US"><span style="font-family: Times New Roman;">List</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类的成员都能访问它们。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: -18pt; mso-list: l0 level4 lfo1; tab-stops: list 81.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">3)</span><span style="font-family: &quot;Times New Roman&quot;;">      </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">基类和派生类，把</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">声明为基类，同时</span><span lang="EN-US"><span style="font-family: Times New Roman;">List</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类声明为派生类，建立继承关系，让</span><span lang="EN-US"><span style="font-family: Times New Roman;">List</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类继承其数据成员和某些成员函数，表示一种使用关系。此时</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类的数据成员应为</span><span lang="EN-US"><span style="font-family: Times New Roman;">protected</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，以保证被子类使用。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 81pt; text-indent: -18pt; mso-list: l0 level4 lfo1; tab-stops: list 81.0pt;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">4)</span><span style="font-family: &quot;Times New Roman&quot;;">      </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">用</span><span lang="EN-US"><span style="font-family: Times New Roman;">struct</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">定义</span><span lang="EN-US"><span style="font-family: Times New Roman;">LinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类，和</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言方法相似，但其失去了封装性，仅在需要简化描述时采用此类方法。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">下面仅给出复合类的具体声明方法：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">class List;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">class LinkNode</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>friend class List;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>private:</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>int data;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>LinkNode *link;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">};</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">class Link</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>public:</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">链表公共操作</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>……</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>private:</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>LinkNode *first<span style="mso-tab-count: 1;">      </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">链表头指针</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">};</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">单链表的基本运算</span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><strong style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）初始化单链表：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>InitList(LinkList *L)</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>*L=(LinkList)malloc(sizeof(Node));</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>(*L)-&gt;next=NULL;<span style="mso-tab-count: 2;">        </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">带头结点的链表，故</span><span lang="EN-US"><span style="font-family: Times New Roman;">L-&gt;next=NULL</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">这里明确</span><span lang="EN-US"><span style="font-family: Times New Roman;">malloc/free</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span lang="EN-US"><span style="font-family: Times New Roman;">new/delete</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的区别，我们知道，</span><span lang="EN-US"><span style="font-family: Times New Roman;">malloc/free</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++/C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">里的标准库函数，而</span><span lang="EN-US"><span style="font-family: Times New Roman;">new/delete</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的运算符，两者都含有申请内存空间</span><span lang="EN-US"><span style="font-family: Times New Roman;">/</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">释放的功能，但</span><span lang="EN-US"><span style="font-family: Times New Roman;">malloc/free</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">仅仅能做到这一点。</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">引入运算符</span><span lang="EN-US"><span style="font-family: Times New Roman;">new/delete</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的目的是，当我们需要动态地建立对象时，由于面向对象方法的限制，必须要利用到运算符的性质，而避免使用函数来操作。在分配内存空间后，还必须执行对象的构造方法，在释放空间时需要执行析构函数，这是</span><span lang="EN-US"><span style="font-family: Times New Roman;">malloc/free</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">所不具备的，因此</span><span lang="EN-US"><span style="font-family: Times New Roman;">new/delete</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">有其合理性，这一点在</span><span lang="EN-US"><span style="font-family: Times New Roman;">java</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中得到了继承和发展。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）建立单链表</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">这里先介绍头结点的概念，我们知道，通常链表初始化过程中会产生一个头指针</span><span lang="EN-US"><span style="font-family: Times New Roman;">*L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，此时</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">直接指向</span><span lang="EN-US"><span style="font-family: Times New Roman;">null</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，有时我们需要建立一个头结点以满足一些特殊操作，因此</span><span lang="EN-US"><span style="font-family: Times New Roman;">L-&gt;next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">被设置为</span><span lang="EN-US"><span style="font-family: Times New Roman;">null</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="mso-tab-count: 2;"><span style="font-size: small; font-family: Times New Roman;">              </span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">基于头结点的建表法，即头插法建表。头插法建表的思想是，在一个带头结点的链表</span><span lang="EN-US"><span style="font-family: Times New Roman;">L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中，首先申请结点空间</span><span lang="EN-US"><span style="font-family: Times New Roman;">*s</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，并给其数据域赋值。由于</span><span lang="EN-US"><span style="font-family: Times New Roman;">L-&gt;next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指向了表中下一个结点，故先</span><span lang="EN-US"><span style="font-family: Times New Roman;">s-&gt;next=L-&gt;next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">链接后继结点，同时</span><span lang="EN-US"><span style="font-family: Times New Roman;">L-&gt;=s</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">完成链表的结点插入操作。其伪码表示为：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>CreateFromHead(L)</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>flag=1;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>while flag do</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>c=getchar();</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>if c!=’$’ then<span style="mso-tab-count: 8;">                                                   </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">用来确保</span><span lang="EN-US"><span style="font-family: Times New Roman;">’$’</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为输入结束符</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>s=(Node*)malloc(sizeof(Node));</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>s-&gt;data=c;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>s-&gt;next=L-&gt;next;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>L-&gt;next=s;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>else then</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>flag=0;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">头插法中输入元素与得到的单链表逻辑顺序相反，因此也被称作逆序建表法。如果需要链表顺序与输入顺序一致，可以直接采用尾插法建表解决。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>CreateFromTail(L)</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>flag=1;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>r=L;<span style="mso-tab-count: 9;">                                                         </span>//r</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为尾指针，初始化时应指向头结点。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>while flag do</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>c=getchar();</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>if c!=’$’ then</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>s=(Node*)malloc(sizeof(Node));</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>s-&gt;data=c;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>r-&gt;next=s;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>r=s;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>else then</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>flag=0;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 4;">                            </span>r-&gt;next=NULL;<span style="mso-tab-count: 1;">      </span></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">3</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）删除单链表</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">单链表删除操作的思想是，首先声明一个空指针</span><span lang="EN-US"><span style="font-family: Times New Roman;">r</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">并使其指向要删除的结点，同时将要删除结点直接前驱的</span><span lang="EN-US"><span style="font-family: Times New Roman;">next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指针指向其直接后继，然后释放</span><span lang="EN-US"><span style="font-family: Times New Roman;">r</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的空间即可。下面给出一个带头结点链表中删除第</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个元素的伪码表示：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">DelList(L,i,e)</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>pre=L,k=0;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>while pre-&gt;next!=NULL&amp;&amp;k&lt;i-1 do</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>pre=pre-&gt;next;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>k=k+1;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>if !(pre-&gt;next) then</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span><span style="mso-spacerun: yes;"> </span>error “</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">删除位置不合理！</span><span lang="EN-US"><span style="font-family: Times New Roman;">”;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>r=pre-&gt;next;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>pre-&gt;next=pre-&gt;next-&gt;next;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>e=r-&gt;data;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>free(r);</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>return OK;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">4)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">链表的前插操作，和头插法建表类似，但需要注意的是，由于插入操作可在链表尾部进行，因此其循环条件为</span><span lang="EN-US"><span style="font-family: Times New Roman;">pre!=NULL&amp;&amp;k&lt;i-1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，并非是</span><span lang="EN-US"><span style="font-family: Times New Roman;">pre-&gt;next!=NULL</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，如果在删除操作中忽略了这一点，则可能造成空指针操作，发生错误。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"> </p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"> </p>
-
-
-<p><b>(未完待续)</b></p>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-25T17:18:25+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
-
-</div>
-
-
-	
-</div></article>
-
 <nav id="pagenavi">
     
-        <a href="13" class="prev">Prev</a>
+    	
+        	<a href="/posts/13" class="prev">Prev</a>
+        
     
     
-        <a href="15" class="next">Next</a>
+        <a href="/posts/15" class="next">Next</a>
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>

@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 我之前从未接触过导演Stanley Kubrick的作品，虽然至少也听闻过《lolita》、《发条橙》、《2001》这些，但也仅限于少量的影评而已。过去喜欢看科幻片，以为这些只是异人们想象力四溢的结果，后来发现科幻片大师普遍更加看好影片所蕴含的metaphor，动机大概都不是太纯的—— &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="非常幸运的是，我们生活在一个正处于高速变革中的时代里。新的技术、理念乃至行业标准即将定稿，虽然我们无从参与任何权威文件的最终发布，却能全程体验这一史无前例的飞速发展的全貌。 从1996年VRML1.0发布时起，Web3D就追赶上了互联网高速发展的黄金时期。 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -102,6 +102,70 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2011/01/24/xiang-qian-xian-jin-fa-WebGL-chu-shi/">
+		
+			向前线进发：WebGL初试</a>
+	</h2>
+	<div class="entry-content">
+		<p>非常幸运的是，我们生活在一个正处于高速变革中的时代里。新的技术、理念乃至行业标准即将定稿，虽然我们无从参与任何权威文件的最终发布，却能全程体验这一史无前例的飞速发展的全貌。</p>
+
+<p>从1996年VRML1.0发布时起，Web3D就追赶上了互联网高速发展的黄金时期。然而端上的资源匮乏严重制约了VRML前进的脚步，这期间又经历了针对Java Applet的普遍质疑。如今，除了Princeton 3D Model Search Engine闻名于学术界以外，似乎就很难再找到如此振奋人心的killer platform了。 2004年，w3c开始着手筹备html5。一系列高级功能，如表单控制、应用程序接口(APIs)、多媒体、结构化和语义化等计划被引入新的标准。由于这些全新概念的引入（实际上在pc领域这些早已算不上是“全新”了），Web3D的支持者们终于看到了新的突破点：直接在浏览器中引入3D API，再通过一系列底层优化，甚至采用硬件加速来提升效率和稳定性。这次Khronos Group终于可以携自己的OpenGL ES 2.0大展身手了。本文的目的旨在向读者介绍WebGL当前的标准制定和研发进度，并提供一些关于平台demo的建议。本文剩余的内容是基于learningwebgl.com整合而成的，在此对相关作者表示感谢。</p>
+
+<p>首先要说明的是，要想率先体验WebGL所带来全新的视觉冲击力，你至少需要安装一款支持它的浏览器。幸运的是，目前除了微软的IE系列，几乎所有主流浏览器的开发版本都支持WebGL。那么我们如今的问题就变成了：如何为你现有的系统配置一款WebGL支持良好的浏览器。</p>
+
+<p>对于windows操作系统而言，如果你拥有一块性能不差的ATI或Nvidia显卡，那么试着安装Firefox或是Chromium，它们也是目前win系统上最好的浏览器。如果你的机器只配置了一套来自Intel的集成图形芯片组（目前普通笔记本电脑普遍集成了这种配置），那么情况可能变得有些糟：这是因为Intel的图形硬件驱动并不能很好地支持OpenGL，而事实上目前的WebGL主要是基于OpenGL的（尽管这种情况在今后将会有所改善）。在这种情况下即使你安装了Firefox或Chromium，浏览器可能还是不会正常地运行WebGL程序——当然对此有更好的解决办法，我们可以使用带软件渲染的Firefox浏览器（这种软件渲染方式即把针对3D图形的运算全部交由CPU执行而非显卡，这将大大降低WebGL的运行效率&hellip;&hellip;但至少我们很大程度上解决了这一问题）。</p>
+
+<p>在Macintosh系统中，如果你采用了Snow Leopard操作系统（版本号OS X 10.6），那么我建议你使用WebKit的开发版本，它将是Safari的替代版本。如果你使用的是Leopard （版本号OS X 10.5），你可能无法运行WebKit开发版，那么Firefox或Chromium就是你最好的选择。当然，Snow Leopard的用户也可以采用上述两款浏览器。遗憾的是，我目前尚无法确定WebKit在更旧版本的Mac操作系统上的运行情况。</p>
+
+<p>如果你正在使用Linux，那么解决方案可能和windows差不多。但需要注意，如果你的集成显卡不能很好地支持WebGL，那么在采用软件渲染之前，你需要安装Mesa，然后再安装最新版本的Firefox即可。</p>
+
+<p>由于笔者的配置环境是ATI HD5650/Windows 7 ultimate，故我们以chromium浏览器的安装为例介绍这一流程。</p>
+
+<p>目前chrome的开发者强烈建议用户使用Chromium的nightly build版本，它可以看成是chrome的一种实验版本，由于nightly build版本的存在使得其发展速度要全面领先于chrome，后者的缺点主要是功能较前者而言欠缺一些，但运行更加稳定。chromium的安装因操作系统的差异有所区别，这里我们仅给出windows操作系统的chromium安装流程。</p>
+
+<p>1、首先下载chrome-win32.zip并解压之；</p>
+
+<p>2、运行chrome.exe;</p>
+
+<p>3、开始在google上搜索WebGL纷繁复杂的demo欣赏吧！</p>
+
+<p>值得一提的是，本站的首页采用了WebGL的展示技术，如果你的浏览器不支持WebGL，今后可能就无法正常浏览这里的全部信息了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-24T22:29:16+08:00" pubdate data-updated="true">2011-01-24</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2011/01/17/tian-qi-hai-shi-zi-jue/">
 		
 			天启还是自决</a>
@@ -135,7 +199,7 @@ $(document).ready(
   
 
 
-<time datetime="2011-01-17T23:08:36+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2011-01-17T23:08:36+08:00" pubdate data-updated="true">2011-01-17</time></div>
 	
 
 <div class="tags">
@@ -177,7 +241,7 @@ $(document).ready(
   
 
 
-<time datetime="2010-12-31T20:30:32+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-12-31T20:30:32+08:00" pubdate data-updated="true">2010-12-31</time></div>
 	
 
 <div class="tags">
@@ -223,7 +287,7 @@ $(document).ready(
   
 
 
-<time datetime="2010-11-28T00:15:45+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-11-28T00:15:45+08:00" pubdate data-updated="true">2010-11-28</time></div>
 	
 
 <div class="tags">
@@ -289,7 +353,7 @@ $(document).ready(
   
 
 
-<time datetime="2010-11-20T17:52:27+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-11-20T17:52:27+08:00" pubdate data-updated="true">2010-11-20</time></div>
 	
 
 <div class="tags">
@@ -391,7 +455,7 @@ $(document).ready(
   
 
 
-<time datetime="2010-11-20T15:58:20+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-11-20T15:58:20+08:00" pubdate data-updated="true">2010-11-20</time></div>
 	
 
 <div class="tags">
@@ -463,7 +527,7 @@ $(document).ready(
   
 
 
-<time datetime="2010-11-14T12:49:43+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-11-14T12:49:43+08:00" pubdate data-updated="true">2010-11-14</time></div>
 	
 
 <div class="tags">
@@ -513,7 +577,7 @@ $(document).ready(
   
 
 
-<time datetime="2010-11-06T01:57:40+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-11-06T01:57:40+08:00" pubdate data-updated="true">2010-11-06</time></div>
 	
 
 <div class="tags">
@@ -571,7 +635,7 @@ $(document).ready(
   
 
 
-<time datetime="2010-10-30T02:40:54+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-10-30T02:40:54+08:00" pubdate data-updated="true">2010-10-30</time></div>
 	
 
 <div class="tags">
@@ -631,87 +695,7 @@ $(document).ready(
   
 
 
-<time datetime="2010-10-24T01:47:12+08:00" pubdate data-updated="true"></time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
-
-</div>
-
-
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/10/15/dun-ge-ji-shang/">
-		
-			遁鸽记(上)</a>
-	</h2>
-	<div class="entry-content">
-		<p><code><code><code>[nggallery id=3 <strong>template=galleryview</strong> images=5]</code></code></code></p>
-
-<p> 10月10日晨，突降暴雨。</p>
-
-<p>  醒来发现天色仍很暗，电话开机一瞅——10点钟，又见阳台门被各种风敲得噼里啪啦，这才知道碰上难得的诡异天气了。到了中午，和阿仝吃饭回来，正要开写一个新专题。见德锋指着阳台门外道：咱们这来了只鸽子！遂隔着门窗看，确实，这雨来的十分突然，白鸽躲进阳台避雨也属正常，又见左足上似乎有足环，毕竟也是有主的了。</p>
-
-<p> 不会，众人决定邀鸽入室，但也知道执行起来有难度。这时佩哥二话不说冲出阳台，一把扑向白鸽，小白估计也是被雨打的秀逗的不行，等缓过神来时右脚已被栓到床边了。</p>
-
-<p> 仔细看了看白鸽的足环——中国种鸽880155，虽然查不出什么门道，恐怕也没少受鸽主的悉心照顾了。然而雨一直下，只好先将就一晚了。</p>
-
-<p> 晚饭出去给白鸽找玉米吃，无奈整天围着南门外叫嚷“热棒棒（平声）”的老太们竟没来做生意，只好在村里找了两只馒头回来。德锋已经从食堂带了粘玉米，众人把“大餐”铺好放至桌下，白鸽不但不理，更往衣柜下钻去。这一钻就再没出来过。</p>
-
-<p> 夜，鸽子咳嗽不停，可能患了病，不过似乎不严重。</p>
-
-<p> 次日上课回来，白鸽依旧畏缩，摆了一夜的“大餐”似乎没怎么动过，倒是上面沾了一泡鸽屎。</p>
-
-<p> 鸽子乃飞翔物，并非鸡鸭之流，我提议至少迁至阳台圈养再说。</p>
-
-<p> 白鸽重见天日心情也好了些，开始吃些大米，还有数天前剩的馒头了。</p>
-
-<p> 又过了两日，这次是翘了科社回来，瞥了眼鸽子——没异常。于是剥了一把馍渣撒在台阶上，平时白鸽见我走远了才会来吃，就顺手把阳台门关上。</p>
-
-<p> 一会回头看看，窗台上俨然不止白鸽一只——竟有只雨点也站在白鸽不远处。我惊异，但也不敢贸然去阳台。雨点转头看看白鸽脚上的绳子（普及下，鸽子的眼睛长在脑袋两边，故需要不停转动脑袋来感知景深信息），显然对窗台上新撒的馍渣更感兴趣。</p>
-
-<p> 两只鸽子吃食的场面显然更有活力一些，然而即使我的出现也没惊飞雨点，现在我开始对两只鸽子的性别感兴趣了。</p>
-
-<p> 鸽子的御寒能力不俗，因此德锋找来的纸箱始终没能派上用场，此外要说的是，鸽子的消化系统简直简单的可以，仅仅几天时间阳台就堆满了鸽子粪。</p>
-
-<p> 雨点喜欢在台阶上玩金鸡独立，这时脑袋差点就能缩到身体里去，想到白鸽可能也差不多，只是腿脚不太灵便&hellip;&hellip;</p>
-
-<p> 晚上两只鸽子贴在一起睡。</p>
-
-<p> 一天中午回来继续剥馍渣（雨点对馍渣的兴趣要远超过大米，这似乎也影响了白鸽起初的饮食习惯），无意中发现白鸽在轻啄雨点的脖子（这个鸽子有时也会对自己做同样的动作，但互相做的还真没见过）。</p>
-
-<p> 雨点在台阶下踱步时会时不时扇动一下翅膀，有时想飞到台阶上，但大部分尝试竟以失败告终&hellip;&hellip;</p>
-
-<p> 这天我怀揣馍渣来到阳台，雨点已经在台阶上原地扑扇了好几下，突然从3楼一个滑翔就没影了。</p>
-
-<p>（未完待续）</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-10-15T22:20:27+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2010-10-24T01:47:12+08:00" pubdate data-updated="true">2010-10-24</time></div>
 	
 
 <div class="tags">
@@ -726,10 +710,12 @@ $(document).ready(
 
 <nav id="pagenavi">
     
-        <a href="5" class="prev">Prev</a>
+    	
+        	<a href="/posts/5" class="prev">Prev</a>
+        
     
     
-        <a href="7" class="next">Next</a>
+        <a href="/posts/7" class="next">Next</a>
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
