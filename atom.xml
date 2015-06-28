@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-06-16T13:56:31+08:00</updated>
+  <updated>2015-06-28T22:31:35+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,174 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ruby Web服务器：这十五年]]></title>
+    <link href="http://www.hanyi.name/blog/2015/06/28/ruby-webserver-last-10-years/"/>
+    <updated>2015-06-28T16:39:54+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/06/28/ruby-webserver-last-10-years</id>
+    <content type="html"><![CDATA[<p>坦率的说，作为一个年轻的计算机语言，Ruby在最近二十年里的发展并不算慢。但如果与坐拥豪门的明星语言们相比，Ruby就颇显平民范儿，表现始终不温不火，批评胜于褒奖，下行多过上扬。但总有一些至少曾经自称过Rubyist的程序员们，愉快地实践了这门语言，他们没有丝毫的歧视习惯，总是努力尝试各家之长，以语言表达思想，用基准评判高下，一不小心就影响了整个技术发展的进程。</p>
+
+<p>本文谨以Ruby Web服务器技术的发展为线索，回顾Ruby截至目前最为人所知的Web领域中，重要性数一数二的服务器技术的发展历程，试图帮助我们了解过去，预见未来。</p>
+
+<h3>一、随波逐流</h3>
+
+<p>长久以来，任何Web服务器都具有的最重要的两项功能，一是根据RFC2616解析HTTP/1.1协议，二是接收、处理并响应客户端的HTTP请求。幸运的是Web的发展并不算早，使得Ruby恰好能赶上这趟顺风车，但在前期也基本上受限于整个业界的发展。</p>
+
+<h4>cgi.rb</h4>
+
+<p>cgi.rb是Ruby官方的CGI协议标准库。作为Web服务器接口的早期标准，CGI程序在调用过程中，通过环境变量（GET）或$stdin（POST）传递参数，然后将结果返回至$stdout，从而完成Web服务器和应用程序之间的通信。发布于2000年的cgi.rb还包括了HTTP参数获取、Cookie/Session管理、以及生成HTML内容等基本功能。</p>
+
+<p>当支持CGI应用的Web服务器接到HTTP请求时，需要先创建一个CGI应用进程，并传入相应的参数，当请求返回时再销毁该进程。因此CGI原生是单一进程/请求的，特别是每次请求时发生的进程创建/销毁消耗了大量系统资源，根本无法满足高负载HTTP请求。此外，CGI进程模型还限制了数据库连接池、内存缓存等资源的复用。</p>
+
+<p>对于标准CGI应用存在的单一进程问题，厂商分别提出了兼容CGI协议的解决方案，包括网景的NSAPI、微软的ISAPI和后来的Apache API（ASAPI）。上述服务器API的特点是既支持在服务器进程内运行CGI程序，也支持在独立进程中运行CGI程序，但通常需要在服务器进程中嵌入一个插件以支持该API。</p>
+
+<h4>Webrick</h4>
+
+<p>作为最古老的Ruby Web服务器，诞生于2000年的Webrick从Ruby 1.9.3（2011年10月正式发布）起被正式纳入标准库，成为Ruby的默认Web服务器API。Webrick支持HTTP/HTTPS、代理服务器、虚拟主机服务器，以及HTTP基础认证等RFC2617及以外的其它认证算法。同时，一个Webrick服务器还能由多个Webrick服务器或服务器小程序组合，提供类似虚拟主机或路由等功能，例如处理CGI脚本、ERb页面、Ruby块以及目录服务等。</p>
+
+<p>实际上Webrick也曾被用于Rails核心团队的开发和测试中。但是，Webrick内置的HTTP Parser非常古老，文档缺失，性能低下且不易维护，且其默认只支持单一进程/线程，根本无法满足产品环境中的并发需求。目前一般只用于Web应用的本地开发和基准测试。</p>
+
+<h4>fcgi.rb</h4>
+
+<p>fcgi.rb是FastCGI协议的Ruby封装（latest版底层依赖libfcgi）。FastCGI协议最初是Open Market开发并用于自家Web服务器，从而与当时的NSAPI竞争市场。FastCGI延续了采用独立进程处理请求的做法，即FastCGI服务器。当Web服务器接收到请求时，请求内容和环境信息被通过Socket（本地）或TCP连接（远程）的方式传递至FastCGI服务器，再通过相反路径返回信息。分离进程的好处是Web服务器进程和FastCGI进程是永远保持的，只有连接会被销毁，从而减少了进程管理的开销。
+FastCGI还支持同时处理多个请求，为了尽量降低资源浪费，与Web服务器之间的连接可以被多个请求复用，且支持扩展至多服务器进程。FastCGI能够降低Web服务器和应用程序之间的耦合度，进而为解决安全、性能、管理等各方面问题打开了突破口，相比一些嵌入式方案如mod_perl和mod_php更具灵活性。
+由于FastCGI协议的开放性，主流Web服务器产品基本都实现了各自的FastCGI插件，从而导致FastCGI方案的广泛使用。fcgi.rb最早开发于1998年，分别包含C和Ruby两种实现方式，早期曾被广泛用于Rails的产品环境。</p>
+
+<h4>mod_ruby</h4>
+
+<p>mod_ruby是专门针对Apache Web服务器的ruby扩展插件，其支持在Web服务器中直接运行ruby代码。但是，mod_ruby只允许在多个Apache进程中共享一个ruby解释器，而许多ruby的流行web框架如Rails并不支持多线程，采用mod_ruby会引起多个Rails应用共享类的问题，因此mod_ruby实际上并没有被广泛采用。</p>
+
+<h4>LiteSpeed API/RubyRunner</h4>
+
+<p>LiteSpeed是由LiteSpeed Tech公司最初于2002年发布的商用Web服务器，特点是与被广泛采用的Apache Web服务器的配置文件兼容，但因为采用了事件驱动架构而拥有更好的性能提升。一般考虑采用LiteSpeed作为Web服务器的业务场景包括虚拟主机/VPS提供商、以及相关业务的cPanel产品。
+LiteSpeed API（LSAPI）是LiteSpeed专有的服务器API，LSAPI具备深度优化的IPC协议以提升通信性能。LiteSpeed在LSAPI的基础上开发了ruby接口模块，支持运行基于ruby的Web应用。此外，LiteSpeed还提供一种插件RubyRunner，允许其采用第三方ruby解释器运行ruby应用，但性能不如LSAPI Ruby。
+由于LiteSpeed需要收费，其普及率并不高。但是在一些业务需求比较特殊的场合，特别是对Web服务器性能要求高，且应用程序及其部署需要兼容Apache服务器时仍被考虑。目前LiteSpeed也有其开源版本OpenLiteSpeed。</p>
+
+<h4>scgi.rb</h4>
+
+<p>scgi.rb是对SCGI协议的纯Ruby实现。从原理上来看，SCGI和FastCGI类似，二者的性能并无多大差别，但前者实现起来复杂度更低，犯错率就更小。此外，SCGI服务器进程会将Web服务器的请求转发至其子进程，并由该子进程运行CGI程序，一个SCGI服务器可以动态创建服务器子进程用于处理更多请求（处理完毕将转入睡眠），直至达到配置的子进程上限，此外还能自动销毁退出和崩溃的子进程。从而让SCGI与FastCGI相比拥有更好的并发处理能力。</p>
+
+<h3>二、闻名天下</h3>
+
+<p>2005年，David Heinemeier Hansson（DHH）发布了基于Ruby的开发框架Ruby on Rails（Rails），聚光灯第一次聚焦在Ruby身上。但是业内普遍对Web服务器的方案感到棘手，本地环境Webrick/产品环境FastCGI＋HTTP服务器几乎成了标配，无论是开发、部署或维护都遇到不少困难，一些吃螃蟹的人遂把此视为Rails不如J2EE、PHP方案的证据。</p>
+
+<h4>Mongrel</h4>
+
+<p>2006年，Zed Shaw发布了当时最快的Ruby Web服务器Mongrel。Mongrel采用Ragel开发HTTP/1.1协议的Ruby parser，而后者是一个高性能有限自动机编译器，支持开发协议/数据parser、词法分析器和用户输入验证，支持编译成多种主流语言（包括Ruby）。采用Regel也使parser具有更好的可移植性。但是，Mongrel本身不支持任何应用程序框架，而需要由框架自身提供这种支持。</p>
+
+<p>Mongrel把自己定位成一个“应用服务器”，因为其不仅可以运行Ruby Web应用，也提供标准的HTTP接口，从而使Mongrel可以被放置在Web代理、Load Balancer等任意类型的转发器后面，而非像FastCGI、SCGI一样通过调用脚本实现Web服务器和CGI程序的通信。</p>
+
+<p>Mongrel的可靠性和先进性使其迅速流行在Rails的产品环境中，且曾被Twitter作为其第一代Web服务器，还启发了Ryan Dahl发布于2009年的Node.JS。</p>
+
+<p>但是当Mongrel发布后没过多久，Shaw就与Rails社区的核心成员不和（实际上Shaw对业界的许多技术和公司都表达过不满），随后就终止了Mongrel的开发。进而在其Parser的基础上开发了其后续——语言无关的Web服务器Mongrel2（与前续毫无关系）。</p>
+
+<p>尽管Mongrel迅速衰落，却成功启发了随后更多优秀Ruby应用服务器的诞生，例如下文将介绍的Thin、Unicorn和Puma。</p>
+
+<h4>Rack</h4>
+
+<p>随着Web服务器接口技术的发展，从开始时作为一个module嵌入Web服务器，到维护独立的应用服务器进程，越来越多的应用服务器产品开始涌现，同时相互之间还产生了差异化以便适应不同的应用场景。但是，由于底层协议和API的差别，基于不同的应用服务器开发Web产品时，意味着要实现各自的通信接口，从而为Web应用开发带来更多工作量。特别是对于类似Django、Rails这些被广泛使用的Web框架来说，兼容主流应用服务器几乎是必须的。2003年，Python界权威Phillip J. Eby发表了PEP 0333（Python Web Server Gateway Interface v1.0，即WSGI），提出一种Web服务器和应用程序之间的统一接口，该接口封装了包括CGI、FastCGI、mod_python等主流应用服务器程序的API，使遵循WSGI的Python Web应用能够直接部署在各类应用服务器上。与Python的发展轨迹相似，Ruby界也遇到了类似的挑战，并且在2007年出现了与WSGI类似的Rack。</p>
+
+<p>与WSGI最初只作为一份建议不同，Rack直接提供了模块化的框架实现，并由于良好的设计架构迅速统一了Ruby应用服务器和应用程序框架接口。</p>
+
+<p>Rack被设计成一种中间件“框架”，接收到的HTTP请求会被rack放入不同的管线（中间件）进行处理，直到从应用程序获取响应。这种设计通过统一接口，把一般Web应用所需的底层依赖，包括Session处理、数据库操作、请求处理、渲染视图、路由/调度、以及表单处理等组件以中间件的形式“放入”rack的中间件管线中，并在HTTP请求/响应发生时依次通过上述管线传递至应用程序，从而实现Web应用程序对依赖库的解绑。</p>
+
+<p>Rack接口部分包含两类组件：Handler，用于和Web服务器通信；Adapter，用于和应用程序通信。截至Rack 1.6，Rack内置的handlers包括WEBrick、FCGI、CGI、SCGI、LiteSpeed以及Thin，上述handlers用以兼容已有的常见应用服务器。而2008年后，随着rack逐渐成为事实标准，更新的ruby应用服务器几乎都包含Rack提供的handler。支持Rack Adapters的应用程序框架包括Rails、Sinatra、Merb等等更是囊括了所有主流产品。</p>
+
+<h3>三、百花齐放</h3>
+
+<p>Mongrel和Rack的相继诞生，使Ruby Web服务器、甚至应用程序框架的发展有了明确方向。Mongrel后相继派生出Thin、Unicorn和Puma；而Rack统一了Ruby Web服务器和应用程序框架接口，使应用开发不再需要考虑特定的部署平台。Ruby Web服务器开始依据特定需求深入发展。</p>
+
+<h4>Thin/Goliath</h4>
+
+<p>发布于2009年的Thin沿用了Mongrel的Parser，基于Rack和EventMachine开发，从而能够支持客户端的长请求连接。前两者上文已有介绍，EventMachine是一个Ruby编写的、基于Reactor模式的事件驱动I/O和轻量级并发库。发表自1995年的Reactor模型原理是采用一个事件循环阻塞所有资源，当资源可被处理时，再采用同步方式将其发送至处理模块进行处理并返回结果。Reactor提供了一种基于单线程事件循环的并发能力，支持异构的处理模块，被广泛用于许多基于ruby的事件驱动服务器、异步客户端、网络代理以及监控工具。</p>
+
+<p>2011年，社交网络分析商PostRank开源了其Web服务器Goliath，与Thin相似（都采用了EventMachine）但又有很大不同，采用新的HTTP Parser，同时基于Ruby1.9+的纤程技术实现了全异步I/O，支持MRI、JRuby和Rubinius等多平台。实际上，Goliath的目标不仅是Web服务器，更是一个快速构建WebServices/APIs的开发框架，但是随着之后PostRank被Google收购，Goliath项目也就不再活跃在开源界了。</p>
+
+<h4>Unicorn</h4>
+
+<p>2009年，Eric Wong在Mongrel 1.1.5版本的基础上开发了Unicorn。Unicorn是一个基于Unix/类Unix操作系统的、面向快客户端、低延迟和高带宽的Rack服务器，因此任何情况下几乎都需要在Unicorn和客户端之间设置一个反向代理，以缓存请求和响应数据，这是Unicorn的设计特点所决定的，但也给它带来一些新的好处。</p>
+
+<p>尽管来源于Mongrel，但Unicorn只在进程级运行，且吸收和利用了一些Unix/类Unix系统内核的特性，如Prefork模型。Unicorn由1个master进程和n个fork(2)子进程组成，子进程分别调用select(2)阻塞自己，直到出错或者超时时，才做一些写日志、处理信号以及维护与master的心跳链接等内置任务。子进程和master间通过一个共享socket实现通信，而由Unix/类Unix系统内核自身处理资源调度。Unicorn的设计理念十分简洁，即“只专注一件事”，这种进程阻塞的方式令Unicorn无从接受慢客户端——但前置反向代理能解决这一问题，workers的负载均衡就直接交给操作系统处理，这就大大降低了Unicorn本身的复杂度，并且提高了自身可靠性。此外，类似nginx的重加载机制，Unicorn也支持零宕机重新加载配置文件，使其允许在线部署Web应用等特性。</p>
+
+<h4>Phusion Passenger（mod_rails/mod_rack）</h4>
+
+<p>2008年初，一位叫赖洪礼的Ruby神童发布了mod_rails。尽管Mongrel在当时已经席卷Rails的Web服务器市场，但是面对部署共享主机或是集群的情况时还是缺少统一有效的解决方案，引起业内一些抱怨，包括DHH（也许Shaw就不认为这是个事儿）。mod_rails最初被设计成一个Apache的module，与FastCGI的原理类似，但设置起来异常简单——只需要设置一个RailsBaseURI匹配转发至Rails服务器的URI串。mod_rails服务器会在启动时自动加载Web应用程序，然后按需创建子进程，并协调Web服务器和Rails服务器的通信，从而支持单一服务器同时部署多个应用，还允许按需自动重启应用服务器。</p>
+
+<p>mod_rails遵循了Rails的设计原则，包括Convention over Configuration、Don&rsquo;t Repeat Yourself，使其面向部署非常友好，很快得到了业界青睐，并在正式release时改名Passenger。</p>
+
+<p>截至2015年6月，Phusion Passenger的版本号已经达到5.0.10（Raptor），核心采用C++编写，同时支持Ruby、Python和Node.js应用。支持Apache、Nginx和独立HTTP模式（建议采用独立模式），支持Unix/类Unix系统，在统计网站Builtwith上排名Ruby Web服务器使用率第一。值得一提的是，Phusion Passenger的开源版本支持多进程单线程模式，但是其企业版同样支持多线程运行。本文撰写时，Phusion Passenger是最近一个号称“史上最快”的Ruby Web服务器（本文最后将进一步介绍Raptor）。</p>
+
+<h4>Trinidad/TorqueBox</h4>
+
+<p>Trinidad发布于2009年，基于JRuby::Rack和Apache Tomcat，使Rails的部署和世界上最流行的Web服务器之一Tomcat结合，支持集成Java代码、支持Resque和Delayed::Job等Worker，具有跨平台、配置简单的特性。
+与Trinidad相比，同样发布于2009年的TorqueBox不仅仅是一个Web服务器，而且被设计成一个可移植的Ruby平台。基于JRuby和WildFly（即JBoss AS的后继），基于Rack开发，支持多线程阻塞I/O，从而实现高并发。</p>
+
+<h4>Puma</h4>
+
+<p>Puma——Mongrel最年轻的后代于2011年发布，作者是Evan Phoenix。Mongrel诞生于前Rack时期，而随着Rack统一了Web服务器接口，任何基于Rack的应用再与Mongrel配合就有许多不便。Puma继承了前者的Parser，并且基于Rack重写了底层通信部分。更重要的是，Puma部分依赖Ruby的其它两个流行实现：Rubinius和JRuby，与TorqueBox类似拥有多线程I/O的能力，从而支持真正的多线程和高并发（而MRI并不支持）。同时由于引入了事件I/O缓存Web请求和响应数据，即使在采用MRI的情况下，Puma也能实现阻塞I/O和高并发。但是，从获得更高吞吐量的角度来说，Puma仍然需要采用Rubinius和JRuby这两个平台。</p>
+
+<h3>四、迈向未来</h3>
+
+<p>除了性能以外，Ruby Web服务器先后解决了缺少部署方案、与Web应用程序不兼容、运维管理困难等问题，基础架构趋于成熟且稳定。当然，随着更多基准测试结果的出现，业界逐渐开始朝着更高性能和并发量发展。以最新的Raptor（上文提到的Phusion Passenger 5）为例，其在I/O模型上融合了现有其它优秀产品的方案，包括Unicorn的多进程模型、内置基于C++和事件响应模型的反向代理缓冲（类似Nginx的功能，但对Raptor自身做了大量裁减和优化）、以及企业版具有的多线程模型（类似Puma和TorqueBox）；此外，Raptor采用的Node.js HTTP Parser（基于Nginx的Parser）的性能超过了Mongrel；更进一步，Raptor甚至实现了Zero-copy和一般在大型游戏中使用的区域内存管理技术，使其对CPU和内存访问的优化达到了极致（感兴趣的话可以进一步查阅<a href="http://www.rubyraptor.org/how-we-made-raptor-up-to-4x-faster-than-unicorn-and-up-to-2x-faster-than-puma-torquebox/">这篇文章</a>）。</p>
+
+<p>另外也需要看到，当引入多线程运行方式，现有Web应用将不得不仔细检查自身及其依赖，是否是线程安全的，同时给构建Ruby Web应用带来更多新的挑战。这也是为什么更多人宁愿选择进程级应用服务器的方式——毕竟大多数应用不需要用到太多横向扩展，引入反向代理即可解决慢客户端拒绝服务的问题，Raptor甚至在独立模式能工作的更好（而且不用花时间去学习Nginx）。</p>
+
+<p>除非你已经开始考虑向支持大规模并发的架构迁移，并希望节省接下来的一大笔花费了。</p>
+
+<p>本文灵感来源于RailsConf 2015的Session：&#8221;Riding Rails for 10 Years - John Duff&#8221;。</p>
+
+<h3>参考资源</h3>
+
+<p><a href="http://confreaks.tv/videos/railsconf2015-riding-rails-for-10-years">http://confreaks.tv/videos/railsconf2015-riding-rails-for-10-years</a></p>
+
+<p><a href="http://kovyrin.net/2006/08/28/ruby-performance-results/lang/en/">http://kovyrin.net/2006/08/28/ruby-performance-results/lang/en/</a></p>
+
+<p><a href="http://chneukirchen.org/blog/archive/2007/02/introducing-rack.html">http://chneukirchen.org/blog/archive/2007/02/introducing-rack.html</a></p>
+
+<p><a href="https://www.wiredtree.com/blog/litespeed-replacement-for-apache/">https://www.wiredtree.com/blog/litespeed-replacement-for-apache/</a></p>
+
+<p><a href="https://www.litespeedtech.com/support/wiki/doku.php?id=litespeed_wiki:ruby_rails">https://www.litespeedtech.com/support/wiki/doku.php?id=litespeed_wiki:ruby_rails</a></p>
+
+<p><a href="https://www.colm.net/open-source/ragel/">https://www.colm.net/open-source/ragel/</a></p>
+
+<p><a href="http://zedshaw.com/archive/ragel-state-charts/">http://zedshaw.com/archive/ragel-state-charts/</a></p>
+
+<p><a href="https://en.wikipedia.org/wiki/Comparison_of_parser_generators">https://en.wikipedia.org/wiki/Comparison_of_parser_generators</a></p>
+
+<p><a href="https://blog.twitter.com/2010/unicorn-power">https://blog.twitter.com/2010/unicorn-power</a></p>
+
+<p><a href="http://david.heinemeierhansson.com/posts/31-myth-2-rails-is-expected-to-crash-400-timesday">http://david.heinemeierhansson.com/posts/31-myth-2-rails-is-expected-to-crash-400-timesday</a></p>
+
+<p><a href="http://techcrunch.com/2008/01/01/zed-shaw-puts-the-smack-down-on-the-rails-community/">http://techcrunch.com/2008/01/01/zed-shaw-puts-the-smack-down-on-the-rails-community/</a></p>
+
+<p><a href="http://code.macournoyer.com/thin/">http://code.macournoyer.com/thin/</a></p>
+
+<p><a href="http://www.dre.vanderbilt.edu/~schmidt/PDF/reactor-siemens.pdf">http://www.dre.vanderbilt.edu/~schmidt/PDF/reactor-siemens.pdf</a></p>
+
+<p><a href="http://www.cs.wustl.edu/~schmidt/PDF/proactor.pdf">http://www.cs.wustl.edu/~schmidt/PDF/proactor.pdf</a></p>
+
+<p><a href="http://www.infoq.com/articles/meet-goliath">http://www.infoq.com/articles/meet-goliath</a></p>
+
+<p><a href="http://2ndscale.com/rtomayko/2009/unicorn-is-unix">http://2ndscale.com/rtomayko/2009/unicorn-is-unix</a></p>
+
+<p><a href="http://unicorn.bogomips.org/SIGNALS.html">http://unicorn.bogomips.org/SIGNALS.html</a></p>
+
+<p><a href="http://nginx.org/en/docs/control.html">http://nginx.org/en/docs/control.html</a></p>
+
+<p><a href="http://izumi.plan99.net/blog/index.php/2008/01/14/what-is-so-hard-about-rails-deployment/">http://izumi.plan99.net/blog/index.php/2008/01/14/what-is-so-hard-about-rails-deployment/</a></p>
+
+<p><a href="https://blog.phusion.nl/">https://blog.phusion.nl/</a></p>
+
+<p><a href="https://trends.builtwith.com/web-server">https://trends.builtwith.com/web-server</a></p>
+
+<p><a href="https://github.com/puma/puma">https://github.com/puma/puma</a></p>
+
+<p><a href="http://www.rubyraptor.org/how-we-made-raptor-up-to-4x-faster-than-unicorn-and-up-to-2x-faster-than-puma-torquebox/">http://www.rubyraptor.org/how-we-made-raptor-up-to-4x-faster-than-unicorn-and-up-to-2x-faster-than-puma-torquebox/</a></p>
+
+<p><a href="http://ohcoder.com/blog/2014/11/11/raptor-part-1/">http://ohcoder.com/blog/2014/11/11/raptor-part-1/</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[microsevices陷阱: 安全]]></title>
@@ -1256,75 +1424,6 @@ REST over HTTP也存在缺点，一、生成客户端stub的成本较高，超�
 <p>9、驱动程序和运行时系统的稳定性和性能进一步提升，<strong>尤其是在托管API层</strong>。</p>
 
 <p>总的来看，Beta 2并未提供关键功能上的改进，更多是对现有问题的修正。此外，备受瞩目的Kinect for Windows杀手级应用仍未出现，社区反馈是目前很多未公开的商业项目在尝试OpenNI，对MS SDK反倒比较谨慎。不过从长远角度考虑，MS SDK在开发社区、系统平台和资源支撑方面拥有众多优势，明年商业化后必然会率先占据有利位置。由此联想到近期在4S上被热炒的Siri，看来自然交互的春天真的离我们不远了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[从SIGGRAPH'11看《Rango》]]></title>
-    <link href="http://www.hanyi.name/blog/2011/10/22/cong-SIGGRAPH-11-Rango/"/>
-    <updated>2011-10-22T02:45:54+08:00</updated>
-    <id>http://www.hanyi.name/blog/2011/10/22/cong-SIGGRAPH-11-Rango</id>
-    <content type="html"><![CDATA[<p>一年前，我们曾介绍并讨论了展示在siggraph&#8217;10 Talks上、作为Disney&rsquo;s 50th Feature Animation的《Tangled》。在今年8月7日至11日的温哥华siggraph&#8217;11大会上，工业光魔携首部动画长篇《Rango》成为了“Let there be light”（加点儿灯光？）单元当之无愧的主角（尽管去年的Tangled和今年的Cars 2同时均有入选）。</p>
-
-<p>《Rango》中文译名“兰戈”，由执导了前三部加勒比海盗系列的Gore Verbinski担任导演，该片作为工业光魔在Feature Animation（FA）领域的处女之作，使得后者在首次试水FA后即登上了巅峰。影片主要讲述了一只不慎被遗失在西部荒漠中的蜥蜴，历经艰难、最终找回自我的故事。影片无论在情节构思、画面、配乐上的精细程度都堪称前所未有。本文依旧从Siggraph&#8217;11上的三篇文章出发，试图探索堪称计算机图形学史上迄今最先进的工业级CG技术。</p>
-
-<p><strong> 使用面向FX工具制作动画角色和光照特效</strong></p>
-
-<p>在拍摄初期，工作人员在虚拟转台上测试了整个ILM的材质库，其意在测试材质的环境光遮蔽和阴影效果。然而在影片中，除了60名主要角色以外，还需要大约1000个道具。为了简化这部分工作，这里还使用了部分置换贴图以丰富材质信息。同时，再将这些材质用于不同环境的转台程序下，以便迅速发现问题并制作新的Shader；</p>
-
-<p>过去通常使用光板或参考集设置光线，然而《Rango》则例外，这部分影片中引入了新的方法。每一组镜头中的光照设置非常简单，即包括关键光、环境光、反射光三部分，该方法被用于全部的室外光和一些室内光。技术人员使用Digital Matte部门开发的虚拟集渲染器创建环境光和反射光映射，而非直接进行360度捕获。上述映射被用于非静止的、处于快速移动物体中的反射/折射光精确表示。设置灯光时，关键光通过一个受可切变天空顶约束的远程光Shader定义，并通过复制角色的远程关键光，达到较好的交互和阴影效果。同时，用户还可以通过旋转整个装置以达到尽可能广泛的变化，或只旋转关键光以改变复制光，或通过特定的扭曲修改角色局部的复制光。</p>
-
-<p>除个别场景外，影片几乎所有的室外场景都使用了前文所述的格式化远程关键光、环境光和反射光装置。该装置包含两个开关：一是激活阳光反射卡片（模拟光晕效果），另一个用于开启基于距离的阴影模糊。</p>
-
-<p>假设你在一个阳光明媚的室外场所，挥动手臂并在一张白纸上映上阴影效果，你会发现当你升起手臂时，阴影边界的模糊度随之逐级递增，这种边界阴影模糊在物理学中被称为“半影”现象。物理学中已经证明，半影宽度除以障碍物至阴影面的距离值约为常数1/112，它同时也是太阳以弧度为单位角直径值。工作人员实现了基于距离的关键光阴影边界模糊并对其进行严格控制，力求在符合真实世界效果的基础上尽可能满足导演对夸张手法的要求。</p>
-
-<p>简易的关键光/环境光设置方法是设置全局光照参数，并将其作为一组镜头的初始光照。整部影片也可以通过该方法初始化并检测通用关键光的特效和镜头效果。每当TD（Technical Directors）布置新任务时，他们就可以通过添加特定的光照效果以丰富镜头。出于对主角显著区别于背景的绘制需要，工作人员对其进行了逐帧细化和调整。</p>
-
-<p>角色合成方面起初的构想十分简单，然而随后愈加复杂，这种复杂程度甚至超过了真实的角色电影。导演对每一个场景均有特定的灯光、编排和镜头要求，还包括变化的气候、照片级真实感绘制（光畸变，正确的燃烧扭曲，热涟波和相机抖动等）。额外还包括了沙漠、指纹、水、尘土等各种细节效果。为此制作团队特组织了一批强大的计算机开发团队，通过创建自定义通用脚本制作了多个工具辅助影片拍摄。</p>
-
-<p><strong> 动物皮毛的穿透避免和动力学</strong></p>
-
-<p>在《Tango》中需要对多个鸟类角色建立羽毛模型，而这种羽毛模型通常需要手动放置主要的羽毛茎秆曲线，再在不允许插值的条件下实例化整个皮毛几何体。此外，影片对动物角色的要求还包括了日常姿态、呼吸动作、受风、动量、惯性影响的效果等。这里制作团队开发了一种尽可能保持原设计形态的皮毛动力学模拟和自由碰撞技术。</p>
-
-<p>鸟类的羽毛是通过分层有序叠加的，开发人员应允许设计师能够任意设计皮毛的基本外形、层次结构，且不必处心积虑地避免皮毛穿透问题。设计师通过在角色皮肤上放置引导曲线，以构建基本的皮毛外观，同时在其径向上实例化一个矩形几何框，用户可据此设置宽度、扭曲度、与起始点法线相似度等参数。该四边形面片同时还被用于在绘制阶段实现多种纹理效果。</p>
-
-<p>制作团队共使用了两个实例化的皮毛集合，一是目标集，包括了许多皮毛间的相互穿透效果。二是特征皮毛根集，这部分使用狭长的面片实现，由于其更接近法线方向，故存在较少的互穿透。后者用于对某些动物的皮毛进行初始化和带穿透避免的布料模拟。与[Weber and Gornowicz 2009]提出的复杂方法不同，下一步是使用非身体力设置布料模拟的皮毛。每一个布片的基被限制在一个曲面片上，据此检测面片间的相互碰撞。目标集则是通过布料解析器限制下点接点的受力建立。在模拟过程中，布料面片将面向目标集方向生长、然后由碰撞检测部分避免穿透。碰撞避免的方法可以使用基于三角形或是基于边的排斥方法。在第一步完成后，仍需要进一步对角色动作过程中的皮毛穿透现象进行检测， 同时还要保证对原设计形态的维持。</p>
-
-<p><strong> 插值毛发的碰撞精度</strong></p>
-
-<p>毛发的动力学常常是通过引导毛发和成员插值构成的，因此这部分也被称为插值毛发。碰撞精度是毛发模拟技术中最费时的阶段之一，因此通过限制毛发的碰撞精度从而提升动力学性能是非常重要的。在许多情况下，只需要视觉感官上可被接受即可不需增加碰撞精度，遗憾的是，我们的运气往往没有这么好：）</p>
-
-<p>影片中许多动物都穿有衣服，那么即使是一根发丝从衣服布料中伸出来都是不可接受的。然而对整个已生成的毛发集合进行穿透检测和避免也是不现实的：首先，这种技术非常耗时，插值后的毛发往往是引导毛发的成百上千倍；其次，这种方法并不能用于目前的管线设置，因为在模拟阶段插值头发尚不存在；最后，基于物理的碰撞检测方法通常是使用多边形面片，而非Catmull-Clark细分曲面表示，即使是极小的曲面差异也很难保证碰撞检测的正确性。</p>
-
-<p>这里制作团队提出了一个新的穿透修正方法，该方法主要解决的问题包括精度、效率和时间相关性，其主要贡献是对平滑曲面表示进行碰撞检测，沿着毛发生长方向进行连续碰撞检测，并在每一帧进行碰撞检测。该方法最终在影片多处被用到，它既保证了高效率，同时精度也达到了无需进行后期修正的程度。</p>
-
-<p>文中工作人员使用了[Verma et al. 2009]将CC曲面转换为Bezier表示，这种显式曲面允许通过精确交叉查询解决碰撞检测的问题。其次，使用层次数据结构对毛发和Bezier面片进行候选碰撞检测。由于当前配对可能发生了穿透，将毛发的生长方向再移动至其参数空间中的上层部分。通过沿参数化的曲线空间搜索连续毛发-曲面交叉，其中使用Newton法计算毛发和曲面交叉部分。</p>
-
-<p>在穿透避免时很容易造成无法保持原始形态的问题，这里使用了一种简便方法以保持形态，即在穿透避免后使用[Goldenthal et al. 2007]提出的快速投影法修正其差异长度，然后在碰撞精度和应用不可延展间进行迭代，直到满足两方面需求即停止。实际应用中只需要很少的迭代次数即可完成计算。</p>
-
-<p>插值头发绘制时逐步生成的，同时还要同步进行穿透避免计算。因此需要在每一帧进行独立的穿透避免计算（并行处理），这条限制有一定隐患，即可能导致发生时间无干性：毛发可能在连续帧中发生不平滑。这里通过尽量使其朝向生长方向以降低不平滑的程度，尽管尚不完美，但已经足够达到目的了。</p>
-
-<p><strong> 总结</strong></p>
-
-<p>《Rango》无疑是siggraph&#8217;11大会上一颗耀眼的明珠。与去年的《Tangled》相比，该片的制作成本要少一亿三千万美元（估计成本一亿三千五百万），前者更是花费了Disney Animation Studio长达六年时间。不过，这次ILM的口碑和舆评显然超过了Disney，正如片尾Rango骑着白鸡，发表了如下慷慨激昂的讲话：</p>
-
-<p>My fellow comrades.</p>
-
-<p>There will be times when you doubt yourself.</p>
-
-<p>When you feel pummeled by the cataclysms of life,</p>
-
-<p>Remember this moment. Remember me.</p>
-
-<p>Know that I will be there watching you,</p>
-
-<p>Sometimes at inappropriate moments.</p>
-
-<p>That&rsquo;s part of the deal.</p>
-
-<p>And remember, within all of us resides</p>
-
-<p>The true spirit of the&hellip;</p>
 ]]></content>
   </entry>
   
