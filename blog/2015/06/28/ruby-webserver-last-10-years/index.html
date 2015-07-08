@@ -110,6 +110,8 @@ $(document).ready(
 
 <p>作为Web服务器接口的早期标准，CGI程序在调用过程中，通过环境变量（GET）或$stdin（POST）传递参数，然后将结果返回至$stdout，从而完成Web服务器和应用程序之间的通信。cgi.rb是Ruby官方的CGI协议标准库，发布于2000年的cgi.rb包含HTTP参数获取、Cookie/Session管理、以及生成HTML内容等基本功能。</p>
 
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/ruby_web_servers/cgi.png" alt="Web服务器和CGI" /></p>
+
 <p>当支持CGI应用的Web服务器接到HTTP请求时，需要先创建一个CGI应用进程，并传入相应的参数，当该请求被返回时再销毁该进程。因此CGI原生是单一进程/请求的，特别是每次请求时产生的进程创建/销毁操作消耗了大量系统资源，根本无法满足较高负载的HTTP请求。此外，CGI进程模型还限制了数据库连接池、内存缓存等资源的复用。</p>
 
 <p>对于标准CGI应用存在的单一进程问题，各大厂商分别提出了兼容CGI协议的解决方案，包括网景的NSAPI、微软的ISAPI和后来的Apache API（ASAPI）。上述服务器API的特点是既支持在服务器进程内运行CGI程序，也支持在独立进程中运行CGI程序，但通常需要在服务器进程中嵌入一个插件以支持该API。</p>
@@ -123,6 +125,8 @@ $(document).ready(
 <h4>fcgi.rb</h4>
 
 <p>fcgi.rb是FastCGI协议的Ruby封装（latest版底层依赖libfcgi）。为了与当时的NSAPI竞争，FastCGI协议最初由Open Market提出和开发、并应用于自家Web服务器，延续了前者采用独立进程处理请求的做法：即维持一个FastCGI服务器。当Web服务器接收到HTTP请求时，请求内容和环境信息被通过Socket（本地）或TCP连接（远程）的方式传递至FastCGI服务器进行处理，再通过相反路径返回响应信息。分离进程的好处是Web服务器进程和FastCGI进程是永远保持的，只有相互之间的连接会被断开，避免了进程管理的开销。</p>
+
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/ruby_web_servers/fastcgi.png" alt="Web服务器和FastCGI/SCGI服务器" /></p>
 
 <p>进一步，FastCGI还支持同时响应多个请求。为了尽量减少资源浪费，若干请求可以复用同一个与Web服务器之间的连接，且支持扩展至多个FastCGI服务器进程。FastCGI降低了Web服务器和应用程序之间的耦合度，进而为解决安全、性能、管理等各方面问题提供新的思路，相比一些嵌入式方案如mod_perl和mod_php更具灵活性。</p>
 
@@ -144,7 +148,9 @@ $(document).ready(
 
 <p>scgi.rb是对SCGI协议的纯Ruby实现。从原理上来看，SCGI和FastCGI类似，二者的性能并无多大差别。但比起后者复杂的协议内容来说，SCGI移除了许多非必要的功能，看起来十分简洁，且实现复杂度更低。</p>
 
-<p>在SCGI协议中，一个SCGI服务器可以动态创建服务器子进程用于处理更多请求（处理完毕将转入睡眠），直至达到配置的子进程上限。当获得Web服务器请求时，SCGI服务器进程会将其转发至子进程，并由子进程运行CGI程序处理该请求，从而使SCGI与FastCGI相比拥有更好的并发处理能力。此外，SCGI还能自动销毁退出和崩溃的子进程，具有良好的稳定性。</p>
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/ruby_web_servers/fastcgi_advance.png" alt="Web服务器和多FastCGI/SCGI服务器" /></p>
+
+<p>与FastCGI类似，一个SCGI服务器可以动态创建服务器子进程用于处理更多请求（处理完毕将转入睡眠），直至达到配置的子进程上限。当获得Web服务器请求时，SCGI服务器进程会将其转发至子进程，并由子进程运行CGI程序处理该请求。此外，SCGI还能自动销毁退出和崩溃的子进程，具有良好的稳定性。</p>
 
 <h3>二、闻名天下</h3>
 
@@ -155,6 +161,8 @@ $(document).ready(
 <p>2006年，Zed Shaw发布了划时代的Mongrel。Mongrel把自己定位成一个“应用服务器”，因为其不仅可以运行Ruby Web应用，也提供标准的HTTP接口，从而使Mongrel可以被放置在Web代理、Load Balancer等任意类型的转发器后面，而非像FastCGI、SCGI一样通过调用脚本实现Web服务器和CGI程序的通信。</p>
 
 <p>Mongrel采用Ragel开发HTTP/1.1协议的Ruby parser，而后者是一个高性能有限自动机编译器，支持开发协议/数据parser、词法分析器和用户输入验证，支持编译成多种主流语言（包括Ruby）。采用Regel也使parser具有更好的可移植性。但是，Mongrel本身不支持任何应用程序框架，而需要由框架自身提供这种支持。</p>
+
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/ruby_web_servers/mongrel.png" alt="Mongrel Web服务器" /></p>
 
 <p>Mongrel支持多线程运行（但对于当时非线程安全的Rails来说，仍然只能采用多进程的方式提高一部分并发能力），曾被Twitter作为其第一代Web服务器，还启发了Ryan Dahl发布于2009年的Node.JS。</p>
 
@@ -172,6 +180,8 @@ $(document).ready(
 
 <p>Rack被设计成一种中间件“框架”，接收到的HTTP请求会被rack放入不同的管线（中间件）进行处理，直到从应用程序获取响应。这种设计通过统一接口，把一般Web应用所需的底层依赖，包括Session处理、数据库操作、请求处理、渲染视图、路由/调度、以及表单处理等组件以中间件的形式“放入”rack的中间件管线中，并在HTTP请求/响应发生时依次通过上述管线传递至应用程序，从而实现Web应用程序对底层通信依赖的解绑。</p>
 
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/ruby_web_servers/rack.png" alt="Rack中间件" /></p>
+
 <p>Rack接口部分包含两类组件：Handler，用于和Web服务器通信；Adapter，用于和应用程序通信。截至Rack 1.6，Rack内置的handlers包括WEBrick、FCGI、CGI、SCGI、LiteSpeed以及Thin，上述handlers用以兼容已有的常见应用服务器。而2008年后，随着rack逐渐成为事实标准，更新的Ruby Web服务器几乎都包含Rack提供的handler。包括Rails、Sinatra、Merb等等几乎所有主流框架都引入了Rack Adapters的支持。</p>
 
 <h3>三、百花齐放</h3>
@@ -184,6 +194,8 @@ $(document).ready(
 
 <p>发表自1995年的Reactor模型的基本原理是采用一个单线程事件循环缓存所有系统事件，当事件发生时，以同步方式将该事件发送至处理模块，处理完成后返回结果。基于Reactor模型的EventMachine具备异步（非阻塞）I/O的能力，被广泛用于大部分基于Ruby的事件驱动服务器、异步客户端、网络代理以及监控工具中。</p>
 
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/ruby_web_servers/reactor.png" alt="Reactor模型" /></p>
+
 <p>2011年，社交网络分析商PostRank开源了其Web服务器Goliath，与Thin相似（都采用了EventMachine）但又有很大不同，采用新的HTTP Parser，同时针对异步事件编程中的高复杂度回调函数问题，借助Ruby1.9+的纤程技术实现了线性编码，使程序具备更好的可维护性。Goliath支持MRI、JRuby和Rubinius等多平台。在附加功能方面，Goliath的目标不仅是作为Web服务器，更是一个快速构建WebServices/APIs的开发框架，但是随着之后PostRank被Google收购，Goliath项目也就不再活跃在开源界了。</p>
 
 <h4>Unicorn</h4>
@@ -193,6 +205,8 @@ $(document).ready(
 <p>尽管来源于Mongrel，但Unicorn只在进程级运行，且吸收和利用了一些Unix/类Unix系统内核的特性，如Prefork模型。</p>
 
 <p>Unicorn由1个master进程和n个fork(2)子进程组成，子进程分别调用select(2)阻塞自己，直到出错或者超时时，才做一些写日志、处理信号以及维护与master的心跳链接等内置任务。子进程和master间通过一个共享socket实现通信，而由Unix/类Unix系统内核自身处理资源调度。</p>
+
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/ruby_web_servers/unicorn.png" alt="Unicorn的多进程模型" /></p>
 
 <p>Unicorn的设计理念是“只专注一件事”：多进程阻塞I/O的方式令其无从接受慢客户端——但前置反向代理能解决这一问题；workers的负载均衡就直接交给操作系统处理。这种理念大大降低了实现复杂度，从而提高了自身可靠性。此外，类似Nginx的重加载机制，Unicorn也支持零宕机重新加载配置文件，使其允许在线部署Web应用而不用产生离线成本。</p>
 
@@ -239,6 +253,8 @@ $(document).ready(
 <h4>高吞吐量</h4>
 
 <p>以最新的Raptor（上文提到的Phusion Passenger 5）为例，其在网络I/O模型的选择上融合了现有其它优秀产品的方案，包括Unicorn的多进程模型、内置基于多线程和事件I/O模型的反向代理缓冲（类似Nginx的功能，但对Raptor自身做了大量裁减和优化）、以及企业版具有的多线程模型（类似Puma和TorqueBox）；此外，Raptor采用的Node.js HTTP Parser（基于Nginx的Parser）的性能超过了Mongrel；更进一步，Raptor甚至实现了Zero-copy和一般在大型游戏中使用的区域内存管理技术，使其对CPU和内存访问的优化达到了极致（感兴趣的话可以进一步查阅<a href="http://www.rubyraptor.org/how-we-made-raptor-up-to-4x-faster-than-unicorn-and-up-to-2x-faster-than-puma-torquebox/">这篇文章</a>）。</p>
+
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/ruby_web_servers/raptor.png" alt="Raptor的优化模型" /></p>
 
 <p>另外也需要看到，当引入多线程运行方式，现有Web应用将不得不仔细检查自身及其依赖，是否是线程安全的，同时这也给构建Ruby Web应用带来更多新的挑战。这也是为什么更多人宁愿选择进程级应用服务器的方式——毕竟对大多数应用来说不需要用到太多横向扩展，引入反向代理即可解决慢客户端的问题，而采用Raptor甚至在独立模式能工作的更好（这样就不用花时间去学习Nginx）。</p>
 
