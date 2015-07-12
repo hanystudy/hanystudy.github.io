@@ -4,7 +4,7 @@
   <title><![CDATA[Category: web | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-07-08T15:46:54+08:00</updated>
+  <updated>2015-07-12T23:01:16+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -21,6 +21,8 @@
     <content type="html"><![CDATA[<p>坦率的说，作为一门年轻的计算机语言，Ruby在最近二十年里的发展并不算慢。但如果与坐拥豪门的明星语言们相比，Ruby就颇显平民范儿，表现始终不温不火，批评胜于褒奖，下行多过上扬。但总有一些至少曾经自称过Rubyist的程序员们，愉快地实践了这门语言，他们没有丝毫的歧视习惯，总是努力尝试各家之长，以语言表达思想，用基准评判高下，一不小心就影响了整个技术发展的进程。</p>
 
 <p>本文谨以Ruby Web服务器技术的发展为线索，回顾Ruby截至目前最为人所知的Web领域中，重要性数一数二的服务器技术的发展历程，试图帮助我们了解过去，预见未来。</p>
+
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/ruby_web_servers/timeline.png" alt="Ruby Web服务器发展时间轴" /></p>
 
 <h3>一、随波逐流</h3>
 

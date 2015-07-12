@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="3、数据类型（下）  1)向量(Vectors)    Vector是C++标准模板类库的重要组成部分,使用时需要包含头文件vector.主要定义方式如下:     vector &lt;int&gt; a(10);                     //定义了10个整数元素,但没有赋初值 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 在绝大多数人眼中，汇编语言是一个低级的、面向机器硬件的程序设计语言。从第一颗微处理器诞生之日起，二进制代码形式的机器语言就被代替成了具有一定意义的特殊指令。指令的有序堆积即称为汇编语言。  令人遗憾的是，中国人自计算机发明以来，几乎未在其硬件领域上取得过较大突破。微处理器技术也是如此。 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,68 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/04/18/xiao-yi-hui-bian/">
+		
+			小议汇编</a>
+	</h2>
+	<div class="entry-content">
+		<p> 在绝大多数人眼中，汇编语言是一个低级的、面向机器硬件的程序设计语言。从第一颗微处理器诞生之日起，二进制代码形式的机器语言就被代替成了具有一定意义的特殊指令。指令的有序堆积即称为汇编语言。</p>
+
+<p> 令人遗憾的是，中国人自计算机发明以来，几乎未在其硬件领域上取得过较大突破。微处理器技术也是如此。这也就能解释，为何若干套指令集中没有汉字的影子了。（无语。。。）其实，非但我国在这一领域起步较晚，当今技术水平与国外同类技术的差距也还是相当可观的。这样可能有人会说，经济全球化的今天，中国人为什么总要搞自己的一套东西！需知，信息产业在未来社会生活所占据的比重将十分庞大，而当今国际社会的政治形势变幻也从未停留过脚步，拥有民族化自主知识产权的技术也就成了重要一环。</p>
+
+<p> 提前说了这么多废话，主要还是勉励当代微电子学专业的同学们奋发图强。我们从“软”的已经软到了火候，而该“硬”的却还没有硬得起来。</p>
+
+<p> 目前高校的汇编语言教学主要是以8086/88指令系统为主要内容，事实上真正的汇编语言远不止这个概念。它的发展和CPU的发展几乎是同步进行的。我们知道，1971年intel公司推出了世界上第一台4位微处理器4004，1978年推出了16位微处理器i8086/87，并相应配套了x86指令集。随后的8088芯片用在了IBM-PC中，在1981年的首次PC机概念推广时广为人知。此后，x86指令集被多数微处理器厂商采用并集成到自主产品中。虽然后来的发展使cpu指令集不断更新扩充，但为了延续长期以往积攒的软件资源周期，都向上兼容了x86指令集。当然，不同的cpu大多数都有自己的扩展指令集，还有些并未沿用x86构架，但总的来说这些指令主要分两大构架:</p>
+
+<p>   1、复杂指令系统计算机(CISC,Complex Instruction Set Computer):指令均处于平等地位的指令构架，有指令多且复杂，因为操作码扩展而增加寻址方式种类的特点。早期的x86指令集都属于cisc构架。</p>
+
+<p>   2、精简指令系统计算机(RISC,Reduced Instruction Set Computer):指令有优先级之分，一般常用指令优先级较高，提升了运行效率，并且克服了cisc构架的上述若干缺点。当前除PC机以外的计算机系统基本上都采用RISC构架。</p>
+
+<p> cisc虽然拥有众多缺点，但x86集基础上所建立的软件资源是它至今仍必须在pc机上存在的重要原因。目前看来，cisc和risc在pc机上的争夺最终将走向中间领域，两大厂商intel和amd也在上世纪90年代开始同时采用了两种技术。</p>
+
+<p> 那么，汇编语言的具体优势又在哪里？</p>
+
+<p> 高级语言如C/C++,JAVA,C#等，都具有直观，抽象化易于理解，应用范围广的特点。早期的汇编语言相对而言就不具备这些优势了。通常汇编用来进行底层开发，例如操作系统及其硬件驱动程序、端口程序,还包括当前愈为流行的嵌入式开发等等。有时程序员会使用汇编语言和高级语言相配合以进一步达到高效精确的目的。近一段时期以来，随着汇编语言自身的发展和翻译程序的开发，汇编已经能够做到完全独立编写win32程序,其在一些高级绘图程序、视频游戏程序中的应用也越来越多。</p>
+
+<p> 我认为，针对计算机偏软件方向的专业来说，汇编语言提供了一个能近距离观察机器内部实现的窗口。另外，通过对汇编语言程序设计的掌握，将对上层软件系统原理拥有更为深刻的理解。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-18T19:40:03+08:00" pubdate data-updated="true">2008-04-18</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/assembly/'>assembly</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2008/04/18/xiao-yi-hui-bian//posts/20/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -3223,680 +3285,6 @@ void ShowDlg(void);</td>
 
 	
 		<span class="comments"><a href="/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-san//posts/20/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-er/">
-		
-			Visual C++动态链接库编程（二）</a>
-	</h2>
-	<div class="entry-content">
-		<p>　　4.1一个简单的DLL</p>
-
-<p>　　第2节给出了以静态链接库方式提供add函数接口的方法，接下来我们来看看怎样用动态链接库实现一个同样功能的add函数。</p>
-
-<p class="guanggao">　　如图6，在VC++中new一个Win32 Dynamic-Link Library工程dllTest（<a target="_blank" href="http://www.mydown.com/code/244/244551.html"><font color="#000000">单击此处下载本工程</font></a>）。注意不要选择MFC AppWizard(dll)，因为用MFC AppWizard(dll)建立的将是第5、6节要讲述的MFC 动态链接库。</p>
-
-
-
-
-<p><p class="guanggao">
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/z197lah23li0.jpg" />
-图6 建立一个非MFC DLL</td>
-</tr>
-</table>
-<p class="guanggao">
-　　在建立的工程中添加lib.h及lib.cpp文件，源代码如下：
-<p class="guanggao">
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>/<em> 文件名：lib.h　</em>/</p>
-
-<h1>ifndef LIB_H</h1>
-
-<h1>define LIB_H</h1>
-
-<p>extern &ldquo;C&rdquo; int __declspec(dllexport)add(int x, int y);</p>
-
-<h1>endif</h1>
-
-<p>/<em> 文件名：lib.cpp　</em>/</p>
-
-<h1>include &ldquo;lib.h&rdquo;</h1>
-
-<p>int add(int x, int y)
-{
-　return x + y;
-}</td>
-</tr>
-</table>
-<p class="guanggao">
-　　与第2节对静态链接库的调用相似，我们也建立一个与DLL工程处于同一工作区的应用工程dllCall，它调用DLL中的函数add，其源代码如下：
-<p class="guanggao">
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#include &lt;stdio.h&gt;</p>
-
-<h1>include &lt;windows.h&gt;</h1>
-
-<p>typedef int(<em>lpAddFun)(int, int); //宏定义函数指针类型
-int main(int argc, char </em>argv[])
-{
-　HINSTANCE hDll; //DLL句柄
-　lpAddFun addFun; //函数指针
-　hDll = LoadLibrary(&ldquo;..\Debug\dllTest.dll&rdquo;);
-　if (hDll != NULL)
-　{
-　　addFun = (lpAddFun)GetProcAddress(hDll, &ldquo;add&rdquo;);
-　　if (addFun != NULL)
-　　{
-　　　int result = addFun(2, 3);
-　　　printf(&ldquo;%d&rdquo;, result);
-　　}
-　　FreeLibrary(hDll);
-　}
-　return 0;
-}</td>
-</tr>
-</table>
-<p class="guanggao">
-　　分析上述代码，dllTest工程中的lib.cpp文件与第2节静态链接库版本完全相同，不同在于lib.h对函数add的声明前面添加了__declspec(dllexport)语句。这个语句的含义是声明函数add为DLL的导出函数。DLL内的函数分为两种：</p>
-
-<p>　　(1)DLL导出函数，可供应用<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>调用；</p>
-
-<p>　　(2) DLL内部函数，只能在DLL程序使用，应用程序无法调用它们。</p>
-
-<p>　　而应用程序对本DLL的调用和对第2节静态链接库的调用却有较大差异，下面我们来逐一分析。</p>
-
-<p>　　首先，语句typedef int ( * lpAddFun)(int,int)定义了一个与add函数接受参数类型和返回值均相同的函数指针类型。随后，在main函数中定义了lpAddFun的实例addFun；</p>
-
-<p>　　其次，在函数main中定义了一个DLL HINSTANCE句柄实例hDll，通过Win32 Api函数LoadLibrary动态加载了DLL模块并将DLL模块句柄赋给了hDll；</p>
-
-<p>　　再次，在函数main中通过Win32 Api函数GetProcAddress得到了所加载DLL模块中函数add的地址并赋给了addFun。经由函数指针addFun进行了对DLL中add函数的调用；</p>
-
-<p>　　最后，应用工程使用完DLL后，在函数main中通过Win32 Api函数FreeLibrary释放了已经加载的DLL模块。</p>
-
-<p>　　通过这个简单的例子，我们获知DLL定义和调用的一般概念：</p>
-
-<p>　　(1)DLL中需以某种特定的方式声明导出函数（或变量、类）；</p>
-
-<p>　　(2)应用工程需以某种特定的方式调用DLL的导出函数（或变量、类）。</p>
-
-<p>　　下面我们来对“特定的方式进行”阐述。</p>
-
-<p>　　4.2 声明导出函数</p>
-
-<p>　　DLL中导出函数的声明有两种方式：一种为4.1节例子中给出的在函数声明中加上__declspec(dllexport)，这里不再举例说明；另外一种方式是采用模块定义(.def) 文件声明，.def文件为链接器提供了有关被链接程序的导出、属性及其他方面的信息。</p>
-
-<p>　　下面的代码演示了怎样同.def文件将函数add声明为DLL导出函数（需在dllTest工程中添加lib.def文件）：
-<p class="guanggao">
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>; lib.def : 导出DLL函数</p>
-
-<p>LIBRARY dllTest</p>
-
-<p>EXPORTS</p>
-
-<p>add @ 1</td>
-</tr>
-</table>
-<p class="guanggao">
-　　.def文件的规则为：</p>
-
-<p>　　(1)LIBRARY语句说明.def文件相应的DLL；</p>
-
-<p>　　(2)EXPORTS语句后列出要导出函数的名称。可以在.def文件中的导出函数名后加@n，表示要导出函数的序号为n（在进行函数调用时，这个序号将发挥其作用）；</p>
-
-<p>　　(3).def 文件中的注释由每个注释行开始处的分号 (;) 指定，且注释不能与语句共享一行。</p>
-
-<p>　　由此可以看出，例子中lib.def文件的含义为生成名为“dllTest”的动态链接库，导出其中的add函数，并指定add函数的序号为1。</p>
-
-<p>　　4.3 DLL的调用方式</p>
-
-<p>　　在4.1节的例子中我们看到了由“LoadLibrary-GetProcAddress-FreeLibrary”系统Api提供的三位一体“DLL加载-DLL函数地址获取-DLL释放”方式，这种调用方式称为DLL的动态调用。</p>
-
-<p>　　动态调用方式的特点是完全由编程者用 API 函数加载和卸载 DLL，程序员可以决定 DLL 文件何时加载或不加载，显式链接在运行时决定加载哪个 DLL 文件。</p>
-
-<p>　　与动态调用方式相对应的就是静态调用方式，“有动必有静”，这来源于物质世界的对立统一。“动与静”，其对立与统一竟无数次在技术领域里得到验证，譬如静态IP与DHCP、静态路由与动态路由等。从前文我们已经知道，库也分为静态库与动态库DLL，而想不到，深入到DLL内部，其调用方式也分为静态与动态。“动与静”，无处不在。《周易》已认识到有动必有静的动静平衡观，《易．系辞》曰：“动静有常，刚柔断矣”。哲学意味着一种普遍的真理，因此，我们经常可以在枯燥的技术领域看到哲学的影子。</p>
-
-<p>　　静态调用方式的特点是由编译系统完成对DLL的加载和应用程序结束时 DLL 的卸载。当调用某DLL的应用程序结束时，若系统中还有其它程序使用该 DLL，则Windows对DLL的应用记录减1，直到所有使用该DLL的程序都结束时才释放它。静态调用方式简单实用，但不如动态调用方式灵活。</p>
-
-<p>　　下面我们来看看静态调用的例子（<a target="_blank" href="http://www.mydown.com/code/244/244556.html"><font color="#0000ff">单击此处下载本工程</font></a>），将编译dllTest工程所生成的.lib和.dll文件拷入dllCall工程所在的路径，dllCall执行下列代码：
-<p class="guanggao">
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#pragma comment(lib,&ldquo;dllTest.lib&rdquo;)</p>
-
-<p>//.lib文件中仅仅是关于其对应DLL文件中函数的重定位信息</p>
-
-<p>extern &ldquo;C&rdquo; __declspec(dllimport) add(int x,int y);</p>
-
-<p>int main(int argc, char* argv[])
-{
-　int result = add(2,3);
-　printf(&ldquo;%d&rdquo;,result);
-　return 0;
-}</td>
-</tr>
-</table>
-<p class="guanggao">
-　　由上述代码可以看出，静态调用方式的顺利进行需要完成两个动作：</p>
-
-<p>　　(1)告诉编译器与DLL相对应的.lib文件所在的路径及文件名，#pragma comment(lib,&ldquo;dllTest.lib&rdquo;)就是起这个作用。</p>
-
-<p>　　程序员在建立一个DLL文件时，连接器会自动为其生成一个对应的.lib文件，该文件包含了DLL 导出函数的符号名及序号（并不含有实际的代码）。在应用程序里，.lib文件将作为DLL的替代文件参与编译。</p>
-
-<p>　　(2)声明导入函数，extern &ldquo;C&rdquo; <strong>declspec(dllimport) add(int x,int y)语句中的</strong>declspec(dllimport)发挥这个作用。</p>
-
-<p>　　静态调用方式不再需要使用系统API来加载、卸载DLL以及获取DLL中导出函数的地址。这是因为，当程序员通过静态链接方式编译生成应用程序时，应用程序中调用的与.lib文件中导出符号相匹配的函数符号将进入到生成的EXE 文件中，.lib文件中所包含的与之对应的DLL文件的文件名也被编译器存储在 EXE文件内部。当应用程序运行过程中需要加载DLL文件时，Windows将根据这些信息发现并加载DLL，然后通过符号名实现对DLL 函数的动态链接。这样，EXE将能直接通过函数名调用DLL的输出函数，就象调用程序内部的其他函数一样。</p>
-
-<p><p class="guanggao">　　4.4 DllMain函数</p>
-
-<p>　　Windows在加载DLL的时候，需要一个入口函数，就如同控制台或DOS<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>需要main函数、WIN32程序需要WinMain函数一样。在前面的例子中，DLL并没有提供DllMain函数，应用工程也能成功引用DLL，这是因为Windows在找不到DllMain的时候，系统会从其它运行库中引入一个不做任何操作的缺省DllMain函数版本，并不意味着DLL可以放弃DllMain函数。</p>
-
-<p>　　根据编写规范，Windows必须查找并执行DLL里的DllMain函数作为加载DLL的依据，它使得DLL得以保留在内存里。这个函数并不属于导出函数，而是DLL的内部函数。这意味着不能直接在应用工程中引用DllMain函数，DllMain是自动被调用的。</p>
-
-<p>　　我们来看一个DllMain函数的例子（<a target="_blank" href="http://www.mydown.com/code/244/244555.html"><font color="#0000ff">单击此处下载本工程</font></a>）。
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>BOOL APIENTRY DllMain( HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
-{
-　switch (ul_reason_for_call)
-　{
-　　case DLL_PROCESS_ATTACH:
-　　　printf(&ldquo;\nprocess attach of dll&rdquo;);
-　　　break;
-　　case DLL_THREAD_ATTACH:
-　　　printf(&ldquo;\nthread attach of dll&rdquo;);
-　　　break;
-　　case DLL_THREAD_DETACH:
-　　　printf(&ldquo;\nthread detach of dll&rdquo;);
-　　　break;
-　　case DLL_PROCESS_DETACH:
-　　　printf(&ldquo;\nprocess detach of dll&rdquo;);
-　　　break;
-　}
-　return TRUE;
-}</td>
-</tr>
-</table>
-　　DllMain函数在DLL被加载和卸载时被调用，在单个线程启动和终止时，DLLMain函数也被调用，ul_reason_for_call指明了被调用的原因。原因共有4种，即PROCESS_ATTACH、PROCESS_DETACH、THREAD_ATTACH和THREAD_DETACH，以switch语句列出。</p>
-
-<p>　　来仔细解读一下DllMain的函数头BOOL APIENTRY DllMain( HANDLE hModule, WORD ul_reason_for_call, LPVOID lpReserved )。</p>
-
-<p>　　APIENTRY被定义为__stdcall，它意味着这个函数以标准Pascal的方式进行调用，也就是WINAPI方式；</p>
-
-<p>　　进程中的每个DLL模块被全局唯一的32字节的HINSTANCE句柄标识，只有在特定的进程内部有效，句柄代表了DLL模块在进程虚拟空间中的起始地址。在Win32中，HINSTANCE和HMODULE的值是相同的，这两种类型可以替换使用，这就是函数参数hModule的来历。</p>
-
-<p>　　执行下列代码：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>hDll = LoadLibrary(&ldquo;..\Debug\dllTest.dll&rdquo;);
-if (hDll != NULL)
-{
-　addFun = (lpAddFun)GetProcAddress(hDll, MAKEINTRESOURCE(1));
-　//MAKEINTRESOURCE直接使用导出文件中的序号
-　if (addFun != NULL)
-　{
-　　int result = addFun(2, 3);
-　　printf(&ldquo;\ncall add in dll:%d&rdquo;, result);
-　}
-　FreeLibrary(hDll);
-}</td>
-</tr>
-</table>
-　　我们看到输出顺序为：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>process attach of dll
-call add in dll:5
-process detach of dll</td>
-</tr>
-</table>
-　　这一输出顺序验证了DllMain被调用的时机。</p>
-
-<p>　　代码中的GetProcAddress ( hDll, MAKEINTRESOURCE ( 1 ) )值得留意，它直接通过.def文件中为add函数指定的顺序号访问add函数，具体体现在MAKEINTRESOURCE ( 1 )，MAKEINTRESOURCE是一个通过序号获取函数名的宏，定义为（节选自winuser.h）：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#define MAKEINTRESOURCEA(i) (LPSTR)((DWORD)((WORD)(i)))</p>
-
-<h1>define MAKEINTRESOURCEW(i) (LPWSTR)((DWORD)((WORD)(i)))</h1>
-
-<h1>ifdef UNICODE</h1>
-
-<h1>define MAKEINTRESOURCE MAKEINTRESOURCEW</h1>
-
-<h1>else</h1>
-
-<h1>define MAKEINTRESOURCE MAKEINTRESOURCEA</td></h1>
-
-<p></tr>
-</table>
-　　4.5 __stdcall约定</p>
-
-<p>　　如果通过VC++编写的DLL欲被其他语言编写的程序调用，应将函数的调用方式声明为<strong>stdcall方式，WINAPI都采用这种方式，而C/C++缺省的调用方式却为</strong>cdecl。<strong>stdcall方式与</strong>cdecl对函数名最终生成符号的方式不同。若采用C编译方式(在C++中需将函数声明为extern &ldquo;C&rdquo;)，<strong>stdcall调用约定在输出函数名前面加下划线，后面加“@”符号和参数的字节数，形如_functionname@number；而</strong>cdecl调用约定仅在输出函数名前面加下划线，形如_functionname。</p>
-
-<p>　　Windows编程中常见的几种函数类型声明宏都是与<strong>stdcall和</strong>cdecl有关的（节选自windef.h）：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#define CALLBACK __stdcall //这就是传说中的回调函数</p>
-
-<h1>define WINAPI __stdcall //这就是传说中的WINAPI</h1>
-
-<h1>define WINAPIV __cdecl</h1>
-
-<h1>define APIENTRY WINAPI //DllMain的入口就在这里</h1>
-
-<h1>define APIPRIVATE __stdcall</h1>
-
-<h1>define PASCAL __stdcall</td></h1>
-
-<p></tr>
-</table>
-　　在lib.h中，应这样声明add函数：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>int <strong>stdcall add(int x, int y);</td>
-</tr>
-</table>
-　　在应用工程中函数指针类型应定义为：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>typedef int(</strong>stdcall <em>lpAddFun)(int, int);</td>
-</tr>
-</table>
-　　若在lib.h中将函数声明为__stdcall调用，而应用工程中仍使用typedef int (</em> lpAddFun)(int,int)，运行时将发生错误（因为类型不匹配，在应用工程中仍然是缺省的__cdecl调用），弹出如图7所示的对话框。
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/vrn4lm2rlf11.jpg" />
-图7 调用约定不匹配时的运行错误</td>
-</tr>
-</table>
-　　图8中的那段话实际上已经给出了错误的原因，即“This is usually a result of　…”。</p>
-
-<p>　　<a target="_blank" href="http://www.mydown.com/code/244/244554.html"><font color="#000000">单击此处下载__stdcall调用例子工程源代码</font></a>。</p>
-
-<p><p class="guanggao">　　4.6 DLL导出变量</p>
-
-<p>　　DLL定义的全局变量可以被调用进程访问；DLL也可以访问调用进程的全局数据，我们来看看在应用工程中引用DLL中变量的例子（<a target="_blank" href="http://www.mydown.com/code/244/244552.html"><font color="#000000">单击此处下载本工程</font></a>）。
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>/<em> 文件名：lib.h　</em>/</p>
-
-<h1>ifndef LIB_H</h1>
-
-<h1>define LIB_H</h1>
-
-<p>extern int dllGlobalVar;</p>
-
-<h1>endif</h1>
-
-<p>/<em> 文件名：lib.cpp </em>/</p>
-
-<h1>include &ldquo;lib.h&rdquo;</h1>
-
-<h1>include &lt;windows.h&gt;</h1>
-
-<p>int dllGlobalVar;</p>
-
-<p>BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
-{
-　switch (ul_reason_for_call)
-　{
-　　case DLL_PROCESS_ATTACH:
-　　　dllGlobalVar = 100; //在dll被加载时，赋全局变量为100
-　　　break;
-　　case DLL_THREAD_ATTACH:
-　　case DLL_THREAD_DETACH:
-　　case DLL_PROCESS_DETACH:
-　　　break;
-　}
-　return TRUE;
-}</td>
-</tr>
-</table>
-　　;文件名：lib.def</p>
-
-<p>　　;在DLL中导出变量
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>LIBRARY &ldquo;dllTest&rdquo;</p>
-
-<p>EXPORTS</p>
-
-<p>dllGlobalVar CONSTANT</p>
-
-<p>;或dllGlobalVar DATA</p>
-
-<p>GetGlobalVar</td>
-</tr>
-</table>
-　　从lib.h和lib.cpp中可以看出，全局变量在DLL中的定义和使用方法与一般的<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>设计是一样的。若要导出某全局变量，我们需要在.def文件的EXPORTS后添加：</p>
-
-<p>　　变量名　CONSTANT　　　//过时的方法</p>
-
-<p>　　或</p>
-
-<p>　　变量名　DATA　　　 　//VC++提示的新方法</p>
-
-<p>　　在主函数中引用DLL中定义的全局变量：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#include &lt;stdio.h&gt;</p>
-
-<h1>pragma comment(lib,&ldquo;dllTest.lib&rdquo;)</h1>
-
-<p>extern int dllGlobalVar;</p>
-
-<p>int main(int argc, char <em>argv[])
-{
-　printf(&ldquo;%d &rdquo;, </em>(int<em>)dllGlobalVar);
-　</em>(int<em>)dllGlobalVar = 1;
-　printf(&ldquo;%d &rdquo;, </em>(int<em>)dllGlobalVar);
-　return 0;
-}</td>
-</tr>
-</table>
-　　特别要注意的是用extern int dllGlobalVar声明所导入的并不是DLL中全局变量本身，而是其地址，应用程序必须通过强制指针转换来使用DLL中的全局变量。这一点，从</em>(int*)dllGlobalVar可以看出。因此在采用这种方式引用DLL全局变量时，千万不要进行这样的赋值操作：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>dllGlobalVar = 1;</td>
-</tr>
-</table>
-　　其结果是dllGlobalVar指针的内容发生变化，程序中以后再也引用不到DLL中的全局变量了。</p>
-
-<p>　　在应用工程中引用DLL中全局变量的一个更好方法是：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#include &lt;stdio.h&gt;</p>
-
-<h1>pragma comment(lib,&ldquo;dllTest.lib&rdquo;)</h1>
-
-<p>extern int <em>declspec(dllimport) dllGlobalVar; //用</em>declspec(dllimport)导入
-int main(int argc, char *argv[])
-{
-　printf(&ldquo;%d &rdquo;, dllGlobalVar);
-　dllGlobalVar = 1; //这里就可以直接使用, 无须进行强制指针转换
-　printf(&ldquo;%d &rdquo;, dllGlobalVar);
-　return 0;
-}</td>
-</tr>
-</table>
-　　通过_declspec(dllimport)方式导入的就是DLL中全局变量本身而不再是其地址了，笔者建议在一切可能的情况下都使用这种方式。</p>
-
-<p>　　4.7 DLL导出类</p>
-
-<p>　　DLL中定义的类可以在应用工程中使用。</p>
-
-<p>　　下面的例子里，我们在DLL中定义了point和circle两个类，并在应用工程中引用了它们（<a target="_blank" href="http://www.mydown.com/code/244/244553.html"><font color="#0000ff">单击此处下载本工程</font></a>）。
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>//文件名：point.h，point类的声明</p>
-
-<h1>ifndef POINT_H</h1>
-
-<h1>define POINT_H</h1>
-
-<h1>ifdef DLL_FILE</h1>
-
-<p>　class _declspec(dllexport) point //导出类point</p>
-
-<h1>else</h1>
-
-<p>　class _declspec(dllimport) point //导入类point</p>
-
-<h1>endif</h1>
-
-<p>{
-　public:
-　　float y;
-　　float x;
-　　point();
-　　point(float x_coordinate, float y_coordinate);
-};</p>
-
-<h1>endif</h1>
-
-<p>//文件名：point.cpp，point类的实现</p>
-
-<h1>ifndef DLL_FILE</h1>
-
-<p>　#define DLL_FILE</p>
-
-<h1>endif</h1>
-
-<h1>include &ldquo;point.h&rdquo;</h1>
-
-<p>//类point的缺省构造函数</p>
-
-<p>point::point()
-{
-　x = 0.0;
-　y = 0.0;
-}</p>
-
-<p>//类point的构造函数</p>
-
-<p>point::point(float x_coordinate, float y_coordinate)
-{
-　x = x_coordinate;
-　y = y_coordinate;
-}</p>
-
-<p>//文件名：circle.h，circle类的声明</p>
-
-<h1>ifndef CIRCLE_H</h1>
-
-<h1>define CIRCLE_H</h1>
-
-<h1>include &ldquo;point.h&rdquo;</h1>
-
-<h1>ifdef DLL_FILE</h1>
-
-<p>class _declspec(dllexport)circle //导出类circle</p>
-
-<h1>else</h1>
-
-<p>class _declspec(dllimport)circle //导入类circle</p>
-
-<h1>endif</h1>
-
-<p>{
-　public:
-　　void SetCentre(const point &amp;centrePoint);
-　　void SetRadius(float r);
-　　float GetGirth();
-　　float GetArea();
-　　circle();
-　private:
-　　float radius;
-　　point centre;
-};</p>
-
-<h1>endif</h1>
-
-<p>//文件名：circle.cpp，circle类的实现</p>
-
-<h1>ifndef DLL_FILE</h1>
-
-<h1>define DLL_FILE</h1>
-
-<h1>endif</h1>
-
-<h1>include &ldquo;circle.h&rdquo;</h1>
-
-<h1>define PI 3.1415926</h1>
-
-<p>//circle类的构造函数</p>
-
-<p>circle::circle()
-{
-　centre = point(0, 0);
-　radius = 0;
-}</p>
-
-<p>//得到圆的面积</p>
-
-<p>float circle::GetArea()
-{
-　return PI *radius * radius;
-}</p>
-
-<p>//得到圆的周长</p>
-
-<p>float circle::GetGirth()
-{
-　return 2 *PI * radius;
-}</p>
-
-<p>//设置圆心坐标</p>
-
-<p>void circle::SetCentre(const point &amp;centrePoint)
-{
-　centre = centrePoint;
-}</p>
-
-<p>//设置圆的半径</p>
-
-<p>void circle::SetRadius(float r)
-{
-　radius = r;
-}</td>
-</tr>
-</table>
-　　类的引用：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#include &ldquo;..\circle.h&#8221;　　//包含类声明头文件</p>
-
-<h1>pragma comment(lib,&ldquo;dllTest.lib&rdquo;);</h1>
-
-<p>int main(int argc, char *argv[])
-{
-　circle c;
-　point p(2.0, 2.0);
-　c.SetCentre(p);
-　c.SetRadius(1.0);
-　printf(&ldquo;area:%f girth:%f&rdquo;, c.GetArea(), c.GetGirth());
-　return 0;
-}</td>
-</tr>
-</table>
-　　从上述源代码可以看出，由于在DLL的类实现代码中定义了宏DLL_FILE，故在DLL的实现中所包含的类声明实际上为：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class <em>declspec(dllexport) point //导出类point
-{
-　…
-}</td>
-</tr>
-</table>
-　　和
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class </em>declspec(dllexport) circle //导出类circle
-{
-　…
-}</td>
-</tr>
-</table>
-　　而在应用工程中没有定义DLL_FILE，故其包含point.h和circle.h后引入的类声明为：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class <em>declspec(dllimport) point //导入类point
-{
-　…
-}</td>
-</tr>
-</table>
-　　和
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class </em>declspec(dllimport) circle //导入类circle
-{
-　…
-}</td>
-</tr>
-</table>
-　　不错，正是通过DLL中的
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class <em>declspec(dllexport) class_name //导出类circle　
-{
-　…
-}</td>
-</tr>
-</table>
-　　与应用程序中的
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>class </em>declspec(dllimport) class_name //导入类
-{
-　…
-}</td>
-</tr>
-</table>
-　　匹对来完成类的导出和导入的！</p>
-
-<p>　　我们往往通过在类的声明头文件中用一个宏来决定使其编译为class <em>declspec(dllexport) class_name还是class </em>declspec(dllimport) class_name版本，这样就不再需要两个头文件。本程序中使用的是：
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#ifdef DLL_FILE
-　class _declspec(dllexport) class_name //导出类</p>
-
-<h1>else</h1>
-
-<p>　class _declspec(dllimport) class_name //导入类</p>
-
-<h1>endif</td></h1>
-
-<p></tr>
-</table>
-　　实际上，在MFC DLL的讲解中，您将看到比这更简便的方法，而此处仅仅是为了说明<em>declspec(dllexport)与</em>declspec(dllimport)匹对的问题。</p>
-
-<p>　　由此可见，应用工程中几乎可以看到DLL中的一切，包括函数、变量以及类，这就是DLL所要提供的强大能力。只要DLL释放这些接口，应用程序使用它就将如同使用本工程中的程序一样！</p>
-
-<p>　　本章虽以VC++为平台讲解非MFC DLL，但是这些普遍的概念在其它语言及开发环境中也是相同的，其思维方式可以直接过渡。 接下来，我们将要研究MFC规则DLL。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-04-05T14:49:07+08:00" pubdate data-updated="true">2008-04-05</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-er//posts/20/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

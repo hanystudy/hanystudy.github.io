@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="（树形结构—二叉树）       这是12号发布的第二篇连载，为了突出树形结构的重要性，以及方便对该部分内容的整理工作，故将本节内容分段进行发布。同时为了突出树的应用性，我们可能会在这两天进行一个关于前阵时间讨论过的迷宫问题扩展的研究，由于时间制约不一定会准时放出。   二叉树   &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="（树形结构—树和森林、哈夫曼树）       本篇为12号的第三篇连载，基于时间、理论连贯性上的考虑，我们利用下午的时间完成了前两篇关于树的基本概念及其ADT，二叉树及其相关等内容，现在我们介绍树形结构对基础概念的扩展—一般树，以及森林。最后我们会研究一种特殊的二叉树结构， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,318 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/02/12/jia-qi-lian-zai-zhi-shi-er-100/">
+		
+			假期连载之十二(100)</a>
+	</h2>
+	<div class="entry-content">
+		<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">（树形结构—树和森林、哈夫曼树）<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span></strong><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">本篇为<span lang="EN-US">12</span>号的第三篇连载，基于时间、理论连贯性上的考虑，我们利用下午的时间完成了前两篇关于树的基本概念及其<span lang="EN-US">ADT</span>，二叉树及其相关等内容，现在我们介绍树形结构对基础概念的扩展—一般树，以及森林。最后我们会研究一种特殊的二叉树结构，它通常被人称为最优二叉树，是信息传输、数据压缩领域的重要工具。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">树、森林和二叉树的关系<span lang="EN-US"></span></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">在一般树的条件下，分支个数是不定的，因此会出现所谓的多叉树。对于这种一般的树，我们就需要采用一种不同于二叉树二叉链表的存储表示。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l1 level1 lfo1; tab-stops: list 39.0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">1、</span><span style="font: 7pt &quot;Times New Roman&quot;;"> </span></span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">广义表表示法<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">广义表表示树是一种非常有效的方法，树中结点可以分三种：叶结点、根结点以及除根结点之外的其它非叶结点（也称分支结点）。因此在广义表中也可以有三种结点与之对应：原子结点、表头结点、子表结点。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">在子表结点内部，我们同样使用从上至下、从左至右的顺序对结点进行排序。其运算也是基于广义表的基本运算进行的。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">我们在前面的连载中介绍了广义表的头尾链表和扩展线性链表等存储表示方法，并附加了相关基础运算，但必须注意的是，广义表在一些高级语言中能够特别方便地使用，这也是这种数据结构诞生的初衷，因此在其它高级语言中应尽量在实际应用中避免采用这种并不擅长的方式进行运算。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l1 level1 lfo1; tab-stops: list 39.0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">2、</span><span style="font: 7pt &quot;Times New Roman&quot;;"> </span></span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">父指针表示法<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">利用一组连续的空间来存储树中的结点，在保存每个结点的同时附设一个指示器来指示其父结点在表中的位置。这种结构易于求指定结点的父结点，但当求某结点的子女结点时需遍历结构数组。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l1 level1 lfo1; tab-stops: list 39.0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">3、</span><span style="font: 7pt &quot;Times New Roman&quot;;"> </span></span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">子女表示法<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">这种方法通常是把每个结点的子女结点排列起来，构成一个单链表，称其为子女链表。<span lang="EN-US">n</span>个结点共有<span lang="EN-US">n</span>个子女链表，其中叶子结点的子女链表为空。而<span lang="EN-US">n</span>个结点的数据和<span lang="EN-US">n</span>个子女链表的头指针又组成一个顺序表。这种结构适合需要频繁寻找子女结点的应用，并可以和父指针表示法结合，使寻找父结点或子女结点都很方便。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l1 level1 lfo1; tab-stops: list 39.0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">4、</span><span style="font: 7pt &quot;Times New Roman&quot;;"> </span></span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">子女<span lang="EN-US">-</span>兄弟表示法<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">这种方法是一种二叉树表示法，也被称为二叉链表表示法。其链表结点中包含三个结点域，分别指向该结点的第一个子女结点指针，指向下一个兄弟结点指针以及数据域。这种存储结构首先比较清晰地描绘了树形结构的容貌，同时非常方便实现树的各类操作。与以上三种表示法相比，子女兄弟表示法既在操作上容易实现了许多，且在空间和时间的效能上也具有一定优势。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">根据子女兄弟表示法的启示，我们发现一般树和二叉树均可以用二叉链表进行表示，换一个角度说，我们可以通过一定转换，将一般树按原二叉链表表示的序列转化为二叉树形式，且并不影响对树进行的各种基本运算的结果。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l3 level1 lfo2; tab-stops: list 39.0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">1、</span><span style="font: 7pt &quot;Times New Roman&quot;;"> </span></span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">树转换为二叉树<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">将一棵树转换为二叉树的方法是，将树中的所有兄弟结点之间加一条连线，对树中的每个结点，只保留其与第一个子女结点之间的连线，删去其与其它子女结点之间的连线。最后以树的根结点为轴心，将整棵树顺时针旋转一定的角度，使之结构层次分明。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">可以证明，通过这种方法树转换成的二叉树是唯一的。而且此时二叉树的链表表示与树本身的子女<span lang="EN-US">-</span>兄弟表示法所生成的二叉链表完全一致，这时就可以展开对树的各种基本操作。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l3 level1 lfo2; tab-stops: list 39.0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">2、</span><span style="font: 7pt &quot;Times New Roman&quot;;"> </span></span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">森林转换为二叉树<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">森林是若干树的集合。那么采用如下方法可以将森林转换为二叉树表示：首先将森林中的每棵树转换成相应的二叉树，第一棵二叉树不动，从第二棵二叉树开始依次把后一棵二叉树的根结点作为前一棵二叉树根结点的右子结点，当所有二叉树连在一起后，得到的二叉树即是由森林转换得到的二叉树。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l3 level1 lfo2; tab-stops: list 39.0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">3、</span><span style="font: 7pt &quot;Times New Roman&quot;;"> </span></span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">二叉树还原为树或森林<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">树转换成的二叉树，其特点是必无右子结点，而森林转换成的二叉树，其必含右子结点。根据以上特征区分还原的对象。然后按照以下方法还原二叉树：若某结点是其父结点的左子结点，则把该结点的右子结点、右子结点的右子结点、<span lang="EN-US">…</span>均与该结点的父结点用线连接起来。此时删除掉原二叉树中所有父结点与右子结点的连线，并加以整理即可。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">树与森林的遍历<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">基于前面建立的子女兄弟存储表示，我们可以得出树和森林的一般遍历算法，它们与二叉树的相关遍历算法有很深厚的联系。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">从大方面看，树与森林的遍历分为深度优先遍历和广度优先遍历两种。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l2 level1 lfo3; tab-stops: list 39.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">1、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">深度优先遍历</span></strong><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">是一种与二叉树遍历类似的遍历算法<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 63pt; text-indent: -21pt; mso-list: l2 level2 lfo3; tab-stops: list 63.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">a)</span><span style="font: 7pt &quot;Times New Roman&quot;;">       </span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">树的<strong style="mso-bidi-font-weight: normal;">先根遍历</strong>算法，类似于二叉树遍历的先序顺序。其结果与直接用先序遍历算法所演示的结果是相一致的。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 63pt; text-indent: -21pt; mso-list: l2 level2 lfo3; tab-stops: list 63.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">b)</span><span style="font: 7pt &quot;Times New Roman&quot;;">       </span></span></span><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">后根遍历</span></strong><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">，实际上类似于二叉树遍历的后序顺序。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">我们以树的递归先根次序遍历算法为例，给出具体编程实现先根的两种方法：<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">if(root!=NULL)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>Visit(root-&gt;data);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>p=root-&gt;FirstChild;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>while(p!=NULL)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 2;">        </span>RootFirst(p);<span style="mso-tab-count: 2;">       </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">访问以<span lang="EN-US">p</span>为根的子树<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">        </span>p=p-&gt;nextSibling;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">}//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">以上是方法一<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">if(root!=NULL)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>Visit(root-&gt;data);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>RootFirst(root-&gt;FirstChild);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>RootFirst(root-&gt;NextSibling);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">}//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">方法二消除了循环，也以递归的方式呈现<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">对于森林的遍历，一般也分先序遍历、中序遍历以及后序遍历，值得注意的是在森林的后序遍历中第一棵树的根结点应放在最后访问，以后其它各树的根结点依次倒数访问，这点需特别留意。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>2</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">、<strong style="mso-bidi-font-weight: normal;">广度优先遍历</strong>是一种新的遍历方法，它是以结点的序号排列为顺序直接遍历的。在这种算法中并不存在递归结构，通常使用队列的方法，扫描至每一层时，将该层的所有结点入队，然后依次访问。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">哈夫曼树<span lang="EN-US"></span></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">哈夫曼树<span lang="EN-US">Huffman Tree</span>又称最优二叉树，是一类加权路径长度最短的二叉树。其在编码设计、决策和算法设计等领域有着广泛的应用。我们大家现今经常使用的图像格式<span lang="EN-US">JPEG</span>，就是一种基于<span lang="EN-US">DCT(</span>离散余弦变换<span lang="EN-US">)</span>和哈夫曼编码的有损高压缩比编码标准。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">我们首先给出哈夫曼树的一些概念。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">路径<span lang="EN-US">path</span>，指从树中一个结点到另一个结点之间的分支构成该两点之间的路径。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">路径长度<span lang="EN-US">path length</span>，指路径上的分支条数。树的路径长度一般指树的根结点到每个结点的路径长度之和。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">由树的定义可知，从根结点到达树中的每一个结点有且仅有一条路径。若设树的根结点位于第<span lang="EN-US">1</span>层，某结点处于第<span lang="EN-US">k</span>层，则其路径上的分支条数为<span lang="EN-US">k-1</span>，因此从根结点到其它各个结点的路径长度等于该结点所处的层次<span lang="EN-US">k-1</span>。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">一般来说，当结点数相同时，越接近完全二叉树的结构其路径长度越短。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">定义一个带权路径长度<span lang="EN-US">Weighted Path Length(WPL)</span>，假设有<span lang="EN-US">n</span>个权值的集合中，若<span lang="EN-US">T</span>是一棵有<span lang="EN-US">n</span>个叶结点的二叉树，且将集合中的权值分别赋给<span lang="EN-US">T</span>的<span lang="EN-US">n</span>个叶结点，此时我们称<span lang="EN-US">T</span>是权值为相关值的扩充二叉树。带权结点被称为外结点，其余结点被称做内结点。外结点的带权路径长度为从<span lang="EN-US">T</span>的根到该结点的路径长度与该结点上权值的乘积。此时将整个扩充二叉树的带权路径长度定义为<span lang="EN-US">WPL</span>，就是每个外结点带权路径长度之和。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">我们把<span lang="EN-US">WPL</span>最小的扩充二叉树称为最优二叉树。在这种情况里，最小带权路径长度的扩充二叉树就不再一定是完全二叉树。从直观上看，最优二叉树应该是权值大的外结点离根结点越近的扩充二叉树，就是<span lang="EN-US">Huffman</span>树。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">构造哈夫曼树<span lang="EN-US"></span></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span></strong><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">构造哈夫曼树的算法是由<span lang="EN-US">Huffman</span>提出的，其基本思路为：<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo4; tab-stops: list 39.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">1、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">根据给定的<span lang="EN-US">n</span>个权值，构造具有<span lang="EN-US">n</span>棵扩充二叉树的森林，其中每一棵二叉树都有一只权值为相关值的根结点，其左右子树为空。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo4; tab-stops: list 39.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">2、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">找最小树，在森林中选择两棵根结点权值最小的二叉树，作为一棵新二叉树的左右子树，标记新二叉树的根结点权值为其左右子树的根结点权值之和。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo4; tab-stops: list 39.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">3、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">删除与加入，从森林中删除被选中的那两棵二叉树，同时把新构成的二叉树加入到森林中。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 39pt; text-indent: -18pt; mso-list: l0 level1 lfo4; tab-stops: list 39.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: 宋体;" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-size: small;">4、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">判断，重复<span lang="EN-US">2</span>、<span lang="EN-US">3</span>步骤，直到森林中只含有一棵二叉树时为止。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">程序构建哈夫曼树，首先须确定一个静态三叉链表的结点结构，这种结点由四个域构成：分别是权值域、父结点序号、左子结点序号以及右子结点序号。为了计算方便，<span lang="EN-US">0</span>号单元不用，从<span lang="EN-US">1</span>号开始使用，程序也按照静态链表的构建方法进行。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">哈夫曼编码<span lang="EN-US"></span></span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">构造哈夫曼树的实质还是为了求哈夫曼编码。通常计算机中存储的图形符号是以二进制码进行处理的。例如<span lang="EN-US">ASCII</span>码就是一种<span lang="EN-US">8</span>位二进制编码，且还是一种定长编码。为了压缩数据存储空间，有必要采用不定长编码的方式进行编码。首先介绍几个概念：<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">、<strong style="mso-bidi-font-weight: normal;">前缀码</strong>，如果在一个编码系统中，任一个编码都不是其它任何编码的前缀（即最左子串），则成该编码系统中的编码是前缀码。例如一组编码<span lang="EN-US">01</span>，<span lang="EN-US">001</span>，<span lang="EN-US">010</span>，<span lang="EN-US">100</span>，<span lang="EN-US">110</span>就不是前缀码，因为<span lang="EN-US">01</span>是<span lang="EN-US">010</span>的前缀，去掉其中之一后即为前缀码。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">如果采用前缀码，我们就可以在各字符对应的编码之间不需要分隔符。如果非前缀码，不使用分隔符则会产生二义性。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">2</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">、<strong style="mso-bidi-font-weight: normal;">哈夫曼编码</strong>，对一棵具有<span lang="EN-US">n</span>个叶子的哈夫曼树，若对树中的每个左分支赋予<span lang="EN-US">0</span>，右分支赋予<span lang="EN-US">1</span>，则从根到每个叶子的通路上，各分支的赋值分别构成一个二进制串，该二进制串即位哈夫曼编码。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">求解哈夫曼编码的方法也有很多，一般而言，我们首先根据带权结点构建哈夫曼树，此时将哈夫曼树的左分支标记为<span lang="EN-US">0</span>，右分支标记为<span lang="EN-US">1</span>，根结点不计，我们从根结点出发，把抵达相关叶结点的路径按先后顺序编码，则就构成了哈夫曼编码。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">在实际编程中，对<span lang="EN-US">0</span>和<span lang="EN-US">1</span>的赋值是在求编码的算法中直接进行判断的。<span lang="EN-US"></span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">（未完待续）<span lang="EN-US"></span></span></span></strong></p>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-12T21:19:53+08:00" pubdate data-updated="true">2009-02-12</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/02/12/jia-qi-lian-zai-zhi-shi-er-100//posts/14/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -3617,267 +3929,6 @@ $(document).ready(
 
 	
 		<span class="comments"><a href="/blog/2009/02/03/jia-qi-lian-zai-zhi-si//posts/14/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/01/26/jia-qi-lian-zai-zhi-san/">
-		
-			假期连载之三</a>
-	</h2>
-	<div class="entry-content">
-		<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">(</span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表的链式存储—循环链表、双向链表、静态链表</span></strong><span lang="EN-US"><span style="font-family: Times New Roman;">)</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">上节我们介绍了线性表的链式存储结构中最重要的一种—单链表结构，但在这样的结构中也存在一些问题，而这些在顺序存储中却能得到较好的体现。为此，我们需要对单链表的存储结构进行一些改进，以实现我们需要的功能。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">例如，在单链表中有时会给出某个结点的地址，并要求寻找其它所有结点，我们知道单链表结点中包括了指向其直接后继的指针域，但并不能回溯执行，因此在大多数情况下并不能实现题设的要求。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">我们提供一种“首尾相接”的链表，其原理是将尾结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指针由</span><span lang="EN-US"><span style="font-family: Times New Roman;">null</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">改为指向表头结点，于是就形成了单链表形式的循环链表，简称循环链表。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在不带附加头结点链表中，尾结点的情况为</span><span lang="EN-US"><span style="font-family: Times New Roman;">rear-&gt;next=head</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，其中</span><span lang="EN-US"><span style="font-family: Times New Roman;">head</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为头指针。而在带头结点链表中这种情况就变成</span><span lang="EN-US"><span style="font-family: Times New Roman;">rear-&gt;next=head-&gt;next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。相应地，关于单链表操作的循环条件</span><span lang="EN-US"><span style="font-family: Times New Roman;">p!=NULL</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">或</span><span lang="EN-US"><span style="font-family: Times New Roman;">p-&gt;next!=NULL</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">将变为</span><span lang="EN-US"><span style="font-family: Times New Roman;">p!=head</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">或</span><span lang="EN-US"><span style="font-family: Times New Roman;">p!=head-&gt;next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，具体由是否附加头结点决定。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">下面来看一个关于循环链表的应用问题——约瑟夫环（</span><span lang="EN-US"><span style="font-family: Times New Roman;">Josephus</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">约瑟夫环问题原本为一个数学应用，是由古罗马的史学家约瑟夫（</span><span lang="EN-US"><span style="font-family: Times New Roman;">Josephus</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）提出的。它的具体数学抽象为：设有编号为</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，……，</span><span lang="EN-US"><span style="font-family: Times New Roman;">n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的</span><span lang="EN-US"><span style="font-family: Times New Roman;">n(n&gt;0)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个人围成一个圈，从第</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个人开始报数，报到</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">时停止报数，报</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的人出圈，再从他的下一个人起重新报数，报到</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">时停止报数，报</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的出圈，……，如此下去，直到所有人全部出圈为止。当任意给定</span><span lang="EN-US"><span style="font-family: Times New Roman;">n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">后，设计算法求最后一个出圈的人的最初序号。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">事实上数学家们早已给出了这个问题或以此为基础衍生出的各种问题的数学解答，我们仅需要根据简单的递推公式即可轻松解决此类问题。但事实上，它其实也是一个循环链表的典型问题。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">这是因为，其一，环事实上就是循环链表的抽象表现，在本题中环链的大小不断发生改变，也恰符合链表设置的最初意义，另外，约瑟夫环所对应的操作几乎囊括了循环链表的所有基本运算问题。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">下面给出</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">描述的约瑟夫环求解代码：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">template&lt;class T&gt;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">void Josephus(CircList&lt;T&gt;&amp;Js,int n,int m)<span style="mso-tab-count: 2;">         </span>//n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为结点数，</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为间隔数</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>CircLinkNode&lt;T&gt;*p=Js.getHead(),*pre=NULL;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>int i,j;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>for(i=0;i&lt;n-1;i++)</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>{</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>for(j=1;j&lt;m;j++)</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>{</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>pre=p;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 63pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p=p-&gt;link;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">cout&lt;&lt;”</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">出圈的是：</span><span lang="EN-US"><span style="font-family: Times New Roman;">”&lt;&lt;p-&gt;data&lt;&lt;endl;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">pre-&gt;link=p-&gt;link;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">delete p;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p=pre-&gt;link;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">};</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">注：本例仅给出约瑟夫环的求解方法函数，</span><span lang="EN-US"><span style="font-family: Times New Roman;">CircLinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">及</span><span lang="EN-US"><span style="font-family: Times New Roman;">CircList</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类需要自行写出。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">循环链表实现了一定的回溯操作，丰富了单链表的功能。但其在寻找直接前驱时的时间复杂度仍为</span><span lang="EN-US"><span style="font-family: Times New Roman;">O(n)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，我们要使用更为高效的替代算法以实现</span><span lang="EN-US"><span style="font-family: Times New Roman;">O(1)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，则就产生了双向循环链表，简称双向链表。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">顾名思义，双向链表的结点中包含了三个数据成员，除原有的数据域，直接后继指针</span><span lang="EN-US"><span style="font-family: Times New Roman;">*next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">外，又添加了指向直接前驱的指针</span><span lang="EN-US"><span style="font-family: Times New Roman;">*prior</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">在实际应用中，双向循环链表在仅需求后继结点的情况下和单链表的基本用法相类似。但当需同时顾及到前驱和后继两方面结点时就会发生改变。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">首先我们知道在双向链表中存在下式成立：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p-&gt;prior-&gt;next==p;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p==p-&gt;next-&gt;prior;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">我们据此给出双向链表前插操作的伪码表示：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">DlinkIns(L,i,e)<span style="mso-tab-count: 6;">                                          </span>//L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为原链表，</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为插入位置，</span><span lang="EN-US"><span style="font-family: Times New Roman;">e</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为插入数据</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">检查位置</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是否合法，否则返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">-1</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">设置</span><span lang="EN-US"><span style="font-family: Times New Roman;">*p</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指向第</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个结点</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>S=(DNode*)malloc(sizeof(DNode));</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>If(s) then</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>s-&gt;data=e;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>s-&gt;prior=p-&gt;prior;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>p-&gt;prior-&gt;next=s;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>s-&gt;next=p;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>p-&gt;prior=s;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>return OK</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>else then</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>return -1</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">执行循环链表删除运算时，需要注意应从两个方面同时补链，例如：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p-&gt;prior-&gt;next=p-&gt;next;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p-&gt;next-&gt;prior=p-&gt;prior;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">通过连载一和连载二我们较详细地介绍了线性表的几种存储结构和运算方法，它们都是基于</span><span lang="EN-US"><span style="font-family: Times New Roman;">C/C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">或</span><span lang="EN-US"><span style="font-family: Times New Roman;">Java</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言而言的。在一些语言诸如</span><span lang="EN-US"><span style="font-family: Times New Roman;">BASIC</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span lang="EN-US"><span style="font-family: Times New Roman;">FORTRAN</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中并不包含“指针”这种数据类型（当然</span><span lang="EN-US"><span style="font-family: Times New Roman;">Java</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中也不存在</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言意义上的指针，但并这不影响其对链表结构的诠释）。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-size: small; font-family: Times New Roman;">       </span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在我们同样需要在此类领域中实现链表应用时，数组就成为最为可靠的手段，但这并不同于顺序表的动态存储，而是采用结构体数组的形式，通过设置数据域和“游标</span><span lang="EN-US"><span style="font-family: Times New Roman;">Cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">”模拟链表结点，以达到和链表类似的目的，这就是<strong style="mso-bidi-font-weight: normal;">静态链表</strong>。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">游标</span><span lang="EN-US"><span style="font-family: Times New Roman;">Cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">通常为非负整数形式，它存放后继结点在结构数组中的数组下标值（并非绝对位置）。根据结点</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值可以轻松凭借</span><span lang="EN-US"><span style="font-family: Times New Roman;">StaticList[cursor].data</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">获得当前后继结点的值。而数组最后一个结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值通常为</span><span lang="EN-US"><span style="font-family: Times New Roman;">-1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">表示</span><span lang="EN-US"><span style="font-family: Times New Roman;">null</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">由于数组的特性，首先<strong style="mso-bidi-font-weight: normal;">静态链表的长度是固定的</strong>。因此在执行添加</span><span lang="EN-US"><span style="font-family: Times New Roman;">/</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">删除操作时并不能实际创建</span><span lang="EN-US"><span style="font-family: Times New Roman;">/</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">释放内存空间，而全部在原数组内部进行。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在后插法添加结点操作中，新结点先存放在数组空闲空间中，然后使新结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值等于要插入结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，再将原结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值等于新结点在结构体数组中的实际下标值。以上步骤可由以下语句实现：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>StaticList[s].cursor=StaticList[p].cursor;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>StaticList[p].cursor=s;</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">这说明尽管静态链表中的数据结点物理位置可能并不连续，但其逻辑次序并未发生变化，这就接近于链表的实际存储结构。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">执行静态链表的删除操作时，只需使要删除结点前驱的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值等于要删除结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值即可。实际上要删除的结点空间并未发生任何修改。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">由以上操作可知，当静态链表在经过数次插入</span><span lang="EN-US"><span style="font-family: Times New Roman;">/</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">删除操作后，其总结点数其实只增未降，这就使得静态链表的运行效率大打折扣。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为此，我们一般额外设置一个<strong style="mso-bidi-font-weight: normal;">备用静态链表</strong>，该表结点所存放的值是空闲空间以及因删除操作而回收的结点空间，实际运算时需要原链表和备用表的互相协作以达到相关目的。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">（<strong style="mso-bidi-font-weight: normal;">未完待续</strong>）</span></span></p>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-26T19:31:32+08:00" pubdate data-updated="true">2009-01-26</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/01/26/jia-qi-lian-zai-zhi-san//posts/14/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
