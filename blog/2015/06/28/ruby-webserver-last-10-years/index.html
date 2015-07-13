@@ -108,7 +108,7 @@ $(document).ready(
 
 <p>长久以来，任何Web服务器都具备的两项最重要的功能：一是根据RFC2616解析HTTP/1.1协议，二是接收、处理并响应客户端的HTTP请求。幸运的是Web技术的发展并不算太早，使得Ruby恰好能赶上这趟顺风车，但在前期也基本上受限于整个业界的进展。像Apache HTTP Server、Lighttpd和Nginx这些通用型Web服务器＋合适的Web服务器接口即可完成大部分工作，而当时开发者的重心则是放在接口实现上。</p>
 
-<h4>cgi.rb</h4>
+<h4><a href="http://ruby-doc.org/stdlib-2.2.2/libdoc/cgi/rdoc/CGI.html">cgi.rb</a></h4>
 
 <p>作为Web服务器接口的早期标准，CGI程序在调用过程中，通过环境变量（GET）或$stdin（POST）传递参数，然后将结果返回至$stdout，从而完成Web服务器和应用程序之间的通信。cgi.rb是Ruby官方的CGI协议标准库，发布于2000年的cgi.rb包含HTTP参数获取、Cookie/Session管理、以及生成HTML内容等基本功能。</p>
 
@@ -118,13 +118,13 @@ $(document).ready(
 
 <p>对于标准CGI应用存在的单一进程问题，各大厂商分别提出了兼容CGI协议的解决方案，包括网景的NSAPI、微软的ISAPI和后来的Apache API（ASAPI）。上述服务器API的特点是既支持在服务器进程内运行CGI程序，也支持在独立进程中运行CGI程序，但通常需要在服务器进程中嵌入一个插件以支持该API。</p>
 
-<h4>Webrick</h4>
+<h4><a href="http://ruby-doc.org/stdlib-2.2.2/libdoc/webrick/rdoc/WEBrick.html">Webrick</a></h4>
 
 <p>作为最古老的Ruby Web服务器而不仅仅是一个接口，诞生于2000年的Webrick从Ruby 1.9.3（2011年10月正式发布）起被正式纳入标准库，成为Ruby的默认Web服务器API。Webrick支持HTTP/HTTPS、代理服务器、虚拟主机服务器，以及HTTP基础认证等RFC2617及以外的其它认证算法。同时，一个Webrick服务器还能由多个Webrick服务器或服务器小程序组合，提供类似虚拟主机或路由等功能：例如处理CGI脚本、ERb页面、Ruby块以及目录服务等。</p>
 
 <p>Webrick曾被用于Rails核心团队的开发和测试中。但是，Webrick内置的HTTP Parser非常古老，文档缺失，性能低下且不易维护，功能单一且默认只支持单进程模式（但支持多线程，不过在Rails中默认关闭了对Webrick的多线程支持），根本无法满足产品环境中的并发和日常维护需求。目前一般只用于Web应用的本地开发和基准测试。</p>
 
-<h4>fcgi.rb</h4>
+<h4><a href="https://rubygems.org/gems/fcgi">fcgi.rb</a></h4>
 
 <p>fcgi.rb是FastCGI协议的Ruby封装（latest版底层依赖libfcgi）。为了与当时的NSAPI竞争，FastCGI协议最初由Open Market提出和开发、并应用于自家Web服务器，延续了前者采用独立进程处理请求的做法：即维持一个FastCGI服务器。当Web服务器接收到HTTP请求时，请求内容和环境信息被通过Socket（本地）或TCP连接（远程）的方式传递至FastCGI服务器进行处理，再通过相反路径返回响应信息。分离进程的好处是Web服务器进程和FastCGI进程是永远保持的，只有相互之间的连接会被断开，避免了进程管理的开销。</p>
 
@@ -134,11 +134,11 @@ $(document).ready(
 
 <p>由于FastCGI协议的开放性，主流Web服务器产品基本都实现了各自的FastCGI插件，从而导致FastCGI方案被广泛使用。fcgi.rb最早开发于1998年，底层包含C和Ruby两种实现方式，早期曾被广泛应用于Rails应用的产品环境。</p>
 
-<h4>mod_ruby</h4>
+<h4><a href="https://github.com/shugo/mod_ruby">mod_ruby</a></h4>
 
 <p>mod_ruby是专门针对Apache HTTP Server的Ruby扩展插件，支持在Web服务器中直接运行Ruby CGI代码。由于mod_ruby在多个Apache进程中只能共享同一个Ruby解释器，意味着当同时运行多个Web应用（如Rails）时会发生冲突，存在安全隐患。因此只在一些简单部署环境下被采用，实际上并没有普及。</p>
 
-<h4>LiteSpeed API/RubyRunner</h4>
+<h4><a href="https://www.litespeedtech.com/support/wiki/doku.php/litespeed_wiki:other_ext_app">LiteSpeed API/RubyRunner</a></h4>
 
 <p>LiteSpeed是由LiteSpeed Tech公司最初于2002年发布的商用Web服务器，特点是与被广泛采用的Apache Web服务器的配置文件兼容，但因为采用了事件驱动架构而具有更好的性能。</p>
 
@@ -146,7 +146,7 @@ $(document).ready(
 
 <p>由于LiteSpeed是收费产品，其普及率并不高，一般会考虑采用LiteSpeed作为Web服务器的业务场景包括虚拟主机/VPS提供商、以及相关业务的cPanel产品。同时，LiteSpeed也会被用于一些业务需求比较特殊的场合，例如对Web服务器性能要求高，且应用程序及其部署需要兼容Apache服务器。LiteSpeed于2013年发布了开源的轻量Web服务器——OpenLiteSpeed（GPL v3），移除了商业版本中偏具体业务的功能如cPanel等，更倾向于成为通用Web服务器。</p>
 
-<h4>scgi.rb</h4>
+<h4><a href="https://rubygems.org/gems/scgi">scgi.rb</a></h4>
 
 <p>scgi.rb是对SCGI协议的纯Ruby实现。从原理上来看，SCGI和FastCGI类似，二者的性能并无多大差别。但比起后者复杂的协议内容来说，SCGI移除了许多非必要的功能，看起来十分简洁，且实现复杂度更低。</p>
 
@@ -158,7 +158,7 @@ $(document).ready(
 
 <p>2005年，David Heinemeier Hansson（DHH）发布了基于Ruby的开发框架Ruby on Rails（Rails），聚光灯第一次聚焦在Ruby身上。但是业内普遍对Web服务器的方案感到棘手，本地环境Webrick/产品环境FastCGI＋通用Web服务器几乎成了标配，无论是开发、部署或维护都遇到不少困难，一些吃螃蟹的人遂把此视为Rails不如J2EE、PHP方案的证据。</p>
 
-<h4>Mongrel</h4>
+<h4><a href="https://rubygems.org/gems/mongrel">Mongrel</a></h4>
 
 <p>2006年，Zed Shaw发布了划时代的Mongrel。Mongrel把自己定位成一个“应用服务器”，因为其不仅可以运行Ruby Web应用，也提供标准的HTTP接口，从而使Mongrel可以被放置在Web代理、Load Balancer等任意类型的转发器后面，而非像FastCGI、SCGI一样通过调用脚本实现Web服务器和CGI程序的通信。</p>
 
@@ -172,7 +172,7 @@ $(document).ready(
 
 <p>尽管Mongrel迅速衰落，却成功启发了随后更多优秀Ruby应用服务器的诞生，例如后文将介绍的Thin、Unicorn和Puma。</p>
 
-<h4>Rack</h4>
+<h4><a href="https://rubygems.org/gems/rack">Rack</a></h4>
 
 <p>随着Web服务器接口技术的发展，从开始时作为一个module嵌入Web服务器，到维护独立的应用服务器进程，越来越多的应用服务器产品开始涌现，同时相互之间还产生了差异化以便适应不同的应用场景。但是，由于底层协议和API的差别，基于不同的应用服务器开发Web产品时，意味着要实现各自的通信接口，从而为Web应用开发带来更多工作量。特别是对于类似Django、Rails这些被广泛使用的Web框架来说，兼容主流应用服务器几乎是必须的。</p>
 
@@ -190,7 +190,7 @@ $(document).ready(
 
 <p>Mongrel和Rack的相继诞生，使Ruby Web服务器、乃至应用程序框架的发展有了一定意义上可以遵循的标准。Mongrel后相继派生出Thin、Unicorn和Puma；而Rack统一了Ruby Web服务器和应用程序框架接口，使应用开发不再需要考虑特定的部署平台。Ruby Web服务器开始依据特定需求深入发展。</p>
 
-<h4>Thin/Goliath</h4>
+<h4><a href="https://rubygems.org/gems/thin">Thin</a>/<a href="https://rubygems.org/gems/goliath">Goliath</a></h4>
 
 <p>发布于2009年的Thin沿用了Mongrel的Parser，基于Rack和EventMachine开发，前者上文已有介绍，EventMachine是一个Ruby编写的、基于Reactor模式的轻量级事件驱动I/O（类似JBoss Netty、Apache MINA、Python Twisted、Node.js、libevent和libev等）和并发库，使Thin能够在面对慢客户端的同时支持高并发请求。</p>
 
@@ -200,7 +200,7 @@ $(document).ready(
 
 <p>2011年，社交网络分析商PostRank开源了其Web服务器Goliath，与Thin相似（都采用了EventMachine）但又有很大不同，采用新的HTTP Parser，同时针对异步事件编程中的高复杂度回调函数问题，借助Ruby1.9+的纤程技术实现了线性编码，使程序具备更好的可维护性。Goliath支持MRI、JRuby和Rubinius等多平台。在附加功能方面，Goliath的目标不仅是作为Web服务器，更是一个快速构建WebServices/APIs的开发框架，但是随着之后PostRank被Google收购，Goliath项目也就不再活跃在开源界了。</p>
 
-<h4>Unicorn</h4>
+<h4><a href="https://rubygems.org/gems/unicorn">Unicorn</a></h4>
 
 <p>2009年，Eric Wong在Mongrel 1.1.5版本的基础上开发了Unicorn。Unicorn是一个基于Unix/类Unix操作系统的、面向快客户端、低延迟和高带宽场景的Rack服务器，基于上述限制，任何情况下几乎都需要在Unicorn和客户端之间设置一个反向代理缓存请求和响应数据，这是Unicorn的设计特点所决定的，但也使得Unicorn的内部实现相对简洁、可靠。</p>
 
@@ -212,7 +212,7 @@ $(document).ready(
 
 <p>Unicorn的设计理念是“只专注一件事”：多进程阻塞I/O的方式令其无从接受慢客户端——但前置反向代理能解决这一问题；workers的负载均衡就直接交给操作系统处理。这种理念大大降低了实现复杂度，从而提高了自身可靠性。此外，类似Nginx的重加载机制，Unicorn也支持零宕机重新加载配置文件，使其允许在线部署Web应用而不用产生离线成本。</p>
 
-<h4>Phusion Passenger（mod_rails/mod_rack）</h4>
+<h4><a href="https://rubygems.org/gems/passenger">Phusion Passenger（mod_rails/mod_rack）</a></h4>
 
 <p>2008年初，一位叫赖洪礼的Ruby神童发布了mod_rails。尽管Mongrel在当时已经席卷Rails的Web服务器市场，但是面对部署共享主机或是集群的情况时还是缺少统一有效的解决方案，引起业内一些抱怨，包括DHH（也许Shaw就不认为这是个事儿）。</p>
 
@@ -224,25 +224,25 @@ $(document).ready(
 
 <p>值得一提的是，Phusion Passenger的开源版本支持多进程模式，但是其企业版同样支持多线程运行。本文撰写时，Phusion Passenger是最近一个号称“史上最快”的Ruby Web服务器（本文最后将进一步介绍Raptor）。</p>
 
-<h4>Trinidad/TorqueBox</h4>
+<h4><a href="https://rubygems.org/gems/trinidad">Trinidad</a>/<a href="https://rubygems.org/gems/torquebox">TorqueBox</a></h4>
 
 <p>Trinidad发布于2009年，基于JRuby::Rack和Apache Tomcat，使Rails的部署和世界上最流行的Web服务器之一Tomcat结合，支持集成Java代码、支持多线程的Resque和Delayed::Job等Worker，也支持除Tomcat以外的其它Servlet容器。</p>
 
 <p>与Trinidad相比，同样发布于2009年的TorqueBox不仅仅是一个Web服务器，而且被设计成一个可移植的Ruby平台。基于JRuby::Rack和WildFly（JBoss AS），支持多线程阻塞I/O，内置对消息、调度、缓存和后台进程的支持。同时具有集群、负载均衡、高可用等多种附加功能。</p>
 
-<h4>Puma</h4>
+<h4><a href="https://rubygems.org/gems/puma">Puma</a></h4>
 
 <p>Puma——Mongrel最年轻的后代于2011年发布，作者是Evan Phoenix。</p>
 
 <p>由于Mongrel诞生于前Rack时期，而随着Rack统一了Web服务器接口，任何基于Rack的应用再与Mongrel配合就有许多不便。Puma继承了前者的Parser，并且基于Rack重写了底层通信部分。更重要的是，Puma部分依赖Ruby的其它两个流行实现：Rubinius和JRuby，与TorqueBox类似拥有多线程阻塞I/O的能力（MRI平台不支持真正意义上的多线程，但Puma依然具有良好并发能力），支持高并发。同时Puma还包含了一个事件I/O模块以缓冲HTTP请求，以降低慢客户端的影响。但是，从获得更高吞吐量的角度来说，Puma目前仍然需要采用Rubinius和JRuby这两个平台。</p>
 
-<h4>Reel</h4>
+<h4><a href="https://rubygems.org/gems/reel">Reel</a></h4>
 
 <p>Reel是最初由Tony Arcieri发布于2012年的采用事件I/O的Web服务器。采用了不同于Eventmachine的Celluloid::IO，后者基于Celluloid——Actor并发模型的Ruby实现库，解决了EM只能在单一线程中运行事件循环程序的问题，从而同时支持多线程＋事件I/O，在非阻塞I/O和多线程方案间实现了良好的融合。</p>
 
 <p>与其它现代Ruby Web服务器不同的是，Reel并不是基于Rack创建，但通过Reel::Rack提供支持Rack的Adapter。尽管支持Rails，与Puma也有一定的相似性，但与Unicorn、Puma和Raptor相比，Reel在部署Rails/Rack应用方面缺少易用性。实际上基于Celluloid本身的普及程度和擅长领域，相比其它Web服务器而言，Reel更适合部署WebSocket/Stream应用。</p>
 
-<h4>Yahns</h4>
+<h4><a href="https://rubygems.org/gems/yahns">Yahns</a></h4>
 
 <p>2013年，Eric Wong等人受Kqueue（源自FreeBSD，同时被Node.js作为基础事件I/O库）的启发启动了Yahns项目。其目标与Reel类似，同样是在非阻塞I/O设计中引入多线程。与Reel不同的是，Yahns原生支持Rack/HTTP应用。</p>
 
@@ -264,11 +264,13 @@ $(document).ready(
 
 <h4>HTTP/2</h4>
 
-<p>2015年5月，HTTP/2随着RFC7540正式发布。如今各主流服务器/浏览器厂商正在逐渐完成从HTTP/2测试模块到正式版本的过渡。而截至目前，主流Ruby Web服务器都还没有公开HTTP/2的开发信息。HTTP-2是在2013年由Ilya Grigorik发布的纯Ruby的HTTP/2协议实现，包括二进制帧的解析与编码、流传输的多路复用和优先级制定、连接和流传输的流量控制、报头压缩与服务器推送、连接和流传输管理等功能。随着HTTP/2的发布和普及，主流Ruby Web服务器将不可避免的引入对HTTP/2的支持。</p>
+<p>2015年5月，HTTP/2随着RFC7540正式发布。如今各主流服务器/浏览器厂商正在逐渐完成从HTTP/2测试模块到正式版本的过渡。而截至目前，主流Ruby Web服务器都还没有公开HTTP/2的开发信息。<a href="https://rubygems.org/gems/http-2">HTTP-2</a>是在2013年由Ilya Grigorik发布的纯Ruby的HTTP/2协议实现，包括二进制帧的解析与编码、流传输的多路复用和优先级制定、连接和流传输的流量控制、报头压缩与服务器推送、连接和流传输管理等功能。随着HTTP/2的发布和普及，主流Ruby Web服务器将不可避免的引入对HTTP/2的支持。</p>
 
 <h4>WebSocket/流（Stream）/服务器推送事件（Server Sent Events，SSE）</h4>
 
 <p>2011年，RFC6455正式公布了WebSocket协议。WebSocket用于在一个TCP链接上实现全双工通信，其目的是实现客户端与服务器之间更高频次的交互，以完成实时互动业务。鉴于该特点，仅支持慢客户端的Web服务器就无法有效支撑WebSocket的并发需求，更何况后者对并发量更加严苛的要求了。而对于同样需要长连接的流服务器和服务器推送事件服务（SSE），都避免不了对长连接和高并发量的需求。尽管高性能的Ruby Web服务器都有足够的潜力完成这些任务，但是从原生设计的角度来看，更加年轻的Reel和Yahns无疑具有优势。</p>
+
+<p>最近Planet ruby在Ruby邮件组发布了<a href="https://github.com/planetruby/awesome-webservers">Awesome Webservers</a>，该Github Repo旨在对主流Ruby Web服务器进行总结和对比，并且保持持续更新，推荐开发者关注。</p>
 
 <p>本文灵感来源于RailsConf 2015的Session：&#8221;Riding Rails for 10 Years - John Duff&#8221;。</p>
 
