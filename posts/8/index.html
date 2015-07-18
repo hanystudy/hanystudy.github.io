@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="  既来之，则安之。  看来我的假期在两年前已经结束了。 2010-07-17 天选之作 Comments "> <meta name="keywords" content="">
+<meta name="description" content=" 如果脚没废自认为还真能继续坚持一两个月。这下真挂了，上下楼可以靠电梯，总不能平时不走路吧，只好回家看书去了。  假期到目前为止最大的收获在于HKUST的大牛来实验室做讲座，虽然不及人家在BNU、ZJU的系列课程，但一些关于前沿技术的全貌还是了解到了。 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,52 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/07/28/kang-bu-zhu-le/">
+		
+			抗不住了</a>
+	</h2>
+	<div class="entry-content">
+		<p> 如果脚没废自认为还真能继续坚持一两个月。这下真挂了，上下楼可以靠电梯，总不能平时不走路吧，只好回家看书去了。</p>
+
+<p> 假期到目前为止最大的收获在于HKUST的大牛来实验室做讲座，虽然不及人家在BNU、ZJU的系列课程，但一些关于前沿技术的全貌还是了解到了。感触最深的是教授不经意间流露出对众师兄师姐们的“同情”之心了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-07-28T22:14:13+08:00" pubdate data-updated="true">2010-07-28</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2010/07/28/kang-bu-zhu-le//posts/8/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -612,132 +658,6 @@ Reader-&gt;SetDataSpacing (0.8, 0.8, 1.5);
 
 	
 		<span class="comments"><a href="/blog/2010/04/18/yi-xue-ying-xiang-de-ji-ben-wen-jian-cun-chu-ge-shi-yu-vtk-ji-cheng-fang-fa//posts/8/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/04/18/jie-xi-xuan-ran-xi-tong/">
-		
-			解析渲染系统</a>
-	</h2>
-	<div class="entry-content">
-		<p> 本文的目的旨在对vtk的渲染系统做一简要概述，并引入一些示例。如果读者已经阅读过官方出品的System Overview，文中的示例对初学者来说仍然具有一定意义。</p>
-
-<p> vtk包含两个基层子系统：一个已编译的C++类库，以及一个解释封装层。后者可以使用户能够使用Java、Python以及Tcl语言引用已编译的C++类。</p>
-
-<p> 在vtk中存在两个基本对象模型，图像模型和可视化模型。两个必要模型共同构成成了vtk的基本概念系统。</p>
-
-<p><strong> 1、图像模型</strong></p>
-
-<p> 图像模型包含了以下一些基本对象，这些对象共同组成了一个“场景”：</p>
-
-<p> vtkActor,vtkActor2D,vtkVolume—vtkProp和vtkProp3D的子类</p>
-
-<p> vtkTransform</p>
-
-<p> 道具Props是指我们能在场景中看到的物体，在vtk中道具使用一个抽象类vtkProp或vtkProp3D表示。通过使用上述类的子类而生成的实例变量即“角色”。应当注意，道具本身并不直接表示其几何形状，而是通过引用映射器mappers表示图形数据。另外，还可以使用一种转换对象，这种对象内部封装的4*4转换矩阵可用于控制道具的位置、方位和缩放比例。</p>
-
-<p> vtkLight</p>
-
-<p>  灯光用于表示和操作场景照明，且仅需要在3D场景中使用。在场景中灯光与角色的相互作用是控制绘制过程的一个主要因素，一旦光线与场景中的角色发生相对作用，我们就可以使用相机进行观察。在计算机图形学中，使用过多种不同类型的灯光，其中，最简单的一种是在无限远处的点光源，这就意味着它所照亮的物体接受的是一组平行的光线。而另外一种是在有限区域内的点光源，其照射在物体表面上的光线不再互相平行。另外我们假设在光线的传播过程中，其能量不发生损失，即其光线强度始终保持不变。把这样简化了的模型用在可视化过程中，使得我们对光的计算公式也获得了简化。场景中的灯光包括漫反射光、镜面光以及环境光。</p>
-
-<p> vtkCamera</p>
-
-<p> 相机用于控制在渲染过程中三维几何体如何被投影到二维平面。相机通过几种不同方法实现定位、焦点和指向功能。此外，相机也用于控制透视投影和立体视图。</p>
-
-<p> vtkProperty,vtkProperty2D</p>
-
-<p> 属性对象控制了一个道具的外在属性，如颜色、漫反射、环境以及镜面光效果等。</p>
-
-<p> vtkMapper,vtkMapper2D—vtkAbstractMapper的子类</p>
-
-<p> vtkLookupTable,vtkColorTransferFunction—vtkScalarsToColors的子类</p>
-
-<p> 映射器通过结合vtkLookupTable，用于转换和渲染几何图形。映射器为可视化管线和图像模型之间提供了接口界面。而vtkLookupTable以及vtkColorTransferFunction则负责把数值映射为颜色，这是可视化技术中最为重要的技术之一。 </p>
-
-<p> vtkRenderer,vtkRenderWindow</p>
-
-<p> 渲染器与渲染窗口负责管理图像引擎和计算机窗口系统的接口。其中渲染窗口是在计算机窗口中进行渲染的窗口。可以有多个渲染器同时在一个渲染窗口中工作，也可以创建多个渲染窗口。渲染器工作的区域称为视口viewport。</p>
-
-<p> vtkRenderWindowInteractor</p>
-
-<p> 一旦把对象绘制进渲染窗口，就有机会进行数据交互了。VTK提供了多种和场景进行交互的方法，其中之一就是引用vtkRenderWindowInteractor对象，这是一种简单的工具可用于操控相机、选取对象、调用invoke用户定义的方法、进入/推出立体观察视角以及改变部分角色属性等。</p>
-
-<p><strong> 2、可视化模型</strong></p>
-
-<p> <strong>图像管线</strong>的作用是将图形数据转换成图像数据。而<strong>可视化管线</strong>的作用则是将图像信息转换成图形数据。换一个角度来看，可视化管线负责构建图形几何表示，然后再利用图像管线将这种表示绘制在渲染窗口中。</p>
-
-<p> VTK使用了数据流的方式将图像信息转换成图形数据，在这种方式中，包含了两个基本类型的对象：</p>
-
-<p> 数据对象vtkDataObject</p>
-
-<p> 处理对象vtkProcessObject</p>
-
-<p> <strong>数据对象</strong>可以表示各种类型的数据，具有一定组成结构的数据被称作数据集dataset，数据对象由几何结构和拓扑结构（点和单元），以及相关的属性数据如标量或向量组成。属性数据是与数据集的点或单元相联系的。单元是多个点的拓扑构成，它是组成数据集的原子类型。 </p>
-
-<p> <strong>处理对象</strong>，即我们通常所说的过滤器filter，它被用于对数据对象进行操作并产生新的数据对象。处理对象表示了系统中对数据进行处理的算法。数据对象和处理对象连接在一起就构成了可视化管线。</p>
-
-<p> 在可视化管线中，源处理对象是通过读取或者构造一个或多个数据对象而产生数据的对象。过滤器通过吸收一个或多个数据对象，经过处理后，输出一个或多个数据对象。映射器则是将数据对象转换成图像对象，然后由图像引擎进行渲染。</p>
-
-<p><strong> 3、一些问题</strong></p>
-
-<p> 下面讨论在构造可视化管线中的值得特别注意的一些问题。</p>
-
-<p> 首先，管线拓扑可以使用多种方法构造，如：</p>
-
-<p> aFilter-&gt;SetInput(anotherFilter-&gt;GetOutput());</p>
-
-<p> 上述语句是将anotherFilter过滤器中的输出再用于aFilter过滤器的输出（多重输入和输出也有类似的方法）。</p>
-
-<p> 其次，必须制定一个关于管线运行的控制机制。通常我们只想运行管线的那些必要功能以获取输出，vtk引入了基于每个对象内部更正时间的惰性计算lazy evaluation（即只在数据被请求时进行计算）模式。</p>
-
-<p> 第三，管线的装配要求每个对象必须互相兼容，以适应SetInput()和GetOutput方法。在vtk中，c++程序会在编译时类型检查过程中检查此类问题，而对于解释型语言只能在运行时从解释器报错中发现问题。</p>
-
-<p> 最后，必须决定是否在管线运行时使用缓存，亦或维持数据对象。</p>
-
-<p><strong> 4、管线执行概览</strong></p>
-
-<p> 前文已经提到，vtk可视化管线只有当请求数据计算时才会运行（惰性计算）。例如，如果用户实例化了一个Reader读取器对象，并随后请求返回象素点数GetNumberOfPoints，读取器对象将会通过该方法返回“0”，尽管事实上数据文件可能包含了数以千计的象素点。然而，如果在调用GetNumberOfPoints方法前加入一句：</p>
-
-<p> reader-&gt;update();</p>
-
-<p> 读取器对象就会返回正确的象素点数目。出现这种情况的原因是，在前例中GetNumberOfPoints方法并不请求计算，对象仅仅返回当前的象素点数，首次计算前显然为“0”。而update()方法的作用即是强制运行管线，从而强制读取器从相关文件中读入数据。</p>
-
-<p> 通常情况下，用户不需要manually手动调用update()，因为过滤器是接入可视化管线的。也就是说，当角色接收到重新渲染得请求之后，它会将相关方法转发至映射器，同时update()方法就被自动送入了可视化管线中。从较高层次来看，render()方法通常初始化对数据的请求，该请求再通过管线传递，此过程中管线待更新部分的过滤器将重新运行，从而保证了管线末端的数据是最新的。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-04-18T10:00:48+08:00" pubdate data-updated="true">2010-04-18</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2010/04/18/jie-xi-xuan-ran-xi-tong//posts/8/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
