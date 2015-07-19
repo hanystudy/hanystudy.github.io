@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="（限定性线性表——栈，栈的递归应用）        五）限定性线性表——栈和队列          前面我们介绍了几种简单线性表的抽象数据结构及其基本运算，在一些应用中，通常还有一些逻辑结构与线性表相同，但含额外运算限制的数据结构需求，例如栈和队列。        栈        &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="（迷宫Maze的魅力——一个初级迷宫解法的讨论及延伸A）               现在，我们根据以上连载中的内容来研究一个有趣的应用问题。        假设在一个二位数组maze[m+2][p+2]表示的迷宫中，除maze[1][0]以及maze[m][p+1]分别表示入口、出口外， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,381 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/02/04/jia-qi-lian-zai-zhi-wu/">
+		
+			假期连载之五</a>
+	</h2>
+	<div class="entry-content">
+		<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">（迷宫</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">Maze</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的魅力——一个初级迷宫解法的讨论及延伸</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">A</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">）</span></strong><strong style="mso-bidi-font-weight: normal;"></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">现在，我们根据以上连载中的内容来研究一个有趣的应用问题。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">假设在一个二位数组</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">maze[m+2][p+2]</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">表示的迷宫中，除</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">maze[1][0]</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">以及</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">maze[m][p+1]</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">分别表示入口、出口外，包括第</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">0</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">m+1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">行、第</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">0</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">p+1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">列的元素均表示迷宫的围墙，用</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">表示，其它元素同样用</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">表示围墙，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">0</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">表示通路，如下图例：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>0<span style="mso-tab-count: 1;">     </span>0<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>0<span style="mso-tab-count: 1;">     </span>1</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>1<span style="mso-tab-count: 1;">     </span>0<span style="mso-tab-count: 1;">     </span>0<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>0<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>0<span style="mso-tab-count: 1;">     </span>1</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>1<span style="mso-tab-count: 1;">     </span>0<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>0<span style="mso-tab-count: 1;">     </span>0<span style="mso-tab-count: 1;">     </span>0</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1<span style="mso-tab-count: 1;">     </span>1</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">以上是一个</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">6*6</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的迷宫图示，其中</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">(1,0)</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">和</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">(4,5)</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">表示了迷宫的出口和入口。对于迷宫中除边界外的任意元素</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">maze[i][j]</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，有</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">0&lt;i&lt;m</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">0&lt;j&lt;p</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，并且当</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">maze[i][j]==0</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">时路通，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">maze[i][j]==1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">时不通。我们假设迷宫中的个体一次可移动八个方向——</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">N</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">NE</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">E</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">SE</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">S</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">SW</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">W</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">NW</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，其数据关系据此可知。我们先根据可前进的方向建立一个前进方向表，给出各个方向的偏移量。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>struct offsets</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span>int a,b;<span style="mso-tab-count: 2;">          </span>//a</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">b</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">分别表示在</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">x</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">和</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">y</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">方向上的偏移量。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span>char *dir;<span style="mso-tab-count: 1;">       </span>//dir</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">为方向。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">};</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">offsets move[8];<span style="mso-tab-count: 1;">   </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">各个方向的偏移量表。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在使用上述数据结构时，需要初始化</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">move[8]</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中８个方向的元素值，如果该前进方向走不通，则在前进路径上回退一步，再尝试其他的允许方向。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">同时为了防止重走原路，另外设置一个标志矩阵</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">mark[m+2][p+2]</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，它的所有元素都初始化为０，一旦进行到迷宫的某个位置</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">[i][j]</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，则将</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">mark[i][j]</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">置为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，下次这个位置则被屏蔽。下面给出解决迷宫问题的递归算法</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">C++</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">语言描述：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">int SeekPath(int x,int y)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在本例中我们首先从</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">Maze[1][1]</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">开始探索，如果找到出口则返回</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，否则返回</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">0;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>int i,g,h;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span>char *d;<span style="mso-tab-count: 9;">                                                          </span>//g,h</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">记录位置信息，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">dir</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">记录方向</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>if(x==n&amp;&amp;y==p)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>return 1;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span>for(i=0;i&lt;8;i++)<span style="mso-tab-count: 7;">                                               </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">每次选择一个方向探索</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>g=x+move[i].a;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>h=y+move[i].b;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>d=move[i].dir;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>if(Maze[g][h]==0&amp;&amp;mark[g][h]==0)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>mark[g][h]=1;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 3;">                     </span>if(SeekPath(g,h))<span style="mso-tab-count: 5;">                             </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">选择此位置递归探索</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>cout&lt;&lt;”(”&lt;&lt;g&lt;&lt;”,”&lt;&lt;h&lt;&lt;”),”&lt;&lt;”Direction ”&lt;&lt;dir&lt;&lt;endl;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 4;">                            </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">此处输出路径的顺序是逆向的</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>return 1;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 63pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">if(x==1&amp;&amp;y==1)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>cout&lt;&lt;”no path in Maze”&lt;&lt;endl;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">return 0;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">我们将上述迷宫数据经由此算法检查，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">g++</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">给出了如下输出：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">(4,4),Direction W</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">(4,5),Direction SE</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">(3,4),Direction NE</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">(4,3),Direction SE</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">(3,2),Direction S</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">(2,2),Direction SE</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">(1,1),Direction E</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">由于算法本身的问题，输出逻辑上存在一些偏差，但并不影响其正确性。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">现在，我们对递归算法作出一些改进，使其能通过栈处理的方式提高算法性能。为了达到这一目标，我们需要设置一个三元组来存储已走过路径的信息，如下所示：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">struct items</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span>int x,y,dir;<span style="mso-tab-count: 2;">             </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">位置和前进方向的序号</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">此算法的原理是，我们对当前位置的信息进行记录并压栈，按照前进方向表给出的数据向某一个允许的方向前进一位，并将此位置压栈，继续进行上述过程。如果当前位置无法走通，则将前进方向退栈，并在前进路径上回退一步，并尝试其它方向，如果栈空则表示已回退到开始位置。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">下面给出迷宫非递归算法的</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">C++</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">描述，需要提前说明的是，我们已假设存在一个完整的</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">Stack</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">类，并具备连载四包含的所有栈操作函数。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">int path(int m,int p)<span style="mso-tab-count: 3;">                    </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">关于参数的介绍请借鉴上例</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>int i,j,d,g,h;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span>mark[1][0]=1;<span style="mso-tab-count: 4;">                            </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">假定</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">(1,0)</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">为入口</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span>Stack&lt;items&gt;st(m*p);<span style="mso-tab-count: 2;">         </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">初始化栈</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">st</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，其大小为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">m*p</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，这是根据迷宫空间设置的最大可能值。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span>items tmp;<span style="mso-tab-count: 4;">                          </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">选择当前位置信息</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>tmp.x=1;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>tmp.y=0;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>tmp.dir=2;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 1;">       </span>st.Push(tmp);<span style="mso-tab-count: 4;">                            </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">将初始位置压栈</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>while(st.IsEmpty()==FALSE)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 2;">              </span>st.Pop(tmp);<span style="mso-tab-count: 3;">                </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">将栈顶位置信息弹出，并设置为当前位置</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>i=tmp.x;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>j=tmp.y;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>d=tmp.dir;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 2;">              </span>while(d&lt;8)<span style="mso-tab-count: 3;">                   </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">选择前进方向</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>g=i+move[d].a;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>h=j+move[d].b;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>if(g==m&amp;&amp;h==p)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 3;">                     </span>{//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">已找到出口</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>cout&lt;&lt;st;<span style="mso-tab-count: 1;">       </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 84pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">这里在</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">Stack</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">类的内部重载了操作符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">&lt;&lt;</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，用于输出</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">st</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中保存的路径</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>cout&lt;&lt;m&lt;&lt;&#8221; &#8220;&lt;&lt;p&lt;&lt;endl;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>return;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>if(Maze[g][h]==0&amp;&amp;mark[g][h]==0)</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="mso-tab-count: 3;">                     </span>{//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">选择新的可通位置并前进</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>mark[g][h]=1;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>tmp.x=i;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>tmp.y=j;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>tmp.dir=d;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>st.Push(tmp);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>i=g;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>j=h;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 4;">                            </span>d=0;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 3;">                     </span>else d++;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>cout&lt;&lt;&#8221;no path Maze&#8221;&lt;&lt;endl;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">};</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在上述算法中，由于涉及到了栈的操作，可能会使算法难度增加，但事实证明其在性能及智能化的扩展方面存在很大的提高。对于小型、简单的二维迷宫，均可根据以上算法对其进行有效的处理。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在今后涉及到树或图部分的内容时，我们将再次回顾迷宫</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">Maze</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">问题，届时的迷宫实例将具备更多复杂的元素以及更巧妙的规则，使当前的算法复杂度大幅提高，也不仅仅是一般数据结构或算法就能够轻松解决的。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">(</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">未完待续</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;">)</span></strong></span></p>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-04T23:30:57+08:00" pubdate data-updated="true">2009-02-04</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/02/04/jia-qi-lian-zai-zhi-wu//posts/15/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -2053,91 +2428,6 @@ $(document).ready(
 
 	
 		<span class="comments"><a href="/blog/2009/01/10/qi-mo-zhou-qi-jie-shu//posts/15/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/01/01/NURBS-jian-jie/">
-		
-			NURBS简介</a>
-	</h2>
-	<div class="entry-content">
-		<p> 非均匀有理样条（NURBS）（non uniform rational B-spline），是在<span style="color: #000000;">计算机图形学</span>中常用的数学模型，用于产生和表示曲线及曲面。</p>
-
-<p> NURBS的发展始于1950年代，它是由需要像在车体和船壳中使用的自由曲面的数学上的精确表示的工程师们所发现的，它可以在任何技术上需要的时候精确的复制出来。以前这类曲面的表示只存在于设计者创建的实体模型。该发展的先驱包括：皮埃尔·贝兹（Pierre Bézier）， 他曾是Renault的工程师，以及Paul de Casteljau，他在Peugeot工作，两个都是法国的。贝兹基本是和de Casteljau独立发展的，两人互相不知道对方的工作。但是因为贝兹发表了他的工作的结果，今天的一般的计算机图形学用户认为样条 &ndash; 通过在曲线上的控制点表示的那类 - 为贝兹样条，而de Casteljau的名字仅作为他为计算参数化曲面所设计的算法而为人所知。在1960年代，人们认识到非均匀有理基本样条是贝兹曲线的一个推广，而贝兹曲线可以视为均匀非有理B样条。</p>
-
-<p>最初NURBS仅用于汽车公司私有的计算机辅助设计包。后来它们成为标准计算机图形包的一部分，包括OpenGL图形库。</p>
-
-<p>NURBS曲线和曲面的实时、交互绘制最初由Silicon Graphics工作站于1989年提供。在1993年，CAS Berlin（一个和柏林工大合作的小创业公司）开发了第一个个人机上的交互式NURBS建模器，称为NöRBS。今天多数台式机上的专业计算机图形应用程序提供NURBS技术，一般通过集成一个从专用公司来的NURBS引擎。</p>
-
-<p>NURBS对于计算机辅助设计、制造和工程（CAD，CAM，CAE）是几乎无法回避的，并且是很多业界广泛采用的标准的一部分，例如IGES， STEP，和PHIGS。</p>
-
-<p>但还是有很多它们在交互式建模中的优点和有用性的错误观念，主要是由于关于单一软件包及其用户界面的易用性而得出的猜测。 通常，据说编辑NURBS曲线和曲面是高度直观和可预测的。控制点总是直接连接到曲线或曲面上或象是通过一根橡皮筋连接。根据用户界面的类型，编辑可以通过它们各自的控制点实现，这对于贝兹曲线是最显然和最一般的，或者也可以通过高层的工具，例如样条建模或者层次结构的编辑。高层工具可以设计得很强大，并得益于NURBS创建和建立不同层次的连续性的能力： c0连续性表示连通性，c1连续性可以视为没有尖角，而c2连续性通常称为几何连续性，视觉上也就是“光滑”的东西，用NURBS还可以达到更高阶的连续性，它们可以导致&#8221;亮度连续性&#8221;。这被新车模型的摄影师所倚重，他们热衷于展示霓虹灯在车身上的镜像。灯光可以展示出完美的光滑度，这在没有NURBS的情况下实际上是不可能。</p>
-
-<p>一条NURBS曲线用一个带比重控制点和曲线的次序以及一个节点向量的集合定义。NURBS是B-样条和贝兹曲线和曲面两者的推广，其主要差别在于控制点的比重，这使它们成为有理的（非有理B-样条是有理B-样条的特殊情形）。 NURBS曲线在一个参数方向上演变，通常内部用&rsquo;s&#8217;参数代表，而NURBS曲面在两个参数方向上演变。 所以，通过计算NURBS曲线的s-参数，它可以在三维空间中表示，通过计算NURBS曲面的s和t它也可以在三维空间中表示。 推广意味着：一条贝兹曲线总是一条NURBS曲线，就像狗总是动物。反过来则不总是成立，一条NURBS曲线可以是一条贝兹曲线，就像一个动物可以是一条狗。</p>
-
-<p>NURBS有用的原因有很多条：他们</p>
-
-<p>在仿射变换下不变也在投影变换下不变；
-提供了标准解析形体（例如圆锥曲面）和自由曲面两者的共同数学形式；
-提供了设计一大类形体的灵活性；
-减少了存储形体的内存消耗（和更简单的方法相比）；
-可以用数值上稳定和精确的算法较快的计算；
-是非有理B-样条和非有理和有理贝兹曲线和曲面的推广。
-节点向量是一个参数值的序列，用于决定控制点在何处和如何影响NURBS曲线。节点的个数总是等于控制点的个数加上曲线的阶数。节点必须只是用于内部计算，因而一般对于软件的终端用户来说是没有帮助的、不可编辑、甚至不可以见的。</p>
-
-<p>节点向量的值必须升序：下面的向量是正确的：[0 0 1 2 3]，而接下来这个不是：[0 0 2 1 3]。也要注意唯一重要的因素是值之间的比例：节点向量[0 0 1 2 3]，[0 0 2 4 6]和[1 1 2 3 4]产生相同的曲线。不可以有比曲线的度数更多的重合值：节点的重复度≤度数。 对于一阶NURBS，每个节点和一个控制点结对。</p>
-
-<p>曲线的序大于或等于2，对应与一条线性曲线（序=2，表示一条直线），一条二次曲线（序=3)以及一条三次曲线（序=4）。数学上曲线用同阶的多项式表示，一条三次曲线用3阶多项式表示，其序为4。另外，控制点的个数必须等于或大于曲线的序。实践上，3阶的三次类型是表示曲线和曲面时最常用的。而4次或5次的有时候有用，特别是用于导数，更高阶实际上从来不用因为他们经常导致内部数值问题并趋向于消耗更多的不必要的计算。</p>
-
-<p>非有理曲线有时不够用，例如用于表示圆。 这是表示一个XY平面上的均匀的圆的控制点，第四个参数是比重：
-   cp_circle[0] = Controlpoint( 1、 0、0、     1);
-   cp_circle[1] = Controlpoint( 1、 1、0、sqrt(2) / 2.0);
-   cp_circle[2] = Controlpoint( 0、 1、0、     1);
-   cp_circle[3] = Controlpoint(-1、 1、0、sqrt(2) / 2.0);
-   cp_circle[4] = Controlpoint(-1、 0、0、     1);
-   cp_circle[5] = Controlpoint(-1、-1、0、sqrt(2) / 2.0);
-   cp_circle[6] = Controlpoint( 0、-1、0、     1);
-   cp_circle[7] = Controlpoint( 1、-1、0、sqrt(2) / 2.0);
-   cp_circle[8] = Controlpoint( 1、 0、0、     1);</p>
-
-<p><strong>ps:thanks for wikipedia&amp;university of bristol.</strong></p>
-
-<p><strong>评论突破3600&hellip;即日起暂闭清理&hellip;</strong></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-01T20:59:29+08:00" pubdate data-updated="true">2009-01-01</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/01/01/NURBS-jian-jie//posts/15/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

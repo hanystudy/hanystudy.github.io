@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="1 UNIX系统调用 1.1 System Call System call是OS提供的应用程序和OS交互的惟一手段，应用程序只能通过系统调用访问硬件资源。 在 Windows 中，OS 很少直接将System call提供给程序员使用，它提供类似缓冲文件操作那样既有用户态代码又有System &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="本章主要介绍目录和文件的状态信息，这些是大量系统功能应用的基础。后续文章会针对前次连载的文件系统、System call等内容进行部分常用程序的设计以及分析工作。 1 文件状态信息 1.1 获取文件的状态信息 该部分系统调用定义在/usr/include/sys/stat.h中， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,666 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/06/03/MP77-de-UNIX-ke-jian-bi-ji-8/">
+		
+			MP77的UNIX课件笔记(8)</a>
+	</h2>
+	<div class="entry-content">
+		<p>本章主要介绍目录和文件的状态信息，这些是大量系统功能应用的基础。后续文章会针对前次连载的文件系统、System call等内容进行部分常用程序的设计以及分析工作。</p>
+
+<p><a id="more"></a><a id="more-175"></a></p>
+
+<p>1 文件状态信息</p>
+
+<p>1.1 获取文件的状态信息</p>
+
+<p>该部分系统调用定义在/usr/include/sys/stat.h中，并且需要types.h的支持。</p>
+
+<p>int stat(char <em>path, struct stat </em>statbuf); /<em> return 0 on success or -1 on error </em>/</p>
+
+<p>int fstat(int fd，struct stat <em>statbuf); /</em> returns 0 n success or -1 on error */</p>
+
+<p>stat和fstat的原理均是从inode节点中获取文件状态信息。值得注意的是，如果是利用C语言缓冲I/O方式打开文件，将FILE *f转换为相应文件描述符的方法是，使用宏调用fileno(f)即可返回discriptor。stat由于是提供了路径，因此可能需要逐级深入，导致效率普遍不如fstat，但考虑到fstat仅适用于已打开的文件，那么两种call就需要灵活使用了。</p>
+
+<p>注意到参数struct stat *statbuf定义了存储文件状态信息的结构体，其在types.h中定义，其基本成员如下：</p>
+
+<p>struct stat {</p>
+
+<p>dev_t     st_dev;        /<em>device of inode</em>/</p>
+
+<p>ino_t     st_ino; /<em> inode  number</em>/</p>
+
+<p>mode_t   st_mode; /<em> mode bits </em>/</p>
+
+<p>nlink_t   st_nlink; /<em> number of links to file </em>/</p>
+
+<p>uid_t     st_uid; /<em> owener’s userid </em>/</p>
+
+<p>dev_t     st_gid; /<em> owener’s group id </em>/</p>
+
+<p>dev_t     st_rdev; /<em> for special files </em>/</p>
+
+<p>off_t     st_size; /<em>file size in characters </em>/</p>
+
+<p>time_t    st_atime; /<em>time file last read</em>/</p>
+
+<p>time_t    st_mtime; /<em>time file last written or created</em>/</p>
+
+<p>time_t st_ctime; /<em>time file or inode last changed</em>/</p>
+
+<p>}</p>
+
+<p>尽管stat成员类型大部分均为整型，但基于可移植性的需要，通常不直接定义为C语言的内部数据类型如short、int或long等等。可以发现，此类类型定义都是以_t结尾的使用typedef重定义后的类型声明符。</p>
+
+<p>1.1.1 st_mode转换成字符</p>
+
+<p>st_mode字段长度为16位，包括4位的类型标识，suid、sgid和sticky字段以及9位权限标识位。</p>
+
+<p>类型标识位我们在连载五中已经有所涉及：</p>
+
+<p><a href="http://www.hanyi.name/blog/?p=169">http://www.hanyi.name/blog/?p=169</a></p>
+
+<p>suid和sgid涉及到系统安全，它们分别指Set User ID和Set Group ID，其作用类似。对一个suid被置位的程序来说，其权限设置示例如下:</p>
+
+<p>rwsr&ndash;r&ndash;</p>
+
+<p>这里需要解释一下effective uid和effective gid，它们是记录在内核中相对于用户uid和gid的标识，其主要目的是为了分配给其相应的权限。一般情况下，如果suid和sgid未被置位，那么进程显示的euid应是正在执行操作的用户uid。但是在suid被置位的情况下，euid会显示为程序拥有者的uid，并且该进程享受拥有者权限。</p>
+
+<p>简单举例/usr/bin/passwd命令，功能是修改用户密码，其实质是对/etc/passwd和/etc/shadow进行更新操作。我们知道/etc/.一般对普通用户不具备wx权限。借助于/usr/bin/passwd，该程序的默认权限为：</p>
+
+<p>rws&ndash;x&ndash;x</p>
+
+<p>那么普通用户就可以以root身份对上述两个文件进行w操作了。</p>
+
+<p>sgid的作用与suid类似，创建该位的主要目的是当涉及到root权限时，如非必要应置sgid而非suid以避免造成安全缺陷。</p>
+
+<p>sticky粘贴位，该位一般只在目录文件定义时有效。sticky置位的目录下所有用户都可以在该目录下创建文件，但除root外的用户只能删除自己创建的文件。</p>
+
+<p>这里可能需要解释一下Unix的文件删除机制。严格说来删除权限和源文件的mode字段无关，而是与存放该文件的目录文件权限有关，如果允许相应用户拥有删除权限，那么用户必须在该目录下拥有写权限。</p>
+
+<p>但是/usr/include/sys/stat.h中对标识的宏定义为八进制，且无法与st_mode中的bit直接对应，为此要借助于掩码运算计算出相应的字段定义，计算方法是st_mode &amp; 相应的标识掩码（其中&amp;为位运算中的“与”）。例如文件类型宏：</p>
+
+<h1>define  S_IFMT  0170000  /<em>type of file</em>/</h1>
+
+<h1>define  S_IFREG 0100000  /<em> Regular file </em>/</h1>
+
+<h1>define  S_IFDIR 0040000  /<em> Directory </em>/</h1>
+
+<h1>define  S_IFCHR 0020000  /<em> Character device </em>/</h1>
+
+<h1>define  S_IFBLK 0060000  /<em> Block device </em>/</h1>
+
+<h1>define  S_IFIFO 0010000  /<em> FIFO</em>/</h1>
+
+<h1>define  S_IFLNK 0120000  /<em> Symbolic link </em>/</h1>
+
+<h1>define  S_IFSOCK 0140000 /<em> SOCKET</em>/</h1>
+
+<p>S_IFMT即为文件类型的掩码，运算时只需st_mode &amp; S_IFMT，判断其相应的文件类型宏编码即可。下面仍列出一些/usr/include/sys/stat.h宏定义编码：</p>
+
+<h1>define S_ISUID   0004000    /<em>set user  id on execution</em>/</h1>
+
+<h1>define S_ISGID   0002000   /<em>set group id on execution</em>/</h1>
+
+<h1>define S_IREAD 0000400 /<em>read permission </em>/</h1>
+
+<h1>define S_IWRITE  0000200 /<em>write permission </em>/</h1>
+
+<h1>define S_IEXEC  0000100  /<em>execute/search permission,owner</em>/</h1>
+
+<p>在编写程序的时候，可能会利用如下代码：</p>
+
+<p>if  ((info.st_mode &amp; S_IFMT) == S_IFDIR)</p>
+
+<p>printf(“this is a directory”);</p>
+
+<p>/usr/include/sys/stat.h同样给出了此类转换的宏定义，例如：</p>
+
+<h1>define  S_ISDIR(mode)   (((mode)&amp;S_IFMT)==S_IFDIR)</h1>
+
+<h1>define  S_ISREG(mode)   (((mode)&amp;S_IFMT)==S_IFREG</h1>
+
+<h1>define  S_ISBLK(mode)   (((mode)&amp;S_IFMT)==S_IFBLK</h1>
+
+<h1>define  S_ISCHR(mode)   (((mode)&amp;S_IFMT)==S_IFCHR</h1>
+
+<p>那么就可以实现本节题目所提出的问题了：</p>
+
+<p>void mode_to_letters( int mode, char str[] ){</p>
+
+<p>strcpy( str, &ldquo;&mdash;&mdash;&mdash;-&rdquo; );                    /<em> default=no perms </em>/</p>
+
+<p>if ( S_ISDIR(mode) )    str[0] = &rsquo;d&#8217;;     /<em> directory?       </em>/</p>
+
+<p>if ( S_ISCHR(mode) )   str[0] = &lsquo;c&rsquo;;    /<em> char devices     </em>/</p>
+
+<p>if ( S_ISBLK(mode) )    str[0] = &lsquo;b&rsquo;;    /<em> block device     </em>/</p>
+
+<p>if ( mode &amp; S_IRUSR )  str[1] = &lsquo;r&rsquo;;    /<em> 3 bits for user  </em>/</p>
+
+<p>if ( mode &amp; S_IWUSR ) str[2] = &lsquo;w&rsquo;;</p>
+
+<p>if ( mode &amp; S_IXUSR )  str[3] = &lsquo;x&rsquo;;</p>
+
+<p>if ( mode &amp; S_IRGRP )  str[4] = &lsquo;r&rsquo;;    /<em> 3 bits for group </em>/</p>
+
+<p>if ( mode &amp; S_IWGRP ) str[5] = &lsquo;w&rsquo;;</p>
+
+<p>if ( mode &amp; S_IXGRP )  str[6] = &lsquo;x&rsquo;;</p>
+
+<p>if ( mode &amp; S_IROTH )   str[7] = &lsquo;r&rsquo;;    /<em> 3 bits for other </em>/</p>
+
+<p>if ( mode &amp; S_IWOTH )  str[8] = &lsquo;w&rsquo;;</p>
+
+<p>if ( mode &amp; S_IXOTH )   str[9] = &lsquo;x&rsquo;;</p>
+
+<p>}</p>
+
+<p>1.1.2 时间字段转换成字符</p>
+
+<p>1.1中已经给出了文件状态信息中的st_atime（read）、st_mtime（write or create）和st_ctime（change）时间字段的定义，为了将其转换为标准系统时间，需要使用/usr/include/time.h中的System call函数。其基本格式为：</p>
+
+<p>char <em>ctime(const time_t </em>clock);</p>
+
+<p>注意到stat中的时间字段均为time_t型，也是Unix中系统定义的基本类型。ctime的目的是将time_t转换为标准时间格式，并以字符串形式回传。其最小单位时间为秒，采用UTC(Coordinated Universal Time )时间，其绝对值00:00:00代表1970年1月1日00:00:00，返回的格式示例如下：</p>
+
+<p>Thu Nov 24 18:22:48 1986</p>
+
+<p>值得注意的是，当年份字段长度小于4个字节时需要用前导0补齐，当年份大于4个字节时，显示会成为：</p>
+
+<p>Thu Nov 24 18:22:48     81986</p>
+
+<p>在年份字段之前会出现5个空格，这是为了防止在一些老式软件中将26个字节的输出判断为超出时间范围而显示出错。</p>
+
+<p>showtime( time_t timeval )</p>
+
+<p>{</p>
+
+<p>char <em>ctime(); /</em> convert long to ascii */</p>
+
+<p>char <em>cp; /</em> to hold address of time    */</p>
+
+<p>cp = ctime( &amp;timeval ); /<em> convert time to string </em>/</p>
+
+<p>printf(&ldquo;%12.12s&rdquo;, cp+4 ); /<em> pick 12 chars from pos 4 </em>/</p>
+
+<p>}</p>
+
+<p>以上是一段输出time_t类型时间的程序示例。</p>
+
+<p>1.1.3 st_uid &amp; st_gid 转换成字符</p>
+
+<p>st_uid和st_gid是在stat字段中记录文件拥有者ID和拥有者所在用户组ID的字段。前文已经提到用户信息和用户组信息分别存储在/etc/passwd和/etc/group中，因而要获取详细的用户或组信息就必须实现读取并分析操作，系统给出了此方面的System call。不同类型的Unix发行版其passwd结构也略有不同，这就造成了其相应结构体字段的不同。这里用OpenBSD的/usr/include/pwd.h定义加以说明，其它系统的设定较之并不全面：</p>
+
+<p>struct passwd {</p>
+
+<p>char      <em>pw_name;          /</em> user name */</p>
+
+<p>char      <em>pw_passwd;       /</em> encrypted password */</p>
+
+<p>uid_t       pw_uid;             /<em> user uid </em>/</p>
+
+<p>gid_t       pw_gid;              /<em> user gid </em>/</p>
+
+<p>time_t     pw_change;        /<em> password change time </em>/</p>
+
+<p>char       <em>pw_class;           /</em> user access class */</p>
+
+<p>char       <em>pw_gecos;          /</em> login info */</p>
+
+<p>char       <em>pw_dir;               /</em> home directory */</p>
+
+<p>char      <em>pw_shell;            /</em> default shell */</p>
+
+<p>time_t      pw_expire;         /<em> account expiration </em>/ };</p>
+
+<p>}</p>
+
+<p>其调用函数为struct passwd *getpwuid(uid_t uid);</p>
+
+<p>st_gid定义在/usr/include/grp.h中，其结构体字段如下：</p>
+
+<p>struct group {</p>
+
+<p>char     <em>gr_name;          /</em> group name */</p>
+
+<p>char      <em>gr_passwd;       /</em> group password */</p>
+
+<p>gid_t     gr_gid;              /<em> group id </em>/</p>
+
+<p>char      <em><em>gr_mem;        /</em> group members </em>/</p>
+
+<p>};</p>
+
+<p>其调用函数为struct passwd *getgrgid(uid_t uid);</p>
+
+<p>2   设备文件</p>
+
+<p>2.1 一些概念</p>
+
+<p>我们在连载5中已经介绍过特殊文件类型，它是Unix一种独特的文件类型。特殊文件类型总的说来包含物理设备文件和逻辑设备文件，Unix的设备管理将设备组织得看起来同磁盘文件一样，可以通过文件系统里的文件名进行访问。</p>
+
+<p>UNIX的设备分为块设备和字符设备：</p>
+
+<p>1、块设备面向磁盘等可以随机访问的存储设备</p>
+
+<p>2、mkfs，mount等使用块设备文件名，映射块设备。</p>
+
+<p>3、终端、打印机等为字符设备，也叫做“原始（raw）”设备。</p>
+
+<p>所有的设备在文件系统中都有一文件名，在文件的inode节点中记录了文件类型是块设备文件或者字符设备文件。</p>
+
+<p>每个设备都对应一个主设备号和次设备号，也记录在inode节点中。按照惯例，设备文件都放在/dev目录下。</p>
+
+<p>我们通过ls -l查看一些设备文件时得到如下信息：</p>
+
+<h1>ls -l /dev/hdc1 /dev/fd[01] /dev/tty1</h1>
+
+<p>brw-rw&mdash;- 1 root floppy  2, 0 Jan 30  2003 /dev/fd0</p>
+
+<p>brw-rw&mdash;- 1 root floppy  2, 1 Jan 30  2003 /dev/fd1</p>
+
+<p>brw-rw&mdash;- 1 root  disk  22,1 Jan 30  2003 /dev/hdc1</p>
+
+<p>crw&mdash;&mdash;- 1 root  root  4, 1 Jun  2 20:32 /dev/tty1</p>
+
+<p>其中主设备号和次设备号的作用列出如下：</p>
+
+<p>1、主设备号对应物理设备的一类。</p>
+
+<p>2、设备能够正常工作，需要提供设备驱动程序。</p>
+
+<p>3、设备驱动程序中有多个入口函数，设备驱动程序安装时注册这些函数，安装完成之后，会得到一个主设备号。</p>
+
+<p>4、主设备号与驱动程序相关联，根据主设备号，可以检索到已经登记了的这个设备的设备驱动程序的入口函数。</p>
+
+<p>5、主设备号用来定位所使用的设备驱动程序，次设备号用来区分这一类物理设备的哪一个。</p>
+
+<p>要创建设备文件，需要使用mknod命令。</p>
+
+<h1>mknod /dev/ttyE0 c 16 0</h1>
+
+<p>/dev/ttyE0是要创建的设备文件名，c指的是字符设备，16是主设备号，0是次设备号。</p>
+
+<p>2.2 随机数生成器/dev/random</p>
+
+<p>我们在连载5详细介绍了逻辑设备文件/dev/null和/dev/zero，逻辑设备文件也被称作虚拟设备文件，设备驱动程序不操作任何物理硬件,它像普通设备驱动程序一样提供设备驱动程序入口，通过这些入口，可以和内核交互作用，得到某些数据。这些设备叫做“虚拟设备”。</p>
+
+<p>如设备文件/dev/mem和/dev/kmem可以通过某些操作获取内核中的一些数据表格内容，常常被随操作系统软件带来的一些运行在用户态的工具使用。</p>
+
+<p>这里再引入一个常用的虚拟设备文件——/dev/ranodm。</p>
+
+<p>在Linux中，虚拟设备文件/dev/random是一个随机数生成器，根据系统键盘和鼠标等外设的活动生成二进制的随机数数列。可以在用户自己编写的程序中使用这个设备文件。</p>
+
+<p>命令od -x /dev/random可以观察这些随机数序列。在系统外设都不活动时，这个设备暂停供应随机数序列。</p>
+
+<p>另一个虚拟设备文件/dev/urandom，无论外设是否活动，只要你的程序读取该设备，都会源源不断地供应随机数序列。命令od -x /dev/urandom可以观察到这些随机数序列。</p>
+
+<p>2.3 终端设备文件</p>
+
+<p>每个终端设备，无论是网络虚拟终端设备，还是一个真正的终端设备，都对应一个名字。可以按名字像普通文件那样使用终端，但是不方便的是无法决定当前终端到底是哪个终端。</p>
+
+<p>特殊的设备文件/dev/tty就是当前终端，而无论实际使用的终端到底是哪个。尽管scanf和printf等函数可以从当前终端获得输入和从当前终端输出，但是标准输入和标准输出的重定向功能，会使得程序不再从当前终端输入和输出数据。</p>
+
+<p>对于程序员来说，当程序在这种情况下仍然需要和用户交互时，/dev/tty文件特别有用。程序可以打开/dev/tty文件输入和输出数据，在重定向环境中，仍然保持从当前终端输入和输出数据。</p>
+
+<p>3   文件和目录权限</p>
+
+<p>尽管前部分内容很多涉及到了文件和目录权限的问题，但并没有详细描述文件系统的权限控制方法和掩码运算原理。</p>
+
+<p>3.1 权限控制</p>
+
+<p>UNIX的每个文件和目录，都有对应的一组权限存放在它的inode节点中，用于控制用户对它的访问。每个文件都有惟一的属主和组号，记录在inode节点中。</p>
+
+<p>UNIX有命令chown和chgrp可以修改文件的属主和组，也有相应的系统调用函数chown() 。在inode节点中记录的权限有9b，描述3个级别，分别是文件主、同组用户、其他用户。每个级别的权限都包括3部分：读权限、写权限、执行权限。</p>
+
+<p>1、普通文件的权限</p>
+
+<p>用户对普通文件文件具有读权限，用户可以读取文件。</p>
+
+<p>用户对文件具有写权限，可以修改文件的内容。</p>
+
+<p>用户对文件具有可执行权限，可以执行这个文件。</p>
+
+<p>2、目录的权限</p>
+
+<p>目录文件存储了多个由“文件名-i节点号”组成的目录项。目录的读写权限，就是对这个目录表文件的读写权限。</p>
+
+<p>目录无读权限，目录文件不许读，ls操作会失败。</p>
+
+<p>目录无写权限，目录文件修改的操作都被禁止。创建文件、删除文件、文件改名、复制文件到该目录、创建子目录、删除子目录等这些操作需要在目录表中增加、删除或者修改条目。</p>
+
+<p>对于上面所叙述的权限控制，现总结概括如下：</p>
+
+<p>1、目录不可写，不可以保护目录下的所有的文件不可写</p>
+
+<p>在一个只允许读的目录下修改一个已经存在的文件，不需要修改目录表中的任何数据。</p>
+
+<p>inode节点中的数据和文件内容要发生变化，只要文件自身有可写属性，这些操作就能正常完成。</p>
+
+<p>2、文件的只读权限可保护文件不被误写，不能保护文件被误删</p>
+
+<p>一个文件有只读属性，文件所在目录有写权限，就可删除这个文件。删除文件，不需要打开文件，只需修改文件所在目录，只要目录可写就可以了。rm命令会在删除一个只读文件时给出一个善意的提示，但是删除照样可以完成。</p>
+
+<p>3、目录有执行权限指可以检索该目录</p>
+
+<p>cat /a/b/c要求/，/a，/a/b三目录有x权限，c有读权限。</p>
+
+<p>cd../stud4628要求.目录、..目录和stud4628目录有x权限。</p>
+
+<p>3.2 访问合法性验证的顺序</p>
+
+<p>用户操作一个文件时，系统根据登录用户名、组名及文件i节点中存储的文件主和组，判断该使用3级权限的哪一级。</p>
+
+<p>若文件主与登录用户相同，则只使用文件主权限，不再查组和其他用户的权限。</p>
+
+<p>若文件主与登录用户不同，但文件i节点中记录的组号与登录用户的组号相同，则只使用组权限，不使用关于其他用户的权限。</p>
+
+<p>若文件主与登录用户不同，文件i节点中记录的组号与登录用户的组号也不同，则使用文件关于其他用户的权限。</p>
+
+<p>超级用户root不受任何权限的制约。</p>
+
+<p>3.3 修改权限</p>
+
+<h1>ls -l</h1>
+
+<p>可以查当前目录下所有文件和子目录的权限</p>
+
+<h1>ls -1d .</h1>
+
+<p>列出当前目录自身的权限</p>
+
+<p>如果要修改已有文件和目录的权限，只有root用户和文件拥有者才能执行此类操作。其命令为chmod。</p>
+
+<p>使用chmod时有两种体现形式，分别是字母形式和数字形式：</p>
+
+<p>1、字母形式</p>
+
+<h1>chmod [ugoa][+-=][rwx] file-list</h1>
+
+<p>u （user）   文件主的权限</p>
+
+<p>g （group）  同组用户的权限</p>
+
+<p>o （other）  其他用户权限</p>
+
+<p>a （all）    所有上述三级权限</p>
+
+<p>要执行的操作的符号：</p>
+
+<ul>
+<li><p>给指定用户增加存取权限</p></li>
+<li><p>取消指定用户的存取权限</p></li>
+</ul>
+
+
+<p>= 给指定用户设置存取权限，其他权限都取消</p>
+
+<p>定义存储权限的字母：</p>
+
+<p>r     read</p>
+
+<p>w    write</p>
+
+<p>x     execute</p>
+
+<h1>chmod   u+rw    *</h1>
+
+<h1>chmod   go-rwx *.[ch]</h1>
+
+<h1>chmod   a+x  batch</h1>
+
+<h1>chmod   u=rx try2</h1>
+
+<p>2、数字形式</p>
+
+<p>chmod mode file-list</p>
+
+<p>使用3个八进制数字，分别描述文件主、同组用户、其他用户的权限。</p>
+
+<p>八进制：    6     4     0</p>
+
+<p>二进制：   110   100  000</p>
+
+<p>权限：     rw-   r&ndash;  &mdash;</p>
+
+<h1>chmod 640 <em>.[ch] makefile </em>.log</h1>
+
+<p>3.4 权限修改示例</p>
+
+<p>1、文件写权限</p>
+
+<h1>who am i</h1>
+
+<p>jiang      pts/2       Jun 06 08:34</p>
+
+<h1>who &gt; mydata</h1>
+
+<h1>ls -l mydata</h1>
+
+<p>-rw-r&ndash;r&ndash;  1 jiang   usr   58 Jun 06 09:04 mydata</p>
+
+<h1>chmod u-w mydata</h1>
+
+<h1>who &gt;&gt; mydata （只读文件不许写）</h1>
+
+<p>mydata: The file access permissions do not allow the specified action.</p>
+
+<h1>rm mydata （只读文件可以被删除）</h1>
+
+<p>rm: Remove mydata? y</p>
+
+<h1>ls -l mydata</h1>
+
+<p>ls: 0653-341 The file mydata does not exist.</p>
+
+<p>2、文件的读权限</p>
+
+<h1>who &gt; mydata</h1>
+
+<h1>chmod   u-rw   mydata</h1>
+
+<h1>cat   mydata （无法读取不允许读的文件中内容）</h1>
+
+<p>cat: 0652-050 Cannot open mydata.</p>
+
+<h1>chmod 644 mydata</h1>
+
+<p>3、目录写权限</p>
+
+<h1>chmod  u-w   .   （当前目录不许写）</h1>
+
+<h1>who &gt; mydata2 （不能创建新文件）</h1>
+
+<p>mydata2: The file access permissions do not allow the specified action.</p>
+
+<h1>who&gt;&gt; mydata （可以修改已有的文件，追加一部分数据）</h1>
+
+<h1>rm mydata     （不能删除文件）</h1>
+
+<p>rm: 0653-609 Cannot remove mydata.</p>
+
+<p>The file access permissions don’tallow the specified action.</p>
+
+<h1>cp /etc/passwd   mydata （可以覆盖旧文件）</h1>
+
+<h1>cp /etc/passwd   mydata2 （不能创建新文件）</h1>
+
+<p>cp: mydata2: The file access permissions do not allow the specified action.</p>
+
+<h1>mv mydata MyData  （文件不许改名）</h1>
+
+<p>mv: 0653-401 Cannot rename mydata to MyData:</p>
+
+<p>The file access permissions do not allow the specified action.</p>
+
+<h1>mkdir Test  （不可创建子目录）</h1>
+
+<p>mkdir: 0653-357 Cannot access directory ..</p>
+
+<p>.: The file access permissions do not allow the specified action.</p>
+
+<p>4、目录读权限</p>
+
+<p>设pwd为:           /usr/jiang</p>
+
+<h1>chmod   u-r .</h1>
+
+<h1>ls （不可读的目录无法列出其中文件）</h1>
+
+<p>ls: .:The file access permissions do not allow the specified action.</p>
+
+<h1>chmod   000 . （取消当前目录所有权限）</h1>
+
+<h1>ls</h1>
+
+<p>ls: 0653-345 .: Permission denied.</p>
+
+<h1>chmod 755 . chmod: .:The file access permissions do not allow the specified action.</h1>
+
+<h1>chmod 755 /usr/jiang （这种访问不需要当前目录的权限，可恢复当前目录权限）</h1>
+
+<p>5、子目录ttt没有读写权限，但是保留了x权限</p>
+
+<h1>chmod  u=x  ttt</h1>
+
+<h1>cat ttt/ccp.c</h1>
+
+<p>main(int argc, char **argv)</p>
+
+<p>{</p>
+
+<p>&hellip;</p>
+
+<p>}</p>
+
+<h1>rm ttt/arg.c （子目录没有写权限，不能删除其中的文件）</h1>
+
+<p>rm: 0653-609 Cannot remove ttt/arg.c.</p>
+
+<p>The file access permissions do not allow the specified action.</p>
+
+<h1>ls ttt   （子目录没有读权限，不能列出其中的文件）</h1>
+
+<p>ls: ttt: The file access permissions do not allow the specified action.</p>
+
+<p>6、子目录有读写权限，但没有x权限</p>
+
+<h1>chmod u=rw ttt</h1>
+
+<h1>ls ttt</h1>
+
+<p>BUGS.report  arg.c     ccp.c      chap.h       mydata</p>
+
+<p>arg          auth.c       chap.c       disk.img</p>
+
+<h1>cat ttt/arg.c</h1>
+
+<p>cat: 0652-050 Cannot open ttt/arg.c.</p>
+
+<p>7、试图设置其他用户的文件或目录的权限</p>
+
+<h1>chmod 777 /</h1>
+
+<p>chmod: /: Operation not permitted.</p>
+
+<p>#</p>
+
+<p>3.5 文件掩码umask</p>
+
+<p>3.5.1   概念</p>
+
+<p>umask指设置文件和目录的初始权限。掩码值的含义是在新创建的文件和目录中，不含有掩码值中列出的权限。</p>
+
+<h1>umask       （打印当前的umask值）</h1>
+
+<h1>umask 022   （将umask值设置为八进制的022）</h1>
+
+<p>umask是shell内部命令，是进程属性的一部分，每个进程都对应一umask值。umask命令用于修改shell进程自身的umask属性。</p>
+
+<p>常将umask命令放到自动执行批处理文件中，如用csh作登录时，可将umask命令加入到.login文件或.cshrc文件中；用sh作登录shell时，可以将umask命令加入到.profile文件中。</p>
+
+<h1>umask 022   （将umask值设置为八进制的022）</h1>
+
+<p>掩码值：    022</p>
+
+<p>二进制：    000010010</p>
+
+<p>掩掉的权限：&mdash;-w&ndash;w-</p>
+
+<p>即文件和目录的初始权限，不含同组用户和其他用户的写权限。</p>
+
+<h1>umask 077   （将umask值设置为八进制的077）</h1>
+
+<p>掩码值：    077</p>
+
+<p>二进制：    000111111</p>
+
+<p>掩掉的权限：&mdash;rwxrwx</p>
+
+<p>除文件主外，不许其他用户访问</p>
+
+<p>3.5.2   System call在umask的应用</p>
+
+<p>int  umask(int new_mask);</p>
+
+<p>new_mask为新掩码值，函数返回值为原先的掩码值。为了读出进程的掩码值,需要调用umask两次。</p>
+
+<p>新文件的初始权限由umask和open中的权限参数共同确定。</p>
+
+<p>设umask为077</p>
+
+<p>fd = open(filename, O_CREAT | O_WRONLY, 0666);</p>
+
+<p>文件的权限为0666，屏蔽掉077后为0600，即rw&mdash;&mdash;-。</p>
+
+<p>初始创建的文件的权限受open调用的规定值和进程自身属性的umask值影响。</p>
+
+<p>文件的权限只有在初始创建时受上述因素影响，一个已存在的文件的权限，不会受open和umask的影响。</p>
+
+<p>系统调用chmod可修改文件的权限,它不受umask的影响。</p>
+
+<p>int chmod(char *path, mode_t mode);</p>
+
+<p>int fchmod(int fd, mode_t mode);</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-03T17:11:21+08:00" pubdate data-updated="true">2009-06-03</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/06/03/MP77-de-UNIX-ke-jian-bi-ji-8//posts/12/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1660,102 +2320,6 @@ diff不仅有对比两个任意文件（包括文本文件、二进制文件等�
 
 	
 		<span class="comments"><a href="/blog/2009/05/15/mp77-de-UNIX-ke-jian-bi-ji-1//posts/12/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-xia/">
-		
-			简单的词法分析程序和一种lex for Win32用法示例（下）</a>
-	</h2>
-	<div class="entry-content">
-		<p> 前面介绍了如何使用lex写一个词法分析器，为了证明上述程序的正确性，需生成与它对应的c语言代码，并编译成可执行程序。unix下使用这些工具非常简单（以至于两行commands就可以完成工作），在此就不做详细说明，接下来我们来面对ms留给我们的烂摊子&hellip;&hellip;</p>
-
-<p> 为了证明在win32下利用lex生成词法分析器有多复杂，我们选用parser generator 2和vc++6.0组合向大家展示ms强大的化神奇为腐朽的力量（依然不推荐win32用户使用vs平台进行此项工作）。</p>
-
-<p> parser generator可以在以下网址免费获取：<a href="http://www.bumblebeesoftware.com/downloads.htm"><a href="http://www.bumblebeesoftware.com/downloads.htm">http://www.bumblebeesoftware.com/downloads.htm</a></a></p>
-
-<p> vc++6.0？别告诉我你不知道怎么获取&hellip;&hellip;</p>
-
-<p> 首先启动pg2,要进行针对vc++6.0的配置工作:</p>
-
-<p> 选择menu下的project-&gt;LibBuilder,Complers选则Visual C++(32-bit),并点击compiler properties,这时在Options内作如下设置:</p>
-
-<p>Version:6</p>
-
-<p> Unicode:true</p>
-
-<p> treat wchar_t as Built-in type:False</p>
-
-<p> Compiler Bin directory: C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\BIN</p>
-
-<p> Compiler Bin directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\MSDEV98\BIN</p>
-
-<p> Compiler Include directory: C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\INCLUDE</p>
-
-<p> Compiler Include directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE</p>
-
-<p> Compiler Library directory:C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\LIB</p>
-
-<p> Compiler Library directory(2):C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\LIB</p>
-
-<p> (注: 请读者按vc实际安装目录而定)选择完毕后点击OK,在父窗口中选择Build生成供vc使用的库文件.</p>
-
-<p> &hellip;&hellip;</p>
-
-<p> 经过漫长等待库文件终于生成了&hellip;现在回到主界面,选择project-&gt;parserWizard,填入自己的lex工程名,选择vc++6.0(32-bit),进入下一步.Files选lex file only,其它均保持默认即可.填入lex源文件名后即可选择complete.</p>
-
-<p> 这时程序会自动生成lex文件的框架,如果在前面的设置中还选择了create main function,文本中还会有几行简单的main函数.但是该文本对我们没有任何意义&hellip;直接将前文所述的源代码覆盖至此即可.</p>
-
-<p> 现在选择project-&gt;compile file,build后就会生成lex源码对应的c语言source和include文件了.接下来启动vc++6.0进行相关配置.</p>
-
-<p> 首先点击Tools-&gt;Options,切换至directory选项卡,分别在show directories for中的Include、Library和Source选项中添加如下信息（每项一条）：</p>
-
-<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\INCLUDE</p>
-
-<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\LIB\MSVC32</p>
-
-<p>C:\PROGRAM FILES\PARSER GENERATOR 2\CPP\SOURCE</p>
-
-<p>（注：应按pg的实际安装路径而定）现在新建win32 console application工程，并点击Project-&gt;Settings选项，Settings for先选择win32 debug。然后在C/C++选项卡的Proprocessor Definitions选项中添入,YYDEBUG，切换至Link选项卡在Object/library modules中添入yld.lib ylmtd.lib ylmtrd.lib。</p>
-
-<p> 将Settings for切换至win32 Release重复上述操作，就完成了整个前期的所有配置工作&hellip;&hellip;</p>
-
-<p> 在工程中添加前面生成的source和include文件，直接build即可。现在，我们就可以按照PL/0的基本关键词写出一些简单的程序并加以词法分析了（事实证明这时的编译功能还十分微弱，但却是向前迈出一大步了）。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-01T20:21:18+08:00" pubdate data-updated="true">2009-05-01</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/bian-yi-ji-zhu/'>编译技术</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-xia//posts/12/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
