@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 毫无疑问，PACS已经是现代乃至未来医疗机构里不可或缺的基础设施之一，医学影像的基本存储格式就成为了标准化过程中的关键环节。  ACR/NEMA联合发布了数字医学影像和通信标准，即DICOM。DICOM涉及的领域非常之多，NEMA上公布了DICOM的全部文档信息：  http:// &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 之前提到GDCM基层DCM类库是一个颇为强大的开源dicom文件基础类库。目前，GDCM已经专门针对vtk提供了应用程序接口，我们可以利用vtkGDCMImageReader和vtkGDCMImageWriter两个类完整支持DICOM标准V3的IO操作。  但是获得GDCM后， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,78 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/04/19/guan-yu-GrassrootDCM-bu-wan/">
+		
+			关于GrassrootDCM补完</a>
+	</h2>
+	<div class="entry-content">
+		<p> 之前提到GDCM基层DCM类库是一个颇为强大的开源dicom文件基础类库。目前，GDCM已经专门针对vtk提供了应用程序接口，我们可以利用vtkGDCMImageReader和vtkGDCMImageWriter两个类完整支持DICOM标准V3的IO操作。</p>
+
+<p> 但是获得GDCM后，遇到一些颇为棘手的问题。</p>
+
+<p> 首先，GDCM对Win32平台只支持vc7.1以后的编译器，而现有的vtk则是采用vc6.0编译。即是说，如果编译GDCM时要cmake选择vtk的扩展项，就必须采用vc7.1以后的编译器重新编译vtk。</p>
+
+<p> 其次，现有的工程均是采用vc6.0创建，如果将平台完全迁移至后续vc版本，就可能会影响目前的工程进度。</p>
+
+<p> 另外，从vc6.0迁移至新版本中所带来的编码问题可能会影响到应用程序的稳定性。</p>
+
+<p> 出于以上考虑，先尝试重新编译vtk，这里我们预设的编译平台为vs2005，即vc8.0。但注意不应覆盖原有vc6.0编译的vtk文件，即在cmake阶段改一下prefix属性值就可以了，其余操作不变。对于新install的vtk文件，我们将环境变量path中bin的原有vtkbin的设置改为新版本值（有些读者之前可能会选择将所有bin文件放入system32中，但是按修改path的方法较好，当然后者的修改方法是相对应的）。</p>
+
+<p> 现在cmake从sourceforge上找来的GDCM2.0.x，仔细检查一些配置项，尤其是扩展vtk项一定要选，g后用vc8.0编译。这里不应出现任何error。现在看来，GDCM的安装步骤其实和vtk没有什么区别，但是对vtk和编译器的要求较严格。</p>
+
+<p> 这里再总结一下我们针对vc6.0使用GDCM+VTK编程的基本思路：</p>
+
+<p> 1、vc6.0引用库采用原有vc6.0编译生成的vtk文件。</p>
+
+<p> 2、运行库采用vc8.0编译生成的vtk文件（即DLL文件）。</p>
+
+<p> 3、在vc6.0中再引用vc8.0编译生成的GDCM文件。</p>
+
+<p> 完成上述步骤，就可以使用vc6.0进行下一步工作了。要注意的是，vtk的运行库一定要更新为vc8.0新编译版本，否则我们一调用GDCM就会因为DLL版本不足而出错。</p>
+
+<p> 关于gdcm的全套文档可以参考：</p>
+
+<p> <a href="http://gdcm.sourceforge.net"><a href="http://gdcm.sourceforge.net">http://gdcm.sourceforge.net</a></a></p>
+
+<p> 这里要再次说明一下，gdcm完整支持dicomV3，这是vtkDICOMImageReader乃至ITK都无法与之相提并论的。在实际应用开发中，还要注意程序基础构架对选择开发平台的影响。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-19T20:52:16+08:00" pubdate data-updated="true">2010-04-19</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2010/04/19/guan-yu-GrassrootDCM-bu-wan//posts/9/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -702,50 +774,6 @@ TARGET_LINK_LIBRARIES(ItkRegMFC ${ITK_LIBRARIES} )
 
 	
 		<span class="comments"><a href="/blog/2010/02/22/shi-wu-qian-li-shi-wu-qian-li-ya//posts/9/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/02/22/a-break/">
-		
-			A Break</a>
-	</h2>
-	<div class="entry-content">
-		<p>离开了十天左右，因为要在月底前完成一个win32下的医学图像预处理工具。令人欣慰的是前期的编程工作已经基本结束，且接下来的数据实验阶段可能不会很快开始，因此近期的重点将重新放在网站建设上面&hellip;但由于行将开学，我注定还要奔波于见不到什么人的最后一个学期，因此设施更新进程就很难保证了。不过我们会在下个月开启一个新的板块，并讨论一些新问题。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-02-22T00:10:49+08:00" pubdate data-updated="true">2010-02-22</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>, <a class='category' href='/blog/categories/zhan-dian-ri-zhi/'>站点日志</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2010/02/22/a-break//posts/9/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
