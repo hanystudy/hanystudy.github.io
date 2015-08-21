@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-07-26T22:25:55+08:00</updated>
+  <updated>2015-08-21T10:12:12+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[metaprogramming ruby: core concepts - BasicObject]]></title>
+    <link href="http://www.hanyi.name/blog/2015/08/03/metaprogramming-ruby-core-concepts/"/>
+    <updated>2015-08-03T07:33:27+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/08/03/metaprogramming-ruby-core-concepts</id>
+    <content type="html"><![CDATA[<p>Metaprogramming is one of core features for ruby lang, it&rsquo;s widely used from internal ruby to standard library, also endless magic gems. In next a few articles we will focus on those core stuff. I recommend for <a href="https://pragprog.com/book/ppmetr2/metaprogramming-ruby-2">Metaprogramming ruby 2</a> as a reference, except a little verbose and may be only for primer usage. For more ascent knowledge, perhaps you need to track the <a href="https://github.com/ruby/ruby">trunk</a> of ruby. This essay will concentrate on BasicObject, which is parent for all classes in ruby.</p>
+
+<h3>BasicObject</h3>
+
+<p>As the object oriented hierarchy in ruby core, each type of class is also object of Class except BasicObject, and All the objects of Class has root superclass BasicObject, the one is also object of Class. Thus we&rsquo;ll have whole picture below.</p>
+
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/metaprogramming_ruby/ruby_class.png" alt="Ruby OO hierarchy" /></p>
+
+<h4>i.class methods</h4>
+
+<p>BasicObject only has single public class method, names &ldquo;new&rdquo;.</p>
+
+<h4>ii.instance methods</h4>
+
+<p>logical operators, any instance of BasicObject is almost empty, with only a few methods, like logical operators !, !=, ==. Here == has same meaning with equal? for object level equality, The difference is that == is recommended for descendant overriding, but equal? should always be same as it is defined in BasicObject.</p>
+
+<h5>__id__ / object_id</h5>
+
+<p>An integer identifier of an object, should be unique for a given object. But some objects of builtin classes are reused for optimization, like immediate values (not passed by reference but value, like nil, true, false, Fixnums, Symbols, and some Floats) and frozen string literals.</p>
+
+<h5>__send__ / send</h5>
+
+<p>Double underscore gives a backup for pure alphabet version which may be overrode through other ways. Invokes the method, and passes all arguments using dynamic number of arguments.</p>
+
+<h5>instance_eval / instance_exec</h5>
+
+<p>instance_eval support passing a string of ruby source code, with file path and line number when compilation errors happen, also given block, within the context of receiver. Thus eval code will have access to instance variables and private methods.</p>
+
+<p>instance_exec only support using block as an argument, but allows one more argument to be passed from outer scope into receiver.</p>
+
+<h4>iii.private instance methods</h4>
+
+<h5>method_missing</h5>
+
+<p>In BasicObject, method_missing belongs to private instance methods, any call for this method will raise an error. But descendant can override this method to do dynamic processing, according to user&rsquo;s input like symbol name and arguments. If overrode method does not want to do any processing, super should be called to pass message bottom from up.</p>
+
+<h5>singleton_method_added / singleton_method_removed / singleton_method_undefined</h5>
+
+<p>Callback for singleton method operations. As we already know, ruby will not create the whole clone of the class for any objects. Only with a middle layer between object and class - singleton class. Singleton class is generated when object comes out, and any messages sent to object should be transferred to its singleton class first, then its own class if not matches in singleton class.</p>
+
+<p>class&rsquo;s singleton class is different to object&rsquo;s singleton class. That&rsquo;s because singleton class of a class should be inherited from its parent&rsquo;s singleton class, until BasicObject&rsquo;s singleton class, then it can reach non singleton class. But for object, singleton class should always have parent class of its own class.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[microsevices陷阱: 本质与陷阱]]></title>
@@ -1604,21 +1653,6 @@ REST over HTTP也存在缺点，一、生成客户端stub的成本较高，超�
 <p>4）光线投射渲染，采用光线投射渲染前步生成的隐式表面。</p>
 
 <p>上述整个管线均采用了并行GPU实现，在下文中，我们将重点解析上述算法的CUDA实现细节。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[TangleTracer(Basic edition/B) 1.0 beta开源发布]]></title>
-    <link href="http://www.hanyi.name/blog/2012/06/08/tangletacerbasic-editionb-1-0-TangleTracer-Basic-edition-B-1-0-beta-kai/"/>
-    <updated>2012-06-08T22:32:17+08:00</updated>
-    <id>http://www.hanyi.name/blog/2012/06/08/tangletacerbasic-editionb-1-0-TangleTracer-Basic-edition-B-1-0-beta-kai</id>
-    <content type="html"><![CDATA[<p>TangleTracer是一个实验性光线跟踪渲染平台，目的在于为真实感绘制技术的初学者提供完备的学习例程和友好的实验接口。系统设计思路主要源于Kevin Suffern的《Ray tracing from the Ground Up》一书，同时部分参考了著名的真实感绘制圣经《PBRT 2nd》。从今年三月中旬起我们就开始了前期的技术储备工作，该项目由四月初正式开始，截至目前完成代码近9万行，系统框架基本完善，实现并调试通过了440个demo或Kevin书中的习题（这部分代码超过4万行）。与K书中提供的原型系统不同，项目开发平台选择了Microsoft Visual Studio 2010和Qt framework 4.7.3，为快速开发提供了良好基础。
-由于系统和部分框架来源于K书，我们循例采用GPLv2开源发布。此次发布的主要内容是系统的代码部分，为便于大家测试，我们稍后会提供基于win32平台的二进制版本（目前正在进行兼容性测试），运行系统内置的全部例程需要同时满足以下条件：
-1.下载例程所需的纹理包：<a href="http://www.raytracegroundup.com/downloads/TextureImages.zip%EF%BC%9B">http://www.raytracegroundup.com/downloads/TextureImages.zip%EF%BC%9B</a>
-2.下载例程所需的模型包：<a href="http://www.raytracegroundup.com/downloads/PLYFiles.zip%EF%BC%9B">http://www.raytracegroundup.com/downloads/PLYFiles.zip%EF%BC%9B</a>
-3.确保纹理包的TextureFiles目录和模型包的PLYFiles目录与程序二进制文件位于同一目录下；
-4.部分模型需要下载stanford的原始文件并进行替换（具体请阅读README及代码注释）：<a href="http://www-graphics.stanford.edu/data/3Dscanrep/%EF%BC%9B">http://www-graphics.stanford.edu/data/3Dscanrep/%EF%BC%9B</a>
-此次发布的是TangleTracer的Basic edition/B版本，其目的在于提供思路清晰的CPU渲染技术，但实际渲染性能较低。我们正在进行系统的并行迁移实现，并力求在下半年提供TangleTracer的GPU edition/G版本。详情请关注项目github主页：<a href="http://mp77.github.com%E3%80%82">http://mp77.github.com%E3%80%82</a></p>
 ]]></content>
   </entry>
   

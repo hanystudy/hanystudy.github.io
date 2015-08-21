@@ -9,7 +9,12 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 我们创建了Google企业应用套件/组织版，目前已知的开放内容有Calendar、E-mail、Docs、Google talk以及其它组件，完全免费使用。预申请的名额最大为250位，详情请登陆 http://mail.hanyi.name  注：目前系统仍不支持成员自动注册功能， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="demo里原本有个applet，不过难看又没什么新意，加上了一些功能，其中利用到了JNI，dll文件的源码由于太短就不晒出来了&hellip; /
+  @(#)mp77_clock.java
+ 
+  mp77的clock模拟器j2se1.4.2版
+ 
+  mp77 版权所有 西北大学 韩翼 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -102,6 +107,291 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2008/10/23/Windows-xia-de-j2se-shi-zhong-shi-li/">
+		
+			Windows下的j2se时钟示例</a>
+	</h2>
+	<div class="entry-content">
+		<p>demo里原本有个applet，不过难看又没什么新意，加上了一些功能，其中利用到了JNI，dll文件的源码由于太短就不晒出来了&hellip;</p>
+
+<p>/<em><em>
+ </em> @(#)mp77_clock.java
+ </em>
+ <em> mp77的clock模拟器j2se1.4.2版
+ </em>
+ <em> mp77 版权所有 西北大学 韩翼
+ </em>
+ <em> @author mp77
+ </em> @version 1.00 2008/10/18
+ <em>/
+import java.awt.</em>;
+import java.awt.event.<em>;
+import java.util.</em>;</p>
+
+<p>import javax.swing.<em>;
+import javax.swing.event.</em>;
+ 
+public class clock extends JFrame implements Runnable{
+ 
+ //绘图坐标集合
+ private int initX,initY,centerX,centerY,sX,sY,mX,mY,hX,hY;
+ 
+ private Date trialTime;
+ 
+ private Calendar calendar;
+ 
+ private volatile Thread thread;
+ 
+ //控制面版JPanel
+ private static JPanel clockPanel;
+ 
+ private JButton button;
+ 
+ private JSpinner spinner;
+ 
+ private Container container;
+ 
+ private JSpinner.DateEditor editor;</p>
+
+<p> private SpinnerDateModel model;
+ 
+ //指针时间变量
+ private int seconds,minutes,hours;
+ 
+ public clock(){
+  
+  super(&ldquo;mp77的clock模拟器j2se版&rdquo;);</p>
+
+<p>  container = getContentPane();
+  container.setLayout(new BorderLayout());</p>
+
+<p>///////////////////控制面版JPanel.start///////////////////
+  clockPanel = new JPanel();</p>
+
+<p>  JLabel label= new JLabel(&ldquo;当前系统时间&rdquo;);</p>
+
+<p>  //JSpinner显示格式
+  calendar = new GregorianCalendar();
+  calendar.getInstance(TimeZone.getTimeZone(&ldquo;GMT+8&rdquo;));
+          
+  Date initDate = calendar.getTime();
+  model = new SpinnerDateModel(initDate,null,null,Calendar.YEAR);  
+  spinner= new JSpinner(model);
+  spinner.addChangeListener(new ChangeListener(){
+   public void stateChanged(ChangeEvent changeEvent)
+   {
+    //挂起thread
+    thread.suspend();
+    
+    //实时更改指针坐标
+    seconds=model.getDate().getSeconds();
+    minutes=model.getDate().getMinutes();
+    hours=model.getDate().getHours();
+    repaint();
+       
+    //唤醒确认button  
+    button.setEnabled(true);</p>
+
+<p>   }
+  });
+ 
+  editor = new JSpinner.DateEditor(spinner, &ldquo; HH:mm:ss &rdquo;);
+  spinner.setEditor(editor);
+  
+  //时间修改确认
+  button = new JButton(&ldquo;ok&rdquo;);
+  button.setEnabled(false);
+  button.addActionListener(new ActionListener()
+  {
+   public void actionPerformed(ActionEvent e)
+   {
+     clock.setTime(model.getDate().getHours(),model.getDate().getMinutes(),model.getDate().getSeconds());
+     
+     //唤醒thread
+     thread.resume();
+     //屏蔽确认button
+     button.setEnabled(false);
+   }
+  }
+   );
+  //设置JSpinner为不可编辑状态
+  JFormattedTextField tf =((JSpinner.DefaultEditor)spinner.getEditor()).getTextField();
+        tf.setEditable(false);
+        tf.setBackground(Color.WHITE);
+    
+  clockPanel.add(label);
+  clockPanel.add(spinner);
+  clockPanel.add(button);
+  
+  container.add(clockPanel,BorderLayout.SOUTH);
+  
+  
+  button.setBackground(Color.WHITE);          
+     getContentPane().setBackground(Color.WHITE); 
+///////////////////控制面版JPanel.end///////////////////  </p>
+
+<p>     //指针初始化
+     trialTime = new Date();
+  calendar = new GregorianCalendar();
+  seconds=calendar.get(Calendar.SECOND);
+  minutes=calendar.get(Calendar.MINUTE);
+  hours=calendar.get(Calendar.HOUR);  
+     
+     //窗体属性
+  setSize(300,350);
+     setVisible(true);
+     setResizable(false);
+        
+     </p>
+
+<p>              
+ }
+ 
+ //绘图
+ public void paint(Graphics g) {</p>
+
+<p>     clockPanel.setBackground(Color.WHITE);
+  initX=45;
+  initY=55;
+  //表盘圆心坐标
+  centerX=initX+100;
+  centerY=initY+100;
+  
+  //jdk1.6前在vista中存在时区bug
+  TimeZone zone = new SimpleTimeZone(28800000,&ldquo;Asia/Shanghai&rdquo;);
+      calendar.setTimeZone(zone);
+  
+  //指针绘图算法
+     sX=centerX+(int)(90<em>Math.cos(Math.PI</em>seconds/30-Math.PI/2));
+  sY=centerY+(int)(90<em>Math.sin(Math.PI</em>seconds/30-Math.PI/2));
+  
+  mX=centerX+(int)(80<em>Math.cos(Math.PI</em>minutes/30-Math.PI/2+(Math.PI<em>seconds/30)/60));
+  mY=centerY+(int)(80</em>Math.sin(Math.PI<em>minutes/30-Math.PI/2+(Math.PI</em>seconds/30)/60));
+  
+  hX=centerX+(int)(50<em>Math.cos(Math.PI</em>hours/6-Math.PI/2+(Math.PI<em>minutes/30)/12));
+  hY=centerY+(int)(50</em>Math.sin(Math.PI<em>hours/6-Math.PI/2+(Math.PI</em>minutes/30)/12));</p>
+
+<p>     super.paint(g);
+     g.setColor(Color.blue);
+     
+     //绘制表盘和刻度
+     g.drawArc(initX, initY, 200, 200, 0, 360);
+     g.drawLine(centerX,centerY,sX,sY);
+  g.drawLine(centerX,centerY,mX,mY);
+  g.drawLine(centerX,centerY,hX,hY);
+     g.drawString(&ldquo;12&rdquo;,138,70);
+     g.drawString(&ldquo;3&rdquo;,235,160);
+     g.drawString(&ldquo;6&rdquo;,143,250);
+     g.drawString(&ldquo;9&rdquo;,48,160);
+     g.drawString(&ldquo;1&rdquo;,188,85);
+     g.drawString(&ldquo;2&rdquo;,220,118);
+     g.drawString(&ldquo;4&rdquo;,220,205);
+     g.drawString(&ldquo;5&rdquo;,188,235);
+     g.drawString(&ldquo;7&rdquo;,98,235);
+     g.drawString(&ldquo;8&rdquo;,65,205);
+     g.drawString(&ldquo;10&rdquo;,62,118);
+     g.drawString(&ldquo;11&rdquo;,95,85);
+     
+     //秒针针头端红色标记
+     g.setColor(Color.red);
+     g.fillArc(sX-5,sY-5,10,10,0,360);
+     
+    }
+ 
+    public void run() {</p>
+
+<p>        Thread me = Thread.currentThread();
+        while (thread == me) {
+            try {
+                Thread.currentThread().sleep(500);
+            } catch (InterruptedException e) {
+            }
+           
+            //重新设置指针坐标
+            trialTime = new Date();
+   calendar = new GregorianCalendar();
+   seconds=calendar.get(Calendar.SECOND);
+   minutes=calendar.get(Calendar.MINUTE);
+   hours=calendar.get(Calendar.HOUR);
+           
+            //重绘全部控件
+            repaint();
+            
+            //重新设置JSpinner内容
+   model = new SpinnerDateModel();
+   spinner.setModel(model);       
+   editor = new JSpinner.DateEditor(spinner, &ldquo; HH:mm:ss &rdquo;);
+   spinner.setEditor(editor);
+   
+   JFormattedTextField tf =((JSpinner.DefaultEditor)spinner.getEditor()).getTextField();
+            tf.setEditable(false);
+            tf.setBackground(Color.WHITE);
+           
+        }
+    }
+   
+    public void start() {
+   thread = new Thread(this);
+        thread.start();
+    }
+   
+    //JNI方法函数
+ public static native void setTime(int hours,int minutes,int seconds);
+ 
+ //载入setTimer.dll
+ static
+ {
+  System.loadLibrary(&ldquo;setTimer&rdquo;);
+ }</p>
+
+<p> //入口
+ public static void main(String args[])
+ {
+  clock application = new clock();
+  application.setDefaultCloseOperation(
+   JFrame.EXIT_ON_CLOSE
+   );
+  application.start();
+ }   
+}</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-23T21:04:54+08:00" pubdate data-updated="true">2008-10-23</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/java/'>java</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2008/10/23/Windows-xia-de-j2se-shi-zhong-shi-li//posts/17/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2008/10/19/hanyi-name-you-ju-shi/">
 		
 			@hanyi.name邮局试用</a>
@@ -161,11 +451,11 @@ $(document).ready(
 
 <p> 感谢本系列第1-4篇文章的原作者，很多是被原文采纳，其余内容也做了详细的参考，在此一并感谢。</p>
 
-<p> cnweblog.com <span style="color: #000000;">刘正伟 </span><span style="color: #000000;"><a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x73;&#117;&#110;&#100;&#x79;&#x32;&#54;&#x40;&#x31;&#50;&#54;&#x2e;&#x63;&#x6f;&#109;">&#x73;&#117;&#x6e;&#x64;&#x79;&#x32;&#x36;&#x40;&#49;&#x32;&#x36;&#x2e;&#x63;&#x6f;&#109;</a></span></p>
+<p> cnweblog.com <span style="color: #000000;">刘正伟 </span><span style="color: #000000;"><a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x73;&#117;&#x6e;&#100;&#x79;&#x32;&#x36;&#64;&#x31;&#x32;&#x36;&#46;&#x63;&#x6f;&#109;">&#115;&#x75;&#110;&#100;&#x79;&#x32;&#54;&#x40;&#x31;&#50;&#54;&#x2e;&#99;&#111;&#109;</a></span></p>
 
 <p> blog.edu.cn  <span class="style3">xdsamuel</span></p>
 
-<p><span class="style3"> gceclub.sun.com.cn Sun中国技术社区 陈健明 华中师范大学网络与通讯研究所 <span style="color: #000000;"><a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#x63;&#104;&#101;&#x6e;&#106;&#x6d;&#50;&#x30;&#x30;&#x30;&#64;&#104;&#x6f;&#x74;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#x6f;&#109;">&#99;&#x68;&#101;&#x6e;&#x6a;&#x6d;&#x32;&#48;&#48;&#48;&#64;&#104;&#x6f;&#116;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a></span></span></p>
+<p><span class="style3"> gceclub.sun.com.cn Sun中国技术社区 陈健明 华中师范大学网络与通讯研究所 <span style="color: #000000;"><a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x63;&#104;&#101;&#110;&#x6a;&#109;&#x32;&#x30;&#48;&#x30;&#64;&#x68;&#x6f;&#x74;&#109;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#x63;&#104;&#101;&#x6e;&#106;&#x6d;&#50;&#48;&#x30;&#x30;&#64;&#x68;&#x6f;&#116;&#109;&#97;&#x69;&#108;&#x2e;&#x63;&#x6f;&#x6d;</a></span></span></p>
 
 		
 		
@@ -388,7 +678,7 @@ System.out.println(&ldquo;Serial:&rdquo; + diskList[i].serial);
 *
 * @author 刘正伟(sundy)
 * @see <a href="http://www.cnweblog.com/sundy">http://www.cnweblog.com/sundy</a>
-* @see <a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#115;&#x75;&#x6e;&#100;&#121;&#50;&#x36;&#x40;&#x31;&#x32;&#54;&#x2e;&#99;&#111;&#x6d;">&#x73;&#x75;&#x6e;&#x64;&#x79;&#x32;&#x36;&#x40;&#49;&#50;&#x36;&#46;&#99;&#x6f;&#109;</a>
+* @see <a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#x73;&#x75;&#x6e;&#x64;&#121;&#x32;&#x36;&#64;&#x31;&#x32;&#x36;&#x2e;&#x63;&#x6f;&#109;">&#115;&#117;&#x6e;&#x64;&#121;&#50;&#54;&#x40;&#x31;&#50;&#54;&#46;&#x63;&#x6f;&#109;</a>
 * @version 1.0
 * @since 2005-4-30
 *
@@ -1402,50 +1692,6 @@ char *tmpdata = (char*)(*env)-&gt;GetByteArrayElements(env, bytearray, NULL);
 
 	
 		<span class="comments"><a href="/blog/2008/10/03/ji-yu-J2se-de-cheng-xu-she-ji//posts/17/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/09/14/xiu-zheng-ji-ben-jie-shu-jie-ri-ji-hua-ge-qian/">
-		
-			修正基本结束，节日计划搁浅</a>
-	</h2>
-	<div class="entry-content">
-		<p>利用在家短暂的2天时间基本完成了网站的整修工作，不过却错过了中秋节游戏专题的制作时间&hellip;因而此计划被迫中止，以后有什么节且闲下来了再说。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-09-14T17:15:03+08:00" pubdate data-updated="true">2008-09-14</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2008/09/14/xiu-zheng-ji-ben-jie-shu-jie-ri-ji-hua-ge-qian//posts/17/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

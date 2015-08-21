@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="我对所谓的“国产禁片”并不感冒。其原因在于真正要被禁的影片根本不可能启动拍摄，而已经拍出来的所谓“禁片”注定是褪去了核心思想的阉货，顶多被允许在课堂上当教学片放，还需得是遮遮掩掩的那种。不过，当听到《武训传》要出数码修复版时又不禁小兴奋了一下，突然对这部筹划于上世纪四十年代初、 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="TangleTracer是一个实验性光线跟踪渲染平台，目的在于为真实感绘制技术的初学者提供完备的学习例程和友好的实验接口。系统设计思路主要源于Kevin Suffern的《Ray tracing from the Ground Up》一书，同时部分参考了著名的真实感绘制圣经《PBRT 2nd》。 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,56 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/06/08/tangletacerbasic-editionb-1-0-TangleTracer-Basic-edition-B-1-0-beta-kai/">
+		
+			TangleTracer(Basic edition/B) 1.0 Beta开源发布</a>
+	</h2>
+	<div class="entry-content">
+		<p>TangleTracer是一个实验性光线跟踪渲染平台，目的在于为真实感绘制技术的初学者提供完备的学习例程和友好的实验接口。系统设计思路主要源于Kevin Suffern的《Ray tracing from the Ground Up》一书，同时部分参考了著名的真实感绘制圣经《PBRT 2nd》。从今年三月中旬起我们就开始了前期的技术储备工作，该项目由四月初正式开始，截至目前完成代码近9万行，系统框架基本完善，实现并调试通过了440个demo或Kevin书中的习题（这部分代码超过4万行）。与K书中提供的原型系统不同，项目开发平台选择了Microsoft Visual Studio 2010和Qt framework 4.7.3，为快速开发提供了良好基础。
+由于系统和部分框架来源于K书，我们循例采用GPLv2开源发布。此次发布的主要内容是系统的代码部分，为便于大家测试，我们稍后会提供基于win32平台的二进制版本（目前正在进行兼容性测试），运行系统内置的全部例程需要同时满足以下条件：
+1.下载例程所需的纹理包：<a href="http://www.raytracegroundup.com/downloads/TextureImages.zip%EF%BC%9B">http://www.raytracegroundup.com/downloads/TextureImages.zip%EF%BC%9B</a>
+2.下载例程所需的模型包：<a href="http://www.raytracegroundup.com/downloads/PLYFiles.zip%EF%BC%9B">http://www.raytracegroundup.com/downloads/PLYFiles.zip%EF%BC%9B</a>
+3.确保纹理包的TextureFiles目录和模型包的PLYFiles目录与程序二进制文件位于同一目录下；
+4.部分模型需要下载stanford的原始文件并进行替换（具体请阅读README及代码注释）：<a href="http://www-graphics.stanford.edu/data/3Dscanrep/%EF%BC%9B">http://www-graphics.stanford.edu/data/3Dscanrep/%EF%BC%9B</a>
+此次发布的是TangleTracer的Basic edition/B版本，其目的在于提供思路清晰的CPU渲染技术，但实际渲染性能较低。我们正在进行系统的并行迁移实现，并力求在下半年提供TangleTracer的GPU edition/G版本。详情请关注项目github主页：<a href="http://mp77.github.com%E3%80%82">http://mp77.github.com%E3%80%82</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-08T22:32:17+08:00" pubdate data-updated="true">2012-06-08</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2012/06/08/tangletacerbasic-editionb-1-0-TangleTracer-Basic-edition-B-1-0-beta-kai//posts/3/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1072,116 +1122,6 @@ nRetVal = context.FindExistingNode(XN_NODE_TYPE_DEPTH, depth);        //获取�
 
 	
 		<span class="comments"><a href="/blog/2011/08/24/Kinect-lai-le-jie-xi-jie-xi-SDK//posts/3/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/08/23/Kinect-lai-le-jie-xi-jie-xi-SDK/">
-		
-			Kinect来了——解析SDK(OpenNI Framework 2)</a>
-	</h2>
-	<div class="entry-content">
-		<p>前文主要介绍了OpenNI FrameWork的基本概念和整体构架，在正式进入API概览之前，我们需要对工作节点（Production Nodes）进行一些补充说明。</p>
-
-<p><strong> 工作节点的数据创建/销毁机制</strong></p>
-
-<p>通常把能够输出数据的工作节点称为“生成器”，这里我们可以把“生成器”看作一个对象。而当“生成器”对象被首次创建时，这些对象往往不会立即执行有关数据处理的代码，而需要等待上层应用针对该节点输入相关配置信息之后才进行。实际上“生成器”必须等候相关应用的执行指令到达之后才进行创建数据操作。这一操作往往通过下列虚方法实现：</p>
-
-<p>[c]xn::Generator::StartGenerating();[/c]</p>
-
-<p>应注意 ，上面的StartGenerating函数的作用是开始执行数据生成操作，有时我们希望停止生成新数据，但最好能保留该工作节点的配置信息。那么就没有必要销毁该工作节点对象，只需调用下面的函数即可：</p>
-
-<p>[c]xn::Generator::StopGenerating();[/c]</p>
-
-<p>事实上每一个“生成器”节点都需要实现数据输入操作，但有时可能会遇到这种情况：程序运行可能需要上一次处理的数据结果，为了避免频繁I/O，每个“生成器”节点必须在内部保存一份数据结果副本，直到上层代码显示调用更新数据备份区的函数。此类函数通常是以下形式：</p>
-
-<p>[c]xn::Generator::WaitAndUpdateData();[/c]</p>
-
-<p>调用该函数就意味着通知工作节点需要重置自己的数据备份区，并等待下一次新的数据生成操作。在一条完整的工作链上，程序员需要一次性刷新所有工作节点的数据备份区，那么依照不同情况可以选择相应的简便处理方式：</p>
-
-<p>[c]xn::Context::WaitAnyUpdateAll();        //当任意节点产生新数据时，所有节点都刷新自己的数据备份区；</p>
-
-<p>xn::Context::WaitOneUpdateAll();        //只有当某一个指定节点产生新数据时，所有节点才刷新自己的数据备份区，这种情况通常适用于只有一个控制节点的应用程序；</p>
-
-<p>xn::Context::WaitNoneUpdateAll();        //所有节点立即刷新数据备份区；</p>
-
-<p>xn::Context::WaitAndUpdateAll();        //只有当全部节点都产生新数据时，所有节点才刷新自己的数据备份区；[/c]</p>
-
-<p>上述函数均会在延迟两秒后自动退出。</p>
-
-<p>官方建议程序员应尽量使用形如xn::Context::Wait…UpdateAll()的函数进行数据备份区刷新，除非确实需要只刷新某一个节点，上述方式也会在一定程度上简化程序员的设计和编码工作。</p>
-
-<p><strong>主要数据对象</strong></p>
-
-<p>OpenNI的最基本的数据对象是指上下文对象，上下文对象保存了应用程序使用OpenNI的所有状态信息，包括所有工作链。应注意同一个应用程序可同时创建多个上下文对象，但上下文之间无法共享信息。同时上下文对象必须进行初始化后才能首次使用，且需保证所有的附加模块均得到正确的载入和确认。应用程序可以通过调用shutdown函数释放上下文对象所使用的内存空间。</p>
-
-<p>OpenNI中还定义了一种元数据对象，元数据主要用于保存与特殊数据类型有关的属性信息。例如在一套深度映射数据中，其解析度的大小就属于元数据范畴。任何从生成器节点产生的数据都拥有相应的元数据对象。设计元数据对象的目的在于，由于节点配置可由人为随机干预，任何生成器节点的配置信息和其所产生的数据信息始终无法保证完全一致，因此有必要对每套数据也封装进相应的属性信息，这就是元数据对象的作用。</p>
-
-<p><strong> 配置变更</strong></p>
-
-<p>每一个OpenNI中所包含有关配置的选项都携带以下方法：</p>
-
-<p>1、Set函数，用于修改当前配置；</p>
-
-<p>2、Get函数，用于返回当前配置内容；</p>
-
-<p>3、Register和Unregister函数，用于为配置变更事件注册一个回调函数；</p>
-
-<p><strong>数据生成器</strong></p>
-
-<p>1、基本映射图像生成器，OpenNI中用于生成任意数据映射类型的最基本的映射生成器，它的功能主要包括配置控制、特性分配、可替换的视点特性以及帧同步特性；</p>
-
-<p>2、深度映射生成器，主要功能包括获取深度映射、获取设备的最大深度范围、设备的视野属性配置、用户位置特性等；</p>
-
-<p>3、图像生成器，主要功能包括获取彩色图像、获取像素格式属性；</p>
-
-<p>4、红外数据生成器，用于获取当前的红外映射图像；</p>
-
-<p>5、场景分析器，用于获取传感器原始数据，并对原始数据内容进行分类标记和输出，其主要功能包括获取分类映射图像（每一个像素都携带相应的标签）、获取水平面坐标；</p>
-
-<p>6、音频生成器，主要功能包括获取音频缓冲区、配置音频设备属性，包括采样率、通道数以及采样带宽等；</p>
-
-<p>7、姿态生成器，用于对特定的人物或手势进行跟踪，主要功能包括姿态添加/删除、获取活动姿态、注册/反注册姿态存在回调函数、注册/反注册姿态变更毁掉函数；</p>
-
-<p>8、手部标记点生成器，用于跟踪手部标记点，主要功能包括开始/停止手部跟踪、注册/反注册手部跟踪回调函数（包括手部的进/出以及位置变化）；</p>
-
-<p>9、用户生成器，用于生成场景中有关人物的数据，主要功能包括返回用户数据、获取用户信息、获取用户质心CoM、获取携带用户标记像素的场景图像、注册/反注册用户进/出回调函数。</p>
-
-<p>最后，我们将介绍几个OpenNI的基本程序框架。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-08-23T00:18:19+08:00" pubdate data-updated="true">2011-08-23</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/kinect/'>kinect</a>, <a class='category' href='/blog/categories/xiang-mu/'>项目</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2011/08/23/Kinect-lai-le-jie-xi-jie-xi-SDK//posts/3/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
