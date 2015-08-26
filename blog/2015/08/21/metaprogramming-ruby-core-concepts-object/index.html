@@ -1,0 +1,286 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>metaprogramming ruby: core concepts - Object  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="As the default root of all Rubric objects, Object holds quite a lot valuable instance methods for common usage. It mixes in the Kernel module to &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Metaprogramming Ruby: Core Concepts - Object</h2>
+	<div class="entry-content"><p>As the default root of all Rubric objects, Object holds quite a lot valuable instance methods for common usage. It mixes in the Kernel module to provide global accessibility of Kernel APIs for all inherited classes. This article will introduce Object definition.</p>
+
+<h3>Object</h3>
+
+<p>Object only holds a few constants and instance methods for objects of descendants, all these methods are only used for instance level metaprogramming.</p>
+
+<h5>class</h5>
+
+<p>Gets class Constant of object.</p>
+
+<h5>define_singleton_method / new_method</h5>
+
+<p>Defines a singleton method in the receiver. The parameters can be a Proc, a Method or an UnboundMethod object. If a block is specified, it is used as the method body.</p>
+
+<h5>extend</h5>
+
+<p>Enhance object with instance methods from modules given as a parameter.</p>
+
+<h5>instance_of?</h5>
+
+<p>Check if obj is an instance of the given class(Except ancestors).</p>
+
+<h5>instance_variable_defined?</h5>
+
+<p>Check if the given instance variable is defined in obj.</p>
+
+<h5>instance_variable_get</h5>
+
+<p>Gets the value of the given instance variable, or nil if the instance variable is not set. Just note that the @ part of the variable name should be included for regular instance variables.</p>
+
+<h5>instance_variable_set</h5>
+
+<p>Sets the instance variable named by symbol to the given object. The variable does not have to exist prior to this call.</p>
+
+<h5>instance_variables</h5>
+
+<p>Returns array of instance variables</p>
+
+<h5>is_a? / kind_of?</h5>
+
+<p>Returns true if class is the class of object, or if class is one of the superclasses of obj or modules included in obj.</p>
+
+<h5>itself</h5>
+
+<p>returns object itself</p>
+
+<h5>method</h5>
+
+<p>Looks up the named method as a receiver in object, returning a Method object. The Method object acts as a closure in object&rsquo;s object instance, so instance variables and the value of self remain available.</p>
+
+<h5>methods</h5>
+
+<p>Returns a list of the names of public and protected methods of object. This will include all the methods accessible in obj&rsquo;s ancestors. If the optional parameter is false, it returns an array of object&rsquo;s public and protected singleton methods, the array will not include methods in modules included in object.</p>
+
+<h5>private_methods</h5>
+
+<p>Returns the list of private methods accessible to object.</p>
+
+<h5>protected_methods</h5>
+
+<p>Returns the list of protected methods accessible to object.</p>
+
+<h5>public_method</h5>
+
+<p>Similar to method, searches public method only.</p>
+
+<h5>public_methods</h5>
+
+<p>Returns the list of public methods accessible to obj.</p>
+
+<h5>public_send</h5>
+
+<p>Invokes the method identified by symbol, passing it any arguments specified. Unlike send, #public_send calls public methods only.</p>
+
+<h5>remove_instance_variable</h5>
+
+<p>Removes the named instance variable from object, returning that variable&rsquo;s value.</p>
+
+<h5>respond_to_missing?</h5>
+
+<p>Hook method to return whether the object can respond to id method or not.</p>
+
+<h5>send / __send__</h5>
+
+<p>Invokes the method identified by symbol, passing it any arguments specified. You can use __send__ if the name send clashes with an existing method in obj.</p>
+
+<h5>singleton_class</h5>
+
+<p>Returns the singleton class of object. This method creates a new singleton class if obj does not have one. If object is nil, true, or false, it returns NilClass, TrueClass, or FalseClass, respectively. If object is a Fixnum or a Symbol, it raises a TypeError.</p>
+
+<h5>singleton_method</h5>
+
+<p>Similar to #method, searches singleton method only.</p>
+
+<h5>singleton_methods</h5>
+
+<p>Returns an array of the names of singleton methods for object. Only public and protected singleton methods are returned.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-08-21T11:24:33+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2015/08/21/metaprogramming-ruby-core-concepts-object/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2015/08/21/metaprogramming-ruby-core-concepts-object/';
+        var disqus_url = 'http://www.hanyi.name/blog/2015/08/21/metaprogramming-ruby-core-concepts-object/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

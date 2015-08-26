@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-08-21T10:12:12+08:00</updated>
+  <updated>2015-08-26T23:11:27+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,111 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[metaprogramming ruby: core concepts - Object]]></title>
+    <link href="http://www.hanyi.name/blog/2015/08/21/metaprogramming-ruby-core-concepts-object/"/>
+    <updated>2015-08-21T11:24:33+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/08/21/metaprogramming-ruby-core-concepts-object</id>
+    <content type="html"><![CDATA[<p>As the default root of all Rubric objects, Object holds quite a lot valuable instance methods for common usage. It mixes in the Kernel module to provide global accessibility of Kernel APIs for all inherited classes. This article will introduce Object definition.</p>
+
+<h3>Object</h3>
+
+<p>Object only holds a few constants and instance methods for objects of descendants, all these methods are only used for instance level metaprogramming.</p>
+
+<h5>class</h5>
+
+<p>Gets class Constant of object.</p>
+
+<h5>define_singleton_method / new_method</h5>
+
+<p>Defines a singleton method in the receiver. The parameters can be a Proc, a Method or an UnboundMethod object. If a block is specified, it is used as the method body.</p>
+
+<h5>extend</h5>
+
+<p>Enhance object with instance methods from modules given as a parameter.</p>
+
+<h5>instance_of?</h5>
+
+<p>Check if obj is an instance of the given class(Except ancestors).</p>
+
+<h5>instance_variable_defined?</h5>
+
+<p>Check if the given instance variable is defined in obj.</p>
+
+<h5>instance_variable_get</h5>
+
+<p>Gets the value of the given instance variable, or nil if the instance variable is not set. Just note that the @ part of the variable name should be included for regular instance variables.</p>
+
+<h5>instance_variable_set</h5>
+
+<p>Sets the instance variable named by symbol to the given object. The variable does not have to exist prior to this call.</p>
+
+<h5>instance_variables</h5>
+
+<p>Returns array of instance variables</p>
+
+<h5>is_a? / kind_of?</h5>
+
+<p>Returns true if class is the class of object, or if class is one of the superclasses of obj or modules included in obj.</p>
+
+<h5>itself</h5>
+
+<p>returns object itself</p>
+
+<h5>method</h5>
+
+<p>Looks up the named method as a receiver in object, returning a Method object. The Method object acts as a closure in object&rsquo;s object instance, so instance variables and the value of self remain available.</p>
+
+<h5>methods</h5>
+
+<p>Returns a list of the names of public and protected methods of object. This will include all the methods accessible in obj&rsquo;s ancestors. If the optional parameter is false, it returns an array of object&rsquo;s public and protected singleton methods, the array will not include methods in modules included in object.</p>
+
+<h5>private_methods</h5>
+
+<p>Returns the list of private methods accessible to object.</p>
+
+<h5>protected_methods</h5>
+
+<p>Returns the list of protected methods accessible to object.</p>
+
+<h5>public_method</h5>
+
+<p>Similar to method, searches public method only.</p>
+
+<h5>public_methods</h5>
+
+<p>Returns the list of public methods accessible to obj.</p>
+
+<h5>public_send</h5>
+
+<p>Invokes the method identified by symbol, passing it any arguments specified. Unlike send, #public_send calls public methods only.</p>
+
+<h5>remove_instance_variable</h5>
+
+<p>Removes the named instance variable from object, returning that variable&rsquo;s value.</p>
+
+<h5>respond_to_missing?</h5>
+
+<p>Hook method to return whether the object can respond to id method or not.</p>
+
+<h5>send / __send__</h5>
+
+<p>Invokes the method identified by symbol, passing it any arguments specified. You can use __send__ if the name send clashes with an existing method in obj.</p>
+
+<h5>singleton_class</h5>
+
+<p>Returns the singleton class of object. This method creates a new singleton class if obj does not have one. If object is nil, true, or false, it returns NilClass, TrueClass, or FalseClass, respectively. If object is a Fixnum or a Symbol, it raises a TypeError.</p>
+
+<h5>singleton_method</h5>
+
+<p>Similar to #method, searches singleton method only.</p>
+
+<h5>singleton_methods</h5>
+
+<p>Returns an array of the names of singleton methods for object. Only public and protected singleton methods are returned.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - BasicObject]]></title>
