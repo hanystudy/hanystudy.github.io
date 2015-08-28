@@ -1,24 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: ruby | Wing of Dream 梦境之翼]]></title>
-  <link href="http://www.hanyi.name/blog/categories/ruby/atom.xml" rel="self"/>
-  <link href="http://www.hanyi.name/"/>
-  <updated>2015-08-28T11:19:29+08:00</updated>
-  <id>http://www.hanyi.name/</id>
-  <author>
-    <name><![CDATA[Han Yi]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>metaprogramming ruby: core concepts - Module  | Wing of Dream 梦境之翼</title>
 
-  
-  <entry>
-    <title type="html"><![CDATA[metaprogramming ruby: core concepts - Module]]></title>
-    <link href="http://www.hanyi.name/blog/2015/08/26/metaprogramming-ruby-core-concepts-module/"/>
-    <updated>2015-08-26T23:18:08+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/08/26/metaprogramming-ruby-core-concepts-module</id>
-    <content type="html"><![CDATA[<p>For internal ruby, Module is mainly used for holding class methods for descendants. Suppose each object has class of A, A always has class of Class, and Class inherits from Module, thus class A should hold all class methods from instance methods in Module. On the other hand, user can mix in self defined Module to provide more instance methods for their class, or use module function directly.</p>
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="For internal ruby, Module is mainly used for holding class methods for descendants. Suppose each object has class of A, A always has class of Class, &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Metaprogramming Ruby: Core Concepts - Module</h2>
+	<div class="entry-content"><p>For internal ruby, Module is mainly used for holding class methods for descendants. Suppose each object has class of A, A always has class of Class, and Class inherits from Module, thus class A should hold all class methods from instance methods in Module. On the other hand, user can mix in self defined Module to provide more instance methods for their class, or use module function directly.</p>
 
 <h3>Module</h3>
 
@@ -215,161 +295,92 @@ remove_method Removes the method identified by symbol from the current class. Fo
 <h5>undef_method</h5>
 
 <p>Prevents the current class from responding to calls to the named method. Contrast this with remove_method, which deletes the method from the particular class; Ruby will still search superclasses and mixed-in modules for a possible receiver. String arguments are converted to symbols.</p>
-]]></content>
-  </entry>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
   
-  <entry>
-    <title type="html"><![CDATA[metaprogramming ruby: core concepts - Object]]></title>
-    <link href="http://www.hanyi.name/blog/2015/08/21/metaprogramming-ruby-core-concepts-object/"/>
-    <updated>2015-08-21T11:24:33+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/08/21/metaprogramming-ruby-core-concepts-object</id>
-    <content type="html"><![CDATA[<p>As the default root of all Rubric objects, Object holds quite a lot valuable instance methods for common usage. It mixes in the Kernel module to provide global accessibility of Kernel APIs for all inherited classes. This article will introduce Object definition.</p>
 
-<h3>Object</h3>
 
-<p>Object only holds a few constants and instance methods for objects of descendants, all these methods are only used for instance level metaprogramming.</p>
+<time datetime="2015-08-26T23:18:08+08:00" pubdate data-updated="true"></time></div>
+	
 
-<h5>class</h5>
+<div class="tags">
 
-<p>Gets class Constant of object.</p>
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>
 
-<h5>define_singleton_method / new_method</h5>
+</div>
 
-<p>Defines a singleton method in the receiver. The parameters can be a Proc, a Method or an UnboundMethod object. If a block is specified, it is used as the method body.</p>
 
-<h5>extend</h5>
+	
+		<span class="comments"><a href="/blog/2015/08/26/metaprogramming-ruby-core-concepts-module/#disqus_thread">Comments</a></span>
+	
+</div></article>
 
-<p>Enhance object with instance methods from modules given as a parameter.</p>
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
 
-<h5>instance_of?</h5>
 
-<p>Check if obj is an instance of the given class(Except ancestors).</p>
 
-<h5>instance_variable_defined?</h5>
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
 
-<p>Check if the given instance variable is defined in obj.</p>
+    Han Yi
 
-<h5>instance_variable_get</h5>
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
 
-<p>Gets the value of the given instance variable, or nil if the instance variable is not set. Just note that the @ part of the variable name should be included for regular instance variables.</p>
 
-<h5>instance_variable_set</h5>
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2015/08/26/metaprogramming-ruby-core-concepts-module/';
+        var disqus_url = 'http://www.hanyi.name/blog/2015/08/26/metaprogramming-ruby-core-concepts-module/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
-<p>Sets the instance variable named by symbol to the given object. The variable does not have to exist prior to this call.</p>
 
-<h5>instance_variables</h5>
 
-<p>Returns array of instance variables</p>
 
-<h5>is_a? / kind_of?</h5>
 
-<p>Returns true if class is the class of object, or if class is one of the superclasses of obj or modules included in obj.</p>
-
-<h5>itself</h5>
-
-<p>returns object itself</p>
-
-<h5>method</h5>
-
-<p>Looks up the named method as a receiver in object, returning a Method object. The Method object acts as a closure in object&rsquo;s object instance, so instance variables and the value of self remain available.</p>
-
-<h5>methods</h5>
-
-<p>Returns a list of the names of public and protected methods of object. This will include all the methods accessible in obj&rsquo;s ancestors. If the optional parameter is false, it returns an array of object&rsquo;s public and protected singleton methods, the array will not include methods in modules included in object.</p>
-
-<h5>private_methods</h5>
-
-<p>Returns the list of private methods accessible to object.</p>
-
-<h5>protected_methods</h5>
-
-<p>Returns the list of protected methods accessible to object.</p>
-
-<h5>public_method</h5>
-
-<p>Similar to method, searches public method only.</p>
-
-<h5>public_methods</h5>
-
-<p>Returns the list of public methods accessible to obj.</p>
-
-<h5>public_send</h5>
-
-<p>Invokes the method identified by symbol, passing it any arguments specified. Unlike send, #public_send calls public methods only.</p>
-
-<h5>remove_instance_variable</h5>
-
-<p>Removes the named instance variable from object, returning that variable&rsquo;s value.</p>
-
-<h5>respond_to_missing?</h5>
-
-<p>Hook method to return whether the object can respond to id method or not.</p>
-
-<h5>send / __send__</h5>
-
-<p>Invokes the method identified by symbol, passing it any arguments specified. You can use __send__ if the name send clashes with an existing method in obj.</p>
-
-<h5>singleton_class</h5>
-
-<p>Returns the singleton class of object. This method creates a new singleton class if obj does not have one. If object is nil, true, or false, it returns NilClass, TrueClass, or FalseClass, respectively. If object is a Fixnum or a Symbol, it raises a TypeError.</p>
-
-<h5>singleton_method</h5>
-
-<p>Similar to #method, searches singleton method only.</p>
-
-<h5>singleton_methods</h5>
-
-<p>Returns an array of the names of singleton methods for object. Only public and protected singleton methods are returned.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[metaprogramming ruby: core concepts - BasicObject]]></title>
-    <link href="http://www.hanyi.name/blog/2015/08/03/metaprogramming-ruby-core-concepts/"/>
-    <updated>2015-08-03T07:33:27+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/08/03/metaprogramming-ruby-core-concepts</id>
-    <content type="html"><![CDATA[<p>Metaprogramming is one of core features for ruby lang, it&rsquo;s widely used from internal ruby to standard library, also endless magic gems. In next a few articles we will focus on those core stuff. I recommend for <a href="https://pragprog.com/book/ppmetr2/metaprogramming-ruby-2">Metaprogramming ruby 2</a> as a reference, except a little verbose and may be only for primer usage. For more ascent knowledge, perhaps you need to track the <a href="https://github.com/ruby/ruby">trunk</a> of ruby. This essay will concentrate on BasicObject, which is parent for all classes in ruby.</p>
-
-<h3>BasicObject</h3>
-
-<p>As the object oriented hierarchy in ruby core, each type of class is also object of Class except BasicObject, and All the objects of Class has root superclass BasicObject, the one is also object of Class. Thus we&rsquo;ll have whole picture below.</p>
-
-<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/metaprogramming_ruby/ruby_class.png" alt="Ruby OO hierarchy" /></p>
-
-<h4>i.class methods</h4>
-
-<p>BasicObject only has single public class method, names &ldquo;new&rdquo;.</p>
-
-<h4>ii.instance methods</h4>
-
-<p>logical operators, any instance of BasicObject is almost empty, with only a few methods, like logical operators !, !=, ==. Here == has same meaning with equal? for object level equality, The difference is that == is recommended for descendant overriding, but equal? should always be same as it is defined in BasicObject.</p>
-
-<h5>__id__ / object_id</h5>
-
-<p>An integer identifier of an object, should be unique for a given object. But some objects of builtin classes are reused for optimization, like immediate values (not passed by reference but value, like nil, true, false, Fixnums, Symbols, and some Floats) and frozen string literals.</p>
-
-<h5>__send__ / send</h5>
-
-<p>Double underscore gives a backup for pure alphabet version which may be overrode through other ways. Invokes the method, and passes all arguments using dynamic number of arguments.</p>
-
-<h5>instance_eval / instance_exec</h5>
-
-<p>instance_eval support passing a string of ruby source code, with file path and line number when compilation errors happen, also given block, within the context of receiver. Thus eval code will have access to instance variables and private methods.</p>
-
-<p>instance_exec only support using block as an argument, but allows one more argument to be passed from outer scope into receiver.</p>
-
-<h4>iii.private instance methods</h4>
-
-<h5>method_missing</h5>
-
-<p>In BasicObject, method_missing belongs to private instance methods, any call for this method will raise an error. But descendant can override this method to do dynamic processing, according to user&rsquo;s input like symbol name and arguments. If overrode method does not want to do any processing, super should be called to pass message bottom from up.</p>
-
-<h5>singleton_method_added / singleton_method_removed / singleton_method_undefined</h5>
-
-<p>Callback for singleton method operations. As we already know, ruby will not create the whole clone of the class for any objects. Only with a middle layer between object and class - singleton class. Singleton class is generated when object comes out, and any messages sent to object should be transferred to its singleton class first, then its own class if not matches in singleton class.</p>
-
-<p>class&rsquo;s singleton class is different to object&rsquo;s singleton class. That&rsquo;s because singleton class of a class should be inherited from its parent&rsquo;s singleton class, until BasicObject&rsquo;s singleton class, then it can reach non singleton class. But for object, singleton class should always have parent class of its own class.</p>
-]]></content>
-  </entry>
-  
-</feed>
+</body>
+</html>

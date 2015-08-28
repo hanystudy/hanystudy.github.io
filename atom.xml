@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-08-26T23:11:27+08:00</updated>
+  <updated>2015-08-28T11:19:29+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,211 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[metaprogramming ruby: core concepts - Module]]></title>
+    <link href="http://www.hanyi.name/blog/2015/08/26/metaprogramming-ruby-core-concepts-module/"/>
+    <updated>2015-08-26T23:18:08+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/08/26/metaprogramming-ruby-core-concepts-module</id>
+    <content type="html"><![CDATA[<p>For internal ruby, Module is mainly used for holding class methods for descendants. Suppose each object has class of A, A always has class of Class, and Class inherits from Module, thus class A should hold all class methods from instance methods in Module. On the other hand, user can mix in self defined Module to provide more instance methods for their class, or use module function directly.</p>
+
+<h3>Module</h3>
+
+<p>Module provides two kinds of class level metaprogramming methods, either public or private. Each of them has different usage for building descendants.</p>
+
+<h4>Public instance methods</h4>
+
+<h5>ancestors</h5>
+
+<p>Returns a list of modules included/prepended in current module.</p>
+
+<h5>class_eval</h5>
+
+<p>Evaluates the string or block in the context of module, except that when a block is given, constant/class variable lookup is not affected. This can be used to add methods to a class. class_eval returns the result of evaluating its argument.</p>
+
+<h5>class_exec</h5>
+
+<p>Evaluates the given block in the context of the class/module. The method defined in the block will belong to the receiver. Any arguments passed to the method will be passed to the block. This can be used if the block needs to access instance variables.</p>
+
+<h5>class_variable_defined?</h5>
+
+<p>Returns true if the given class variable is defined in object.</p>
+
+<h5>class_variable_get</h5>
+
+<p>Returns the value of the given class variable (or throws a NameError exception). The @@ part of the variable name should be included for regular class variables.</p>
+
+<h5>class_variable_set</h5>
+
+<p>Sets the class variable named by symbol to the given object.</p>
+
+<h5>class_variables</h5>
+
+<p>Returns an array of the names of class variables in current module. This includes the names of class variables in any included modules, unless the inherit parameter is set to false.</p>
+
+<h5>const_defined?</h5>
+
+<p>Says whether module or its ancestors have a constant with the given name: If module is a Module, additionally Object and its ancestors are checked. In each of the checked classes or modules, if the constant is not present but there is an autoload for it, true is returned directly without autoloading. If the constant is not found the callback const_missing is not called and the method returns false. If inherit is false, the lookup only checks the constants in the receiver. In this case, the same logic for autoloading applies. If the argument is not a valid constant name a NameError is raised with the message “wrong constant name name”.</p>
+
+<h5>const_get</h5>
+
+<p>Checks for a constant with the given name in module. If inherit is set, the lookup will also search the ancestors (and Object if module is a Module). The value of the constant is returned if a definition is found, otherwise a NameError is raised. This method will recursively look up constant names if a namespaced class name is provided.</p>
+
+<h5>const_missing</h5>
+
+<p>Invoked when a reference is made to an undefined constant in module. It is passed a symbol for the undefined constant, and returns a value to be used for that constant. If found, it returns the loaded class. It therefore implements an autoload feature similar to Kernel#autoload and #autoload.</p>
+
+<h5>const_set</h5>
+
+<p>Sets the named constant to the given object, returning that object. Creates a new constant if no constant with the given name previously existed. If symbol or string is not a valid constant name a NameError will be raised with a warning “wrong constant name”.</p>
+
+<h5>constants</h5>
+
+<p>Returns an array of the names of the constants accessible in module. This includes the names of constants in any included modules, unless the inherit parameter is set to false.</p>
+
+<h5>instance_method</h5>
+
+<p>Returns an UnboundMethod representing the given instance method in module.</p>
+
+<h5>instance_methods</h5>
+
+<p>Returns an array containing the names of the public and protected instance methods in the receiver. For a module, these are the public and protected methods; for a class, they are the instance (not singleton) methods.</p>
+
+<h5>method_defined?</h5>
+
+<p>Returns true if the named method is defined by module (or its included modules and, if module is a class, its ancestors). Public and protected methods are matched. String arguments are converted to symbols.</p>
+
+<h5>module_eval</h5>
+
+<p>Evaluates the string or block in the context of module, except that when a block is given, constant/class variable lookup is not affected. This can be used to add methods to a class. module_eval returns the result of evaluating its argument.</p>
+
+<h5>module_exec</h5>
+
+<p>Evaluates the given block in the context of the class/module. The method defined in the block will belong to the receiver. Any arguments passed to the method will be passed to the block. This can be used if the block needs to access instance variables.</p>
+
+<h5>name</h5>
+
+<p>Returns the name of the module module. Returns nil for anonymous modules.</p>
+
+<h5>prepend</h5>
+
+<p>Invokes Module.prepend_features on each parameter in reverse order.</p>
+
+<h5>private_class_method</h5>
+
+<p>Makes existing class methods private. Often used to hide the default constructor new.</p>
+
+<h5>private_constant</h5>
+
+<p>Makes a list of existing constants private.</p>
+
+<h5>private_instance_methods</h5>
+
+<p>Returns a list of the private instance methods defined in module. If the optional parameter is false, the methods of any ancestors are not included.</p>
+
+<h5>private_method_defined?</h5>
+
+<p>Returns true if the named private method is defined by _mod_ (or its included modules and, if module is a class, its ancestors).</p>
+
+<h5>protected_instance_methods</h5>
+
+<p>Returns a list of the protected instance methods defined in module. If the optional parameter is false, the methods of any ancestors are not included.</p>
+
+<h5>protected_method_defined?</h5>
+
+<p>Returns true if the named protected method is defined by module (or its included modules and, if module is a class, its ancestors).</p>
+
+<h5>public_class_method</h5>
+
+<p>Makes a list of existing class methods public.</p>
+
+<h5>public_constant</h5>
+
+<p>Makes a list of existing constants public.</p>
+
+<h5>public_instance_method</h5>
+
+<p>Similar to instance_method, searches public method only.</p>
+
+<h5>public_instance_methods</h5>
+
+<p>Returns a list of the public instance methods defined in module. If the optional parameter is false, the methods of any ancestors are not included.</p>
+
+<h5>public_method_defined?</h5>
+
+<p>Returns true if the named public method is defined by module (or its included modules and, if module is a class, its ancestors).</p>
+
+<h5>remove_class_variable</h5>
+
+<p>Removes the definition of the symbol, returning that constant&rsquo;s value.</p>
+
+<h5>singleton_class?</h5>
+
+<p>Returns true if module is a singleton class or false if it is an ordinary class or module.</p>
+
+<h4>Private instance methods</h4>
+
+<p>Private instance methods in Module are mainly used in internal classes level.</p>
+
+<h5>alias_method</h5>
+
+<p>Makes new_name a new copy of the method old_name. This can be used to retain access to methods that are overridden.</p>
+
+<h5>append_features</h5>
+
+<p>When this module is included in another, Ruby calls append_features in this module, passing it the receiving module in module. Ruby&rsquo;s default implementation is to add the constants, methods, and module variables of this module to module if this module has not already been added to module or one of its ancestors.</p>
+
+<h5>define_method</h5>
+
+<p>Defines an instance method in the receiver. The method parameter can be a Proc, a Method or an UnboundMethod object. If a block is specified, it is used as the method body. This block is evaluated using instance_eval, a point that is tricky to demonstrate because define_method is private.</p>
+
+<h5>extend_object</h5>
+
+<p>Extends the specified object by adding this module&rsquo;s constants and methods (which are added as singleton methods). This is the callback method used by Object#extend.</p>
+
+<h5>extended</h5>
+
+<p>The equivalent of included, but for extended modules.</p>
+
+<h5>included</h5>
+
+<p>Callback invoked whenever the receiver is included in another module or class. This should be used in preference to Module.append_features if your code wants to perform some action when a module is included in another.</p>
+
+<h5>method_added</h5>
+
+<p>Invoked as a callback whenever an instance method is added to the receiver.</p>
+
+<h5>method_removed</h5>
+
+<p>Invoked as a callback whenever an instance method is removed from the receiver.</p>
+
+<h5>method_undefined</h5>
+
+<p>Invoked as a callback whenever an instance method undefined but called from the receiver.</p>
+
+<h5>module_function</h5>
+
+<p>Creates module functions for the named methods. These functions may be called with the module as a receiver, and also become available as instance methods to classes that mix in the module. Module functions are copies of the original, and so may be changed independently. The instance-method versions are made private. If used with no arguments, subsequently defined methods become module functions. String arguments are converted to symbols.
+prepend_features When this module is prepended in another, Ruby calls prepend_features in this module, passing it the receiving module in module. Ruby&rsquo;s default implementation is to overlay the constants, methods, and module variables of this module to mod if this module has not already been added to mod or one of its ancestors. See also Module#prepend.</p>
+
+<h5>prepended</h5>
+
+<p>The equivalent of included, but for prepended modules.</p>
+
+<h5>refine</h5>
+
+<p>Refine klass in the receiver. Returns an overlaid module.</p>
+
+<h5>remove_const</h5>
+
+<p>Removes the definition of the given constant, returning that constant&rsquo;s previous value. If that constant referred to a module, this will not change that module&rsquo;s name and can lead to confusion.
+remove_method Removes the method identified by symbol from the current class. For an example, see Module.undef_method.</p>
+
+<h5>undef_method</h5>
+
+<p>Prevents the current class from responding to calls to the named method. Contrast this with remove_method, which deletes the method from the particular class; Ruby will still search superclasses and mixed-in modules for a possible receiver. String arguments are converted to symbols.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - Object]]></title>
@@ -1620,99 +1825,6 @@ REST over HTTP也存在缺点，一、生成客户端stub的成本较高，超�
 <p>迁移工作还是颇费周折，现在看来wordpress迁移唯一必然的成功办法还是数据库内容链接的全文替换，否则只改几个字段可能会出现无法进入后台的情况。再加上周中实验室网络欠费，用了几天坑爹的“西大国内网”，很难顺利完成整站内容的迁移。于是只好把多余的时间用来进行一些反思：多年以来我做了许多自己感兴趣的工作，尽管无甚成果，但确实也学习了不少东西，总体上始终循着当初所谓“自由学习，自由思想”的理念，也从未遇过大的挫折。然而，出于一些忧虑和回避，自己有意无意忽视了平等交流：所谓平等交流，在我看来就是用自己的想法去换取别人的想法，并且所有人都认同且遵守唯一的道德准则。事实上，我对周围真实环境的了解程度非常低，某种程度上是基于以上原因。这也就导致了自己对身边事物的看法具有很强的不确定性，难以在自身问题上做出有效判断。另一方面也导致自己至今缺乏一些常识&hellip;&hellip;有些事在别人看来是显而易见，自己却不容易想明白。</p>
 
 <p>考虑到有些外链是指向原mp77.cn，本站仍会对继续支持这个域名，并持续至少1年时间。而hanyi.name会是我的永久性域名，今后也不会再向站外自动导出文章。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[手嶌葵拯救世界]]></title>
-    <link href="http://www.hanyi.name/blog/2012/06/28/shou-dao-kui-zheng-jiu-shi-jie/"/>
-    <updated>2012-06-28T01:58:13+08:00</updated>
-    <id>http://www.hanyi.name/blog/2012/06/28/shou-dao-kui-zheng-jiu-shi-jie</id>
-    <content type="html"><![CDATA[<p>如果说，手嶌葵是六年前的《地海战记》迄今为止给人们留下的<a href="http://www.hanyi.name/blog/?p=189">唯一记忆</a>的话，同样的评价送给《虞美人盛开的山坡》恐怕也没多少人会提出异议。然而必须承认，宫崎吾朗的二次登场的确令人耳目一新，看似俗套的少女漫画情节，影片最终展现出的信息却远超出这个范畴。毫无疑问，我们都被影片和她的主题歌声完全治愈了。</p>
-
-<p>仅从观影的角度来说，影片的主线情节可以说毫无新意，即使单是吉卜力在近二十年里也已拍了不少类似的主题，观者可能会感到比较乏味。不过如果换一个方向，会发现影片丝毫不含蓄地表达着一种积极向上的氛围，这一点却是同类型片中所少见的。正如《萤火虫之墓》展现给我们一个焦灼的日本一样，《虞美人盛开的山坡》所展现的是短短二十年后一个全新的社会。许多中国人都对五六十年代的日本感兴趣，以至于有关彼国六十年代经济腾飞的著述迄今都颇受欢迎，然而恐怕许多人（包括我）至今都为此感到困惑，如今幸好一部2011年本土票房冠军的影片能够给我们以管中窥豹的机会。</p>
-
-<p>故事原设于公元1963年，恰好是东京第十八届夏季奥运会的前一年。阿海和阿俊几乎在同一时间内都遇到了“人生的重要挑战”，一是“拉丁楼事件”，二是关于自身的身世之谜。然而二人自始至终都未言放弃，一方面成功使得作为历史见证的活动大楼免遭校方为了“迎接奥运”而进行的拆毁重建；另一方面，同时也颇具戏剧性的是，历史真相的唯一见证人恰好在片末出现，吐露出了阿俊身世的秘密，并且终于卸下了重压在两人身上的历史包袱。如果仅仅从青春爱情故事的视角去鉴赏影片，有些情节可能经不起推敲，于是宁愿称之为一种朦胧的、尚未成熟的情感加以附会，但叙事手法上就显然比不上早年的《侧耳倾听》。事实上，从《地海战记》中我们就可以发现，宫崎吾朗的思想深度其实不亚于老爹，广度上则可能要更甚一些。然而他的劣势在讲故事的能力上，导演没能像上一辈的几部经典作品（当然宫老也并非只是传说）那样能够抓住观众，这种小遗憾现在看来恐怕仍然是不可避免的。</p>
-
-<p>不过，导演真正希望传递的信息可能不止于此。其实，真正令人惊讶的是片中人物所共有的思维方式。例如，作为全剧线索的“拉丁楼事件”，即使在争辩双方矛盾非常尖锐的情况下，依然能够齐心协力维护大家得来不易的自由。学生们甚至喊出了“少数服从多数，即是多数人对少数人的暴力”这样颇具智慧的政治口号：这些桥段无一不体现着当时日本社会的整体风貌。另一方面，阿海和阿俊都是非常严肃地看待两人之间的微妙关系，哪怕是后来所谓的“兄妹疑云”，也没有发生任何情绪化事件，相反二人都在尽力追求真正的谜底：相比之下，在五十年后的现代社会，这样的“死理性派”是否太少了点呢？</p>
-
-<p>如果对故事的所有事件追根溯源，则要归结于立花洋和泽村雄一郎两位长辈在战时的先后离世。阿俊每天驾着拖船驶过阿海家门前的一片水域，不经意间发现少女每天准时升起祈愿平安的U.W信号旗，于是撰下诗篇并发表在校园刊物上：</p>
-
-<p><em>少女扬起了旗帜 </em>
-<em>何故 </em>
-<em>要将思念寄语晨风 </em>
-<em>呼唤著远方 </em>
-<em>伴著一时心血来潮的老鸦 </em>
-<em>少女啊 </em>
-<em>那藏青色围绕下红白相间的旗帜今日也在风中飞扬</em></p>
-
-<p>命运就那样巧合。阿海偶然读到诗文，从此记住了松间俊这个名字，也为二人相识奠定了命运的基础。最后，唯一历史亲历者小野寺善雄的出现，使得尘封十余年的故事最终浮出水面，拖船缓缓驶向岸边，夕阳下的阿海和阿俊终于如释重负：对阿俊而言当然是得知了自己的真实身世；另一方面则包含了阿海对父亲的怀念；而当下乃至未来的意义则是不言自明了。片末，阿海完成了人生中迄今为止最为宁静的一次升旗，镜头回到姐姐的那副画作，正是不远处水域上航行的那艘拖船，船头也挂起了“答语U.W”。对导演来说，战后的日本社会长期受到历史遗留问题的困扰，而同样作为战争受害者的普通民众则受之更甚：人们需要通过某些方式得到彻底解脱，才能坦然面对未来并开始新的生活。实际上，六十年代的日本国民不仅做到了，而且还比其他亚洲国家要出色的多。或许这才是导演的真正意图：唤醒国民对美好时代的回忆与憧憬，而且不应仅仅是怀念而已。</p>
-
-<p>手嶌葵的歌声在片尾响起，其实是翻唱自森山良子在七十年代的一首老歌《さよならの夏（告别之夏）》，宫氏招牌式的完美结局，在手MM的伴奏下逾显动人了（也彻底填补了影片末尾与《侧耳倾听》之间存在的思想差距）。</p>
-
-<p>附歌词：</p>
-
-<p><em>光る海に かすむ船は</em></p>
-
-<p><em>さよならの汽笛 のこします</em></p>
-
-<p><em>ゆるい坂を おりてゆけば</em></p>
-
-<p><em>夏色の风に あえるかしら</em></p>
-
-<p><em>わたしの爱 それはメロディー</em></p>
-
-<p><em>たかく ひくく 歌うの</em></p>
-
-<p><em>わたしの爱 それはカモメ</em></p>
-
-<p><em>たかく ひくく 飞ぶの</em></p>
-
-<p><em>夕阳のなか 呼んでみたら</em></p>
-
-<p><em>やさしいあなたに 逢えるかしら</em></p>
-
-<p><em>だれかが弾く ピアノの音</em></p>
-
-<p><em>海鸣りみたいに きこえます</em></p>
-
-<p><em>おそい午後を 往き交うひと</em></p>
-
-<p><em>夏色の梦を はこぶかしら</em></p>
-
-<p><em>わたしの爱 それはダイアリー</em></p>
-
-<p><em>日々のページ つづるの</em></p>
-
-<p><em>わたしの爱 それは小舟</em></p>
-
-<p><em>空の海をゆくの</em></p>
-
-<p><em>夕阳のなか 降り返れば</em></p>
-
-<p><em>あなたはわたしを 探すかしら</em></p>
-
-<p><em>散歩道に ゆれる木々は</em></p>
-
-<p><em>さよならの影を おとします</em></p>
-
-<p><em>古いチャペル 风见の鶏(とり)</em></p>
-
-<p><em>夏色の街は みえるかしら</em></p>
-
-<p><em>きのうの爱 それは涙</em></p>
-
-<p><em>やがて かわき 消えるの</em></p>
-
-<p><em>あしたの爱 それはルフラン</em></p>
-
-<p><em>おわりのない言叶</em></p>
-
-<p><em>夕阳のなか めぐり逢えば</em></p>
-
-<p><em>あなたはわたしを 抱くかしら</em></p>
-
-<p>（完）</p>
 ]]></content>
   </entry>
   

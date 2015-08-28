@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="十年前，云和山的彼端首发，从此双剑归来不玩它了。 十年后，又是云，依然是外传，又似乎是汉之云续—云之遥。 大宇資訊著名的經典RPG《軒轅劍》系列，繼2007年推出的《軒轅劍外傳：漢之雲》大受好評後，「DOMO 小組」經過兩年的激盪研發後，預計於今年年底推出最新力作《軒轅劍外傳：雲之遙》，此次「 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="回趟家不容易，一部1个半小时的短片足矣，然而《Moon》绝非仅仅是视觉意义上的科幻题材。 年轻导演Duncan Jones自编自导，将伦理与科幻完美结合在一起，导演显然对计算机科学、医学，甚至是社会科学都有一番独到的见解，这些内涵在影片中自然地流露出来。 对我来说， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,58 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/11/09/Moon-zhi-mian-zhi-mian/">
+		
+			《Moon》——直面现实</a>
+	</h2>
+	<div class="entry-content">
+		<p>回趟家不容易，一部1个半小时的短片足矣，然而《Moon》绝非仅仅是视觉意义上的科幻题材。</p>
+
+<p>年轻导演Duncan Jones自编自导，将伦理与科幻完美结合在一起，导演显然对计算机科学、医学，甚至是社会科学都有一番独到的见解，这些内涵在影片中自然地流露出来。</p>
+
+<p>对我来说，本片向人们展示了三个前沿科学的命题，虽然这些问题看似遥不可及，却又实实在在地摆在我们面前：1、机器人与人工智能的发展所引发的潜在人与机器关系的问题；2、可能存在的克隆人以及伴随这些克隆生物（况且还被植入了原版记忆）而造成的伦理问题；3、未来长时间星际航行或独居地外而引发的人性问题。</p>
+
+<p>事实上，imdb影迷mike-1145对本片“A worthwhile one-man show”的评价是绝对中肯的，但考虑到已故波兰著名作家Stanislaw Lem的《Solaris》及其同名改编电影的影响力，Jones身上还是背负着一身疑问的。</p>
+
+<p>但问题是，我对《Solaris》一无所知&hellip;况且$5Million的预算已经足够证明一切了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-11-09T00:48:14+08:00" pubdate data-updated="true">2009-11-09</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/11/09/Moon-zhi-mian-zhi-mian//posts/11/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -638,516 +690,6 @@ int main()
 
 	
 		<span class="comments"><a href="/blog/2009/06/26/shi-wu-zai-qi-xia-chuan-xian-jian-bu-mie//posts/11/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/06/15/MP77-de-UNIX-ke-jian-bi-ji-12/">
-		
-			MP77的UNIX课件笔记(12)</a>
-	</h2>
-	<div class="entry-content">
-		<p>本章介绍socket网络编程，socket是当前计算机网络中最流行的编程接口，同时也是UNIX系统应用中必不可少的关键模块之一。我们会介绍计算机网络的基本概念和原理，但仍然需要读者具备一定的计算机网络通信基础知识。在后继连载中，会经常引用本文讨论的内容。</p>
-
-<p><a id="more"></a><a id="more-180"></a></p>
-
-<p>1 socket网络编程概述</p>
-
-<p>1.1 socket概述</p>
-
-<p>网络协议规定了两台计算机之间进行数据交换的共同规则，包括交换数据的格式和动作序列。但并不规定在一台计算机内利用网络协议传输信息的应用程序和实现这些协议的协议实体之间的程序接口。</p>
-
-<p>UNIX中传输层和传输层以下的协议在操作系统内核中实现，那么，就必须规定一种应用程序使用内核的这些网络功能的方法。UNIX总是习惯于将设备和其他机制组织成文件的方式，然后通过文件描述符像访问普通文件那样访问它们。UNIX访问网络也用文件描述符引用一个特殊文件的方法。网络机制要比终端和管道复杂得多，所以，还提供了一组施加在这种特殊文件描述符上的系统调用实现网络所必需的功能。这组函数，就是应用程序和网络之间的接口。</p>
-
-<p>应用程序与网络之间接口有socket和TLI。socket最先由BSD 4.3提供，TLI（tansport layer interface）由AT&amp;T的System V提供。除此之外，还有其他的几种接口，但没有被程序员普遍接受。</p>
-
-<p>对于socket和TLI，多数程序员更偏爱socket，在System V和其他的UNIX系统中也提供了socket编程界面。Windows系统中也有类似的Winsock接口，几乎所有函数都兼容。</p>
-
-<p>最流行的网络协议是TCP/IP，socket提供的编程接口可以使用TCP/IP协议。BSD UNIX设计的socket编程界面是一种通用的网络编程界面，充分考虑了各种网络，例如：IPX网络，X.25网络，ISO的传输层协议TP4，IBM的SNA，以及UNIX内的进程之间通信等。但是，许多系统并不提供所有这些网络支持，有的系统甚至只允许TCP/IP协议的socket编程。</p>
-
-<p>在运行TCP/IP协议的计算机中，一般都支持软件虚拟的IP数据报自环接口loopback。如果试图和IP地址等于自己地址的计算机通信，或者与地址127.0.0.1的计算机通信，数据不会发送到网络上，而是通过内核实现的虚拟的自环接口loopback，将数据回环到计算机自身。利用这一点，可以在一个计算机的多个进程之间进行通信。</p>
-
-<p>现代的许多软件设计，同一台计算机内的进程之间通信也使用socket方式，这使得系统有很大的灵活性，因为需要的时候，只要将两个进程分布到不同的计算机上运行就可以了，而不需要更改程序。</p>
-
-<p>1.2 TCP和UDP协议</p>
-
-<p>TCP/IP对应用程序提供的服务主要有两种：</p>
-
-<p>1、一种是面向连接的可靠的数据流传输TCP，另一种是无连接不可靠数据报传输UDP。</p>
-
-<p>2、应用程序员在使用TCP/IP网络编写通信程序之前，应当首先在TCP和UDP协议之间作出选择，它们决定了由系统提供的通信可靠性。</p>
-
-<p>1.3 基本网络体系结构</p>
-
-<p>在ISO(International organization for Standards)定义的网络体系结构OSI(Open System Interconnection)开放系统互连模型中，计算机网络被定义为七层结构模型。从底向上分别是物理层、数据链路层、网络层、传输层、会话层、表示层和应用层。目前广泛使用的Internet协议簇结构表示如下：</p>
-
-<p>介质层包括IEEE802.3(Ethernet)、802.4(token bus)、802.5(token ring)及其它；</p>
-
-<p>网络层以Internet protocal为主，ARP、RARP、ICMP和IGMP为辅结构；</p>
-
-<p>传输层主要分为TCP协议和UDP协议；</p>
-
-<p>应用层建立了以TCP为基础的FTP、TELNET、SMTP、SNMP，DNS(Domain Name Server)则建立在TCP和UDP之上，另外一些如RPC、NFS、XDR建立在纯粹的UDP协议之上。</p>
-
-<p>计算机网络的通信过程不属于本文讨论范围，如有必要可自行查阅相关文献。</p>
-
-<p>1.4 网络字节次序</p>
-
-<p>不同计算机厂商在计算机内部存储整数的方法会有不同。有的厂商将整数的低位字节放在最低地址处，这种安排叫Little Endian，而有的厂商正好相反，高位字节放在内存的低地址处，它们的字节顺序安排叫Big Endian。</p>
-
-<p>网络通信时，总是从内存的低地址开始传输连续的若干字节，因此，网络软件为了保证各计算机之间的互联性，要求所有的数据按统一的字节顺序传输，这就是规定的网络字节顺序。网络字节顺序的规定与Big Endian 相同。</p>
-
-<p>UNIX中htons，htonl两个库函数，分别将短整数和长整数从主机字节次序转换到网络字节次序。相应地，ntohs和ntohl把网络字节顺序转换到主机字节顺序。</p>
-
-<p>在socket的网络系统调用和库函数的结构体参数中的整数，一般也要求按网络字节顺序排列。为了源程序的可移植性，即使所用的UNIX中主机字节顺序与网络字节顺序正好吻合，也不要省略掉所必须的htons、htonl、ntohs和ntohl。</p>
-
-<p>2 TCP客户端/服务器程序</p>
-
-<p>2.1 Clinet/Server结构概述</p>
-
-<p>socket编程接口，无论使用TCP还是UDP协议，都是一种client/server风格的软件结构。client/server结构的协议软件包括客户端软件和服务器端软件。</p>
-
-<p>以文件传送协议FTP为例，UNIX提供的ftp命令就是客户端软件，在提供文件传送服务的远程计算机上，运行服务器端软件。这些服务器端的软件，在UNIX中由“精灵(daemon)”进程inetd控制，当TCP连接到达时，inetd创建ftpd服务进程负责与客户端软件的ftp通信，以完成文件传送操作，文件传送结束后，ftpd进程结束。</p>
-
-<p>事实上，UNIX设计的socket机制，不仅仅是面向TCP/IP协议的，而是面向所有的网络通信，包括SPX/IPX，X.25，SNA，甚至充分考虑了可扩展性，支持将来可能出现的其他协议。IPv6比socket出现得晚，但是仍然继续沿用socket机制的这层“壳”，内核扩充了IPv6支持后，应用程序员就可以写基于IPv6的socket风格的通信程序了。</p>
-
-<p>2.2 仿照文件的操作模式</p>
-
-<p>访问文件有一组函数，而且这些函数调用的先后顺序也有一定的规则：</p>
-
-<p>先open得到文件描述符fd，然后可以执行read和write访问文件内容，另有一些可以施加在fd上的函数，如：lseek定位文件指针，fcntl设置close-on-exec标志或者对文件的记录加锁，fstat获得文件的状态，等等。</p>
-
-<p>使用管道时，就不再用open获得文件描述符，而是用pipe一次获得两个文件描述符。</p>
-
-<p>使用socket的情况类似：</p>
-
-<p>先用socket创建一个文件描述符，在这个文件描述符上，先施行一些connect，bind，listen等操作控制建立TCP连接，然后才能使用read和write收发数据。</p>
-
-<p>通信过程中可使用fcntl、setsockopt和getpeername等函数，获得一些通信的状态，或者设置一些与通信有关的参数。最终，用close关闭连接。</p>
-
-<p>这些函数调用的先后顺序，也遵循一定的规则。</p>
-
-<p>2.3 网间进程通信需解决的问题</p>
-
-<p>1、网间进程标识问题</p>
-
-<p>单机上不同进程可以用进程号唯一标识。但在网络环境下，各主机独立分配的进程号是不能唯一标识该进程的。</p>
-
-<p>2、多重协议的识别问题</p>
-
-<p>操作系统支持的网络协议众多，不同协议的工作方式、地址格式都不同， TCP/IP协议引入了下列几个概念解决多重协议的识别问题：端口、地址、网络字节序、连接、半相关、全半相关等。</p>
-
-<p>接下来我们将对以上概念逐一做一介绍。</p>
-
-<p>2.3.1 Ports</p>
-
-<p>把网络地址和端口号信息放在一个结构中，也就是套接字地址结构。大多数套接字系统调用都需要一个指向套接字地址结构的指针作为参数，并以此来传递地址信息。每个协议族都定义它自己的套接字地址结构，套接字地址结构都以“sockaddr_”开头，并以每个协议族名中的两个字母作结尾。</p>
-
-<p>端口包括一些数据结构和I/O缓冲区。进程通过系统调用和某端口建立连接后，传输层传给该端口的数据都被相应的进程接收，相应进程发给传输层的数据都从该端口输出。</p>
-
-<p>在TCP/IP协议的实现中，端口操作类似于一般I/O操作，进程获取一个端口相当于获取本地的唯一的I/O文件，可以用一般的读/写原语访问。类似于文件描述符，每个端口都有一个叫端口号的整数描述符，以区别不同的端口。由于TCP/IP传输层的两个协议TCP和UDP是两个完全独立的软件模块，因此各自端口号也相互独立。如TCP和UDP的端口号可以相同，两者并不冲突。</p>
-
-<p>2.3.2 端口的分配</p>
-
-<p>（1）全局分配：是一种集中式分配，由一个公认的中央机构根据用户的需要进行统一分配，并将结果公布于众；</p>
-
-<p>（2）本地分配（ 动态连接）： 进程在需要访问传输层时，向本地操作系统提出申请，操作系统返回本地唯一的端口号，进程再通过合适的系统调用将自己和该端口连接起来（binding)。</p>
-
-<p>TCP/IP端口号分配综合了两种方式。 TCP/IP是将端口号分为两部分，少量的作为保留端口（&lt;256），以全局的方式分配给服务进程。因此，每一个标准服务器都拥有一个全局公认的端口叫周知口，即使在不同的机器上，其端口号也相同。如HTTP中80、TELNET中的23等。剩余的为自由端口，是以本地方式进行分配。</p>
-
-<p>/etc/services文件包含了服务名、端口号和协议名。若机器提供新服务，则需要在该文件中建立一项。</p>
-
-<p>2.3.3 地址</p>
-
-<p>网络通信中的两个进程是分别在两个不同的机器上。两台机器可以位于不同的网络，这些网络通过互连设备（网关、网桥、路由器）连接，因此需要三级寻址（网络地址、主机地址、进程标识）。</p>
-
-<p>某一主机可与多个网络相连，必须指定一特定网络地址；</p>
-
-<p>网络上每一台主机应有其唯一的地址；</p>
-
-<p>每一主机上的每一进程应有在该主机上的唯一标识符。</p>
-
-<p>通常主机地址由网络ID和主机ID组成，在TCP/IP协议中用32位整数值表示；TCP和UDP均使用16位端口号标识用户进程。</p>
-
-<p>2.3.4 连接</p>
-
-<p>两个进程间的通信链路称为连接，连接在内部表现为一些缓冲区和一组协议机制。</p>
-
-<p>2.3.5 半相关和全半相关</p>
-
-<p>1、半相关（half-association）</p>
-
-<p>网络中用一个三元组(the triple)可以在全局中唯一标识一个进程（协议，本机地址，本地端口号）。这样的一个三元组叫做半相关。</p>
-
-<p>2、全半相关</p>
-
-<p>一个完整的网间进程通信需要两个进程组成，并且只能使用同一种高层协议，也就是说TCP无法和UDP通信，因此一个完整的网间进程通信需要一个五元组来标识（协议，本机地址，本地端口号，远地地址，远地端口号）。</p>
-
-<p>这样一个五元组，叫做一个相关（association），即两个协议相同的半相关才能组合成一个合适的相关，或完全指定组成一连接。</p>
-
-<p>2.3.6 服务方式</p>
-
-<p>1、面向连接服务</p>
-
-<p>面向连接服务是电话系统服务模式的抽象，即每一次完整的数据传输都要经过建立连接，使用连接，终止连接的过程。在数据传输过程中，各数据分组不携带目的地址，而使用连接号（connect ID）。本质上，连接是一个管道，收发数据不但顺序一致，而且内容相同。TCP协议提供面向连接的虚电路。</p>
-
-<p>2、无连接服务</p>
-
-<p>无连接服务是邮政系统服务的抽象，每个分组都携带完整的目的地址，各分组在系统中独立传送。无连接服务不能保证分组的先后顺序，不进行分组出错的恢复与重传，不保证传输的可靠性。UDP协议提供无连接的数据报服务。</p>
-
-<p>2.3.7 客户机/服务器模式</p>
-
-<p>TCP/IP允许程序员在两个应用程序之间建立通信并来回传送数据，提供一种对等通信，可以是同一台机器上，也可以是不在同一台机器上。TCP/IP指明了数据是如何进行通信的，但并没有规定如何组织这些应用程序。</p>
-
-<p>实践中网间进程通信的主要模式是客户机/服务器模式，即客户机向服务器发出请求，服务器在接收到请求后提供相应的服务。客户与服务器的作用是非对称的，服务器进程一般是先于客户启动，并一直随系统运行而存在，直到被终止。</p>
-
-<p>客户机/服务器模式的建立基于以下两点：</p>
-
-<p>（1）网络的目的是共享，从而让拥有众多资源的主机提供服务，让资源较少的客户请求服务；</p>
-
-<p>（2）网间进程通信完全是异步的，在通信的进程间需要一种机制建立联系，以便为二者的数据交换提供同步。</p>
-
-<p>客户机/服务器模式操作过程中采取的是以下主动请求方式：</p>
-
-<p>1、服务器端</p>
-
-<p>（1）打开一个通信信道，并告知本地主机将在某一公共地址端口（如Http中80、Telnet中的23）上接受用户的请求；</p>
-
-<p>（2）等待客户请求到达端口；</p>
-
-<p>（3）若接收到重复请求服务，则处理该请求并发送应答信号；若接收到并发服务请求，则要建立子进程来处理这个客户的请求，服务完成后，关闭子进程与客户的通信链路，并终止子进程；</p>
-
-<p>（4） 跳至（2）步；</p>
-
-<p>（5） 关闭服务器。</p>
-
-<p>2、客户端</p>
-
-<p>（1）打开一个通信信道，并连接到服务器所在主机的特定端口；</p>
-
-<p>（2）向服务器发出服务器请求报文，等待并接受应答；</p>
-
-<p>（3）请求结束后关闭与服务器的通信链路并终止此进程。</p>
-
-<p>从以上描述过程可以看出：</p>
-
-<p>客户与服务器的作用是非对称的，因此编码不同。</p>
-
-<p>服务器进程一般是先于客户请求启动。只要系统运行，进程就一直存在，直到正常终止或者强迫终止。</p>
-
-<p>客户软件不必处理并发性，因此比服务器程序简单得多。</p>
-
-<p>2.3.8 TCP协议的实现机制</p>
-
-<p>UDP协议是无连接的不可靠的协议，而TCP是面向连接的，所谓面向连接，是指在数据传输开始前建立一个数据通道，这个通道在整个数据传输过程中都保证通畅，到传输结束才关闭这一通道。</p>
-
-<p>一个典型的TCP协议双方通信的过程是：</p>
-
-<p>（1）获得对方IP地址和端口号。</p>
-
-<p>（2）在本地主机上选择一个IP地址和端口号。</p>
-
-<p>（3）建立连接。</p>
-
-<p>（4）传输数据   这时数据就好象是直接从发送方顺序流出到接收方的一样，与普通的文件流操作没有什么不同。</p>
-
-<p>（5）断开连接。</p>
-
-<p>2.4 TCP网络通信程序构建</p>
-
-<p>2.4.1 建立TCP连接</p>
-
-<p>为了建立一条可靠的连接，TCP采用3次握手：</p>
-
-<p>（1）服务器首先执行被打开的连接操作：socket, bind, listen, accept,然后服务器阻塞，等待客户端的连接。</p>
-
-<p>（2）客户端执行主动打开的连接操作：socket,connect,同时客户端向服务器发送SYN类型的数据段，其中包括客户端的序列号。</p>
-
-<p>（3）服务器接收到这个SYN数据段后，也发送一个SYN类型的数据段，其中包括服务器的序列号和对上一个SYN的确认。</p>
-
-<p>（4）客户端在接收到这个确认后，就发送了对服务器SYN的确认，完成客户端的连接。</p>
-
-<p>（5）服务器接收到这个确认，完成服务器的连接。</p>
-
-<p>2.4.2 面向连接的SOCKET编程</p>
-
-<p>套接字根据使用的协议不同可以分很多种，这里主要介绍两种：TCP套接字和UDP套接字。</p>
-
-<p>Socket套接字对于不同的对象存在相应合理的解释。对于内核来说，socket标记了通信的终点，而对于应用程序来说，socket是一个文件描述符，这种文件描述符指定了应用程序写入/读取信息的位置。</p>
-
-<p>显然，套接字描述符和文件描述符形式上基本一致，但数据结构上存在很大区别。</p>
-
-<p>文件描述符在前文中已经有详细讨论，我们曾提到每个进程均含有一张文件描述符表，表内的数据结构存储了文件的相关信息。</p>
-
-<p>套接字接口为网络通信增加了一个新的抽象，即套接字。当进程调用socket后，操作系统就分配了一个新的数据结构以便保存通信所需的信息，并在文件描述符表中填入了一个新的条目，该条目含有一个指向这个数据结构的指针。尽管套接字内部的数据结构有许多字段，在系统创建套接字后，大多数字段中的值并没有填上。在套接字能够被使用之前，创建该套接字的应用程序必须用其他系统调用把套接字数据结构中的这些信息填上。</p>
-
-<p>套接字一旦创建，应用程序就必须指定如何使用它，套接字本身是完全通用的，可以用来进行任意方式的通信。例如，服务器可以将套接字配置为等待传入连接，而客户可以将其配置为发起连接。</p>
-
-<p>如果服务器将套接字配置为等待传入连接，就称此套接字套接字为主动套接字；反之，客户用来发起连接的套接字就称为被动套接字。</p>
-
-<p>使用TCP的客户和服务器各自使用套接字的一种调用序列。</p>
-
-<p>客户创建套接字，调用connect连接服务器，交互时，使用send（或者write）发送请求，使用recv（或者read）接收应答。当使用连接结束时，客户调用close。</p>
-
-<p>服务器使用bind指明使用的本地（熟知）协议端口，调用listen设置连接等待队列的长度，之后便进入循环。在循环中，服务器调用accept进行等待，直到下一个连接请求到达为止，它使用recv和send（或read和write）同客户交流，最后使用close终止连接。之后，服务器回到accept调用，在那里等待下一个连接。</p>
-
-<p>2.4.3 使用TCP时客户和服务端通信流程</p>
-
-<p>服务端：socket-&gt;bind-&gt;listen-&gt;accept-&gt;read-&gt;write-&gt;close</p>
-
-<p>客户端：socket-&gt;connect-&gt;write-&gt;read-&gt;close</p>
-
-<p>2.4.4 套接字用到的具体数据结构</p>
-
-<p>1、通用套接字地址数据结构（/usr/include/sys/socket.h）</p>
-
-<p>struct sockaddr   /<em>struct  to hold an address </em>/</p>
-
-<p>{</p>
-
-<p>unsigned short sa_familly;     /<em>address family</em>/</p>
-
-<p>char        sa_data[14];       /<em>protocol address</em>/</p>
-
-<p>};</p>
-
-<p>sa_familly为协议族，指出通信协议类型，对于internet域的地址族为AF-INET。</p>
-
-<p>sa_data存贮实际的地址。</p>
-
-<p>2、IPV4套接字地址数据结构</p>
-
-<p>在实际中为了方便处理，每个协议在上面通用定义的基础上改成自己的套接字地址结构，这些结构均以“sockaddr_”开头，并以对应每个协议族的唯一后缀结束。</p>
-
-<p>对于我们关心的Internet（IPV4）域，我们有专用的套接字地址结构sockaddr_in结构，它定义在中。</p>
-
-<p>struct sockaddr_in</p>
-
-<p>{</p>
-
-<p>short int  sin_fammily;    / <em>address family Ipv4 is AF_INET</em>/</p>
-
-<p>unsigned short  sin_port;   /<em>port  number</em>/</p>
-
-<p>struct in_addr   sin_addr;  /<em>internet address   IP address</em>/</p>
-
-<p>unsigned char  sin_zero[8]; /<em>same size as struct sockaddr</em>/</p>
-
-<p>};</p>
-
-<p>struct  in_addr</p>
-
-<p>{</p>
-
-<p>unsigned long s_addr;   /<em>32-bit  IP  address , network byte</em>/</p>
-
-<p>};</p>
-
-<p>2.4.5 套接字用到的基本系统调用</p>
-
-<p>1、socket系统调用，用来获得一个socket描述符。</p>
-
-<h1>include</h1>
-
-<h1>include</h1>
-
-<p>int socket(int domain, int type,  int protocol);</p>
-
-<p>domain是指存放通信进程的区域，通常使用的domains包括：</p>
-
-<p>AF_UNIX for communication between processes on one system;</p>
-
-<p>AF_INET (IPv4) for communication between processes on the same or different systems using the DARPA standard protocols(IP/UDP/TCP)</p>
-
-<p>AF_INET6 (IPv6)</p>
-
-<p>AF_LOCAL (Unix domain)</p>
-
-<p>…</p>
-
-<p>type：通信的类型SOCK-STREAM（TCP)、SOCK-DGRAM(UDP)、SOCK-RAW。</p>
-
-<p>Protocol：一般为0，除非使用原始套接口。</p>
-
-<p>2、bind系统调用</p>
-
-<p>bind为套接字指定本地地址，它包含了IP地址和协议端口号，服务器主要由bind来指明熟知的端口号，它在此熟知的端口号等待连接。以下是一段bind程序演示：</p>
-
-<h1>include</h1>
-
-<h1>include</h1>
-
-<h1>include</h1>
-
-<h1>define MYPORT 3490</h1>
-
-<p>main()</p>
-
-<p>{
-int sockfd;
-struct sockaddr_in   my_addr;
-sockfd = socket(AF_INET, SOCK_STREAM, 0); /<em>需要错误检查 </em>/
-my_addr.sin_family = AF_INET; /<em> host byte order </em>/
-my_addr.sin_port = htons(MYPORT); /<em> short, network byte order </em>/
-my_addr.sin_addr.s_addr = inet_addr(&ldquo;132.241.5.10&rdquo;);
-bzero(&amp;(my_addr.sin_zero),; /<em> zero the rest of the struct </em>/
-/<em> don&rsquo;t forget your error checking for bind(): </em>/
-bind(sockfd, (struct sockaddr *)&amp;my_addr, sizeof(struct sockaddr));</p>
-
-<p>&hellip;</p>
-
-<p>处理自己的 IP 地址和端口的 时候，有些工作是可以自动处理的。
-my_addr.sin_port = 0; /<em> 随机选择一个没有使用的端口 </em>/
-my_addr.sin_addr.s_addr = INADDR_ANY; /<em> 用自己的IP地址 </em>/
-通过将0赋给 my_addr.sin_port，告诉 bind() 自己选择合适的端 口。</p>
-
-<p>将 my_addr.sin_addr.s_addr 设置为 INADDR_ANY，告诉 它自动填上它所运行的机器的 IP 地址。没有将INADDR_ANY转 换为网络字节顺序！INADDR_ANY 实际上就 是 0！即使你改变字节的顺序，0依然是0。
-my_addr.sin_port = htons(0); /<em> 随机选一没有使用的端口 </em>/
-my_addr.sin_addr.s_addr = htonl(INADDR_ANY);</p>
-
-<p>/<em> 使用自己的IP地址 </em>/</p>
-
-<p>3、connect系统调用</p>
-
-<p>connect系统调用于在一个指定的socket上建立一个连接。</p>
-
-<p>int connect(int sockfd, struct sockaddr *serv_addr,int addrlen);</p>
-
-<p>在创建套接字后，客户程序connect以便同远程服务器建立主动的连接，connect的一个参数允许客户指明远程端点，它包括IP地址以及协议端口号。一旦建立了连接，客户就可以向它传送数据了。</p>
-
-<h1>include</h1>
-
-<h1>include</h1>
-
-<h1>include</h1>
-
-<h1>define DEST_IP   &ldquo;132.241.5.10&rdquo;</h1>
-
-<h1>define  DEST_PORT  23</h1>
-
-<p>main()</p>
-
-<p>{</p>
-
-<p>int sockfd;</p>
-
-<p>struct sockaddr_in  dest_addr; /<em> 目的地址</em>/
-sockfd = socket(AF_INET, SOCK_STREAM, 0); /<em> 错误检查 </em>/
-dest_addr.sin_family = AF_INET; /<em> host byte order </em>/</p>
-
-<p>dest_addr.sin_port = htons(DEST_PORT); /<em> short, network byte order </em>/
-dest_addr.sin_addr.s_addr = inet_addr(DEST_IP);</p>
-
-<p>bzero(&amp;(dest_addr.sin_zero),; /<em> zero the rest of the struct </em>/
-/<em> don&rsquo;t forget to check error  </em>/
-connect(sockfd, (struct sockaddr *)&amp;dest_addr, sizeof(struct sockaddr));</p>
-
-<p>&hellip;</p>
-
-<p>4、listen系统调用</p>
-
-<p>系统调用使一个套接字进入监听状态，仅被TCP服务器调用</p>
-
-<h1>include</h1>
-
-<p>int listen(int sockfd, int backlog);</p>
-
-<p>在创建套接字后,直到应用程序采取进一步行动以前，它既不是主动的（由客户使用）也不是被动的（由服务器使用）。面向连接的服务器用listen将一个套接字置为被动的模式，并使其准备接受传入连接。大多数服务器由无限循环构成。该循环可以接受传入的下一个连接，然后对其进行处理，完成后便返回准备接受下一个连接，正处于忙的服务器有可能又来了一个连接请求。为保证不丢失连接请求，服务器必须给listen传递一个参数，告诉操作系统对某个套接字上的连接请求进行排队。因此，listen的一个参数指明某个套接字将被置为被动的模式，而另一个参数将指明套接字所使用的队列长度。</p>
-
-<p>5、accept系统调用</p>
-
-<p>int accept(int sockfd, struct sockaddr <em>addr, int </em>addrlrn);</p>
-
-<p>accept返回非负描述字表示成功，出错将返回-1。如果成功，则返回值用来标识新建立的连接。</p>
-
-<p>参数addr为返回客户进程协议地址，参数addrlen为返回客户进程协议地址的长度。</p>
-
-<p>对TCP套接字，服务器用socket创建一个套接字，用bind指明本地端口地址，用listen将其置为被动的模式，用accept以获取传入连接请求，accept的一个参数指明一个套接字，将从该套接字上接受连接。</p>
-
-<p>accept为每一个新连接创建了一个新的套接字，并将这个新套接字的描述符传给调用者。服务器只对这个新的连接使用该套接字，而原来的套接字接受其他的连接请求。服务器一旦接受了一个连接后，它就可以在这个新的套接字上传送数据。在使用完这个新的套接字后，服务器将关闭该套接字。</p>
-
-<h1>include</h1>
-
-<h1>include</h1>
-
-<h1>include</h1>
-
-<h1>define MYPORT 3490 /<em>用户接入端口</em>/</h1>
-
-<h1>define BACKLOG 10 /<em> 多少等待连接控制</em>/</h1>
-
-<p>main()</p>
-
-<p>{</p>
-
-<p>int sin_size;
-int sockfd, new_fd; /<em> listen on sock_fd, new connection on new_fd </em>/
-struct sockaddr_in  my_addr; /<em> 地址信息 </em>/
-struct sockaddr_in  their_addr; /<em> connector&rsquo;s address information </em>/
-sockfd = socket(AF_INET, SOCK_STREAM, 0); /<em> 错误检查</em>/
-my_addr.sin_family = AF_INET; /<em> host byte order </em>/
-my_addr.sin_port = htons(MYPORT); /<em> short, network byte order </em>/
-my_addr.sin_addr.s_addr = INADDR_ANY; /<em> auto-fill with my IP </em>/
-bzero(&amp;(my_addr.sin_zero),; /<em> zero the rest of the struct </em>/
-/<em> don&rsquo;t forget your error checking for these calls: </em>/
-bind(sockfd, (struct sockaddr *)&amp;my_addr, sizeof(struct sockaddr));
-listen(sockfd, BACKLOG);
-sin_size = sizeof(struct sockaddr_in);
-new_fd = accept(sockfd, &amp;their_addr, &amp;sin_size);</p>
-
-<p>&hellip;</p>
-
-<p>6、send和recv系统调用(read和write)</p>
-
-<p>int send( int sockfd,void *buf ,int len,int flags);</p>
-
-<p>int recv( int sockfd,void *buf ,int len,int flags);</p>
-
-<p>在大多数UNIX系统，程序员可以用read代替recv，用write代替send。对TCP和UDP套接字来说，他们的语义是一样的。把 flags 设置为 0 就可以了。</p>
-
-<p>下列调用将导致进程阻塞：</p>
-
-<p>1、accept()系统调用,若没有连接请求，则被阻塞。</p>
-
-<p>2、read()系统调用。</p>
-
-<p>3、write()系统调用。</p>
-
-<p>7、Closesocket</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-06-15T20:44:03+08:00" pubdate data-updated="true">2009-06-15</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/06/15/MP77-de-UNIX-ke-jian-bi-ji-12//posts/11/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
