@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-08-28T11:19:29+08:00</updated>
+  <updated>2015-08-29T22:36:20+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[metaprogramming ruby: core concepts - Kernel]]></title>
+    <link href="http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel/"/>
+    <updated>2015-08-29T21:57:31+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel</id>
+    <content type="html"><![CDATA[<p>The Kernel is the object of Module, thus it has all instance methods from the parent. Also it&rsquo;s available as instance methods in every Ruby object since the Kernel is included by class Object. Kernel has widespread usage including but not limit to internal Constant references, Processes operations, Loading Strategies, Exceptions, Controlling, IO, and Basic string operations. This article will focus on metaprogramming on instance level.</p>
+
+<h3>Kernel</h3>
+
+<p>All Constants and instance methods are public in Kernel, thus they all can be used in any objects as callee.</p>
+
+<h5>binding</h5>
+
+<p>Returns a Binding object, describing the variable and method bindings at the point of call. This object can be used when calling eval to execute the evaluated command in this environment.</p>
+
+<h5>eval</h5>
+
+<p>Evaluates the Ruby expression(s) in string. If the binding is given, which must be a Binding object, the evaluation is performed in its context. If the optional filename and lineno parameters are present, they will be used when reporting syntax errors.</p>
+
+<h5>block_given? / iterator?</h5>
+
+<p>Returns true if yield would execute a block in the current context. The iterator? form is mildly deprecated.</p>
+
+<h5>callcc{|cont| block}</h5>
+
+<p>Generates a Continuation object, which it passes to the associated block. You need to require &lsquo;continuation&rsquo; before using this method. Performing a cont.call will cause the callcc to return (as will falling through the end of the block). The value returned by the callcc is the value of the block, or the value passed to cont.call.
+In general, Continuation object is used to be analogous to C setjmp/longjmp, or a thread. cont will return itself, and cont.call will jump to end of callcc block.</p>
+
+<h5>caller</h5>
+
+<p>Returns the current execution stack—an array containing strings in the form file:line or file:line: in &lsquo;method&rsquo;. Returns nil if start is greater than the size of current execution stack. Optionally you can pass a range, which will return an array containing the entries within the specified range.</p>
+
+<h5>caller_locations</h5>
+
+<p>Returns the current execution stack—an array containing backtrace location objects. Returns nil if start is greater than the size of current execution stack. Optionally you can pass a range, which will return an array containing the entries within the specified range.</p>
+
+<h5>eval</h5>
+
+<p>Evaluates the Ruby expression(s) in string. If binding is given, which must be a Binding object, the evaluation is performed in its context. If the optional filename and lineno parameters are present, they will be used when reporting syntax errors.</p>
+
+<h5>global_variables</h5>
+
+<p>Lookup global variables.</p>
+
+<h5>lambda</h5>
+
+<p>Equivalent to Proc.new, except the resulting Proc objects check the number of parameters passed when called.</p>
+
+<h5>proc</h5>
+
+<p>Equivalent to Proc.new</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - Module]]></title>

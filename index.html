@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="For internal ruby, Module is mainly used for holding class methods for descendants. Suppose each object has class of A, A always has class of Class &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="The Kernel is the object of Module, thus it has all instance methods from the parent. Also it&rsquo;s available as instance methods in every Ruby &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,95 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel/">
+		
+			Metaprogramming Ruby: Core Concepts - Kernel</a>
+	</h2>
+	<div class="entry-content">
+		<p>The Kernel is the object of Module, thus it has all instance methods from the parent. Also it&rsquo;s available as instance methods in every Ruby object since the Kernel is included by class Object. Kernel has widespread usage including but not limit to internal Constant references, Processes operations, Loading Strategies, Exceptions, Controlling, IO, and Basic string operations. This article will focus on metaprogramming on instance level.</p>
+
+<h3>Kernel</h3>
+
+<p>All Constants and instance methods are public in Kernel, thus they all can be used in any objects as callee.</p>
+
+<h5>binding</h5>
+
+<p>Returns a Binding object, describing the variable and method bindings at the point of call. This object can be used when calling eval to execute the evaluated command in this environment.</p>
+
+<h5>eval</h5>
+
+<p>Evaluates the Ruby expression(s) in string. If the binding is given, which must be a Binding object, the evaluation is performed in its context. If the optional filename and lineno parameters are present, they will be used when reporting syntax errors.</p>
+
+<h5>block_given? / iterator?</h5>
+
+<p>Returns true if yield would execute a block in the current context. The iterator? form is mildly deprecated.</p>
+
+<h5>callcc{|cont| block}</h5>
+
+<p>Generates a Continuation object, which it passes to the associated block. You need to require &lsquo;continuation&rsquo; before using this method. Performing a cont.call will cause the callcc to return (as will falling through the end of the block). The value returned by the callcc is the value of the block, or the value passed to cont.call.
+In general, Continuation object is used to be analogous to C setjmp/longjmp, or a thread. cont will return itself, and cont.call will jump to end of callcc block.</p>
+
+<h5>caller</h5>
+
+<p>Returns the current execution stack—an array containing strings in the form file:line or file:line: in &lsquo;method&rsquo;. Returns nil if start is greater than the size of current execution stack. Optionally you can pass a range, which will return an array containing the entries within the specified range.</p>
+
+<h5>caller_locations</h5>
+
+<p>Returns the current execution stack—an array containing backtrace location objects. Returns nil if start is greater than the size of current execution stack. Optionally you can pass a range, which will return an array containing the entries within the specified range.</p>
+
+<h5>eval</h5>
+
+<p>Evaluates the Ruby expression(s) in string. If binding is given, which must be a Binding object, the evaluation is performed in its context. If the optional filename and lineno parameters are present, they will be used when reporting syntax errors.</p>
+
+<h5>global_variables</h5>
+
+<p>Lookup global variables.</p>
+
+<h5>lambda</h5>
+
+<p>Equivalent to Proc.new, except the resulting Proc objects check the number of parameters passed when called.</p>
+
+<h5>proc</h5>
+
+<p>Equivalent to Proc.new</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-08-29T21:57:31+08:00" pubdate data-updated="true">2015-08-29</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel//index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1493,119 +1582,6 @@ remove_method Removes the method identified by symbol from the current class. Fo
 
 	
 		<span class="comments"><a href="/blog/2015/06/10/microservices-security//index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/06/04/microsevices-trap-monitoring/">
-		
-			Microsevices陷阱: 监控</a>
-	</h2>
-	<div class="entry-content">
-		<p>微服务带来的是更高的架构复杂度，即使你有能力驾驭整体设计，也很难处理生产环境中的各种failures。监控在运维中是一项专门的技术，而对微服务而言则更具有必要性。原因在于，对于单一系统、或者是单点失败型系统而言，任何的错误信息都是有的可循的，然而对于微服务类似的自治系统来说，除非拥有良好的日志和监控系统，否则连发现问题都成问题。一个好的解决办法就是分布式日志数据抽取和聚合查询。</p>
-
-<h3>1. 系统架构对监控模式的影响</h3>
-
-<p>由于系统架构的不同，即使利用前述的思想，实施监控模式也有一定区别。</p>
-
-<h4>单服务，单节点</h4>
-
-<p>一切都变得如此简单，CPU、内存&hellip;日志和查询系统、平均响应时间、负载增长&hellip;甚至当你知道Nagios或New Relic，搭建此类系统就几乎等于零成本。当然，这并不意味着你就此精通监控技术&hellip;&hellip;</p>
-
-<h4>单服务，多节点</h4>
-
-<p>由于各个节点的权重由LBS决定，因此监控时采用的系数可能会有差别。不过，通过把多个节点的运维数据聚合在一起，实现一次查询也是理想的方案。直观的，可以利用ssh-multiplexers类的工具同时在多节点上获取数据，并存储在第三方节点上向运维提供分析平台。</p>
-
-<h4>多服务，多节点</h4>
-
-<p>在遇到真正的微服务大杀器时，运维会遇到很多从未谋面的问题。例如在复杂架构下，如何判断某个服务的错误和功能错误有关（可调试性），如何在海量运维数据中找到具体的错误（可检索性），这些都成为眼前难题。而解决方案还是采集＋聚合，无论数据属于日志或系统应用度量。</p>
-
-<h3>2. 日志系统架构</h3>
-
-<p>现在，开源界流行专门的日志采集工具logstash，和聚合查询系统Kibana，实际上就体现了一种良好的日志监控系统架构。logstash负责分布式日志数据采集和过滤，并将其存储至任何介质。Kibana是一个基于ElasticSearch的聚合查询工具，能够方便管理其中的日志数据，并提供可视化。但是，针对不同类型的日志数据也要采取不同的采集和管理方案。</p>
-
-<h4>跨多服务跟踪系统应用度量数据</h4>
-
-<p>系统应用度量，包括CPU、内存、网络请求/响应等基础数据，在复杂架构中，运维可能需要全局性数据，也可能需要针对单个服务的全部节点数据，也就是说，在元数据中必须加入相关的关联性，以保证日志数据的可用性。当数据准备就绪，Graphite这种实时可视化工具就能派上用场了。</p>
-
-<h4>服务度量</h4>
-
-<p>系统度量采集了除应用服务之外的几乎全部运维数据，而对应用本身来说，利用其自身的日志工具在多数情况下就足够了。但是，我们可能有时会遇到如下若干需求：希望查看所有用户检查其购物车的次数、希望查看用户操作的平均间隔时间&hellip;对于此类统计需求，一方面可以作为功能进行开发，但由于引入发布流程，本身缺乏灵活性，在多数场合下并不适用。另一方面，可以直接从日志数据中攥取所需信息。很显然，后者带来的好处更多，实现现有数据的更高效利用（但具体技术还在发展中，例如大数据技术），甚至可能挖掘出新的商业信息。因此，在任何关于日志数据挖掘的理论普及之前，好的实践应是尽量多的保存日志信息，因为其中可能蕴藏着未被发现的金矿。</p>
-
-<h3>3. 监控系统</h3>
-
-<h4>综合监控和语义化</h4>
-
-<p>对日志系统的监控，通常要求实现一个对人的警告功能。但是在具体实践中，可能只是对CPU、内存甚至磁盘利用率设置一个阈值，一旦运维数据达到这个值就向运维人员发送警告。问题在于，现实中我们想在第一时间得到的信息其实是“系统在正常工作吗？”，而单个维度的超限可能无法等同于上述答案。</p>
-
-<p>因此为了保证运维人员不至于整晚都睡不好觉，监控模型的改进还是很有必要的。除了针对底层运维数据的监控，从业务角度入手实现综合监控是未来发展的趋势，特别是在微服务架构下。例如，有时需要监控微服务间可用性，除了观察各服务的基础运维数据，还可以从业务角度入手，检查数据流的变化情况，以及健康度。这种更高层的监控，也被称作语义化监控，在实际中对运维人员实现了更高要求：理解业务和设计。</p>
-
-<h4>关联IDs</h4>
-
-<p>分布式系统的跟踪调试是一个世界性难题，实际中也很少有人能够遇到、甚至尝试解决此类问题。一般而言，微服务架构的日志系统至少应包含一个跟踪功能，否则一旦出现监控警告，我们能看到的只有直接服务代码，其上游成百上千的服务调用却一无所知——当然这种规模的系统没有几家公司拥有。Google在2010年发表了Dapper——其大规模分布式系统跟踪基础架构，Twitter随后在前者的研究基础上实现了zipkin——开源分布式系统跟踪框架。上述解决方案无一不具有“重”的特点，但基本原理类似：在服务间传递消息时，在消息头封装一个特殊的GUID，并将其写入日志或第三方系统。</p>
-
-<p>目前来看，关联IDs是微服务架构必须要尽早考虑的问题，否则一旦出现问题就很难有充分的信息进行定位。而采用重量级框架带来的成本可能较高，理想方案是尽量简单实现类似功能，并集成进现有日志系统，如果需求复杂度进一步提升，就可以考虑引入大杀器灭之。</p>
-
-<h4>层级关联</h4>
-
-<p>本节开始提到了语义话监控的概念，它对于“系统正确运行”含义的代表可能要强于底层运维数据警告。但如果从定位问题的角度出发，即使发现问题存在，也不意味着立即定位问题，更谈不上提高可用性了。例如，两个独立服务分别运行良好，但服务间通信出现问题，导致数据无法正确传输，但现有功能依然存在，严重的话可能引起数据级别的错误，因此这种服务间集成点的监控成为必须要考虑解决的问题。</p>
-
-<p>实践中针对服务层级的监控多引入一种名为断路器的工具，其用途是一旦发现通信中断，就立即断开当前服务与下游的通信，从而避免错误的持续传递造成灾难。Netflix的Hystrix是这一领域中基于JVM的开源框架。</p>
-
-<h4>标准化和可读性</h4>
-
-<p>日志/监控系统的重要内容就是标准化，当你采用微服务架构，标准化就更加重要——这恐怕是你唯一能够从整体上把握系统的切入点。另一方面，监控最终还是向人提供决策参考——因为角色的不同，不同的人对监控数据的理解也存在偏差，因此在设计监控系统时还需要考虑的重要问题：</p>
-
-<ol>
-<li><p>人们当前需要什么数据。</p></li>
-<li><p>人们随后需要什么数据。</p></li>
-<li><p>人们习惯于如何消费这些数据。</p></li>
-</ol>
-
-
-<p>至少你应该尝试读一下《Information Dashboard Design: Displaying Data for At-a-Glance Monitoring》，相信会把对监控的理解上升到人文的高度。</p>
-
-<h4>4. 总结与未来</h4>
-
-<p>监控领域非常得大，有时甚至超过产品本身——这会不会是一次大规模的历史性误区，目前还很难说。但现状是几乎所有的技术研发公司都在该领域发力，希望从此走上数据金矿的道路。传统上，我们利用自身简易工具监控系统应用，利用GA、Omniture抓取业务数据，利用日志系统定位问题。碎片化的工具方便实现精细化分工，但很大程度上阻碍了数据的进一步攥取，成为大数据之路上的绊脚石。</p>
-
-<p>监控工具的融合进程目前依然缓慢，Riemann是现有的比较流行的分布式系统监控框架，其本质上是一个事件服务器，通过接收分布式系统的各类事件采集、聚合相关数据，但仍主要集中在系统应用监控方面。Suro是由Netflix开源的一套分布式数据管线框架，数据处理方式类似Riemann，但更集中于数据管线的功能，其下游应用包括Storm实时数据分析框架、Hadoop离线批处理框架以及Kibana日志分析平台。</p>
-
-<p>当然，这种融合趋势并不会影响专注于不同领域的工具的发展，但统一数据接口是眼下应当开始的工作。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-06-04T13:57:50+08:00" pubdate data-updated="true">2015-06-04</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>, <a class='category' href='/blog/categories/ruan-jian-jia-gou/'>软件架构</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2015/06/04/microsevices-trap-monitoring//index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

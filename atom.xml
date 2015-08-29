@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-08-28T11:19:29+08:00</updated>
+  <updated>2015-08-29T22:35:28+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[metaprogramming ruby: core concepts - Kernel]]></title>
+    <link href="http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel/"/>
+    <updated>2015-08-29T21:57:31+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel</id>
+    <content type="html"><![CDATA[<p>The Kernel is the object of Module, thus it has all instance methods from the parent. Also it&rsquo;s available as instance methods in every Ruby object since the Kernel is included by class Object. Kernel has widespread usage including but not limit to internal Constant references, Processes operations, Loading Strategies, Exceptions, Controlling, IO, and Basic string operations. This article will focus on metaprogramming on instance level.</p>
+
+<h3>Kernel</h3>
+
+<p>All Constants and instance methods are public in Kernel, thus they all can be used in any objects as callee.</p>
+
+<h5>binding</h5>
+
+<p>Returns a Binding object, describing the variable and method bindings at the point of call. This object can be used when calling eval to execute the evaluated command in this environment.</p>
+
+<h5>eval</h5>
+
+<p>Evaluates the Ruby expression(s) in string. If the binding is given, which must be a Binding object, the evaluation is performed in its context. If the optional filename and lineno parameters are present, they will be used when reporting syntax errors.</p>
+
+<h5>block_given? / iterator?</h5>
+
+<p>Returns true if yield would execute a block in the current context. The iterator? form is mildly deprecated.</p>
+
+<h5>callcc{|cont| block}</h5>
+
+<p>Generates a Continuation object, which it passes to the associated block. You need to require &lsquo;continuation&rsquo; before using this method. Performing a cont.call will cause the callcc to return (as will falling through the end of the block). The value returned by the callcc is the value of the block, or the value passed to cont.call.
+In general, Continuation object is used to be analogous to C setjmp/longjmp, or a thread. cont will return itself, and cont.call will jump to end of callcc block.</p>
+
+<h5>caller</h5>
+
+<p>Returns the current execution stack—an array containing strings in the form file:line or file:line: in &lsquo;method&rsquo;. Returns nil if start is greater than the size of current execution stack. Optionally you can pass a range, which will return an array containing the entries within the specified range.</p>
+
+<h5>caller_locations</h5>
+
+<p>Returns the current execution stack—an array containing backtrace location objects. Returns nil if start is greater than the size of current execution stack. Optionally you can pass a range, which will return an array containing the entries within the specified range.</p>
+
+<h5>eval</h5>
+
+<p>Evaluates the Ruby expression(s) in string. If binding is given, which must be a Binding object, the evaluation is performed in its context. If the optional filename and lineno parameters are present, they will be used when reporting syntax errors.</p>
+
+<h5>global_variables</h5>
+
+<p>Lookup global variables.</p>
+
+<h5>lambda</h5>
+
+<p>Equivalent to Proc.new, except the resulting Proc objects check the number of parameters passed when called.</p>
+
+<h5>proc</h5>
+
+<p>Equivalent to Proc.new</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - Module]]></title>
@@ -1810,21 +1864,6 @@ REST over HTTP也存在缺点，一、生成客户端stub的成本较高，超�
 <p>总的来说，社会网络可被看作是一个个体相互间施加行为影响的媒介，如同一只隐形的蝴蝶，有意无意将花粉传播到网络中的各个角落。而随着电子信息工业的发展，互联网上的社会网络逐渐崛起，非常丰富和高质量的社会网络数据直接被用于网络分析，从而为底层的基础理论研究提供数据保障，使这第一手资料变得弥足珍贵。但是，研究人员仍需要进一步明确传统社会网络和所谓SNS的本质区别，由于网络传播的即时性和爆炸性，行为影响传播在广度上会有极大的促进，但也未必完全意味着好消息。毕竟，从植物学的角度来说，错误的花粉被授予柱头，将导致花粉和胚珠的双重浪费，这显然不是进化论给予我们的答案。</p>
 
 <p>即使是在传统社会网络里，这种情况发生的概率也非常之低。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[整站迁移完成]]></title>
-    <link href="http://www.hanyi.name/blog/2012/07/07/zheng-zhan-qian-yi-wan-cheng/"/>
-    <updated>2012-07-07T21:20:38+08:00</updated>
-    <id>http://www.hanyi.name/blog/2012/07/07/zheng-zhan-qian-yi-wan-cheng</id>
-    <content type="html"><![CDATA[<p>最近一直在考虑是不是该升级到vps了？毕竟单纯的空间已经远远无法满足现在互联网DIY的需求。然而思考再三，vps需要花更多时间去照顾，恰好在未来一段时间内又不会很轻松，只好先忍一忍。于是决定趁早先拿下新域名hanyi.name。结果问题就来了，国内的空间商要求新绑定域名必须重新备案，否则按规定不予解析。还好我对这一套比较熟悉，屁颠儿跑去XX部网站办备案，结果被告知个人只允许备案1次，机构最多也只允许备案5次。而我前次备案是在08年，当时还是因为他们无故删除了我在06年就提交并审核通过的备案信息，悲剧的是他们这次居然成功保存了4年前的信息！回来找空间商商量，最简单的方法还是换别人的真实信息重新提交。顿时无语，原来早前CN域名开放是纯属坑人呢？进而有了将整站迁移至国外空间的想法。</p>
-
-<p>域名问题很好解决，许多国外知名域名商支持通过支付宝进行国际支付，加上pending共花了一天时间完成。缺点是DNS初解析较慢，平时用的CN域名的解析在国内几乎是实时更新的。另一方面采用了原空间商在国外的主机业务，用电信线路看主机的ping不错，不过迁移后发现明显还是慢了一个级别，目前看来只好通过在今后优化页面内容来改善了。好处是空间容量是以前的三倍，不过现在看来用处似乎不大。</p>
-
-<p>迁移工作还是颇费周折，现在看来wordpress迁移唯一必然的成功办法还是数据库内容链接的全文替换，否则只改几个字段可能会出现无法进入后台的情况。再加上周中实验室网络欠费，用了几天坑爹的“西大国内网”，很难顺利完成整站内容的迁移。于是只好把多余的时间用来进行一些反思：多年以来我做了许多自己感兴趣的工作，尽管无甚成果，但确实也学习了不少东西，总体上始终循着当初所谓“自由学习，自由思想”的理念，也从未遇过大的挫折。然而，出于一些忧虑和回避，自己有意无意忽视了平等交流：所谓平等交流，在我看来就是用自己的想法去换取别人的想法，并且所有人都认同且遵守唯一的道德准则。事实上，我对周围真实环境的了解程度非常低，某种程度上是基于以上原因。这也就导致了自己对身边事物的看法具有很强的不确定性，难以在自身问题上做出有效判断。另一方面也导致自己至今缺乏一些常识&hellip;&hellip;有些事在别人看来是显而易见，自己却不容易想明白。</p>
-
-<p>考虑到有些外链是指向原mp77.cn，本站仍会对继续支持这个域名，并持续至少1年时间。而hanyi.name会是我的永久性域名，今后也不会再向站外自动导出文章。</p>
 ]]></content>
   </entry>
   
