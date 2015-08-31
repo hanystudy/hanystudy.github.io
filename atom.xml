@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-08-29T22:35:28+08:00</updated>
+  <updated>2015-08-31T11:54:27+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,193 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[metaprogramming ruby: core concepts - Object Oriented Hierarchies]]></title>
+    <link href="http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-object-oriented-hierarchies/"/>
+    <updated>2015-08-29T22:40:06+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-object-oriented-hierarchies</id>
+    <content type="html"><![CDATA[<p>Since last several articles, we&rsquo;ve gone through all basic but the most important internal definitions in Ruby lang. They are BasicObject, Object, Module, and Kernel, don&rsquo;t forget Class. The five composite the root of Object Oriented Hierarchies in Ruby world. One of their most useful benefit is incredible metaprogramming ability, which already provides people revolutionary tools like Ruby on Rails. Frankly speaking, the word metaprogramming makes itself too mysterious to be accepted by most people. Conciseness and Expressiveness - are the only purpose of this feature.</p>
+
+<h3>1. Class</h3>
+
+<p>Classes in Ruby are first-class objects, each class in Ruby is an instance of class Class. Typically, you create a new class by using: Class.new. When a new class is created, an object of type Class is initialized and assigned to a global constant (Name in this case). When Name.new is called to create a new object, the new method in Class is run by default. Classes, modules, and objects are interrelated, we will discuss more in next chapter.</p>
+
+<h4>Public Class Methods</h4>
+
+<h5>new</h5>
+
+<p>Creates a new anonymous (unnamed) class with the given superclass (or Object if no parameter is given). You can give a class a name by assigning the class object to a constant. If a block is given, it is passed the class object, and the block is evaluated in the context of this class using class_eval.</p>
+
+<h4>Public Instance Methods</h4>
+
+<h5>allocate</h5>
+
+<p>Allocates space for a new object of class&rsquo;s class and does not call initialize on the new instance. The returned object must be an instance of class.</p>
+
+<h5>new</h5>
+
+<p>Calls allocate to create a new object of class&rsquo;s class, then invokes that object&rsquo;s initialize method, passing it args. This is the method that ends up getting called whenever an object is constructed using .new.</p>
+
+<h5>superclass</h5>
+
+<p>Returns the superclass of class, or nil. Returns nil when the given class does not have a parent class.</p>
+
+<h4>Private Instance Methods</h4>
+
+<h5>inherited</h5>
+
+<p>Callback invoked whenever a subclass of the current class is created.</p>
+
+<h3>2. Hierarchy of Five Kings</h3>
+
+<p>For more clearly, here we give a figure to cover all five items listed in preface. (We also list two guests in this figure to represent custom codes in the hierarchy)</p>
+
+<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/metaprogramming_ruby/ruby_oo_hierarchy.png" alt="More advance Ruby OO hierarchy" /></p>
+
+<p>From the figure, we can see that class can be completely separated with objects under well design. Ruby uses this kind of hierarchy to implement its internal Object Oriented design. Here we would like to introduce the responsibilities on metaprogramming for each in above figure, and have deeper discussion on Module and Class, which are directly related to custom codes.</p>
+
+<h4>BasicObject</h4>
+
+<p>BasicObject is the root of all objects in Ruby through its subclass Object. The only class method in BasicObject is &lsquo;new&rsquo;, which is used to allocate memory to new object, and do initialization. For the public instance methods, mainly including object_id, send, and instance_eval/instance_exec to provide basic operations on any objects in Ruby. Also, BasicObject figures out the method_missing mechanism, which is very important for Ruby DSL definition, and singleton methods hook — which actually connects classes and objects in Ruby.</p>
+
+<h4>Object</h4>
+
+<p>If any class is defined by using keyword &lsquo;class&rsquo; without other specific inheritance, it should be inherited from Object by default. Object offers the top useful Constants in Ruby world, like ARGV, ENV, RUBY_VERSION, STDIN/STDOUT/STDERR, etc. Also for public instance methods, it provides objects comparison, clone/dup, freezing, and respond_to? checking, etc.</p>
+
+<p>In metaprogramming field, Object mainly focus on instance level usage, like getting class of object, extend, instance_of?, methods, retrieving singleton_class/singleton_methods of object. etc.</p>
+
+<h4>Kernel</h4>
+
+<p>Kernel is very special in the hierarchy, because it&rsquo;s absolutely not class but an object. On the other hand, Kernel is mixed into class Object, making it become the earliest members in the whole hierarchy and also play very important role in the process.</p>
+
+<p>Unlike Object, Constants in Kernel do not refer to some parameters of internal Ruby lang, they&rsquo;re more like an utility or tool kit for subclasses, especially the reference to popular classes. Kernel also plays hard in Process operations(abort, fork, spawn), Source file loading(auto loading, require), Exception(catch, fail, raise, throw), String(chomp, chop, format, gets, gsub, sprintf, sub), Controlling(loop, sleep, rand, srand, trace/untrace), and IO(open, print, put, readlines, select).</p>
+
+<p>Kernel also enhances the metaprogramming, like binding, block_given?, caller, eval, lambda, and proc.</p>
+
+<h3>3. Modules and Classes</h3>
+
+<h4>Module</h4>
+
+<p>Basically, Modules serve two purposes in Ruby: namespacing and mix-in functionality.</p>
+
+<p>A namespace can be used to organize code by package or functionality that separates common names from interference by other packages. Mix-in functionality allows sharing common methods across multiple classes or modules. Ruby comes with the Enumerable mix-in module which provides many enumeration methods based on the each method and Comparable allows comparison of objects based on the &lt;=> comparison method.</p>
+
+<p>A module is created using the module keyword.</p>
+
+<h4>Class</h4>
+
+<p>Every class is also a module, but unlike modules a class may not be mixed-in to another module (or class). Like a module, a class can be used as a namespace. A class also inherits methods and constants from its superclass. Use the class keyword to create a class. Any method defined on a class is callable from its subclass, the same is true for constants. You can override the functionality of a superclass method by redefining the method. If you wish to invoke the superclass functionality from a method use super.</p>
+
+<p>If you do not supply a superclass your new class will inherit from Object. You may inherit from a different class using &lt; followed by a class name.</p>
+
+<p>When used without any arguments super uses the arguments given to the subclass method. To send no arguments to the superclass method use super(). To send specific arguments to the superclass method provide them manually like super(2). super may be called as many times as you like in the subclass method.</p>
+
+<h4>Common properties</h4>
+
+<p>Note that there are many similarities between modules and classes. Besides the ability to mix-in a module, the description of modules also applies to classes.</p>
+
+<h5>Reopening</h5>
+
+<p>Reopening classes is a very powerful feature of Ruby, but it is best to only reopen classes you own. Otherwise it may lead to naming conflicts or difficult to diagnose bugs.</p>
+
+<h5>Nesting</h5>
+
+<p>Modules may be nested.</p>
+
+<h5>Packaging</h5>
+
+<p>Many packages create a single outermost module (or class) to provide a namespace for their functionality. You may also define inner modules using :: provided the outer modules (or classes) are already defined.</p>
+
+<h5>Self</h5>
+
+<p>self refers to the object that defines the current scope. And it will change when entering a different method or when defining a new module.</p>
+
+<h5>Constants</h5>
+
+<p>Accessible constants are different depending on the module nesting (which syntax was used to define the module). if you use :: to define A::B without nesting it inside A a NameError exception will be raised because the nesting does not include A. If a constant is defined at the top-level you may preceded it with :: to reference it.</p>
+
+<h5>Methods</h5>
+
+<p>Class methods may be called directly(This is slightly confusing, but a method on a module is often called a “class method” instead of a “module method”. See also Module#module_function which can convert an instance method into a class method.). When a class method references a constant it uses the same rules as referencing it outside the method as the scope is the same.
+Instance methods defined in a module are only callable when included. These methods have access to the constants defined when they were included through the ancestors list.</p>
+
+<h5>Visibility</h5>
+
+<p>Ruby has three types of visibility. The default is public. A public method may be called from any other object.</p>
+
+<p>The second visibility is protected. When calling a protected method the sender must be a subclass of the receiver or the receiver must be a subclass of the sender. Otherwise a NoMethodError will be raised. Protected visibility is most frequently used to define == and other comparison methods where the author does not wish to expose an object&rsquo;s state to any caller and would like to restrict it only to inherited classes.</p>
+
+<p>The third visibility is private. A private method may not be called with a receiver, not even self. If a private method is called with a receiver a NoMethodError will be raised.</p>
+
+<h5>Alias and Undef</h5>
+
+<p>You may also alias or undefine methods, but these operations are not restricted to modules or classes.</p>
+
+<h3>4. Singleton classes</h3>
+
+<p>The singleton class (also known as the metaclass or eigenclass) of an object is a class that holds methods for only that instance. You can access the singleton class of an object using class &lt;&lt; object like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+</span><span class='line'>    <span class="c1"># self is the singleton class here</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="no">Foo</span>
+</span><span class='line'>  <span class="c1"># self is the singleton class here</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This allows definition of methods and attributes on a class (or module) without needing to write def self.my_method.</p>
+
+<p>Since you can open the singleton class of any object this means that this code block:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">bar</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nc">bar</span><span class="o">.</span><span class="nf">bar_method</span>
+</span><span class='line'>  <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>is equivalent to this code block:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">bar</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="n">bar</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">bar_method</span>
+</span><span class='line'>    <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Understanding singleton class in ruby is very important to investigate internal ruby, especially for its OO design. In next article, we&rsquo;ll introduce the scope mechanism in ruby.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - Kernel]]></title>
@@ -1847,23 +2034,6 @@ REST over HTTP也存在缺点，一、生成客户端stub的成本较高，超�
 <p>尽管我崇尚绝对自由，甚至可以说如果没有自由，我就不再是我。但是另一方面，如果未来我选择妥协，用自己的自由去换取世界观，我就变成了另外一个我，一个背叛了原始的我的我，到那时，我该怎么看待自己？我只能确定，本文完成后还剩了一摞的书等着我去啃。至少通过这种方法，我就有机会去变成一个不一样的我，然后告诉原始的我：原来我是这样的我！</p>
 
 <p>最后，如果读者您完全看懂了本文，那么也请尽量告诉我，让我能够佩服一下自己 ，谢谢。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[网络里的隐形蝴蝶]]></title>
-    <link href="http://www.hanyi.name/blog/2012/07/24/wang-luo-li-de-yin-xing-hu-die/"/>
-    <updated>2012-07-24T02:24:10+08:00</updated>
-    <id>http://www.hanyi.name/blog/2012/07/24/wang-luo-li-de-yin-xing-hu-die</id>
-    <content type="html"><![CDATA[<p>取道天津回家的路上，回想起在研讨班上介绍的近期发表在《Science》上的一篇文章——《<a href="http://www.sciencemag.org/content/337/6090/49.abstract">Network Interventions</a>》，恰好随身u盘里存有该期的full text，为了打发时间，便试读了这篇Review（很少去碰《Science》上的Review，往往感觉高贵但又不知所云）。结合最近、特别是这几天会议期间的经历，觉得有所感触，于是就想写文章，无奈下了动车就找不到一个能接到电源的地方，于是只好回家后将其完善。事实上，南加州大学Thomas W. Valente博士通过这篇Review列举了一些针对社会网络的最新研究成果，并向我们展示了一个看待现实问题的新思路。</p>
-
-<p>原文作者Thomas W. Valente是USC的传播学博士，现任该校预防医学系副教授，由于数学学士的背景，其研究兴趣主要集中于网络分析和基于社会网络与程序评估的社会影响研究。Network Interventions的字面意思是网络介入，指利用社会网络数据加速行为变更或改善组织效率的一种新方法。近年来，研究人员逐渐发现通过分析已有的社会网络数据，并采用合适的方法就能得到一种具体且有效的Network Intervention方案，而一旦应用该方案就有可能引发强烈的正面或负面效应（Interventions并不是本文的重点，但却是原文的核心主题）。应当注意的是，Network Interventions之所以可被看作一门科学，是因为前期已有大量有关社会网络分析的研究，并取得了不乏瞩目的成果，而Network Interventions实际上是建立在前述成果基础上的一系列应用。那么，随着时间的推移，社会网络的规模和复杂度不断更迭，其本质是否已发生了无数次巨变呢？</p>
-
-<p>同一篇文章的原作者著有一本《Social Networks and Health: Models, Methods, and Applications》，别出心裁地将社会网络分析的理论和方法应用于公共卫生和其它社会科学领域，其基本观点是：不同人类分组之间相互交流和传播形成了个体的健康行为。这里的“分组”可以指一个族群，也可以指一个个体。通过对社会网络的数据、特别是近年出现的基于互联网的虚拟社会网络所带来的庞大数据进行网络分析，研究人员发现个体行为和精神状态不同程度地受到了网络中相邻节点的影响，影响力最大的节点被称为“变更代理”。目前已有许多判别网络中“变更代理”的方法，而采用Borgatti提出的最关键节点方法可以找到网络中的局部Key player，即所谓的Leader。通常情况下Leader影响了网络中大部分节点的行为属性，但对于类似存在桥节点（且Leader非该类型节点）的网络，传播效率就很大程度上受到非Leader因素的影响。具体到公共卫生领域，这种影响可能是饮食性超重在节点间的传染，其根源则是Key player对其它节点施加了影响，使节点的固有行为、如饮食习惯等发生变化，从而导致超重节点数量的增加。另一个典型案例就是某种抑郁症的网络传播，这里会另文介绍。进一步，研究人员为了度量个体行为在网络中的传播速度和冲量（动量的变化量），通常采用一种“低阈值变更代理”的方法，即通过分析邻接Key Player数量与所有相邻的节点数，从而得到节点的曝光度，其值实际上就是每个节点的阈值。低阈值携带节点有时也会成为变更代理，但确定这部分则需要获取行为学意义上的先验数据加以支持。</p>
-
-<p>总的来说，社会网络可被看作是一个个体相互间施加行为影响的媒介，如同一只隐形的蝴蝶，有意无意将花粉传播到网络中的各个角落。而随着电子信息工业的发展，互联网上的社会网络逐渐崛起，非常丰富和高质量的社会网络数据直接被用于网络分析，从而为底层的基础理论研究提供数据保障，使这第一手资料变得弥足珍贵。但是，研究人员仍需要进一步明确传统社会网络和所谓SNS的本质区别，由于网络传播的即时性和爆炸性，行为影响传播在广度上会有极大的促进，但也未必完全意味着好消息。毕竟，从植物学的角度来说，错误的花粉被授予柱头，将导致花粉和胚珠的双重浪费，这显然不是进化论给予我们的答案。</p>
-
-<p>即使是在传统社会网络里，这种情况发生的概率也非常之低。</p>
 ]]></content>
   </entry>
   
