@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-08-31T11:54:27+08:00</updated>
+  <updated>2015-09-08T00:12:25+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,211 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[metaprogramming ruby: core concepts - scope &amp; self]]></title>
+    <link href="http://www.hanyi.name/blog/2015/09/08/metaprogramming-ruby-core-concepts-scope-and-self/"/>
+    <updated>2015-09-08T13:47:47+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/09/08/metaprogramming-ruby-core-concepts-scope-and-self</id>
+    <content type="html"><![CDATA[<p>Scope defines the circumstance around any ruby statement, which basically limits your accessibility to resources. But ruby also has implicit and complicate Constants/Methods lookup strategy to make things not so easy at all. This article will clarify the concepts about scope and self firstly, then deep into the Constants/Methods lookup strategy. Finally, let&rsquo;s try to understand top-level which may be the most special case in this topic.</p>
+
+<h3>1. Scope</h3>
+
+<p>In most cases, the &lsquo;Scope&rsquo; we say in ruby commonly refers to variable scope, which has a little bit different from other popular languages. For example, there are four basic variable scopes including local, global, instance and class level, none of them has business with each other. We&rsquo;ve already know the naming specification below:</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">Name begins with</th>
+<th style="text-align:center;">Variable scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">[a-z] or _</td>
+<td style="text-align:center;">local variable   </td>
+</tr>
+<tr>
+<td style="text-align:center;">$         </td>
+<td style="text-align:center;">global variable  </td>
+</tr>
+<tr>
+<td style="text-align:center;">@         </td>
+<td style="text-align:center;">instance variable</td>
+</tr>
+<tr>
+<td style="text-align:center;">@@        </td>
+<td style="text-align:center;">class variable   </td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Actually the tricky is not naming, it&rsquo;s about default scope changing. As we know that ruby has lexical scope, but not like others, it does not support nested scope, like inner scope shares outer scope in some languages. Each of four variable scopes in above figure is purely independent to each other.</p>
+
+<h4>message &amp; scope resolution operator</h4>
+
+<p>Dot . is message operator in ruby, mainly used for message receiving, like method call. Double colon :: is scope resolution operator, commonly used for getting constant in specific scope, Like Foo::Bar, means searching ./foo/bar with relative path. If Foo is undefined in current scope, you should always use ::Foo::Bar to figure it out using absolute path.</p>
+
+<h4>scope changing</h4>
+
+<p>There are four basic cases which may create and change the scope lexically: Class definitions (class), Module definitions (module), Methods (def) and Blocks. Block scope is a little bit different from others and more interesting, which would create its own scope after the block defined, but also have closure capability, like code below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'><span class="n">bar</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;hi&#39;</span> <span class="k">if</span> <span class="n">foo</span> <span class="o">==</span> <span class="s1">&#39;hello&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'><span class="n">bar</span><span class="o">.</span><span class="n">call</span>
+</span><span class='line'><span class="n">foo</span> <span class="c1">#hi</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For sure we can break this very easily:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'><span class="n">bar</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">;</span><span class="n">foo</span><span class="o">|</span> <span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;hi&#39;</span> <span class="k">if</span> <span class="n">foo</span> <span class="o">==</span> <span class="s1">&#39;hello&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'><span class="n">bar</span><span class="o">.</span><span class="n">call</span>
+</span><span class='line'><span class="n">foo</span> <span class="c1">#hello</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that |;foo| defines foo as a local variable in its block, this kind of feature was introduced from ruby 1.9.</p>
+
+<h4>constants scope</h4>
+
+<p>The scope we&rsquo;ve talked until now basically only means variable scope. In ruby, constant is totally different type of data compared with other languages like C++ or Java, any constant name must be started with uppercase character. And none of them can be assigned dynamically. Like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">foo</span>
+</span><span class='line'>  <span class="no">Bar</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'><span class="k">end</span> <span class="c1">#should give SyntaxError for dynamic constant assignment</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Constants defined within a class or module can be accessed within its parent. And scope operator we talked before should be used when it&rsquo;s outside the class or module. Constants defined outside any class or module are global scope, can be accessed directly or by using the scope operator &lsquo;::&rsquo; with no prefix.</p>
+
+<h3>2. Self</h3>
+
+<p>As we know that the grail in ruby world would be conciseness. However, such conciseness is built on many bright solutions like keyword self.</p>
+
+<p>if you just type a name in ruby console, it will show you an error:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">foo</span> <span class="c1">#NameError: undefined local variable or method `foo&#39; for main:Object</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Indeed it has a huge gap between ruby and other languages in such case. But the expression with only name as a statement in ruby really means asking for local variable first, if found nothing then go on for searching method defined by current object. Here &lsquo;main&rsquo; is a special object which represents the top-level, will have more discussion in the last part of this article.</p>
+
+<h4>calling methods</h4>
+
+<p>When you want to call a method, there should always be a receiver pointed to target object. Commonly that would be in this form:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">some_object</span><span class="o">.</span><span class="n">some_method</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If some_object is omitted, some_method will be called on the object where the current scope belongs to. self is one of the keywords referring to the current object. Note that private is an exception in this case, we will show an example here which has already been introduced in last several articles talking about private and public.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">foo</span>
+</span><span class='line'>  <span class="s1">&#39;Hello&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">foo</span> <span class="c1">#Hello</span>
+</span><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">foo</span> <span class="c1">#NoMethodError: private method `foo&#39; called for main:Object</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The most usage of self would be defining a class method, or getting singleton class of current class.</p>
+
+<h3>3. Method lookup</h3>
+
+<p>The order of name lookup should be local variable/constant, then method. We has discussed about variable and constant scope in the first part. Here let&rsquo;s have a look at method lookup.</p>
+
+<p>When a message call happens, ruby will found its receiver firstly which should be an object. Since all methods are stored in classes and modules so method lookup walks these, not the objects themselves.</p>
+
+<p>Here is the order of method lookup for the receiver’s class or module R:</p>
+
+<h4>i. The prepended modules of R in reverse order.</h4>
+
+<h4>ii. For a matching method in R.</h4>
+
+<h4>iii. The included modules of R in reverse order.</h4>
+
+<p>If R is a class with a superclass, this is repeated with R‘s superclass until a method is found. And once a match is found method lookup stops. If no match is found this repeats from the beginning, but looking for method_missing. The default method_missing is BasicObject#method_missing which raises a NameError when invoked.</p>
+
+<h3>4. Understanding top-level</h3>
+
+<p>May be you&rsquo;re not interested in top-level mechanism as a rails developer (You have to use top-level one day even you&rsquo;re only develop rails application), but you need to notice that ruby is also regarded as a powerful scripting language and already as a built-in tool in many popular OS distributions. We talk about top-level because it behaves different from any ruby official documents.</p>
+
+<p>I&rsquo;ve found a nice explanation about top-level <a href="https://banisterfiend.wordpress.com/2010/11/23/what-is-the-ruby-top-level/">here</a>, but there are some newer update in latest ruby, we&rsquo;ll go through this.</p>
+
+<p>Most of us may know that top-level refers to main, which is an object of Object. You can prove it very easily like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">self</span> <span class="c1">#main</span>
+</span><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">class</span> <span class="c1">#Object</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But how about define a top-level method?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">foo</span>
+</span><span class='line'>  <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">foo</span> <span class="c1">#hello</span>
+</span><span class='line'><span class="nb">method</span><span class="p">(</span><span class="ss">:foo</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span> <span class="c1">#Object</span>
+</span><span class='line'><span class="no">Object</span><span class="o">.</span><span class="n">private_method_defined?</span><span class="p">(</span><span class="ss">:foo</span><span class="p">)</span> <span class="c1">#true</span>
+</span><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">private_instance_methods</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span> <span class="c1">#[:foo]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Does that look like a class definition? Even for the constant definition:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Foo</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'><span class="no">Object</span><span class="o">.</span><span class="n">const_defined?</span><span class="p">(</span><span class="ss">:Foo</span><span class="p">,</span> <span class="kp">false</span><span class="p">)</span> <span class="c1">#true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It just looks like you&rsquo;re operating on class Object. Not only for this, we found that there can also use public, private, or include method, they are shadow in singleton_class of main:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">singleton_class</span><span class="o">.</span><span class="n">private_instance_methods</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span> <span class="c1">#[:public, :private, :include, :using, :define_method]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Based on our analyst above, we find a strange dual-nature of ruby top-level with some unexpected definitions in main object in purpose. Matz gives a <a href="http://groups.google.com/group/comp.lang.ruby/browse_thread/thread/7bb7b451a8f3cca7/98c4c62127b9d945">explanation</a> about design of top-level. You can also get more discussion <a href="http://stackoverflow.com/questions/1761148/where-are-methods-defined-at-the-ruby-top-level">here</a>. From my view, such unusual design exactly helps conciseness of this language, but also gains our confusion and curiosity.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - Object Oriented Hierarchies]]></title>
@@ -2004,36 +2209,6 @@ REST over HTTP也存在缺点，一、生成客户端stub的成本较高，超�
     <updated>2012-10-13T01:05:39+08:00</updated>
     <id>http://www.hanyi.name/blog/2012/10/13/xi-xun-re-lie-zhu-he-ben-zhan-zheng-shi-bei-OOXX</id>
     <content type="html"><![CDATA[<p>经向有关部门了解，本站已被GFW屏蔽，具体原因不明。大家今后VPN见！百度的朋友就对不住啦&hellip;&hellip;</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[有关秋雨、毕业、软件测试、痛苦根源、《金刚经》和妄念的一切]]></title>
-    <link href="http://www.hanyi.name/blog/2012/09/08/you-guan-qiu-yu-bi-ye-ruan-jian-ce-shi-tong-ku-gen-yuan-jin-gang-jing-he-wang-nian-de-yi-qie/"/>
-    <updated>2012-09-08T01:43:30+08:00</updated>
-    <id>http://www.hanyi.name/blog/2012/09/08/you-guan-qiu-yu-bi-ye-ruan-jian-ce-shi-tong-ku-gen-yuan-jin-gang-jing-he-wang-nian-de-yi-qie</id>
-    <content type="html"><![CDATA[<p><em>须菩提白佛言：“世尊！佛得阿耨多罗三藐三菩提，为无所得耶？”佛言：“如是，如是。须菩提！我于阿耨多罗三藐三菩提乃至无有少法可得，是名阿耨多罗三藐三菩提。”</em></p>
-
-<p style="text-align: right;">——《金刚般若波罗蜜经》，第二十二品 无法可得分</p>
-
-
-<p>趁着雨天赶上了入夜前的最后一班校车，结果遇到喜闻乐见的大堵车，折腾回家天已全黑。待饭毕，终于不愿去碰什么C++、数据结构与算法的书——最近整天泡在图书馆里读各种经典，恨不能把本科和研究生几年来西大欠我的一座图书馆一下子搬走。结局是书读了不少，却毫无长进：恐怕是因为我这种随众的心态，毕竟眼见人人都揣着本面试宝典之类的畅销书，再淡定也终不能自持了。但这真称得上是所谓的奋斗么？却未必尽然。</p>
-
-<p>现在回头看一眼前一篇文章的日期：写于大约一个半月之前。在那又之前的很长一段时间里，我始终以为未来将在那之后笃定，我甚至认为自己将与心仪的导师和朝气蓬勃的团队会面，大家相谈甚欢，以至于令我觉得能够在自己钟爱的领域大干十年，人生便没有遗憾了。然而当青岛会议结束后，却发现情况和当初预想的完全不同：首先，如果稍了解国内的科研现状，你会发现好的导师和团队真是凤毛菱角，即便遇到了，准入门槛也极高，甚至不完全取决于主观因素，有时真得称得上是可遇而不可求；其次，我发现自己现有的心智模式中可能缺少非常重要的一块，尽管多年来不时遇到好心人提醒，却很少真的思考这个问题。换言之，如果我选择并得以“再干十年”，难道就真能得到自己想要的东西么？</p>
-
-<p>这是一个矛盾，而且以我仅有的经验而言根本无法解决之，也无法获得能够真正说服自己的第三方的帮助。再加上七八月份的火气：令我不得不选择逃离，去到一个能够给自己降温的圣地，也是为了给自己留一点时间：我明智地选择了一人出发，在青藏高原起伏的草场上，试图短暂忘却平均海拔4000米下的一切，而有时候，甚至真的已经感到有些“乐不思蜀”了。有意思的是，等我回到家，发现命运已经把自己落下了一截。</p>
-
-<p>我不知道它是如何发生，实话说也不想知道。大概是因为我有一种固有的计算思维，在提前制定测试用例时，我会像是强迫症似地列举出每条分支和可能性，然后从自己的角度做出对结果的评估。也就是说，我已经意识到这会是结局之一，的确就不很讶异了。但这种所谓的“淡定”存在明显的缺陷，即如果我们只一味做黑盒测试，无法真正从编码的角度去解释问题的原因，那么作为此生唯一的程序员，怎么保证自己能谱下一首生命之歌呢？然而关于这个问题，我至今没有想太明白。</p>
-
-<p>后来有机会和朋友讨论这件事，还是不到两周前的事。谁知道大家听了都很不屑：“这简直太显而易见了吧？”我很惊奇他们是如何熟练掌握这种技能的，更有可能是道听途说吧？但如今世界的规则不就是由道听途说演变而来的么？唯一能确定的，就这是一切都没有超出合理的范围之外，如果连这些都不合理，那人类恐怕早都灭亡了也说不定。</p>
-
-<p>于是我觉得自己又面临着一次需求跟踪与评估，值变了，维度却没变，复杂度依然毫无降低。唯一能做的，就是像众人一样，去啃那些本不值得在此时去啃的书。也就是说，虽然自己的算法bug了，换成朴素的一样好用，当然前提是你不是一个追求完美的狂热份子。我显然在这又悲剧了一把。</p>
-
-<p>所以好不容易回趟家，绵绵秋雨，好时节当然不能全浪费了，便去读大乘经典。本文开头的《金刚经》第二十二分，大意为“须菩提问佛说：世尊，佛所得至高无上、大彻大悟大智慧，也就是什么也没得到吗？佛回答道：正是这样，正是这样！须菩提，我于阿耨多罗三藐三菩提，是无所得，（须菩提）一点法都没得到，只是说我成就了至高无上、大彻大悟大智慧。”另文中的名词可参见关于心经的注，在此就不讨论佛学。南怀瑾亦有关于本品的偈颂：“多年行脚觅归途，入室知为道路愚。检点旧时新衣钵，了无一物可提扶。”或许可当做送给自己的安慰作？仔细想了下，自己恐怕永远也到不了那个境界&hellip;&hellip;</p>
-
-<p>尽管我崇尚绝对自由，甚至可以说如果没有自由，我就不再是我。但是另一方面，如果未来我选择妥协，用自己的自由去换取世界观，我就变成了另外一个我，一个背叛了原始的我的我，到那时，我该怎么看待自己？我只能确定，本文完成后还剩了一摞的书等着我去啃。至少通过这种方法，我就有机会去变成一个不一样的我，然后告诉原始的我：原来我是这样的我！</p>
-
-<p>最后，如果读者您完全看懂了本文，那么也请尽量告诉我，让我能够佩服一下自己 ，谢谢。</p>
 ]]></content>
   </entry>
   

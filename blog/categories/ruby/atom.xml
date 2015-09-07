@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-08-31T11:54:27+08:00</updated>
+  <updated>2015-09-08T00:12:25+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,168 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[metaprogramming ruby: core concepts - scope &amp; self]]></title>
+    <link href="http://www.hanyi.name/blog/2015/09/08/metaprogramming-ruby-core-concepts-scope-and-self/"/>
+    <updated>2015-09-08T13:47:47+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/09/08/metaprogramming-ruby-core-concepts-scope-and-self</id>
+    <content type="html"><![CDATA[<p>Scope defines the circumstance around any ruby statement, which basically limits your accessibility to resources. But ruby also has implicit and complicate Constants/Methods lookup strategy to make things not so easy at all. This article will clarify the concepts about scope and self firstly, then deep into the Constants/Methods lookup strategy. Finally, let&rsquo;s try to understand top-level which may be the most special case in this topic.</p>
+
+<h3>1. Scope</h3>
+
+<p>In most cases, the &lsquo;Scope&rsquo; we say in ruby commonly refers to variable scope, which has a little bit different from other popular languages. For example, there are four basic variable scopes including local, global, instance and class level, none of them has business with each other. We&rsquo;ve already know the naming specification below:</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">Name begins with</th>
+<th style="text-align:center;">Variable scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">[a-z] or _</td>
+<td style="text-align:center;">local variable   </td>
+</tr>
+<tr>
+<td style="text-align:center;">$         </td>
+<td style="text-align:center;">global variable  </td>
+</tr>
+<tr>
+<td style="text-align:center;">@         </td>
+<td style="text-align:center;">instance variable</td>
+</tr>
+<tr>
+<td style="text-align:center;">@@        </td>
+<td style="text-align:center;">class variable   </td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Actually the tricky is not naming, it&rsquo;s about default scope changing. As we know that ruby has lexical scope, but not like others, it does not support nested scope, like inner scope shares outer scope in some languages. Each of four variable scopes in above figure is purely independent to each other.</p>
+
+<h4>message &amp; scope resolution operator</h4>
+
+<p>Dot . is message operator in ruby, mainly used for message receiving, like method call. Double colon :: is scope resolution operator, commonly used for getting constant in specific scope, Like Foo::Bar, means searching ./foo/bar with relative path. If Foo is undefined in current scope, you should always use ::Foo::Bar to figure it out using absolute path.</p>
+
+<h4>scope changing</h4>
+
+<p>There are four basic cases which may create and change the scope lexically: Class definitions (class), Module definitions (module), Methods (def) and Blocks. Block scope is a little bit different from others and more interesting, which would create its own scope after the block defined, but also have closure capability, like code below:</p>
+
+<pre><code class="ruby">foo = ''
+bar = lambda { foo = 'hi' if foo == 'hello' }
+foo = 'hello'
+bar.call
+foo #hi
+</code></pre>
+
+<p>For sure we can break this very easily:</p>
+
+<pre><code class="ruby">foo = ''
+bar = lambda { |;foo| foo = 'hi' if foo == 'hello' }
+foo = 'hello'
+bar.call
+foo #hello
+</code></pre>
+
+<p>Notice that |;foo| defines foo as a local variable in its block, this kind of feature was introduced from ruby 1.9.</p>
+
+<h4>constants scope</h4>
+
+<p>The scope we&rsquo;ve talked until now basically only means variable scope. In ruby, constant is totally different type of data compared with other languages like C++ or Java, any constant name must be started with uppercase character. And none of them can be assigned dynamically. Like:</p>
+
+<pre><code class="ruby">def foo
+  Bar = 'hello'
+end #should give SyntaxError for dynamic constant assignment
+</code></pre>
+
+<p>Constants defined within a class or module can be accessed within its parent. And scope operator we talked before should be used when it&rsquo;s outside the class or module. Constants defined outside any class or module are global scope, can be accessed directly or by using the scope operator &lsquo;::&rsquo; with no prefix.</p>
+
+<h3>2. Self</h3>
+
+<p>As we know that the grail in ruby world would be conciseness. However, such conciseness is built on many bright solutions like keyword self.</p>
+
+<p>if you just type a name in ruby console, it will show you an error:</p>
+
+<pre><code class="ruby">foo #NameError: undefined local variable or method `foo' for main:Object
+</code></pre>
+
+<p>Indeed it has a huge gap between ruby and other languages in such case. But the expression with only name as a statement in ruby really means asking for local variable first, if found nothing then go on for searching method defined by current object. Here &lsquo;main&rsquo; is a special object which represents the top-level, will have more discussion in the last part of this article.</p>
+
+<h4>calling methods</h4>
+
+<p>When you want to call a method, there should always be a receiver pointed to target object. Commonly that would be in this form:</p>
+
+<pre><code class="ruby">some_object.some_method
+</code></pre>
+
+<p>If some_object is omitted, some_method will be called on the object where the current scope belongs to. self is one of the keywords referring to the current object. Note that private is an exception in this case, we will show an example here which has already been introduced in last several articles talking about private and public.</p>
+
+<pre><code class="ruby">def foo
+  'Hello'
+end
+
+foo #Hello
+self.foo #NoMethodError: private method `foo' called for main:Object
+</code></pre>
+
+<p>The most usage of self would be defining a class method, or getting singleton class of current class.</p>
+
+<h3>3. Method lookup</h3>
+
+<p>The order of name lookup should be local variable/constant, then method. We has discussed about variable and constant scope in the first part. Here let&rsquo;s have a look at method lookup.</p>
+
+<p>When a message call happens, ruby will found its receiver firstly which should be an object. Since all methods are stored in classes and modules so method lookup walks these, not the objects themselves.</p>
+
+<p>Here is the order of method lookup for the receiver’s class or module R:</p>
+
+<h4>i. The prepended modules of R in reverse order.</h4>
+
+<h4>ii. For a matching method in R.</h4>
+
+<h4>iii. The included modules of R in reverse order.</h4>
+
+<p>If R is a class with a superclass, this is repeated with R‘s superclass until a method is found. And once a match is found method lookup stops. If no match is found this repeats from the beginning, but looking for method_missing. The default method_missing is BasicObject#method_missing which raises a NameError when invoked.</p>
+
+<h3>4. Understanding top-level</h3>
+
+<p>May be you&rsquo;re not interested in top-level mechanism as a rails developer (You have to use top-level one day even you&rsquo;re only develop rails application), but you need to notice that ruby is also regarded as a powerful scripting language and already as a built-in tool in many popular OS distributions. We talk about top-level because it behaves different from any ruby official documents.</p>
+
+<p>I&rsquo;ve found a nice explanation about top-level <a href="https://banisterfiend.wordpress.com/2010/11/23/what-is-the-ruby-top-level/">here</a>, but there are some newer update in latest ruby, we&rsquo;ll go through this.</p>
+
+<p>Most of us may know that top-level refers to main, which is an object of Object. You can prove it very easily like this:</p>
+
+<pre><code class="ruby">self #main
+self.class #Object
+</code></pre>
+
+<p>But how about define a top-level method?</p>
+
+<pre><code class="ruby">def foo
+  'hello'
+end
+foo #hello
+method(:foo).owner #Object
+Object.private_method_defined?(:foo) #true
+self.class.private_instance_methods(false) #[:foo]
+</code></pre>
+
+<p>Does that look like a class definition? Even for the constant definition:</p>
+
+<pre><code class="ruby">Foo = 'hello'
+Object.const_defined?(:Foo, false) #true
+</code></pre>
+
+<p>It just looks like you&rsquo;re operating on class Object. Not only for this, we found that there can also use public, private, or include method, they are shadow in singleton_class of main:</p>
+
+<pre><code class="ruby">singleton_class.private_instance_methods(false) #[:public, :private, :include, :using, :define_method]
+</code></pre>
+
+<p>Based on our analyst above, we find a strange dual-nature of ruby top-level with some unexpected definitions in main object in purpose. Matz gives a <a href="http://groups.google.com/group/comp.lang.ruby/browse_thread/thread/7bb7b451a8f3cca7/98c4c62127b9d945">explanation</a> about design of top-level. You can also get more discussion <a href="http://stackoverflow.com/questions/1761148/where-are-methods-defined-at-the-ruby-top-level">here</a>. From my view, such unusual design exactly helps conciseness of this language, but also gains our confusion and curiosity.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - Object Oriented Hierarchies]]></title>
@@ -543,55 +705,6 @@ remove_method Removes the method identified by symbol from the current class. Fo
 <h5>singleton_methods</h5>
 
 <p>Returns an array of the names of singleton methods for object. Only public and protected singleton methods are returned.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[metaprogramming ruby: core concepts - BasicObject]]></title>
-    <link href="http://www.hanyi.name/blog/2015/08/03/metaprogramming-ruby-core-concepts/"/>
-    <updated>2015-08-03T07:33:27+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/08/03/metaprogramming-ruby-core-concepts</id>
-    <content type="html"><![CDATA[<p>Metaprogramming is one of core features for ruby lang, it&rsquo;s widely used from internal ruby to standard library, also endless magic gems. In next a few articles we will focus on those core stuff. I recommend for <a href="https://pragprog.com/book/ppmetr2/metaprogramming-ruby-2">Metaprogramming ruby 2</a> as a reference, except a little verbose and may be only for primer usage. For more ascent knowledge, perhaps you need to track the <a href="https://github.com/ruby/ruby">trunk</a> of ruby. This essay will concentrate on BasicObject, which is parent for all classes in ruby.</p>
-
-<h3>BasicObject</h3>
-
-<p>As the object oriented hierarchy in ruby core, each type of class is also object of Class except BasicObject, and All the objects of Class has root superclass BasicObject, the one is also object of Class. Thus we&rsquo;ll have whole picture below.</p>
-
-<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/metaprogramming_ruby/ruby_class.png" alt="Ruby OO hierarchy" /></p>
-
-<h4>i.class methods</h4>
-
-<p>BasicObject only has single public class method, names &ldquo;new&rdquo;.</p>
-
-<h4>ii.instance methods</h4>
-
-<p>logical operators, any instance of BasicObject is almost empty, with only a few methods, like logical operators !, !=, ==. Here == has same meaning with equal? for object level equality, The difference is that == is recommended for descendant overriding, but equal? should always be same as it is defined in BasicObject.</p>
-
-<h5>__id__ / object_id</h5>
-
-<p>An integer identifier of an object, should be unique for a given object. But some objects of builtin classes are reused for optimization, like immediate values (not passed by reference but value, like nil, true, false, Fixnums, Symbols, and some Floats) and frozen string literals.</p>
-
-<h5>__send__ / send</h5>
-
-<p>Double underscore gives a backup for pure alphabet version which may be overrode through other ways. Invokes the method, and passes all arguments using dynamic number of arguments.</p>
-
-<h5>instance_eval / instance_exec</h5>
-
-<p>instance_eval support passing a string of ruby source code, with file path and line number when compilation errors happen, also given block, within the context of receiver. Thus eval code will have access to instance variables and private methods.</p>
-
-<p>instance_exec only support using block as an argument, but allows one more argument to be passed from outer scope into receiver.</p>
-
-<h4>iii.private instance methods</h4>
-
-<h5>method_missing</h5>
-
-<p>In BasicObject, method_missing belongs to private instance methods, any call for this method will raise an error. But descendant can override this method to do dynamic processing, according to user&rsquo;s input like symbol name and arguments. If overrode method does not want to do any processing, super should be called to pass message bottom from up.</p>
-
-<h5>singleton_method_added / singleton_method_removed / singleton_method_undefined</h5>
-
-<p>Callback for singleton method operations. As we already know, ruby will not create the whole clone of the class for any objects. Only with a middle layer between object and class - singleton class. Singleton class is generated when object comes out, and any messages sent to object should be transferred to its singleton class first, then its own class if not matches in singleton class.</p>
-
-<p>class&rsquo;s singleton class is different to object&rsquo;s singleton class. That&rsquo;s because singleton class of a class should be inherited from its parent&rsquo;s singleton class, until BasicObject&rsquo;s singleton class, then it can reach non singleton class. But for object, singleton class should always have parent class of its own class.</p>
 ]]></content>
   </entry>
   

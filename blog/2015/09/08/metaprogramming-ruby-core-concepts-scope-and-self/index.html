@@ -1,0 +1,386 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>metaprogramming ruby: core concepts - scope &amp; self  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="Scope defines the circumstance around any ruby statement, which basically limits your accessibility to resources. But ruby also has implicit and &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Metaprogramming Ruby: Core Concepts - Scope &amp; Self</h2>
+	<div class="entry-content"><p>Scope defines the circumstance around any ruby statement, which basically limits your accessibility to resources. But ruby also has implicit and complicate Constants/Methods lookup strategy to make things not so easy at all. This article will clarify the concepts about scope and self firstly, then deep into the Constants/Methods lookup strategy. Finally, let&rsquo;s try to understand top-level which may be the most special case in this topic.</p>
+
+<h3>1. Scope</h3>
+
+<p>In most cases, the &lsquo;Scope&rsquo; we say in ruby commonly refers to variable scope, which has a little bit different from other popular languages. For example, there are four basic variable scopes including local, global, instance and class level, none of them has business with each other. We&rsquo;ve already know the naming specification below:</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">Name begins with</th>
+<th style="text-align:center;">Variable scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">[a-z] or _</td>
+<td style="text-align:center;">local variable   </td>
+</tr>
+<tr>
+<td style="text-align:center;">$         </td>
+<td style="text-align:center;">global variable  </td>
+</tr>
+<tr>
+<td style="text-align:center;">@         </td>
+<td style="text-align:center;">instance variable</td>
+</tr>
+<tr>
+<td style="text-align:center;">@@        </td>
+<td style="text-align:center;">class variable   </td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Actually the tricky is not naming, it&rsquo;s about default scope changing. As we know that ruby has lexical scope, but not like others, it does not support nested scope, like inner scope shares outer scope in some languages. Each of four variable scopes in above figure is purely independent to each other.</p>
+
+<h4>message &amp; scope resolution operator</h4>
+
+<p>Dot . is message operator in ruby, mainly used for message receiving, like method call. Double colon :: is scope resolution operator, commonly used for getting constant in specific scope, Like Foo::Bar, means searching ./foo/bar with relative path. If Foo is undefined in current scope, you should always use ::Foo::Bar to figure it out using absolute path.</p>
+
+<h4>scope changing</h4>
+
+<p>There are four basic cases which may create and change the scope lexically: Class definitions (class), Module definitions (module), Methods (def) and Blocks. Block scope is a little bit different from others and more interesting, which would create its own scope after the block defined, but also have closure capability, like code below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'><span class="n">bar</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;hi&#39;</span> <span class="k">if</span> <span class="n">foo</span> <span class="o">==</span> <span class="s1">&#39;hello&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'><span class="n">bar</span><span class="o">.</span><span class="n">call</span>
+</span><span class='line'><span class="n">foo</span> <span class="c1">#hi</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For sure we can break this very easily:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'><span class="n">bar</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">;</span><span class="n">foo</span><span class="o">|</span> <span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;hi&#39;</span> <span class="k">if</span> <span class="n">foo</span> <span class="o">==</span> <span class="s1">&#39;hello&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'><span class="n">bar</span><span class="o">.</span><span class="n">call</span>
+</span><span class='line'><span class="n">foo</span> <span class="c1">#hello</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that |;foo| defines foo as a local variable in its block, this kind of feature was introduced from ruby 1.9.</p>
+
+<h4>constants scope</h4>
+
+<p>The scope we&rsquo;ve talked until now basically only means variable scope. In ruby, constant is totally different type of data compared with other languages like C++ or Java, any constant name must be started with uppercase character. And none of them can be assigned dynamically. Like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">foo</span>
+</span><span class='line'>  <span class="no">Bar</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'><span class="k">end</span> <span class="c1">#should give SyntaxError for dynamic constant assignment</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Constants defined within a class or module can be accessed within its parent. And scope operator we talked before should be used when it&rsquo;s outside the class or module. Constants defined outside any class or module are global scope, can be accessed directly or by using the scope operator &lsquo;::&rsquo; with no prefix.</p>
+
+<h3>2. Self</h3>
+
+<p>As we know that the grail in ruby world would be conciseness. However, such conciseness is built on many bright solutions like keyword self.</p>
+
+<p>if you just type a name in ruby console, it will show you an error:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">foo</span> <span class="c1">#NameError: undefined local variable or method `foo&#39; for main:Object</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Indeed it has a huge gap between ruby and other languages in such case. But the expression with only name as a statement in ruby really means asking for local variable first, if found nothing then go on for searching method defined by current object. Here &lsquo;main&rsquo; is a special object which represents the top-level, will have more discussion in the last part of this article.</p>
+
+<h4>calling methods</h4>
+
+<p>When you want to call a method, there should always be a receiver pointed to target object. Commonly that would be in this form:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">some_object</span><span class="o">.</span><span class="n">some_method</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If some_object is omitted, some_method will be called on the object where the current scope belongs to. self is one of the keywords referring to the current object. Note that private is an exception in this case, we will show an example here which has already been introduced in last several articles talking about private and public.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">foo</span>
+</span><span class='line'>  <span class="s1">&#39;Hello&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">foo</span> <span class="c1">#Hello</span>
+</span><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">foo</span> <span class="c1">#NoMethodError: private method `foo&#39; called for main:Object</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The most usage of self would be defining a class method, or getting singleton class of current class.</p>
+
+<h3>3. Method lookup</h3>
+
+<p>The order of name lookup should be local variable/constant, then method. We has discussed about variable and constant scope in the first part. Here let&rsquo;s have a look at method lookup.</p>
+
+<p>When a message call happens, ruby will found its receiver firstly which should be an object. Since all methods are stored in classes and modules so method lookup walks these, not the objects themselves.</p>
+
+<p>Here is the order of method lookup for the receiver’s class or module R:</p>
+
+<h4>i. The prepended modules of R in reverse order.</h4>
+
+<h4>ii. For a matching method in R.</h4>
+
+<h4>iii. The included modules of R in reverse order.</h4>
+
+<p>If R is a class with a superclass, this is repeated with R‘s superclass until a method is found. And once a match is found method lookup stops. If no match is found this repeats from the beginning, but looking for method_missing. The default method_missing is BasicObject#method_missing which raises a NameError when invoked.</p>
+
+<h3>4. Understanding top-level</h3>
+
+<p>May be you&rsquo;re not interested in top-level mechanism as a rails developer (You have to use top-level one day even you&rsquo;re only develop rails application), but you need to notice that ruby is also regarded as a powerful scripting language and already as a built-in tool in many popular OS distributions. We talk about top-level because it behaves different from any ruby official documents.</p>
+
+<p>I&rsquo;ve found a nice explanation about top-level <a href="https://banisterfiend.wordpress.com/2010/11/23/what-is-the-ruby-top-level/">here</a>, but there are some newer update in latest ruby, we&rsquo;ll go through this.</p>
+
+<p>Most of us may know that top-level refers to main, which is an object of Object. You can prove it very easily like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">self</span> <span class="c1">#main</span>
+</span><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">class</span> <span class="c1">#Object</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But how about define a top-level method?</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">foo</span>
+</span><span class='line'>  <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">foo</span> <span class="c1">#hello</span>
+</span><span class='line'><span class="nb">method</span><span class="p">(</span><span class="ss">:foo</span><span class="p">)</span><span class="o">.</span><span class="n">owner</span> <span class="c1">#Object</span>
+</span><span class='line'><span class="no">Object</span><span class="o">.</span><span class="n">private_method_defined?</span><span class="p">(</span><span class="ss">:foo</span><span class="p">)</span> <span class="c1">#true</span>
+</span><span class='line'><span class="nb">self</span><span class="o">.</span><span class="n">class</span><span class="o">.</span><span class="n">private_instance_methods</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span> <span class="c1">#[:foo]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Does that look like a class definition? Even for the constant definition:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Foo</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'><span class="no">Object</span><span class="o">.</span><span class="n">const_defined?</span><span class="p">(</span><span class="ss">:Foo</span><span class="p">,</span> <span class="kp">false</span><span class="p">)</span> <span class="c1">#true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It just looks like you&rsquo;re operating on class Object. Not only for this, we found that there can also use public, private, or include method, they are shadow in singleton_class of main:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">singleton_class</span><span class="o">.</span><span class="n">private_instance_methods</span><span class="p">(</span><span class="kp">false</span><span class="p">)</span> <span class="c1">#[:public, :private, :include, :using, :define_method]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Based on our analyst above, we find a strange dual-nature of ruby top-level with some unexpected definitions in main object in purpose. Matz gives a <a href="http://groups.google.com/group/comp.lang.ruby/browse_thread/thread/7bb7b451a8f3cca7/98c4c62127b9d945">explanation</a> about design of top-level. You can also get more discussion <a href="http://stackoverflow.com/questions/1761148/where-are-methods-defined-at-the-ruby-top-level">here</a>. From my view, such unusual design exactly helps conciseness of this language, but also gains our confusion and curiosity.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-08T13:47:47+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2015/09/08/metaprogramming-ruby-core-concepts-scope-and-self/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2015/09/08/metaprogramming-ruby-core-concepts-scope-and-self/';
+        var disqus_url = 'http://www.hanyi.name/blog/2015/09/08/metaprogramming-ruby-core-concepts-scope-and-self/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>
