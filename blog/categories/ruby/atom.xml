@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-09-09T15:41:02+08:00</updated>
+  <updated>2015-09-16T09:17:33+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,104 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[metaprogramming ruby: core concepts - eval family I]]></title>
+    <link href="http://www.hanyi.name/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family/"/>
+    <updated>2015-09-14T23:08:19+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family</id>
+    <content type="html"><![CDATA[<p>In ruby, block is the cornerstone of metaprogramming with a surprisingly powerful scope controlling capability. Based on this definition, much brilliant interfaces are introduced, and help to implement many valuable features, like callable objects, eval and its huge family.</p>
+
+<h3>1. blocks</h3>
+
+<p>Block represents a snippet of code, it permits to be called immediately or lately depends on different cases. But compared with some similar concepts in functional programming languages, like Lisp, block still has more limits, and more readability respectively.</p>
+
+<p>In commonly, block can be used like this:</p>
+
+<pre><code class="ruby">def show_hello
+  yield 'hello' if block_given?
+end
+
+show_hello { |say| puts say }
+
+show_hello do |say|
+  file = File.open('/tmp/output.txt', 'w')
+  file.write say
+  file.close
+end
+</code></pre>
+
+<p>&lsquo;yield&rsquo; is a ruby keyword used to call blocks sent to the current method. block_given? is an instance method from Kernel to probe whether there is a block for current method.</p>
+
+<p>One of the most useful aspect of block is closure, it captures bindings where it&rsquo;s defined, and avoid impact of scope changing by connecting to those bindings, like flat scopes, and shared scopes.</p>
+
+<p>Frankly speaking, block is actually not responsible for running code, but only representation (Except yield, which indeed means running code immediately). There are more powerful tools to help enhance block usage.</p>
+
+<h3>2. callable objects</h3>
+
+<p>Block is just like a package of code, and you need to use yield to execute it if you like. However, there are more ways to package code in ruby, including Proc and lambda.</p>
+
+<h4>Proc</h4>
+
+<p>We already know that block is not an object in ruby which is really quite a few, but Proc is basically a block turned object, can be seen as a consistent form of block, and you do not have to use yield to run it immediately, it will be running later as you want (Deferred Evaluation). you can define a Proc like this:</p>
+
+<pre><code class="ruby">inc = Proc.new {|x| x + 1}
+inc.call(1) #2
+dec = proc {|x| x - 1}
+inc.call(2) #1
+</code></pre>
+
+<h4>lambda</h4>
+
+<p>Except for Proc, lambda can also be used for transferring blocks, but with simpler and a little different way:</p>
+
+<pre><code class="ruby">inc = lambda {|x| x + 1}
+inc.call(1) #2
+dec = -&gt;(x) {x - 1}
+dec.call(2) #1
+</code></pre>
+
+<h4>&amp; operator</h4>
+
+<p>Once you have defined a block for a method, there is a way to convert it to a Proc inner method by using &amp;. For example:</p>
+
+<pre><code class="ruby">def bar
+  yield 'ruby'
+end
+
+def foo(&amp;operation)
+  bar(&amp;operation)
+  operation.call('world')
+end
+
+foo {|x| puts "hello #{x}"}
+# hello ruby
+# hello world
+</code></pre>
+
+<p>&amp; can be seen like transferring a block into Proc, but you need to remove &amp; if you want to use it as a Proc.</p>
+
+<h4>Comparison between procs and lambdas</h4>
+
+<p>You may notice that lambda is also a Proc, but you can still use Proc#lambda? to see the actual type of the target. Besides there are two important differences: keyword &lsquo;return&rsquo; and arguments checking.</p>
+
+<h5>a. return</h5>
+
+<p>As plain blocks, the program will return out of scope where block defined if return statement is set inner block, so does Proc (which may mean that the return may cause exception when the block is called in nonreturnable scope, like top-level). While for lambda, the return only runs out of block, not even farther.</p>
+
+<h5>b. arity</h5>
+
+<p>Arity means the number of arguments. In real case, lambda has less tolerance than Proc, which means that lambda requires correct number of arity, which is no need for procs.</p>
+
+<h4>Method objects</h4>
+
+<p>All methods are objects of Method. You can use Kernel#method or Kernel#singleton_method to get the object of method, then use Method#call to run the method. Also you may use Method#to_proc and define_method to convert method and proc to each other. Eventhough the method still has scope of it&rsquo;s defined.</p>
+
+<h5>Unbound Methods</h5>
+
+<p>Method object can also be unbound from original scopes by using Method#unbind, or Module#instance_method. Generated UnboundMethod object can not be called directly, but you can still call it after bind it to another scope by using UnboundMethod#bind. The only notice is that UnboundMethod object can only be bound to same class or sub if it&rsquo;s from class, and no such limitation when it&rsquo;s from module.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - open classes &amp; refinements]]></title>
@@ -421,21 +519,15 @@ end
 </code></pre>
 
 <p>is equivalent to this code block:
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">bar</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="sr">&lt;p&gt;class &amp;lt;&amp;lt; bar</span>
-</span><span class='line'><span class="sr">  def bar_method</span>
-</span><span class='line'><span class="sr">    1 + 1</span>
-</span><span class='line'><span class="sr">  end</span>
-</span><span class='line'><span class="sr">end</span>
-</span></code></pre></td></tr></table></div></figure></p>
+&#8220;`ruby
+bar = Object.new</p>
+
+<p>class &lt;&lt; bar
+  def bar_method
+    1 + 1
+  end
+end
+&#8220;`</p>
 
 <p>Understanding singleton class in ruby is very important to investigate internal ruby, especially for its OO design. In next article, we&rsquo;ll introduce the scope mechanism in ruby.</p>
 ]]></content>
@@ -492,211 +584,6 @@ In general, Continuation object is used to be analogous to C setjmp/longjmp, or 
 <h5>proc</h5>
 
 <p>Equivalent to Proc.new</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[metaprogramming ruby: core concepts - Module]]></title>
-    <link href="http://www.hanyi.name/blog/2015/08/26/metaprogramming-ruby-core-concepts-module/"/>
-    <updated>2015-08-26T23:18:08+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/08/26/metaprogramming-ruby-core-concepts-module</id>
-    <content type="html"><![CDATA[<p>For internal ruby, Module is mainly used for holding class methods for descendants. Suppose each object has class of A, A always has class of Class, and Class inherits from Module, thus class A should hold all class methods from instance methods in Module. On the other hand, user can mix in self defined Module to provide more instance methods for their class, or use module function directly.</p>
-
-<h3>Module</h3>
-
-<p>Module provides two kinds of class level metaprogramming methods, either public or private. Each of them has different usage for building descendants.</p>
-
-<h4>Public instance methods</h4>
-
-<h5>ancestors</h5>
-
-<p>Returns a list of modules included/prepended in current module.</p>
-
-<h5>class_eval</h5>
-
-<p>Evaluates the string or block in the context of module, except that when a block is given, constant/class variable lookup is not affected. This can be used to add methods to a class. class_eval returns the result of evaluating its argument.</p>
-
-<h5>class_exec</h5>
-
-<p>Evaluates the given block in the context of the class/module. The method defined in the block will belong to the receiver. Any arguments passed to the method will be passed to the block. This can be used if the block needs to access instance variables.</p>
-
-<h5>class_variable_defined?</h5>
-
-<p>Returns true if the given class variable is defined in object.</p>
-
-<h5>class_variable_get</h5>
-
-<p>Returns the value of the given class variable (or throws a NameError exception). The @@ part of the variable name should be included for regular class variables.</p>
-
-<h5>class_variable_set</h5>
-
-<p>Sets the class variable named by symbol to the given object.</p>
-
-<h5>class_variables</h5>
-
-<p>Returns an array of the names of class variables in current module. This includes the names of class variables in any included modules, unless the inherit parameter is set to false.</p>
-
-<h5>const_defined?</h5>
-
-<p>Says whether module or its ancestors have a constant with the given name: If module is a Module, additionally Object and its ancestors are checked. In each of the checked classes or modules, if the constant is not present but there is an autoload for it, true is returned directly without autoloading. If the constant is not found the callback const_missing is not called and the method returns false. If inherit is false, the lookup only checks the constants in the receiver. In this case, the same logic for autoloading applies. If the argument is not a valid constant name a NameError is raised with the message “wrong constant name name”.</p>
-
-<h5>const_get</h5>
-
-<p>Checks for a constant with the given name in module. If inherit is set, the lookup will also search the ancestors (and Object if module is a Module). The value of the constant is returned if a definition is found, otherwise a NameError is raised. This method will recursively look up constant names if a namespaced class name is provided.</p>
-
-<h5>const_missing</h5>
-
-<p>Invoked when a reference is made to an undefined constant in module. It is passed a symbol for the undefined constant, and returns a value to be used for that constant. If found, it returns the loaded class. It therefore implements an autoload feature similar to Kernel#autoload and #autoload.</p>
-
-<h5>const_set</h5>
-
-<p>Sets the named constant to the given object, returning that object. Creates a new constant if no constant with the given name previously existed. If symbol or string is not a valid constant name a NameError will be raised with a warning “wrong constant name”.</p>
-
-<h5>constants</h5>
-
-<p>Returns an array of the names of the constants accessible in module. This includes the names of constants in any included modules, unless the inherit parameter is set to false.</p>
-
-<h5>instance_method</h5>
-
-<p>Returns an UnboundMethod representing the given instance method in module.</p>
-
-<h5>instance_methods</h5>
-
-<p>Returns an array containing the names of the public and protected instance methods in the receiver. For a module, these are the public and protected methods; for a class, they are the instance (not singleton) methods.</p>
-
-<h5>method_defined?</h5>
-
-<p>Returns true if the named method is defined by module (or its included modules and, if module is a class, its ancestors). Public and protected methods are matched. String arguments are converted to symbols.</p>
-
-<h5>module_eval</h5>
-
-<p>Evaluates the string or block in the context of module, except that when a block is given, constant/class variable lookup is not affected. This can be used to add methods to a class. module_eval returns the result of evaluating its argument.</p>
-
-<h5>module_exec</h5>
-
-<p>Evaluates the given block in the context of the class/module. The method defined in the block will belong to the receiver. Any arguments passed to the method will be passed to the block. This can be used if the block needs to access instance variables.</p>
-
-<h5>name</h5>
-
-<p>Returns the name of the module module. Returns nil for anonymous modules.</p>
-
-<h5>prepend</h5>
-
-<p>Invokes Module.prepend_features on each parameter in reverse order.</p>
-
-<h5>private_class_method</h5>
-
-<p>Makes existing class methods private. Often used to hide the default constructor new.</p>
-
-<h5>private_constant</h5>
-
-<p>Makes a list of existing constants private.</p>
-
-<h5>private_instance_methods</h5>
-
-<p>Returns a list of the private instance methods defined in module. If the optional parameter is false, the methods of any ancestors are not included.</p>
-
-<h5>private_method_defined?</h5>
-
-<p>Returns true if the named private method is defined by _mod_ (or its included modules and, if module is a class, its ancestors).</p>
-
-<h5>protected_instance_methods</h5>
-
-<p>Returns a list of the protected instance methods defined in module. If the optional parameter is false, the methods of any ancestors are not included.</p>
-
-<h5>protected_method_defined?</h5>
-
-<p>Returns true if the named protected method is defined by module (or its included modules and, if module is a class, its ancestors).</p>
-
-<h5>public_class_method</h5>
-
-<p>Makes a list of existing class methods public.</p>
-
-<h5>public_constant</h5>
-
-<p>Makes a list of existing constants public.</p>
-
-<h5>public_instance_method</h5>
-
-<p>Similar to instance_method, searches public method only.</p>
-
-<h5>public_instance_methods</h5>
-
-<p>Returns a list of the public instance methods defined in module. If the optional parameter is false, the methods of any ancestors are not included.</p>
-
-<h5>public_method_defined?</h5>
-
-<p>Returns true if the named public method is defined by module (or its included modules and, if module is a class, its ancestors).</p>
-
-<h5>remove_class_variable</h5>
-
-<p>Removes the definition of the symbol, returning that constant&rsquo;s value.</p>
-
-<h5>singleton_class?</h5>
-
-<p>Returns true if module is a singleton class or false if it is an ordinary class or module.</p>
-
-<h4>Private instance methods</h4>
-
-<p>Private instance methods in Module are mainly used in internal classes level.</p>
-
-<h5>alias_method</h5>
-
-<p>Makes new_name a new copy of the method old_name. This can be used to retain access to methods that are overridden.</p>
-
-<h5>append_features</h5>
-
-<p>When this module is included in another, Ruby calls append_features in this module, passing it the receiving module in module. Ruby&rsquo;s default implementation is to add the constants, methods, and module variables of this module to module if this module has not already been added to module or one of its ancestors.</p>
-
-<h5>define_method</h5>
-
-<p>Defines an instance method in the receiver. The method parameter can be a Proc, a Method or an UnboundMethod object. If a block is specified, it is used as the method body. This block is evaluated using instance_eval, a point that is tricky to demonstrate because define_method is private.</p>
-
-<h5>extend_object</h5>
-
-<p>Extends the specified object by adding this module&rsquo;s constants and methods (which are added as singleton methods). This is the callback method used by Object#extend.</p>
-
-<h5>extended</h5>
-
-<p>The equivalent of included, but for extended modules.</p>
-
-<h5>included</h5>
-
-<p>Callback invoked whenever the receiver is included in another module or class. This should be used in preference to Module.append_features if your code wants to perform some action when a module is included in another.</p>
-
-<h5>method_added</h5>
-
-<p>Invoked as a callback whenever an instance method is added to the receiver.</p>
-
-<h5>method_removed</h5>
-
-<p>Invoked as a callback whenever an instance method is removed from the receiver.</p>
-
-<h5>method_undefined</h5>
-
-<p>Invoked as a callback whenever an instance method undefined but called from the receiver.</p>
-
-<h5>module_function</h5>
-
-<p>Creates module functions for the named methods. These functions may be called with the module as a receiver, and also become available as instance methods to classes that mix in the module. Module functions are copies of the original, and so may be changed independently. The instance-method versions are made private. If used with no arguments, subsequently defined methods become module functions. String arguments are converted to symbols.
-prepend_features When this module is prepended in another, Ruby calls prepend_features in this module, passing it the receiving module in module. Ruby&rsquo;s default implementation is to overlay the constants, methods, and module variables of this module to mod if this module has not already been added to mod or one of its ancestors. See also Module#prepend.</p>
-
-<h5>prepended</h5>
-
-<p>The equivalent of included, but for prepended modules.</p>
-
-<h5>refine</h5>
-
-<p>Refine klass in the receiver. Returns an overlaid module.</p>
-
-<h5>remove_const</h5>
-
-<p>Removes the definition of the given constant, returning that constant&rsquo;s previous value. If that constant referred to a module, this will not change that module&rsquo;s name and can lead to confusion.
-remove_method Removes the method identified by symbol from the current class. For an example, see Module.undef_method.</p>
-
-<h5>undef_method</h5>
-
-<p>Prevents the current class from responding to calls to the named method. Contrast this with remove_method, which deletes the method from the particular class; Ruby will still search superclasses and mixed-in modules for a possible receiver. String arguments are converted to symbols.</p>
 ]]></content>
   </entry>
   

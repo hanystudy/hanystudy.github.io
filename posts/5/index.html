@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="三个月前，我们展示了一套配合使用OpenNI+SensorKinect+NITE在Windows平台上驱动Kinect的Demo程序，事实证明，上述框架已完全可满足基于最新版本的Kinect的PC项目开发了。不过，微软在连续跳票一个多月后终于坐不住了，于北京时间6月17日凌晨开放The &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="作为一款集成了诸多先进视觉技术的自然交互设备，Kinect在学术和工业界均享有较高的关注度。本文将在参考PrimeSense传感器技术若干专利文献的基础上，试图探寻Kinect硬件技术的物理原理及其发展前景。为证明本文所描述的内容与Kinect的相关性， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,98 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/08/16/Kinect-lai-le-ying-jian-ying/">
+		
+			Kinect来了——硬件篇</a>
+	</h2>
+	<div class="entry-content">
+		<p>作为一款集成了诸多先进视觉技术的自然交互设备，Kinect在学术和工业界均享有较高的关注度。本文将在参考PrimeSense传感器技术若干专利文献的基础上，试图探寻Kinect硬件技术的物理原理及其发展前景。为证明本文所描述的内容与Kinect的相关性，还要感谢ifixit写于去年底的一篇<a href="http://www.ifixit.com/Teardown/Microsoft-Kinect-Teardown/4066/1" target="_blank">Microsoft Kinect Teardown</a>拆解教程，这位前人使得Kinect所有的内部元件得以被我们尽收眼底，从而为我们的“推测”提供了事实依据。当然主要还是因为我是绝对不会把啃奶拆着玩的:)</p>
+
+<p><strong> Kinect硬件系统概览</strong></p>
+
+<p>Kinect的硬件系统其实并不复杂（所以理应便宜到爆？），如下图所示：</p>
+
+<p>[singlepic id=33 w=320 h=240 mode=watermark float=center]</p>
+
+<p>Kinect使用NEC uPD720114的USB 2.0集线器控制器作为数据集成接口，主要控制芯片包括Allegro Microsystems A3906（低电压步进器和单/双路直流电机驱动器）、Marvell AP102（带摄像机接口控制器的SoC）/PrimeSense PS1080-A2（成像处理器SoC）、TI TAS1020B（USB音频控制器）和其它辅助计算/存储设备。本文的剩余内容将依次分析Kinect的三大硬件原理：姿态调整、音频输入、视频输入。</p>
+
+<p><strong>1 转动电机系统</strong></p>
+
+<p>尽管Kinect提供了可跟踪目标物体的物理姿态调整机制，然而该部分相对比较简单，因为这些电机和塑料齿轮看起来有够简陋&hellip;实际上在官方出品的Programming Guide中描述了tilt机制的基本规格：±28°V，而Kinect成像系统自身的视角大小为43° V/57°H。同时手册还建议避免频繁调用tilt功能，其最低标准是每秒不超过1次（或每20秒不超过15次）调用。目前看来tilt功能脆弱且基本发挥不了作用，当然今后对应的商业版本可能会是个例外。</p>
+
+<p><strong>2 音频采集系统</strong></p>
+
+<p>Kinect的音频系统采用了四元线性麦克风阵列技术。一般而言，麦克风阵列中包含四个相互独立的小型麦克风，每个设备之间相距数厘米，其排列可呈线形或“L”形。与一般的单麦克风数据相比较，阵列技术包含有效的噪音消除和回波抑制（acoustic echo cancellation，AEC）算法，同时采用波束成形（Beamforming）技术通过每个独立设备的响应时间确定音源位置，并尽可能避免环境噪音的影响。上述Beamforming算法的细节来源于微软研究院，有兴趣的读者可以参考《A NEW BEAMFORMER DESIGN ALGORITHM FOR MICROPHONE ARRAYS》这篇文章，原文发表于IEEE-Proceedings of ICASSP 2005 USA。</p>
+
+<p>从元件上看，除了Kinect所有的四元麦克风阵列以外，还配置了Wolfson Microelectronics WM8737G（配置了前置放大器的24bits立体声ADC）用于进行本地的音频信号处理。关于Kinect Audio系统的软件部分我们将在后续的API专题中进行详细介绍。</p>
+
+<p><strong>3 视频成像系统</strong></p>
+
+<p>Kinect的成像系统来源于PrimeSense的专利技术，尽管微软官方一直遮遮掩掩，但很容易通过分析PS的设计来了解Kinect。下面首先给出Kinect视频传感器的规格：</p>
+
+<p>帧率：30FPS，深度/RGB数据；</p>
+
+<p>帧解析度：深度数据QVGA320x240，RGB数据VGA640x480；</p>
+
+<p>作用范围：1.2-3.5米，深度/RGB数据。</p>
+
+<p>值得一提的是，PrimeSense官网上给出的<a href="http://www.primesense.com/?p=514" target="_blank">Reference Design</a>的规格要高出许多，可以看出Kinect主要追求的是经济效益。我们注意到Kinect的电源和USB是同一个接口，而仅连接PC后Kinect的LED会点亮，但还不能执行主要功能。只有再接入电源后才能正式启动（Kinect的功率达到了12W，而普通USB一般是2.5W）。</p>
+
+<p>[singlepic id=34 w=320 h=240 mode=watermark float=center]</p>
+
+<p>上图从左向右，分别是OG12/0956/D306/JG05A红外发射器、VNA38209015彩色CMOS以及Microsoft/X853750001/VCA379C7130红外CMOS。中间的摄像头提供了彩色VGA图像，剩余的两个元件主要用于提供QVGA深度数据。</p>
+
+<p>那么关键问题就是，PrimeSense是如何获取这些深度数据呢？</p>
+
+<p>截至目前，最精确可行的光学测距方法可能就是ToF（time of flight），例如LDM激光测距、IDM红外测距等等具体技术已经实现了产品化；另一方面，如今许多三维扫描仪都采用了三角测距法，特别是对手持式扫描设备而言。然而上述这些技术都不太适用于Kinect这种家用设备：首先是测量环境的限制，其次还要考虑成本因素。</p>
+
+<p>PrimeSense的测距技术类似一部分结构光技术，“结构光”指一些具有特定模式的光，其pattern的图案可以是线、点、面等多种图形。结构光扫描法的原理是首先将结构光投射至物体表面，再使用摄像机接收该物体表面反射的结构光图案，由于接收图案必会因物体的立体形状而发生变形，那么就可以试图通过该图案在摄像机上的位置和形变程度来计算物体表面的空间信息。普通的结构光方法仍然是部分采用了三角测距原理进行深度计算。</p>
+
+<p>参考Google Patents上的Range mapping using speckle decorrelation（No. US7433024B2）以及DEPTH MAPPING USING PROJECTED PATTERNS（No. 0118123 A1）两篇技术文档，已经有前人对PrimeSense的方法进行了详细解释。</p>
+
+<p>PrimeSense将其深度测量技术命名为Light coding，与结构光法不同的是，Light coding的光源被称为“激光散斑（laser speckle）”，是当激光照射到粗糙物体或穿透毛玻璃后形成的随机衍射斑点。这些散斑具有高度的随机性，而且会随着距离的不同变换图案。也就是说空间中任意两处的散斑图案都是不同的。只要在空间中打上这样的结构光，整个空间就都被做了标记，把一个物体放进这个空间，只要看看物体上面的散斑图案，就可以知道这个物体在什么位置了。</p>
+
+<p>当然，在这之前要把整个空间的散斑图案都记录下来，所以要先做一次光源的标定。在PrimeSense的专利上，标定的方法是这样的：每隔一段距离，取一个参考平面，把参考平面上的散斑图案记录下来。假设Natal规定的用户活动空间是距离电视机1米到4米的范围，每隔10cm取一个参考平面，那么标定下来我们就已经保存了30幅散斑图像。需要进行测量的时候，拍摄一副待测场景的散斑图像，将这幅图像和我们保存下来的30幅参考图像依次做互相关运算，这样我们会得到30幅相关度图像，而空间中有物体存在的位置，在相关度图像上就会显示出峰值。把这些峰值一层层叠在一起，再经过一些插值，就会得到整个场景的三维形状了。</p>
+
+<p>值得注意的是，尽管没有对PrimeSense下手，微软在前不久先后收购了3DV和Canesta，两家均握有大量ToF视频跟踪技术专利的科技公司。可以想见，Kinect作为消费市场的零号机，可能很快就会有更加强大的商用同伴诞生。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-08-16T12:51:46+08:00" pubdate data-updated="true">2011-08-16</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kinect/'>kinect</a>, <a class='category' href='/blog/categories/xiang-mu/'>项目</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2011/08/16/Kinect-lai-le-ying-jian-ying//posts/5/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -900,50 +992,6 @@ $(document).ready(
 
 	
 		<span class="comments"><a href="/blog/2011/05/14/ken-nai-lai-le-Kinect-Kinect-for-Windows-qiang-xian-ti//posts/5/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/04/26/zhen-lei-a/">
-		
-			真累啊</a>
-	</h2>
-	<div class="entry-content">
-		<p>本来就懒得跑，没消停几天就又得出差&hellip;人生真真是个杯具。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-04-26T23:38:52+08:00" pubdate data-updated="true">2011-04-26</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2011/04/26/zhen-lei-a//posts/5/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

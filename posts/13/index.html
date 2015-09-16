@@ -9,8 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="1 一些概念 1.1 基本文件系统root file system UNIX的基本文件系统类型分为两大类，一是根文件系统（注意与本节标题的区别），顾名思义，此类文件系统无法被卸载umount。
-二是子文件系统，子文件系统以基本文件系统中某一子目录的身份出现：硬盘、软盘、USB盘、CD-ROM、 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="1 UNIX系统调用 1.1 System Call System call是OS提供的应用程序和OS交互的惟一手段，应用程序只能通过系统调用访问硬件资源。 在 Windows 中，OS 很少直接将System call提供给程序员使用，它提供类似缓冲文件操作那样既有用户态代码又有System &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +97,224 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/06/01/MP77-de-UNIX-ke-jian-bi-ji-7/">
+		
+			MP77的UNIX课件笔记(7)</a>
+	</h2>
+	<div class="entry-content">
+		<p>1 UNIX系统调用</p>
+
+<p>1.1 System Call</p>
+
+<p>System call是OS提供的应用程序和OS交互的惟一手段，应用程序只能通过系统调用访问硬件资源。</p>
+
+<p>在 Windows 中，OS 很少直接将System call提供给程序员使用，它提供类似缓冲文件操作那样既有用户态代码又有System call的函数库， 如 Windows API。</p>
+
+<p><a id="more"></a><a id="more-173"></a></p>
+
+<p>同样的，在C语言中同时提供了一些标准库函数，从程序员的角度来说，这些与 System call 并不等同，其主要原因是：</p>
+
+<p>1） System call 后立刻产生一个软中断，系统从用户态进入到内核状态，函数的功能由操作系统的内核代码实现。</p>
+
+<p>2）普通函数同程序员编写的程序一样，通过函数调用，在用户态完成函数内部的处理后返回。有些库函数如缓冲文件fopen等，在函数里完成一些必要处理之后再引用系统调用。</p>
+
+<p>为便于不同UNIX系统之间C语言源程序的移植，UNIX的系统调用函数的名字，参数排列顺序，参数类型定义，返回值的类型，以及实现的功能，都属于POSIX标准来规范的内容。</p>
+
+<p>Windows也支持大部分的POSIX函数标准，所以许多UNIX的系统调用函数在Windows系统下也可以使用，Windows提供了功能等价的函数。</p>
+
+<p>1.2 系统调用的返回值</p>
+
+<p>UNIX的System call一般都返回一个整数值，例如：</p>
+
+<p>1）errno.h中定义了许多宏名代替整数值。如EACCESS、EIO、ENOMEM等。每个System call的在线手册中都列出可能的出错情况和对应的错误代码的宏名。</p>
+
+<p>2）char *strerror(int errno)可将整数错误代码转换成一个字符串。</p>
+
+<p>3）void perror(const char *string);它会在标准错误输出设备上产生一条消息，描述在系统调用或使用库函数（库函数中使用了系统调用）期间所遇到的最后一个错误。先输出字符串string，再输出一个 冒号 和 空格 ,然后再打印出这条消息和换行符。</p>
+
+<p>void perror(const char *string)定义在中。</p>
+
+<p>2 文件和目录的访问</p>
+
+<p>2.1 文件存取</p>
+
+<p>在UNIX中，由于文件系统的支持，应用程序根据文件名访问文件，不用操心数据怎样存放在外存上。</p>
+
+<p>首先引入文件描述符的概念。</p>
+
+<p>在通常的认识里，处理整数比字符串更有效，索引整数叫“文件描述符”（file descriptor）。</p>
+
+<p>系统根据它定位文件当前读写位置和文件inode节点信息。每个进程有自己的文件描述符，文件描述符从0开始编号，它是PCB里的一个数组的下标。</p>
+
+<p>值得注意的是，文件操作一般使用“文件描述符”作参数而不是文件名，文件访问结束后，“关闭”操作释放占用的存储空间。</p>
+
+<p>首先介绍，它是位于/usr/include/sys下的文件控制库文件引用，其实际地址为/usr/include/fcntl.h，该文件包含了了几乎所有与文件控制操作有关的系统调用定义。</p>
+
+<p>2.1.1 打开文件</p>
+
+<p>int open(char *filename, int flags);</p>
+
+<p>int open(char *filename, int flags, mode_t mode);</p>
+
+<p>open函数有两种定义方式，返回值为文件描述符。char* filename传入目标文件所处的路径（absolute or relative），int flags指定此次操作的限制范围，例如只读/读写，或是否创建新文件。flags通常为整形常量，但便于使用期间fcntl.h中还为其设置了宏定义描述。open的返回值通常为源文件的文件描述符，如果文件打开失败，则返回值为-1。</p>
+
+<p>O_RDONLY 只读，Open for reading only；</p>
+
+<p>O_WRONLY 只写，Open for writing only.；</p>
+
+<p>O_RDWR 读/写，Open for reading and writing；</p>
+
+<p>O_CREAT 不存在时创建，Create file if it does not exist.；</p>
+
+<p>O_TRUNC 清空源文件，Truncate size to 0；</p>
+
+<p>O_APPEND  在末尾添加，Append on each write；</p>
+
+<p>mode定义了文件保护模式（该项在创建时有效），其值需要与系统掩码值综合后产生最终结果，在权限一节会详细介绍。</p>
+
+<p>2.1.2 文件读写</p>
+
+<p>首先介绍头文件unistd.h，其实际地址为/usr/include/unistd.h。unistd意为Unix standard header，即Unix标准库文件，作用类似于C语言的stdlib.h（standard library header，包含了标准函数以及NULL等宏定义内容）。Unix中与file I/O有关的的System call均包含在此文件内。</p>
+
+<p>int write(int fd, void *buf, int n);</p>
+
+<p>write()尝试将buf缓冲区中的内容输出至文件描述符所对应的磁盘数据区中，n指期望写入的字节数，其返回值为真正写入的字节数，如果该系统调用返回值为-1，则说明系统调用失败。</p>
+
+<p>int read(int fd, void *buf, int n);</p>
+
+<p>read() 尝试从文件描述符对应的磁盘数据区中输入文件内容至内存缓冲区中，n指期望读的字节数。返回值为实际读的字节数，如果该系统调用返回值为-1，则说明系统调用失败。</p>
+
+<p>值得注意的是，read/write操作类似于文件的 顺序访问 机制，这是因为：</p>
+
+<p>1、在内核中为每个打开的文件保留一个记录当前操作位置的指针；</p>
+
+<p>2、无论是read还是write，都从文件的当前位置读取或写，操作后，文件当前指针自动向后移动；</p>
+
+<p>3、这非常适合于按顺序访问文件中的数据；</p>
+
+<p>这就可能出现类似下面的情况，在多进程同时对一个文件进行操作时，当read返回值为0时，此时已读至文件尾部，但如果文件被外部进程进行写操作时，会默认写至文件末尾，再次调用read会返回新的可能值。</p>
+
+<p>System call还支持 随机访问 机制，这要利用如下函数（同样包含在unistd.h中）：</p>
+
+<p>off_t lseek(int fd,off_t offset,int whence);</p>
+
+<p>off_t offset定义强制移动当前文件读写指针的字节偏移量，int whence指offset的实际参考基准，以上两个参数在/usr/include/sys/types.h中定义。其中关于whence的宏定义如下：</p>
+
+<p>SEEK_SET，读写指针移动到offset指定的位置（绝对值）；</p>
+
+<p>SEEK_CUR，读写指针移动到当前读写指针加offset后的位置；</p>
+
+<p>SEEK_END，读写指针移动到文件尾加offset后的位置，也就是文件中字节数加offset后的位置。</p>
+
+<p>在后两种方式中，允许offset为负值。</p>
+
+<p>利用lseek时仍然需要注意系统在文件管理机制上的问题。一般来说，如果lseek被指定为超过文件末尾之后的位置，那么对应用程序来说文件大小的确是目前“实际的文件大小”，但是对系统来说，在块管理机制的情况下仅仅会给多余的非空内容分配出相应的存储块（这就可能存在占用1-9块和100块而中间块不占空间的情况）。此时当文件被写入时会导致系统分配真正的磁盘存储块，就造成了大量的“空块”浪费的情况，绝大多数情况下这是毫无意义的，因而应尽量避免出现此类情况。</p>
+
+<p>System call还允许用户截断一个文件：</p>
+
+<p>int ftruncate(int fd,off_t length);</p>
+
+<p>length定义了截取的文件字节长度，当length为0则文件长度即变为0。</p>
+
+<p>2.1.3 文件关闭</p>
+
+<p>int close(int fd);</p>
+
+<p>首先需要注意：</p>
+
+<p>1、每个程序允许同时打开的文件数是有限的，整个系统允许打开的文件总数，也是有限的。</p>
+
+<p>2、程序无论正常还是异常退出，所有由程序打开但尚未关闭的文件描述符，系统都会自动关闭。</p>
+
+<p>3、文件访问的另一种方式是使用C语言的标准函数fopen，fprintf，fscanf，fgets，fread，fwrite，&hellip;，close。这一组函数，是在系统调用open，read，write，&hellip;，close基础上构建的库函数。</p>
+
+<p>因而尽管程序终止时文件描述符总会被强制关闭，但在一些后台程序中，close的作用对资源的合理分配是不可忽视的。</p>
+
+<p>2.2 目录访问</p>
+
+<p>2.2.1 与普通数据文件相同的方式打开目录文件</p>
+
+<p>目录和普通文件一样，占用文件存储区中的空间。目录中的数据是“文件名-inode节点”对。</p>
+
+<p>早期的UNIX每个目录项16B，包括2B的inode节点号和14B文件名。inode节点号为0标志文件已删，因此inode节点1开始编号。用open以只读方式打开一个目录文件，read得到16B目录项。程序自己来分析inode节点号和文件名。</p>
+
+<p>使用长文件名后，目录存储结构发生了变化，应用程序必须了解目录文件的存储结构，这很不方便。因此系统提供了库函数，用于操作目录文件。可将目录文件和普通文件一样打开读，但内核保留写目录的权利，任何用户态程序，就算是超级用户，也不允许改写目录内容，这样，保证其中数据的结构正确和有效。</p>
+
+<p>当以处理普通磁盘文件的方式打开目录读取目录文件数据时，由于需要根据目录表的存储结构在二进制数据中判断文件名、inode节点号，这对普通用户来说是极不方便的。</p>
+
+<p>2.2.3 目录有关的System call</p>
+
+<p>首先介绍/usr/include/dirent.h，即directory entry目录项头文件，定义了有关Unix目录操作的System call和宏定义。</p>
+
+<p>DIR <em>opendir(char </em>dirname);</p>
+
+<p>char *dirname指定目标目录路径（absolute or relative），该调用返回该目录的标志句柄，DIR在dirent.h中定义。</p>
+
+<p>struct dirent <em>readdir(DIR </em>dir);</p>
+
+<p>readdir取第一个目录项的内容，并返回dirent型结构体指针，dirent定义了目录项包括的具体属性，常用的有d_name（char *）、d_ino（int）等，且当前句柄指针跳至下一目录项等待读取。readdir返回NULL,标志目录表已经读到尾。</p>
+
+<p>2.2.4 目录操作的其它System call</p>
+
+<p>这里不再详述其使用方法，事实上这些都是显而易见的。</p>
+
+<p>int closedir(DIR *dir);     //关闭目录表访问句柄</p>
+
+<p>int unlink(char *pathname);    //删除文件</p>
+
+<p>int link(char <em>oldpath,char </em>newpath);  //建立硬连接</p>
+
+<p>int symlink(char <em>oldpath,char </em>newpath); //建立符号连接</p>
+
+<p>int rename(char <em>oldpath,char </em>newpath); //文件改名</p>
+
+<p>int chdir(char *path);     //修改当前工作目录</p>
+
+<p>int getcwd(char *buf,int size);   //当前工作目录名</p>
+
+<p>int mkdir(char *pathname,mode_t mode); //创建目录</p>
+
+<p>int rmdir(char *pathname);    //删除目录</p>
+
+<p>后续文章中我们将利用以上System call进行实际应用示例研究。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-01T00:02:27+08:00" pubdate data-updated="true">2009-06-01</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/06/01/MP77-de-UNIX-ke-jian-bi-ji-7//posts/13/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1539,343 +1756,6 @@ diff不仅有对比两个任意文件（包括文本文件、二进制文件等�
 
 	
 		<span class="comments"><a href="/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-xia//posts/13/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-shang/">
-		
-			简单的词法分析程序和一种lex for Win32用法示例（上）</a>
-	</h2>
-	<div class="entry-content">
-		<p> 学计算机的同学都要学习编译原理，理论是抽象了点，但最终目的毕竟只是让我们了解一下程序语言编译器的构造原理。</p>
-
-<p> 尽管没有充分的证据显示lex+yacc能证明一个人学习cp程度的好坏（考试的作用就更难以拿来说明这些了），但好歹大家学过nfa，学过确定化，学过dfa化简，用c语言大概可以写出设定简单的词法分析程序了。</p>
-
-<p> 然而教材上都是一些纯理论性的内容，实现技术的精粹还得去找洋人学。因而本科生只需掌握lex和yacc——这已经是为极限，再低就难以搞清楚cp和programming有什么关系&hellip;再高？说实话暂时已是心有余而力不足了&hellip;</p>
-
-<p> 那么lex的作用大概就是这些，尽管在几乎所有的程序设计语言编译器中词法分析都是由语法分析程序不断调用而生效，但对于我们来说分别实现并作演示是再好不过。这就是本文介绍词法分析器lex的目的。</p>
-
-<p> 一个lex源程序由四部分构成，基本框架如下：</p>
-
-<p>%{</p>
-
-<p>//包含的头文件、函数声明以及一些全局量的声明</p>
-
-<p>%}</p>
-
-<p>//词法定义</p>
-
-<p>%%</p>
-
-<p>//规则定义</p>
-
-<p>%%</p>
-
-<p>//自定义程序</p>
-
-<p> 需要注意的是，带有%的分隔符必须顶格书写，词法分析和规则定义的基本形式为正规式。为了显示词法分析的最终成果，需要定义一个二元结构体，分别存储其单词内容以及归属类别，并存入定义好的目标文件中，同时按国际惯例显示源代码出错信息。</p>
-
-<p> 现在给出一个PL/0语言（pascal语言的一种子集）的EBNF描述：</p>
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;prog&gt; → program &lt;id&gt;；&lt;block&gt;</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;block&gt; → [&lt;condecl&gt;][&lt;vardecl&gt;][&lt;proc&gt;]&lt;body&gt;</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;condecl&gt; → const &lt;const&gt;{，&lt;const&gt;}</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;const&gt; → &lt;id&gt;:=&lt;integer&gt;</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;vardecl&gt; → var &lt;id&gt;{，&lt;id&gt;}</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;proc&gt; → procedure &lt;id&gt;（&lt;id&gt;{，&lt;id&gt;}）;&lt;block&gt;{;&lt;proc&gt;}</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;body&gt; → begin &lt;statement&gt;{;&lt;statement&gt;}end</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;statement&gt; → &lt;id&gt; := &lt;exp&gt;</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |if &lt;lexp&gt; then &lt;statement&gt;[else &lt;statement&gt;]</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |while &lt;lexp&gt; do &lt;statement&gt;</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |call &lt;id&gt;[（&lt;exp&gt;{，&lt;exp&gt;}）]</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |&lt;body&gt;</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |read (&lt;id&gt;{，&lt;id&gt;})</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">               |write (&lt;exp&gt;{，&lt;exp&gt;})</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;lexp&gt; → &lt;exp&gt; &lt;lop&gt; &lt;exp&gt;|odd &lt;exp&gt;</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;exp&gt; → [+|-]&lt;term&gt;{&lt;aop&gt;&lt;term&gt;}</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;term&gt; → &lt;factor&gt;{&lt;mop&gt;&lt;factor&gt;}</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;factor&gt;→&lt;id&gt;|&lt;integer&gt;|(&lt;exp&gt;)</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;lop&gt; → =|&lt;&gt;|&lt;|&lt;=|&gt;|&gt;=</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;aop&gt; → +|-</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;mop&gt; → *|/</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;id&gt; → l{l|d}   （注：l表示字母）</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;integer&gt; → d{d} </p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;"> </p>
-
-
-<p style="margin: 0cm 0cm 0pt; mso-pagination: widow-orphan;">注释：</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;prog&gt;：程序 ；&lt;block&gt;：块、程序体 ；&lt;condecl&gt;：常量说明；&lt;const&gt;：常量；</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;vardecl&gt;：变量说明 ；&lt;proc&gt;：分程序 ； &lt;body&gt;：复合语句 ；&lt;statement&gt;：语句；</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;exp&gt;：表达式 ；&lt;lexp&gt;：条件 ；&lt;term&gt;：项； &lt;factor&gt;：因子 ；&lt;aop&gt;：加法运算符；</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">&lt;mop&gt;：乘法运算符； &lt;lop&gt;：关系运算符</p>
-
-
-<p style="margin: 0cm 0cm 0pt; tab-stops: 45.8pt 91.6pt 137.4pt 183.2pt 229.0pt 274.8pt 320.6pt 366.4pt 412.2pt 458.0pt 503.8pt 549.6pt 595.4pt 641.2pt 687.0pt 732.8pt; mso-pagination: widow-orphan;">odd：判断表达式的奇偶性。</p>
-
-
-<p> 利用上述文字中提取出的词法信息，我们可以建立一个简单的词法分析程序：</p>
-
-<p>%{
-/<em>
- </em>
- <em> coded by 韩翼 from nwu    Email:8621316@qq.com
- </em>
- */</p>
-
-<h1>include &lt;stdio.h&gt;</h1>
-
-<h1>include &lt;stdlib.h&gt;</h1>
-
-<h1>include &lt;string.h&gt;</h1>
-
-<h1>define MAX_COUNT 10000     //最大可接受id数</h1>
-
-<p>int process();       //处理函数
-int main(int argc,char <strong>argv);
-int nowline = 1;      //当前行数计数器
-int errorno = 0;      //出错计数器
-int flag = 0;       //分支标识
-int count = 0;       //id计数器
-char desfilename[32];     //目标文件名
-char <em>srcfilename;      //源文件名
-FILE </em>srcfile;       //源文件缓冲指针
-FILE <em>desfile;       //目标文件缓冲指针
-struct result       //id标记二元组
-{
- char </em>content;
- char <em>description;
-}result[MAX_COUNT];
-%}
-d [0-9]         
-l [a-zA-Z]
-wr ([0-9]+)<a href="[a-zA-Z]|[0-9]">a-zA-Z</a></em>
-integer [0-9]+
-id <a href="[a-zA-Z]|[0-9]">a-zA-Z</a><em>
-anotherline [\n]
-whitespace [\t]+
-%%
-&ldquo;program&rdquo; { flag = 0; process(); }
-&ldquo;const&rdquo; { flag = 1; process(); }
-&ldquo;:=&rdquo; { flag = 2; process(); }
-&ldquo;var&rdquo; { flag = 3; process(); }
-&ldquo;procedure&rdquo; { flag = 4; process(); }
-&ldquo;begin&rdquo; |
-&ldquo;end&rdquo; { flag = 5; process(); }
-&ldquo;if&rdquo; |
-&ldquo;then&rdquo; |
-&ldquo;else&rdquo; |
-&ldquo;while&rdquo; |
-&ldquo;call&rdquo; |
-&ldquo;read&rdquo; |
-&ldquo;write&rdquo; { flag = 6; process(); }
-&ldquo;+&rdquo; |
-&ldquo;-&rdquo; { flag = 7; process(); }
-&ldquo;</em>&rdquo; |
-&ldquo;/&rdquo; { flag = 8; process(); }
-&ldquo;=&rdquo; |
-&ldquo;&lt;&gt;&rdquo; |
-&ldquo;&lt;&rdquo; |
-&ldquo;&lt;=&rdquo; |
-&ldquo;&gt;&rdquo; |
-&ldquo;&gt;=&rdquo; { flag = 9; process(); }
-&ldquo;(&rdquo; |
-&ldquo;)&rdquo; |
-&ldquo;,&rdquo; |
-&ldquo;;&rdquo; { flag = 10; process(); }
-{wr} { flag = 13; process(); }
-{id} { flag = 11; process(); }
-{integer} { flag = 12; process(); }
-{anotherline} { nowline++; }
-{whitespace} { ; }
-&ldquo; &rdquo; { ; }
-. { flag = 14; process(); }
-%%
-int process()
-{
- switch(flag)
- {
- case 0:
-  result[count].description = &ldquo;&lt;prog&gt;&rdquo;;
-  break;
- case 1:
-  result[count].description = &ldquo;&lt;condecl&gt;&rdquo;;
-  break;  
- case 2:
-  result[count].description = &ldquo;&lt;op&gt;&rdquo;;
-  break;
- case 3:
-  result[count].description = &ldquo;&lt;vardecl&gt;&rdquo;;
-  break;
- case 4:
-  result[count].description = &ldquo;&lt;proc&gt;&rdquo;;
-  break;
- case 5:
-  result[count].description = &ldquo;&lt;body&gt;&rdquo;;
-  break;
- case 6:
-  result[count].description = &ldquo;&lt;statement&gt;&rdquo;;
-  break;
- case 7:
-  result[count].description = &ldquo;&lt;aop&gt;&rdquo;;
-  break;
- case 8:
-  result[count].description = &ldquo;&lt;mop&gt;&rdquo;;
-  break;
- case 9:
-  result[count].description = &ldquo;&lt;lop&gt;&rdquo;;
-  break;
- case 10:
-  result[count].description = &ldquo;&lt;bop&gt;&rdquo;;
-  break;
- case 11:
-  result[count].description = &ldquo;&lt;identifier&gt;&rdquo;;
-  break;
- case 12:
-  result[count].description = &ldquo;&lt;integer&gt;&rdquo;;
-  break;
- case 13:
-  errorno++;
-  result[count].description = &ldquo;&lt;wrong integer or id&gt;&rdquo;;
-  printf(&ldquo;%s(%d) : error &lsquo;%s&rsquo; : wrong integer or identifier\n&rdquo;,srcfilename,nowline,yytext);
-  break;
- case 14:
-  errorno++;
-  result[count].description = &ldquo;&lt;unknown identifier&gt;&rdquo;;
-  printf(&ldquo;%s(%d) : error &lsquo;%s&rsquo; : unknown identifier\n&rdquo;,srcfilename,nowline,yytext);
-  break;
- }
- result[count].content = yytext;
- fprintf(desfile,&ldquo;%d: %s\t%s \n&rdquo;,count+1,result[count].content,result[count].description);
- count++;
- return 0;
-}
-int main(int argc,char </strong>argv)
-{ 
- int i = 0;
- if( argc != 2)
- {
-  printf(&ldquo;No sourcecode processed : parameter error\n&rdquo;);
-  return 0;
- }
- srcfilename = argv[1];
- strcat(desfilename,argv[1]);
- while (desfilename[i] != &lsquo;.&rsquo;)
- {
-  i++;
- }
- desfilename[i] = &lsquo;\0&rsquo;;
- strcat(desfilename,&ldquo;.pl0&rdquo;);
- if( (srcfile = fopen(argv[1],&ldquo;r&rdquo;)) == NULL )
- {
-  printf(&ldquo;No sourcecode processed : cannot open the file \&rdquo;%s\&ldquo;\n&rdquo;,argv[1]);
-  return 0;
- }
- if( (desfile = fopen(desfilename,&ldquo;a&rdquo;)) == NULL )
- {
-  printf(&ldquo;No sourcecode processed : cannot write the file \&rdquo;%s\&ldquo;\n&rdquo;,desfilename);
-  return 0;
- }
- yyin = srcfile;
- yylex();
- fprintf(desfile,&ldquo;\n&rdquo;);
- fprintf(desfile,&ldquo;completed! welcome to lex by mp77,this is only a demo for compile principle.\n&rdquo;);
- printf(&ldquo;%s - %d error(s)\n&rdquo;,desfilename,errorno);
- printf(&ldquo;completed! welcome to lex by mp77,this is only a demo for compile principle.\n&rdquo;);
- fclose(desfile);
- fclose(srcfile);
- return 0;
-}</p>
-
-<p> 接下来我们会介绍如何利用lex工具生成本代码的C语言源代码，并使用vc6.0编译成win32 console程序。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-01T19:25:02+08:00" pubdate data-updated="true">2009-05-01</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/bian-yi-ji-zhu/'>编译技术</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-shang//posts/13/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
