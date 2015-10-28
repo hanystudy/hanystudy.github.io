@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="年底总是很忙，粗算一下也要考7、8门课程。还好过了元月初就放假回家，届时会开出所有的考研书目以及算法书。可以预见，09年会是一个在pm上被看作是milestone的东西。 另本站近期评论数目暴增&hellip;初步认定来源于海外的web2.0网络广告组织&hellip; &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 非均匀有理样条（NURBS）（non uniform rational B-spline），是在计算机图形学中常用的数学模型，用于产生和表示曲线及曲面。  NURBS的发展始于1950年代，它是由需要像在车体和船壳中使用的自由曲面的数学上的精确表示的工程师们所发现的， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,91 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/01/01/NURBS-jian-jie/">
+		
+			NURBS简介</a>
+	</h2>
+	<div class="entry-content">
+		<p> 非均匀有理样条（NURBS）（non uniform rational B-spline），是在<span style="color: #000000;">计算机图形学</span>中常用的数学模型，用于产生和表示曲线及曲面。</p>
+
+<p> NURBS的发展始于1950年代，它是由需要像在车体和船壳中使用的自由曲面的数学上的精确表示的工程师们所发现的，它可以在任何技术上需要的时候精确的复制出来。以前这类曲面的表示只存在于设计者创建的实体模型。该发展的先驱包括：皮埃尔·贝兹（Pierre Bézier）， 他曾是Renault的工程师，以及Paul de Casteljau，他在Peugeot工作，两个都是法国的。贝兹基本是和de Casteljau独立发展的，两人互相不知道对方的工作。但是因为贝兹发表了他的工作的结果，今天的一般的计算机图形学用户认为样条 &ndash; 通过在曲线上的控制点表示的那类 - 为贝兹样条，而de Casteljau的名字仅作为他为计算参数化曲面所设计的算法而为人所知。在1960年代，人们认识到非均匀有理基本样条是贝兹曲线的一个推广，而贝兹曲线可以视为均匀非有理B样条。</p>
+
+<p>最初NURBS仅用于汽车公司私有的计算机辅助设计包。后来它们成为标准计算机图形包的一部分，包括OpenGL图形库。</p>
+
+<p>NURBS曲线和曲面的实时、交互绘制最初由Silicon Graphics工作站于1989年提供。在1993年，CAS Berlin（一个和柏林工大合作的小创业公司）开发了第一个个人机上的交互式NURBS建模器，称为NöRBS。今天多数台式机上的专业计算机图形应用程序提供NURBS技术，一般通过集成一个从专用公司来的NURBS引擎。</p>
+
+<p>NURBS对于计算机辅助设计、制造和工程（CAD，CAM，CAE）是几乎无法回避的，并且是很多业界广泛采用的标准的一部分，例如IGES， STEP，和PHIGS。</p>
+
+<p>但还是有很多它们在交互式建模中的优点和有用性的错误观念，主要是由于关于单一软件包及其用户界面的易用性而得出的猜测。 通常，据说编辑NURBS曲线和曲面是高度直观和可预测的。控制点总是直接连接到曲线或曲面上或象是通过一根橡皮筋连接。根据用户界面的类型，编辑可以通过它们各自的控制点实现，这对于贝兹曲线是最显然和最一般的，或者也可以通过高层的工具，例如样条建模或者层次结构的编辑。高层工具可以设计得很强大，并得益于NURBS创建和建立不同层次的连续性的能力： c0连续性表示连通性，c1连续性可以视为没有尖角，而c2连续性通常称为几何连续性，视觉上也就是“光滑”的东西，用NURBS还可以达到更高阶的连续性，它们可以导致&#8221;亮度连续性&#8221;。这被新车模型的摄影师所倚重，他们热衷于展示霓虹灯在车身上的镜像。灯光可以展示出完美的光滑度，这在没有NURBS的情况下实际上是不可能。</p>
+
+<p>一条NURBS曲线用一个带比重控制点和曲线的次序以及一个节点向量的集合定义。NURBS是B-样条和贝兹曲线和曲面两者的推广，其主要差别在于控制点的比重，这使它们成为有理的（非有理B-样条是有理B-样条的特殊情形）。 NURBS曲线在一个参数方向上演变，通常内部用&rsquo;s&#8217;参数代表，而NURBS曲面在两个参数方向上演变。 所以，通过计算NURBS曲线的s-参数，它可以在三维空间中表示，通过计算NURBS曲面的s和t它也可以在三维空间中表示。 推广意味着：一条贝兹曲线总是一条NURBS曲线，就像狗总是动物。反过来则不总是成立，一条NURBS曲线可以是一条贝兹曲线，就像一个动物可以是一条狗。</p>
+
+<p>NURBS有用的原因有很多条：他们</p>
+
+<p>在仿射变换下不变也在投影变换下不变；
+提供了标准解析形体（例如圆锥曲面）和自由曲面两者的共同数学形式；
+提供了设计一大类形体的灵活性；
+减少了存储形体的内存消耗（和更简单的方法相比）；
+可以用数值上稳定和精确的算法较快的计算；
+是非有理B-样条和非有理和有理贝兹曲线和曲面的推广。
+节点向量是一个参数值的序列，用于决定控制点在何处和如何影响NURBS曲线。节点的个数总是等于控制点的个数加上曲线的阶数。节点必须只是用于内部计算，因而一般对于软件的终端用户来说是没有帮助的、不可编辑、甚至不可以见的。</p>
+
+<p>节点向量的值必须升序：下面的向量是正确的：[0 0 1 2 3]，而接下来这个不是：[0 0 2 1 3]。也要注意唯一重要的因素是值之间的比例：节点向量[0 0 1 2 3]，[0 0 2 4 6]和[1 1 2 3 4]产生相同的曲线。不可以有比曲线的度数更多的重合值：节点的重复度≤度数。 对于一阶NURBS，每个节点和一个控制点结对。</p>
+
+<p>曲线的序大于或等于2，对应与一条线性曲线（序=2，表示一条直线），一条二次曲线（序=3)以及一条三次曲线（序=4）。数学上曲线用同阶的多项式表示，一条三次曲线用3阶多项式表示，其序为4。另外，控制点的个数必须等于或大于曲线的序。实践上，3阶的三次类型是表示曲线和曲面时最常用的。而4次或5次的有时候有用，特别是用于导数，更高阶实际上从来不用因为他们经常导致内部数值问题并趋向于消耗更多的不必要的计算。</p>
+
+<p>非有理曲线有时不够用，例如用于表示圆。 这是表示一个XY平面上的均匀的圆的控制点，第四个参数是比重：
+   cp_circle[0] = Controlpoint( 1、 0、0、     1);
+   cp_circle[1] = Controlpoint( 1、 1、0、sqrt(2) / 2.0);
+   cp_circle[2] = Controlpoint( 0、 1、0、     1);
+   cp_circle[3] = Controlpoint(-1、 1、0、sqrt(2) / 2.0);
+   cp_circle[4] = Controlpoint(-1、 0、0、     1);
+   cp_circle[5] = Controlpoint(-1、-1、0、sqrt(2) / 2.0);
+   cp_circle[6] = Controlpoint( 0、-1、0、     1);
+   cp_circle[7] = Controlpoint( 1、-1、0、sqrt(2) / 2.0);
+   cp_circle[8] = Controlpoint( 1、 0、0、     1);</p>
+
+<p><strong>ps:thanks for wikipedia&amp;university of bristol.</strong></p>
+
+<p><strong>评论突破3600&hellip;即日起暂闭清理&hellip;</strong></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-01T20:59:29+08:00" pubdate data-updated="true">2009-01-01</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/01/01/NURBS-jian-jie//posts/17/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -764,60 +849,6 @@ public class clock extends JFrame implements Runnable{
 
 	
 		<span class="comments"><a href="/blog/2008/10/19/hanyi-name-you-ju-shi//posts/17/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/10/18/JNI-ji-shu-chu-bu-wu/">
-		
-			JNI技术初步(五)</a>
-	</h2>
-	<div class="entry-content">
-		<p> 总的来说，JNI应当是java初学者须掌握的内容。尽管教科书中涉及的极少，JNI也破坏了java重要的可移植性，但JNI并未因此被弃用，反而被Sun列入JDK不可缺少的一部分——这至少说明了java并非像一些人说得那么神通广大。</p>
-
-<p> 正如原文作者最初所说的，JNI适用于许多程序设计语言，甚至包括汇编程序。但理解了java内涵的人都会小心翼翼去使用JNI，而非将其当成是万能的解决方案。</p>
-
-<p> 感谢本系列第1-4篇文章的原作者，很多是被原文采纳，其余内容也做了详细的参考，在此一并感谢。</p>
-
-<p> cnweblog.com <span style="color: #000000;">刘正伟 </span><span style="color: #000000;"><a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x73;&#x75;&#110;&#x64;&#121;&#50;&#54;&#x40;&#x31;&#x32;&#x36;&#46;&#x63;&#x6f;&#x6d;">&#115;&#x75;&#x6e;&#100;&#121;&#50;&#54;&#x40;&#49;&#x32;&#54;&#46;&#x63;&#x6f;&#x6d;</a></span></p>
-
-<p> blog.edu.cn  <span class="style3">xdsamuel</span></p>
-
-<p><span class="style3"> gceclub.sun.com.cn Sun中国技术社区 陈健明 华中师范大学网络与通讯研究所 <span style="color: #000000;"><a href="&#x6d;&#97;&#105;&#x6c;&#116;&#111;&#x3a;&#99;&#x68;&#x65;&#x6e;&#106;&#x6d;&#50;&#48;&#48;&#x30;&#x40;&#104;&#x6f;&#116;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#111;&#109;">&#x63;&#x68;&#x65;&#x6e;&#x6a;&#109;&#x32;&#x30;&#48;&#x30;&#x40;&#x68;&#111;&#x74;&#109;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#x6d;</a></span></span></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-10-18T16:59:48+08:00" pubdate data-updated="true">2008-10-18</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2008/10/18/JNI-ji-shu-chu-bu-wu//posts/17/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

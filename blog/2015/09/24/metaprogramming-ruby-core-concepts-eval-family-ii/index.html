@@ -1,0 +1,285 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>metaprogramming ruby: core concepts - eval family II  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="In previous article several basic scope controlling tools are introduced, like block, proc, lambda, and method object. All of them should work well &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Metaprogramming Ruby: Core Concepts - Eval Family II</h2>
+	<div class="entry-content"><p>In previous article several basic scope controlling tools are introduced, like block, proc, lambda, and method object. All of them should work well when you organize them in your code reasonably. There are more flexible way to mix code and bindings in ruby - eval, which may not be used broadly than others, so that considerable traps about it are still unclear for us.</p>
+
+<h3>3. instance_eval / instance_exec</h3>
+
+<p>BasicObject#instance_eval can be used almost everywhere in ruby, you can use it like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">instance_eval</span> <span class="p">{</span> <span class="vi">@bar</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">instance_variable_get</span><span class="p">(</span><span class="s1">&#39;@bar&#39;</span><span class="p">)</span> <span class="c1">#hello</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the block of instance_eval, the scope changes to the instance foo, thus any operations inner it should bind to the instance, except closure variables.</p>
+
+<p>BasicObject#instance_exec has similar feature to eval one, but with arguments support. This benefit shows as below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="vi">@bar</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;world&#39;</span>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">instance_exec</span><span class="p">(</span><span class="n">output</span><span class="p">){</span><span class="o">|</span><span class="n">output</span><span class="o">|</span> <span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="vi">@bar</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="n">output</span> <span class="c1">#world</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4. class_eval / class_exec (module_eval / module_exec)</h3>
+
+<p>Module#class_eval works for evaluating a block in the context of an existing class. It seems to be similar to instance_eval which will have scope changes to instance self, but also changes current class (excluding singleton class).</p>
+
+<p>class_eval can be used to open a existing class, without using keyword &lsquo;class&rsquo;. That means it has no scope changing issue compared with keyword way. Actually it even does not need to know the constant name of the target, while keyword way indeed needs.</p>
+
+<p>Also Module#class_exec plays same role like instance_exec for instance_eval.</p>
+
+<p>Think about the thing what we&rsquo;ve discussed several weeks ago, in ruby all items are instance of class, including classes no matter internal or customized. Which means instance_eval and class_eval both can work for classes in many cases, but indeed have different self meaning.</p>
+
+<p>You may also notice that there is also Module#module_eval / Module#module_exec methods, but they are just alias for class_eval / class_exec without any other changes.</p>
+
+<h3>5. Kernel#eval</h3>
+
+<p>Unlike instance_eval/class_eval, Kernel#eval only accept a string of ruby code as its argument, run the code and give the result. Even it&rsquo;s so powerful, using string of code is not a good choice if you have other ways. The most issue for string of code is security.</p>
+
+<p>Suppose you have eval expression in your code, which means others can evaluate any code using such method, including get/set operations. Ruby defines safe levels, which actually limits the evaluation of code from outside. By default, ruby will mark potentially unsafe objects which many come from external sources. And user could config a global variable $SAFE, it&rsquo;s range from 0 to 3(0 by default) with more strict.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vg">$SAFE</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'><span class="nb">eval</span> <span class="s2">&quot;p &#39;hello </span><span class="si">#{</span><span class="nb">gets</span><span class="p">()</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+</span><span class='line'><span class="n">world</span> <span class="c1">#SecurityError: Insecure operation - eval</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default, eval can accept almost any code from outside. However, it will not be permitted for code from I/O device(tainted object) if $SAFE is none zero. Below gives more details about $SAFE:</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">$SAFE</th>
+<th style="text-align:center;">Constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">0</td>
+<td style="text-align:center;">No checking of the use of externally supplied (tainted) data is performed. This is Ruby&rsquo;s default mode.</td>
+</tr>
+<tr>
+<td style="text-align:center;">>= 1</td>
+<td style="text-align:center;">Ruby disallows the use of tainted data by potentially dangerous operations.</td>
+</tr>
+<tr>
+<td style="text-align:center;">>= 2</td>
+<td style="text-align:center;">Ruby prohibits the loading of program files from globally writable locations.</td>
+</tr>
+<tr>
+<td style="text-align:center;">>= 3</td>
+<td style="text-align:center;">All newly created objects are considered tainted.</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-24T09:20:27+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/';
+        var disqus_url = 'http://www.hanyi.name/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ruby | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-09-16T09:17:33+08:00</updated>
+  <updated>2015-10-29T06:49:58+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[metaprogramming ruby: core concepts - eval family II]]></title>
+    <link href="http://www.hanyi.name/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/"/>
+    <updated>2015-09-24T09:20:27+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii</id>
+    <content type="html"><![CDATA[<p>In previous article several basic scope controlling tools are introduced, like block, proc, lambda, and method object. All of them should work well when you organize them in your code reasonably. There are more flexible way to mix code and bindings in ruby - eval, which may not be used broadly than others, so that considerable traps about it are still unclear for us.</p>
+
+<h3>3. instance_eval / instance_exec</h3>
+
+<p>BasicObject#instance_eval can be used almost everywhere in ruby, you can use it like this:</p>
+
+<pre><code class="ruby">foo = Object.new
+foo.instance_eval { @bar = 'hello' }
+foo.instance_variable_get('@bar') #hello
+</code></pre>
+
+<p>In the block of instance_eval, the scope changes to the instance foo, thus any operations inner it should bind to the instance, except closure variables.</p>
+
+<p>BasicObject#instance_exec has similar feature to eval one, but with arguments support. This benefit shows as below:</p>
+
+<pre><code class="ruby">class Foo
+  def initialize
+    @bar = 'hello'
+  end
+end
+output = 'world'
+foo = Foo.new
+foo.instance_exec(output){|output| output = "#{@bar} #{output}"}
+output #world
+</code></pre>
+
+<h3>4. class_eval / class_exec (module_eval / module_exec)</h3>
+
+<p>Module#class_eval works for evaluating a block in the context of an existing class. It seems to be similar to instance_eval which will have scope changes to instance self, but also changes current class (excluding singleton class).</p>
+
+<p>class_eval can be used to open a existing class, without using keyword &lsquo;class&rsquo;. That means it has no scope changing issue compared with keyword way. Actually it even does not need to know the constant name of the target, while keyword way indeed needs.</p>
+
+<p>Also Module#class_exec plays same role like instance_exec for instance_eval.</p>
+
+<p>Think about the thing what we&rsquo;ve discussed several weeks ago, in ruby all items are instance of class, including classes no matter internal or customized. Which means instance_eval and class_eval both can work for classes in many cases, but indeed have different self meaning.</p>
+
+<p>You may also notice that there is also Module#module_eval / Module#module_exec methods, but they are just alias for class_eval / class_exec without any other changes.</p>
+
+<h3>5. Kernel#eval</h3>
+
+<p>Unlike instance_eval/class_eval, Kernel#eval only accept a string of ruby code as its argument, run the code and give the result. Even it&rsquo;s so powerful, using string of code is not a good choice if you have other ways. The most issue for string of code is security.</p>
+
+<p>Suppose you have eval expression in your code, which means others can evaluate any code using such method, including get/set operations. Ruby defines safe levels, which actually limits the evaluation of code from outside. By default, ruby will mark potentially unsafe objects which many come from external sources. And user could config a global variable $SAFE, it&rsquo;s range from 0 to 3(0 by default) with more strict.</p>
+
+<pre><code class="ruby">$SAFE = 1
+eval "p 'hello #{gets()}'"
+world #SecurityError: Insecure operation - eval
+</code></pre>
+
+<p>By default, eval can accept almost any code from outside. However, it will not be permitted for code from I/O device(tainted object) if $SAFE is none zero. Below gives more details about $SAFE:</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">$SAFE</th>
+<th style="text-align:center;">Constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">0</td>
+<td style="text-align:center;">No checking of the use of externally supplied (tainted) data is performed. This is Ruby&rsquo;s default mode.</td>
+</tr>
+<tr>
+<td style="text-align:center;">>= 1</td>
+<td style="text-align:center;">Ruby disallows the use of tainted data by potentially dangerous operations.</td>
+</tr>
+<tr>
+<td style="text-align:center;">>= 2</td>
+<td style="text-align:center;">Ruby prohibits the loading of program files from globally writable locations.</td>
+</tr>
+<tr>
+<td style="text-align:center;">>= 3</td>
+<td style="text-align:center;">All newly created objects are considered tainted.</td>
+</tr>
+</tbody>
+</table>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - eval family I]]></title>
@@ -519,71 +605,23 @@ end
 </code></pre>
 
 <p>is equivalent to this code block:
-&#8220;`ruby
-bar = Object.new</p>
-
-<p>class &lt;&lt; bar
-  def bar_method
-    1 + 1
-  end
-end
-&#8220;`</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">bar</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;class &amp;lt;&amp;lt; bar</span>
+</span><span class='line'><span class="sr">  def bar_method</span>
+</span><span class='line'><span class="sr">    1 + 1</span>
+</span><span class='line'><span class="sr">  end</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Understanding singleton class in ruby is very important to investigate internal ruby, especially for its OO design. In next article, we&rsquo;ll introduce the scope mechanism in ruby.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[metaprogramming ruby: core concepts - Kernel]]></title>
-    <link href="http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel/"/>
-    <updated>2015-08-29T21:57:31+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel</id>
-    <content type="html"><![CDATA[<p>The Kernel is the object of Module, thus it has all instance methods from the parent. Also it&rsquo;s available as instance methods in every Ruby object since the Kernel is included by class Object. Kernel has widespread usage including but not limit to internal Constant references, Processes operations, Loading Strategies, Exceptions, Controlling, IO, and Basic string operations. This article will focus on metaprogramming on instance level.</p>
-
-<h3>Kernel</h3>
-
-<p>All Constants and instance methods are public in Kernel, thus they all can be used in any objects as callee.</p>
-
-<h5>binding</h5>
-
-<p>Returns a Binding object, describing the variable and method bindings at the point of call. This object can be used when calling eval to execute the evaluated command in this environment.</p>
-
-<h5>eval</h5>
-
-<p>Evaluates the Ruby expression(s) in string. If the binding is given, which must be a Binding object, the evaluation is performed in its context. If the optional filename and lineno parameters are present, they will be used when reporting syntax errors.</p>
-
-<h5>block_given? / iterator?</h5>
-
-<p>Returns true if yield would execute a block in the current context. The iterator? form is mildly deprecated.</p>
-
-<h5>callcc{|cont| block}</h5>
-
-<p>Generates a Continuation object, which it passes to the associated block. You need to require &lsquo;continuation&rsquo; before using this method. Performing a cont.call will cause the callcc to return (as will falling through the end of the block). The value returned by the callcc is the value of the block, or the value passed to cont.call.
-In general, Continuation object is used to be analogous to C setjmp/longjmp, or a thread. cont will return itself, and cont.call will jump to end of callcc block.</p>
-
-<h5>caller</h5>
-
-<p>Returns the current execution stack—an array containing strings in the form file:line or file:line: in &lsquo;method&rsquo;. Returns nil if start is greater than the size of current execution stack. Optionally you can pass a range, which will return an array containing the entries within the specified range.</p>
-
-<h5>caller_locations</h5>
-
-<p>Returns the current execution stack—an array containing backtrace location objects. Returns nil if start is greater than the size of current execution stack. Optionally you can pass a range, which will return an array containing the entries within the specified range.</p>
-
-<h5>eval</h5>
-
-<p>Evaluates the Ruby expression(s) in string. If binding is given, which must be a Binding object, the evaluation is performed in its context. If the optional filename and lineno parameters are present, they will be used when reporting syntax errors.</p>
-
-<h5>global_variables</h5>
-
-<p>Lookup global variables.</p>
-
-<h5>lambda</h5>
-
-<p>Equivalent to Proc.new, except the resulting Proc objects check the number of parameters passed when called.</p>
-
-<h5>proc</h5>
-
-<p>Equivalent to Proc.new</p>
 ]]></content>
   </entry>
   

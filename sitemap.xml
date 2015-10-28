@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://www.hanyi.name/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/</loc>
+    <lastmod>2015-09-24T09:20:27+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://www.hanyi.name/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family/</loc>
     <lastmod>2015-09-14T23:08:19+08:00</lastmod>
   </url>
@@ -934,22 +938,86 @@
   </url>
   <url>
     <loc>http://www.hanyi.name/blog/</loc>
-    <lastmod>2015-09-16T09:17:33+08:00</lastmod>
   </url>
   <url>
     <loc>http://www.hanyi.name/archives/</loc>
-    <lastmod>2015-09-16T09:17:33+08:00</lastmod>
   </url>
   <url>
     <loc>http://www.hanyi.name/</loc>
-    <lastmod>2015-09-16T09:17:33+08:00</lastmod>
   </url>
   <url>
     <loc>http://www.hanyi.name/blog/archives/</loc>
-    <lastmod>2015-09-16T09:17:33+08:00</lastmod>
   </url>
   <url>
     <loc>http://www.hanyi.name/about/</loc>
-    <lastmod>2015-09-16T09:17:33+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/tian-xuan-zhi-zuo/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/zhan-dian-ri-zhi/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/pcyou-xi/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/guan-dian/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/c-plus-plus-slash-c/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/xiang-mu/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/zhuan-zai/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/assembly/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/kao-yan-slash-bo/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/java/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/shu-ju-jie-gou/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/bian-cheng-yu-yan/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/actionscript/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/bian-yi-ji-zhu/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/unix-slash-linux/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/ke-shi-hua/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/suan-fa-tao-lun/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/qt/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/web/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/kinect/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/gpu-slash-gpgpu/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/ruan-jian-jia-gou/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/ruby/</loc>
   </url>
 </urlset>
