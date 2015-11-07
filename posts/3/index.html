@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="总的来说，微服务并不是指某一个具体的技术。推崇者认为它得益于Eric Evans的领域驱动设计、持续交付、Alistair Cockburn的六边形架构、基础设施可视平台和小型全功能团队等众多近年内不断涌现的高效实践。ThoughtWorks的Sam Newman认为，微服务包含两方面含义： &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Recently we used an online user session recording service in one of our project, which caused my interests and push me to do some spike on such tool &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,118 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/03/23/guide-for-sessioncam/">
+		
+			Sessioncam: Introduction&Principle</a>
+	</h2>
+	<div class="entry-content">
+		<p>Recently we used an online user session recording service in one of our project, which caused my interests and push me to do some spike on such tool —— sessioncam. In this article, I will give an introduction as simple as I can, then try to dig deep into its design and implementation.</p>
+
+<h3>1.What is sessioncam in one sentence?</h3>
+
+<p>SessionCam is a leading “software as a service” session replay product used by clients to record and replay website sessions. you can visit <a href="http://www.sessioncam.com/">http://www.sessioncam.com/</a> for more detail.</p>
+
+<h3>2.Basic features list about sessioncam.</h3>
+
+<h4>i.Session replay</h4>
+
+<p>Almost any behaviour of customers will be recorded and can be replayed by developers, including mouse clicks, movements, scrolling, form inputs, or any other actions on page, similar to specific actions on mobile devices. Developers can replay the recordings like playing videos by their sessioncam account with various speed.</p>
+
+<h4>ii.Heatmaps</h4>
+
+<p>User can generate website heatmaps for mouse movement(M), mouse clicks&copy;, page scrolling(S) and browser attention(A).</p>
+
+<h4>iii.Funnels, Form Analytics, Field Drop-Off</h4>
+
+<p>A kind of analytics tool to filter out useless data, improve conversion through assessing drop-off of users behaviour, such as page accessing or form inputing.</p>
+
+<h4>iv.API and integration</h4>
+
+<p>User can integrate sessioncam with their own analytics tool, such as Google Analytics, Campaign Monitor, CheetahMail and Olark.</p>
+
+<h3>3.How to start?</h3>
+
+<p>You must register an account on sessioncam <a href="http://www.sessioncam.com/plans/">http://www.sessioncam.com/plans/</a> , there are also free plan <a href="http://www.sessioncam.com/free-account-request/">http://www.sessioncam.com/free-account-request/</a> , with limited page count per month.</p>
+
+<p>About which plan to choose, from our experience you can hardly use non-enterprise edition if all site visitors are planned to be recorded. Therefore, it depends on the scale of your site. If you only have hundreds users and each users will take hundreds page views on your site per month, that means medium edition is better for your situation.</p>
+
+<p>There are many ways to deploy sessioncam to your website, most of them are very easy work with only a few javascript needed on your page. Refer to <a href="https://help.sessioncam.com/hc/en-gb/articles/200863126-Adding-SessionCam-to-your-website">https://help.sessioncam.com/hc/en-gb/articles/200863126-Adding-SessionCam-to-your-website</a> .</p>
+
+<p>Login to your sessioncam account console and turn on recording, <a href="https://console.sessioncam.com/Dashboard/Manage/HostnameManagement.aspx?accountAdmin">https://console.sessioncam.com/Dashboard/Manage/HostnameManagement.aspx?accountAdmin</a> sessioncam will start working.</p>
+
+<h3>4. How does it work?</h3>
+
+<h4>Step 1. IO initialisation</h4>
+
+<p>Reading and executing script from //d2oh4tlt9mrke9.cloudfront.net/Record/js/sessioncam.recorder.js, through which it will request for <a href="https://ws.sessioncam.com/Record/config.aspx">https://ws.sessioncam.com/Record/config.aspx</a> to initialise a sessionCamRecorder object, with tracking configurations from sessioncam server.</p>
+
+<h4>Step 2. Run</h4>
+
+<p>(Please refer to sessioncam.recorder.js when you reading this part)</p>
+
+<p>Sessioncam will capture and clone the whole document inner html at line 5920(function SessionCamRecorder.prototype.ml), during this a pre-processing job should be done at line 6568. Below shows basic workflow:</p>
+
+<ol type="a">
+<li><p>Replace script, object, image, or any useless target element with short strings. The processed document content will be kept in SessionCamRecorder.hK.</p></li>
+<li><p>Check whether sessionCamDebug is opened .</p></li>
+<li><p>Initialise data structure which stores form data at line 5847.</p></li>
+<li><p>Config for mobile device.</p></li>
+<li><p>Check XHttpRequest configuration, if disabled by browser it will try swfhttprequest.</p></li>
+<li><p>Bind any document interactive events in sessionCamRecorder.cU, line 7631.</p></li>
+<li><p>Once any event triggered, sessioncam will collect event data and push them into IO pool, in SessionCamRecorder.prototype.gG, line 7279.</p></li>
+<li><p>Looping scan all doms of page per 250ms, record any dom and its xpath value who is different from 250ms before into IO pool. line 6855-6878.</p></li>
+<li><p>Looping check IO pool and send existed data flow by time to sessioncam server, in SessionCamRecorder.prototype.jM, line 8106.</p></li>
+<li><p>Send data to sessioncam server per second, in SessionCamRecorder.prototype.lh, line 8584.</p></li>
+</ol>
+
+
+<h4>Step 3. Replay</h4>
+
+<p>According to step 2, sessioncam almost collects all the user&rsquo;s browser data at milliseconds level, it&rsquo;s easy to replay the session by time flow. Actually, for session replay there is an iframe element which always figuring to remote getpage.aspx, with parameters like PageId, SessionId, starttime, EventId, HostnameId, etc. Javascript can play this iframe just as animation easily.</p>
+
+<h3>5.Miscellaneous</h3>
+
+<p>Sessioncam identify data only by website domain, which means you must register sessioncam account by a domain, and once such domain has been taken, new account can not set same domain unless the first user permits it.</p>
+
+<p>Session data may contain some user privacy data, but sessioncam will ignore most common item like password, credentials. But admin can still config some privacy fields to be ignored.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-23T23:43:49+08:00" pubdate data-updated="true">2015-03-23</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/web/'>web</a>, <a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2015/03/23/guide-for-sessioncam//posts/3/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -826,60 +938,6 @@ REST over HTTP也存在缺点，一、生成客户端stub的成本较高，超�
 
 	
 		<span class="comments"><a href="/blog/2012/06/08/tangletacerbasic-editionb-1-0-TangleTracer-Basic-edition-B-1-0-beta-kai//posts/3/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/03/25/wu-xun-chuan-de-xian-shi-yi-yi/">
-		
-			《武训传》的现实意义</a>
-	</h2>
-	<div class="entry-content">
-		<p>我对所谓的“国产禁片”并不感冒。其原因在于真正要被禁的影片根本不可能启动拍摄，而已经拍出来的所谓“禁片”注定是褪去了核心思想的阉货，顶多被允许在课堂上当教学片放，还需得是遮遮掩掩的那种。不过，当听到《武训传》要出数码修复版时又不禁小兴奋了一下，突然对这部筹划于上世纪四十年代初、成片于1950年并在中国当代史上扮演了重要角色的“第一禁片”十分好奇起来。尽管寻找片源时颇费了一番周折，好在终于在周末第一次看完时长197分钟的全片。</p>
-
-<p>使我对该片产生好奇的第一个问题是，《武训传》在今天仍不失影响力，那么是因为传主事迹确实称得上“感天动地”、堪得流芳百年？还是由于该片后来“意外地”成为了首个思想文化批判与改造运动的漩涡中心，以致于迄今为止仍有许多人们念念不忘，难以释怀？我们知道，影片创作最初源于民国著名教育家陶行知先生对“武训精神”的推崇和力行，并随段承泽和漫画家孙之俊两位先生的《武训先生画传》而广为人知（1950年李士钊和孙之俊又重新出版了一套《武训画传》）。据《武训画传》载，武训（武七）幼年丧父，与母亲以讨饭为生，年少时先后在自己的姨夫家和李地主家做工，饱受欺辱。由于没上过学，被地主骗光了三年工钱。经过几番沉重打击后，武训意识到只有读书才能改变穷孩子们的命运，才能真正帮助穷人摆脱这种不公正。经过近四十年行乞的勤劳与节俭，武训先后创办“崇贤”、“杨二庄”以及“御使巷”三家义塾，免费供贫困子弟上学。武训事迹轰动山东，最终得到清廷嘉奖并授予“义学正”。总的来说，武训事迹是真其人、确其事的贫民教育典范，理应作传以传后世。不过，当漫画版传记到银幕则产生了原因复杂到令人难以理解的后果。</p>
-
-<p>昆仑公司出品的《武训传》成片于1950年，实际上影片曾断断续续拍了几年时间，周恩来等领导人都曾经对拍摄中的剧本进行了修改和建议。不过，影片的编导对原《画传》的核心思想进行了改编，我认为这恐怕是为创作团队带来日后横祸的重要原因，但也不得不佩服孙瑜导演及其他主创对待文艺创作的理性态度和勇气。影片新引入的一条主要线索是前太平军周大的经历，北伐失利的周大与武训一同在张举人家里做工，最终与武训共同逃离，不过他的选择和武训大相径庭，后者选择兴办“义学”，而周大则去做了响马，其理想是将地主“抢光”、“杀光”，有意影射清末数量庞大的农民起义运动。影片中武训的态度很清楚：“读书改变命运”，一味烧杀并不能解决问题。但在片末，农民运动达到了高潮，响马们履行诺言回来复仇，武训看着一切只能又标志性地挠了挠头，但影片没有给出事件的最后结局。批判者指责影片推崇“改良”，在某种程度上说并不完全错误，同时这也是至今影片仍存争议的原因。不过，关于所谓的“路线”争执是自百年前至今都确实存在的，只是取决于我们怎样对待这种应当仅存于学术层面的争论。</p>
-
-<p>然而影片中武训的担心也未必没有道理，当狂热到丧失理性之时，原本就缺乏思考的人们会变成怎样可怕的怪兽？君不见，当代中国又横遭了多少磨难？我对影片与《画传》的一处细节差别印象深刻，首先片中强调“张举人”的读书人身份，后来又编出什么“没收武训所积造文昌帝庙，以明读书人之修身齐家的志愿”？读书人是不完美，但人始终无完人，影片着重渲染了一干“读书轻义”的当权者，与武训到处跪求贫困家庭送子入学形成了明显矛盾，尽管片中也给出了几个开明乡绅的形象。而当武训听到对“学而优则仕”的解释时又大为困惑起来，是顺带批评了当时的知识分子么？可见，影片所带给人的思考余地是非常广阔的。</p>
-
-<p>现在回去看《武训传》所遭遇的不公正待遇，我认为这正是影片创作者们的担心终成现实的结果，甚至可能丝毫不出他们所预料。当然恐怕有更多的人宁愿相信这些卓越的文艺创作者们是犯了某些错误，至少是某一“特定历史时期”下的错误。但我始终觉得这些说辞只会是无力面对历史的辩解之词，看似轻描淡写，实则是一个讳疾忌医的病人罢了。</p>
-
-<p>最后，针对《武训传》的当代史研究在最近30多年里已经著述颇丰，我认为要了解一段历史，必须行史学家的态度去阅读文献，在此之前不应轻下结论，否则必然是一叶障目。本文不提非官方的野史故事，理由一是资料真假难辨，有失严谨；二是希望现今的人们能继续从本质上对武训及这部影片展开讨论，当然这种讨论必须是完全理性的、有意义的观点和看法。尽管我们长久以来避而不谈，但历史终究会使我们不得不去思考，今后的路朝哪里走。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-25T02:33:30+08:00" pubdate data-updated="true">2012-03-25</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2012/03/25/wu-xun-chuan-de-xian-shi-yi-yi//posts/3/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

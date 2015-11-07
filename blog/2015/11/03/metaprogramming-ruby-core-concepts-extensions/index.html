@@ -1,0 +1,482 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>metaprogramming ruby: core concepts - extensions  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="As we already know, ruby provides several ways to extend our classes and objects including but not limit to OO inheritance, Module mix-in, Dynamic &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Metaprogramming Ruby: Core Concepts - Extensions</h2>
+	<div class="entry-content"><p>As we already know, ruby provides several ways to extend our classes and objects including but not limit to OO inheritance, Module mix-in, Dynamic Methods, Monkey patching / Refinement, Eval family, Ghost methods, Callable objects, Singleton classes / methods, etc. But there are still some important tips deserve to be mentioned, before we moving forward.</p>
+
+<h3>1. Include vs Extend</h3>
+
+<p>Firstly let&rsquo;s see an example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">foo</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;Hello world&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">say_hi</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;Hello world&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Bar</span>
+</span><span class='line'>  <span class="kp">include</span> <span class="no">Foo</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Bar</span><span class="o">.</span><span class="n">foo</span> <span class="c1">#NoMethodError: undefined method `foo&#39; for Bar:Class</span>
+</span><span class='line'><span class="no">Bar</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">say_hi</span> <span class="c1">#Hello world</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It seems that module mix-in can only involve instance methods but not others like class methods. But how to do similar thing at class level? You must hear about extend:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">foo</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;Hello world&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Bar</span>
+</span><span class='line'>  <span class="kp">extend</span> <span class="no">Foo</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Bar</span><span class="o">.</span><span class="n">foo</span> <span class="c1">#Hello world</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Extend is used in object level, so we are sure it can also be used for any class in ruby. But in previous article, we know that class method is actually saved as a singleton method of the original class, also instance method of its singleton class. So that should also happen on include:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">foo</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;Hello world&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Bar</span>
+</span><span class='line'>  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span>
+</span><span class='line'>    <span class="kp">include</span> <span class="no">Foo</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Bar</span><span class="o">.</span><span class="n">foo</span> <span class="c1">#Hello world</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Thus we can regard extend as a kind of special usage on include through above examples.</p>
+
+<h3>2. Method wrappers</h3>
+
+<p>Method wrapper means wrapping an existing method inside a new method, which is very useful when you want to make extension without changing the source, like code in standard library or other cases.</p>
+
+<p>There are several ways to implement method wrappers in ruby, and they are all in composite form of primitives which&rsquo;ve already been introduced in previous articles. We&rsquo;ll go through below.</p>
+
+<h4>Around Alias</h4>
+
+<p>Module#alias_method (also the key word &lsquo;alias&rsquo;) is used to give another name to ruby methods. It will involve more accessibility if an usual method could have different domain names(e.g. size, length and count). Also more flexibilities if you want, like code below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">say_hi</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;Hello&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="n">alias_method</span> <span class="ss">:say_hello</span><span class="p">,</span> <span class="ss">:say_hi</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">say_hi</span>
+</span><span class='line'>    <span class="n">say_hello</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;World&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">say_hi</span> <span class="c1">#Hello\nWorld\n</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is just a kind of wrapper using open class, alias_method, and method redefinition.</p>
+
+<h4>Refinement</h4>
+
+<p>We talked about refinement and suggested using refine instead of monkey patch. Actually refinement is even more powerful than that.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">say_hi</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;Hello&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">FooRefinement</span>
+</span><span class='line'>  <span class="n">refine</span> <span class="no">Foo</span> <span class="k">do</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">say_hi</span>
+</span><span class='line'>      <span class="k">super</span>
+</span><span class='line'>      <span class="nb">p</span> <span class="s1">&#39;World&#39;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">using</span> <span class="no">FooRefinement</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Foo</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">say_hi</span> <span class="c1">#Hello\nWorld\n</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Only thing you need to notice is that the key word &lsquo;using&rsquo; may not work well with your IRB environment, which means you couldn&rsquo;t get result in mind for some versions of ruby if you run those code in IRB. See more information <a href="https://bugs.ruby-lang.org/issues/9580">here</a>.</p>
+
+<p>The benefit of refinement wrapper is controllable scope of wrapper unlike around alias which affects globally. However, accessibility to original method is also lower than alias way.</p>
+
+<h4>Prepending</h4>
+
+<p>Module#prepend is the simplest way to implement method wrapper without scope configurability like refinement. But much more clear than other two.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">say_hi</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;Hello&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">module</span> <span class="nn">FooPrepending</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">say_hi</span>
+</span><span class='line'>    <span class="k">super</span>
+</span><span class='line'>    <span class="nb">p</span> <span class="s1">&#39;World&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Foo</span><span class="o">.</span><span class="n">class_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">prepend</span> <span class="no">FooPrepending</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Foo</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">say_hi</span> <span class="c1">#Hello\nWorld\n</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. Class Macros</h3>
+
+<p>Ruby objects have no attributes - May this won&rsquo;t surprise or confuse you too much. Indeed we&rsquo;ve hear about instance variables or class variables, but you can not access them directly from outside. That means getter or writer can not be avoided:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">bar</span><span class="o">=</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</span><span class='line'>    <span class="vi">@bar</span> <span class="o">=</span> <span class="n">value</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">bar</span>
+</span><span class='line'>    <span class="vi">@bar</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="s1">&#39;Hello&#39;</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="c1">#Hello</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&rsquo;s just not ruby style! Ruby provides series accessors for class definition using metaprogramming api, like attr_accessor, attr_reader and attr_writer, they are quite intuitive to use:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="kp">attr_accessor</span> <span class="ss">:bar</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="s1">&#39;Hello&#39;</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">bar</span> <span class="c1">#Hello</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>attr_* come from Module as private instance methods, thus they all can be used in module or class definitions.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-11-03T08:24:21+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2015/11/03/metaprogramming-ruby-core-concepts-extensions/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2015/11/03/metaprogramming-ruby-core-concepts-extensions/';
+        var disqus_url = 'http://www.hanyi.name/blog/2015/11/03/metaprogramming-ruby-core-concepts-extensions/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>
