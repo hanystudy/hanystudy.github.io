@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="（限定性线性表——队列，一个初级迷宫解法的讨论及延伸B）          本节我们介绍另外一个重要的线性表——队列。首先会讨论队列的几种不同的存储结构，以及相关结构的基本运算问题，最后，我们会对连载五中介绍的迷宫Maze解法进行第一步优化工作。        队列Queue   与栈相类似， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 最初是准备发第七篇技术连载，突然想起由于这几天长期沉浸《Friends》，自己很久都没有认真看一部完整的电影了。  随意在mtime上翻了一翻新片海报。现在回想起来那几乎与普通海报无异，顶部印着电影在多伦多电影节上取得的荣誉，以及转载Time的一句话点评。但影片独特的构思就体现在正下方， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,78 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/02/07/yong-bu-yan-qi-Slumdog-Slumdog/">
+		
+			永不言弃—《Slumdog Millionaire》</a>
+	</h2>
+	<div class="entry-content">
+		<p> 最初是准备发第七篇技术连载，突然想起由于这几天长期沉浸《Friends》，自己很久都没有认真看一部完整的电影了。</p>
+
+<p> 随意在mtime上翻了一翻新片海报。现在回想起来那几乎与普通海报无异，顶部印着电影在多伦多电影节上取得的荣誉，以及转载Time的一句话点评。但影片独特的构思就体现在正下方，一个单项选择题：</p>
+
+<p>what does it take to find a lost love?</p>
+
+<p>a.MONEY     b.LUCK     c.SMARTS     d.DESTINY</p>
+
+<p> 起初是好奇，观赏完全片后便不由得被原著《Q&amp;A》的作者所折服。</p>
+
+<p> 影片的画面开始于一个电视节目《who wants to be a millinaire?》的现场，开始感觉像是小时候喜欢看得国内一出同题材的电视节目—尽管后来愈觉得这类节目缺乏吸引力。结果还没太看明白，画面又切入审讯室里，同样的男主角承受着酷刑逼供。事实上后来全片所体现出的剪辑思路完全突破了传统的框架，产生了令人意料之外的效果。</p>
+
+<p> 影片前半部分故事发在孟买的贫民窟里，有点像曾经看过的一部电影《上帝之城》，事实上最初的感觉是两部影片极其相似—贫民窟里发生的令人心酸的丑恶，以及男主角一颗宁静而执着的心。然而影片的叙事手法却是凭借着电视节目里主持人提出的问题—当然，“现在”已经是不幸而又万幸的主角坐在节目录像前向调查警官“坦白罪行”了。</p>
+
+<p>　从贫民窟走出来以后，影片的线索就随着主角对latika的苦苦追寻而展开。主角的哥哥salim也就开始为人所留意，其实之前有一段salim偷拿jamal心爱的明星签名照去卖钱的情节，但并没有引起我太大注意。直到兄弟俩逃出魔窟的当晚，salim不顾一切地拯救弟弟，却面带阴笑地松开了latika的手，对和谐电影的一贯做法使人隐约感觉到了salim悲剧性的结局。</p>
+
+<p>　弟弟对latika的感情发展依照这样一条线索，在一次大规模的种族宗教械斗中两人共同丧失了双亲，事后主角对latika产生了同病相怜的感情—此时两人互相结识。不幸落入魔掌之后，哥哥的凶狠受到了犯罪分子的怂恿，而最终逃脱使主角对latika的不幸感到万分懊悔，历尽艰辛两人生存了下来，出于对latika的依恋弟弟执意再次回到孟买。salim在这里枪杀了犯罪集团的头目，并与弟弟一道救出了latika，然而此时几乎疯狂的salim投靠了贫民窟的黑老大，并成为其手下一名打手。此时的salim显然对刚刚成年的latika打起了主意，为此不惜拔出手枪将弟弟赶出了旅店。</p>
+
+<p>　影片最巧妙的地方位于片尾，事实上前面已经有多处伏笔显示jamal将利用游戏规则“打电话”的方式与latika通话，此时的jamal深知自己将不再失去，于是毫不犹豫地“乱”选了一个答案。导演选择了“正确”作为最终解答，并让主角抱得两千万与美人同归。</p>
+
+<p>　怪不得海报中的影评里写道“A bouyant hymn to life&hellip;”，这确实是一出喜剧，哥哥最终完成了教科书般的自我救赎。剧末众人在维多利亚火车站跳起滑稽的印度舞蹈，网上有评论说本部分毫无存在的价值—但仔细想想，导演和编剧所要向人传递的一种贫民窟人民对生活的乐观，这不仅仅是影片所体现的对贫民窟人民由衷的敬意，同时也是教化大众所要秉持的一种生活态度。</p>
+
+<p>　影片的主题似乎是Destiny，命运，但更像是升华着一种永不言弃的精神，童年的“弟弟”在当今世界里又有多少？在高楼上重逢后，兄弟俩有这样一段对白：</p>
+
+<p>jamal:Salim&hellip;where&rsquo;s latika?</p>
+
+<p>salim:Still?&hellip;&hellip;</p>
+
+<p> 哥哥对弟弟的衷情感到有些不可理解，但幸运的是，这段感情最终得到了所有人的认可—可能除了被salim杀掉的黑老大。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-07T00:09:45+08:00" pubdate data-updated="true">2009-02-07</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/02/07/yong-bu-yan-qi-Slumdog-Slumdog//posts/16/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -2705,50 +2777,6 @@ $(document).ready(
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/01/15/jia-qi-xi-lie-nei-rong-yu-gao/">
-		
-			假期系列内容预告</a>
-	</h2>
-	<div class="entry-content">
-		<p>09年寒假期间我们准备连载有关ACM的知识，同时将对一些典型例题进行有效解答。由于时间限制，内容仅能尽量拓宽，而很难深入。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-15T13:50:32+08:00" pubdate data-updated="true">2009-01-15</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/01/15/jia-qi-xi-lie-nei-rong-yu-gao//posts/16/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
 <nav id="pagenavi">
     
     	
@@ -2760,7 +2788,7 @@ $(document).ready(
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Han Yi
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2015-11-07T16:55:18+08:00</updated>
+  <updated>2016-11-20T21:32:29+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -14,15 +14,74 @@
 
   
   <entry>
+    <title type="html"><![CDATA[微情境混合现实]]></title>
+    <link href="http://www.hanyi.name/blog/2016/11/20/micro-situational-mixed-reality/"/>
+    <updated>2016-11-20T13:37:28+08:00</updated>
+    <id>http://www.hanyi.name/blog/2016/11/20/micro-situational-mixed-reality</id>
+    <content type="html"><![CDATA[<p>Oculus Rift、Vive、Hololens、Daydream，接下来呢？</p>
+
+<p>许多人初次接触VR/AR，通常想说WTF&hellip;&hellip;但没过多久，又想说WTF&hellip;&hellip;好像这些“新颖”的技术还只能被视为玩具。然而，这些早在50年前(<a href="https://www.youtube.com/watch?v=ISJWZpFIAlQ">The Sword of Damocles，1968</a>)就被人玩剩了，他的创作者是图形学界祖师之一Ivan Sutherland。但后来萨大爷可能发现自己已经走得太远（实际上当时现代图形学基础还没有完全确立），于是带着他一票学生和下属回去后方铺路，后者们先后发明了Smalltalk编程语言、Gouraud着色算法、图形反走样算法，甚至联合乔帮主创办Pixar（Edwin Catmull也是图形学巨擘，发明了Catmull样条），风生水起的Adobe以及曾经辉煌的SGI。</p>
+
+<p>然而50年后的今天，还有人说这项技术距离“成熟”还要XX年，我只能说WTF&hellip;&hellip;2015年的Proto颁奖大会上，萨大爷获虚拟现实“创始人奖”，发表感言时曾说：“内容意味着一切，摄像机并不创造内容，只有伟大的创造者才得以使用技术把现实带给人们”。</p>
+
+<p>而如果你能尝试Vive、浏览SteamVR上的应用列表、甚至体验下Proto奖的获奖作品时，你会欣慰地发现原来还是有很多有梦想、有创造力的人。你就会从各种捞钱、炫富的纸醉金迷中暂时解脱出来了。</p>
+
+<p>本文提出一种特定场景下的混合现实产品思路，最后以一个真实的开源Demo为例，希望能为许多有想法的人打开一扇窗。</p>
+
+<h4>为什么是特定场景？</h4>
+
+<p>如今在诸多VR/AR平台中，Daydream的优势是非常易见的：它太容易接近大众了。对于其它竞品平台，则更多聚焦在高端和行业应用上，不利于小团队做快速原型开发和内容创新。</p>
+
+<p>而Daydream的劣势目前也很明显：无法捕捉用户的全身动作，反馈缺失导致了沉浸感不足（Vive的这一优势目前还无人匹敌）；另外，移动设备受限的性能、参差不齐的规格也导致潜在的用户体验问题。</p>
+
+<p>因此在设计VR/AR产品时，需要先考虑平台的限制。</p>
+
+<h4>微情境（Micro-Situation）</h4>
+
+<p>理论上说，VR/AR技术几乎可以被用于任何情境。基于现实考量，在“微情境”中实现的性价比则更高。</p>
+
+<p>例如非厨师职业学习做饭，传统上可能是一对一的学徒体系；后来发展成书籍报刊、电视传播。前者属于文字模式更多得靠个人天赋，后者的声音＋图像模式就更容易被大众所接受。</p>
+
+<p>但有人可能会质疑为什么不真的去尝试做一顿饭？其实这相当于混淆了学习和实践两种活动，“学做饭”和“做饭”本身不是一回事（当然你也可以说在实践中学习，但你也不能证明你是在完全未经过学习的情况下做了一顿饭，况且如果真的是这样，那么满足各位食客的可能性恐怕微乎其微）。</p>
+
+<p>再来看“虚拟学做饭”这一活动的“价值”，最大的劣势就是你无法从外观之外获得任何的有效反馈，包括直接吃掉自己的学习成果。而优势是节省钱、食材、时间，切身经历每一道工序，这是现有的学习形式都不具备的。</p>
+
+<p>从这一情境本身来说，用户只需要一间整洁的厨房，摆放整齐的食材和调味品，再加上面前一座灶台即可。而交互内容仅需要双手参与。那么即将进入寻常百姓家的Daydream平台完全满足需求，于是皆大欢喜。</p>
+
+<p>其实这里需要考虑的重点在“微”上，什么样的情境才算是“微情境”呢？</p>
+
+<p>我们不尝试去做更多的文字游戏，对于“微情境”的发现要更多依赖自身对情境本身、以及对VR/AR技术的理解和运用。</p>
+
+<h4>为什么是混合现实（MR）？</h4>
+
+<p>在这波VR行情之前，就有许多AR应用运行在智能手机上，甚至还包括不久前的google glass，都始终没有杀手级应用出现。其中市场太小是一个非常重要的因素。难道VR就没有市场的疑问？否则巨头们为何集体押注在后者身上？可见投资VR的回报率明显要更高一筹。</p>
+
+<p>值得一提的是Hololens展示了当前无与伦比的MR技术，无奈离大众太过遥远，注定只会面向专业领域。实际上基于现有的VR设备要想直接实现类似Hololens的MR并不困难，毕竟只需要一个背景显示和空间位置标定，但成本肯定低得多。</p>
+
+<p>然而如果比拼想象力，MR无疑更胜VR/AR，虽然前者只是模糊了后者之间的界限。在接受程度上，人们总会倾向于那些更加抽象、简洁且表现力更强的概念，MR无疑将会胜出。真正的困难之处在于，MR不仅仅是两幅人眼画面的结合，也意味着更加复杂的微情境应用，以及更具挑战的交互模式。</p>
+
+<h4>来自22世纪的程序员（C22）</h4>
+
+<p><a href="https://github.com/hanystudy/coder-from-22nd-century">C22</a>是一个基于PC+Cardboard的微情境应用。它展示了未来的程序员，能够摆脱固定显示器的束缚，使用HMD、键鼠就可以编写代码，并且在自身环境周围展示各种信息的技术。</p>
+
+<p>为了快速实现产品原型，C22全部使用JavaScript编写，并且采用了大量尚未广泛兼容的技术（详见github），完成核心部分只用了两个晚上时间。</p>
+
+<p>这是一份属于程序员的礼物，也借此向伟大的先行者们致敬。</p>
+
+<p>（未完待续）</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - extensions]]></title>
     <link href="http://www.hanyi.name/blog/2015/11/03/metaprogramming-ruby-core-concepts-extensions/"/>
-    <updated>2015-11-03T08:24:21+08:00</updated>
+    <updated>2015-11-03T16:08:28+08:00</updated>
     <id>http://www.hanyi.name/blog/2015/11/03/metaprogramming-ruby-core-concepts-extensions</id>
     <content type="html"><![CDATA[<p>As we already know, ruby provides several ways to extend our classes and objects including but not limit to OO inheritance, Module mix-in, Dynamic Methods, Monkey patching / Refinement, Eval family, Ghost methods, Callable objects, Singleton classes / methods, etc. But there are still some important tips deserve to be mentioned, before we moving forward.</p>
 
 <h3>1. Include vs Extend</h3>
 
-<p>Firstly let&rsquo;s see an example:</p>
+<p>Firstly let’s see an example:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -123,11 +182,11 @@
 
 <p>Method wrapper means wrapping an existing method inside a new method, which is very useful when you want to make extension without changing the source, like code in standard library or other cases.</p>
 
-<p>There are several ways to implement method wrappers in ruby, and they are all in composite form of primitives which&rsquo;ve already been introduced in previous articles. We&rsquo;ll go through below.</p>
+<p>There are several ways to implement method wrappers in ruby, and they are all in composite form of primitives which’ve already been introduced in previous articles. We’ll go through below.</p>
 
 <h4>Around Alias</h4>
 
-<p>Module#alias_method (also the key word &lsquo;alias&rsquo;) is used to give another name to ruby methods. It will involve more accessibility if an usual method could have different domain names(e.g. size, length and count). Also more flexibilities if you want, like code below:</p>
+<p>Module#alias_method (also the key word ‘alias’) is used to give another name to ruby methods. It will involve more accessibility if an usual method could have different domain names(e.g. size, length and count). Also more flexibilities if you want, like code below:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -211,7 +270,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Only thing you need to notice is that the key word &lsquo;using&rsquo; may not work well with your IRB environment, which means you couldn&rsquo;t get result in mind for some versions of ruby if you run those code in IRB. See more information <a href="https://bugs.ruby-lang.org/issues/9580">here</a>.</p>
+<p>Only thing you need to notice is that the key word ‘using’ may not work well with your IRB environment, which means you couldn’t get result in mind for some versions of ruby if you run those code in IRB. See more information <a href="https://bugs.ruby-lang.org/issues/9580">here</a>.</p>
 
 <p>The benefit of refinement wrapper is controllable scope of wrapper unlike around alias which affects globally. However, accessibility to original method is also lower than alias way.</p>
 
@@ -260,7 +319,7 @@
 
 <h3>3. Class Macros</h3>
 
-<p>Ruby objects have no attributes - May this won&rsquo;t surprise or confuse you too much. Indeed we&rsquo;ve hear about instance variables or class variables, but you can not access them directly from outside. That means getter or writer can not be avoided:</p>
+<p>Ruby objects have no attributes - May this won’t surprise or confuse you too much. Indeed we’ve hear about instance variables or class variables, but you can not access them directly from outside. That means getter or writer can not be avoided:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -291,7 +350,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>It&rsquo;s just not ruby style! Ruby provides series accessors for class definition using metaprogramming api, like attr_accessor, attr_reader and attr_writer, they are quite intuitive to use:</p>
+<p>It’s just not ruby style! Ruby provides series accessors for class definition using metaprogramming api, like attr_accessor, attr_reader and attr_writer, they are quite intuitive to use:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -316,9 +375,9 @@
   
   <entry>
     <title type="html"><![CDATA[metaprogramming ruby: core concepts - eval family II]]></title>
-    <link href="http://www.hanyi.name/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/"/>
-    <updated>2015-09-24T09:20:27+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii</id>
+    <link href="http://www.hanyi.name/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii/"/>
+    <updated>2015-09-16T09:20:27+08:00</updated>
+    <id>http://www.hanyi.name/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii</id>
     <content type="html"><![CDATA[<p>In previous article several basic scope controlling tools are introduced, like block, proc, lambda, and method object. All of them should work well when you organize them in your code reasonably. There are more flexible way to mix code and bindings in ruby - eval, which may not be used broadly than others, so that considerable traps about it are still unclear for us.</p>
 
 <h3>3. instance_eval / instance_exec</h3>
@@ -359,23 +418,23 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>4. class_eval / class_exec (module_eval / module_exec)</h3>
+<h3>4. class_eval / class_exec</h3>
 
 <p>Module#class_eval works for evaluating a block in the context of an existing class. It seems to be similar to instance_eval which will have scope changes to instance self, but also changes current class (excluding singleton class).</p>
 
-<p>class_eval can be used to open a existing class, without using keyword &lsquo;class&rsquo;. That means it has no scope changing issue compared with keyword way. Actually it even does not need to know the constant name of the target, while keyword way indeed needs.</p>
+<p>class_eval can be used to open a existing class, without using keyword ‘class’. That means it has no scope changing issue compared with keyword way. Actually it even does not need to know the constant name of the target, while keyword way indeed needs.</p>
 
 <p>Also Module#class_exec plays same role like instance_exec for instance_eval.</p>
 
-<p>Think about the thing what we&rsquo;ve discussed several weeks ago, in ruby all items are instance of class, including classes no matter internal or customized. Which means instance_eval and class_eval both can work for classes in many cases, but indeed have different self meaning.</p>
+<p>Think about the thing what we’ve discussed several weeks ago, in ruby all items are instance of class, including classes no matter internal or customized. Which means instance_eval and class_eval both can work for classes in many cases, but indeed have different self meaning.</p>
 
 <p>You may also notice that there is also Module#module_eval / Module#module_exec methods, but they are just alias for class_eval / class_exec without any other changes.</p>
 
 <h3>5. Kernel#eval</h3>
 
-<p>Unlike instance_eval/class_eval, Kernel#eval only accept a string of ruby code as its argument, run the code and give the result. Even it&rsquo;s so powerful, using string of code is not a good choice if you have other ways. The most issue for string of code is security.</p>
+<p>Unlike instance_eval/class_eval, Kernel#eval only accept a string of ruby code as its argument, run the code and give the result. Even it’s so powerful, using string of code is not a good choice if you have other ways. The most issue for string of code is security.</p>
 
-<p>Suppose you have eval expression in your code, which means others can evaluate any code using such method, including get/set operations. Ruby defines safe levels, which actually limits the evaluation of code from outside. By default, ruby will mark potentially unsafe objects which many come from external sources. And user could config a global variable $SAFE, it&rsquo;s range from 0 to 3(0 by default) with more strict.</p>
+<p>Suppose you have eval expression in your code, which means others can evaluate any code using such method, including get/set operations. Ruby defines safe levels, which actually limits the evaluation of code from outside. By default, ruby will mark potentially unsafe objects which many come from external sources. And user could config a global variable $SAFE, it’s range from 0 to 3(0 by default) with more strict.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -391,25 +450,25 @@
 <table>
 <thead>
 <tr>
-<th style="text-align:center;">$SAFE</th>
-<th style="text-align:center;">Constraints</th>
+<th>$SAFE</th>
+<th style="text-align:center;"> Constraints</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center;">0</td>
-<td style="text-align:center;">No checking of the use of externally supplied (tainted) data is performed. This is Ruby&rsquo;s default mode.</td>
+<td>0</td>
+<td style="text-align:center;">No checking of the use of externally supplied (tainted) data is performed. This is Ruby’s default mode.</td>
 </tr>
 <tr>
-<td style="text-align:center;">>= 1</td>
+<td>>= 1</td>
 <td style="text-align:center;">Ruby disallows the use of tainted data by potentially dangerous operations.</td>
 </tr>
 <tr>
-<td style="text-align:center;">>= 2</td>
+<td>>= 2</td>
 <td style="text-align:center;">Ruby prohibits the loading of program files from globally writable locations.</td>
 </tr>
 <tr>
-<td style="text-align:center;">>= 3</td>
+<td>>= 3</td>
 <td style="text-align:center;">All newly created objects are considered tainted.</td>
 </tr>
 </tbody>
@@ -2483,109 +2542,6 @@ remove_method Removes the method identified by symbol from the current class. Fo
 <p>部署界面的另一个重要部分是环境管理，环境管理的具体内容主要是一些provision的配置信息，部署工具应不限于provision工具的选择，包括puppet、chef或是ansible。</p>
 
 <p>当前，在Deployment和Provision之间依然存在着缝隙，且其中的界限还不明确。例如对于Provision Heroku、或者AWS，或者Provision和Deployment间的相互依赖问题的解决，还缺少一个有效且一致的方案。Terraform看起来是一个潜在的选择。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[microservices陷阱: 切割单一系统]]></title>
-    <link href="http://www.hanyi.name/blog/2015/04/13/microservices-trap-splitting/"/>
-    <updated>2015-04-13T08:44:04+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/04/13/microservices-trap-splitting</id>
-    <content type="html"><![CDATA[<p>前面已经提到，构建microservices的第一步即划分服务边界，而对新系统直接进行边界划分具有相当的风险，且通常是不被鼓励的。我们建议选择一个较成熟的codebase再进行服务切割。</p>
-
-<h3>1.辨识服务边界</h3>
-
-<p>面对已有系统，首先需要做的就是辨识其中隐藏的服务边界。在《Working Effectively with Legacy Code》中，提到架构“缝隙”的概念。我们几乎可以把“缝隙”和“边界”等同起来，实际上DDD中的服务边界即一种好的“缝隙”。那么如何找到“缝隙”则是面对遗留代码所需的第一站。
-许多编程语言提供一种自然的封装方式，比如namespace，java的package也拥有类似的概念，当然并非所有语言如此（如javascript）。
-在进入代码之前，首先应该至少理解高级别的边界上下文抽象O，这将有利于我们进行逐渐向下的切割。当拥有O后（当然O可能并不完美，但这不是必须的），我们可以逐步把代码移动至相应的O&#8217;中。在这一过程中通常就能发现其中存在的问题，比如更细粒度级别的边界、错误的依赖、以及其它，借助代码分析工具可能会提高一部分工作效率。
-当然，面对小型系统，你可以指望在数天、甚至一天内完成全部分析工作，但是多数情况下这可能是数周、或数月的付出。因此还应注意任务分解、确定优先级、循序渐进地切割新服务。</p>
-
-<h4>切割单一系统的好处</h4>
-
-<p>尽管前文已经无数次提到，但这里还是简单做一下总结：相互独立的自治单元更易实现变更、根据所属服务划分团队职责、针对特定服务的安全性增强、技术更新更加频繁&hellip;所有以上会是单一系统经过合理切割之后带来的好处，然而如果你不确定这些是否真的对你有“帮助”，还是谨慎一些比较好。</p>
-
-<h3>2.解决依赖缠绕</h3>
-
-<p>当切割服务边界时，如何处理新旧系统之间的依赖缠绕则成为随之而来的问题。前文提到过建模工具，它能更容易地让你发现设计是否基于有向无环图从而避免了明显的缠绕关系。当然，实践表明几乎所有的缠绕都和数据库模式相关。事实上到目前为止，切割服务就像是纸上谈兵，数据库才是大boss。
-基于之前的实践，首先尝试依照服务把repository层进行垂直切割，也就是分表。SchemaSpy等类似的工具能够根据代码生成类UML的可视化分析结果，从而提高理解程度。</p>
-
-<h4>解除外键关系</h4>
-
-<p>如果确实存在外键依赖，唯一能做的就是自己维护一个与外键类似的字段，然后按需要手动解决一致性问题（这通常与业务有关，也就是说，有时需求根本不要求强一致性）。</p>
-
-<h4>静态共享数据</h4>
-
-<p>例如国家代码、区划等数据，一般来说有三种解决途径：在多个服务间实现冗余拷贝；通过静态配置文件消除代码和数据；或者直接建立独立服务，并在代码中内嵌静态数据。多数情况下，静态文件会是一种最简便的解决方法。</p>
-
-<h4>动态共享数据</h4>
-
-<p>此类数据比外键关系更为复杂，实际上出现的几率也更高。对于此类情况，通常是由于数据库中隐含了某种领域概念，而实际上这种领域概念理应由代码直接表示出来。当抽象出该概念模型后，就可以把共享数据转变成独立服务了。</p>
-
-<h4>动态共享表</h4>
-
-<p>为了降低数据冗余，有时会把分属于不同领域概念的数据放在一张表中，这就是动态共享表。为了进一步划分服务边界，应允许适当的冗余，也即垂直分表，但这里的分表并非是抽象出独立服务，而是分配到不同服务中。</p>
-
-<h3>3.重构数据库</h3>
-
-<p>正如前文所述，切割服务确实需要重构数据库，而这一领域又少有人涉及，如《Refactoring Databases: Evolutionary Database Design》。而在预上线环境，应尽可能先部署包含两套schema的但仍然保持单一的版本，然后逐渐分离服务代码，直至成为两个不同的codebase。之所以要循序渐进，是因为隔离schema带来的第一个问题就是影响了后台数据读取操作，由原先的若干查询语句，成为API请求-查询数据库-响应模式，这就直接破坏了系统原有的事务集成特性。因此，应当在处理好这一部分之前，尽量不要独立上线新服务.</p>
-
-<h4>事务边界</h4>
-
-<p>在单一schema系统中，事务的好处是能轻而易举实现操作的一致性。而对分布式系统而言，事务边界被一分为众，数据一致性将面临挑战。</p>
-
-<h4>稍后重试</h4>
-
-<p>一致性的首要目标是处理中间出错的情况，在许多场景中，“强一致”是非必要的，而通常我们仅要求“最终一致性”。在这种情况下，可以设置一个队列或日志文件，存储数据库操作及其状态，并对出错操作进行特殊标记，稍后重试该操作，直到数据成功写入。该方法的前提是假设重试操作必然有效。</p>
-
-<h4>全局操作中断</h4>
-
-<p>数据回滚是另一种解决方案，但需要另维护一份回滚代码，从而保证错误数据被及时清除。问题在于保证回滚代码能够正确执行，可能需要采用前一种不断重试的方法。然而随着回滚数据的增多，该方法的有效性就会降低，成本则会不断增加。</p>
-
-<h4>分布式事务</h4>
-
-<p>分布式事务通过设置一个中央协调进程，监控所有执行节点的状态。一旦接收到事务请求，中央进程会向所有执行节点发出投票通知，执行节点在接到通知后会检查自己的数据提交状态，成功则返回赞成票，否则反对。只有当中央进程接收到所有节点的赞成票时，才会再向所有节点发出执行通知，每个节点分别执行数据提交，这就是朴素的分布式事务“两段提交”算法。
-然而分布式事务算法始终不是“绝对正确”的，比如执行节点在投“赞成”之后出错。此外，中央协调进程的存在会使得所有资源被加锁，进而存在资源竞争行为，降低系统可用性。
-目前已经有一些针对分布式事务的实现，如Java的事务API。但是，分布式事务带来的副作用是必须要考虑的问题。</p>
-
-<h4>小结</h4>
-
-<p>保持一致性会带来更多的复杂因素，例如分布式事务会降低可用性和伸缩性。当一致性需求发生时，首先应思考它的必要性，或者采用局部事务、最终一致性加以替代。如果确实是强一致，应尽量避免切割。如果一定要切割，也可以选择设计一种混合抽象来代表事务本身，从而降低分布式事务的复杂度，进而保证可用性（例如在销售系统中，分离出一种“处理中”的订单服务，从而降低销售和库存服务之间的耦合）。</p>
-
-<h3>4.审计报表</h3>
-
-<p>审计报表系统是企业应用里常见的需求，而随着微服务架构的演进，该类型的系统将面临重构。在单一系统中，报表很可能只是意味着若干SQL语句的集合，顶多在架构层面增设一个读库专供报表使用，读库和主库之间采用定时同步策略。
-对微服务而言，上述方法存在一定缺陷：首先，数据库schema将以服务与报表系统之间共享的形式存在，这就导致任何变更需要格外小心；其次，许多数据库提供优化能力以提高读写性能，然而当处于微服务环境时，由于数据结构的不确定性，很难在报表数据库中实现任何优化；此外，随着异构数据库架构越来越普遍，SQL、NOSQL的混合使用将使得数据融合成为新挑战。</p>
-
-<h4>采用服务调用获取数据</h4>
-
-<p>假设一个商业系统报表，常见需求是列出最近15分钟产生的订单。在微服务中，这可能需要跨服务的数据调用。然而，当数据体量过大时，这种方法就会变的效率低下，例如条件变为过去24个月的订单信息查询，如果采用备份数据的形式存放在报表系统中，可能会导致非一致的结果。
-一种有效方案是定时从主库中提取数据到报表库（通常是一个关系型数据库），仍然有几个问题需要解决：首先，不同微服务暴露的接口可能并非报表友好的，如果硬要基于现有API，可能会导致一些其它问题，例如数据的额外处理、cache失效等等。因此在针对可能存在的大数据传输问题，一个好的办法是目标服务并不通过HTTP直接返回数据内容，而是以文件的形式转存至第三方位置，这样主服务就可以通过轮询文件生成状态从而实现HTTP的低负载通信。</p>
-
-<h4>数据泵</h4>
-
-<p>除了拉取数据这种方式，也可以尝试采用数据推送的办法。传统HTTP的缺点是链接耗费较高，一方面是底层协议原因，另一方面是报表系统请求的API次数较高（有时该API甚至只为报表提供服务）。一种高效方案是设立一个第三方的数据泵，其同时拥有主数据库和报表数据库的访问权限，定时把主库的更新数据同步至报表库中。该方法唯一要解决的问题就是schema的管理，而事实上，报表库的schema可以看作是published api，泵程序最好和目标服务共同由一支团队开发，这就尽可能保证了schema的同步。</p>
-
-<h4>事件数据泵</h4>
-
-<p>数据泵是一种有效的数据同步方案，但同步时机缺乏验证。对微服务而言，当某个服务产生状态迁移时，可通过发出一个特殊事件通知泵程序，使后者能够订阅、接收并处理相关事件，从而实现事件驱动的数据同步。此外，为了减小通信压力，报表服务可以只提取差异数据，而非全部，这就尽可能避免了广播报表更新事件与相关数据所带来的副作用。然而，这是一种有效的近实时同步报表解决方案。</p>
-
-<h4>备份数据泵</h4>
-
-<p>该方法被用于Netflix的报表系统中，基于现有的备份方案。Netflix采用Cassandra作为其主数据库，并在此基础上构建了许多备份服务应用（详见github）。为了备份Cassandra，常规做法是生成一份数据文件（SSTables）拷贝并存放至第三方，例如Amazon S3。报表服务是基于Hadoop实现的大数据处理框架Aegisthus，其作用与本文中数据泵的概念类似。</p>
-
-<h3>5.小结</h3>
-
-<h4>面向实时</h4>
-
-<p>由于业务需求的不同，许多服务，比如dashboard、alerting、financial reports甚至user analytics都具有相互不同的时效性要求，这就导致各个服务可建立在不同的技术选项上。微服务为此提供了良好的前提条件。</p>
-
-<h4>变更代价</h4>
-
-<p>微服务是面向需求变更友好的，但走向微服务的过程可能是极不友好的&hellip;例如切割服务、重构数据库等工作，都存在一定的风险。我们唯一能做的就是尽量使风险最小、可控。采用白板分析设计是一个常用的办法。此外，class-responsibility-collaboration卡是个“好”工具。</p>
-
-<h4>理解根源</h4>
-
-<p>问题的关键在于理解为何我们需要微服务架构。在实践中，我们经常会遇到某个服务迅速变的臃肿，尽管我们可能知道这么做所带来的不良后果。改善的第一步是找准下手位置，这正是本文的目的。当你熟练于此，随后就会自然陷入到微服务庞杂且无序的内部细节中。但是相信我，第一步才是最难的。</p>
 ]]></content>
   </entry>
   

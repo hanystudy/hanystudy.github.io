@@ -138,23 +138,23 @@ $(document).ready(
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>4. class_eval / class_exec (module_eval / module_exec)</h3>
+<h3>4. class_eval / class_exec</h3>
 
 <p>Module#class_eval works for evaluating a block in the context of an existing class. It seems to be similar to instance_eval which will have scope changes to instance self, but also changes current class (excluding singleton class).</p>
 
-<p>class_eval can be used to open a existing class, without using keyword &lsquo;class&rsquo;. That means it has no scope changing issue compared with keyword way. Actually it even does not need to know the constant name of the target, while keyword way indeed needs.</p>
+<p>class_eval can be used to open a existing class, without using keyword ‘class’. That means it has no scope changing issue compared with keyword way. Actually it even does not need to know the constant name of the target, while keyword way indeed needs.</p>
 
 <p>Also Module#class_exec plays same role like instance_exec for instance_eval.</p>
 
-<p>Think about the thing what we&rsquo;ve discussed several weeks ago, in ruby all items are instance of class, including classes no matter internal or customized. Which means instance_eval and class_eval both can work for classes in many cases, but indeed have different self meaning.</p>
+<p>Think about the thing what we’ve discussed several weeks ago, in ruby all items are instance of class, including classes no matter internal or customized. Which means instance_eval and class_eval both can work for classes in many cases, but indeed have different self meaning.</p>
 
 <p>You may also notice that there is also Module#module_eval / Module#module_exec methods, but they are just alias for class_eval / class_exec without any other changes.</p>
 
 <h3>5. Kernel#eval</h3>
 
-<p>Unlike instance_eval/class_eval, Kernel#eval only accept a string of ruby code as its argument, run the code and give the result. Even it&rsquo;s so powerful, using string of code is not a good choice if you have other ways. The most issue for string of code is security.</p>
+<p>Unlike instance_eval/class_eval, Kernel#eval only accept a string of ruby code as its argument, run the code and give the result. Even it’s so powerful, using string of code is not a good choice if you have other ways. The most issue for string of code is security.</p>
 
-<p>Suppose you have eval expression in your code, which means others can evaluate any code using such method, including get/set operations. Ruby defines safe levels, which actually limits the evaluation of code from outside. By default, ruby will mark potentially unsafe objects which many come from external sources. And user could config a global variable $SAFE, it&rsquo;s range from 0 to 3(0 by default) with more strict.</p>
+<p>Suppose you have eval expression in your code, which means others can evaluate any code using such method, including get/set operations. Ruby defines safe levels, which actually limits the evaluation of code from outside. By default, ruby will mark potentially unsafe objects which many come from external sources. And user could config a global variable $SAFE, it’s range from 0 to 3(0 by default) with more strict.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -170,25 +170,25 @@ $(document).ready(
 <table>
 <thead>
 <tr>
-<th style="text-align:center;">$SAFE</th>
-<th style="text-align:center;">Constraints</th>
+<th>$SAFE</th>
+<th style="text-align:center;"> Constraints</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center;">0</td>
-<td style="text-align:center;">No checking of the use of externally supplied (tainted) data is performed. This is Ruby&rsquo;s default mode.</td>
+<td>0</td>
+<td style="text-align:center;">No checking of the use of externally supplied (tainted) data is performed. This is Ruby’s default mode.</td>
 </tr>
 <tr>
-<td style="text-align:center;">>= 1</td>
+<td>>= 1</td>
 <td style="text-align:center;">Ruby disallows the use of tainted data by potentially dangerous operations.</td>
 </tr>
 <tr>
-<td style="text-align:center;">>= 2</td>
+<td>>= 2</td>
 <td style="text-align:center;">Ruby prohibits the loading of program files from globally writable locations.</td>
 </tr>
 <tr>
-<td style="text-align:center;">>= 3</td>
+<td>>= 3</td>
 <td style="text-align:center;">All newly created objects are considered tainted.</td>
 </tr>
 </tbody>
@@ -210,7 +210,7 @@ $(document).ready(
   
 
 
-<time datetime="2015-09-24T09:20:27+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2015-09-16T09:20:27+08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -221,7 +221,7 @@ $(document).ready(
 
 
 	
-		<span class="comments"><a href="/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii/#disqus_thread">Comments</a></span>
 	
 </div></article>
 
@@ -245,7 +245,7 @@ $(document).ready(
 </div>
 </section>
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Han Yi
 
@@ -266,8 +266,8 @@ Powered by Octopress.
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.hanyi.name/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/';
-        var disqus_url = 'http://www.hanyi.name/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/';
+        var disqus_identifier = 'http://www.hanyi.name/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii/';
+        var disqus_url = 'http://www.hanyi.name/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii/';
         var disqus_script = 'embed.js';
       
     (function () {

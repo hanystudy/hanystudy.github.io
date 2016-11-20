@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://www.hanyi.name/blog/2015/11/03/metaprogramming-ruby-core-concepts-extensions/</loc>
-    <lastmod>2015-11-03T08:24:21+08:00</lastmod>
+    <loc>http://www.hanyi.name/blog/2016/11/20/micro-situational-mixed-reality/</loc>
+    <lastmod>2016-11-20T13:37:28+08:00</lastmod>
   </url>
   <url>
-    <loc>http://www.hanyi.name/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/</loc>
-    <lastmod>2015-09-24T09:20:27+08:00</lastmod>
+    <loc>http://www.hanyi.name/blog/2015/11/03/metaprogramming-ruby-core-concepts-extensions/</loc>
+    <lastmod>2015-11-03T16:08:28+08:00</lastmod>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii/</loc>
+    <lastmod>2015-09-16T09:20:27+08:00</lastmod>
   </url>
   <url>
     <loc>http://www.hanyi.name/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family/</loc>
@@ -1023,6 +1027,9 @@
   </url>
   <url>
     <loc>http://www.hanyi.name/blog/categories/ruby/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/blog/categories/mr/</loc>
   </url>
   <url>
     <loc>http://www.hanyi.name/posts/2/</loc>

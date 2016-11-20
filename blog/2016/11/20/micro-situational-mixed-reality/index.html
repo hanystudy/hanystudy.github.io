@@ -1,0 +1,240 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>微情境混合现实  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="Oculus Rift、Vive、Hololens、Daydream，接下来呢？ 许多人初次接触VR/AR，通常想说WTF&hellip;&hellip;但没过多久，又想说WTF&hellip;&hellip;好像这些“新颖”的技术还只能被视为玩具。然而，这些早在50年前(The Sword of &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">微情境混合现实</h2>
+	<div class="entry-content"><p>Oculus Rift、Vive、Hololens、Daydream，接下来呢？</p>
+
+<p>许多人初次接触VR/AR，通常想说WTF&hellip;&hellip;但没过多久，又想说WTF&hellip;&hellip;好像这些“新颖”的技术还只能被视为玩具。然而，这些早在50年前(<a href="https://www.youtube.com/watch?v=ISJWZpFIAlQ">The Sword of Damocles，1968</a>)就被人玩剩了，他的创作者是图形学界祖师之一Ivan Sutherland。但后来萨大爷可能发现自己已经走得太远（实际上当时现代图形学基础还没有完全确立），于是带着他一票学生和下属回去后方铺路，后者们先后发明了Smalltalk编程语言、Gouraud着色算法、图形反走样算法，甚至联合乔帮主创办Pixar（Edwin Catmull也是图形学巨擘，发明了Catmull样条），风生水起的Adobe以及曾经辉煌的SGI。</p>
+
+<p>然而50年后的今天，还有人说这项技术距离“成熟”还要XX年，我只能说WTF&hellip;&hellip;2015年的Proto颁奖大会上，萨大爷获虚拟现实“创始人奖”，发表感言时曾说：“内容意味着一切，摄像机并不创造内容，只有伟大的创造者才得以使用技术把现实带给人们”。</p>
+
+<p>而如果你能尝试Vive、浏览SteamVR上的应用列表、甚至体验下Proto奖的获奖作品时，你会欣慰地发现原来还是有很多有梦想、有创造力的人。你就会从各种捞钱、炫富的纸醉金迷中暂时解脱出来了。</p>
+
+<p>本文提出一种特定场景下的混合现实产品思路，最后以一个真实的开源Demo为例，希望能为许多有想法的人打开一扇窗。</p>
+
+<h4>为什么是特定场景？</h4>
+
+<p>如今在诸多VR/AR平台中，Daydream的优势是非常易见的：它太容易接近大众了。对于其它竞品平台，则更多聚焦在高端和行业应用上，不利于小团队做快速原型开发和内容创新。</p>
+
+<p>而Daydream的劣势目前也很明显：无法捕捉用户的全身动作，反馈缺失导致了沉浸感不足（Vive的这一优势目前还无人匹敌）；另外，移动设备受限的性能、参差不齐的规格也导致潜在的用户体验问题。</p>
+
+<p>因此在设计VR/AR产品时，需要先考虑平台的限制。</p>
+
+<h4>微情境（Micro-Situation）</h4>
+
+<p>理论上说，VR/AR技术几乎可以被用于任何情境。基于现实考量，在“微情境”中实现的性价比则更高。</p>
+
+<p>例如非厨师职业学习做饭，传统上可能是一对一的学徒体系；后来发展成书籍报刊、电视传播。前者属于文字模式更多得靠个人天赋，后者的声音＋图像模式就更容易被大众所接受。</p>
+
+<p>但有人可能会质疑为什么不真的去尝试做一顿饭？其实这相当于混淆了学习和实践两种活动，“学做饭”和“做饭”本身不是一回事（当然你也可以说在实践中学习，但你也不能证明你是在完全未经过学习的情况下做了一顿饭，况且如果真的是这样，那么满足各位食客的可能性恐怕微乎其微）。</p>
+
+<p>再来看“虚拟学做饭”这一活动的“价值”，最大的劣势就是你无法从外观之外获得任何的有效反馈，包括直接吃掉自己的学习成果。而优势是节省钱、食材、时间，切身经历每一道工序，这是现有的学习形式都不具备的。</p>
+
+<p>从这一情境本身来说，用户只需要一间整洁的厨房，摆放整齐的食材和调味品，再加上面前一座灶台即可。而交互内容仅需要双手参与。那么即将进入寻常百姓家的Daydream平台完全满足需求，于是皆大欢喜。</p>
+
+<p>其实这里需要考虑的重点在“微”上，什么样的情境才算是“微情境”呢？</p>
+
+<p>我们不尝试去做更多的文字游戏，对于“微情境”的发现要更多依赖自身对情境本身、以及对VR/AR技术的理解和运用。</p>
+
+<h4>为什么是混合现实（MR）？</h4>
+
+<p>在这波VR行情之前，就有许多AR应用运行在智能手机上，甚至还包括不久前的google glass，都始终没有杀手级应用出现。其中市场太小是一个非常重要的因素。难道VR就没有市场的疑问？否则巨头们为何集体押注在后者身上？可见投资VR的回报率明显要更高一筹。</p>
+
+<p>值得一提的是Hololens展示了当前无与伦比的MR技术，无奈离大众太过遥远，注定只会面向专业领域。实际上基于现有的VR设备要想直接实现类似Hololens的MR并不困难，毕竟只需要一个背景显示和空间位置标定，但成本肯定低得多。</p>
+
+<p>然而如果比拼想象力，MR无疑更胜VR/AR，虽然前者只是模糊了后者之间的界限。在接受程度上，人们总会倾向于那些更加抽象、简洁且表现力更强的概念，MR无疑将会胜出。真正的困难之处在于，MR不仅仅是两幅人眼画面的结合，也意味着更加复杂的微情境应用，以及更具挑战的交互模式。</p>
+
+<h4>来自22世纪的程序员（C22）</h4>
+
+<p><a href="https://github.com/hanystudy/coder-from-22nd-century">C22</a>是一个基于PC+Cardboard的微情境应用。它展示了未来的程序员，能够摆脱固定显示器的束缚，使用HMD、键鼠就可以编写代码，并且在自身环境周围展示各种信息的技术。</p>
+
+<p>为了快速实现产品原型，C22全部使用JavaScript编写，并且采用了大量尚未广泛兼容的技术（详见github），完成核心部分只用了两个晚上时间。</p>
+
+<p>这是一份属于程序员的礼物，也借此向伟大的先行者们致敬。</p>
+
+<p>（未完待续）</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-11-20T13:37:28+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/mr/'>mr</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2016/11/20/micro-situational-mixed-reality/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2016
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2016/11/20/micro-situational-mixed-reality/';
+        var disqus_url = 'http://www.hanyi.name/blog/2016/11/20/micro-situational-mixed-reality/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

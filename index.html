@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="As we already know, ruby provides several ways to extend our classes and objects including but not limit to OO inheritance, Module mix-in, Dynamic &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="Oculus Rift、Vive、Hololens、Daydream，接下来呢？ 许多人初次接触VR/AR，通常想说WTF&hellip;&hellip;但没过多久，又想说WTF&hellip;&hellip;好像这些“新颖”的技术还只能被视为玩具。然而，这些早在50年前(The Sword &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -102,6 +102,100 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2016/11/20/micro-situational-mixed-reality/">
+		
+			微情境混合现实</a>
+	</h2>
+	<div class="entry-content">
+		<p>Oculus Rift、Vive、Hololens、Daydream，接下来呢？</p>
+
+<p>许多人初次接触VR/AR，通常想说WTF&hellip;&hellip;但没过多久，又想说WTF&hellip;&hellip;好像这些“新颖”的技术还只能被视为玩具。然而，这些早在50年前(<a href="https://www.youtube.com/watch?v=ISJWZpFIAlQ">The Sword of Damocles，1968</a>)就被人玩剩了，他的创作者是图形学界祖师之一Ivan Sutherland。但后来萨大爷可能发现自己已经走得太远（实际上当时现代图形学基础还没有完全确立），于是带着他一票学生和下属回去后方铺路，后者们先后发明了Smalltalk编程语言、Gouraud着色算法、图形反走样算法，甚至联合乔帮主创办Pixar（Edwin Catmull也是图形学巨擘，发明了Catmull样条），风生水起的Adobe以及曾经辉煌的SGI。</p>
+
+<p>然而50年后的今天，还有人说这项技术距离“成熟”还要XX年，我只能说WTF&hellip;&hellip;2015年的Proto颁奖大会上，萨大爷获虚拟现实“创始人奖”，发表感言时曾说：“内容意味着一切，摄像机并不创造内容，只有伟大的创造者才得以使用技术把现实带给人们”。</p>
+
+<p>而如果你能尝试Vive、浏览SteamVR上的应用列表、甚至体验下Proto奖的获奖作品时，你会欣慰地发现原来还是有很多有梦想、有创造力的人。你就会从各种捞钱、炫富的纸醉金迷中暂时解脱出来了。</p>
+
+<p>本文提出一种特定场景下的混合现实产品思路，最后以一个真实的开源Demo为例，希望能为许多有想法的人打开一扇窗。</p>
+
+<h4>为什么是特定场景？</h4>
+
+<p>如今在诸多VR/AR平台中，Daydream的优势是非常易见的：它太容易接近大众了。对于其它竞品平台，则更多聚焦在高端和行业应用上，不利于小团队做快速原型开发和内容创新。</p>
+
+<p>而Daydream的劣势目前也很明显：无法捕捉用户的全身动作，反馈缺失导致了沉浸感不足（Vive的这一优势目前还无人匹敌）；另外，移动设备受限的性能、参差不齐的规格也导致潜在的用户体验问题。</p>
+
+<p>因此在设计VR/AR产品时，需要先考虑平台的限制。</p>
+
+<h4>微情境（Micro-Situation）</h4>
+
+<p>理论上说，VR/AR技术几乎可以被用于任何情境。基于现实考量，在“微情境”中实现的性价比则更高。</p>
+
+<p>例如非厨师职业学习做饭，传统上可能是一对一的学徒体系；后来发展成书籍报刊、电视传播。前者属于文字模式更多得靠个人天赋，后者的声音＋图像模式就更容易被大众所接受。</p>
+
+<p>但有人可能会质疑为什么不真的去尝试做一顿饭？其实这相当于混淆了学习和实践两种活动，“学做饭”和“做饭”本身不是一回事（当然你也可以说在实践中学习，但你也不能证明你是在完全未经过学习的情况下做了一顿饭，况且如果真的是这样，那么满足各位食客的可能性恐怕微乎其微）。</p>
+
+<p>再来看“虚拟学做饭”这一活动的“价值”，最大的劣势就是你无法从外观之外获得任何的有效反馈，包括直接吃掉自己的学习成果。而优势是节省钱、食材、时间，切身经历每一道工序，这是现有的学习形式都不具备的。</p>
+
+<p>从这一情境本身来说，用户只需要一间整洁的厨房，摆放整齐的食材和调味品，再加上面前一座灶台即可。而交互内容仅需要双手参与。那么即将进入寻常百姓家的Daydream平台完全满足需求，于是皆大欢喜。</p>
+
+<p>其实这里需要考虑的重点在“微”上，什么样的情境才算是“微情境”呢？</p>
+
+<p>我们不尝试去做更多的文字游戏，对于“微情境”的发现要更多依赖自身对情境本身、以及对VR/AR技术的理解和运用。</p>
+
+<h4>为什么是混合现实（MR）？</h4>
+
+<p>在这波VR行情之前，就有许多AR应用运行在智能手机上，甚至还包括不久前的google glass，都始终没有杀手级应用出现。其中市场太小是一个非常重要的因素。难道VR就没有市场的疑问？否则巨头们为何集体押注在后者身上？可见投资VR的回报率明显要更高一筹。</p>
+
+<p>值得一提的是Hololens展示了当前无与伦比的MR技术，无奈离大众太过遥远，注定只会面向专业领域。实际上基于现有的VR设备要想直接实现类似Hololens的MR并不困难，毕竟只需要一个背景显示和空间位置标定，但成本肯定低得多。</p>
+
+<p>然而如果比拼想象力，MR无疑更胜VR/AR，虽然前者只是模糊了后者之间的界限。在接受程度上，人们总会倾向于那些更加抽象、简洁且表现力更强的概念，MR无疑将会胜出。真正的困难之处在于，MR不仅仅是两幅人眼画面的结合，也意味着更加复杂的微情境应用，以及更具挑战的交互模式。</p>
+
+<h4>来自22世纪的程序员（C22）</h4>
+
+<p><a href="https://github.com/hanystudy/coder-from-22nd-century">C22</a>是一个基于PC+Cardboard的微情境应用。它展示了未来的程序员，能够摆脱固定显示器的束缚，使用HMD、键鼠就可以编写代码，并且在自身环境周围展示各种信息的技术。</p>
+
+<p>为了快速实现产品原型，C22全部使用JavaScript编写，并且采用了大量尚未广泛兼容的技术（详见github），完成核心部分只用了两个晚上时间。</p>
+
+<p>这是一份属于程序员的礼物，也借此向伟大的先行者们致敬。</p>
+
+<p>（未完待续）</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-11-20T13:37:28+08:00" pubdate data-updated="true">2016-11-20</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/mr/'>mr</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2016/11/20/micro-situational-mixed-reality//index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2015/11/03/metaprogramming-ruby-core-concepts-extensions/">
 		
 			Metaprogramming Ruby: Core Concepts - Extensions</a>
@@ -111,7 +205,7 @@ $(document).ready(
 
 <h3>1. Include vs Extend</h3>
 
-<p>Firstly let&rsquo;s see an example:</p>
+<p>Firstly let’s see an example:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -212,11 +306,11 @@ $(document).ready(
 
 <p>Method wrapper means wrapping an existing method inside a new method, which is very useful when you want to make extension without changing the source, like code in standard library or other cases.</p>
 
-<p>There are several ways to implement method wrappers in ruby, and they are all in composite form of primitives which&rsquo;ve already been introduced in previous articles. We&rsquo;ll go through below.</p>
+<p>There are several ways to implement method wrappers in ruby, and they are all in composite form of primitives which’ve already been introduced in previous articles. We’ll go through below.</p>
 
 <h4>Around Alias</h4>
 
-<p>Module#alias_method (also the key word &lsquo;alias&rsquo;) is used to give another name to ruby methods. It will involve more accessibility if an usual method could have different domain names(e.g. size, length and count). Also more flexibilities if you want, like code below:</p>
+<p>Module#alias_method (also the key word ‘alias’) is used to give another name to ruby methods. It will involve more accessibility if an usual method could have different domain names(e.g. size, length and count). Also more flexibilities if you want, like code below:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -300,7 +394,7 @@ $(document).ready(
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Only thing you need to notice is that the key word &lsquo;using&rsquo; may not work well with your IRB environment, which means you couldn&rsquo;t get result in mind for some versions of ruby if you run those code in IRB. See more information <a href="https://bugs.ruby-lang.org/issues/9580">here</a>.</p>
+<p>Only thing you need to notice is that the key word ‘using’ may not work well with your IRB environment, which means you couldn’t get result in mind for some versions of ruby if you run those code in IRB. See more information <a href="https://bugs.ruby-lang.org/issues/9580">here</a>.</p>
 
 <p>The benefit of refinement wrapper is controllable scope of wrapper unlike around alias which affects globally. However, accessibility to original method is also lower than alias way.</p>
 
@@ -349,7 +443,7 @@ $(document).ready(
 
 <h3>3. Class Macros</h3>
 
-<p>Ruby objects have no attributes - May this won&rsquo;t surprise or confuse you too much. Indeed we&rsquo;ve hear about instance variables or class variables, but you can not access them directly from outside. That means getter or writer can not be avoided:</p>
+<p>Ruby objects have no attributes - May this won’t surprise or confuse you too much. Indeed we’ve hear about instance variables or class variables, but you can not access them directly from outside. That means getter or writer can not be avoided:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -380,7 +474,7 @@ $(document).ready(
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>It&rsquo;s just not ruby style! Ruby provides series accessors for class definition using metaprogramming api, like attr_accessor, attr_reader and attr_writer, they are quite intuitive to use:</p>
+<p>It’s just not ruby style! Ruby provides series accessors for class definition using metaprogramming api, like attr_accessor, attr_reader and attr_writer, they are quite intuitive to use:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -419,7 +513,7 @@ $(document).ready(
   
 
 
-<time datetime="2015-11-03T08:24:21+08:00" pubdate data-updated="true">2015-11-03</time></div>
+<time datetime="2015-11-03T16:08:28+08:00" pubdate data-updated="true">2015-11-03</time></div>
 	
 
 <div class="tags">
@@ -438,7 +532,7 @@ $(document).ready(
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii/">
+		<a href="/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii/">
 		
 			Metaprogramming Ruby: Core Concepts - Eval Family II</a>
 	</h2>
@@ -483,23 +577,23 @@ $(document).ready(
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>4. class_eval / class_exec (module_eval / module_exec)</h3>
+<h3>4. class_eval / class_exec</h3>
 
 <p>Module#class_eval works for evaluating a block in the context of an existing class. It seems to be similar to instance_eval which will have scope changes to instance self, but also changes current class (excluding singleton class).</p>
 
-<p>class_eval can be used to open a existing class, without using keyword &lsquo;class&rsquo;. That means it has no scope changing issue compared with keyword way. Actually it even does not need to know the constant name of the target, while keyword way indeed needs.</p>
+<p>class_eval can be used to open a existing class, without using keyword ‘class’. That means it has no scope changing issue compared with keyword way. Actually it even does not need to know the constant name of the target, while keyword way indeed needs.</p>
 
 <p>Also Module#class_exec plays same role like instance_exec for instance_eval.</p>
 
-<p>Think about the thing what we&rsquo;ve discussed several weeks ago, in ruby all items are instance of class, including classes no matter internal or customized. Which means instance_eval and class_eval both can work for classes in many cases, but indeed have different self meaning.</p>
+<p>Think about the thing what we’ve discussed several weeks ago, in ruby all items are instance of class, including classes no matter internal or customized. Which means instance_eval and class_eval both can work for classes in many cases, but indeed have different self meaning.</p>
 
 <p>You may also notice that there is also Module#module_eval / Module#module_exec methods, but they are just alias for class_eval / class_exec without any other changes.</p>
 
 <h3>5. Kernel#eval</h3>
 
-<p>Unlike instance_eval/class_eval, Kernel#eval only accept a string of ruby code as its argument, run the code and give the result. Even it&rsquo;s so powerful, using string of code is not a good choice if you have other ways. The most issue for string of code is security.</p>
+<p>Unlike instance_eval/class_eval, Kernel#eval only accept a string of ruby code as its argument, run the code and give the result. Even it’s so powerful, using string of code is not a good choice if you have other ways. The most issue for string of code is security.</p>
 
-<p>Suppose you have eval expression in your code, which means others can evaluate any code using such method, including get/set operations. Ruby defines safe levels, which actually limits the evaluation of code from outside. By default, ruby will mark potentially unsafe objects which many come from external sources. And user could config a global variable $SAFE, it&rsquo;s range from 0 to 3(0 by default) with more strict.</p>
+<p>Suppose you have eval expression in your code, which means others can evaluate any code using such method, including get/set operations. Ruby defines safe levels, which actually limits the evaluation of code from outside. By default, ruby will mark potentially unsafe objects which many come from external sources. And user could config a global variable $SAFE, it’s range from 0 to 3(0 by default) with more strict.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -515,25 +609,25 @@ $(document).ready(
 <table>
 <thead>
 <tr>
-<th style="text-align:center;">$SAFE</th>
-<th style="text-align:center;">Constraints</th>
+<th>$SAFE</th>
+<th style="text-align:center;"> Constraints</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center;">0</td>
-<td style="text-align:center;">No checking of the use of externally supplied (tainted) data is performed. This is Ruby&rsquo;s default mode.</td>
+<td>0</td>
+<td style="text-align:center;">No checking of the use of externally supplied (tainted) data is performed. This is Ruby’s default mode.</td>
 </tr>
 <tr>
-<td style="text-align:center;">>= 1</td>
+<td>>= 1</td>
 <td style="text-align:center;">Ruby disallows the use of tainted data by potentially dangerous operations.</td>
 </tr>
 <tr>
-<td style="text-align:center;">>= 2</td>
+<td>>= 2</td>
 <td style="text-align:center;">Ruby prohibits the loading of program files from globally writable locations.</td>
 </tr>
 <tr>
-<td style="text-align:center;">>= 3</td>
+<td>>= 3</td>
 <td style="text-align:center;">All newly created objects are considered tainted.</td>
 </tr>
 </tbody>
@@ -558,7 +652,7 @@ $(document).ready(
   
 
 
-<time datetime="2015-09-24T09:20:27+08:00" pubdate data-updated="true">2015-09-24</time></div>
+<time datetime="2015-09-16T09:20:27+08:00" pubdate data-updated="true">2015-09-16</time></div>
 	
 
 <div class="tags">
@@ -569,7 +663,7 @@ $(document).ready(
 
 
 	
-		<span class="comments"><a href="/blog/2015/09/24/metaprogramming-ruby-core-concepts-eval-family-ii//index.html#disqus_thread">Comments</a></span>
+		<span class="comments"><a href="/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii//index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
@@ -1824,90 +1918,6 @@ remove_method Removes the method identified by symbol from the current class. Fo
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/08/03/metaprogramming-ruby-core-concepts/">
-		
-			Metaprogramming Ruby: Core Concepts - BasicObject</a>
-	</h2>
-	<div class="entry-content">
-		<p>Metaprogramming is one of core features for ruby lang, it&rsquo;s widely used from internal ruby to standard library, also endless magic gems. In next a few articles we will focus on those core stuff. I recommend for <a href="https://pragprog.com/book/ppmetr2/metaprogramming-ruby-2">Metaprogramming ruby 2</a> as a reference, except a little verbose and may be only for primer usage. For more ascent knowledge, perhaps you need to track the <a href="https://github.com/ruby/ruby">trunk</a> of ruby. This essay will concentrate on BasicObject, which is parent for all classes in ruby.</p>
-
-<h3>BasicObject</h3>
-
-<p>As the object oriented hierarchy in ruby core, each type of class is also object of Class except BasicObject, and All the objects of Class has root superclass BasicObject, the one is also object of Class. Thus we&rsquo;ll have whole picture below.</p>
-
-<p><img src="http://7xk84n.com1.z0.glb.clouddn.com/metaprogramming_ruby/ruby_class.png" alt="Ruby OO hierarchy" /></p>
-
-<h4>i.class methods</h4>
-
-<p>BasicObject only has single public class method, names &ldquo;new&rdquo;.</p>
-
-<h4>ii.instance methods</h4>
-
-<p>logical operators, any instance of BasicObject is almost empty, with only a few methods, like logical operators !, !=, ==. Here == has same meaning with equal? for object level equality, The difference is that == is recommended for descendant overriding, but equal? should always be same as it is defined in BasicObject.</p>
-
-<h5>__id__ / object_id</h5>
-
-<p>An integer identifier of an object, should be unique for a given object. But some objects of builtin classes are reused for optimization, like immediate values (not passed by reference but value, like nil, true, false, Fixnums, Symbols, and some Floats) and frozen string literals.</p>
-
-<h5>__send__ / send</h5>
-
-<p>Double underscore gives a backup for pure alphabet version which may be overrode through other ways. Invokes the method, and passes all arguments using dynamic number of arguments.</p>
-
-<h5>instance_eval / instance_exec</h5>
-
-<p>instance_eval support passing a string of ruby source code, with file path and line number when compilation errors happen, also given block, within the context of receiver. Thus eval code will have access to instance variables and private methods.</p>
-
-<p>instance_exec only support using block as an argument, but allows one more argument to be passed from outer scope into receiver.</p>
-
-<h4>iii.private instance methods</h4>
-
-<h5>method_missing</h5>
-
-<p>In BasicObject, method_missing belongs to private instance methods, any call for this method will raise an error. But descendant can override this method to do dynamic processing, according to user&rsquo;s input like symbol name and arguments. If overrode method does not want to do any processing, super should be called to pass message bottom from up.</p>
-
-<h5>singleton_method_added / singleton_method_removed / singleton_method_undefined</h5>
-
-<p>Callback for singleton method operations. As we already know, ruby will not create the whole clone of the class for any objects. Only with a middle layer between object and class - singleton class. Singleton class is generated when object comes out, and any messages sent to object should be transferred to its singleton class first, then its own class if not matches in singleton class.</p>
-
-<p>class&rsquo;s singleton class is different to object&rsquo;s singleton class. That&rsquo;s because singleton class of a class should be inherited from its parent&rsquo;s singleton class, until BasicObject&rsquo;s singleton class, then it can reach non singleton class. But for object, singleton class should always have parent class of its own class.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-08-03T07:33:27+08:00" pubdate data-updated="true">2015-08-03</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/ruby/'>ruby</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2015/08/03/metaprogramming-ruby-core-concepts//index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
 <nav id="pagenavi">
     
     
@@ -1915,7 +1925,7 @@ remove_method Removes the method identified by symbol from the current class. Fo
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Han Yi
 

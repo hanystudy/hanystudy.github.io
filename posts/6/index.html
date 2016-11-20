@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="首先需要说明的是，CUDA并非GPGPU（GPU通用计算）的全部。但是我们仍然应该首先感谢Nvidia，因为CUDA使GPGPU走向大众化，使得我等终于也能从中一窥究竟了。不过随之而来的疑问却是，CUDA真能担负得起GPGPU的重担吗？至少在目前看来，答案并不太明显。 战前准备 当然， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="本文算是最近三周内的第三个“来了”系列（博主是不是整天无所事事？）&hellip;不过这次的确是因为工作需要的原因，GL的主题将会持续一段时间。至于为什么我习惯称之gl，那么请留意gl的发音/gl/，前面再加个open&hellip;总会有人真正体会到她的魅力所在的。 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,56 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/05/28/GL-zhong-jiu-hai-shi-lai-le/">
+		
+			GL终究还是来了</a>
+	</h2>
+	<div class="entry-content">
+		<p>本文算是最近三周内的第三个“来了”系列（博主是不是整天无所事事？）&hellip;不过这次的确是因为工作需要的原因，GL的主题将会持续一段时间。至于为什么我习惯称之gl，那么请留意gl的发音/gl/，前面再加个open&hellip;总会有人真正体会到她的魅力所在的。不过这也确实不是我第一次尝试学习gl了：一年前我曾冒着烈日学习nehe怎么用gl画会转的三角形&hellip;两天后被迫放假回家，于是又练了个新号，直到前几天又被个文明贼盗了2w多g&hellip;这里似乎离题了！总之现在就算不上是gl新手了吧&hellip;</p>
+
+<p>上述事实再次告诉我们，当你像我这么老的时候，好奇心就不能再是生活的第一目标了，而应优先满足需求&hellip;在满足各种实际需求的过程中，我们永远的好奇心也将逐步得到慰藉。</p>
+
+<p>PS:Kinect for Windows SDK近期连续跳票&hellip;广大Kinect开发者表示情绪灰常稳定，是到了该OpenNI收拾残局的时候了。</p>
+
+<p>PPS:本周读书去&hellip;</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-05-28T10:18:36+08:00" pubdate data-updated="true">2011-05-28</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2011/05/28/GL-zhong-jiu-hai-shi-lai-le//posts/6/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -852,85 +902,6 @@ $(document).ready(
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/03/05/yang-tiao-cha-zhi-de-yi-ban-fang-fa-shang/">
-		
-			样条插值的一般方法（上）</a>
-	</h2>
-	<div class="entry-content">
-		<p>  没有接触过计算机曲线、面生成技术的人可能会想到，如果我们给定一个点集序列，再根据该集合生成一条经过每个点的曲线，同时曲线的形态还可以依据点的相互位置而定。</p>
-
-<p> 然而当我们初步接触了Bezier curve，敬佩之余还带有稍许失望。不过在这之前我们必须承认，“控制点”生成曲线的方法早已是老祖宗的专利，后来Citroen的de Casteljau和Renault的Bezier先后终于完成了样条曲线的数学定义。Bezier曲线的成功得益于其三个出色的特性：控制点简单、光滑度较好且可控以及允许Bezier反算。下面是直接根据三次Bezier公式生成带有四个控制点的Bezier曲线的过程。</p>
-
-<object style="width: 412px; height: 300px;" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="412" height="300" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0"><param name="wmode" value="transparent" /><param name="src" value="http://www.hanyi.name/blog/wp-content/uploads/2011/03/bezier.swf" /><param name="align" value="top" /><embed style="width: 412px; height: 300px;" type="application/x-shockwave-flash" width="412" height="300" src="http://www.hanyi.name/blog/wp-content/uploads/2011/03/bezier.swf" wmode="transparent" align="top"></embed></object>
-
-
-<p> 应当注意的是，工业标准的Bezier曲线生成往往采用基于de Casteljau算法的递归细分策略，其目的是为了确保进行计算机数值计算的稳定性，进一步提高曲线的精度。 现在我们希望解决文章开始的疑问，其实质是利用Bezier曲线进行插值，以构建能够通过“所有”控制点（实际上Bezier曲线往往通过首尾两个控制点）的曲线。</p>
-
-<p> 通过对Bezier的学习我们知道，Bezier曲线必然通过首尾控制点的特性其实完全可以被用于插值算法。我们把有序点序列相邻两点作为首尾控制点，据此生成分段Bezier曲线，即可满足要求。这一过程需要解决两个问题：</p>
-
-<p> 1、若采用分段三次Bezier曲线，如何确定除首尾控制点的另外两点；</p>
-
-<p> 2、连接若干分段三次Bezier曲线的平滑性如何得以保证；</p>
-
-<p> 早在1974年，Edwin Catmull和Raphael Rom发表《A class of local interpolating splines》一文，就解决了上述问题，而且至今仍是最重要的曲线插值方法。</p>
-
-<p> 值得一提的是，Edwin Catmull是计算机图形学领域一名做出过许多突出贡献的科学家（如纹理映射、双三次Bezier曲面、反走样算法、曲面细分的优化算法，还独立发明了Z-Buffer技术），而且还是现代影视动画工业的奠基人之一。1979年，Catmull离开了纽约理工学院计算机图形学实验室，加盟Lucas的工业光魔并领导其计算机动画部门。1986年该部门被Steve Jobs收购，Catmull也成为新公司Pixar的CTO。2006年Disney收购Pixar，Catmull成为现任Disney Animation Studios&amp;Pixar Animation Studios总裁。</p>
-
-<p> 假设有m+1个插值点<strong>p0</strong>,&hellip;<strong>pm</strong>，现在要才用分段三次Bezier曲线，则Catmull-Rom样条曲线包含m-2条Bezier曲线，其中第i条Bezier曲线起始于<strong>pi</strong>终止于<strong>pi+1</strong>。设：</p>
-
-<p> <strong>li</strong>=&frac12;(<strong>pi+1</strong> - <strong>pi-1</strong>)</p>
-
-<p> 且</p>
-
-<p> <strong>pi+</strong> = <strong>pi </strong>+ 1/3li以及<strong>pi-</strong> =<strong> pi</strong> - 1/3<strong>li</strong></p>
-
-<p> 然后设<strong>qi(</strong>u)是<strong>pi</strong>、<strong>pi+</strong>、<strong>pi+1-</strong>、<strong>pi+1</strong>为控制点的Bezier曲线—曲线的定义域被变成了i&lt;=u&lt;=i+1。将这些Bezier曲线拼接在一起，就构成了完整的Catmull-Rom样条曲线q(u)，使得对于任何i&lt;=u&lt;=i+1都有<strong>q</strong>(u)=<strong>qi</strong>(u)。</p>
-
-<p> 其示例如图：</p>
-
-<p><img class="aligncenter size-medium wp-image-290" title="catmull" src="http://www.hanyi.name/blog/wp-content/uploads/2011/03/catmull-300x180.png" alt="" width="300" height="180" /></p>
-
-<p> Catmull-Rom存在一定的不足，当某相邻点间距明显小于其它点的平均相邻距离时，生成的曲线会发生“漂离现象”，也就是导致G1不连续。实际上Catmull-Rom的问题主要在于额外的控制点位置异常，采用被称作Bessel-Overhauser的样条函数即可解决这一问题，这就是不同于均匀参数化的弦长参数化方法，此外还有一种节点值参数化方法，即向心参数化方法。有兴趣的读者可以查阅其它相关文献。</p>
-
-<p> 本文的参考资料来源于Samuel R.Buss的《3D computer graphics—a mathmatical introduction with OpenGL》相关章节，以及两篇分别来自T.Y.Kim和Christopher Twigg的论文。下次我们将讨论构造曲面的一般方法（当然具体日期要根据下周的空余时间而定了）。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-03-05T20:19:05+08:00" pubdate data-updated="true">2011-03-05</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2011/03/05/yang-tiao-cha-zhi-de-yi-ban-fang-fa-shang//posts/6/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
 <nav id="pagenavi">
     
     	
@@ -942,7 +913,7 @@ $(document).ready(
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Han Yi
 

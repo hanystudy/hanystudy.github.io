@@ -102,7 +102,7 @@ $(document).ready(
 
 <h3>1. Include vs Extend</h3>
 
-<p>Firstly let&rsquo;s see an example:</p>
+<p>Firstly let’s see an example:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -203,11 +203,11 @@ $(document).ready(
 
 <p>Method wrapper means wrapping an existing method inside a new method, which is very useful when you want to make extension without changing the source, like code in standard library or other cases.</p>
 
-<p>There are several ways to implement method wrappers in ruby, and they are all in composite form of primitives which&rsquo;ve already been introduced in previous articles. We&rsquo;ll go through below.</p>
+<p>There are several ways to implement method wrappers in ruby, and they are all in composite form of primitives which’ve already been introduced in previous articles. We’ll go through below.</p>
 
 <h4>Around Alias</h4>
 
-<p>Module#alias_method (also the key word &lsquo;alias&rsquo;) is used to give another name to ruby methods. It will involve more accessibility if an usual method could have different domain names(e.g. size, length and count). Also more flexibilities if you want, like code below:</p>
+<p>Module#alias_method (also the key word ‘alias’) is used to give another name to ruby methods. It will involve more accessibility if an usual method could have different domain names(e.g. size, length and count). Also more flexibilities if you want, like code below:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -291,7 +291,7 @@ $(document).ready(
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Only thing you need to notice is that the key word &lsquo;using&rsquo; may not work well with your IRB environment, which means you couldn&rsquo;t get result in mind for some versions of ruby if you run those code in IRB. See more information <a href="https://bugs.ruby-lang.org/issues/9580">here</a>.</p>
+<p>Only thing you need to notice is that the key word ‘using’ may not work well with your IRB environment, which means you couldn’t get result in mind for some versions of ruby if you run those code in IRB. See more information <a href="https://bugs.ruby-lang.org/issues/9580">here</a>.</p>
 
 <p>The benefit of refinement wrapper is controllable scope of wrapper unlike around alias which affects globally. However, accessibility to original method is also lower than alias way.</p>
 
@@ -340,7 +340,7 @@ $(document).ready(
 
 <h3>3. Class Macros</h3>
 
-<p>Ruby objects have no attributes - May this won&rsquo;t surprise or confuse you too much. Indeed we&rsquo;ve hear about instance variables or class variables, but you can not access them directly from outside. That means getter or writer can not be avoided:</p>
+<p>Ruby objects have no attributes - May this won’t surprise or confuse you too much. Indeed we’ve hear about instance variables or class variables, but you can not access them directly from outside. That means getter or writer can not be avoided:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -371,7 +371,7 @@ $(document).ready(
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>It&rsquo;s just not ruby style! Ruby provides series accessors for class definition using metaprogramming api, like attr_accessor, attr_reader and attr_writer, they are quite intuitive to use:</p>
+<p>It’s just not ruby style! Ruby provides series accessors for class definition using metaprogramming api, like attr_accessor, attr_reader and attr_writer, they are quite intuitive to use:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -407,7 +407,7 @@ $(document).ready(
   
 
 
-<time datetime="2015-11-03T08:24:21+08:00" pubdate data-updated="true"></time></div>
+<time datetime="2015-11-03T16:08:28+08:00" pubdate data-updated="true"></time></div>
 	
 
 <div class="tags">
@@ -442,7 +442,7 @@ $(document).ready(
 </div>
 </section>
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Han Yi
 
