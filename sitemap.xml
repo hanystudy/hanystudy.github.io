@@ -951,13 +951,16 @@
     <loc>http://www.hanyi.name/archives/</loc>
   </url>
   <url>
-    <loc>http://www.hanyi.name/</loc>
-  </url>
-  <url>
     <loc>http://www.hanyi.name/blog/archives/</loc>
   </url>
   <url>
+    <loc>http://www.hanyi.name/</loc>
+  </url>
+  <url>
     <loc>http://www.hanyi.name/about/</loc>
+  </url>
+  <url>
+    <loc>http://www.hanyi.name/portfolio/</loc>
   </url>
   <url>
     <loc>http://www.hanyi.name/blog/categories/tian-xuan-zhi-zuo/</loc>
