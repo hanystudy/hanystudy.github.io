@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2016-11-28T21:36:23+08:00</updated>
+  <updated>2016-11-29T17:58:27+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -20,7 +20,7 @@
     <id>http://www.hanyi.name/blog/2016/11/20/micro-situational-mixed-reality</id>
     <content type="html"><![CDATA[<p><em>从前有一池清潭，在附近的居民眼里它和普通池塘并没有什么区别。某天一位富绅来到池边，搬起一块巨石砸进了池中心，泛起的沉渣顿时把池水变成了浊潭。富绅见人就说，突然变浑浊的潭水里其实是出土了宝藏，价值万贯。消息传开，好奇的人们不远万里赶到潭边，有的确实想发笔横财，有的只是为了观光。富绅自己则在潭边围起一段栅栏，向来访者销售门票，不日累积万贯。不久，别处的清潭都变浊了。</em></p>
 
-<p>近年火爆的VR/AR在大众眼中是“黑科技”，其实早在50年前(<a href="https://www.youtube.com/watch?v=ISJWZpFIAlQ">The Sword of Damocles，1968</a>)就被人玩剩了，他的创作者是图形学界祖师之一Ivan Sutherland。但可能是发现自己已经走得太远（实际上当时现代图形学基础还没有完全确立），于是萨大爷就带着他一票学生和下属回去后方铺路，后者们先后发明了Smalltalk编程语言、Gouraud着色算法、图形反走样算法，创办创意设计巨头Adobe以及高性能计算鼻祖SGI，甚至还联合乔帮主创办了Pixar（现任Pixar/Disney动画总裁的Edwin Catmull也是图形学巨擘，发明了灰常实用的Catmull-Rom样条函数，直到现在还被用于关键帧插值和<a href="http://www.cemyuksel.com/research/catmullrom_param/">渲染头发丝</a>）。</p>
+<p>近年火爆的VR/AR在大众眼中是“黑科技”，其实早在50年前(<a href="https://www.youtube.com/watch?v=ISJWZpFIAlQ">The Sword of Damocles，1965</a>)就被人玩剩了，他的创作者是图形学界祖师之一Ivan Sutherland。但可能是发现自己已经走得太远（实际上当时现代图形学基础还没有完全确立），于是萨大爷就带着他一票学生和下属回去后方铺路，后者们先后发明了Smalltalk编程语言、Gouraud着色算法、图形反走样算法，创办创意设计巨头Adobe以及高性能计算鼻祖SGI，甚至还联合乔帮主创办了Pixar（现任Pixar/Disney动画总裁的Edwin Catmull也是图形学巨擘，发明了灰常实用的Catmull-Rom样条函数，直到现在还被用于关键帧插值和<a href="http://www.cemyuksel.com/research/catmullrom_param/">渲染头发丝</a>）。</p>
 
 <p>有意思的是，VR/AR在理论上的研究早已从感知器官上升到哲学范畴&hellip;&hellip;多年来在实践上却仍然停留在科技馆和特殊行业应用领域。最终，geek们期待的科技大跃进并没有真正到来，尘埃褪去，呈现的却是更加亲民的头显（HMD）和各种奇思妙想的控制器（Controller），无不体现着以人为本的时代理念。而如果你能尝试SteamVR上的应用、特别是体验下Proto奖的获奖作品时，你会欣慰地发现，原来真正有梦想、有创造力的人还在不断涌现，你就会从各种捞钱、炫富的纸金现实中暂时解脱出来了。</p>
 
