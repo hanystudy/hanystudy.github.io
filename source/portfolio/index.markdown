@@ -43,4 +43,4 @@ For development:
 
 ### Others
 
-[Introduction to ThoughtWorks Technology Radar](http://slides.com/hanyi8000/asd-14#/)
+[Introduction to ThoughtWorks Technology Radar](http://slides.com/hanyi8000/asd-14#/), [Learn to be a professional programmer](http://slides.com/hanyi8000/deck-29#/)
