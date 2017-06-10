@@ -37,6 +37,10 @@ For development:
 
 [Portable Document Format online generating](http://slides.com/hanyi8000/deck-27#/), [i18n 💑 gettext](http://slides.com/hanyi8000/i18n#/), [Learning Tools Interoperability](http://slides.com/hanyi8000/gc-integration#/), [SSO: CAS, LDAP, AD](http://slides.com/hanyi8000/gc-integration-7#/)
 
+### MongoDB
+
+[MongoDB data modeling](http://slides.com/hanyi8000/mongodb-data-modeling)
+
 ### Graphics
 
 [How to draw a bunny](http://slides.com/hanyi8000/how-to-draw-a-bunny#/), [How to scan a bunny](http://slides.com/hanyi8000/how-to-draw-a-bunny-5#/), [How to render a bunny in modern style: I](http://slides.com/hanyi8000/how-to-draw-a-bunny-8#/)
