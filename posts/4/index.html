@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="TangleTracer是一个实验性光线跟踪渲染平台，目的在于为真实感绘制技术的初学者提供完备的学习例程和友好的实验接口。系统设计思路主要源于Kevin Suffern的《Ray tracing from the Ground Up》一书，同时部分参考了著名的真实感绘制圣经《PBRT 2nd》。 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="有关Kinect应用开发正日新月异，稍有懈怠就会被远远甩在身后。不过，Kinect目前带给我们的仍只是一个充满无限可能的远景，正如App store能吸引年仅11岁的开发者一样，Kinect未来将对“全民开发者”产生重要推动作用。另一方面，一些基于Kinect的应用研究仍颇复杂， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,86 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2012/06/22/Kinect-de-san-wei-chong-jian-1/">
+		
+			Kinect的三维重建(1)</a>
+	</h2>
+	<div class="entry-content">
+		<p>有关Kinect应用开发正日新月异，稍有懈怠就会被远远甩在身后。不过，Kinect目前带给我们的仍只是一个充满无限可能的远景，正如App store能吸引年仅<a href="http://www.cnbeta.com/articles/161695.htm">11岁的开发者</a>一样，Kinect未来将对“全民开发者”产生重要推动作用。另一方面，一些基于Kinect的应用研究仍颇复杂，主要是因为一些关键环节的滞后而导致的。2011年的siggraph talks上，<a href="http://research.microsoft.com/en-us/projects/surfacerecon/">KinectFusion</a>首次展示了实时、廉价、轻便的室内场景三维重建，使得我们向着“无处不在的数字化”迈进了一大步。该项目主要由微软剑桥研究院的研究人员发起实施，研究小组目前公开发表了两篇文章：</p>
+
+<p>Shahram Izadi, David Kim, Otmar Hilliges, David Molyneaux, Richard Newcombe, Pushmeet Kohli, Jamie Shotton, Steve Hodges, Dustin Freeman, Andrew Davison, and Andrew Fitzgibbon, <strong>KinectFusion: Real-time 3D Reconstruction and Interaction Using a Moving Depth Camera</strong>, ACM Symposium on User Interface Software and Technology, October 2011</p>
+
+<p>Richard A. Newcombe, Shahram Izadi, Otmar Hilliges, David Molyneaux, David Kim, Andrew J. Davison, Pushmeet Kohli, Jamie Shotton, Steve Hodges, and Andrew Fitzgibbon, <strong>KinectFusion: Real-Time Dense Surface Mapping and Tracking</strong>, in IEEE ISMAR, IEEE, October 2011</p>
+
+<p>除了Microsoft Research外，国内外大量机构都借助Kinect进行相关研究。仅就实时场景三维重建这项应用而言，由开源机器人研发公司Willow Garage在2011年发起的Point Cloud Libary (PCL)就吸引了全世界数十家著名科研机构参与、十余家公司提供经济支持。PCL是一项集点云获取与处理、滤波、特征提取、关键点标定、表面重建和点云配准以及点云融合等功能为一体的开源点云处理库，PCL使用OpenNI作为系统IO接口，实际成为KinectFusion的开源实现项目，该项目的相关论文发表在<a href="http://www.pointclouds.org/assets/pdf/pcl_icra2011.pdf">ICRA2011</a>上。</p>
+
+<p>上述文献可以说是迄今为止有关Kinect的三维重建应用的最佳切入点了。应注意的是这两篇文章讨论重点的区别，前者先是对KinectFusion整个项目进行了流水式说明，随后解释了文中采用的经典算法的GPU实现，开发者可能会比较感兴趣；而后一篇文章则重点讨论了新的并行算法的形式化描述和性能分析，这部分可能会更吸引一部分研究者。我们将采用一种自上而下的方法先对这两篇文章进行简要介绍。</p>
+
+<p><strong> 概述</strong></p>
+
+<p>有关Kinect的结构光技术读者可以参考这篇<a href="http://www.hanyi.name/blog/?p=335">文章</a>或直接去Google下PrimeSense的专利，这里不再赘述。不过，尽管Kinect在获取深度图方面几乎是达到了性能与质量的完美结合，但仍无法避免深度图中大量抖动的产生，如果我们直接对单张深度图进行bilateral filter双边滤波然后重建出网格模型，会发现重建出的模型表面质量较低，甚至出现孔洞的情况。更重要的是，单张深度图能够获得的只是模型在某个视角下所展现出的一部分，而非表示完整的模型。因此，如何改善基于Kinect深度图的模型重建质量，并实现物体的完整重建成为该项技术的关键。</p>
+
+<p>KinectFusion的首要任务就是克服该难题，它允许用户手持Kinect设备在室内场景自由移动，并实现场景的高质量三维重建。同时，KinectFusion还提供了精彩的AR应用，包括前景、背景和人体的分割与重建、以及AR世界中的多点触摸识别技术。</p>
+
+<p><strong>场景重建</strong></p>
+
+<p>基于上述需求，KinectFusion允许用户手持Kinect设备自由探索室内环境，系统将自动跟踪Kinect摄像头的6DOF姿态，然后融合不同时序的深度图数据并重建出场景的全局模型。由于视角的不断变化，Kinect反馈的深度图也会发生改变，这里采用了类似图像超分辨率技术对深度图进行了细节优化，从而提高模型的重建质量。最后利用Kinect自带的RGB数据进行场景纹理映射。</p>
+
+<p>首先如何利用单Kinect摄像头去跟踪它自己的6DOF姿态？这里采用点云模型的刚性配准对齐来计算摄像头在空间中的6DOF变换，点云配准首选经典的ICP[Besl92, RusinKiewicz01]。之前需要将深度图像数据变换至摄像机的空间坐标系中，并计算其对应点的法线信息；然后逐帧采用基于GPU的ICP实现进行模型配准和6DOF计算；在重建部分，KinectFusion并没有直接融合点云或生成网格模型，而是采用了[Curless96]的体集成算法，最终在全局坐标系中生成一个三维体素网格并进行不断更新，每个体素内最终保存了一段时间内从该体素到物理表面上某一点的平均距离。最后使用Raycast给出隐式表面的渲染结果，另一方面，以摄像机位置作为视点做Raycasting，同样能够得到一个具有真实细节的高质量的合成深度图，然后再对其进行下一轮ICP迭代。这就允许我们能够利用合成深度图与下一帧的深度图进行配准，使重建结果的精度不断提高。</p>
+
+<p>具体算法实现采用了CUDA并行架构，算法基本流程如下：</p>
+
+<p>1）深度坐标变换，对于每个像素启用一只CUDA线程，给定一个Kinect红外摄像头的内部校准矩阵K，使用如下公式</p>
+
+<p><img class="aligncenter" title="\textup{v}_{i}(u) = \textup{D}_{i}(u)\textup{K}^{-1}[u ,1]" src="http://latex.codecogs.com/gif.latex?\textup{v}_{i}(u) = \textup{D}_{i}(u)\textup{K}^{-1}[u ,1]" alt="" /></p>
+
+<p>计算坐标变换；相应的顶点法线则直接取其右、下邻向量的外积，并进行归一化。时间i时的6DOF摄像机姿态使用一个刚性变换矩阵T表示，其中T包括了摄像机的旋转矩阵R和平移矩阵t。变换后的顶点和法线通过T即可再变换至全局坐标系中。</p>
+
+<p>2）摄像机跟踪，该部分的主要目的就是计算6DOF姿态。核心的ICP即迭代最近点算法，首要是需要逐帧计算不同朝向的点集的相关度。这里采用了projective data association方法计算相关度。</p>
+
+<p>3）体集成，针对已配准的点云数据，需要执行后续的融合处理，这里采用了经典的[Curless96]体集成方法融合这些点云数据。</p>
+
+<p>4）光线投射渲染，采用光线投射渲染前步生成的隐式表面。</p>
+
+<p>上述整个管线均采用了并行GPU实现，在下文中，我们将重点解析上述算法的CUDA实现细节。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-22T20:35:07+08:00" pubdate data-updated="true">2012-06-22</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kinect/'>kinect</a>, <a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2012/06/22/Kinect-de-san-wei-chong-jian-1//posts/4/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -955,173 +1035,6 @@ Node，该子结点可以包含多个，它将引导OpenNI枚举并创建一个�
 
 	
 		<span class="comments"><a href="/blog/2011/09/03/Kinect-lai-le-jie-xi-jie-xi-SDK//posts/4/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/08/24/Kinect-lai-le-jie-xi-jie-xi-SDK/">
-		
-			Kinect来了——解析SDK(OpenNI Framework 3)</a>
-	</h2>
-	<div class="entry-content">
-		<p><strong>基本编程方法</strong></p>
-
-<p>本节的主要内容是结合OpenNI编程。</p>
-
-<p>首先假设使用MS VS作为开发工具，那么应先在工程中配置OpenNI库：其中分别需要添加环境变量$(OPEN_NI_INCLUDE)和$(OPEN_NI_LIB)，以及静态链接库OpenNI.lib；此外代码文件中还要添加相应的头文件，C语言工程需包含XnOpenNI.h，C++工程为XnCppWrapper.h。</p>
-
-<p>下面的代码段演示了如何初始化一个上下文对象，并从深度节点中创建和读取数据：</p>
-
-<p>[c]XnStatus nRetVal = XN_STATUS_OK;
-xn::Context context;       //声明上下文对象
-nRetVal = context.Init();        //初始化并返回异常编码
-xn::DepthGenerator depth;        //声明深度生成器节点</p>
-
-<p>nRetVal = depth.Create(context);        //初始化节点，返回异常编码
-nRetVal = context.StartGeneratingAll();        //启动深度节点数据生成
-while (bShouldRun)
-{
-nRetVal = context.WaitOneUpdateAll(depth);        //等待数据更新
-if (nRetVal != XN_STATUS_OK)        //数据更新异常
-{
-printf(&quot;Failed updating data: %s\n&quot;,xnGetStatusString(nRetVal));
-continue;        //不间断通信
-}
-//深度数据获取正常
-const XnDepthPixel* pDepthMap = depth.GetDepthMap();        //获取数据缓冲区指针
-}
-context.Shutdown();        //关闭上下文对象[/c]</p>
-
-<p>通常配置一个工作链需要实现大量代码，OpenNI提供了工作链查询接口，使得程序员可以通过查询关键字的形式找到系统内已有的相关工作链配置信息，考虑到符合查询条件的结果数量可能不唯一，OpenNI的查询机制结果总是以集合的形式返回。下面给出相关代码：</p>
-
-<p>[c]//创建查询对象
-xn::Query query;
-nRetVal = query.SetVendor(&quot;MyVendor&quot;);        //设置查询条件，这里设置了有关提供商名称
-query.AddSupportedCapability(XN_CAPABILITY_SKELETON);        //这里的查询条件指定数字骨架数据支持
-xn::NodeInfoList possibleChains;
-nRetVal = context.EnumerateProductionTrees(XN_NODE_TYPE_USER, &amp;query, possibleChains, NULL);        //根据查询对象枚举全部的工作链配置
-xn::NodeInfo selected = *possibleChains.Begin();        //返回最相似的查询结果，此时仍是但节点信息
-nRetVal = context.CreateProductionTree(selected);        //根据节点信息创建相应工作节点
-xn::UserGenerator userGen;
-nRetVal = selected.GetInstance(userGen);        //获取节点实例
-&hellip;&hellip;        //进一步操作[/c]</p>
-
-<p>实际上上述代码在OpenNI编程中非常常见，因为通过编程配置有关工作链实际上是一件很烦琐的事情。但显然对相关节点的查询并不一定能得到理想的结果，有时确实会发生查询结果为零的情况。例如该功能类型的节点尚未配置入系统中，或者节点的许可证序号不一致等异常情况。为方便查看节点测试失败的原因，OpenNI提供了一种针对节点类型的全局测试机制，该机制允许记录节点初始化失败的原因。相关代码如下：</p>
-
-<p>[c]xn::EnumerationErrors errors;        //实际上是一个异常结果集合
-xn::HandsGenerator handsGen;
-nRetVal = context.CreateAnyProductionTree(XN_NODE_TYPE_HANDS, NULL, handsGen, &amp;errors);
-//如果没有一个节点测试成功
-if (nRetVal == XN_STATUS_NO_NODE_PRESENT) {
-//遍历所有的异常信息，并输出
-for (xn::EnumerationErrors::Iterator it = errors.Begin(); it != errors.End(); ++it) {
-XnChar strDesc[512];
-xnProductionNodeDescriptionToString(&amp;it.Description(), strDesc, 512);
-printf(&quot;%s failed to enumerate: %s\n&quot;, xnGetStatusString(it.Error()));
-}
-return (nRetVal);
-}
-//如果存在相关节点，但无法验证
-else if (nRetVal != XN_STATUS_OK) {
-printf(&quot;Create failed: %s\n&quot;, xnGetStatusString(nRetVal)); return (nRetVal);
-}[/c]</p>
-
-<p>下面这段代码演示了从创建深度生成器，到节点设置配置信息，再从中获取数据并最终显示的全过程。</p>
-
-<p>[c]XnStatus nRetVal = XN_STATUS_OK;
-Context context;
-nRetVal = context.Init();        //创建上下文
-DepthGenerator depth;
-nRetVal = depth.Create(context); //创建深度生成器
-XnMapOutputMode mapMode;
-mapMode.nXRes = XN_VGA_X_RES;
-mapMode.nYRes = XN_VGA_Y_RES;
-mapMode.nFPS = 30;
-nRetVal = depth.SetMapOutputMode(mapMode);        //设置其输出模式为VGA+30FPS，
-nRetVal = context.StartGeneratingAll();        //开始获取数据
-XnUInt32 nMiddleIndex = XN_VGA_X_RES * XN_VGA_Y_RES/2 + XN_VGA_X_RES/2;        //计算中心像素索引
-while (TRUE) {
-nRetVal = context.WaitOneUpdateAll(depth);       //刷新数据缓冲区
-const XnDepthPixel* pDepthMap = depth.GetDepthMap();
-printf(&quot;Middle pixel is %u millimeters away\n&quot;, pDepthMap[nMiddleIndex]);        //输出中心像素的深度值
-}
-context.Shutdown();[/c]</p>
-
-<p>音频生成器（AG）的操作与其它节点相比有一定区别，原因在于当程序执行UpdateData()方法后AG才会将之前记录的音频数据存入数据缓冲区中，而且许多情况下音频生成器的数据缓冲区大小是未知的，因此需要经常使用xn::AudioGenerator::GetDataSize()方法获取当前环境下的数据缓冲区大小。下面的例子中首先创建了一个AG，然后对其进行配置，最后读取音频数据。</p>
-
-<p>[c]Context context;
-nRetVal = context.Init();        //初始化上下文
-AudioGenerator audio;
-nRetVal = audio.Create(context);         //初始化AG
-XnWaveOutputMode waveMode;
-waveMode.nSampleRate = 44100;
-waveMode.nChannels = 2;
-waveMode.nBitsPerSample = 16;
-nRetVal = audio.SetWaveOutputMode(waveMode);        //设置AG配置属性
-while (TRUE) {
-nRetVal = context.WaitOneUpdateAll(audio);        //刷新数据缓冲区
-const XnUChar* pAudioBuf = audio.GetAudioBuffer();
-XnUInt32 nBufSize = audio.GetDataSize();        //获取当前数据大小
-}
-context.Shutdown();[/c]</p>
-
-<p>最后，我们来看看OpenNI提供的录制与缩放功能（NSSDK未提供该功能）。执行录制的前提是首先创建一个Recorder节点对象,并设置好它的待保存文件名。然后应用程序在该节点中添加需要进行录制目标节点，当在Recorder中加入一个节点后，Recorder将首先保存其配置信息，然后对其进行记录。同时Recorder会持续监听目标节点的所有触发事件，以便当节点配置发生改变时能及时获得响应。一旦所有节点添加至Recorder中，应用程序就可以使用Recorder记录节点的数据流了。需要注意的是，针对数据的记录可以使用xn::Recorder::Record()方法，或者通过UpdateAll函数进行。</p>
-
-<p>此外，使用外部XML文件初始化的OpenNI程序可方便地记录其session信息，从而避免修改相应代码。具体只需要在XML文件中为Recorder创建一个新的节点，并将所有节点添加至其中，每当应用程序调用一类UpdataAll函数时均会自动触发记录操作。下面的代码演示了记录一个深度生成器的操作：</p>
-
-<p>[c]DepthGenerator depth;
-nRetVal = depth.Create(context);          // 创建深度生成器
-RetVal = context.StartGeneratingAll();
-Recorder recorder;
-nRetVal = recorder.Create(context);        //创建一个Recorder
-nRetVal = recorder.SetDestination(XN_RECORD_MEDIUM_FILE, &quot;c:\temp\tempRec.oni&quot;);        //配置Recorder属性
-nRetVal = recorder.AddNodeToRecording(depth, XN_CODEC_16Z_EMB_TABLES);        //将深度节点加入Recorder
-while (TRUE) {
-nRetVal = context.WaitOneUpdateAll(depth);        //注意UpdataAll函数既刷新了数据缓冲区，同时对其中的帧数据进行了记录
-}[/c]</p>
-
-<p>录制数据的重放需要首先调用xn::Context::OpenFileRecording()函数，OpenNI读入该文件后先针对文件中的每一个节点创建一个对应的模拟节点，然后使用记录的配置信息进行重配置。应用程序可以随时调用xn::Context::FindExistingNode()获取任何需要的节点，并能像正常节点一样使用。但是应注意，由播放器创建的节点处于锁定状态，且无法被更改，因此其配置信息只能维持记录中保存的状态。同时 ，使用XML文件的OpenNI程序可以轻松替换其载入录制内容，即直接从XML的Recorder节点中读取相应数据。下面的代码就演示了如何载入录制文件，并获取其中保存的深度节点信息。</p>
-
-<p>[c]Context context;
-nRetVal = context.Init();        //初始化上下文
-nRetVal = context.OpenFileRecording(&quot;c:\temp\tempRec.oni&quot;);        //载入录制文件
-DepthGenerator depth;
-nRetVal = context.FindExistingNode(XN_NODE_TYPE_DEPTH, depth);        //获取已录制的深度生成器节点[/c]
- 在关于OpenNI的最后一篇文章中，我们将重点关注有关节点配置的内容。</pre></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-08-24T23:24:07+08:00" pubdate data-updated="true">2011-08-24</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/kinect/'>kinect</a>, <a class='category' href='/blog/categories/xiang-mu/'>项目</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2011/08/24/Kinect-lai-le-jie-xi-jie-xi-SDK//posts/4/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

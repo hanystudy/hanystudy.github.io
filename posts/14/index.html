@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="第一章 UNIX的前世今生   一、UNIX起源   Unix的诞生离不开一种于1965年由Advance research project agency(United States Department of Defence)支持，并聚集MIT、AT&amp; &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="一、 UNIX的安装 需要提前说明的是，本段内容并不会包含某个UNIX发行版本的完整安装教程，而是总结了UNIX安装的一般步骤及其常用的解决方案。 一般说来UNIX的安装需要经过三个阶段：准备阶段、内核系统安装阶段以及用户系统安装阶段。在准备阶段中，首先应确定的是系统所处的硬件环境， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,190 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/19/mp77-de-UNIX-ke-jian-bi-ji-3/">
+		
+			mp77的UNIX课件笔记(3)</a>
+	</h2>
+	<div class="entry-content">
+		<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+
+<p><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">一、</span> <span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">UNIX<span style="font-family: 宋体;">的安装</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+<div class="Section0">
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">需要提前说明的是，本段内容并不会包含某个UNIX发行版本的完整安装教程，而是总结了UNIX安装的一般步骤及其常用的解决方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">一般说来UNIX的安装需要经过三个阶段：准备阶段、内核系统安装阶段以及用户系统安装阶段。在准备阶段中，首先应确定的是系统所处的硬件环境，例如硬盘接口类型、RAID控制器驱动、网卡驱动、硬件的启动顺序以及现有系统的备份及安装顺序；随后获取系统软件（GNU/Linux通常可以在网上直接获得ISO文件）；配置准备需要制定出分区规划、SWAP分区大小、root及普通用户口令、网络配置等。在系统安装阶段可以根据相关引导方式逐步进行，包括硬盘分区、加载硬件驱动等，需要注意的是在安装双系统（包含Windows时）需要先安装Windows再安装Unix。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">系统安装完成后需要先检查硬件是否全部安装正常，通常有两种查看方式：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">lspci -b -v<span style="font-family: 宋体;">，列出本机上所有PCI总线上连接的设备，其中-b查看相关设备在PCI总线上的地址信息，-v显示相关详细信息verbose。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">dmesg<span style="font-family: 宋体;">，显示linux启动信息，通常在系统启动时会自动检测硬件设备，dmesg允许用户随时查看该检测列表。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">检查正常后可对系统做以下配置工作（可选）：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、配置防火墙，开放/关闭有关端口；调整服务，禁用不必要服务；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、运行系统更新程序，修补系统漏洞；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、配置X-windows，或将X关闭，通过对以下文件进行修改可以指定Linux的启动模式：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">./etc/inittab</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//X=3</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">text mode</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//X=5</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">x-window</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、增加管理用户，配置远程登录；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">5<span style="font-family: 宋体;">、进行用户磁盘限额配置；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">6<span style="font-family: 宋体;">、应用程序的安装和编译等；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">7<span style="font-family: 宋体;">、对系统主要的配置文件进行备份；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">通常要对系统做远程登陆配置工作，当然这是根据不同用户需求而定的。远程登录一般分为远程登录管理和远程文件交流管理两种工作。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">远程登录服务器进行管理的方式主要包括rsh，rlogin，telnet，ssh（字符终端方式），远程Xwindows，VNC（图形终端）等。不过仍然需要注意以下问题：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、rsh/rlogin等协议由于安全性差等原因已面临被淘汰；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、telnet协议认证过程用户名/密码明文传输，存在安全隐患，一般也不允许root用户从telnet登录，su命令可以实现用户身份的转换；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、Ssh（Secure shell）采用ssl协议对通信进行加密，可有效保障用户名/密码泄漏；.</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、常用的SSH客户端有NetTerm，SecureCRT，PuTTY等；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">5<span style="font-family: 宋体;">、VNC/远程Xwindows可实现远程使用图形界面GUI；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">远程文件交流管理一般包含以下几种基本方式：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、FTP，要求开放服务器的20,21的端口和ftp服务.，常见的ftp客户端有CuteFTP；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、SCP，集成在ssh服务中，无需开放ftp服务，推荐使用WinSCP；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、NFS，Network File System，适合UNIX服务之间的文件传递；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、Samba，方便UNIX和Windows系统之间交换文件；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">5<span style="font-family: 宋体;">、HTTP，适合下载文件，UNIX平台下的wget工具，可将整个目录下载下来；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">二、</span> <span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户系统安装</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户系统涉及到常用软件的安装设置，尽管许多UNIX/Linux发行版中已内置了大量的软件包，但仍无法确保满足所有用户的需要（如一些商业软件）。其安装方式也分三种具体途径：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">拷贝运行，针对一些文件包可以直接运行，可以直接拷贝的方式，一般采用压缩包传输到服务器上解压执行，可能需要修改权限。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">编译安装方式，采用源代码编译，要求安装编译器（需gcc、make等工具支持，一些发行版的workstation模式即附带开发者GNU工具），编译过程相对复杂，需要一定经验和技巧，但更灵活。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">实践证明，有时编译一些规模较大的程序时耗时会非常长，其唯一的好处就是可以自己配置相应的程序——这通常只有专业人员才会用到&#8230;&#8230;程序员算不算专业人员？你认为呢？</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">现在来看Linux中编译安装一个新内核的具体过程&#8230;&#8230;编译内核？好吧&#8230;&#8230;我们只需要了解编译安装的一般流程和方法即可，对于某些软件的编译安装可能需要其相关的高端硬件或软件知识作为支撑，当然忽略所有设置进行简单的内核升级还是不复杂的。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">那么，我们转而来了解一下编译安装mysql数据库系统的基本流程&#8230;&#8230;</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"># tar -zxvf mysql-5.0.45.tar.gz</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　# cd mysql-5.0.45</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　# ./configure –prefix=/usr/local/mysql –with-charset=utf8 –with-collation=utf8_general_ci –with-extra-charsets=latin1</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　# make</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"># make install</span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">由上可知编译安装时应先释放相应软件包，进入安装目录，并配置configure生成相应的makefile或Makefile文件（相关参数需要提前了解），并不是所有的程序都自带configure，因而必要时makefile或Makefile需要自己制作。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">然后利用make根据刚才生成的规则文件编译相关源代码文件，并编译安装install即可。（注：本段文字的目的仅为了演示编译安装的一般规则，并不包含具体的mysql安装方法，包括安装完成后的配置工作）。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">软件包安装方式，直接将编译好的软件包安装在UNIX系统上，类似于Windows平台下用setup命令安装一个软件包。安装过程简单，但包和包之间存在一定的依赖性关系，不同的Unix支持的软件包格式不相同。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">在Linux下，软件包的格式略有不同，常用的包格式有rpm（Redhat Package Manager）、deb（Debian下利用dpkg工具以tar或tar.gz方式制作的软件包）、tar.gz、tar.z、tar.bz2（以上三种是一般Linux自带的打包工具）。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">根据Linux主流发行版的不同，流行的软件包格式分别是rpm（Redhat</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">、SuSE、Fedora等采用</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">）和deb（一种流行的debian的衍生版本ubuntu采用）。尽管有alien（一种支持包格式转换的工具），但某些情况下依然无法实现不同包的跨系统正常安装。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">）RPM命令的主要选项有：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-i <span style="font-family: 宋体;">安装软件。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-t <span style="font-family: 宋体;">测试安装，不是真的安装。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-p <span style="font-family: 宋体;">显示安装进度。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-f <span style="font-family: 宋体;">忽略任何错误。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-U <span style="font-family: 宋体;">升级安装。 </span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">-</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">V </span> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">检测套件是否正确安装。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">）dpkg命令的主要选项有：</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-i 安装一个Debian软件包。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-c 列出的内容。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-I 从中提取包裹信息。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-r 移除一个已安装的包裹。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-P 完全清除一个已安装的包裹。和remove不同的是，remove只是删掉数据和可执行文件，purge另外还删除所有的配制文件。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-L 列出安装的所有文件清单。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-s 显示已安装包裹的信息。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-align: justify;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">　　-reconfigure 重新配制一个已经安装的包裹，如果它使用的是 debconf (debconf 为包裹安装提供了一个统一的配制界面)。</span> </span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">三、UNIX备份方案</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">以上工作安装完毕并调试正常后，就可以为系统建立首次安装备份了。某些系统可能配备了相类似功能，部分商业版本同时也支持GHOST镜像。下面按照方法分类介绍一些简单有效的备份方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">直接文件备份，意即使用系统自带的档案压缩工具对待备份文件进行打包存储。在早期的UNIX系统中有compress命令可以使用，然而在目前大多数的UNIX/Linux中多数是tar一统天下了。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar<span style="font-family: 宋体;">的选项众多，一般情况下使用的是：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-c</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">创建一个新的档案；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-f</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">使用的源档案文件；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-v</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">verbose<span style="font-family: 宋体;">列出tar处理的序列；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-z</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">使用gnuzip对档案附带压缩；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-x</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">释放源文件中的内容；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">例如对/etc目录进行备份，有如下命令行：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zcvf /etc-backup.tar.gz /etc</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">恢复配置：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zxvf </span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">/etc-backup.tar.gz /etc</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">-restore</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">通过网络备份，这在一些服务器环境中经常用到。其中和不同主机进行数据文件交流的途径也不尽相同：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">和Windows服务器：CIFS，Samba；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">和UNIX类服务器：NFS；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">其他解决方案：FTP，HTTP；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">现在以跨系统主机备份为例，介绍一种简单有效的远程备份方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">“<span style="font-family: 宋体;">某图书馆Web服务器操作系统为Windows 2003, 备份服务器为Linux,需要定时（每天）将Web服务器上的数据备份到Linux服务器上。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Web<span style="font-family: 宋体;">服务器IP: 202.1.1.1；</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Linux<span style="font-family: 宋体;">备份服务器IP: 202.1.1.2；”</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1）</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">基于samba实现，samba是一种可供不同主机进行数据文件交流的系统工具，它是基于SMB（Server Message Block）协议（ms后来改名为CIFS，Common Internet File System）的一种通用解决方案。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">首先应对Windows主机上的数据目录进行共享，必要时可设置密码；通常还需要建立一个供backup专用的系统账户，这里设置为username：backup，password：backit，共享点为backit。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">在Linux主机上建立相应的shell脚本（具体教程在后文中有详细说明）：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">/backup/backupweb.sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">#!/bin/sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">mkdir -p /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">cd /backup</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">mount -t smbfs -o username=backup,password=backit //201.1.1.1/backupweb /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zcvf `date +%Y%m%d`.webbackup.tar.gz /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">umount /backup/web</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">由于要求使用计划任务，在/etc/cron.daily/中加入backupweb.sh的符号连接，以实现每天一次的自动备份：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">cd /etc/cron.daily/</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">ln -s /backup/backupweb.sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">这里就是一次简单的web服务器备份流程了。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2）</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">基于FTP实现。相应于samba，FTP的适用性和稳定性似乎更为优秀，另外在一些安全性较高的系统中还可以采用SSL或者TLS协议加密传输。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">首先需要将待备份目录映射至FTP中的backupweb目录，这方面的工作在web服务器中完成。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Linux<span style="font-family: 宋体;">服务器中建立备份脚本backupweb-ftp.sh：</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">#!/bin/sh</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">cd /tmp</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">wget -m -np \ftp://username:password@202.1.1.1/backupweb/</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tar zcvf /backup/`date +%Y%m%d`.webbackup.tar.gz /tmp/202.1.1.1/backupweb</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">rm -rf /tmp/202.1.1.1/backupweb</span> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">后续操作参考方案1即可。</span> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">至于Linux在进行系统备份时具体涉及到哪些系统文件，会在下节有详细说明。以上就是Linux中常用的一些文件备份解决方案的介绍，在实际应用中应根据具体情况灵活使用。</span> </span></p>
+<p class="0" style="layout-grid-mode: char; text-indent: 21pt; text-align: justify;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></p>
+
+</div>
+
+
+<!--EndFragment-->
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-19T14:24:42+08:00" pubdate data-updated="true">2009-05-19</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/05/19/mp77-de-UNIX-ke-jian-bi-ji-3//posts/14/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1796,213 +1980,6 @@ int main(int argc,char </strong>argv)
 
 	
 		<span class="comments"><a href="/blog/2009/02/21/jia-qi-lian-zai-zhi-shi-wu//posts/14/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/02/21/2010-kao-yan-fu-xi-gang-yao/">
-		
-			2010考研复习纲要</a>
-	</h2>
-	<div class="entry-content">
-		<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-align: center;" align="center"><strong style="mso-bidi-font-weight: normal;"><span style="font-size: 14pt;" lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-size: 14pt; font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">考研复习纲要</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-size: 14pt;" lang="EN-US"></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">本纲要初定于</span><span lang="EN-US"><span style="font-family: Times New Roman;">2009</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年</span><span lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">月</span><span lang="EN-US"><span style="font-family: Times New Roman;">21</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">日</span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">星期六，是</span><span lang="EN-US"><span style="font-family: Times New Roman;">2008-2009</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">学年度大学三年级第二学期开学后第六天。制定本纲要的目的是对</span><span lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年全国硕士研究生入学统一考试复习工作进行全面规划、安排，同时对复习期间附带其它的学习项目进行评估。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">目标学校</span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">：暂定，由于信息收集工作的原因，本项于</span><span lang="EN-US"><span style="font-family: Times New Roman;">2009</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年</span><span lang="EN-US"><span style="font-family: Times New Roman;">5</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">月</span><span lang="EN-US"><span style="font-family: Times New Roman;">31</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">日前</span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">确定。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">目标专业</span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、方向：计算机科学与技术专业、计算机软件与理论方向（方向正式录取后才能最终确定）。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">考试科目及教材</span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">高等数学（同济大学第五版），工程数学线性代数（同济大学第三版），概率论与数理统计（浙江大学第三版）、数据结构（高等教育出版社</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言版、清华大学</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">版）、计算机组成原理（白中英第四版）、计算机操作系统（西电汤子瀛第二版）、计算机网络（清华大学出版社吴功宜，备选电子工业出版社谢希仁第五版）、思想道德修养与法律基础（高等教育出版社）、中国近现代史纲要（西北大学出版社、备选高等教育出版社）、马克思主义原理基本概论（高等教育出版社）、毛泽东思想、邓小平理论和三个代表重要思想概论（高等教育出版社）。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">具体考试科目介绍</span></strong><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">（严格依据</span><span lang="EN-US"><span style="font-family: Times New Roman;">2009</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年全国硕士研究生入学统一考试大纲）：</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt; mso-list: l0 level1 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">1、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数学一（满分</span><span lang="EN-US"><span style="font-family: Times New Roman;">150</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，考试时间为</span><span lang="EN-US"><span style="font-family: Times New Roman;">180</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分钟）</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: -21pt; tab-stops: list 42.0pt; mso-list: l0 level2 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">a)</span><span style="font: 7pt &quot;Times New Roman&quot;;">         </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">试卷内结构：高等数学</span><span lang="EN-US"><span style="font-family: Times New Roman;">55%</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，工程数学线性代数</span><span lang="EN-US"><span style="font-family: Times New Roman;">22%</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、概率论与数理统计</span><span lang="EN-US"><span style="font-family: Times New Roman;">22%</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: -21pt; tab-stops: list 42.0pt; mso-list: l0 level2 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">b)</span><span style="font: 7pt &quot;Times New Roman&quot;;">        </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">试卷题型结构：单项选择题</span><span lang="EN-US"><span style="font-family: Times New Roman;">8</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题</span><span lang="EN-US"><span style="font-family: Times New Roman;">*4</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，填空题</span><span lang="EN-US"><span style="font-family: Times New Roman;">6</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题</span><span lang="EN-US"><span style="font-family: Times New Roman;">*4</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，解答题</span><span lang="EN-US"><span style="font-family: Times New Roman;">9</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题共</span><span lang="EN-US"><span style="font-family: Times New Roman;">94</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt; mso-list: l0 level1 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">2、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">政治（满分</span><span lang="EN-US"><span style="font-family: Times New Roman;">100</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，考试时间为</span><span lang="EN-US"><span style="font-family: Times New Roman;">180</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分钟）</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: -21pt; tab-stops: list 42.0pt; mso-list: l0 level2 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">a)</span><span style="font: 7pt &quot;Times New Roman&quot;;">         </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">试卷内结构：由于课程改革，试卷结构将在</span><span lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年考研政治大纲公布后确定。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: -21pt; tab-stops: list 42.0pt; mso-list: l0 level2 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">b)</span><span style="font: 7pt &quot;Times New Roman&quot;;">        </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">试卷题型结构：单项选择题</span><span lang="EN-US"><span style="font-family: Times New Roman;">16</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题</span><span lang="EN-US"><span style="font-family: Times New Roman;">*1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，不定向选择题</span><span lang="EN-US"><span style="font-family: Times New Roman;">17</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题</span><span lang="EN-US"><span style="font-family: Times New Roman;">*2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，问答题</span><span lang="EN-US"><span style="font-family: Times New Roman;">10</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题</span><span lang="EN-US"><span style="font-family: Times New Roman;">*4</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，二选一论述题</span><span lang="EN-US"><span style="font-family: Times New Roman;">10</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt; mso-list: l0 level1 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">3、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">英语（满分</span><span lang="EN-US"><span style="font-family: Times New Roman;">100</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，考试时间为</span><span lang="EN-US"><span style="font-family: Times New Roman;">180</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分钟）</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: -21pt; tab-stops: list 42.0pt; mso-list: l0 level2 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">a)</span><span style="font: 7pt &quot;Times New Roman&quot;;">         </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">词汇量要求：</span><span lang="EN-US"><span style="font-family: Times New Roman;">2009</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">考研英语大纲要求的词汇量为</span><span lang="EN-US"><span style="font-family: Times New Roman;">5500</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">词，但根据各方数据为了全面应对考试，考生应具备</span><span lang="EN-US"><span style="font-family: Times New Roman;">8000</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">左右的词汇量，达到大学英语专业四级的词汇水平。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: -21pt; tab-stops: list 42.0pt; mso-list: l0 level2 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">b)</span><span style="font: 7pt &quot;Times New Roman&quot;;">        </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">试卷题型结构：完型填空（</span><span lang="EN-US"><span style="font-family: Times New Roman;">20</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题</span><span lang="EN-US"><span style="font-family: Times New Roman;">*0.5</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分），阅读（</span><span lang="EN-US"><span style="font-family: Times New Roman;">A</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">阅读理解</span><span lang="EN-US"><span style="font-family: Times New Roman;">20</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题</span><span lang="EN-US"><span style="font-family: Times New Roman;">*2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，</span><span lang="EN-US"><span style="font-family: Times New Roman;">B</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">新题型</span><span lang="EN-US"><span style="font-family: Times New Roman;">5</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题</span><span lang="EN-US"><span style="font-family: Times New Roman;">*2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">翻译</span><span lang="EN-US"><span style="font-family: Times New Roman;">5</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题</span><span lang="EN-US"><span style="font-family: Times New Roman;">*2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分），作文（书信小作文</span><span lang="EN-US"><span style="font-family: Times New Roman;">10</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，图画大作文</span><span lang="EN-US"><span style="font-family: Times New Roman;">20</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分）。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt; text-indent: -18pt; tab-stops: list 18.0pt; mso-list: l0 level1 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">4、</span><span style="font: 7pt &quot;Times New Roman&quot;;">  </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">计算机学科专业基础综合考试（满分</span><span lang="EN-US"><span style="font-family: Times New Roman;">150</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，考试时间为</span><span lang="EN-US"><span style="font-family: Times New Roman;">180</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分钟）</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: -21pt; tab-stops: list 42.0pt; mso-list: l0 level2 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">a)</span><span style="font: 7pt &quot;Times New Roman&quot;;">         </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">试卷内结构：数据结构</span><span lang="EN-US"><span style="font-family: Times New Roman;">45</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，计算机组成原理</span><span lang="EN-US"><span style="font-family: Times New Roman;">45</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，操作系统</span><span lang="EN-US"><span style="font-family: Times New Roman;">35</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分，计算机网络</span><span lang="EN-US"><span style="font-family: Times New Roman;">25</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: -21pt; tab-stops: list 42.0pt; mso-list: l0 level2 lfo1;"><span style="mso-fareast-font-family: 'Times New Roman';" lang="EN-US"><span style="mso-list: Ignore;"><span style="font-family: Times New Roman;"><span style="font-size: small;">b)</span><span style="font: 7pt &quot;Times New Roman&quot;;">        </span></span></span></span><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">试卷题型结构：单项选择题</span><span lang="EN-US"><span style="font-family: Times New Roman;">80</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分（</span><span lang="EN-US"><span style="font-family: Times New Roman;">40</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题，每小题</span><span lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分），综合应用题</span><span lang="EN-US"><span style="font-family: Times New Roman;">70</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">分。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 18pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">参考书目及辅导班计划</span><span lang="EN-US"></span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">由于参考书目众多且辅导班较为庞杂，因此这里仅列出重点要求。另一些已列书目可能会包含在辅导班计划之内，例如政治任汝芬系列。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数学：</span><span lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数学复习全书（数学一，李永乐），</span><span lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">数学历年试题解析（数学一，李永乐），全真模拟</span><span lang="EN-US"><span style="font-family: Times New Roman;">400</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题（李永乐）。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">英语：历年考研英语真题解析及复习思路（新华出版社，张剑），</span><span lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">考研英语词汇星火式巧记速记精练（新华出版社，马德高）、</span><span lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">考研英语阅读理解精读</span><span lang="EN-US"><span style="font-family: Times New Roman;">200</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">篇（高等教育出版社，胡敏）。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">政治：任汝芬教授考研政治序列之一、序列之二、序列之三（西安交通大学出版社），启航考研政治</span><span lang="EN-US"><span style="font-family: Times New Roman;">20</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">天</span><span lang="EN-US"><span style="font-family: Times New Roman;">20</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">题（中国市场出版社，每年１月初出版）。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span>计算机学科专业基础综合：算法与数据结构考研试题精析（第二版）、计算机组成原理—学习指导与习题解答（唐朔飞），计算机网络知识要点与习题解析（哈尔滨工程大学出版社），操作系统学习指导和考试指导（浙江大学出版社，李善平）。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span>根据目前所掌握的信息并结合<span style="font-family: Times New Roman;">2009</span>年时间安排情况，辅导班重点关注考研政治（西安人信学校），数学（西安海文学校）、英语两科按照</span><span><span style="font-family: Times New Roman;">2009</span>年<span style="font-family: Times New Roman;">5</span>月<span style="font-family: Times New Roman;">31</span>日</span><span>之前的基础复习情况以及之后的初步评估最终决定。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: black; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span><strong><span style="font-size: small;">复习时间流程</span></strong></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: black; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span>由于<span style="font-family: Times New Roman;">7</span>月初开始需要进行为期四个半月的实习项目，因此时间安排上比较紧凑，同时仍要考虑到辅导班的日程安排，因此规划如下。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: black; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span><span style="font-family: Times New Roman;">2009</span>年<span style="font-family: Times New Roman;">1</span>月<span style="font-family: Times New Roman;">11</span>日</span><span style="color: black; font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">至</span><span><span style="font-family: Times New Roman;">2009</span>年<span style="font-family: Times New Roman;">5</span>月<span style="font-family: Times New Roman;">31</span>日</span><span>，重点完成对高等数学、线性代数、概率论与数理统计三门课的课本复习，同时进行英语<span style="font-family: Times New Roman;">8000</span>词汇的记忆工作，力争在时间内初步解决。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: black; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span><span style="font-family: Times New Roman;">2009</span>年<span style="font-family: Times New Roman;">6</span>月<span style="font-family: Times New Roman;">1</span>日</span><span style="color: black; font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">至</span><span><span style="font-family: Times New Roman;">2009</span>年<span style="font-family: Times New Roman;">8</span>月<span style="font-family: Times New Roman;">31</span>日</span><span>，开展暑期强化工作，除了继续基础阶段的强化外，要开始进行专业课的基础复习工作（在暑期实习期间完成）。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: black; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span><span style="font-family: Times New Roman;">2009</span>年<span style="font-family: Times New Roman;">9</span>月<span style="font-family: Times New Roman;">1</span>日</span><span style="color: black; font-family: 宋体; mso-bidi-font-size: 10.5pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">至</span><span><span style="font-family: Times New Roman;">2009</span>年<span style="font-family: Times New Roman;">11</span>月<span style="font-family: Times New Roman;">30</span>日</span><span>，继续强化基础课程，并开始进行专业课强化复习。开始政治课全面复习，期间考虑申报最终阶段辅导班。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: black; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span><span style="font-family: Times New Roman;">2009</span>年<span style="font-family: Times New Roman;">12</span>月<span style="font-family: Times New Roman;">1</span>日</span><span>至考试前夕，对整个复习流程进行总结，并根据复习期间积累的重点习题册和真题进行最后复查，政治课进行强化复习。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: black; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span><strong><span style="font-size: small;">考研复习期间学习项目计划</span></strong></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: black; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span>尽管复习任务艰巨，情况复杂，但不应忽视对本专业上层能力的扩展。<span style="font-family: Times New Roman;">2009</span>年<span style="font-family: Times New Roman;">6</span>月<span style="font-family: Times New Roman;">31</span>日前应重点学习<span style="font-family: Times New Roman;">ActionScript3.0</span>编程、计算机算法设计部分（<span style="font-family: Times New Roman;">C/C++</span>版），</span><span><span style="font-family: Times New Roman;">2009</span>年<span style="font-family: Times New Roman;">7</span>月<span style="font-family: Times New Roman;">1</span>日</span><span>起开始重点学习实习有关内容（预计为<span style="font-family: Times New Roman;">VC++</span>，<span style="font-family: Times New Roman;">MFC</span>）、设计模式、<span style="font-family: Times New Roman;">C#</span>（<span style="font-family: Times New Roman;">ASP.NET</span>）。以上内容应在<span style="font-family: Times New Roman;">2010</span>年２月底以前全部完成。</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: black; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span><strong><span style="font-size: small;">总结</span></strong></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="color: black; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为了不产生误导作用，本文自发布起将设置隐藏。根据以往统考惯例，</span><span lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年的研招考试预计将在</span><span lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">月</span><span lang="EN-US"><span style="font-family: Times New Roman;">9</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">日</span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">至</span><span lang="EN-US"><span style="font-family: Times New Roman;">10</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">日进行，本纲要的作者可在</span><span lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">月</span><span lang="EN-US"><span style="font-family: Times New Roman;">9</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">日</span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">以前对本纲要进行任何修改，但需保留原计划内容并标明修改时间，</span><span lang="EN-US"><span style="font-family: Times New Roman;">2010</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">年</span><span lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">月底（距制定时间一周年以后）本纲要的隐藏设置将解除。</span></span></p>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-21T16:41:51+08:00" pubdate data-updated="true">2009-02-21</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/kao-yan-slash-bo/'>考研/bo?</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/02/21/2010-kao-yan-fu-xi-gang-yao//posts/14/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

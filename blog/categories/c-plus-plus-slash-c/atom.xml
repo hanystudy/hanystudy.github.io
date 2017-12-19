@@ -4,7 +4,7 @@
   <title><![CDATA[Category: c++/c | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/c-plus-plus-slash-c/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2017-06-09T19:30:12+08:00</updated>
+  <updated>2017-12-20T02:49:24+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -523,13 +523,7 @@ int main(void){
 </table>
 
 
-<!--EndFragment-->
-
-
-<!--EndFragment-->
-
-
-<p>  3）枚举类型enum;</p>
+<p><!--EndFragment--><!--EndFragment-->  3）枚举类型enum;</p>
 
 <p>   枚举型是对整数区间的自定义类型，通常用于整数常量。例如：</p>
 

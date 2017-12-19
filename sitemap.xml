@@ -1,1037 +1,1044 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://www.hanyi.name/blog/2016/11/20/micro-situational-mixed-reality/</loc>
-    <lastmod>2016-11-20T13:37:28+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/11/03/metaprogramming-ruby-core-concepts-extensions/</loc>
-    <lastmod>2015-11-03T16:08:28+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii/</loc>
-    <lastmod>2015-09-16T09:20:27+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family/</loc>
-    <lastmod>2015-09-14T23:08:19+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/09/08/metaprogramming-ruby-core-concepts-open-classes-and-refinements/</loc>
-    <lastmod>2015-09-08T22:40:23+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/09/08/metaprogramming-ruby-core-concepts-scope-and-self/</loc>
-    <lastmod>2015-09-08T13:47:47+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-object-oriented-hierarchies/</loc>
-    <lastmod>2015-08-29T22:40:06+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel/</loc>
-    <lastmod>2015-08-29T21:57:31+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/08/26/metaprogramming-ruby-core-concepts-module/</loc>
-    <lastmod>2015-08-26T23:18:08+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/08/21/metaprogramming-ruby-core-concepts-object/</loc>
-    <lastmod>2015-08-21T11:24:33+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/08/03/metaprogramming-ruby-core-concepts/</loc>
-    <lastmod>2015-08-03T07:33:27+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/07/21/microservices-why-it-is-trap/</loc>
-    <lastmod>2015-07-21T17:32:35+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/07/19/microservices-scale-3/</loc>
-    <lastmod>2015-07-19T17:32:35+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/07/18/microservices-scale-2/</loc>
-    <lastmod>2015-07-18T17:34:06+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/07/11/microsevices-scale/</loc>
-    <lastmod>2015-07-11T08:21:19+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/06/28/ruby-webserver-last-10-years/</loc>
-    <lastmod>2015-06-28T16:39:54+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/06/10/microservices-security/</loc>
-    <lastmod>2015-06-10T08:02:55+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/06/04/microsevices-trap-monitoring/</loc>
-    <lastmod>2015-06-04T13:57:50+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/06/01/microservice-testing/</loc>
-    <lastmod>2015-06-01T08:53:39+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/05/19/microservices-trap-deployment/</loc>
-    <lastmod>2015-05-19T09:44:53+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/04/13/microservices-trap-splitting/</loc>
-    <lastmod>2015-04-13T08:44:04+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/03/23/guide-for-sessioncam/</loc>
-    <lastmod>2015-03-23T23:43:49+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/03/06/microservices-trap-practices/</loc>
-    <lastmod>2015-03-06T08:36:44+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2015/02/18/microservices-trap/</loc>
-    <lastmod>2015-02-18T20:33:00+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2012/10/13/xi-xun-re-lie-zhu-he-ben-zhan-zheng-shi-bei-OOXX/</loc>
-    <lastmod>2012-10-13T01:05:39+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2012/09/08/you-guan-qiu-yu-bi-ye-ruan-jian-ce-shi-tong-ku-gen-yuan-jin-gang-jing-he-wang-nian-de-yi-qie/</loc>
-    <lastmod>2012-09-08T01:43:30+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2012/07/24/wang-luo-li-de-yin-xing-hu-die/</loc>
-    <lastmod>2012-07-24T02:24:10+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2012/07/07/zheng-zhan-qian-yi-wan-cheng/</loc>
-    <lastmod>2012-07-07T21:20:38+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2012/06/28/shou-dao-kui-zheng-jiu-shi-jie/</loc>
-    <lastmod>2012-06-28T01:58:13+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2012/06/22/Kinect-de-san-wei-chong-jian-1/</loc>
-    <lastmod>2012-06-22T20:35:07+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2012/06/08/tangletacerbasic-editionb-1-0-TangleTracer-Basic-edition-B-1-0-beta-kai/</loc>
-    <lastmod>2012-06-08T22:32:17+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2012/03/25/wu-xun-chuan-de-xian-shi-yi-yi/</loc>
-    <lastmod>2012-03-25T02:33:30+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2012/02/02/can-shu-hua-she-ji-jian-mo-ji-qi-zai-yi-shu-chuang-zuo-ling-yu-de-ying-yong-qian-jing/</loc>
-    <lastmod>2012-02-02T20:58:30+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/12/10/xin-hai-cheng-de-yun-he-ta-de-hai-zi-men/</loc>
-    <lastmod>2011-12-10T18:34:06+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/11/13/you-guan-Beta-2-he-Kinect-for-Windows-shang-yong-qian-zhan/</loc>
-    <lastmod>2011-11-13T00:07:03+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/10/22/cong-SIGGRAPH-11-Rango/</loc>
-    <lastmod>2011-10-22T02:45:54+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/09/24/KINECT-lai-le-jie-xi-jie-xi-SDK/</loc>
-    <lastmod>2011-09-24T23:09:39+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/09/17/KINECT-lai-le-jie-xi-jie-xi-SDK/</loc>
-    <lastmod>2011-09-17T23:41:18+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/09/03/Kinect-lai-le-jie-xi-jie-xi-SDK/</loc>
-    <lastmod>2011-09-03T21:48:15+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/08/24/Kinect-lai-le-jie-xi-jie-xi-SDK/</loc>
-    <lastmod>2011-08-24T23:24:07+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/08/23/Kinect-lai-le-jie-xi-jie-xi-SDK/</loc>
-    <lastmod>2011-08-23T00:18:19+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/08/21/Kinect-lai-le-jie-xi-jie-xi-SDK/</loc>
-    <lastmod>2011-08-21T20:46:27+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/08/20/wan-xian-jian-de-dou-shi-ke-lian-de-ju-qing-kong/</loc>
-    <lastmod>2011-08-20T13:38:05+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/08/16/Kinect-lai-le-ying-jian-ying/</loc>
-    <lastmod>2011-08-16T12:51:46+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/08/11/ms-MS-Kinect-kai-fa-she-qu-de-zui-xin-jin-zhan/</loc>
-    <lastmod>2011-08-11T10:47:36+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/07/29/wo-de-xi-da-san-bao-3/</loc>
-    <lastmod>2011-07-29T22:51:16+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/07/27/wo-de-xi-da-san-bao-2/</loc>
-    <lastmod>2011-07-27T23:58:45+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/07/25/wo-de-xi-da-san-bao-1/</loc>
-    <lastmod>2011-07-25T00:15:39+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/07/02/dai-ma-ru-shi-yin-ci-qing-bu-yao-dai-ma-ru-Shi/</loc>
-    <lastmod>2011-07-02T16:46:29+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/06/25/gong-qi-jun-he-ta-de-zi-ran-fa-ze/</loc>
-    <lastmod>2011-06-25T17:44:13+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/05/28/GL-zhong-jiu-hai-shi-lai-le/</loc>
-    <lastmod>2011-05-28T10:18:36+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/05/21/CUDA-xue-xi-de-xian-zhuang-he-kun-rao/</loc>
-    <lastmod>2011-05-21T23:01:52+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/05/14/ken-nai-lai-le-Kinect-Kinect-for-Windows-qiang-xian-ti/</loc>
-    <lastmod>2011-05-14T20:46:15+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/04/26/zhen-lei-a/</loc>
-    <lastmod>2011-04-26T23:38:52+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/04/17/web-kai-fa-de-ruo-gan-an-quan-wen-ti-xiao-jie/</loc>
-    <lastmod>2011-04-17T00:59:26+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/04/09/ji-ri-qi-kai-shi-tong-bu-fen-fa-blog-shu-ju/</loc>
-    <lastmod>2011-04-09T22:50:17+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/04/09/tsp/</loc>
-    <lastmod>2011-04-09T15:21:00+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/03/26/mang-II/</loc>
-    <lastmod>2011-03-26T00:19:10+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/03/19/yang-tiao-cha-zhi-de-yi-ban-fang-fa-xia/</loc>
-    <lastmod>2011-03-19T16:32:56+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/03/13/jia-ru-gong-bei-gai-bian-cheng-RPG/</loc>
-    <lastmod>2011-03-13T11:37:24+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/03/05/yang-tiao-cha-zhi-de-yi-ban-fang-fa-shang/</loc>
-    <lastmod>2011-03-05T20:19:05+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/02/27/flowingdata-2010-de-10-10-zui-zui-jia-shu-ju-ke-shi-hua-gong/</loc>
-    <lastmod>2011-02-27T12:06:30+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/02/18/Qt-yu-xian-you-xi-tong-zi-fu-ji-de-jian-rong-wen-ti-yan-jiu/</loc>
-    <lastmod>2011-02-18T19:04:07+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/02/11/Qt-de-ming-yun/</loc>
-    <lastmod>2011-02-11T23:25:12+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/02/02/2010-nian-zhong-zong-jie-ji-hanyi-name-chong-jian-san-nian-ji-nian/</loc>
-    <lastmod>2011-02-02T19:11:11+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/01/26/cong-SIGGRAPH-kan-Tangled/</loc>
-    <lastmod>2011-01-26T00:50:27+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/01/24/xiang-qian-xian-jin-fa-WebGL-chu-shi/</loc>
-    <lastmod>2011-01-24T22:29:16+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2011/01/17/tian-qi-hai-shi-zi-jue/</loc>
-    <lastmod>2011-01-17T23:08:36+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/12/31/mang/</loc>
-    <lastmod>2010-12-31T20:30:32+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/11/28/xian-jian-qi-xia-chuan-wu-xiao-xi/</loc>
-    <lastmod>2010-11-28T00:15:45+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/11/20/Qt-chu-jie-mi-zhong-jie-zhong/</loc>
-    <lastmod>2010-11-20T17:52:27+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/11/20/guan-yu-Qt-de-yi-qie-xu/</loc>
-    <lastmod>2010-11-20T15:58:20+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/11/14/guan-yu-Qt-de-yi-qie/</loc>
-    <lastmod>2010-11-14T12:49:43+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/11/06/mo-shi-zhi-zheng/</loc>
-    <lastmod>2010-11-06T01:57:40+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/10/30/Qt-lai-le/</loc>
-    <lastmod>2010-10-30T02:40:54+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/10/24/dun-ge-ji-xia/</loc>
-    <lastmod>2010-10-24T01:47:12+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/10/15/dun-ge-ji-shang/</loc>
-    <lastmod>2010-10-15T22:20:27+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/10/06/you-jian-yin-mu-he-xie/</loc>
-    <lastmod>2010-10-06T00:45:05+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/10/03/yi-zhong-shu-zi-tu-xiang-wu-sun-ya-suo-suan-fa-ji-yu-ji-yu-dong-tai-gui-hua/</loc>
-    <lastmod>2010-10-03T15:24:19+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/09/04/yuan-fen-you-jin-le/</loc>
-    <lastmod>2010-09-04T00:37:26+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/08/12/zhan-dian-wei-hu/</loc>
-    <lastmod>2010-08-12T14:12:39+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/08/08/gu-jian-1-tong-guan/</loc>
-    <lastmod>2010-08-08T01:50:47+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/08/03/gu-jian-wu-qing-sui-shu-qi-tan/</loc>
-    <lastmod>2010-08-03T01:15:15+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/07/28/kang-bu-zhu-le/</loc>
-    <lastmod>2010-07-28T22:14:13+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/07/17/yan-lian-xiang-xue-II/</loc>
-    <lastmod>2010-07-17T20:49:57+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/07/10/wai-xian-jin-yu-de-xin-hong-lou-meng/</loc>
-    <lastmod>2010-07-10T23:18:37+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/07/02/yao-fan-xiao-le/</loc>
-    <lastmod>2010-07-02T19:46:26+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/06/30/si-nian-le/</loc>
-    <lastmod>2010-06-30T23:55:21+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/05/29/da-bian-jie-shu/</loc>
-    <lastmod>2010-05-29T13:56:43+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/05/01/DLC-fu-fei-ye-feng-kuang/</loc>
-    <lastmod>2010-05-01T03:19:58+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/04/30/geng-duo-guan-yu-flash-de-yi-xie-si-kao/</loc>
-    <lastmod>2010-04-30T11:49:08+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/04/19/guan-yu-GrassrootDCM-bu-wan/</loc>
-    <lastmod>2010-04-19T20:52:16+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/04/18/yi-xue-ying-xiang-de-ji-ben-wen-jian-cun-chu-ge-shi-yu-vtk-ji-cheng-fang-fa/</loc>
-    <lastmod>2010-04-18T17:32:52+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/04/18/jie-xi-xuan-ran-xi-tong/</loc>
-    <lastmod>2010-04-18T10:00:48+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/04/10/ci-ri-yi-ran-bei-ju/</loc>
-    <lastmod>2010-04-10T18:15:15+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/04/09/shou-ri-bei-ju/</loc>
-    <lastmod>2010-04-09T11:43:11+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/04/07/zui-hou-yi-zhou/</loc>
-    <lastmod>2010-04-07T20:19:24+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/04/04/wordpress-3-0beta1-WordPress-3-0beta1/</loc>
-    <lastmod>2010-04-04T17:46:27+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/03/07/an-zhuang-yu-pei-zhi/</loc>
-    <lastmod>2010-03-07T01:10:46+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/03/05/ji-yu-ITK-VTK-ji-ji-suan-ji-yi-xue-tu-xiang-chu-li-ji-shu-yan-jiu-xi-lie-wen/</loc>
-    <lastmod>2010-03-05T10:03:40+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/02/22/shi-wu-qian-li-shi-wu-qian-li-ya/</loc>
-    <lastmod>2010-02-22T20:33:56+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/02/22/a-break/</loc>
-    <lastmod>2010-02-22T00:10:49+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/02/10/gou-jian-reng-zai-ji-xu/</loc>
-    <lastmod>2010-02-10T17:14:29+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/02/08/bang-zhu-wen-dang/</loc>
-    <lastmod>2010-02-08T20:09:03+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/02/01/xuan-yuan-jian-wai-zhuan-yun-zhi-yao-tong-guan-ping-ce/</loc>
-    <lastmod>2010-02-01T01:53:40+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/01/26/blog-cheng-xu-zeng-qiang/</loc>
-    <lastmod>2010-01-26T16:52:57+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2010/01/18/2010-chong-gou-ji-hua/</loc>
-    <lastmod>2010-01-18T13:02:37+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/12/13/yun-zhi-yao-shang-shi-10/</loc>
-    <lastmod>2009-12-13T22:12:35+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/11/09/Moon-zhi-mian-zhi-mian/</loc>
-    <lastmod>2009-11-09T00:48:14+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/10/01/shi-zhou-nian-yun-zhi-yao/</loc>
-    <lastmod>2009-10-01T23:44:39+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/10/01/zuo-liu-tian-hui-min/</loc>
-    <lastmod>2009-10-01T23:21:16+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/08/26/da-qie/</loc>
-    <lastmod>2009-08-26T00:56:44+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/08/20/xiao-xiang-shi-ri/</loc>
-    <lastmod>2009-08-20T22:54:37+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/07/08/introducing-the-google-chrome-os/</loc>
-    <lastmod>2009-07-08T20:44:23+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/07/07/bei/</loc>
-    <lastmod>2009-07-07T20:28:02+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/07/02/wen-xin-ti-shi/</loc>
-    <lastmod>2009-07-02T23:21:20+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/07/02/cong-ji-xian-bian-cheng-shuo-qi/</loc>
-    <lastmod>2009-07-02T23:04:34+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/06/26/shi-wu-zai-qi-xia-chuan-xian-jian-bu-mie/</loc>
-    <lastmod>2009-06-26T23:16:37+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/06/15/MP77-de-UNIX-ke-jian-bi-ji-12/</loc>
-    <lastmod>2009-06-15T20:44:03+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/06/13/MP77-de-UNIX-ke-jian-bi-ji-11/</loc>
-    <lastmod>2009-06-13T23:24:07+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/06/09/MP77-de-UNIX-ke-jian-bi-ji-10/</loc>
-    <lastmod>2009-06-09T10:21:41+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/06/07/MP77-de-UNIX-ke-jian-bi-ji-9/</loc>
-    <lastmod>2009-06-07T09:49:39+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/06/03/MP77-de-UNIX-ke-jian-bi-ji-8/</loc>
-    <lastmod>2009-06-03T17:11:21+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/06/01/MP77-de-UNIX-ke-jian-bi-ji-7/</loc>
-    <lastmod>2009-06-01T00:02:27+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/05/28/mp77-de-UNIX-ke-jian-bi-ji-6/</loc>
-    <lastmod>2009-05-28T21:53:31+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/05/27/mp77-de-UNIX-ke-jian-bi-ji-5/</loc>
-    <lastmod>2009-05-27T22:27:50+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/05/23/mp77-de-UNIX-ke-jian-bi-ji-4/</loc>
-    <lastmod>2009-05-23T22:26:31+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/05/23/nan-jing-nan-jing-hui-cheng-wei-chuan-shi-jing-dian/</loc>
-    <lastmod>2009-05-23T02:58:24+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/05/21/mp77-de-UNIX-ke-jian-bi-ji-4/</loc>
-    <lastmod>2009-05-21T12:39:49+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/05/19/mp77-de-UNIX-ke-jian-bi-ji-3/</loc>
-    <lastmod>2009-05-19T14:24:42+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/05/15/mp77-de-UNIX-ke-jian-bi-ji-2/</loc>
-    <lastmod>2009-05-15T20:56:32+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/05/15/mp77-de-UNIX-ke-jian-bi-ji-1/</loc>
-    <lastmod>2009-05-15T17:13:02+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-xia/</loc>
-    <lastmod>2009-05-01T20:21:18+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-shang/</loc>
-    <lastmod>2009-05-01T19:25:02+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/04/30/si-yue-de-zui-hou-yi-tie/</loc>
-    <lastmod>2009-04-30T23:49:38+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/04/03/programming-competition/</loc>
-    <lastmod>2009-04-03T17:24:35+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/03/07/lian-zai-zan-ting/</loc>
-    <lastmod>2009-03-07T00:09:34+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/22/AS3-0-xue-xi-bi-ji/</loc>
-    <lastmod>2009-02-22T20:01:59+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/21/jia-qi-lian-zai-zhi-shi-wu/</loc>
-    <lastmod>2009-02-21T22:23:25+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/21/2010-kao-yan-fu-xi-gang-yao/</loc>
-    <lastmod>2009-02-21T16:41:51+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/16/AS3-0-xue-xi-bi-ji/</loc>
-    <lastmod>2009-02-16T21:21:08+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/13/bai-pian-zong-jie/</loc>
-    <lastmod>2009-02-13T22:41:22+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/13/jia-qi-lian-zai-zhi-shi-si/</loc>
-    <lastmod>2009-02-13T22:24:05+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/13/jia-qi-lian-zai-zhi-shi-san/</loc>
-    <lastmod>2009-02-13T16:49:46+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/12/jia-qi-lian-zai-zhi-shi-er-100/</loc>
-    <lastmod>2009-02-12T21:19:53+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/12/jia-qi-lian-zai-zhi-shi-yi/</loc>
-    <lastmod>2009-02-12T17:13:00+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/12/jia-qi-lian-zai-zhi-shi/</loc>
-    <lastmod>2009-02-12T14:06:35+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/11/jia-qi-lian-zai-zhi-jiu/</loc>
-    <lastmod>2009-02-11T20:26:19+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/10/jia-qi-lian-zai-zhi-ba/</loc>
-    <lastmod>2009-02-10T16:47:33+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/09/jia-qi-lian-zai-zhi-qi/</loc>
-    <lastmod>2009-02-09T17:15:54+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/07/yong-bu-yan-qi-Slumdog-Slumdog/</loc>
-    <lastmod>2009-02-07T00:09:45+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/05/jia-qi-lian-zai-zhi-liu/</loc>
-    <lastmod>2009-02-05T18:05:10+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/04/jia-qi-lian-zai-zhi-wu/</loc>
-    <lastmod>2009-02-04T23:30:57+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/02/03/jia-qi-lian-zai-zhi-si/</loc>
-    <lastmod>2009-02-03T16:39:55+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/01/26/jia-qi-lian-zai-zhi-san/</loc>
-    <lastmod>2009-01-26T19:31:32+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/01/26/ji-chou-ji-yu/</loc>
-    <lastmod>2009-01-26T00:44:14+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/01/25/jia-qi-lian-zai-zhi-er/</loc>
-    <lastmod>2009-01-25T17:18:25+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/01/21/jia-qi-lian-zai-zhi-yi/</loc>
-    <lastmod>2009-01-21T16:34:52+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/01/21/ping-min-de-sheng-li/</loc>
-    <lastmod>2009-01-21T02:48:50+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/01/16/acm-ACM-ICPC-lian-lian-zai-nei-rong-jian/</loc>
-    <lastmod>2009-01-16T15:56:28+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/01/15/jia-qi-xi-lie-nei-rong-yu-gao/</loc>
-    <lastmod>2009-01-15T13:50:32+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/01/10/qi-mo-zhou-qi-jie-shu/</loc>
-    <lastmod>2009-01-10T21:05:59+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2009/01/01/NURBS-jian-jie/</loc>
-    <lastmod>2009-01-01T20:59:29+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/12/21/jin-ru-qi-mo-zhou-qi/</loc>
-    <lastmod>2008-12-21T00:54:32+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/11/28/SCCS-chong-gou-ban-fa-bu-cheng-yao-bug-ce-shi-kai-fa-jian-yi/</loc>
-    <lastmod>2008-11-28T20:57:15+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/11/22/SCCS-di-yi-jie-duan-chong-gou-wan-cheng-tui-chi-fa-bu-beta/</loc>
-    <lastmod>2008-11-22T20:47:34+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/11/14/hui-jia-guang-guang/</loc>
-    <lastmod>2008-11-14T19:09:09+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/11/10/can-a-can/</loc>
-    <lastmod>2008-11-10T20:34:01+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/11/01/kai-fa-zhong-de-SCCS/</loc>
-    <lastmod>2008-11-01T11:09:30+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/25/SCCS-chong-gou-qi-dong/</loc>
-    <lastmod>2008-10-25T20:46:50+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/23/Windows-xia-de-j2se-shi-zhong-shi-li/</loc>
-    <lastmod>2008-10-23T21:04:54+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/19/hanyi-name-you-ju-shi/</loc>
-    <lastmod>2008-10-19T19:06:32+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-wu/</loc>
-    <lastmod>2008-10-18T16:59:48+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-si/</loc>
-    <lastmod>2008-10-18T16:31:47+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-san/</loc>
-    <lastmod>2008-10-18T16:29:57+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-er/</loc>
-    <lastmod>2008-10-18T16:24:55+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-yi/</loc>
-    <lastmod>2008-10-18T16:19:29+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/17/ru-he-cheng-wei-ji-shu-ling-xiu/</loc>
-    <lastmod>2008-10-17T22:03:46+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/09/jue-ding-kao-yan/</loc>
-    <lastmod>2008-10-09T17:22:14+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/10/03/ji-yu-J2se-de-cheng-xu-she-ji/</loc>
-    <lastmod>2008-10-03T00:53:43+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/09/14/xiu-zheng-ji-ben-jie-shu-jie-ri-ji-hua-ge-qian/</loc>
-    <lastmod>2008-09-14T17:15:03+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/09/13/shou-ye-geng-xin-gong-zuo-chu-bu-wan-cheng/</loc>
-    <lastmod>2008-09-13T11:51:25+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/08/29/C-C-shi-xi-bao-gao-yu-Win32-ji-yu-Win32-console-app-ding-min-hang-ding/</loc>
-    <lastmod>2008-08-29T22:06:44+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/08/26/xin-de-wang-zhan-jie-gou-he-feng-ge/</loc>
-    <lastmod>2008-08-26T22:55:45+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/08/24/C-C-shi-xi-she-ji-wen-dang-yu-Win32-ji-yu-Win32-console-app-ding-min-hang-ding/</loc>
-    <lastmod>2008-08-24T22:03:20+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/08/16/Mp77-de-Internet-dai-ma-shou-ji-xi-tong-ce-shi-gong-gao/</loc>
-    <lastmod>2008-08-16T08:55:26+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/07/25/Mp77-de-Internet-dai-ma-shou-ji-xi-tong-xiang-mu-ji-hua-shu-shang/</loc>
-    <lastmod>2008-07-25T11:37:42+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/07/21/yan-lian-xiang-xue/</loc>
-    <lastmod>2008-07-21T13:30:03+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/06/05/shen-du-jie-mi-xuan-zhuan-xuan-zhuan-n%CC%88u/</loc>
-    <lastmod>2008-06-05T14:33:15+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/06/03/PowerBuilder-cong-tan/</loc>
-    <lastmod>2008-06-03T13:11:07+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/05/29/huan-zhen-ji/</loc>
-    <lastmod>2008-05-29T21:10:43+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/05/28/ban-quan-sheng-ming/</loc>
-    <lastmod>2008-05-28T17:34:31+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/05/20/di-ba-tian-ping-lun/</loc>
-    <lastmod>2008-05-20T22:44:33+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/05/16/tan-tan-tu-ling-jiang/</loc>
-    <lastmod>2008-05-16T19:21:41+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/05/13/its-in-the-rain/</loc>
-    <lastmod>2008-05-13T20:44:45+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/05/06/facebook-de-qian-shi-jin-sheng/</loc>
-    <lastmod>2008-05-06T11:04:07+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/05/03/qing-hai-fen-fen-qing-xiang/</loc>
-    <lastmod>2008-05-03T15:39:24+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/28/da-lao-gui/</loc>
-    <lastmod>2008-04-28T21:40:46+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/25/xie-zai-ao-yun-zhi-qian/</loc>
-    <lastmod>2008-04-25T17:21:13+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/23/dong-jing-di-shi-qi-ge-ming-ri/</loc>
-    <lastmod>2008-04-23T22:57:11+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/20/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-liu/</loc>
-    <lastmod>2008-04-20T22:56:01+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/19/zhao-dao-le-zhao-dao-le/</loc>
-    <lastmod>2008-04-19T23:36:09+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/18/shou-ye-jian-she-ji-hua/</loc>
-    <lastmod>2008-04-18T21:15:58+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/18/yue-zhong-zong-jie-di-1-qi/</loc>
-    <lastmod>2008-04-18T20:36:43+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/18/xiao-yi-hui-bian/</loc>
-    <lastmod>2008-04-18T19:40:03+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/11/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-wu/</loc>
-    <lastmod>2008-04-11T11:44:32+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/08/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-si/</loc>
-    <lastmod>2008-04-08T10:49:37+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/06/shou-ye-zheng-zai-geng-xin-flash-yuan-ma/</loc>
-    <lastmod>2008-04-06T01:20:53+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-ba-wan-jie-wan-jie-bao-hua-jie-yi/</loc>
-    <lastmod>2008-04-05T15:23:32+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-qi/</loc>
-    <lastmod>2008-04-05T15:21:07+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-liu/</loc>
-    <lastmod>2008-04-05T15:19:07+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-wu/</loc>
-    <lastmod>2008-04-05T15:14:54+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-si/</loc>
-    <lastmod>2008-04-05T15:10:42+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-san/</loc>
-    <lastmod>2008-04-05T15:01:46+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-er/</loc>
-    <lastmod>2008-04-05T14:49:07+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-yi/</loc>
-    <lastmod>2008-04-05T14:44:45+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/03/31/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-san/</loc>
-    <lastmod>2008-03-31T11:05:59+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/03/30/jian-dan-de-winapi-shi-xian/</loc>
-    <lastmod>2008-03-30T13:13:16+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/03/30/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-er/</loc>
-    <lastmod>2008-03-30T12:53:46+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/03/29/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-yi/</loc>
-    <lastmod>2008-03-29T20:11:06+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/03/29/C-chong-wen-ji-hua/</loc>
-    <lastmod>2008-03-29T19:30:53+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/03/28/yuan-zheng-jie-shu/</loc>
-    <lastmod>2008-03-28T13:46:46+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/29/zan-li-le-ji-tian/</loc>
-    <lastmod>2008-02-29T19:07:05+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/20/lolicon-dui-zhong-guo-she-hui-de-xian-shi-yi-yi-ji-qi-wei-lai-zhan-wang/</loc>
-    <lastmod>2008-02-20T16:46:50+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/18/yi-ze-xin-wen-de-ping-lun/</loc>
-    <lastmod>2008-02-18T02:38:38+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/16/seven-little-girls-sitting-in-the-back-seat/</loc>
-    <lastmod>2008-02-16T13:12:53+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/14/kai-zhang/</loc>
-    <lastmod>2008-02-14T17:26:29+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/13/yi-ze-xin-wen-de-ping-lun/</loc>
-    <lastmod>2008-02-13T22:56:01+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/13/wu/</loc>
-    <lastmod>2008-02-13T19:21:33+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/11/blog-hui-fu/</loc>
-    <lastmod>2008-02-11T22:40:25+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/07/hanyi-name-chu-chu-yu-zhen-dang/</loc>
-    <lastmod>2008-02-07T20:13:42+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/06/xin-chun-jiang-zhi-chu-xi-ye-fu-shi-yi-shou-jin-gong-xiao-yu/</loc>
-    <lastmod>2008-02-06T22:21:16+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/06/xuan-yuan-jian-5-wai-zhuan-han-zhi-yun-ping-xi/</loc>
-    <lastmod>2008-02-06T20:43:50+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/06/zhu-ti-bei-jing-que-ding/</loc>
-    <lastmod>2008-02-06T19:17:56+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/05/hello-world/</loc>
-    <lastmod>2008-02-05T23:50:30+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/2008/02/05/about/</loc>
-    <lastmod>2008-02-05T23:50:30+08:00</lastmod>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/archives/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/archives/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/about/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/portfolio/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/tian-xuan-zhi-zuo/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/zhan-dian-ri-zhi/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/pcyou-xi/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/guan-dian/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/c-plus-plus-slash-c/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/xiang-mu/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/zhuan-zai/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/assembly/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/kao-yan-slash-bo/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/java/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/shu-ju-jie-gou/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/bian-cheng-yu-yan/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/actionscript/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/bian-yi-ji-zhu/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/unix-slash-linux/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/ke-shi-hua/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/suan-fa-tao-lun/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/qt/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/web/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/kinect/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/gpu-slash-gpgpu/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/ruan-jian-jia-gou/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/ruby/</loc>
-  </url>
-  <url>
-    <loc>http://www.hanyi.name/blog/categories/mr/</loc>
-  </url>
+<url>
+<loc>http://www.hanyi.name/blog/2017/12/17/owl-exploratory-testing/</loc>
+<lastmod>2017-12-17T16:12:58+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2016/11/20/micro-situational-mixed-reality/</loc>
+<lastmod>2016-11-20T13:37:28+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/11/03/metaprogramming-ruby-core-concepts-extensions/</loc>
+<lastmod>2015-11-03T16:08:28+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii/</loc>
+<lastmod>2015-09-16T09:20:27+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family/</loc>
+<lastmod>2015-09-14T23:08:19+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/09/08/metaprogramming-ruby-core-concepts-open-classes-and-refinements/</loc>
+<lastmod>2015-09-08T22:40:23+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/09/08/metaprogramming-ruby-core-concepts-scope-and-self/</loc>
+<lastmod>2015-09-08T13:47:47+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-object-oriented-hierarchies/</loc>
+<lastmod>2015-08-29T22:40:06+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel/</loc>
+<lastmod>2015-08-29T21:57:31+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/08/26/metaprogramming-ruby-core-concepts-module/</loc>
+<lastmod>2015-08-26T23:18:08+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/08/21/metaprogramming-ruby-core-concepts-object/</loc>
+<lastmod>2015-08-21T11:24:33+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/08/03/metaprogramming-ruby-core-concepts/</loc>
+<lastmod>2015-08-03T07:33:27+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/07/21/microservices-why-it-is-trap/</loc>
+<lastmod>2015-07-21T17:32:35+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/07/19/microservices-scale-3/</loc>
+<lastmod>2015-07-19T17:32:35+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/07/18/microservices-scale-2/</loc>
+<lastmod>2015-07-18T17:34:06+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/07/11/microsevices-scale/</loc>
+<lastmod>2015-07-11T08:21:19+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/06/28/ruby-webserver-last-10-years/</loc>
+<lastmod>2015-06-28T16:39:54+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/06/10/microservices-security/</loc>
+<lastmod>2015-06-10T08:02:55+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/06/04/microsevices-trap-monitoring/</loc>
+<lastmod>2015-06-04T13:57:50+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/06/01/microservice-testing/</loc>
+<lastmod>2015-06-01T08:53:39+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/05/19/microservices-trap-deployment/</loc>
+<lastmod>2015-05-19T09:44:53+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/04/13/microservices-trap-splitting/</loc>
+<lastmod>2015-04-13T08:44:04+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/03/23/guide-for-sessioncam/</loc>
+<lastmod>2015-03-23T23:43:49+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/03/06/microservices-trap-practices/</loc>
+<lastmod>2015-03-06T08:36:44+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2015/02/18/microservices-trap/</loc>
+<lastmod>2015-02-18T20:33:00+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2012/10/13/xi-xun-re-lie-zhu-he-ben-zhan-zheng-shi-bei-OOXX/</loc>
+<lastmod>2012-10-13T01:05:39+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2012/09/08/you-guan-qiu-yu-bi-ye-ruan-jian-ce-shi-tong-ku-gen-yuan-jin-gang-jing-he-wang-nian-de-yi-qie/</loc>
+<lastmod>2012-09-08T01:43:30+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2012/07/24/wang-luo-li-de-yin-xing-hu-die/</loc>
+<lastmod>2012-07-24T02:24:10+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2012/07/07/zheng-zhan-qian-yi-wan-cheng/</loc>
+<lastmod>2012-07-07T21:20:38+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2012/06/28/shou-dao-kui-zheng-jiu-shi-jie/</loc>
+<lastmod>2012-06-28T01:58:13+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2012/06/22/Kinect-de-san-wei-chong-jian-1/</loc>
+<lastmod>2012-06-22T20:35:07+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2012/06/08/tangletacerbasic-editionb-1-0-TangleTracer-Basic-edition-B-1-0-beta-kai/</loc>
+<lastmod>2012-06-08T22:32:17+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2012/03/25/wu-xun-chuan-de-xian-shi-yi-yi/</loc>
+<lastmod>2012-03-25T02:33:30+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2012/02/02/can-shu-hua-she-ji-jian-mo-ji-qi-zai-yi-shu-chuang-zuo-ling-yu-de-ying-yong-qian-jing/</loc>
+<lastmod>2012-02-02T20:58:30+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/12/10/xin-hai-cheng-de-yun-he-ta-de-hai-zi-men/</loc>
+<lastmod>2011-12-10T18:34:06+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/11/13/you-guan-Beta-2-he-Kinect-for-Windows-shang-yong-qian-zhan/</loc>
+<lastmod>2011-11-13T00:07:03+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/10/22/cong-SIGGRAPH-11-Rango/</loc>
+<lastmod>2011-10-22T02:45:54+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/09/24/KINECT-lai-le-jie-xi-jie-xi-SDK/</loc>
+<lastmod>2011-09-24T23:09:39+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/09/17/KINECT-lai-le-jie-xi-jie-xi-SDK/</loc>
+<lastmod>2011-09-17T23:41:18+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/09/03/Kinect-lai-le-jie-xi-jie-xi-SDK/</loc>
+<lastmod>2011-09-03T21:48:15+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/08/24/Kinect-lai-le-jie-xi-jie-xi-SDK/</loc>
+<lastmod>2011-08-24T23:24:07+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/08/23/Kinect-lai-le-jie-xi-jie-xi-SDK/</loc>
+<lastmod>2011-08-23T00:18:19+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/08/21/Kinect-lai-le-jie-xi-jie-xi-SDK/</loc>
+<lastmod>2011-08-21T20:46:27+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/08/20/wan-xian-jian-de-dou-shi-ke-lian-de-ju-qing-kong/</loc>
+<lastmod>2011-08-20T13:38:05+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/08/16/Kinect-lai-le-ying-jian-ying/</loc>
+<lastmod>2011-08-16T12:51:46+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/08/11/ms-MS-Kinect-kai-fa-she-qu-de-zui-xin-jin-zhan/</loc>
+<lastmod>2011-08-11T10:47:36+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/07/29/wo-de-xi-da-san-bao-3/</loc>
+<lastmod>2011-07-29T22:51:16+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/07/27/wo-de-xi-da-san-bao-2/</loc>
+<lastmod>2011-07-27T23:58:45+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/07/25/wo-de-xi-da-san-bao-1/</loc>
+<lastmod>2011-07-25T00:15:39+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/07/02/dai-ma-ru-shi-yin-ci-qing-bu-yao-dai-ma-ru-Shi/</loc>
+<lastmod>2011-07-02T16:46:29+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/06/25/gong-qi-jun-he-ta-de-zi-ran-fa-ze/</loc>
+<lastmod>2011-06-25T17:44:13+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/05/28/GL-zhong-jiu-hai-shi-lai-le/</loc>
+<lastmod>2011-05-28T10:18:36+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/05/21/CUDA-xue-xi-de-xian-zhuang-he-kun-rao/</loc>
+<lastmod>2011-05-21T23:01:52+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/05/14/ken-nai-lai-le-Kinect-Kinect-for-Windows-qiang-xian-ti/</loc>
+<lastmod>2011-05-14T20:46:15+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/04/26/zhen-lei-a/</loc>
+<lastmod>2011-04-26T23:38:52+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/04/17/web-kai-fa-de-ruo-gan-an-quan-wen-ti-xiao-jie/</loc>
+<lastmod>2011-04-17T00:59:26+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/04/09/ji-ri-qi-kai-shi-tong-bu-fen-fa-blog-shu-ju/</loc>
+<lastmod>2011-04-09T22:50:17+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/04/09/tsp/</loc>
+<lastmod>2011-04-09T15:21:00+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/03/26/mang-II/</loc>
+<lastmod>2011-03-26T00:19:10+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/03/19/yang-tiao-cha-zhi-de-yi-ban-fang-fa-xia/</loc>
+<lastmod>2011-03-19T16:32:56+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/03/13/jia-ru-gong-bei-gai-bian-cheng-RPG/</loc>
+<lastmod>2011-03-13T11:37:24+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/03/05/yang-tiao-cha-zhi-de-yi-ban-fang-fa-shang/</loc>
+<lastmod>2011-03-05T20:19:05+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/02/27/flowingdata-2010-de-10-10-zui-zui-jia-shu-ju-ke-shi-hua-gong/</loc>
+<lastmod>2011-02-27T12:06:30+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/02/18/Qt-yu-xian-you-xi-tong-zi-fu-ji-de-jian-rong-wen-ti-yan-jiu/</loc>
+<lastmod>2011-02-18T19:04:07+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/02/11/Qt-de-ming-yun/</loc>
+<lastmod>2011-02-11T23:25:12+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/02/02/2010-nian-zhong-zong-jie-ji-hanyi-name-chong-jian-san-nian-ji-nian/</loc>
+<lastmod>2011-02-02T19:11:11+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/01/26/cong-SIGGRAPH-kan-Tangled/</loc>
+<lastmod>2011-01-26T00:50:27+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/01/24/xiang-qian-xian-jin-fa-WebGL-chu-shi/</loc>
+<lastmod>2011-01-24T22:29:16+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2011/01/17/tian-qi-hai-shi-zi-jue/</loc>
+<lastmod>2011-01-17T23:08:36+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/12/31/mang/</loc>
+<lastmod>2010-12-31T20:30:32+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/11/28/xian-jian-qi-xia-chuan-wu-xiao-xi/</loc>
+<lastmod>2010-11-28T00:15:45+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/11/20/Qt-chu-jie-mi-zhong-jie-zhong/</loc>
+<lastmod>2010-11-20T17:52:27+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/11/20/guan-yu-Qt-de-yi-qie-xu/</loc>
+<lastmod>2010-11-20T15:58:20+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/11/14/guan-yu-Qt-de-yi-qie/</loc>
+<lastmod>2010-11-14T12:49:43+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/11/06/mo-shi-zhi-zheng/</loc>
+<lastmod>2010-11-06T01:57:40+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/10/30/Qt-lai-le/</loc>
+<lastmod>2010-10-30T02:40:54+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/10/24/dun-ge-ji-xia/</loc>
+<lastmod>2010-10-24T01:47:12+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/10/15/dun-ge-ji-shang/</loc>
+<lastmod>2010-10-15T22:20:27+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/10/06/you-jian-yin-mu-he-xie/</loc>
+<lastmod>2010-10-06T00:45:05+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/10/03/yi-zhong-shu-zi-tu-xiang-wu-sun-ya-suo-suan-fa-ji-yu-ji-yu-dong-tai-gui-hua/</loc>
+<lastmod>2010-10-03T15:24:19+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/09/04/yuan-fen-you-jin-le/</loc>
+<lastmod>2010-09-04T00:37:26+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/08/12/zhan-dian-wei-hu/</loc>
+<lastmod>2010-08-12T14:12:39+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/08/08/gu-jian-1-tong-guan/</loc>
+<lastmod>2010-08-08T01:50:47+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/08/03/gu-jian-wu-qing-sui-shu-qi-tan/</loc>
+<lastmod>2010-08-03T01:15:15+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/07/28/kang-bu-zhu-le/</loc>
+<lastmod>2010-07-28T22:14:13+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/07/17/yan-lian-xiang-xue-II/</loc>
+<lastmod>2010-07-17T20:49:57+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/07/10/wai-xian-jin-yu-de-xin-hong-lou-meng/</loc>
+<lastmod>2010-07-10T23:18:37+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/07/02/yao-fan-xiao-le/</loc>
+<lastmod>2010-07-02T19:46:26+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/06/30/si-nian-le/</loc>
+<lastmod>2010-06-30T23:55:21+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/05/29/da-bian-jie-shu/</loc>
+<lastmod>2010-05-29T13:56:43+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/05/01/DLC-fu-fei-ye-feng-kuang/</loc>
+<lastmod>2010-05-01T03:19:58+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/04/30/geng-duo-guan-yu-flash-de-yi-xie-si-kao/</loc>
+<lastmod>2010-04-30T11:49:08+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/04/19/guan-yu-GrassrootDCM-bu-wan/</loc>
+<lastmod>2010-04-19T20:52:16+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/04/18/yi-xue-ying-xiang-de-ji-ben-wen-jian-cun-chu-ge-shi-yu-vtk-ji-cheng-fang-fa/</loc>
+<lastmod>2010-04-18T17:32:52+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/04/18/jie-xi-xuan-ran-xi-tong/</loc>
+<lastmod>2010-04-18T10:00:48+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/04/10/ci-ri-yi-ran-bei-ju/</loc>
+<lastmod>2010-04-10T18:15:15+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/04/09/shou-ri-bei-ju/</loc>
+<lastmod>2010-04-09T11:43:11+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/04/07/zui-hou-yi-zhou/</loc>
+<lastmod>2010-04-07T20:19:24+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/04/04/wordpress-3-0beta1-WordPress-3-0beta1/</loc>
+<lastmod>2010-04-04T17:46:27+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/03/07/an-zhuang-yu-pei-zhi/</loc>
+<lastmod>2010-03-07T01:10:46+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/03/05/ji-yu-ITK-VTK-ji-ji-suan-ji-yi-xue-tu-xiang-chu-li-ji-shu-yan-jiu-xi-lie-wen/</loc>
+<lastmod>2010-03-05T10:03:40+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/02/22/shi-wu-qian-li-shi-wu-qian-li-ya/</loc>
+<lastmod>2010-02-22T20:33:56+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/02/22/a-break/</loc>
+<lastmod>2010-02-22T00:10:49+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/02/10/gou-jian-reng-zai-ji-xu/</loc>
+<lastmod>2010-02-10T17:14:29+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/02/08/bang-zhu-wen-dang/</loc>
+<lastmod>2010-02-08T20:09:03+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/02/01/xuan-yuan-jian-wai-zhuan-yun-zhi-yao-tong-guan-ping-ce/</loc>
+<lastmod>2010-02-01T01:53:40+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/01/26/blog-cheng-xu-zeng-qiang/</loc>
+<lastmod>2010-01-26T16:52:57+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2010/01/18/2010-chong-gou-ji-hua/</loc>
+<lastmod>2010-01-18T13:02:37+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/12/13/yun-zhi-yao-shang-shi-10/</loc>
+<lastmod>2009-12-13T22:12:35+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/11/09/Moon-zhi-mian-zhi-mian/</loc>
+<lastmod>2009-11-09T00:48:14+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/10/01/shi-zhou-nian-yun-zhi-yao/</loc>
+<lastmod>2009-10-01T23:44:39+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/10/01/zuo-liu-tian-hui-min/</loc>
+<lastmod>2009-10-01T23:21:16+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/08/26/da-qie/</loc>
+<lastmod>2009-08-26T00:56:44+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/08/20/xiao-xiang-shi-ri/</loc>
+<lastmod>2009-08-20T22:54:37+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/07/08/introducing-the-google-chrome-os/</loc>
+<lastmod>2009-07-08T20:44:23+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/07/07/bei/</loc>
+<lastmod>2009-07-07T20:28:02+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/07/02/wen-xin-ti-shi/</loc>
+<lastmod>2009-07-02T23:21:20+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/07/02/cong-ji-xian-bian-cheng-shuo-qi/</loc>
+<lastmod>2009-07-02T23:04:34+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/06/26/shi-wu-zai-qi-xia-chuan-xian-jian-bu-mie/</loc>
+<lastmod>2009-06-26T23:16:37+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/06/15/MP77-de-UNIX-ke-jian-bi-ji-12/</loc>
+<lastmod>2009-06-15T20:44:03+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/06/13/MP77-de-UNIX-ke-jian-bi-ji-11/</loc>
+<lastmod>2009-06-13T23:24:07+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/06/09/MP77-de-UNIX-ke-jian-bi-ji-10/</loc>
+<lastmod>2009-06-09T10:21:41+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/06/07/MP77-de-UNIX-ke-jian-bi-ji-9/</loc>
+<lastmod>2009-06-07T09:49:39+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/06/03/MP77-de-UNIX-ke-jian-bi-ji-8/</loc>
+<lastmod>2009-06-03T17:11:21+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/06/01/MP77-de-UNIX-ke-jian-bi-ji-7/</loc>
+<lastmod>2009-06-01T00:02:27+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/05/28/mp77-de-UNIX-ke-jian-bi-ji-6/</loc>
+<lastmod>2009-05-28T21:53:31+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/05/27/mp77-de-UNIX-ke-jian-bi-ji-5/</loc>
+<lastmod>2009-05-27T22:27:50+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/05/23/mp77-de-UNIX-ke-jian-bi-ji-4/</loc>
+<lastmod>2009-05-23T22:26:31+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/05/23/nan-jing-nan-jing-hui-cheng-wei-chuan-shi-jing-dian/</loc>
+<lastmod>2009-05-23T02:58:24+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/05/21/mp77-de-UNIX-ke-jian-bi-ji-4/</loc>
+<lastmod>2009-05-21T12:39:49+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/05/19/mp77-de-UNIX-ke-jian-bi-ji-3/</loc>
+<lastmod>2009-05-19T14:24:42+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/05/15/mp77-de-UNIX-ke-jian-bi-ji-2/</loc>
+<lastmod>2009-05-15T20:56:32+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/05/15/mp77-de-UNIX-ke-jian-bi-ji-1/</loc>
+<lastmod>2009-05-15T17:13:02+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-xia/</loc>
+<lastmod>2009-05-01T20:21:18+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-shang/</loc>
+<lastmod>2009-05-01T19:25:02+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/04/30/si-yue-de-zui-hou-yi-tie/</loc>
+<lastmod>2009-04-30T23:49:38+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/04/03/programming-competition/</loc>
+<lastmod>2009-04-03T17:24:35+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/03/07/lian-zai-zan-ting/</loc>
+<lastmod>2009-03-07T00:09:34+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/22/AS3-0-xue-xi-bi-ji/</loc>
+<lastmod>2009-02-22T20:01:59+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/21/jia-qi-lian-zai-zhi-shi-wu/</loc>
+<lastmod>2009-02-21T22:23:25+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/21/2010-kao-yan-fu-xi-gang-yao/</loc>
+<lastmod>2009-02-21T16:41:51+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/16/AS3-0-xue-xi-bi-ji/</loc>
+<lastmod>2009-02-16T21:21:08+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/13/bai-pian-zong-jie/</loc>
+<lastmod>2009-02-13T22:41:22+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/13/jia-qi-lian-zai-zhi-shi-si/</loc>
+<lastmod>2009-02-13T22:24:05+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/13/jia-qi-lian-zai-zhi-shi-san/</loc>
+<lastmod>2009-02-13T16:49:46+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/12/jia-qi-lian-zai-zhi-shi-er-100/</loc>
+<lastmod>2009-02-12T21:19:53+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/12/jia-qi-lian-zai-zhi-shi-yi/</loc>
+<lastmod>2009-02-12T17:13:00+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/12/jia-qi-lian-zai-zhi-shi/</loc>
+<lastmod>2009-02-12T14:06:35+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/11/jia-qi-lian-zai-zhi-jiu/</loc>
+<lastmod>2009-02-11T20:26:19+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/10/jia-qi-lian-zai-zhi-ba/</loc>
+<lastmod>2009-02-10T16:47:33+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/09/jia-qi-lian-zai-zhi-qi/</loc>
+<lastmod>2009-02-09T17:15:54+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/07/yong-bu-yan-qi-Slumdog-Slumdog/</loc>
+<lastmod>2009-02-07T00:09:45+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/05/jia-qi-lian-zai-zhi-liu/</loc>
+<lastmod>2009-02-05T18:05:10+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/04/jia-qi-lian-zai-zhi-wu/</loc>
+<lastmod>2009-02-04T23:30:57+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/02/03/jia-qi-lian-zai-zhi-si/</loc>
+<lastmod>2009-02-03T16:39:55+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/01/26/jia-qi-lian-zai-zhi-san/</loc>
+<lastmod>2009-01-26T19:31:32+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/01/26/ji-chou-ji-yu/</loc>
+<lastmod>2009-01-26T00:44:14+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/01/25/jia-qi-lian-zai-zhi-er/</loc>
+<lastmod>2009-01-25T17:18:25+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/01/21/jia-qi-lian-zai-zhi-yi/</loc>
+<lastmod>2009-01-21T16:34:52+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/01/21/ping-min-de-sheng-li/</loc>
+<lastmod>2009-01-21T02:48:50+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/01/16/acm-ACM-ICPC-lian-lian-zai-nei-rong-jian/</loc>
+<lastmod>2009-01-16T15:56:28+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/01/15/jia-qi-xi-lie-nei-rong-yu-gao/</loc>
+<lastmod>2009-01-15T13:50:32+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/01/10/qi-mo-zhou-qi-jie-shu/</loc>
+<lastmod>2009-01-10T21:05:59+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2009/01/01/NURBS-jian-jie/</loc>
+<lastmod>2009-01-01T20:59:29+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/12/21/jin-ru-qi-mo-zhou-qi/</loc>
+<lastmod>2008-12-21T00:54:32+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/11/28/SCCS-chong-gou-ban-fa-bu-cheng-yao-bug-ce-shi-kai-fa-jian-yi/</loc>
+<lastmod>2008-11-28T20:57:15+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/11/22/SCCS-di-yi-jie-duan-chong-gou-wan-cheng-tui-chi-fa-bu-beta/</loc>
+<lastmod>2008-11-22T20:47:34+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/11/14/hui-jia-guang-guang/</loc>
+<lastmod>2008-11-14T19:09:09+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/11/10/can-a-can/</loc>
+<lastmod>2008-11-10T20:34:01+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/11/01/kai-fa-zhong-de-SCCS/</loc>
+<lastmod>2008-11-01T11:09:30+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/25/SCCS-chong-gou-qi-dong/</loc>
+<lastmod>2008-10-25T20:46:50+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/23/Windows-xia-de-j2se-shi-zhong-shi-li/</loc>
+<lastmod>2008-10-23T21:04:54+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/19/hanyi-name-you-ju-shi/</loc>
+<lastmod>2008-10-19T19:06:32+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-wu/</loc>
+<lastmod>2008-10-18T16:59:48+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-si/</loc>
+<lastmod>2008-10-18T16:31:47+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-san/</loc>
+<lastmod>2008-10-18T16:29:57+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-er/</loc>
+<lastmod>2008-10-18T16:24:55+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/18/JNI-ji-shu-chu-bu-yi/</loc>
+<lastmod>2008-10-18T16:19:29+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/17/ru-he-cheng-wei-ji-shu-ling-xiu/</loc>
+<lastmod>2008-10-17T22:03:46+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/09/jue-ding-kao-yan/</loc>
+<lastmod>2008-10-09T17:22:14+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/10/03/ji-yu-J2se-de-cheng-xu-she-ji/</loc>
+<lastmod>2008-10-03T00:53:43+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/09/14/xiu-zheng-ji-ben-jie-shu-jie-ri-ji-hua-ge-qian/</loc>
+<lastmod>2008-09-14T17:15:03+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/09/13/shou-ye-geng-xin-gong-zuo-chu-bu-wan-cheng/</loc>
+<lastmod>2008-09-13T11:51:25+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/08/29/C-C-shi-xi-bao-gao-yu-Win32-ji-yu-Win32-console-app-ding-min-hang-ding/</loc>
+<lastmod>2008-08-29T22:06:44+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/08/26/xin-de-wang-zhan-jie-gou-he-feng-ge/</loc>
+<lastmod>2008-08-26T22:55:45+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/08/24/C-C-shi-xi-she-ji-wen-dang-yu-Win32-ji-yu-Win32-console-app-ding-min-hang-ding/</loc>
+<lastmod>2008-08-24T22:03:20+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/08/16/Mp77-de-Internet-dai-ma-shou-ji-xi-tong-ce-shi-gong-gao/</loc>
+<lastmod>2008-08-16T08:55:26+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/07/25/Mp77-de-Internet-dai-ma-shou-ji-xi-tong-xiang-mu-ji-hua-shu-shang/</loc>
+<lastmod>2008-07-25T11:37:42+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/07/21/yan-lian-xiang-xue/</loc>
+<lastmod>2008-07-21T13:30:03+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/06/05/shen-du-jie-mi-xuan-zhuan-xuan-zhuan-n%CC%88u/</loc>
+<lastmod>2008-06-05T14:33:15+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/06/03/PowerBuilder-cong-tan/</loc>
+<lastmod>2008-06-03T13:11:07+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/05/29/huan-zhen-ji/</loc>
+<lastmod>2008-05-29T21:10:43+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/05/28/ban-quan-sheng-ming/</loc>
+<lastmod>2008-05-28T17:34:31+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/05/20/di-ba-tian-ping-lun/</loc>
+<lastmod>2008-05-20T22:44:33+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/05/16/tan-tan-tu-ling-jiang/</loc>
+<lastmod>2008-05-16T19:21:41+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/05/13/its-in-the-rain/</loc>
+<lastmod>2008-05-13T20:44:45+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/05/06/facebook-de-qian-shi-jin-sheng/</loc>
+<lastmod>2008-05-06T11:04:07+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/05/03/qing-hai-fen-fen-qing-xiang/</loc>
+<lastmod>2008-05-03T15:39:24+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/28/da-lao-gui/</loc>
+<lastmod>2008-04-28T21:40:46+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/25/xie-zai-ao-yun-zhi-qian/</loc>
+<lastmod>2008-04-25T17:21:13+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/23/dong-jing-di-shi-qi-ge-ming-ri/</loc>
+<lastmod>2008-04-23T22:57:11+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/20/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-liu/</loc>
+<lastmod>2008-04-20T22:56:01+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/19/zhao-dao-le-zhao-dao-le/</loc>
+<lastmod>2008-04-19T23:36:09+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/18/shou-ye-jian-she-ji-hua/</loc>
+<lastmod>2008-04-18T21:15:58+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/18/yue-zhong-zong-jie-di-1-qi/</loc>
+<lastmod>2008-04-18T20:36:43+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/18/xiao-yi-hui-bian/</loc>
+<lastmod>2008-04-18T19:40:03+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/11/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-wu/</loc>
+<lastmod>2008-04-11T11:44:32+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/08/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-si/</loc>
+<lastmod>2008-04-08T10:49:37+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/06/shou-ye-zheng-zai-geng-xin-flash-yuan-ma/</loc>
+<lastmod>2008-04-06T01:20:53+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-ba-wan-jie-wan-jie-bao-hua-jie-yi/</loc>
+<lastmod>2008-04-05T15:23:32+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-qi/</loc>
+<lastmod>2008-04-05T15:21:07+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-liu/</loc>
+<lastmod>2008-04-05T15:19:07+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-wu/</loc>
+<lastmod>2008-04-05T15:14:54+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-si/</loc>
+<lastmod>2008-04-05T15:10:42+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-san/</loc>
+<lastmod>2008-04-05T15:01:46+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-er/</loc>
+<lastmod>2008-04-05T14:49:07+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-yi/</loc>
+<lastmod>2008-04-05T14:44:45+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/03/31/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-san/</loc>
+<lastmod>2008-03-31T11:05:59+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/03/30/jian-dan-de-winapi-shi-xian/</loc>
+<lastmod>2008-03-30T13:13:16+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/03/30/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-er/</loc>
+<lastmod>2008-03-30T12:53:46+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/03/29/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-yi/</loc>
+<lastmod>2008-03-29T20:11:06+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/03/29/C-chong-wen-ji-hua/</loc>
+<lastmod>2008-03-29T19:30:53+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/03/28/yuan-zheng-jie-shu/</loc>
+<lastmod>2008-03-28T13:46:46+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/29/zan-li-le-ji-tian/</loc>
+<lastmod>2008-02-29T19:07:05+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/20/lolicon-dui-zhong-guo-she-hui-de-xian-shi-yi-yi-ji-qi-wei-lai-zhan-wang/</loc>
+<lastmod>2008-02-20T16:46:50+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/18/yi-ze-xin-wen-de-ping-lun/</loc>
+<lastmod>2008-02-18T02:38:38+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/16/seven-little-girls-sitting-in-the-back-seat/</loc>
+<lastmod>2008-02-16T13:12:53+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/14/kai-zhang/</loc>
+<lastmod>2008-02-14T17:26:29+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/13/yi-ze-xin-wen-de-ping-lun/</loc>
+<lastmod>2008-02-13T22:56:01+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/13/wu/</loc>
+<lastmod>2008-02-13T19:21:33+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/11/blog-hui-fu/</loc>
+<lastmod>2008-02-11T22:40:25+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/07/hanyi-name-chu-chu-yu-zhen-dang/</loc>
+<lastmod>2008-02-07T20:13:42+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/06/xin-chun-jiang-zhi-chu-xi-ye-fu-shi-yi-shou-jin-gong-xiao-yu/</loc>
+<lastmod>2008-02-06T22:21:16+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/06/xuan-yuan-jian-5-wai-zhuan-han-zhi-yun-ping-xi/</loc>
+<lastmod>2008-02-06T20:43:50+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/06/zhu-ti-bei-jing-que-ding/</loc>
+<lastmod>2008-02-06T19:17:56+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/05/hello-world/</loc>
+<lastmod>2008-02-05T23:50:30+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/2008/02/05/about/</loc>
+<lastmod>2008-02-05T23:50:30+08:00</lastmod>
+</url>
+<url>
+<loc>http://www.hanyi.name/archives/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/archives/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/about/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/portfolio/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/tian-xuan-zhi-zuo/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/zhan-dian-ri-zhi/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/pcyou-xi/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/guan-dian/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/c-plus-plus-slash-c/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/xiang-mu/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/zhuan-zai/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/assembly/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/kao-yan-slash-bo/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/java/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/shu-ju-jie-gou/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/bian-cheng-yu-yan/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/actionscript/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/bian-yi-ji-zhu/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/unix-slash-linux/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/ke-shi-hua/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/suan-fa-tao-lun/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/qt/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/web/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/kinect/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/gpu-slash-gpgpu/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/ruan-jian-jia-gou/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/ruby/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/mr/</loc>
+</url>
+<url>
+<loc>http://www.hanyi.name/blog/categories/test/</loc>
+</url>
 </urlset>
