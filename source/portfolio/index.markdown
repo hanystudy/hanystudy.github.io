@@ -15,11 +15,17 @@ footer: true
 
 [Coder from 22nd century](https://github.com/hanystudy/coder-from-22nd-century): A demo of Micro-Situational Mixed Reality. You could check it out from this [article](http://www.hanyi.name/blog/2016/11/20/micro-situational-mixed-reality/) (Chinese only).
 
+[SnowyOwl](https://github.com/hanystudy/snowy_owl): Owl exploratory testing. You could check it out from this [article](http://www.hanyi.name/blog/2017/12/17/owl-exploratory-testing/) (Chinese only) and [slide](http://slides.com/hanyi8000/snowy-owl#/).
+
+[Meixue](https://github.com/hanystudy/meixue): A static website IDE using Markdown, Electron, and Vuejs. The editing tool that this blog is written with.
+
 ## Slides
 
 ### Agile
 
-[敏捷与3C](http://slides.com/hanyi8000/ci-cd-and-cd#/)
+[敏捷与3C](http://slides.com/hanyi8000/ci-cd-and-cd#/), [Agile Design
+and
+Organization Structure](http://slides.com/hanyi8000/deck-33#/)
 
 ### Blockchain
 
@@ -47,4 +53,4 @@ For development:
 
 ### Others
 
-[Introduction to ThoughtWorks Technology Radar](http://slides.com/hanyi8000/asd-14#/), [Learn to be a professional programmer](http://slides.com/hanyi8000/deck-29#/)
+[Introduction to ThoughtWorks Technology Radar](http://slides.com/hanyi8000/asd-14#/), [Learn to be a professional programmer](http://slides.com/hanyi8000/deck-29#/), [Four years](http://slides.com/hanyi8000/deck-34#/)
