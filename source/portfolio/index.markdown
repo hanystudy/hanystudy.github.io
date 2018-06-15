@@ -31,6 +31,10 @@ Organization Structure](http://slides.com/hanyi8000/deck-33#/)
 
 [Blockchain learn in non-consulting way](http://slides.com/hanyi8000/blockchain#/), [Easy Blockchain](http://slides.com/hanyi8000/blockchain-25#/)
 
+### Elasticsearch
+
+[Building Modern Enterprise Searching Platform: Introduction & Concept](https://slides.com/hanyi8000/deck-35#/)
+
 ### Ruby/Rails
 
 [Debugging Rails Applications](http://slides.com/hanyi8000/debugging-rails-applications#/), [Rails Continuous Delivery](http://slides.com/hanyi8000/rails-continuous-delivery#/)
