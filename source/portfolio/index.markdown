@@ -35,6 +35,16 @@ Organization Structure](http://slides.com/hanyi8000/deck-33#/)
 
 [Building Modern Enterprise Searching Platform: Introduction & Concept](https://slides.com/hanyi8000/deck-35#/)
 
+[Introduction](https://slides.com/hanyi8000/elasticsearch#/)
+
+[Data Modeling](https://slides.com/hanyi8000/elasticsearch-37#/)
+
+[Indexing](https://slides.com/hanyi8000/elasticsearch-38#/)
+
+[Query Basics](https://slides.com/hanyi8000/elasticsearch-37-39#/)
+
+[Advanced Query](https://slides.com/hanyi8000/elasticsearch-38-40#/)
+
 ### Ruby/Rails
 
 [Debugging Rails Applications](http://slides.com/hanyi8000/debugging-rails-applications#/), [Rails Continuous Delivery](http://slides.com/hanyi8000/rails-continuous-delivery#/)
