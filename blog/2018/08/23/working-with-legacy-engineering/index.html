@@ -1,0 +1,279 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>Working with Legacy Engineering  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="Looking back to the past five years, my common experience for joining a project is always looking like this: Learning business knowledge -> Revealing &hellip;&#8221;> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Working With Legacy Engineering</h2>
+	<div class="entry-content"><p>Looking back to the past five years, my common experience for joining a project is always looking like this:</p>
+
+<p>Learning business knowledge -> Revealing technical context -> Launching a new project and instilling good practices into the team to make better software as usual.</p>
+
+<p>While it&rsquo;s not always true for software engineers, I rarely got chance to work on the pre-existing codebase, not to mention a whole legacy engineering.</p>
+
+<p>Things have changed since I stepped on a new journey. My very first challenge is taking over a legacy engineering. I call it legacy engineering because all I have to care is far more than only the codebase, although it is absolutely focal to tackle with the legacy code. The rest of this article will introduce the steps and thoughts I&rsquo;ve taken during this process.</p>
+
+<h3>Communication</h3>
+
+<p>A good teacher can at least half the work. Everyone who ever worked in the team can teach and benefit, but the following question is how to learn from people more effectively. My answer is no doubt through good communication.</p>
+
+<p>For those who are interested, I would suggest some great learnings like <a href="https://www.nonviolentcommunication.com/">Nonviolent Communication</a> and <a href="https://www.amazon.com/Crucial-Conversations-Talking-Stakes-Second/dp/1469266822">Crucial Conversations</a>. No follow-up discussion since we&rsquo;re not talking about psychology here, but remember it&rsquo;s indeed the first priority soft skill as a professional.</p>
+
+<h3>Documentation</h3>
+
+<p>For a hand-over stage, documentation in any form is less effective than a good communication. But it&rsquo;s worthy to keep valuable knowledge and make it more efficient to spread those to broader stakeholders. Again, it always depends on requirement at the moment for determining the scope of what should be documented. My personal inclination is several topics listed as follows:</p>
+
+<ol>
+<li>Team specific knowledge that everyone should be aware of.</li>
+<li>Any confusing/complicated part.</li>
+<li>The reason for counter-intuitive decisions made by former team members.</li>
+</ol>
+
+
+<p>It finally leads to three basic documents for me:</p>
+
+<ol>
+<li>Feature list (Rough is good).</li>
+<li>Team engineering practice, like workflow definition and release cycle.</li>
+<li>Crucial code design.</li>
+</ol>
+
+
+<p>Of course, the Evernote in hand to prepare for any unknown technologies and skills.</p>
+
+<h3>Codebase</h3>
+
+<p>Being familiar with codebase is always the top priority for a newbie, but former topics we just discussed would influence the effectiveness of codebase learning. As software engineering today has adopted many common practices like CI/CD and DevOps, those automation practices can help to    guide people along with the code or script, rather than outdated document and lengthy tutorial.</p>
+
+<h4>Build (Pipeline)</h4>
+
+<p>Build automation is the most matured practice in nowadays software engineering. For a newbie, the build script provides panorama and coarse-grained view of system modularity and dependency, it would be even clearer if the team is maintaining an effective CI pipeline.</p>
+
+<p>A undoubted fact is that the more matured for build automation, the more efficiency for a newbie to get first wave things done. Otherwise, it would take weeks to set up a local environment by referring to  an far outdated guide and consulting different team members!</p>
+
+<h4>Test</h4>
+
+<p>It&rsquo;s not very common to see &ldquo;effective tests&rdquo; in the codebase, not to mention the practice of the whole test pyramid or <a href="http://www.hanyi.name/blog/2017/12/17/owl-exploratory-testing/">sandwich</a>. Automation test is a proven practice to assure quality, sometimes it is promoted to be the specification of the codebase. However, bad practice for automation test also does harm other than keeping high quality.</p>
+
+<p>For a newbie, in most cases, the tests especially the  bad tests cannot help for specification at all, it shows less value than a good naming practice. My personal experience is that the test is not so good for early learning if it&rsquo;s not well organized and properly implemented. That&rsquo;s not saying that it doesn&rsquo;t play vital role to indicate the consistency when any changes happen.</p>
+
+<p>It&rsquo;s usually easy for everyone to see the value of automation test, while it also  makes this practice be one of the most confusing parts in modern software engineering as  lack of deep understanding.</p>
+
+<h4>Operation</h4>
+
+<p>As DevOps is more adopted, it turns to be more necessary for a newbie to understand operation knowledge. Must-have topics include configuration management and specification of cloud platform and core systems.</p>
+
+<h4>Design (Structural) and Refactor</h4>
+
+<p>The core of codebase learning is about design. A design could be regarded as a collection of decisions along the software development. For a newbie, it&rsquo;s more important to concentrate on the crucial design points than knowing every corners.</p>
+
+<p>Although it varies for the different roles, as a backend newbie, the top concern comes into the structural design. To learn software structure,a  good starting point could be any selected feature from both business and technical perspective, it can help dive into the deeper codebase to understand the structure, then forms into whole picture of modularity design.</p>
+
+<p>A good approach is to elaborate design with some tools, CRC even Naked CRC is agiler, but UML is also very cool and common, it again depends on team background for these tools selection. More important is that whichever tool is used, only the leading design rules need to be considered, rather than drawing a full system map. During this process, design pattern may benefit but also cause restriction.</p>
+
+<p>It&rsquo;s not exactly same for design of software structure and logical data model, but the latter could also be learned via any cleaner ways (like E-R diagram), not necessary to dig into physical data model too early unless there is significant reason to do that.</p>
+
+<h3>Feature Enhancement</h3>
+
+<p>I wouldn&rsquo;t suggest making big change or refactor on the legacy codebase which is just taken over unless the change is too small to cause any visible influence. Before doing any work alone, a newbie still needs to learn from core team members about:</p>
+
+<ol>
+<li>Architecture Roadmap.</li>
+<li>Non-functional requirements.</li>
+<li>Technical debts and roadmap of resolution.</li>
+</ol>
+
+
+<p>Despite the  following work would be feature enhancement in most cases. I&rsquo;d take different strategy depends on the potential influence of the change.</p>
+
+<p>Here I&rsquo;m not going to discuss the case of a tiny change, that wouldn&rsquo;t be a big deal anyway. But if the change is going to happen on the higher level design rule but not touch leading yet (which usually implies a broader influence across code), I could try to add new features via extensional way (rather than editing as is code and making feature changes directly, methods metioned in <a href="https://www.amazon.com/Working-Effectively-Legacy-Robert-Martin-ebook/dp/B005OYHF0A">Working effectively with legacy code</a> are good guidance), and extra feature toggles may help for QA and CD.</p>
+
+<p>The worst case is the desired change must happen on leading design rule, which means it won&rsquo;t work with just simple extension, a big change is definitely required. Even in this case, I wouldn&rsquo;t edit any as is code in an early stage, and purely technical refactor without guidance from business requirement is also not a good option. Instead, I&rsquo;d create a separate package or namespace as the neighbor of the code which is going to die, and naming it &ldquo;experiment&rdquo; or anything makes sense. Using least effort to make experiment code work as well as automation test, without breaking any as is feature or code. Once new feature and refactor direction is confirmed, the experiment code can be transformed into formal and replace dead one.</p>
+
+<p>The benefit of this &ldquo;experimental duplication&rdquo; is that I can continue looking at two implementations and making a trade-off when thinking of the design for following refactor until the new feature is completed and confirmed. Later on, refactor and clean-up can be done to completely remove the deprecation.</p>
+
+<h3>Conclusion</h3>
+
+<p>In this article, we discussed the strategies I would take while working with legacy engineering. Someone calls it reverse engineering to imply the   digestion for an incredibly overdue but complicated legacy codebase or engineering. While in most cases it does not have to make upfront &ldquo;reverse engineering&rdquo; to reach critical decision for future, nor do a hasty change on codebase to cause risk. We can certainly take actions to delay that decision making, by mitigating waste and respecting the economic model of our beloved software industry.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-08-23T15:04:57-04:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/engineering/'>engineering</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2018/08/23/working-with-legacy-engineering/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2018
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2018/08/23/working-with-legacy-engineering/';
+        var disqus_url = 'http://www.hanyi.name/blog/2018/08/23/working-with-legacy-engineering/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>

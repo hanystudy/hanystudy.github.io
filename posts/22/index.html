@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="　　从前文可知，DLL在程序编制中可作出巨大贡献，它提供了具共性代码的复用能力。但是，正如一门高深的武学，若被掌握在正义之侠的手上，便可助其仗义江湖；但若被掌握在邪恶之徒的手上，则必然在江湖上掀起腥风血雨。DLL正是一种这样的武学。DLL一旦染上了魔性，就不再是正常的DLL程序，而是DLL木马， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="　1.关于文章的获取 　　许多读者发来e-mail询问本系列文章的相关事宜，如： 　　（1） 是否已出版？ 　　（2） 哪里可以下载打包版？ 　　（3） 哪里可以下载笔者的其它文章？ 　　还有一些读者对日前笔者在天极网发表的《C语言嵌入式系统编程修炼之道》非常喜爱，给予了热情洋溢的赞扬， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,303 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-ba-wan-jie-wan-jie-bao-hua-jie-yi/">
+		
+			Visual C++动态链接库编程（八）——完结篇——宋宝华解疑</a>
+	</h2>
+	<div class="entry-content">
+		<p>　1.关于文章的获取</p>
+
+<p>　　许多读者发来e-mail询问本系列文章的相关事宜，如：</p>
+
+<p>　　（1） 是否已出版？</p>
+
+<p>　　（2） 哪里可以<a target="_blank" href="http://www.mydown.com/" class="bluekey"><font color="#003399">下载</font></a>打包版？</p>
+
+<p>　　（3） 哪里可以下载笔者的其它文章？</p>
+
+<p class="guanggao">　　还有一些读者对日前笔者在天极网发表的《<a target="_blank" href="http://soft.yesky.com/lesson/188/2023188.shtml"><font color="#1111ee">C语言嵌入式系统编程修炼之道</font></a>》非常喜爱，给予了热情洋溢的赞扬，询问笔者能否继续创作嵌入式编程方面的文章。</p>
+
+
+<p>　　对于这些问题，统一作答如下：</p>
+
+<p>　　（1）本系列文章暂时尚未出版；</p>
+
+<p>　　（2）您可以在天极网<a target="_blank" href="http://product.yesky.com/software/" class="bluekey"><font color="#003399">软件</font></a>频道下载笔者的多数拙作。另外，我也将不定期将这些文章上传到我的博客（ <a href="http://blog.donews.com/21cnbao/%EF%BC%89%E3%80%82%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E4%B8%AD%E7%9A%84%E4%BE%8B%E7%A8%8B%E6%BA%90%E4%BB%A3%E7%A0%81%E5%9D%87%E7%BB%8F%E8%BF%87%E4%BA%B2%E6%89%8B%E8%B0%83%E8%AF%95%EF%BC%8C%E9%AA%8C%E8%AF%81%E6%97%A0%E8%AF%AF%EF%BC%9B">http://blog.donews.com/21cnbao/%EF%BC%89%E3%80%82%E6%89%80%E6%9C%89%E6%96%87%E7%AB%A0%E4%B8%AD%E7%9A%84%E4%BE%8B%E7%A8%8B%E6%BA%90%E4%BB%A3%E7%A0%81%E5%9D%87%E7%BB%8F%E8%BF%87%E4%BA%B2%E6%89%8B%E8%B0%83%E8%AF%95%EF%BC%8C%E9%AA%8C%E8%AF%81%E6%97%A0%E8%AF%AF%EF%BC%9B</a></p>
+
+<p>　　（3）就嵌入式系统开发，笔者将继续进行此方面的创作，新近将推出《基于嵌入式实时OS VxWorks的多任务<a target="_blank" href="http://dev.yesky.com/" class="bluekey"><font color="#003399">程序</font></a>设计》及《领悟：从Windows多线程到VxWorks的多任务》。</p>
+
+<p>　　非常感谢读者朋友对这些文章的喜爱，在下将竭尽所能地为您提供更多的好文章。</p>
+
+<p>　　2.关于DLL的疑问</p>
+
+<p>　　你好，看了你写的&#8221;VC++ DLL编程深入浅出&#8221;，特别有收获。 只是有个地方我老搞不明白，就是用DLL导出全局变量时，指定了.lib的路径（#pragma comment(lib,&ldquo;dllTest.lib&rdquo;)），那么.dll的文件的路径呢，我尝试着把.dll文件移到别的地方程序就无法正常运行了，请问.dll在这里怎么指定。</p>
+
+<p>　　希望您能在百忙中抽空给我解答一下，不胜感激！</p>
+
+<p>　　一位编程爱好者</p>
+
+<p>　　回答：</p>
+
+<p>　　Windows按下列顺序搜索DLL：</p>
+
+<p>　　（1）当前进程的可执行模块所在的目录；</p>
+
+<p>　　（2）当前目录；</p>
+
+<p>　　（3）Windows 系统目录，通过GetSystemDirectory 函数可获得此目录的路径；</p>
+
+<p>　　（4）Windows 目录，通过GetWindowsDirectory 函数可获得此目录的路径；</p>
+
+<p>　　（5）PATH 环境变量中列出的目录。</p>
+
+<p>　　因此，隐式链接时，DLL文件的路径不需要指定也不能指定，系统指定按照1～5的步骤寻找DLL，但是对应的.lib文件却需要指定路径；如果使用Windows API函数LoadLibrary动态加载DLL，则可以指定DLL的路径。</p>
+
+<p>　　你好,我是一位C++初学者,我在PCONLINE看了教学之后,受益不浅。我想问一下能否在DLL里使用多线程?MSDN上用#using &lt;mscorlib.dll&gt;这个指令之后实现了多线程,不过好象不支持DLL..</p>
+
+<p>　　请问有什么办法支持制作多线程DLL??能否给一个源码来?</p>
+
+<p>　　回答：</p>
+
+<p>　　在DLL中可以处理多线程，WIN32对于多线程的支持是<a target="_blank" href="http://os.yesky.com/" class="bluekey"><font color="#003399">操作系统</font></a>本身提供的一种能力，并不在于用户编写的是哪一类程序。即便是一个控制台程序，我们都可以使用多线程：</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
+void ThreadFun(void)
+{
+　while(1)
+　{
+　　printf( &#8220;this is new thread\n&#8221; );
+　　Sleep( 1000 );
+　}
+}
+int main()
+{
+　DWORD threadID;
+　CreateThread( NULL, 0, (LPTHREAD_START_ROUTINE)ThreadFun, NULL, 0, &amp;threadID );
+　while(1)
+　{
+　　printf( &#8220;this is main thread\n&#8221; );
+　　Sleep( 1000 );
+　}
+}</td>
+</tr>
+</table>
+
+
+<p>　　观察程序运行的结果为在控制台窗口上交替输出this is main thread、this is new thread。</p>
+
+<p>　　我们来看下面的一个多线程DLL的例子。</p>
+
+<p>　　DLL程序提供一个接口函数SendInit，在此接口中启动发送线程SendThreadFunc，在这个线程的对应工作函数中我们使用原始套接字socket发送报文。参考微软出版的经典书籍《Windows核心编程》，我们发现，不宜在DLL被加载的时候（即进程绑定时）启动一个新的线程。</p>
+
+<p>　　这个线程等待一个CEvent事件（用于线程间通信），应用程序调用DLL中的接口函数SendMsg( InterDataPkt sendData )可以释放此事件。下面是相关的源代码：</p>
+
+<p>　　（1）发送报文线程入口函数</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>///////////////////////////////////////////////////////////////////////////
+//函数名：SendThreadFunc
+//函数功能：发送报文工作线程入口函数，使用UDP协议
+////////////////////////////////////////////////////////////////////////////
+DWORD WINAPI SendThreadFunc( LPVOID lpvThreadParm )
+//提示：对于线程函数应使用WINAPI声明，WINAPI被宏定义为__stdcall
+{
+　/* 创建socket */
+　sendSock = socket ( AF_INET, SOCK_DGRAM, 0 );
+　if ( sendSock == INVALID_SOCKET )
+　{
+　　AfxMessageBox ( &#8220;Socket创建失败&#8221; );
+　　closesocket ( recvSock );
+　}　/* 获得目标节点端口与地址 */
+　struct sockaddr_in desAddr;
+　desAddr.sin_family=AF_INET;
+　desAddr.sin_port=htons( DES_RECV_PORT ); //目标节点接收端口
+　desAddr.sin_addr.s_addr = inet_addr( DES_IP );
+
+　/* 发送数据 */
+　while(1)
+　{
+　　WaitForSingleObject( hSendEvent, 0xffffffffL );//无限等待事件发生
+　　ResetEvent( hSendEvent );
+
+　　sendto( sendSock, (char *)sendSockData.data, sendSockData.len, 0, (struct sockaddr*)&amp;desAddr, sizeof(desAddr) );
+　}
+　return -1;
+}</td>
+</tr>
+</table>
+
+
+<p>　　（2）MFC规则DLL的InitInstance函数</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>/////////////////////////////////////////////////////////////////////////////
+// CMultiThreadDllApp initialization
+BOOL CMultiThreadDllApp::InitInstance()
+{
+　if ( !AfxSocketInit() ) //初始化socket
+　{
+　　AfxMessageBox( IDP_SOCKETS_INIT_FAILED );
+　　return FALSE;
+　}
+　return TRUE;
+}</td>
+</tr>
+</table>
+
+
+<p>　　（3）启动发送线程</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>////////////////////////////////////////////////////////////////////////////////
+//函数名：SendInit
+//函数功能：DLL提供给应用程序调用接口，用于启动发送线程
+/////////////////////////////////////////////////////////////////////////////
+void SendInit(void)
+{
+　hSendThread = CreateThread( NULL, 1000, SendThreadFunc, this, 1, &amp;uSendThreadID );
+}</td>
+</tr>
+</table>
+
+
+<p>　　（4）SendMsg函数</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>////////////////////////////////////////////////////////////////////////////////
+//函数名：SendMsg
+//函数功能：DLL提供给应用程序调用接口，用于发送报文
+/////////////////////////////////////////////////////////////////////////////
+extern &#8220;C&#8221; void WINAPI SendMsg( InterDataPkt sendData )
+{
+　sendSockData = sendData;
+　SetEvent( hSendEvent ); //释放发送事件
+}</td>
+</tr>
+</table>
+
+
+<p>　　以上程序仅仅是一个简单的例子，其实在许多工程应用中，我们经常看到这样的处理方式。这个DLL对用户而言仅仅使一个简单的接口函数SendMsg，对调用它的应用程序屏蔽了多线程的技术细节。与之类似，MFC提供的CSocket类在底层自己采用了多线程机制，所以使我们免去了对多线程的使用。</p>
+
+<p>　　您好,看了您的DLL文章，发现导出函数可以直接用<em>declspec(dllexport)声明或在.def文件中定义，变量的导出也一样。我想知道类是否也可以在.def文件中导出？您的文章中只讲了在类前添加</em>declspec(dllexport)导出类的方法。请您指教！</p>
+
+<p>　　回答：</p>
+
+<p>　　一般我们不采用.def文件导出类，但是这并不意味着类不能用.def文件导出类。</p>
+
+<p>　　使用Depends查看连载2的&#8221;导出类&#8221;例程生成的DLL，我们发现其导出了如图21的众多&#8221;怪&#8221;symbol，这些symbol都是经过编译器处理的。因此，为了以.def文件导出类，我们必须把这些&#8221;怪&#8221;symbol全部导出，实在是不划算啊！所以对于类，我们最好直接以_declspec(dllexport)导出。</p>
+
+<table border="0" align="center" width="90%">
+<tr>
+<td>
+<p align="center"><img border="0" width="483" src="http://dev.yesky.com/imagelist/05/10/t5u84cjh02yz.jpg" height="160" /><img border="0" width="483" src="http://dev.yesky.com/imagelist/05/10/t5u84cjh02yz.jpg" height="160" />
+图1 导出类时导出的symbol</td>
+</tr>
+</table>
+
+
+<p>　　您好,看了您的DLL文章，知道怎么创建DLL了，但是面对一个具体的工程，我还是不知道究竟应该把什么做成DLL？您能给一些这方面的经验吗？</p>
+
+<p>　　回答：</p>
+
+<p>　　DLL一般用于软件模块中较固定、较通用的可以被复用的模块，这里有一个非常好的例子，就是豪杰超级解霸。梁肇新大师把处理视频和音频的算法模块专门做成了两个DLL，供超级解霸的用户界面GUI程序调用，实在是DLL<a target="_blank" href="http://design.yesky.com/" class="bluekey"><font color="#003399">设计</font></a>的模范教程。所谓&#8221;万变不离其宗&#8221;，超级解霸的界面再cool，用到的还是那几个DLL！具体请参考《编程高手箴言》一书。</p>
+
+<p>　　您好,您的DLL文章讲的都是Windows的，请问Linux操作系统上可以制作DLL吗？如果能，和Windows有什么不一样？谢谢！</p>
+
+<p>　　回答：</p>
+
+<p>　　在Linux操作系统中，也可以采用动态链接技术进行软件设计，但与Windows下DLL的创建和调用方式有些不同。</p>
+
+<p>　　Linux操作系统中的共享对象技术（Shared Object）与Windows里的DLL相对应，但名称不一样，其共享对象文件以.so作为后缀。与Linux共享对象技术相关的一些函数如下：</p>
+
+<p>　　(1)打开共享对象，函数原型：</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>//打开名为filename共享对象，并返回操作句柄；
+void *dlopen (const char *filename, int flag);</td>
+</tr>
+</table>
+
+
+<p>　　(2)取函数地址，函数原型:</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>//获得接口函数地址
+void *dlsym(void *handle, char *symbol);</td>
+</tr>
+</table>
+
+
+<p>　　(3)关闭共享对象，函数原型:</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>//关闭指定句柄的共享对象
+int dlclose (void *handle);</td>
+</tr>
+</table>
+
+
+<p>　　(4)动态库错误函数，函数原型:</p>
+
+<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
+<tr>
+<td>//共享对象操作函数执行失败时，返回出错信息
+const char *dlerror(void);</td>
+</tr>
+</table>
+
+
+<p>　　从这里我们分明看到Windows API――LoadLibrary、FreeLibrary和GetProcAddress的影子！又一个&#8221;万变不离其宗&#8221;！</p>
+
+<p>　　本系列文章的连载暂时告一段落，您可以继续给笔者发送email（mailto：21cnbao@21cn.com）讨论DLL的编程问题。对于文中的错误和纰漏，也热诚欢迎您指正。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-05T15:23:32+08:00" pubdate data-updated="true">2008-04-05</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-ba-wan-jie-wan-jie-bao-hua-jie-yi//posts/22/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -3753,100 +4050,6 @@ int main(int argc, char* argv[])
 
 	
 		<span class="comments"><a href="/blog/2008/03/30/jian-dan-de-winapi-shi-xian//posts/22/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/03/30/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-er/">
-		
-			C++学习笔记(重温计划之二)</a>
-	</h2>
-	<div class="entry-content">
-		<p>2、基本编程语句</p>
-
-<p> 沿用c语言的方法,c++包含了说明语句、赋值语句、表达式语句、过程控制语句。其中，过程控制语句又分为条件语句、循环语句和转移语句。</p>
-
-<p> 2.1 说明语句(略)</p>
-
-<p> 2.2 条件语句</p>
-
-<p>  1）if语句: if(条件) 语句 or if(条件) 语句1 else 语句2；</p>
-
-<p>  2）条件表达式:（条件）?表达式1:表达式2</p>
-
-<p>  3）switch语句:switch(表达式){</p>
-
-<p>                                                          case 常量表达式1:语句1;break;</p>
-
-<p>                                                          case 常量表达式1:语句2;break;</p>
-
-<p>                                                          // &hellip;</p>
-
-<p>                                                          case 常量表达式n:语句n;break;</p>
-
-<p>                                                          default:                   语句n+1;break;</p>
-
-<p>                                                       }</p>
-
-<p> 2.3循环语句</p>
-
-<p>  1)for循环结构:for(i=0;i&lt;n;i++){ 语句};</p>
-
-<p>  2)while循环结构:while(条件){语句};</p>
-
-<p>  3)do-while循环结构:do{语句}while(条件);</p>
-
-<p> 2.4输入输出语句</p>
-
-<p>  1)标准I\O流:cout&lt;&lt;类型&lt;&lt;内容&lt;&lt;格式&lt;&lt;(条件判断);</p>
-
-<p>  2)设置参数 setw(int)宽度、setfill(char)填充字符、setprecision(int)设置精度和有效位数;</p>
-
-<p>  3)文件流:ifstream fin(filename,openmode=ios::in);</p>
-
-<p>                  ofstream fout(filename,openmode=ios::out);</p>
-
-<p> 2.5转移语句</p>
-
-<p>  1)break语句:跳出本级循环；</p>
-
-<p>  2)continue语句:结束本次循环，直接进入下次循环。</p>
-
-<p>  3)goto语句:略。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-03-30T12:53:46+08:00" pubdate data-updated="true">2008-03-30</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2008/03/30/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-er//posts/22/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

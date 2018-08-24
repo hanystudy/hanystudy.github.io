@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="一、 UNIX的安装 需要提前说明的是，本段内容并不会包含某个UNIX发行版本的完整安装教程，而是总结了UNIX安装的一般步骤及其常用的解决方案。 一般说来UNIX的安装需要经过三个阶段：准备阶段、内核系统安装阶段以及用户系统安装阶段。在准备阶段中，首先应确定的是系统所处的硬件环境， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="了解UNIX的文件系统是必要的，就像对于windows我们所了解到的。但二者最大的区别就在于熟知前者会对进一步的工作有决定性的推动作用；后者呢？最终还是无奈地回归平台。原定于本节详细介绍文件系统，但为了提升实用效果我们决定先插入一章全面介绍UNIX基本应用程序的内容（由于本节内容过于冗长， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,159 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/21/mp77-de-UNIX-ke-jian-bi-ji-4/">
+		
+			mp77的UNIX课件笔记(4.a)</a>
+	</h2>
+	<div class="entry-content">
+		<div class="Section0">
+<p class="0"><span style="font-family: 宋体;">了解UNIX的文件系统是必要的，就像对于windows我们所了解到的。但二者最大的区别就在于熟知前者会对进一步的工作有决定性的推动作用；后者呢？最终还是无奈地回归平台。原定于本节详细介绍文件系统，但为了提升实用效果我们决定先插入一章全面介绍UNIX基本应用程序的内容（由于本节内容过于冗长，分两部分加以说明）。</span></p>
+<p class="0"> </p>
+<p class="0">一、 <span style="font-family: 宋体;">常用UNIX系统命令</span></p>
+<p class="0"> </p>
+<p class="0">1、 man<span style="font-family: 宋体;">，即mannual，可以通过此命令查看UNIX在线文档并查找关于本系统的命令、工具、开发函数的详细介绍、选项及使用方法。甚至对于man本身，可以输入：</span></p>
+<p class="0"># man man</p>
+<p class="0"><span style="font-family: 宋体;">即可查阅man命令有关的系统手册信息。</span></p>
+<p class="0"><span style="font-family: 宋体;">事实上还有一些更为常用的查看帮助方法，这在执行一些特定工作时能大大提高查找效率。例如：</span></p>
+<p class="0"># command &#8211;help</p>
+<p class="0">&#8211;help<span style="font-family: 宋体;">本身是查看命令帮助的选项，少数命令还支持-h选项。&#8211;help的好处是只列出命令的输入格式以及全部选项说明，也就是最常用的一种帮助查看方式。</span></p>
+<p class="0"># info command</p>
+<p class="0">info<span style="font-family: 宋体;">是GNU下的一个文本工具，Linux中涵盖了大量的系统开发信息，包含几乎所有man和&#8211;help中的内容，一般只有专业人员才会用到。</span></p>
+<p class="0"># which command</p>
+<p class="0"><span style="font-family: 宋体;">显示命令的具体目录。</span></p>
+<p class="0"> </p>
+<p class="0">2、 <span style="font-family: 宋体;">显示系统信息。基本系统信息包括了系统时间、在线用户以及当前连接的终端设备。</span></p>
+<p class="0"># date</p>
+<p class="0"><span style="font-family: 宋体;">查看系统日期，其强大之处在于可以定制输出格式，自身甚至可以进行大量实用运算。</span></p>
+<p class="0"><span style="font-family: 宋体;">例如输入：</span></p>
+<p class="0"># date &#8221;+%Y.%m.%d %H:%M:%S Day %j&#8221;</p>
+<p class="0">2009.5.20 17:51:05 Day 140</p>
+<p class="0">&#8220;%j&#8221;<span style="font-family: 宋体;">记录已经历当年的天数，更多参数可在&#8211;help中查询。</span></p>
+<p class="0"># cal</p>
+<p class="0"><span style="font-family: 宋体;">查看某月日历，空参数则直接返回当月日历，另外可以用</span></p>
+<p class="0"># cal month year</p>
+<p class="0"><span style="font-family: 宋体;">指定查看日历。</span></p>
+<p class="0"># who</p>
+<p class="0"><span style="font-family: 宋体;">查看在线用户，显示用户ID、登录终端以及登录时间，如果用户通过网络登录，还会附带显示登录主机名称。</span></p>
+<p class="0"><span style="font-family: 宋体;">这里需要解释一下“登录终端”功能。Linux采用了虚拟终端技术，这种技术可以使得用户在虚拟shell对远程主机进行操作，即Virtual Terminal。具体来讲，就是通过键盘Alt+F1-F6键在6个不同的shell间进行切换，每个shell的登录用户是任意的（甚至是可以相同的）。平时没事的时候，我们可以在不同的终端登录不同用户，并互相进行一些用户间操作（显得有些浪费时间&#8230;&#8230;）。关于Virtual Terminal的设置在/etc/inittab中，如下内容：</span></p>
+<p class="0"># Run gettys in standard runlevels</p>
+<p class="0">1:2345:respawn:/sbin/mingetty tty1</p>
+<p class="0">2:2345:respawn:/sbin/mingetty tty2</p>
+<p class="0">3:2345:respawn:/sbin/mingetty tty3</p>
+<p class="0">4:2345:respawn:/sbin/mingetty tty4</p>
+<p class="0">5:2345:respawn:/sbin/mingetty tty5</p>
+<p class="0">6:2345:respawn:/sbin/mingetty tty6</p>
+<p class="0"> </p>
+<p class="0">ttyX<span style="font-family: 宋体;">指定相关终端的名称，minigetty将终端与login进行连接，实现验证登录用户的功能。另外如果系统安装了X-window，那么该系统启动后占用下一个未被占用的终端（如果/etc/inittab中x值为5默认启动X-window模式的话，则该系统占用tty1终端）。另外如果在X-window系统中使用ctrl+alt+F1-F6依然可以进行文本、X-window模式间的切换（理论上是可行的，但笔者在Virtual Machine 6.5挂载redhat 9.0中似乎无法实现此功能，或者是因为切换成本太高，有时甚至会导致X-window崩溃<span style="color: #ff0000;">5.23备注:家里的ubuntu8.1完全是可行的</span>）。</span></p>
+<p class="0"># who am i</p>
+<p class="0"># whoami</p>
+<p class="0"><span style="font-family: 宋体;">以上两条命令显示当前主机登录用户情况。</span></p>
+<p class="0"># w</p>
+<p class="0"><span style="font-family: 宋体;">显示当前系统的详细状态，包括运行时间、在线用户数量、IDLE（该终端空闲时间）、JCPU（该终端的所有作业占用的CPU时间）、PCPU（该终端的前台作业占用的CPU时间）以及what（显示该终端当前正在运行的命令或程序）。</span></p>
+<p class="0"># uptime</p>
+<p class="0"><span style="font-family: 宋体;">仅仅显示w命令的表头内容，如系统时间、在线用户数量、平均CPU占用时间等等。</span></p>
+<p class="0"># tty</p>
+<p class="0"><span style="font-family: 宋体;">显示当前终端的设备文件名。</span></p>
+<p class="0"> </p>
+<p class="0">3、 <span style="font-family: 宋体;">更新用户信息。</span></p>
+<p class="0"># usermod</p>
+<p class="0"><span style="font-family: 宋体;">该命令只能被root用户使用，可以更改指定用户的用户名、密码等信息。普通用户使用时会显示command not found错误。</span></p>
+<p class="0"># passwd</p>
+<p class="0"><span style="font-family: 宋体;">全用户使用，简易更新当前用户的登录密码，并且有评价当前密码复杂度的功能。</span></p>
+<p class="0"> </p>
+<p class="0">4、 <span style="font-family: 宋体;">与其他用户通信。</span></p>
+<p class="0"># write mp77</p>
+<p class="0">Hello world!</p>
+<p class="0"><span style="font-family: 宋体;">可以向正在登录的用户发送消息，消息可以换行，Ctrl+D结束发送，可以使用&lt;重定向文档中的内容。</span></p>
+<p class="0"># talk mp77</p>
+<p class="0"><span style="font-family: 宋体;">如果接收方允许接收对话，则屏幕分成上下两部分，两用户可以以键盘会话。终止talk的执行按Ctrl+C键或Ctrl+D键。</span></p>
+<p class="0"><span style="font-family: 宋体;">如果对方此时没有登录系统或者虽已登录但拒绝消息，通信失败。与其他UNIX系统上的用户会话的talk命令中应有对方主机名，如cdc.xynet.edu.cn主机上的用户wang通信，执行下列命令：</span></p>
+<p class="0"># talk wang@cdc.xynet.edu.cn</p>
+<p class="0"><span style="font-family: 宋体;">设置本机是否允许接收消息，则输入以下命令：</span></p>
+<p class="0"># mesg</p>
+<p class="0"><span style="font-family: 宋体;">显示当前mesg状态。</span></p>
+<p class="0"># mesg y</p>
+<p class="0"><span style="font-family: 宋体;">将mesg状态置为yes，允许接收消息。</span></p>
+<p class="0"># mesg n</p>
+<p class="0"><span style="font-family: 宋体;">拒绝接收消息，但任何时候都无法拒绝root向用户发送的消息。</span></p>
+<p class="0"># wall</p>
+<p class="0"><span style="font-family: 宋体;">即write to all，广播方式向所有已登录用户发送消息，该命令无法被屏蔽，默认使用权限为所有用户，因此很多系统管理员需设置禁止普通用户使用该命令。</span></p>
+<p class="0"> </p>
+<p class="0">5、 mail</p>
+<p class="0">mail<span style="font-family: 宋体;">是一种系统应用程序，从理论上说，mail也是用户间通信的一种方式（但不限于此功能），鉴于其功能强大且比较复杂，移至本段说明。</span></p>
+<p class="0"># mail -s &#8221;title&#8221; username@hostname.address</p>
+<p class="0"><span style="font-family: 宋体;">向username发送一封邮件，可以通过重定向输入文件，邮件内容按Ctrl+D结束输入。</span></p>
+<p class="0"><span style="font-family: 宋体;">紧接着会出现Cc:即Carbon copy，建立副本并抄送往其他用户。如果要发送带附件的邮件，建议安装更为强大的electronic mail agent，例如mutt（Redhat 9.0附带此软件包）：</span></p>
+<p class="0"># mutt -a [appendix] -s [title]</p>
+<p class="0"><span style="font-family: 宋体;">接着按提示操作即可，注意mutt编辑邮件内容时会自动调用vi，完成后需要保存退出并自动退回mutt界面，按y完成发送。</span></p>
+<p class="0"><span style="font-family: 宋体;">如果用户接收到新邮件，则每次登录时系统会提示You have new mail。输入mail即可。</span></p>
+<p class="0"><span style="font-family: 宋体;">此时会进入&amp;的命令提示符状态，并且只会解释mail中定义的一些命令或选项，查看帮助输入?即可。</span></p>
+<p class="0"><span style="font-family: 宋体;">所有未读邮件会在提示符上方列表中显示，顶行的箭头指示当前操作对应于某邮件，事实上我们也可以使用后面的ID直接指定操作对象，现说明几种常用功能：</span></p>
+<p class="0"># q</p>
+<p class="0"><span style="font-family: 宋体;">阅读当前邮件，如果删除则输入d，所有未读邮件保存在/var/spool/mail/username中。</span></p>
+<p class="0"><span style="font-family: 宋体;">对邮件操作结束后有两种退出模式：</span></p>
+<p class="0"># x //<span style="font-family: 宋体;">不存档退出，即还原之前的所有操作，已读邮件仍被列为未读。</span></p>
+<p class="0"># q //<span style="font-family: 宋体;">存档退出，已读邮件会从/var/spool/mail/username中删除，并存入该用户主目录下的mbox中。</span></p>
+<p class="0"> </p>
+<p class="0">6、 <span style="font-family: 宋体;">远程数据交流，包括远程登录和远程文件传输两种功能。</span></p>
+<p class="0"><span style="font-family: 宋体;">远程登录有rlogin、telnet等命令。</span></p>
+<p class="0"># rlogin hostname</p>
+<p class="0"># telnet localhost</p>
+<p class="0"><span style="font-family: 宋体;">前文提到rlogin因为缺乏安全性支持，已经不被推荐使用，因而主流依然是telnet。</span></p>
+<p class="0"><span style="font-family: 宋体;">连接成功后会提示输入login name以及password，验证成功后会直接进入Virtual terminal模式进行远程控制。期间输入^]可以挂起远程terminal进入telnet&gt;命令提示符，输入help可以查看命令帮助，z挂起telnet回到VT模式，close关闭当前连接，quit直接退出telnet。</span></p>
+<p class="0"># rcp username@hostname:directory dstdirectory</p>
+<p class="0">rcp<span style="font-family: 宋体;">即remote file copy远程文件复制，本功能类似windows中的共享功能，且仅能在UNIX主机间使用。需要注意的是，rcp需要提前预知远程主机用户名，以及拥有远程复制的权限。此外还可以-x开启传输加密功能（增加主机负担）。</span></p>
+<p class="0"><span style="font-family: 宋体;">更为强大灵活的工具要依赖ftp，其基本格式类似telnet，但内部命令完全不同。</span></p>
+<p class="0"># ftp hostname</p>
+<p class="0">ftp<span style="font-family: 宋体;">登录远程主机，连接成功后提示输入用户名和密码，并进入ftp&gt;命令提示符。也可以在提示符内输入open hostname连接目标主机。help可以查看ftp命令集，常用的有get（下载）、put（上传）、delete（删除）、bye（断开）等。</span></p>
+<p class="0"><span style="font-family: 宋体;">这里值得注意的是ftp的ascii和binary两种传输模式。</span></p>
+<p class="0">ftp<span style="font-family: 宋体;">默认使用ascii传输文件，这是因为在不同系统环境中传输数据时，有可能会遇到双方主机文本格式不同的问题，因此需要通过ftp对源文本文件进行转译以适应这种变化。但当传输的内容是直接建立在二进制基础上时，这种转译就有可能破坏所传输文件。这时切换至binary模式可以解决此类问题。</span></p>
+<p class="0"><span style="font-family: 宋体;">对ftp感兴趣的读者可以参考RFC 959，空闲时间按标准自己做个ftp客户端玩玩（强调是空闲时间&#8230;）。</span></p>
+
+<p class="0"><span style="font-family: 宋体;">
+</span>
+<p class="0"> </p>
+
+</div>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-21T12:39:49+08:00" pubdate data-updated="true">2009-05-21</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/05/21/mp77-de-UNIX-ke-jian-bi-ji-4//posts/14/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1629,357 +1782,6 @@ int main(int argc,char </strong>argv)
 
 	
 		<span class="comments"><a href="/blog/2009/02/22/AS3-0-xue-xi-bi-ji//posts/14/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/02/21/jia-qi-lian-zai-zhi-shi-wu/">
-		
-			假期连载之十五</a>
-	</h2>
-	<div class="entry-content">
-		<p class="MsoNormal" style="margin: 0cm 0cm 0pt; tab-stops: 93.75pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">（树、图补完篇）</span></strong><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; tab-stops: 93.75pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">本篇的主要目的是对树和图部分内容中的代码进行分析，涉及构造哈夫曼树、图的几种主流应用算法等问题。本篇结束后假期系列的基本数据结构部分就暂告一段落了。<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">构建哈夫曼树<span lang="EN-US"></span></span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">现在讨论构建哈夫曼树的算法实现问题。在前文已经对构造哈夫曼树的算法思路有了一定的介绍，易知哈夫曼树中没有度为<span lang="EN-US">1</span>的结点，因而一棵有<span lang="EN-US">n</span>个叶子的哈夫曼树共有<span lang="EN-US">2n-1</span>个结点，可以用一个大小为<span lang="EN-US">2n-1</span>的一维数组存放哈夫曼树的各个结点。由于每个结点同时还包含其双亲信息和孩子结点的信息，所以构成一个静态三叉链表。其结点结构分别是权值域、双亲序号、左子女序号、右子女序号。各结点存储在一维数组中，<span lang="EN-US">0</span>号单元不用，从<span lang="EN-US">1</span>号位置开始使用。<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">对于有<span lang="EN-US">n</span>个叶子结点的哈夫曼树，结点总数为<span lang="EN-US">2n-1</span>个，为实现方便，将叶子结点集中存储在前面部分<span lang="EN-US">1-n</span>个位置，而后面的<span lang="EN-US">n-1</span>个位置中存储其余非叶子结点。<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">我们给出静态三叉链表实现的哈夫曼树类型<span lang="EN-US">C</span>语言描述：<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>#define N 20</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>#define M 2*N-1</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>typedef struct</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>int weight;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>int parent;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>int LChild;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>int RChild;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}HTNode,HuffmanTree[M+1];</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">使用上述结构实现创建哈夫曼树算法：<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">void CrtHuffmanTree(HuffmanTree ht,int w[],int n)</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>for(i=1;i&lt;=n;i++)</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 2;">        </span>ht[i]={w[i],0,0,0}<span style="mso-tab-count: 1;">  </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">初始化<span lang="EN-US">1</span>—<span lang="EN-US">n</span>单元的叶结点<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">m=2*n-1;<span style="mso-tab-count: 1;">    </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">统计结点总数<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">for(i=n+1;i&lt;=m;i++)<span style="mso-tab-count: 1;"> </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">从<span lang="EN-US">n+1</span>至<span lang="EN-US">m</span>个结点为非叶结点<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>select(ht,i-1,&amp;s1,&amp;s2);<span style="mso-tab-count: 1;"> </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">从<span lang="EN-US">ht</span>中选择两个<span lang="EN-US">parent</span>为<span lang="EN-US">0</span>且<span lang="EN-US">weight</span>最小的结点，将其序号分别赋值给<span lang="EN-US">s1</span>、<span lang="EN-US">s2</span>返回<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>ht[i].weight=ht[s1].weight+ht[s2].weight;<span style="mso-tab-count: 1;">   </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">计算每次结合后根结点的权值<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>ht[s1].parent=i;<span style="mso-tab-count: 1;">    </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">将<span lang="EN-US">s1</span>、<span lang="EN-US">s2</span>的父结点指定为第<span lang="EN-US">i</span>个结点<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>ht[s2].parent=i;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span>ht[i].LChild=s1;<span style="mso-tab-count: 1;">    </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">对第<span lang="EN-US">i</span>个结点的左右子女结点赋值<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>ht[i].RChild=s2;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">计算哈夫曼编码<span lang="EN-US"></span></span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">我们知道，构建哈夫曼树的最终目的是求解哈夫曼编码，从而方便信息传输和数据压缩。因此基于哈夫曼树的哈夫曼编码计算算法就显得尤为重要了。<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>void CrtHuffmanCode(HuffmanTree ht,HuffmanCode hc,int n)</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">        </span>char *cd;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 2;">        </span>cd=(char*)malloc((n+1)*sizeof(char));<span style="mso-tab-count: 1;">   </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">初始化空间<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 2;">        </span>cd[n-1]=”\0”;<span style="mso-tab-count: 7;">                         </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">首先存放结束符<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">        </span>for(int i=1;i&lt;=n;i++)</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">        </span>{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 2;">        </span><span style="mso-tab-count: 1;">    </span>start=n-1;<span style="mso-tab-count: 3;">          </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">编码起始位置<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 3;">            </span>c=i;<span style="mso-tab-count: 4;">                </span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 3;">            </span>p=ht[i].parent;<span style="mso-tab-count: 2;">     </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">从叶结点开始倒推<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 3;">            </span>while(p!=0)</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 3;">            </span>{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 4;">                </span>&#8211;start;<span style="mso-tab-count: 2;">        </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">倒推一层，判断左<span lang="EN-US">0</span>右<span lang="EN-US">1</span>，再推一层，直到根结点<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 4;">                </span>if(ht[p].LChild==c)</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 4;">                </span>{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 5;">                    </span>cd[start]=’0’;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 84pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 84pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">else</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 84pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 84pt; tab-stops: 21.0pt 42.0pt 63.0pt 84.0pt 105.0pt 126.0pt 147.0pt 168.0pt 189.0pt 216.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>cd[start]=’1’;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 84pt; tab-stops: 21.0pt 42.0pt 63.0pt 84.0pt 105.0pt 126.0pt 147.0pt 168.0pt 189.0pt 216.0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 84pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">c=p;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 84pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">p=ht[p].parent;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">hc[i]=(char*)malloc((n-start)*sizeof(char));<span style="mso-tab-count: 1;">    </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">建立哈夫曼编码存放空间<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">strcpy(hc[i],&amp;cd[start]);</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">free(cd);</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">深度优先的简单路径算法<span lang="EN-US"></span></span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">在图这一部分中，简单路径是指任意两结点路径中不含相同结点的一条。为求解图的简单路径，需要先对图中所有结点进行统一标识，每访问一个结点，则更改该结点标识符，从而达到求简单路径的目的。<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span></span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">算法外围的核心是给所有结点统一赋值，并且建立对应于结点且独立的带值空间。下面给出用深度优先搜索寻找从<span lang="EN-US">u</span>到<span lang="EN-US">v</span>的简单路径算法<span lang="EN-US">C</span>语言描述。<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>void DFS_path(Graph *G,int u,int v)</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>int j;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>for(j=firstadj(G,u);j&gt;=0;j=nextadj(G,u,j))</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">    </span>{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">    </span><span style="mso-tab-count: 1;">    </span>if(pre[j]==-1)<span style="mso-tab-count: 2;">      </span>//</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">默认结点标识为<span lang="EN-US">-1</span>，一旦使用过即将标识符置为<span lang="EN-US">u</span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">        </span><span style="mso-tab-count: 1;">    </span>pre[j]=u;</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">        </span><span style="mso-tab-count: 1;">    </span>if(j==v)</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 3;">            </span>{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 4;">                </span>print_path(pre,v);</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 63pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 63pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">else</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 63pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">        </span>DFS_path(G,j,v);</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 63pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">生成树<span lang="EN-US"></span></span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">生成树涉及到很多实际应用，例如搭桥问题<span lang="EN-US">…</span>但利用<span lang="EN-US">MST</span>性质求<span lang="EN-US">MST</span>（<span lang="EN-US">Minimum Spanning Tree</span>）还分别有<span lang="EN-US">Prim</span>和<span lang="EN-US">kruskal</span>两种角度不同的算法。<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">Prim</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">算法通常被称为“加点法”，这是因为算法是在一个初始化为空的结点空间中，判断能令<span lang="EN-US">(u,v)</span>最短的<span lang="EN-US">u</span>对应的<span lang="EN-US">v</span>结点，然后加入到空的结点空间中，反复执行直到该结点空间与图的结点空间相等。<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US">Kruskal</span><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;">算法是根据权值最小的边，同时必须确保两个顶点不在同一个结点集合内，故有时<span lang="EN-US">Kruskal</span>算法也被称为“加边法”。事实上以上两种算法除却初始化的部分，真正涉及到原理的代码段就已经非常简单了。<span lang="EN-US"></span></span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">总结<span lang="EN-US"></span></span></span></strong></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
-
-
-<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-bidi-font-size: 10.5pt;"><span style="font-size: small;">对于拓扑排序、关键路径、最短路径等问题，读者应重点参照“图的应用”这一节连载，其原理已经比较详细，但由于经典算法时间复杂度高，已经有越来越多的专家学者对此提出了许多改进方案，并给出了许多算法解决方案，因此在此基础上参照相关科技文献，才能确保算法的实用性。<span lang="EN-US"></span></span></span></p>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-21T22:23:25+08:00" pubdate data-updated="true">2009-02-21</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/02/21/jia-qi-lian-zai-zhi-shi-wu//posts/14/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
