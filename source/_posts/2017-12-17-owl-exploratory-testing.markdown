@@ -30,7 +30,7 @@ tags:
 * **扩张（Expand）**，一旦产品拥有助推器（通常意味着已经找到了市场的适配点），市场需求就会呈现指数级上升，产品本身也需要具备足够的伸缩性以满足这些需求，由此收益也会快速上升。
 * **提取（Extract）**，当位于该阶段时，公司通常希望最大化产品收益。但此时收益的增幅会小于扩张阶段。
 
-![3X](http://7xk84n.com1.z0.glb.clouddn.com/owl_exploratory_testing/3x.png)
+![3X](http://content.hanyi.name/images/owl_exploratory_testing/3x.png)
 
 Kent Beck[认为](http://redgreenrepeat.com/2016/11/18/kent-beck-3x-and-software-tests/)，如果以产品是否成功作为衡量依据，那么引入自动化测试在探索阶段的作用就不大，甚至会延缓产品接受市场反馈循环的速度，对产品的最终成功毫无用处，还不如不引入；当位于扩张阶段时，市场一方面要求产品更高的伸缩性，另一方面也开始要求产品保证一致的行为（例如质量需求），那么此时就该引入自动化测试来保证产品的行为一致性；当产品最终处于提取阶段时，任何改动都应以不牺牲现有行为为前提，否则由此引发的损失可能远高于改动带来的收益，此时自动化测试就扮演了非常重要的角色。
 
@@ -48,7 +48,7 @@ Kent Beck[认为](http://redgreenrepeat.com/2016/11/18/kent-beck-3x-and-software
 
 这里讨论一种新的测试层级分配策略，我们称之为**三明治模型** 。如下图所示，该模型允许对不同测试层级的占比进行动态调整，说明了倒金字塔形、沙漏形以及金字塔形分配对特定产品开发阶段的积极作用。
 
-![Sandwich](http://7xk84n.com1.z0.glb.clouddn.com/owl_exploratory_testing/sandwich.png)
+![Sandwich](http://content.hanyi.name/images/owl_exploratory_testing/sandwich.png)
 
 ### 产品开发的自动化测试策略
 
@@ -60,7 +60,7 @@ Kent Beck[认为](http://redgreenrepeat.com/2016/11/18/kent-beck-3x-and-software
 
 许多新兴的测试技术和工具擅长各自场景下的验收测试，但更重要的仍是识别产品阶段和当前需求，以满足收益最大化。
 
-![Sandwich-3x](http://7xk84n.com1.z0.glb.clouddn.com/owl_exploratory_testing/sandwich-3x.png)
+![Sandwich-3x](http://content.hanyi.name/images/owl_exploratory_testing/sandwich-3x.png)
 
 由此我们认为，随着产品开发的演进，测试层级的分配应参考三明治模型，动态调整层级占比，更加重视运营和市场反馈，致力于真正帮助产品走向成功。
 

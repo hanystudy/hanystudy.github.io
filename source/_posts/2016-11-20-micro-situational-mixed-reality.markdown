@@ -18,7 +18,7 @@ tags:
 
 如果避开硬科幻，从终极关怀的角度审视VR/AR，我们所处时代的主题原来并非“黑科技”，而是“低门槛”和“大众化”。这里，本文提出一种特定场景下的混合现实产品思路，最后以一个真实的开源Demo为例，希望能为许多有想法的人打开一扇窗，鼓励更多人能参与到这一领域中来。
 
-![C22-Full](http://7xk84n.com1.z0.glb.clouddn.com/c22/full.jpg)
+![C22-Full](http://content.hanyi.name/images/c22/full.jpg)
 
 #### 为什么是特定场景？
 
@@ -66,7 +66,7 @@ tags:
 
 [C22](https://github.com/hanystudy/coder-from-22nd-century)是一个基于传统PC+Cardboard的微情境应用。它展示了未来的程序员，能够摆脱固定显示器的束缚，使用HMD、键鼠就可以编写代码，并且在自身环境周围展示各种信息的技术。
 
-![C22-Right](http://7xk84n.com1.z0.glb.clouddn.com/c22/right.png)
+![C22-Right](http://content.hanyi.name/images/c22/right.png)
 
 如上图所示，PC中的应用信息被独立传送至HMD中创建的每个虚拟屏幕上，程序员可以在三维场景中浏览各种信息。
 
@@ -74,7 +74,7 @@ tags:
 
 由于当前C22无法显示在一块透明质的HMD上（类似Hololens），因此也无法真正让普通用户感受到在现实中操作应用。此外由于分辨率的限制，C22目前能实现的用户体验也比较[受限](https://github.com/hanystudy/coder-from-22nd-century#resolution)。
 
-![C22-Left](http://7xk84n.com1.z0.glb.clouddn.com/c22/left.png)
+![C22-Left](http://content.hanyi.name/images/c22/left.png)
 
 为了快速实现产品原型，C22全部使用JavaScript编写，并且采用了许多尚未广泛兼容的技术（详见[项目github主页](https://github.com/hanystudy/coder-from-22nd-century)），由此带来的好处是核心部分搭建只用了两个晚上的时间，后期为了提高体验可能会进一步扩展当前技术栈。
 

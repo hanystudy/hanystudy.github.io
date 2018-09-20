@@ -40,7 +40,7 @@ Callback invoked whenever a subclass of the current class is created.
 
 For more clearly, here we give a figure to cover all five items listed in preface. (We also list two guests in this figure to represent custom codes in the hierarchy)
 
-![More advance Ruby OO hierarchy](http://7xk84n.com1.z0.glb.clouddn.com/metaprogramming_ruby/ruby_oo_hierarchy.png)
+![More advance Ruby OO hierarchy](http://content.hanyi.name/images/metaprogramming_ruby/ruby_oo_hierarchy.png)
 
 From the figure, we can see that class can be completely separated with objects under well design. Ruby uses this kind of hierarchy to implement its internal Object Oriented design. Here we would like to introduce the responsibilities on metaprogramming for each in above figure, and have deeper discussion on Module and Class, which are directly related to custom codes.
 

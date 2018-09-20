@@ -15,7 +15,7 @@ Metaprogramming is one of core features for ruby lang, it's widely used from int
 ### BasicObject
 As the object oriented hierarchy in ruby core, each type of class is also object of Class except BasicObject, and All the objects of Class has root superclass BasicObject, the one is also object of Class. Thus we'll have whole picture below.
 
-![Ruby OO hierarchy](http://7xk84n.com1.z0.glb.clouddn.com/metaprogramming_ruby/ruby_class.png)
+![Ruby OO hierarchy](http://content.hanyi.name/images/metaprogramming_ruby/ruby_class.png)
 
 #### i.class methods
 BasicObject only has single public class method, names "new".
