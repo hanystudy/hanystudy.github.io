@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="Looking back to the past five years, my common experience for joining a project is always looking like this: Learning business knowledge -> &hellip;&#8221;> <meta name="keywords" content="">
+<meta name="description" content="《软件设计与架构笔记》系列，是笔者对自上世纪60年代末至今在工业界和学术界皆有一定影响的软件设计方法的学习和记录，期望通过历史的时间轴把握相关技术发展的脉络，尝试理解推动了这一领域中概念、方法、原则、模式、实践不断演进的若干基本动机，倚靠巨人的肩膀，但求一条少些人云亦云的实践之路。 自诞生之日起 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,78 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/09/24/software-design-and-architecture-notes/">
+		
+			软件设计与架构笔记(1)</a>
+	</h2>
+	<div class="entry-content">
+		<p><strong><em>《软件设计与架构笔记》系列，是笔者对自上世纪60年代末至今在工业界和学术界皆有一定影响的软件设计方法的学习和记录，期望通过历史的时间轴把握相关技术发展的脉络，尝试理解推动了这一领域中概念、方法、原则、模式、实践不断演进的若干基本动机，倚靠巨人的肩膀，但求一条少些人云亦云的实践之路。</em></strong></p>
+
+<p>自诞生之日起，软件设计就同时在工业界和学术界探索和实践着，然而二者的动机和方法大相径庭。例如计算机科学家Edsger W. Dijkstra，一生就致力于对计算的简洁性和精确性的探索，其工作背后蕴含了严谨的数学美学；而工业界则侧重于使用由计算衍生的自动化方法解决传统生产的问题，根本目的是追求经济利益的最大化。有趣的是，二者的偶然交汇就迸发出这一系列文章的主题——软件设计，而软件架构——作为稍晚出现的buzz word，有时也被本文采用以和行业用语保持一致。</p>
+
+<h2>THE Multiprogramming system：早期探索</h2>
+
+<p>1965年，Dijkstra在埃因霍温科技大学领导了一支团队在Electrologica(EL) X8上开发多道程序系统，该系统的主要目标是能够平滑地处理持续的用户程序流，并将其作为服务提供给学校。该系统的设计目标是：1.降低短程序运行的周转时间； 2.更经济地使用外设; 3.结合后备存储器的自动控制和中央处理器的经济使用; 4.验证一种经济可行性，即将EL X8用于运行在不依赖容量和计算能力，仅需要通用计算机灵活性的应用程序。</p>
+
+<p>出于多道程序系统的<strong>复杂性</strong>，实时触发中断的偶然性和不可复现性使系统开发的debug面临挑战。为此，团队决定在系统构建之初就重视对debug能力的设计，从而在具体实现前就能证明系统的逻辑可靠性，并显著降低了实际bug数量。在论文EWD68中，为了提高<strong>可测试性</strong>，设计者采用层级结构划分整个系统，并以不同的职责区分系统层级：</p>
+
+<p>0级，负责把逻辑可用的进程分配给处理器。为了防止任何进程独占处理器，该层实现了一个实时时钟中断功能。</p>
+
+<p>1级，实现“段控制器”，通过中断与上层的顺序进程保持同步，负责从自动后备存储器中记录数据。</p>
+
+<p>2级，实现“消息解释器”，负责在控制键盘的输入时产生中断，并且联接系统对话的操作员和特定的目标进程。</p>
+
+<p>3级，实现与输入流缓冲和输出流解缓冲相关的顺序进程，通过逻辑通信单元实现对具体外设的抽象，并按照资源限制采用同步方法限制外设运行的数量。</p>
+
+<p>4级，实现独立用户程序。</p>
+
+<p>根据上述层级划分，团队制定了需求规格说明书，并依此实现系统。在验证阶段，在添加下一层级前，需要对前一层进行充分测试，例如针对0级中实现的实时中断和处理器分配，首先设计一个完整的测试状态空间，然后依次进行测试。而当对1级的“段控制器”进行测试时，可以在0级时制定的测试状态空间的基础上，通过引入“请求页”操作，实现状态空间的扩展，只需引入少量新的测试就可以满足当前层的测试需求，直至完成整个系统。</p>
+
+<p>Dijkstra认为，虽然在概念和设计阶段花费了较长时间，但是该过程为系统贡献了良好的设计，避免传统非层级实现可能面临的测试状态空间“爆炸”问题，从而对系统质量提供保证。</p>
+
+<p>虽然缺少定量的研究方法，发布于1968年的THE Multiprogramming System可以说是首次定性地证明了<strong>结构</strong>在软件设计中的重要作用，并且以系统的可测试性为例进行了深入阐释。</p>
+
+<h2>结论</h2>
+
+<p>系统的复杂性引出了软件设计问题。Dijkstra把软件开发过程划分成三个阶段：概念、构建和验证，并且由一个基于层级划分的设计案例指出结构因素在软件设计中的重要性。虽然工业界可能面临更多的问题（例如成本、人员、规模、业务复杂程度等），但是概念阶段产出的良好设计，能使验证阶段受益，从而实现整体的系统质量保证（笔者注：某种程度上也起到控制成本的作用），是THE多道程序系统的一项重要结论，也启发后人对软件概念阶段本身和其边际效应的进一步研究。</p>
+
+<p>值得一提的是，按照不同职责划分层级，底层能够对上层隐藏其核心概念和具体实现，例如0级隐藏了处理器操作，1级隐藏了“页存储”机制，2级隐藏了电传打印控制台等。但是“信息隐藏”作为一个基本设计概念被明确提出，则是若干年以后了。</p>
+
+<h2>引用</h2>
+
+<p>[EWD68] EW Dijkstra, <a href="http://www.cs.utexas.edu/users/EWD/ewd01xx/EWD196.PDF">The structure of the &lsquo;THE&rsquo;-multiprogramming system.</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-09-24T11:57:34-04:00" pubdate data-updated="true">2018-09-24</time></div>
+	
+
+
+	
+		<span class="comments"><a href="/blog/2018/09/24/software-design-and-architecture-notes//index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1899,95 +1971,6 @@ Instance methods defined in a module are only callable when included. These meth
 
 	
 		<span class="comments"><a href="/blog/2015/08/29/metaprogramming-ruby-core-concepts-object-oriented-hierarchies//index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel/">
-		
-			Metaprogramming Ruby: Core Concepts - Kernel</a>
-	</h2>
-	<div class="entry-content">
-		<p>The Kernel is the object of Module, thus it has all instance methods from the parent. Also it&rsquo;s available as instance methods in every Ruby object since the Kernel is included by class Object. Kernel has widespread usage including but not limit to internal Constant references, Processes operations, Loading Strategies, Exceptions, Controlling, IO, and Basic string operations. This article will focus on metaprogramming on instance level.</p>
-
-<h3>Kernel</h3>
-
-<p>All Constants and instance methods are public in Kernel, thus they all can be used in any objects as callee.</p>
-
-<h5>binding</h5>
-
-<p>Returns a Binding object, describing the variable and method bindings at the point of call. This object can be used when calling eval to execute the evaluated command in this environment.</p>
-
-<h5>eval</h5>
-
-<p>Evaluates the Ruby expression(s) in string. If the binding is given, which must be a Binding object, the evaluation is performed in its context. If the optional filename and lineno parameters are present, they will be used when reporting syntax errors.</p>
-
-<h5>block_given? / iterator?</h5>
-
-<p>Returns true if yield would execute a block in the current context. The iterator? form is mildly deprecated.</p>
-
-<h5>callcc{|cont| block}</h5>
-
-<p>Generates a Continuation object, which it passes to the associated block. You need to require &lsquo;continuation&rsquo; before using this method. Performing a cont.call will cause the callcc to return (as will falling through the end of the block). The value returned by the callcc is the value of the block, or the value passed to cont.call.
-In general, Continuation object is used to be analogous to C setjmp/longjmp, or a thread. cont will return itself, and cont.call will jump to end of callcc block.</p>
-
-<h5>caller</h5>
-
-<p>Returns the current execution stack—an array containing strings in the form file:line or file:line: in &lsquo;method&rsquo;. Returns nil if start is greater than the size of current execution stack. Optionally you can pass a range, which will return an array containing the entries within the specified range.</p>
-
-<h5>caller_locations</h5>
-
-<p>Returns the current execution stack—an array containing backtrace location objects. Returns nil if start is greater than the size of current execution stack. Optionally you can pass a range, which will return an array containing the entries within the specified range.</p>
-
-<h5>eval</h5>
-
-<p>Evaluates the Ruby expression(s) in string. If binding is given, which must be a Binding object, the evaluation is performed in its context. If the optional filename and lineno parameters are present, they will be used when reporting syntax errors.</p>
-
-<h5>global_variables</h5>
-
-<p>Lookup global variables.</p>
-
-<h5>lambda</h5>
-
-<p>Equivalent to Proc.new, except the resulting Proc objects check the number of parameters passed when called.</p>
-
-<h5>proc</h5>
-
-<p>Equivalent to Proc.new</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-08-29T21:57:31+08:00" pubdate data-updated="true">2015-08-29</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/ruby/'>ruby</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2015/08/29/metaprogramming-ruby-core-concepts-kernel//index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
