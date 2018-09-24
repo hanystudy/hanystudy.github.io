@@ -3,7 +3,12 @@ layout: post
 title: "软件设计与架构笔记(1)"
 date: 2018-09-24 11:57:34 -0400
 comments: true
-categories: 
+categories:
+- architecture
+tags:
+- software design
+- software architecture
+- dijkstra
 ---
 
 ***《软件设计与架构笔记》系列，是笔者对自上世纪60年代末至今在工业界和学术界皆有一定影响的软件设计方法的学习和记录，期望通过历史的时间轴把握相关技术发展的脉络，尝试理解推动了这一领域中概念、方法、原则、模式、实践不断演进的若干基本动机，倚靠巨人的肩膀，但求一条少些人云亦云的实践之路。***
