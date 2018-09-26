@@ -1,0 +1,416 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>软件设计与架构笔记(2)  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="结构化编程(Structured Programming)：计算语言的突破 上世纪50-60年代，人类的计算能力实现了迅猛发展，各界对计算机的应用也有很高期许，越来越多的领域希望得到强大的计算赋能从而实现飞跃。然而当面临的问题越多、越复杂时，人们在解决问题的道路上发现了一条巨大的鸿沟， &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">软件设计与架构笔记(2)</h2>
+	<div class="entry-content"><h2>结构化编程(Structured Programming)：计算语言的突破</h2>
+
+<p>上世纪50-60年代，人类的计算能力实现了迅猛发展，各界对计算机的应用也有很高期许，越来越多的领域希望得到强大的计算赋能从而实现飞跃。然而当面临的问题越多、越复杂时，人们在解决问题的道路上发现了一条巨大的鸿沟，即以现有的软件构建理论和方法难以应对这些挑战。机遇与挑战并存，这场<strong>软件危机</strong>(Software Crisis)最终促成了软件工程作为一门独立的学科从计算机科学的襁褓中成长起来。</p>
+
+<p>软件危机这个词最早在1968年的北约组织软件工程会议上被诸多与会者提出[NATO68]，由此引发的技术创新和组织行为思辨至今依然活跃。而更现实的影响是，科学家们首先在编程语言本身找到了突破口——<strong>结构化编程</strong>。</p>
+
+<p>发明于上世纪50年代的ALGOL语言，首次用begin&hellip;end语句引入了<strong>代码块</strong>的概念，通过限定其中变量声明的词法作用域，提高程序的<strong>可读性</strong>，从此引起了围绕代码块的研究。1966年，论文[Bohm66]证明使用三种基本的程序结构就能表达任何可计算函数：顺序执行、条件选择和循环迭代，这为随后针对结构化编程的讨论提供了理论依据。1968年，Dijkstra发表了著名的”GOTO语句有害“的观点，并且肯定了如条件选择、循环等语句的应用，同时称GOTO语句应该在所有“高级语言”（这里指除了机器码之外的语言）中被废除[EWD68]。Dijkstra认为应当尽可能减少静态程序和动态运行进程之间的差距，而GOTO语句造成了大量程序难以被理解，即人很难从混乱的静态代码中认识程序的真正意图。这一废除GOTO语句的言论激起旷日持久的争论，反对者认为GOTO所具有的灵活性能满足持续的系统优化工作，但争论两方基本同意应当对GOTO限制使用。于是，结构化编程开始被广泛接受。</p>
+
+<p>伴随着结构化编程的普及，过程式编程(Procedural programming)也在60年代起被许多流行语言采纳，如COBOL和BASIC。这种编程方法以代码块为基础，允许使用子过程（也称子程或函数）编写程序单元，并且可以被程序随时调用。使得来自不同程序员甚至不同组织的代码变得简单可复用，为随后代码库的流行奠定基础。</p>
+
+<h2>结构化程序设计与分析</h2>
+
+<p>结构化编程实现了编程语言的巨大进步，作为首席布道者，Dijkstra发表了很多关于程序的可理解性以及结构化编程实践的原则性观点[EWD70]，但如何设计结构化程序还需要进一步说明。1971年，在计算机教育领域功勋卓著的Niklaus Wirth详细解释了一种自顶而下逐步求精的程序设计方法，并以数学中经典的八皇后问题（把这个著名问题作为编程案例，原因之一是尚无该问题的已知解析解）为例演示了程序设计从问题分析到实现的过程[NW71]。</p>
+
+<p>简单分析可以得到八皇后问题的直观解法：对于全体候选解的集合A，其中每个解元素x满足条件函数p，即(x ∈ A) ∧ p(x)，则：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>repeat Generate the next element of A and call it x
+</span><span class='line'>until p(x) ∨ (no more elements in A);
+</span><span class='line'>if p(x) then x = solution</span></code></pre></td></tr></table></div></figure>
+
+
+<p>由排列组合知识可知，集合A的空间可达2<sup>32</sup>，枚举算法效率较低。通过对问题进一步的分析，使用回溯法解决该问题的算法效率较高，即：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>j := l;
+</span><span class='line'>repeat trystep j;
+</span><span class='line'>if successful then advance else regress
+</span><span class='line'>until (j &lt; 1) ∨ (j &gt; n) </span></code></pre></td></tr></table></div></figure>
+
+
+<p>以上述程序分析结果为基础构建程序，按照回溯算法的基本思想，首先依照specification给出初步实现：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>variable board, pointer, safe;
+</span><span class='line'>considerfirstcolumn;
+</span><span class='line'>repeat trycolumn;
+</span><span class='line'>  if safe then
+</span><span class='line'>  begin setqueen; considernextcolumn
+</span><span class='line'>  end else regress
+</span><span class='line'>until lastcoldone ∨ regressoutoffirstcol</span></code></pre></td></tr></table></div></figure>
+
+
+<p>根据现有结构化编程语言的表达能力，对如下指令进一步分解：</p>
+
+<p>trycolumn:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>procedure trycolumn;
+</span><span class='line'>repeat advancepointer; testsquare
+</span><span class='line'>until safe ∨ lastsquare </span></code></pre></td></tr></table></div></figure>
+
+
+<p>regress:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>procedure regress;
+</span><span class='line'>begin reconsiderpriorcolumn
+</span><span class='line'>  if ¬ regressoutoffirstcol then
+</span><span class='line'>  begin removequeen;
+</span><span class='line'>      if lastsquare then
+</span><span class='line'>      begin reconsiderpriorcolumn;
+</span><span class='line'>          if ¬ regressoutoffirstcol then
+</span><span class='line'>              removequeen
+</span><span class='line'>      end
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>截至目前，如需对上述程序中的指令做进一步分解，就需要设计额外的数据表示了。通过分析待分解语句，可知需要设计一个记录每位皇后位置的数据表示，例如使用二维数组表达棋盘上的每个方块。这里给出一个优化的数据表示方式：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>integer j (0 ≤ j ≤ 9)
+</span><span class='line'>integer array x[1:8] (0 ≤ x[i] ≤ 8) </span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中j表示当前被检查的列序号，一维数组x用于存储上一次被检查方块的坐标，程序的部分指令可以被进一步细化为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>procedure considerfirstcolumn;
+</span><span class='line'>  begin j := 1; x[1] := 0 end
+</span><span class='line'>procedure considernextcolumn;
+</span><span class='line'>  begin j := j + 1; x[j] := 0 end
+</span><span class='line'>procedure reconsidetpriorcolumn; j := j - 1
+</span><span class='line'>procedure advancepointer;
+</span><span class='line'>  x[j] := x[j] + 1
+</span><span class='line'>Boolean procedure lastsquare;
+</span><span class='line'>  lastsquare := x[j] = 8
+</span><span class='line'>Boolean procedure lastcoldone;
+</span><span class='line'>  lastcoldone := j &gt; 8
+</span><span class='line'>Boolean procedure regressoutoffirstcol;
+</span><span class='line'>  regressoutoffirstcol := j &lt; 1 </span></code></pre></td></tr></table></div></figure>
+
+
+<p>接下来考虑剩余指令testsquare、setqueen和removequeen。</p>
+
+<p>指令testsqaure需要验证是否满足问题条件，通过已知的x数组应不难通过计算进行判定，问题是可能导致较高的计算量，同时考虑到testsquare的调用频次较高，这里采用额外数据表示进行优化，设计三个Boolean型数组，其意义如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>a[k] = true : no queen is positioned in row k
+</span><span class='line'>b[k] = true : no queen is positioned in the /-diagonal k
+</span><span class='line'>c[k] = true : no queen is positioned in the \-diagonal k </span></code></pre></td></tr></table></div></figure>
+
+
+<p>那么testsquare就可以用简单的布尔运算表示，其余指令也可以通过上述结构完成：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>procedure testsquare;
+</span><span class='line'>  safe := a[x[j]] ∧ b[j+x[j]] ∧ c[j-x[j]]
+</span><span class='line'>procedure setqueen;
+</span><span class='line'>  a[x[j]] := b[j+x[j]] := x[j-x[j]] := false
+</span><span class='line'>procedure removequeen;
+</span><span class='line'>  a[x[j]] := b[j+x[j]] := c[j-x[j]] := true </span></code></pre></td></tr></table></div></figure>
+
+
+<p>此时发现上述实现的x[j]调用次数过多，为了进一步优化，把x[j]用变量i表示，从而有：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>procedure testsquare;
+</span><span class='line'>  safe := a[i] ∧ b[i+j] ∧ c[i-j]]
+</span><span class='line'>procedure setqueen;
+</span><span class='line'>  a[i] := b[i+j] := c[i-j] := false
+</span><span class='line'>procedure removequeen;
+</span><span class='line'>  a[i] := b[i÷j] := c[i-j] := true
+</span><span class='line'>procedure considerflrstcolumn ;
+</span><span class='line'>  begin j:= 1; i:= 0 end
+</span><span class='line'>procedure advancepointer; i := i + l
+</span><span class='line'>procedure considernextcolumn
+</span><span class='line'>  begin x[j] := i; j:=j+l; i := 0 end
+</span><span class='line'>Boolean procedure lastsquare;
+</span><span class='line'>  lastsquare := i = 8 </span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过inline替换程序中的部分指令，其余采用过程调用，从而最终实现如下程序：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>j := 1; i := 0;
+</span><span class='line'>repeat
+</span><span class='line'>  repeat i := i + 1 ; testsquare
+</span><span class='line'>  until safe ∨ (i = 8);
+</span><span class='line'>  if safe then
+</span><span class='line'>  begin setqueen; x[j] := i; j := j + 1; i := 0
+</span><span class='line'>  end else regress
+</span><span class='line'>until (j &gt; 8) ∨ (j &lt; 1);
+</span><span class='line'>if i &gt; 8 then PRINT(x) else FAILURE </span></code></pre></td></tr></table></div></figure>
+
+
+<p>前述过程清晰解释了逐步求精这种非常经典的结构化程序的分析和设计过程，从早期分析确定适用算法，然后利用基本的结构化编程元素描述初步程序，对复杂过程进一步分解，同时考虑额外必要的数据表示和程序运行效率优化，最终使用目标编程语言实现程序。这是一种具有普遍适用意义的编程方法论，也呼应了Wirth的那句名言：程序=算法+数据结构。</p>
+
+<h2>结论</h2>
+
+<p>50年前的软件危机所揭露的问题成为今天软件工程研究的基石。GOTO语句的争论直至今天，从历史发展看，更多人选择支持Dijkstra的GOTO有害论，许多90年代以后出现的编程语言并没有在应用层面设计GOTO语句。但是，GOTO争论背后有关编程语言灵活和统一的争辩还远未结束。另一方面，结构化编程促成了一套良好的编程方法论，迄今Wirth的逐步求精方法还被采用于程序设计课程，为计算机教育的普及和广泛应用打下了坚实基础。同时，软件设计所要解决的问题也得以提升到更高的复杂度水平。</p>
+
+<h2>引用</h2>
+
+<p>NATO68, <a href="http://homepages.cs.ncl.ac.uk/brian.randell/NATO/nato1968.PDF">NATO Software Engineering Conference</a></p>
+
+<p>Bohm66, <a href="http://www.cs.unibo.it/~martini/PP/bohm-jac.pdf">Flow Diagrams, Turing Machines and Languages with Only Two Formation Rules</a></p>
+
+<p>EWD68, <a href="https://www.cs.utexas.edu/users/EWD/ewd02xx/EWD215.PDF">Go-to statement considered harmful</a></p>
+
+<p>EWD70, <a href="https://pure.tue.nl/ws/files/2408738/252825.pdf">Notes on structured programming</a></p>
+
+<p>NW71, <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.119.8111&amp;rep=rep1&amp;type=pdf">Program Development by Stepwise Refinement</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-09-25T09:46:21-04:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2018/09/25/software-design-and-architecture-notes-2/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2018
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2018/09/25/software-design-and-architecture-notes-2/';
+        var disqus_url = 'http://www.hanyi.name/blog/2018/09/25/software-design-and-architecture-notes-2/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+</body>
+</html>
