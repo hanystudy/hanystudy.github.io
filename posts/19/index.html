@@ -9,7 +9,17 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="在C/C++中实现本地方法 生成C/C++头文件之后，你就需要写头文件对应的本地方法。注意：所有的本地方法的第一个参数都是指向JNIEnv结构的。这个结构是用来调用JNI函数的。第二个参数jclass的意义，要看方法是不是静态的（static）或者实例（Instance）的。前者， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="全部的C/C++方法实现代码如下:
+///
+*
+* 一缕阳光(sundy)版权所有，保留所有权利。
+/
+///*
+*
+* TODO Jni 中一个从Java到C/C++参数传递测试类
+*
+* @author 刘正伟(sundy)
+* @see http://www.cnweblog.com/ &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +107,191 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/10/18/JNI-ji-shu-chu-bu-san/">
+		
+			JNI技术初步(三)</a>
+	</h2>
+	<div class="entry-content">
+		<p>全部的C/C++方法实现代码如下:
+/<strong>//<em>
+*
+* 一缕阳光(sundy)版权所有，保留所有权利。
+</em>/
+/</strong>//<em>*
+*
+* TODO Jni 中一个从Java到C/C++参数传递测试类
+*
+* @author 刘正伟(sundy)
+* @see <a href="http://www.cnweblog.com/sundy">http://www.cnweblog.com/sundy</a>
+* @see <a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#x73;&#x75;&#110;&#100;&#121;&#x32;&#54;&#x40;&#x31;&#x32;&#54;&#x2e;&#99;&#111;&#109;">&#115;&#117;&#110;&#100;&#121;&#50;&#x36;&#x40;&#x31;&#50;&#x36;&#46;&#99;&#111;&#x6d;</a>
+* @version 1.0
+* @since 2005-4-30
+*
+* 修改记录：
+*
+* 日期 修改人 描述
+* &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-
+*
+*
+*
+</em>/
+// JniManage.cpp : 定义 DLL 应用程序的入口点。
+//
+package com.sundy.jnidemo;
+＃i nclude &ldquo;stdafx.h&#8221;＃i nclude &lt;stdio.h&gt;
+＃i nclude &lt;math.h&gt;
+＃i nclude &#8220;jni.h&rdquo;
+＃i nclude &ldquo;jni_md.h&rdquo;</p>
+
+<p>＃i nclude &ldquo;./head/Base.h&rdquo;
+＃i nclude &ldquo;head/wmi.h&rdquo;
+＃i nclude &ldquo;head/com_sundy_jnidemo_ChangeMethodFromJni.h&rdquo; //通过javah -jni javactransfer 生成
+＃i nclude &lt;stdio.h&gt;
+＃i nclude &ldquo;stdlib.h&rdquo;
+＃i nclude &ldquo;string.h&rdquo;</p>
+
+<h1>pragma comment (lib,&ldquo;BaseInfo.lib&rdquo;)</h1>
+
+<h1>pragma comment (lib,&ldquo;jvm.lib&rdquo;)</h1>
+
+<p>//硬盘信息
+struct {
+char name[256];
+int serial;
+}DiskInfo;
+/<em><em>//</em>BOOL APIENTRY DllMain( HANDLE hModule,
+DWORD ul_reason_for_call,
+LPVOID lpReserved
+)
+{
+LPTSTR strName = new CHAR[256] ;
+(</em>GetHostName)(strName);
+printf(&ldquo;%s\n&rdquo;,strName);
+delete [] strName;</p>
+
+<p>return TRUE;
+}<em>/
+//将jstring类型转换成windows类型
+char</em> jstringToWindows( JNIEnv <em>env, jstring jstr );
+//将windows类型转换成jstring类型
+jstring WindowsTojstring( JNIEnv</em> env, char* str );</p>
+
+<p>//主函数
+BOOL WINAPI DllMain(HANDLE hHandle, DWORD dwReason, LPVOID lpReserved)
+{
+return TRUE;
+}
+//输入常用的数值类型 Boolean,Byte,Char,Short,Int,Float,Double
+JNIEXPORT void JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_displayParms
+(JNIEnv <em>env, jobject obj, jstring s, jint i, jboolean b)
+{
+const char</em> szStr = (env)-&gt;GetStringUTFChars(s, 0 );
+printf( &ldquo;String = [%s]\n&rdquo;, szStr );
+printf( &ldquo;int = %d\n&rdquo;, i );
+printf( &ldquo;boolean = %s\n&rdquo;, (b==JNI_TRUE ? &ldquo;true&rdquo; : &ldquo;false&rdquo;) );
+(env)-&gt;ReleaseStringUTFChars(s, szStr );
+}</p>
+
+<p>//调用一个静态方法,只有一个简单类型输出
+JNIEXPORT jint JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_add
+(JNIEnv *env, jobject, jint a, jint b)
+{
+int rtn = (int)(a + b);
+return (jint)rtn;
+}</p>
+
+<p>/<em><em>/////输入一个数组,这里输入的是一个Boolean类型的数组
+JNIEXPORT void JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_setArray
+(JNIEnv </em>env, jobject, jbooleanArray ba)
+{
+jboolean</em> pba = (env)-&gt;GetBooleanArrayElements(ba, 0 );
+jsize len = (env)-&gt;GetArrayLength(ba);
+int i=0;
+// change even array elements
+for( i=0; i &lt; len; i+=2 )
+{
+pba[i] = JNI_FALSE;
+printf( &ldquo;boolean = %s\n&rdquo;, (pba[i]==JNI_TRUE ? &ldquo;true&rdquo; : &ldquo;false&rdquo;) );
+}
+(env)-&gt;ReleaseBooleanArrayElements(ba, pba, 0 );
+}</p>
+
+<p>/<em><em>/////返回一个字符串数组
+JNIEXPORT jobjectArray JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_getStringArray
+(JNIEnv </em>env, jobject)
+{
+jstring str;
+jobjectArray args = 0;
+jsize len = 5;
+char</em> sa[] = { &ldquo;Hello,&rdquo;, &ldquo;world!&rdquo;, &ldquo;JNI&rdquo;, &ldquo;is&rdquo;, &ldquo;fun&rdquo; };
+int i=0;
+args = (env)-&gt;NewObjectArray(len,(env)-&gt;FindClass(&ldquo;java/lang/String&rdquo;),0);
+for( i=0; i &lt; len; i++ )
+{
+str = (env)-&gt;NewStringUTF(sa[i] );
+(env)-&gt;SetObjectArrayElement(args, i, str);
+}
+return args;
+}</p>
+
+<p>//返回一个结构,这里返回一个硬盘信息的简单结构类型
+JNIEXPORT jobject JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_getStruct
+(JNIEnv <em>env, jobject obj)
+{
+/**//</em> 下面为获取到Java中对应的实例类中的变量*/</p>
+
+<p>//获取Java中的实例类
+jclass objectClass = (env)-&gt;FindClass(&ldquo;com/sundy/jnidemo/DiskInfo&rdquo;);</p>
+
+<p>//获取类中每一个变量的定义
+//名字
+jfieldID str = (env)-&gt;GetFieldID(objectClass,&ldquo;name&rdquo;,&ldquo;Ljava/lang/String;&rdquo;);
+//序列号
+jfieldID ival = (env)-&gt;GetFieldID(objectClass,&ldquo;serial&rdquo;,&ldquo;I&rdquo;);
+//给每一个实例的变量付值
+(env)-&gt;SetObjectField(obj,str,(env)-&gt;NewStringUTF(&ldquo;my name is D:&rdquo;));
+(env)-&gt;SetShortField(obj,ival,10);</p>
+
+<p>return obj;
+}</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-18T16:29:57+08:00" pubdate data-updated="true">2008-10-18</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2008/10/18/JNI-ji-shu-chu-bu-san//posts/19/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1355,225 +1550,6 @@ char *tmpdata = (char*)(*env)-&gt;GetByteArrayElements(env, bytearray, NULL);
 
 	
 		<span class="comments"><a href="/blog/2008/08/26/xin-de-wang-zhan-jie-gou-he-feng-ge//posts/19/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/08/24/C-C-shi-xi-she-ji-wen-dang-yu-Win32-ji-yu-Win32-console-app-ding-min-hang-ding/">
-		
-			C++/C实习设计文档——基于Win32 Console App的民航订票系统</a>
-	</h2>
-	<div class="entry-content">
-		<div class="Section0" style="LAYOUT-GRID:  15.6pt none">
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><strong><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><strong>源码、演示ppt及测试结果待续…</strong></span></strong></span></span></p>
-<p class="0" style="TEXT-ALIGN: center"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><strong>民航订票系统项目计划书</strong></span></span></p>
-<p class="0" style="TEXT-ALIGN: center"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">V</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2.0 Final</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> <span style="font-family: 宋体;">韩翼 王毅飞</span></span></p>
-<p class="0"> <span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">一、系统简介</span></span></p>
-<p class="0"> <strong><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">声明:本设计书最终版与配套源代码的实现有一定差距,这将在测试文档中详细说明,本文档仅在开发之前进行了整体的修改和完善,基本上展现了本系统的结构化设计.</span></span></strong></p>
-<p class="0"> <span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">民航订票系统允许用户自由注册、登陆，用户权限分为三种级别，分别是一般浏览用户、注册用户、民航售票员和系统管理员，具体权限如下：</span></span></p>
-<p class="0" style="MARGIN-LEFT: 15.75pt; TEXT-INDENT: -15.75pt"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1<span style="font-family: 宋体;">、一般浏览用户</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">（默认权限为r即只读），</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">可</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">按照各种方式查看</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">航班信息。</span></span></p>
-<p class="0"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2<span style="font-family: 宋体;">、一般的注册用户</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">（默认权限为r即只读），</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">可</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">按照各种方式查看数据</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">。并且能查看自己的信息和订票情况，并且可以网上订票、退票，修改自己的信息等等功能</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">；</span></span></p>
-<p class="0"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、民航机票售票员，</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">除了可以查看数据外还能编辑</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">航班信息。</span></span></p>
-<p class="0"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">4<span style="font-family: 宋体;">、系统管理员，他可以拥有管理航班的所有功能，并且可以创建民航机票售票员，</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">授权用户权限</span></span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">等功能</span></span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">。</span></span></p>
-
-<p class="0">
-<div class="0"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">二、流程图设计</span></span>
-<div class="0"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span></div>
-</span></span></div>
-<span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">
-<div class="Section0" style="layout-grid: 15.6pt none;">
-<p class="0"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">三、界面设计</span></span></p>
-<p class="0" style="line-height: 12pt;"> <span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">1、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">主菜单</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Register <span style="font-family: 宋体;">用户注册</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Login   <span style="font-family: 宋体;">用户登录</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Flight query   <span style="font-family: 宋体;">航班查询</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Quit    <span style="font-family: 宋体;">退出系统</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">2、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户注册</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">……</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Success <span style="font-family: 宋体;">返回主菜单</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Fail    <span style="font-family: 宋体;">返回主菜单</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">3、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户登录</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">User name <span style="font-family: 宋体;">用户名</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">User password <span style="font-family: 宋体;">用户密码</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">4、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">登陆界面</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Flight query <span style="font-family: 宋体;">航班查询</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Ticket info <span style="font-family: 宋体;">订票信息</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">U</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">pdate info <span style="font-family: 宋体;">修改信息</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">退出</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">5、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">航班查询</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Id <span style="font-family: 宋体;">航班代号</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Company <span style="font-family: 宋体;">航空公司</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Initial station <span style="font-family: 宋体;">起始站</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Destination <span style="font-family: 宋体;">终点站</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Price <span style="font-family: 宋体;">票价</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Discount <span style="font-family: 宋体;">打折信息</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Time <span style="font-family: 宋体;">飞行时间</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">6、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">管理登陆</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Admin login <span style="font-family: 宋体;">系统管理员</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Conductor <span style="font-family: 宋体;">售票员</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">7、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">系统管理员</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Flight query <span style="font-family: 宋体;">航班查询</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">U</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">pdate flight <span style="font-family: 宋体;">编辑航班</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Grant user  <span style="font-family: 宋体;">用户授权</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">8、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">售票员</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Flight query <span style="font-family: 宋体;">航班查询</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Update flight <span style="font-family: 宋体;">编辑航班</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">9、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">编辑航班</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Id <span style="font-family: 宋体;">航班代号</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Company <span style="font-family: 宋体;">航空公司</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Initial station <span style="font-family: 宋体;">起始站</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Destination <span style="font-family: 宋体;">终点站</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Price <span style="font-family: 宋体;">票价</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">DIscount <span style="font-family: 宋体;">打折信息</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Time <span style="font-family: 宋体;">飞行时间</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">10<span style="font-family: 宋体;">、用户授权</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">User name <span style="font-family: 宋体;">用户名</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">G</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">rant level <span style="font-family: 宋体;">授权级别</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">11<span style="font-family: 宋体;">、订票信息</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">12<span style="font-family: 宋体;">、网上订票</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">I</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">d <span style="font-family: 宋体;">航班代号</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Time <span style="font-family: 宋体;">飞行时间</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Back <span style="font-family: 宋体;">返回上级</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">13<span style="font-family: 宋体;">、修改信息</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">……</span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">四、模块设计</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">0<span style="font-family: 宋体;">、链表操作</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">1、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">航班模块</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">cl</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">as</span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">s</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> Flight</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">航班号</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Id</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">航线起始站</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Initial</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">航线终点站</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Destinition</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">飞行时间</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Time</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">成员订额</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int maxcount</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">票价</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">float Price</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">折扣信息</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int Discount</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">添加航班</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">AddFlight()</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">&amp;id,&amp;Initial,&amp;Destinition,&amp;Time,&amp;maxcount,&amp;Price,&amp;Discount</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">编辑航班</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">UpdateFlight</span><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">()</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">&amp;id,&amp;Initial,&amp;Destinition,&amp;Time,&amp;maxcount,&amp;Price,&amp;Discount</span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">2、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">用户模块</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">C</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">lass Users</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">用户名 </span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Username</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">密码 </span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Password</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">权限</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">rank</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">3<span style="font-family: 宋体;">、//普通用户模块 </span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">User:Users,Flight</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">用户名</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Username</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">密码</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Password</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">性别</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string Sex</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">民族</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">string</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> People</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">身份证号码</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">long Id</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">护照号码</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">string VisaId</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">级别</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int Rank</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">注册用户</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Register()</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">用户登陆</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Login()</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">修改信息</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">UpdateInfo()</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">网上订票</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">Tickets()</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">订票信息</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">TicketsInfo()</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">附加密模块:</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">M</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">d5()</span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">3、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">查询模块</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">C</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">lass Query</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">查询函数</span></span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">FlightIdQuery(&amp;id)</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightInitialQuery(&amp;Initial)</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightDestinitionQuery(&amp;Destinition)</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightTimeQuery(&amp;Time)</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightMaxcountQuery(&amp;maxcount)</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightPriceQuery(&amp;price)</span></p>
-<p class="0" style="text-indent: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">FlightDiscountQuety(&amp;discount)</span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">7、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">排序模块</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">C</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">lass sort:</span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//<span style="font-family: 宋体;">排序函数</span></span></p>
-<p class="0" style="margin-left: 18pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">8、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">统计模块</span></span></p>
-<p class="0" style="text-indent: 21pt; line-height: 12pt;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">结合入各模块中</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">五、文件设计</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">1、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">用户表 user.txt</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">2、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">航班表 flight.txt</span></span></p>
-<p class="0" style="line-height: 12pt;"><span style="font-size: 10.5pt; font-family: 'Times New Roman'; mso-spacerun: 'yes';">3、 </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;">订票信息 ticket.txt</span></span></p>
-
-</div>
-<div></div>
-</span></span></span><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">
-<div class="Section0" style="layout-grid: 15.6pt none;">
-<p class="0" style="line-height: 12pt;"> </p>
-
-</div>
- 
-
-</span></span>
-<div class="Section0" style="layout-grid: 15.6pt none;">
-<p class="0" style="line-height: 12pt;"> </p>
-
-</div>
-</div>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-08-24T22:03:20+08:00" pubdate data-updated="true">2008-08-24</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/xiang-mu/'>项目</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2008/08/24/C-C-shi-xi-she-ji-wen-dang-yu-Win32-ji-yu-Win32-console-app-ding-min-hang-ding//posts/19/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

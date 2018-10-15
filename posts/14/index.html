@@ -9,8 +9,8 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="原定本章介绍Unix的两个重要文本编辑程序——Vi和Emacs，但由于本系列篇幅限制不可能对这两种软件（尤其是后者）进行足够详细的讨论。事实上如果不能深入研究Emacs的话那么对我们来说是没有任何意义的，因此该部分内容被移至系列的最后进行讨论。
-本章开始我们将进入UNIX文件系统进行深入研究。 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="1 一些概念 1.1 基本文件系统root file system UNIX的基本文件系统类型分为两大类，一是根文件系统（注意与本节标题的区别），顾名思义，此类文件系统无法被卸载umount。
+二是子文件系统，子文件系统以基本文件系统中某一子目录的身份出现：硬盘、软盘、USB盘、CD-ROM、 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -98,6 +98,217 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/05/28/mp77-de-UNIX-ke-jian-bi-ji-6/">
+		
+			mp77的UNIX课件笔记(6)</a>
+	</h2>
+	<div class="entry-content">
+		<p>1           一些概念</p>
+
+<p>1.1     基本文件系统root file system</p>
+
+<p>UNIX的基本文件系统类型分为两大类，一是根文件系统（注意与本节标题的区别），顾名思义，此类文件系统无法被卸载umount。
+二是子文件系统，子文件系统以基本文件系统中某一子目录的身份出现：硬盘、软盘、USB盘、CD-ROM、网络文件系统NFS等，不像DOS那样使用逻辑盘的概念。根文件系统和子文件系统都有自己独立的一套存储结构和目录结构，甚至文件系统的格式都不一样。</p>
+
+<p><a id="more"></a><a id="more-171"></a></p>
+
+<p>1.2     UNIX文件系统操作</p>
+
+<p>要创建一个文件系统，需要使用mkfs命令。如：</p>
+
+<h1>mkfs /dev/fd0135ds18</h1>
+
+<p>其中/dev/fd0135ds18表示一个3.5英寸容量为1.44MB的软盘。一般来说子文件系统需要用户自己加载，我们使用mount命令完成：</p>
+
+<h1>mount /dev/fd0135ds18 /mnt</h1>
+
+<p>当mount命令不带参数时意即列出当前本机所有的文件系统。如果要卸载某些文件系统，可以用umount（注意不是un）。</p>
+
+<p>1.3   NFS</p>
+
+<p>NFS即Network File System网络文件系统，目前是UNIX系统中的一个重要服务组件。它允许主机向外界共享目录和文件。
+现有一案例，主机C和主机S上均已安装好了NFS软件包，主机C期望共享主机S上的文件目录/usr/jiang。
+首先应在主机S的文件/etc/exports中添加行/usr/jiang。然后在主机C上执行下面的命令：</p>
+
+<h1>mount -f NFS 203.123.54.189:/usr/jiang /xbg</h1>
+
+<p>其中203.123.54.189是主机S的地址，/xbg是事先在主机C上已建好的空目录。此时主机C就能通过/xbg访问主机S的/usr/jiang中的目录或文件了。</p>
+
+<p>1.4   引用Windows格式分区举例</p>
+
+<p>Windows系统的分区格式一般为FAT、FAT32或NTFS，当机器安装了Linux+Windows双系统时无法直接看到对方的分区（一些较新的发行版已支持此类功能）。如果要在Linux中查看windows分区信息，则需要使用加载的方法解决。
+首先使用fdisk –l查看本机硬盘以及分区情况，系统一般会自动识别分区格式信息。然后在Linux系统中建立相应的空文件目录，使用mount载入即可。
+值得注意的是，mount的载入源必须是建立在块设备文件类型基础上的文件（也称设备）。也就是说例如其它字符设备文件无法通过mount形式加载。</p>
+
+<p>2         UNIX文件系统</p>
+
+<p>2.1       逻辑结构</p>
+
+<p>UNIX的文件系统是由一系列大小相同的块构成的，其类型为：引导boot块、超级块、Inodes以及数据块。boot block标记为0号块，用于启动系统时存放引导程序；superblock标记为1号块，存储与整个文件系统相关的配置信息；Inodes存放每个文件的inode节点信息；data blocks是由大小为512bytes的块构成的数据存储部分。
+值得注意的是，目录文件在UNIX中跟普通文件一样，存于“文件存储区”中，有自己的i节点。其基本组成单位是“目录项”，每个目录项由一个“文件名-i节点号”对构成，提高了目录检索的效率。</p>
+
+<p>2.2       索引结构</p>
+
+<p>文件名和对应的节点编号存储在目录文件中，从下面的inode结构信息可以看到，其主要目的是为了存储文件的全部属性，包括具体的块地址。
+inode为系统自定义的一种数据结构，其存放位置即相关定义的部分内容如下：
+/<em><em>/
+struct stat
+{
+……
+dev_t st_dev;       /</em>device of inode</em>/
+ino_t  st_ino;        /<em> inode  number</em>/
+mode_t st_mode;  /<em> mode bits </em>/
+nlink_t st_nlink;    /<em> number of links to file </em>/
+uid_t st_uid;         /<em> owener’s userid </em>/
+dev_t st_gid;        /<em> owener’s group id </em>/
+dev_t  st_rdev;     /<em> for special files </em>/
+off_t  st_size;      /<em>file size in characters </em>/
+time_t st_atime;   /<em>time file last read</em>/
+time_t st_mtime;   /<em>time file last written or created</em>/
+time_t st_ctime;    /<em>time file or inode last changed</em>/
+}
+通过inode中存放的磁盘文件表信息，可以直接定位至文件内容的起始位置。例如当我们需要定位/usr/ast/mbox时。对于根目录的inode来说，/usr的inode号为6，察看磁盘文件表知/usr实际在132块的位置，以同样的方法递归察看即可找到/usr/ast/mbox的起始块号。
+现在详细说明inode节点和物理块号之间的联系。通常inode节点有四个独立的属性，分别为直接索引地址、一级索引地址、二级索引地址和三级索引地址。其中直接索引地址事实上即10个具体的数据块号。此后为间接索引地址，其实质为在每一个地址指定的块号上再次指定一个磁盘文件表地址，实现嵌套存储。</p>
+
+<p>2.3       举例说明</p>
+
+<p>现用一个经典案例进一步解释文件系统的索引结构：一个inode节点有10个用于数据块的访问地址，以及一级索引、二级索引、三级索引块的地址。如果每个块有256个磁盘地址，假设一个磁盘块是1K，那么一个文件最大有多大？
+通过题设可知，inode除了直接索引的10个数据块外，还使用一级索引1<em>256个块、二级索引1</em>256<em>256个块、三级索引1</em>256<em>256</em>256个块，因此该系统中的一个文件大小最多有10+256+256<em>256+256</em>256*256= 16843018K。事实上该系统最大支持16TB的单独文件。</p>
+
+<p>3             与文件系统有关的应用</p>
+
+<p>3.1       察看磁盘使用信息</p>
+
+<h1>df</h1>
+
+<p>df即disk free space，它可以列出每个子文件系统的设备文件名，mount安装的路径，文件存储区和inode节点区的总长度以及空闲空间和百分比。
+-v: 选项使得系统显示更多的信息；
+-i: 显示与i节点有关的信息；</p>
+
+<h1>du</h1>
+
+<p>du即disk usage，显示所有下属子目录在内的某一目录中文件使用的块数。</p>
+
+<p>3.2       硬连接和符号连接</p>
+
+<p>每个目录项指定的文件名和inode节点号的映射关系，叫做硬连接hard link。同一inode节点被目录项引用的次数即为link数。建立硬连接使用ln命令进行，以下的示例能基本说明硬连接的作用。</p>
+
+<h1>ls –l chapt0</h1>
+
+<p>-rw-r&ndash;r&ndash;   1 kc   kermit  54332 Jun 01 12:28 chapt0</p>
+
+<h1>ln chapt0 intro</h1>
+
+<h1>ls -l intro chapt0</h1>
+
+<p>-rw-r&ndash;r&ndash;   2 kc   kermit  54332 Jun 01 12:28 chapt0
+-rw-r&ndash;r&ndash;   2 kc   kermit  54332 Jun 01 12:28 intro</p>
+
+<h1>ls -i intro chapt0</h1>
+
+<p>88077 chapt0
+88077 intro
+现在用vi对intro进行编辑，完成存盘退出。</p>
+
+<h1>ls -li intro chapt0</h1>
+
+<p>88077 -rw-r&ndash;r&ndash;   2 kc   kermit     54140 Jun 01 12:30 chapt0
+88077 -rw-r&ndash;r&ndash;   2 kc   kermit     54140 Jun 01 12:30 intro</p>
+
+<h1>rm chapt0</h1>
+
+<h1>ls -l intro</h1>
+
+<p>-rw-r&ndash;r&ndash;   1 kc   kermit         54140 Jun 01 12:30 intro
+用ln建立硬连接时，只限于文件，两个文件名的路径名也必须处于同一文件系统中。不允许对目录用ln命令建立硬连接。
+目录表也使用了硬连接的方法，但是对于任意目录来说，由于.和..文件被系统自动创建，使得其link数不低于2。例如对于/home、/home/bin、/home/jiang、/home/liu组成的/home目录表来说，由于/home/.、/home/bin/..、/home/jiang/..、/home/liu/..、/home均为/home的硬连接，因此其link数实际为5。
+符号连接symbolic 也叫软连接。
+符号连接的思想被广泛应用到用名字进行管理的信息系统中，符号连接允许给一个对象取多个符号名字，可以通过不同的路径名共享同一个信息对象。在UNIX中，用特殊文件“符号连接文件”来实现符号连接，符号连接文件中仅包括一个描述路径名的字符串。</p>
+
+<h1>ln –s</h1>
+
+<p>例如：</p>
+
+<h1>who &gt; users_on</h1>
+
+<h1>ln –s users_on active_users</h1>
+
+<h1>ls –l active_users</h1>
+
+<p>lrwxrwxrwx 1 fang kermit 8 Jul26 16:57 active_users-&gt;users_on
+以上内容透露出的信息是，active_users文件的i节点记录了文件类型为符号连接文件，用ls -l列出时，类型域为l。文件内容是users_on字符串，-&gt;后为符号连接文件的内容。符号连接文件的最后一次修改时间以后不再变化。
+当用户选择active_users进行操作时，系统实际打开users_on。将active_users展开成该符号连接文件存储的字符串users_on的操作，不是由shell完成，而是由OS的文件管理模块完成。文件管理模块处理符号连接的方法是，根据提供的路径名。在逐个翻译路径名中用斜线分割开的路径分量时，若系统发现符号连接，就把符号连接的内容加到路径名的剩余部分的前面,翻译这个名字产生结果路径名。若符号连接包含绝对路径名，使用绝对路径名。
+最后注意，系统在展开符号连接时，由于文件内容可能是绝对路径信息，也可能是相对路径信息，故须注意其中的区别。</p>
+
+<p>3.3       连接类型的区别和应用分析</p>
+
+<p>符号连接的特点是，对连接文件的访问实际上是访问源文件，当删除源文件后再访问连接文件将出现出错信息。又如对目录进行符号连接操作，则当cd 连接文件时，此时的目录环境与连接文件完全没有任何联系，即使执行cd ..，也只是切换至源文件的上层目录。
+而使用硬连接文件时，删除源文件并不影响连接文件继续对文件内容的访问。</p>
+
+<p>硬连接和符号连接的区别详细如下：
+1）硬连接利用文件系统的存储结构，实现信息共享。
+2）符号连接依靠操文件系统的软件处理，实现信息共享。
+3）硬连接只适用于文件，不允许用户通过命令对目录实现硬连接，以保障文件系统中目录的树形结构不被破坏。
+4）每个文件系统有自己的一套inode节点，不同子文件系统之间，不可能用硬连接实现文件的共享。
+5）符号连接完全适用于目录，也可以将符号连接文件和符号连接引用的文件安排在不同的文件系统中，比硬连接更灵活。</p>
+
+<p>连接的主要用途是节约存储和变更目录。
+案例1
+在一台家庭主机中，如果需要共同拥有一套照片文件，则既可以为其建立硬连接或者符号连接文件，但优劣在于：
+使用符号连接，删除某文件，系统会释放相应的空间，可能会导致某些引用这个文件的符号连接不再能正常打开文件；
+使用硬连接，需删除所有相关目录项才能释放文件的存储空间。</p>
+
+<p>案例2
+/usr/adm存储一些系统软件的日志
+/usr/tmp存放一些临时文件
+/usr/spool存放用户未读的邮件和打印任务队列
+某系统管理员希望将这些目录重新规划至/var中，为了不破坏原系统的功能调用，建立符号连接至/usr中就可以实现这些功能。</p>
+
+<h1>ln -s /var/adm /usr/adm</h1>
+
+<h1>ln -s /var/tmp /usr/tmp</h1>
+
+<h1>ln -s /var/spool /usr/spool</h1>
+
+<p>事实上读者可能会发现，符号连接酷似于Windows中的快捷方式。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-28T21:53:31+08:00" pubdate data-updated="true">2009-05-28</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/05/28/mp77-de-UNIX-ke-jian-bi-ji-6//posts/14/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1665,56 +1876,6 @@ int main(int argc,char </strong>argv)
 
 	
 		<span class="comments"><a href="/blog/2009/05/01/jian-dan-de-ci-fa-fen-xi-cheng-xu-he-yi-zhong-lex-for-win32-yong-fa-shi-li-shang//posts/14/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/04/30/si-yue-de-zui-hou-yi-tie/">
-		
-			四月的最后一帖</a>
-	</h2>
-	<div class="entry-content">
-		<p> 回家翻了翻“纲要”，觉得有必要修正一下了&hellip;校方一意孤行坚持进行期中考试， 结果是两周时间就写完两篇论文&hellip;好不容易回家一趟还得做lex&hellip;回学校后仅有一天时间去搞测试报告&hellip;期间笔试了三门课，还剩下日语口语&hellip;总之第一次觉得时间不够用，实在是暴汗&hellip;</p>
-
-<p> 这月新闻多多：wow之争，庆幸当时删的彻底；猪瘟肆虐，还好感冒初愈尚存些许抵抗力；政法申博，当初在openlab看到徐州那个事已经感觉很是惊奇了，没想到这次兄弟学校直接上了门户首页（尽管页面存活了不到几个小时），觉得这下也该引起高层注意了吧&hellip;总之没什么值得炫耀的事情。</p>
-
-<p> 现在就想着把一个月前承诺的大东北还了&hellip;就鼓励一下得&hellip;据说还要到6月才出结果&hellip;恐怕又是一出悲剧。</p>
-
-<p> 下月我们会介绍一些编译原理方面的知识。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-04-30T23:49:38+08:00" pubdate data-updated="true">2009-04-30</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/04/30/si-yue-de-zui-hou-yi-tie//posts/14/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

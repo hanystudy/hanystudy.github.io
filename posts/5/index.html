@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="一年前，我们曾介绍并讨论了展示在siggraph'10 Talks上、作为Disney&rsquo;s 50th Feature Animation的《Tangled》。在今年8月7日至11日的温哥华siggraph'11大会上，工业光魔携首部动画长篇《Rango》成为了“Let there &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="在本月初Kinect正式发布一周年之际，微软公司副总裁Frank X. Shaw在公司官方博客上发表纪念文章“Feeling the Kinect Effect”，并透露Kinect的商用计划“Kinect for Windows commercial program”， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,76 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/11/13/you-guan-Beta-2-he-Kinect-for-Windows-shang-yong-qian-zhan/">
+		
+			有关Beta 2和Kinect for Windows商用前瞻</a>
+	</h2>
+	<div class="entry-content">
+		<p>在本月初Kinect正式发布一周年之际，微软公司副总裁Frank X. Shaw在公司官方博客上发表纪念文章“<a href="http://blogs.technet.com/b/microsoft_blog/archive/2011/10/31/feeling-the-kinect-effect.aspx" target="_blank">Feeling the Kinect Effect</a>”，并透露Kinect的商用计划“Kinect for Windows commercial program”，该项目将于2012年初正式公布。文章称专门负责商用计划的团队已获得来自超过25个国家的知名公司共超过200项商业应用申请，这些应用覆盖了20多个不同领域，这恐怕会令即将到来的2012年成为名副其实的“Kinect年”。</p>
+
+<p>而在上个月27号，微软注册了kinectforwindows.org域名并将其作为Kinect for Windows项目新的官方网站，紧接着Kinect for Windows SDK 1.0 Beta 2在本月5号正式发布。相较于8月份后就再没更新过的Beta 1，新版本SDK在以下功能上进行了持续改进：</p>
+
+<p>1、骨骼跟踪功能得到显著增强，在跟踪精度、计算和传输性能上有了明显提升。此外骨骼跟踪现在能够正确支持多核处理器，在同时使用2个Kinect时，开发人员也可以指定专门用于骨骼跟踪的设备了；</p>
+
+<p>2、API现在能够对设备的状态进行有效检测和管理了，例如device unplugged, device plugged in, power unplugged等，这样应用程序就能在系统从待机状态恢复时自动重新连接设备了。一个很好的程序示例被写进了新版本的Shape Game Demo里；</p>
+
+<p>3、在WPF程序中使用语音功能的开发人员不需要从额外的线程访问DMO了，现在可以直接从UI线程创建KinectAudioSource，从而能够简化现有工程的代码。</p>
+
+<p>4、新的驱动程序、运行时系统和SDK现在能够在<strong>Windows 8 Developer Preview</strong>中使用了。</p>
+
+<p>5、现在能直接创建64位应用程序；</p>
+
+<p>6、NuiImageBuffer被新的INuiFrameTexture代替,新定义在MSR_NuiImageCamera.h中，现有项目不再需要引用NuiImageBuffer.h了；</p>
+
+<p>7、安装目录的结构进行了调整，现在的安装路径使用环境变量%KINECTSDK_DIR%定义，默认值为C:\Program Files\Microsoft SDKs\Kinect\v1.0 Beta2；</p>
+
+<p>8、示例代码的更改包括：</p>
+
+<p>一个新的C#程序示例：KinectAudioDemo；</p>
+
+<p>示例程序现在被默认安装在C:\Program Files\Microsoft SDKs\Kinect\v1.0 Beta2\Samples，你需要Unzip以便查看源代码，而这里建议将源码Unzip到Program Files以外的目录去；</p>
+
+<p>9、驱动程序和运行时系统的稳定性和性能进一步提升，<strong>尤其是在托管API层</strong>。</p>
+
+<p>总的来看，Beta 2并未提供关键功能上的改进，更多是对现有问题的修正。此外，备受瞩目的Kinect for Windows杀手级应用仍未出现，社区反馈是目前很多未公开的商业项目在尝试OpenNI，对MS SDK反倒比较谨慎。不过从长远角度考虑，MS SDK在开发社区、系统平台和资源支撑方面拥有众多优势，明年商业化后必然会率先占据有利位置。由此联想到近期在4S上被热炒的Siri，看来自然交互的春天真的离我们不远了。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-13T00:07:03+08:00" pubdate data-updated="true">2011-11-13</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/kinect/'>kinect</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2011/11/13/you-guan-Beta-2-he-Kinect-for-Windows-shang-yong-qian-zhan//posts/5/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1086,88 +1156,6 @@ nRetVal = context.FindExistingNode(XN_NODE_TYPE_DEPTH, depth);        //获取�
 
 	
 		<span class="comments"><a href="/blog/2011/08/16/Kinect-lai-le-ying-jian-ying//posts/5/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/08/11/ms-MS-Kinect-kai-fa-she-qu-de-zui-xin-jin-zhan/">
-		
-			MS Kinect开发社区的最新进展</a>
-	</h2>
-	<div class="entry-content">
-		<p>三个月前，我们展示了一套配合使用OpenNI+SensorKinect+NITE在Windows平台上驱动Kinect的Demo程序，事实证明，上述框架已完全可满足基于最新版本的Kinect的PC项目开发了。不过，微软在连续跳票一个多月后终于坐不住了，于北京时间6月17日凌晨开放The Kinect for Windows SDK beta下载页面，并作为正规军首次杀入这个吸引了众多发烧友和研究人员的技术萌芽领域。</p>
-
-<p>由于最近一段时间非常忙，我们几乎没有空闲时间用于对快速发展中的Kinect技术进行潜心研究。幸运的是，我得以在暑假一天半的假期里花几个小时研究来自微软的SDK。很显然，因为她的姗姗来迟，越来越多的国内开发者尝试进入这个领域，而又由于Kinect技术在应用层面实际上要求比较高的知识和技术门槛，这也成了Kinect社区拥有一批具有较高技术素养的核心成员的重要原因。</p>
-
-<p>首先应当说明的是，我拿到的SDK其实是微软在7月29日发布的1.00.12版，msdn上给出的Refresh Details解释新版本在驱动和运行库部分相较旧版而言得到了一些增强，目前也没有发现存在任何兼容问题。须知MS的Kinect SDK beta只支持Windows 7操作系统，开发环境要求VS2010/.Netframework 4.0。关于硬件部分的要求在试验阶段其实几乎可以忽略，除非你买到了非盒装的Kinect（拆机版也可额外购买电源/USB数据接口）。</p>
-
-<p>对于初学者而言，还有一些组件需要额外安装，但这些都不是必须的。例如几个经典的Demo程序，例如骨骼跟踪，就需要Microsoft DirectX® SDK - June 2010 or later version和Runtime for Microsoft DirectX® 9才可以编译运行；另外对于语音命令识别的Sample程序，还需要安装Microsoft Speech Platform Runtime, version 10.2 (x86 edition)、Microsoft Speech Platform - Software Development Kit,version 10.2 (x86 edition)以及Kinect for Windows Runtime Language Pack, version 0.9(acoustic model from Microsoft Speech Platform for the Kinect for Windows SDK Beta。上述开发库提供了内容绘制、图像和图形处理、语音识别等非Kinect原生功能，仅仅这些，Kinect综合技术的一角其实已经显现出来了。</p>
-
-<p>那么下面就是一个运用骨骼跟踪和语音识别技术的官方Demo：</p>
-
-<p>[singlepic id=32 w=320 h=240 mode=watermark float=center]</p>
-
-<p>在试用了几个不同的Demo后，我认为微软这次放出的SDK其实并非想象中好。问题主要在于开发平台比较单调，尽管支持非托管的C++代码，但是官方demo基本上都使用C#.NET/WPF开发，在与现有资源相结合的部分还做得不够好，而且demo的bug比较多；另外与OpenNi/NITE组合相比前者似乎性能较低——当然其精度较之后者能好一些，但区别并不明显。</p>
-
-<p>荷兰人Jasper Brekelmans是一名长期关注Kinect技术的开发人员，他在<a href="http://www.brekel.com/?page_id=671" target="_blank">博客</a>上对截至目前微软的beta版和PrimeSense的OpenNi进行了比较。我们总结了他的文章，并将其划分为四个主要问题：</p>
-
-<p><strong>问：什么是Microsoft’s Kinect SDK (Beta)能而OpenNi还不能做到的？</strong></p>
-
-<p>答：目前微软的产品提供了音频支持、调整倾角的转动电机motor/tilt、在全身跟踪骨骼跟踪方面：非标准姿势检测（相对于OpenNi的投降姿势&hellip;），头部、手、脚、锁骨检测以及关节遮挡等细节上的处理更为细致（但精度是否更高还不能确定）。此外，SDK beta还提供了多机接口，使许多尚在设想中的特殊应用有直接变为现实的可能。当然，MS的开发库在安装上非常容易，也基本不需要任何设置即可使用。提供了可用视频和深度图输入的事件触发机制。</p>
-
-<p><strong>问：那么微软的产品没有提供什么功能？</strong></p>
-
-<p>答：对许多开发者而言最大的问题可能是微软对非商业使用的限制，而OpenNi则不存在这方面问题。此外，微软的SDK目前并未提供手势识别和跟踪功能，而在前一篇文章中我们已经看到用NITE的手势识别和跟踪组件控制鼠标光标的例子。</p>
-
-<p>另一方面，SDK beta未能实现RGB图像/深度图像的互对齐，只是提供了对个体坐标系的对齐，而该功能在许多应用中实际上是很有必要的。</p>
-
-<p>在全身骨骼跟踪中，SDK只计算了关节的位置，并未得出其旋转角度。从可移植的角度来看，SDK beta只能用于Kinect/Win7平台，而OpenNi还至少支持华硕的WAVI Xtion体感设备，今后支持的硬件平台还可能更多。相比较而言SDK beta不支持Unity3D游戏引擎、不支持记录/回放数据写入磁盘、不支持原始红外视频数据流、也不支持像OpenNi一样的角色入场和出场的事件响应机制。</p>
-
-<p><strong>问:能不能再说说OpenNi/NITE提供的功能？</strong></p>
-
-<p>答：可用于商业开发、包含手势识别和跟踪功能、可自动对齐深度图像和RGB图像，全身跟踪、关节旋转角度计算、看起来性能较好、跨平台多设备支持、已有众多游戏产品应用、支持记录/回放数据写入磁盘、支持原始红外视频数据流、支持角色入场和出场的事件响应机制。</p>
-
-<p><strong> 问：那么OpenNi/NITE不能做什么？</strong></p>
-
-<p>答：未提供音频功能、不支持调整倾角的转动电机motor/tilt、在全身跟踪骨骼跟踪方面：无法跟踪头部、手、脚和锁骨的旋转动作，需要标准姿势检测（即著名的投降姿势&hellip;），关节遮挡等细节上的处理似乎存在算法bug。不能自动安装并识别Kinect多机环境。安装过程较为繁琐，特别是NITE还要申请开发证书编码。OpenNi也没有提供可用视频和深度图输入的事件触发机制。</p>
-
-<p><strong>总结：</strong> OpenNI最大的优势就是允许跨平台多设备，以及商业应用。但从原始数据的采集和预处理技术上看，微软的SDK似乎更稳定一些，况且还提供了不错的骨骼和语音支持。对于部分身体部位识别方面的功能，SDK beta没有提供局部识别和跟踪，这需要自己的后续开发（至少在相当一段时期内微软可能都不会提供此类功能）。OpenNi/NITE虽然提供了手势识别和跟踪，然而在全身骨骼姿势识别和跟踪上还要更多借鉴微软的产品。</p>
-
-<p>因此，按照目前在社区中的表现，SDK beta和OpenNi/NITE孰优孰劣还真无法一下子确定。而且随着越来越多的开发者加入微软这一方，SDK beta的普及可能会更快，但在更高层次的应用上，对二者的选用往往是需要一定智慧的。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-08-11T10:47:36+08:00" pubdate data-updated="true">2011-08-11</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/kinect/'>kinect</a>, <a class='category' href='/blog/categories/xiang-mu/'>项目</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2011/08/11/ms-MS-Kinect-kai-fa-she-qu-de-zui-xin-jin-zhan//posts/5/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
