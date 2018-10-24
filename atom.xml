@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2018-10-15T17:21:50-04:00</updated>
+  <updated>2018-10-23T22:49:04-04:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,174 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[软件设计与架构笔记(5)]]></title>
+    <link href="http://www.hanyi.name/blog/2018/10/23/software-design-and-architecture-notes-5/"/>
+    <updated>2018-10-23T11:42:00-04:00</updated>
+    <id>http://www.hanyi.name/blog/2018/10/23/software-design-and-architecture-notes-5</id>
+    <content type="html"><![CDATA[<p>上接<a href="http://www.hanyi.name/blog/2018/10/12/software-design-and-architecture-notes-4/">软件设计与架构笔记(4)</a></p>
+
+<p>前文描述的HIPO模型是一个典型的基于结构图的IPO系统设计模型，其基本思想依然是由顶至下，逐步求精。基于经验Larry进一步总结了通用的系统设计准则[SMC74]。</p>
+
+<ol>
+<li><p><strong>程序结构</strong>和<strong>问题结构</strong>。减少程序变更所造成影响的重要方法之一，就是保证设计结构匹配问题本身的结构。由顶至下的思维模式会天然形成一种层级结构，因此重点在于如何决定设计单元在相同层级，或隶属于不同层级，而关键又在于理解问题本身。</p></li>
+<li><p><strong>模块控制范围</strong>和<strong>决策影响范围</strong>。控制范围指模块以及归属于该模块的子模块的集合；影响范围指某个设计决策所造成变更的所有模块集合。当设计决策的影响范围尽可能位于该决策所在的模块控制范围之内时，该系统设计就可以被认为是“简洁”的。保持简洁性的方法之一可以是提升某些决策相关的元素的层级；或者把受到相同决策影响，但位于不同控制结构的模块重新划分至相同控制范围。</p></li>
+<li><p><strong>模块大小</strong>。模块的实际大小可被用于描述潜在问题的信号。过小的模块可能缺少功能性绑定，而过大的模块可能涵盖了超过一个功能性绑定。前者可以通过inline的方式消除以减少模块规模，后者由于可理解性和可读性问题需要进行进一步拆分。</p></li>
+<li><p><strong>错误</strong>和<strong>文件终止处理</strong>。当模块的一部分功能需要通知其调用者发生某件错误时，可通过返回某种错误参数实现，该参数的值最好是二元类型，对于流数据处理的EOF标记也需要进行类似处理。同时这些参数也不应该包含如何处理当前错误的信息，而是由调用者决定。当然，如果模块本身不需要错误标记时，系统设计就更简洁了。</p></li>
+<li><p><strong>初始化</strong>。某些模块由于需要依赖初始化操作，从而可能存在“简洁”但导致“弱绑定”的设计。例如，读模块的access方法可能会遇到“文件未打开”的错误，如果选择将错误信息返回，调用者自然会选择调用open方法然后重新read；但另一种维护“黑盒性”的做法是，在access内部遇到该错误时自动通过open和reread进行恢复，那么调用者就不需要知道“文件未打开”这种错误并且重复进行处理了。</p></li>
+<li><p><strong>模块选择</strong>。消除重复的功能，而非消除重复的代码。如果只是通过抽取的方式简单消除重复代码，那么有可能导致某个变更造成更多的修改。一种识别该问题的方法是，关注那些被其它不同模块调用，以及调用其它不同模块的对象，判断是否存在其子功能与不同的模块集合关联的情况，如果是则意味着存在层级或模块缺失的可能。</p></li>
+<li><p><strong>隔离软件规格说明</strong>。软件设计规格的重要内容就是描述特定的数据类型、记录布局以及索引结构，设计应尽量使其与系统其他模块进行隔离，从而减少规格变更导致的重写。</p></li>
+<li><p><strong>参数数量</strong>。尽量减少模块间调用的参数数量（不只是个数），如果参数中存在一个完整的数据记录，应尽量只传递必要的数据记录，否则也会导致该记录的变更对模块造成潜在影响。</p></li>
+</ol>
+
+
+<h3>结构化分析(Structured Analysis)</h3>
+
+<p>随着软件设计方法论的发展和问题复杂度的增加，人们发现设计不再是解决复杂系统面临的唯一难题。比如，传统的软件设计过程一般是按由顶至下的方法，依照<strong>需求规格说明(requirement specification)</strong>给出具体的软件对象定义，那么如何构建规范合理的需求规格说明呢？另外，如果软件设计过程愈加复杂，是否可以按照经典的分治法(divide-and-conquer)对其进行分解和简化呢？</p>
+
+<p>世界上存在多种多样的原始需求形态，例如采用<strong>文字叙述(narrative)</strong>可以说是最普遍的形式之一。当问题复杂度增加时，软件设计已经不能从简单的叙述中加以消化并诞生，于是就出现了<strong>需求分析</strong>的过程。这种把问题从原始形式转换成可进一步规范设计的规格说明的过程，被称为<strong>系统分析</strong>。<strong>结构化分析</strong>作为软件系统分析最早流行起来的方法论，是在早期工业界数十年的探索中发展起来的。</p>
+
+<p>由于传统的文字叙述不足以表达复杂系统，人们开始重视并使用符号语言，例如德国数学家Carl Adam Petri发表于1962年的<strong>Petri Net</strong>。60年代中期，女数学家Erna Schneider Hoover在贝尔实验室领导了一支团队，其目标是分析电话交换机系统的性能和宕机时间，Erna使用了Petri Net来模拟复杂的电话交换系统。受此启发，同时困扰于晦涩难懂的叙述式规格说明的年轻工程师Tom DeMarco由此开始开发一套网络符号语言，由此发展并最终在1978年发表了<strong>结构化分析</strong>方法[TOM78]。</p>
+
+<h4>结构化分析与传统系统分析</h4>
+
+<p>Tom认为传统的系统分析包含如下目标：</p>
+
+<ol>
+<li><p>确定最优化目标。</p></li>
+<li><p>生成该目标的细节描述，并且能够被后期的实现过程用于评估该目标是否实现。</p></li>
+<li><p>生成该目标相关的重要参数预测，包括花费、收益、日程以及性能特性。</p></li>
+<li><p>得出所有被影响部分之上的项的并发性。</p></li>
+</ol>
+
+
+<p>为了达成这些目标，系统分析活动需要涉及用户沟通、撰写规格说明、损耗收益研究、可行性分析以及估算等。然而，这些活动都因高复杂性存在很多问题。针对这些问题，结构化分析进一步拓展了系统分析的目标：</p>
+
+<ol>
+<li><p>分析的产生物必须是<strong>可维护</strong>的，特别是针对<strong>目标文档(Target Document)</strong>。</p></li>
+<li><p>必须采用有效的分割方法解决大小的问题，摒弃维多利亚小说式的规格说明。</p></li>
+<li><p>尽可能使用<strong>图形表达</strong>。</p></li>
+<li><p>必须区分逻辑和物理设计，并且基于此在分析师和用户之间合理分配职责。</p></li>
+<li><p>必须在具体实现之前构建逻辑系统模型，使用户熟悉系统特性。</p></li>
+</ol>
+
+
+<p>同时，结构化分析描述了一系列可被用于不同分析阶段的工具：<strong>数据流程图(Data Flow Diagram, DFD)</strong>、<strong>数据字典(Data Dictionary)</strong>以及逻辑策略表达工具，例如<strong>结构化英语(Structured English)</strong>、<strong>决策表(Decision Tables)</strong>以及<strong>决策树(Decision Trees)</strong>等。</p>
+
+<h4>数据流程图</h4>
+
+<p>DFD是一种描述相互关联的过程的网络，其作用是帮助分割需求，并在撰写规格说明之前记录这种分割。与普通流程图的区别是，DFD只聚焦在数据流动的过程，因此基本没有任何关于循环或逻辑决策的控制信息。为了举例说明DFD，[TOM78]描述了一个软件咨询公司的自动化管理和运营辅助系统，该系统的功能包含了学员注册、支付、人员管理、课程管理等方面。下图是对该公司的早期运营模型的描述：</p>
+
+<p><img src="http://content.hanyi.name/images/structured_analysis/logical_dfd.png" alt="Logical DFD" /></p>
+
+<p>该图是一种Logical DFD，图中的输入被称作<strong>事务(Transaction)</strong>。以其中一条主要路径的部分为例，该路径共描述了5种事务：Cancellations, Enrollments, Payments, Inqueries和Rejects(这里指不属于前4种类型的事务的统称)，以及数据在这些事务间可能的流动关系。此外还有一种包含了系统具体实现信息的DFD，被称作Physical DFD。</p>
+
+<p>DFD有时又被称作<strong>气泡图(Bubble Diagram)</strong>，原因是其描述数据转换过程的符号——气泡。此外DFD还包含<strong>命名向量</strong>，用于表示数据路径；<strong>直线段</strong>，表示文件或数据库；<strong>矩形(或称为源/入节点)</strong>，表示网络的起点或数据的接收者(通常是当前领域外的人或组织)。</p>
+
+<p>DFD清晰地表达了工具的自然特征——如果DFD存在任何错误，也应当是显而易见、毋庸置疑的，这无疑减少了分析师与用户间产生认知分歧的可能。另一方面，实践证明DFD无论在概念描述或是建模方面都有显著价值。更重要的是，它提供了一种基于功能的系统分割方法，并且描述了不同部分之间的接口。在系统评审中，任何接口或过程的缺失都能够证明当前DFD的缺陷——这比纯粹的数学方式更加直观和有效。</p>
+
+<p>在实际分析活动中通常使用分级数据流程图(Levelled DFD, LDFD)逐步求精分割系统功能。在LDFD中，通常存在3层、有时甚至更多层具有不同功能解析度的DFD。</p>
+
+<p>Level 0，也被称为上下文图，通常仅包含一个气泡——也就是系统总的过程单位以及其它元素。这种图可以被用于和最宽泛的用户进行交流，例如干系人、业务分析员、数据分析员以及程序员。</p>
+
+<p>Level 1，对上下文图的唯一气泡进行细分，将其分解成不同过程单位，以及相关的文件或数据库。</p>
+
+<p>Level 2，进一步对Level 1进行划分，因此需要更多的文字和符号标记。</p>
+
+<p>Level 3+，一般很少出现Level 3+的DFD，原因是这种级别的DFD可能存在过多的细节，从而导致难以沟通、比较和有效建模的问题。</p>
+
+<h4>数据字典</h4>
+
+<p>数据字典用于追踪和评估系统不同部分之前的接口，是对DFD的一种有效补充。以前面描述的系统DFD为例，过程3和7之间的数据流动Payment-Data，可以用如下公式进一步描述：</p>
+
+<pre><code>Payment-Data = Customer-Name +              
+               Customer-Address +
+               Invoice-Number +
+               Amount-of-Payment
+</code></pre>
+
+<p>换句话说，Payment-Data包括了该公式右值的所有数据项，且这些数据项需依序且非空。更进一步，数据字典还可能需要对某些数据项进行进一步描述，例如Invoice-Number：</p>
+
+<pre><code>Invoice-Number = State-Code +
+                 Customer-Account-Number +
+                 Salesman-ID +
+                 Sequential-Invoice-Count
+</code></pre>
+
+<p>与DFD类似，数据字典也是呈现了由顶至下的细分过程。每个DFD应该携带相应的数据字典描述，二者共同组成了系统分析的图形化产生物。</p>
+
+<h4>逻辑策略表达</h4>
+
+<p>逻辑策略表达用于替代传统冗长的文字叙述式的规格说明。最常见的结构化表达方式被称作结构化英语，例如采用按行缩进的方式表述不同层级的规格说明：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>If the amount of the voice exceeds $500.
+</span><span class='line'>    If the account has any invoice more than 60 days overdue.
+</span><span class='line'>        hold the confirmation pending resolution of the debt.
+</span><span class='line'>    Else (account is in good standing).
+</span><span class='line'>        issue confirmation and invoice.
+</span><span class='line'>Else (invoice $500 or less).
+</span><span class='line'>    If the account has any invoice more than 60 days overdue.
+</span><span class='line'>        issue confirmation, invoice and write message on the 
+</span><span class='line'>        credit action report.
+</span><span class='line'>    Else (account is in good standing).
+</span><span class='line'>        issue confirmation and invoice.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用决策表表达上述规格说明，结果如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>                       RULES
+</span><span class='line'>CONDITIONS              1  2  3  4
+</span><span class='line'>
+</span><span class='line'>1.Invoice &gt; $500        Y  N  Y  N
+</span><span class='line'>2.Account overdue
+</span><span class='line'>by 60+ days             Y  Y  N  N
+</span><span class='line'>
+</span><span class='line'>ACTIONS
+</span><span class='line'>
+</span><span class='line'>1.Issue confirmation    N  Y  Y  Y
+</span><span class='line'>2.Issue Invoice         N  Y  Y  Y
+</span><span class='line'>3.Msg to C.A.R.         N  Y  N  N</span></code></pre></td></tr></table></div></figure>
+
+
+<p>决策树的表达结果如下：</p>
+
+<p><img src="http://content.hanyi.name/images/structured_analysis/decision_tree.png" alt="Decision Tree" /></p>
+
+<h2>结论</h2>
+
+<p>结构化设计为软件设计提供了有效的结构图工具，以及作者Larry富有经验的设计准则，至今仍极具指导意义。为了保证设计阶段能使用清晰有效的规格说明，结构化分析提供了强大的DFD分析工具和规格说明描述工具，尽管其核心依然是逐步求精的设计思想，但已经开始涉足于比编程活动更加宽泛的软件工业领域，最终形成了较为独立的需求工程，成为软件构建过程中不可或缺的环节。</p>
+
+<h2>引用</h2>
+
+<p>SMC74, <a href="https://ieeexplore.ieee.org/document/5388187">Structured design</a></p>
+
+<p>TOM78, <a href="https://books.google.com/books/about/Structured_Analysis_and_System_Specifica.html?id=7o0-AAAAIAAJ">Structured Analysis and System Specification</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[软件设计与架构笔记(4)]]></title>
@@ -2551,89 +2719,6 @@ remove_method Removes the method identified by symbol from the current class. Fo
 <p>在SOA的发展初期，类似全局描述、发现以及集成UDDI标准被用于帮助人们理解当前运行着什么服务。事实证明，UDDI对大多数项目来说都非常重，从而导致更多替代产品的出现。</p>
 
 <p>不可否认，获取系统的整个框图并理解其架构对于团队成员来说十分重要。通过关联ID跟踪下游服务并理解调用链、从而让我们更快理解系统原理。采用类似Consul的服务发现技术，能够让我们查看当前运行的微服务。HAL能展示出当前终端上包含的所有服务能力，同时状态监控页面和相关系统能够使我们整体和局部的状态。上述信息都能够用于为进一步设计提供线索，且比只有一个简单到随时会过期的wiki页面强得多。尽管多数情况下我们都是从后者开始的，但不要忘了把上述信息逐渐引入到系统中，随着系统复杂性增加，描述信息的演化能让我们更好的理解系统。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[microsevices陷阱: 层级演进（中）]]></title>
-    <link href="http://www.hanyi.name/blog/2015/07/18/microservices-scale-2/"/>
-    <updated>2015-07-18T17:34:06+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/07/18/microservices-scale-2</id>
-    <content type="html"><![CDATA[<h3>5. 缓存</h3>
-
-<p>当某个操作的结果可以被临时存储，从而使后续的相同操作能够直接采用上述结果，而非花费同样时间和资源在重复操作上，这种性能优化方法就是缓存技术。如今面临大规模的HTTP访问量，缓存已经成为解决性能瓶颈的大杀器之一。</p>
-
-<p>当然，即使是单一系统，目前也存在众多缓存方案可供选择。但对微服务架构来说，可选择的就更多——问题是对于分布式系统而言，由于节点间的相互对等性，缓存存在于客户端或是服务端，会是一个艰难的选择。</p>
-
-<h4>客户端、代理和服务端缓存</h4>
-
-<p>对于三个主要的缓存承载对象之一，客户端缓存主要是把数据放在客户端中，并由客户端决定是否从服务端刷新数据。一种理想的情况是，由服务端负责提供是否需要刷新的线索，然后由客户端决定是否刷新，这种技术被广泛用于HTTP缓存。</p>
-
-<p>代理是指位于客户端和服务端之间的设施，由代理决定缓存机制的包括反向代理或CDN技术。</p>
-
-<p>另一种方法是由服务端负责缓存技术，如采用Redis或Memcache，或者更简单的一些片内缓存技术。</p>
-
-<p>对上述方案的选择主要取决于优化的目标。例如，客户端缓存主要目的是降低网络负载，并且实现起来最为简便；缺点是一旦实行成熟的客户端缓存机制，服务端要想做出什么修改就比较困难，特别是容易引发未经验证的脏数据问题（下文会做进一步讨论）。而对代理缓存来说，其对客户端/服务端都是完全透明的，且针对普通HTTP通信实现也很简单，例如采用反向代理如Squid或Varnish。尽管代理会引入更多网络路由节点，但这对随后的性能提升来说基本是可以忽略不计。服务端缓存能够保证对客户端实现透明化，而且一旦缓存位于服务边界上，就能很容易解决脏数据、分析和优化命中率。同时服务端缓存对于系统性能的提升是最为有效和迅速的——但实现起来又稍复杂。</p>
-
-<p>一般缓存技术的选择可以是混合性的，但也有分布式系统内部完全不设缓存的情况，因此要具体问题具体分析。</p>
-
-<h4>HTTP缓存</h4>
-
-<p>HTTP协议提供了全面的缓存技术，包括客户端和服务端。首先，HTTP头的cache-control指令告诉客户端是否应该缓存当前响应信息，以及缓存时间。同样，还包含一个Expires属性，用于标记该信息在某个时间点后过期，而非持续多长时间。对于静态网站数据，如图像、CSS等，使用cache-control的time to live（TTL）就能够很好解决这一问题。</p>
-
-<p>除了cache-control和Expires，HTTP还提供了一种Entity Tags（ETags）机制。ETag其实是用来标记当前信息是否已经发生变化，即使URI不变，也能识别该信息是否是最新的。应当明确，ETags本身不提供缓存机制，而是通过Conditioanl GET实现，后者是说在GET请求中添加某些头信息，从而告诉服务端只有当该条件满足时才返回整个信息。</p>
-
-<p>当然，ETags还少不了要打上cache-control，只有当TTL或Expires满足时，客户端才会发送信息并携带If-None-Match: ETag值。服务端通过读取If-None-Match信息，判断客户端的信息是否已经过时，如果已是最新，则返回304 Not Modified，否则返回整体信息和200 OK。这些方法在反向代理上被广泛采用，甚至包括CDN如AWS的CloudFront和Akamail。一般的HTTP标准库也都包含这些功能。</p>
-
-<p>无论是cache-control、Expires或ETags，其在功能上相互存在一定重叠。而这也确实会对HTTP通信带来一些问题，特别是混合使用时。建议参考《REST in Practice》或HTTP/1.1协议的13章。</p>
-
-<p>即使不采用HTTP协议进行消息缓存，也应当参考这部分的设计思路，无论对客户端/服务端的缓存实施都是很有价值的。</p>
-
-<h4>写缓存</h4>
-
-<p>对写操作设置缓存在某些场景下是必要的，例如当写操作突然增加时，短期间内频繁I/O会降低系统性能，好的做法是先把数据写入本地缓存中，之后再统一更新至下游节点。另一方面，当下游服务发生不可用的情况时，写操作的数据会被较好的保存，并不会造成数据丢失的问题。</p>
-
-<h4>恢复缓存</h4>
-
-<p>缓存也能够被用于灾难恢复。例如对客户端缓存来说，当下游节点出现问题，客户端就可以把本地缓存作为临时数据，而不是直接导致不可用。Web技术早起曾经有一种Guardian技术，作用是定期生成整个网站的静态内容，当系统离线时就采用静态版本提供服务，尽管数据不是最新的，但仍可以向用户提供服务。</p>
-
-<h4>隐藏源</h4>
-
-<p>由于未命中缓存的存在，一般系统的源都会面临未缓存请求的访问，当请求数量突然增加时就可能导致源崩溃，继而影响整个分布式系统。因此，在某些系统中，请求永远不能直接访问源，当缓存未命中时会立即得到错误响应，同时缓存节点也会把相应的请求信息异步发送至源，再由源把所需数据同步至缓存节点。这种做法的好处就是完全避免了源遭遇大访问量的情况，从而提高系统整体稳定性。</p>
-
-<h4>缓存建立的原则</h4>
-
-<p>目前业界有一种趋势，就是多级缓存＋各类缓存。实际上，缓存就意味着脏数据的可能：当缓存层级增加，脏数据的概率和数量也会随之增加，对于某些业务场景而言这是不可容忍的。特别是当采用微服务架构，类似后果的影响会被无限放大。因此采用缓存的原则就是：简单、单一、有效。</p>
-
-<p>另一方面，采用缓存要时刻保持警惕，因为脏数据对某些业务场景来说几乎是零容忍的。更何况不同缓存所带来的约束也各不相同——例如HTTP缓存中的Expires: Never，就可能导致某些用户理论上永远无法更新数据，其后果可想而知。因此，一定要在完全理解概念的基础上，再谨慎引入缓存技术。</p>
-
-<h3>6. 自动扩展</h3>
-
-<p>自动扩展的前提是基础设施的全面自动化，此类问题在前几篇文章已经提到多次。但是，仅有运维自动化还不足以实现自动扩展——应用至少应部署在公有/私有云之上。例如，在一天中的某个时间段内系统负载总是面临峰值考验，如采用AWS公有云服务的话，动态开启/关闭节点可以节省成本，同时还能在面临高负载时应对自如，当然前提是你手中有足够的运营数据。这种根据数据决定基础扩展策略的方式，通常被称作预测式扩展。</p>
-
-<p>另一种自动扩展方法是反应式扩展。如果某个节点出现问题，或系统负载突然达到一个危险的峰值，则自动启动新节点以增强吞吐能力。反应式方法的关键在于发现问题、启动节点的速度，当然一方面是靠团队Devops的能力，另一方面还要得到云服务商的支持。</p>
-
-<p>实践证明，无论是预测式扩展，或是反应式扩展，其对提高系统整体可用性都是非常有效的。这里的建议是，当团队初次涉足该领域时，应优先考虑设置节点失败条件下的反应式扩展功能，然后再根据更多数据采取进一步行动。</p>
-
-<h3>7. 分布式系统与CAP原则</h3>
-
-<p>十多年来，CAP原则成为构建分布式系统时不可逃避的话题。尽管CAP原则在其科学性上倍受<a href="http://markburgess.org/blog_cap.html">质疑</a>，但其作为权威的实践经验仍不失指导性。</p>
-
-<p>CAP分别表示一致性、可用性和分区容错性。一致性是指任何节点上的数据都是保持一致的；可用性意味着任何请求都会得到响应；而分区容错性指当系统内部通信出现问题时，依然有能力保证整体可靠性。</p>
-
-<p>CAP原则的基本内容就是，分布式系统始终无法同时囊括上述三种属性，多数情况下只能择其二设计。在实践中，与CAP原则相符的例子比比皆是，假设一个分布式系统包含A、B两个实例，后台数据存储在Ad和Bd两个Replica数据节点上。当Ad和Bd间的网络通信中断时，如果不关闭A或B的其中一个，则Replica的数据就会无法实现同步，从而造成不一致。而如果关闭实例A或B，则会降低系统可用性。这就显示出一致性和可用性之间的矛盾——分布式系统无法放弃分区容错：因为其本身就是为此而生。</p>
-
-<h4>AP系统</h4>
-
-<p>如果强调可用性，就意味着一致性可能出现问题。一般情况下，如果多个数据节点间发生不一致，也可以在某个时间后使其交换数据以达到同步，而非立即实行。这就是强调多次的最终一致性。最终一致性系统预示着用户将有可能收到脏数据，这就要建立在具体的业务需求基础上了。</p>
-
-<h4>CP系统</h4>
-
-<p>有时我们不可避免地面临强一致性，即使因为无法达到一致而被迫拒绝服务——这就是牺牲可用性的强一致性系统。然而，在分布式领域，稳定可靠的强一致性系统实现非常困难，一方面是由于分布式事务操作的低效性，另一方面是实现分布式锁算法的困难性（即使是单进程锁，要踩的坑也很多）。因此如果确实要构建强一致系统，采用现有成熟方案非常重要——因为它们通常都经历了时间的考验。当然对比前者，建立AP系统可能就要容易许多。</p>
-
-<h4>孰优孰劣？</h4>
-
-<p>AP和CP，选谁？前者只能实现“最终一致”，后者实现起来则“困难重重”。然而不能否认，在金融系统中，一致性几乎是必须的；而对大部分系统而言，AP则是更加现实的做法。要知道，在大多数情况下，选择AP和CP并非零和游戏，整个系统中可以同时存在AP和CP两种架构，以满足不同需求。要提醒的是，如果采用CP模式，调研好现有方案并择优采用是前提。AP则是更加具有普适性的大众选择。</p>
 ]]></content>
   </entry>
   
