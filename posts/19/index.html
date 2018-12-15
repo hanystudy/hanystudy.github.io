@@ -9,11 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="//返回一个结构数组，返回一个硬盘信息的结构数组
-JNIEXPORT jobjectArray JNICALL Java_com_sundy_jnidemo_ChangeMethodFromJni_getStructArray
-(JNIEnv *env, jobject _obj)
-{
-// &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 总的来说，JNI应当是java初学者须掌握的内容。尽管教科书中涉及的极少，JNI也破坏了java重要的可移植性，但JNI并未因此被弃用，反而被Sun列入JDK不可缺少的一部分——这至少说明了java并非像一些人说得那么神通广大。  正如原文作者最初所说的，JNI适用于许多程序设计语言， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -101,6 +97,60 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/10/18/JNI-ji-shu-chu-bu-wu/">
+		
+			JNI技术初步(五)</a>
+	</h2>
+	<div class="entry-content">
+		<p> 总的来说，JNI应当是java初学者须掌握的内容。尽管教科书中涉及的极少，JNI也破坏了java重要的可移植性，但JNI并未因此被弃用，反而被Sun列入JDK不可缺少的一部分——这至少说明了java并非像一些人说得那么神通广大。</p>
+
+<p> 正如原文作者最初所说的，JNI适用于许多程序设计语言，甚至包括汇编程序。但理解了java内涵的人都会小心翼翼去使用JNI，而非将其当成是万能的解决方案。</p>
+
+<p> 感谢本系列第1-4篇文章的原作者，很多是被原文采纳，其余内容也做了详细的参考，在此一并感谢。</p>
+
+<p> cnweblog.com <span style="color: #000000;">刘正伟 </span><span style="color: #000000;"><a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#115;&#117;&#x6e;&#100;&#121;&#50;&#x36;&#64;&#49;&#50;&#x36;&#46;&#x63;&#x6f;&#x6d;">&#115;&#x75;&#x6e;&#100;&#x79;&#50;&#54;&#x40;&#49;&#50;&#x36;&#46;&#99;&#x6f;&#x6d;</a></span></p>
+
+<p> blog.edu.cn  <span class="style3">xdsamuel</span></p>
+
+<p><span class="style3"> gceclub.sun.com.cn Sun中国技术社区 陈健明 华中师范大学网络与通讯研究所 <span style="color: #000000;"><a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x63;&#104;&#x65;&#x6e;&#106;&#x6d;&#x32;&#x30;&#48;&#x30;&#64;&#104;&#x6f;&#116;&#109;&#x61;&#x69;&#108;&#x2e;&#x63;&#x6f;&#109;">&#99;&#104;&#101;&#x6e;&#x6a;&#x6d;&#50;&#x30;&#x30;&#x30;&#64;&#104;&#x6f;&#116;&#109;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#109;</a></span></span></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-10-18T16:59:48+08:00" pubdate data-updated="true">2008-10-18</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2008/10/18/JNI-ji-shu-chu-bu-wu//posts/19/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -290,7 +340,7 @@ System.out.println(&ldquo;Serial:&rdquo; + diskList[i].serial);
 *
 * @author 刘正伟(sundy)
 * @see <a href="http://www.cnweblog.com/sundy">http://www.cnweblog.com/sundy</a>
-* @see <a href="&#x6d;&#x61;&#x69;&#108;&#x74;&#111;&#58;&#x73;&#x75;&#x6e;&#100;&#x79;&#50;&#x36;&#x40;&#x31;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;">&#x73;&#x75;&#110;&#x64;&#121;&#50;&#x36;&#x40;&#49;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;</a>
+* @see <a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#58;&#115;&#117;&#110;&#x64;&#x79;&#x32;&#x36;&#x40;&#49;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;">&#115;&#x75;&#110;&#x64;&#121;&#x32;&#54;&#64;&#x31;&#x32;&#54;&#46;&#99;&#111;&#x6d;</a>
 * @version 1.0
 * @since 2005-4-30
 *
@@ -1394,276 +1444,6 @@ char *tmpdata = (char*)(*env)-&gt;GetByteArrayElements(env, bytearray, NULL);
 
 	
 		<span class="comments"><a href="/blog/2008/09/13/shou-ye-geng-xin-gong-zuo-chu-bu-wan-cheng//posts/19/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/08/29/C-C-shi-xi-bao-gao-yu-Win32-ji-yu-Win32-console-app-ding-min-hang-ding/">
-		
-			C++/C实习报告——基于Win32 Console App的民航订票系统</a>
-	</h2>
-	<div class="entry-content">
-		<p><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><strong><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><strong>源码、演示ppt及测试结果待续…</strong></span></strong></span></span></p>
-
-<div><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">
-<div><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"></span></span></div>
-</span></span></span></div>
-
-
-<p><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><span style="font-family: 宋体;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></p>
-
-<h3 style="text-align: center;"><span style="font-weight: bold; font-size: 16pt; font-family: Lucida Sans Unicode; mso-spacerun: 'yes';">
-<h3 style="text-align: left;"><span style="font-weight: bold; font-size: 14pt; font-family: '宋体'; mso-spacerun: 'yes';">               索创软件项目实习报告 V1.3 Final</span></h3>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">项目名称：民航飞机订票系统</span></p>
-<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">项目组成员:</span></p>
-<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">韩翼  王毅飞</span></p>
-<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">完成日期：2008年8月28日</span></p>
-<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">学校名称；西北大学 软件工程2班</span></p>
-
-<h5 style="text-align: left;"><a name="_Toc138694584"></a><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><a name="_Toc68487027"></a><a name="_Toc68101079"></a><a name="_Toc68086907"></a><a name="_Toc68086792"></a><a name="_Toc68086676"></a><a name="_Toc68081420"></a><a name="_Toc67967754"></a><a name="_Toc67967386"></a><a name="_Toc67967308"></a><a name="_Toc67888486"></a><a name="_Toc67888393"></a><a name="_Toc48465492">1．需求分析</a></span></h5>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">民航订票系统允许用户自由注册、登陆，用户权限分为三种级别，分别是一般浏览用户、注册用户、民航售票员和系统管理员。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">(1) 所有模块程序均使用c++/c语言编写，使用Microsoft Visual C++ 6.0编译，运行环境需Windows98操作系统或以上。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">(2) 本系统采用菜单操作方法，每个菜单都有相应的帮助，用户分三种权限：一般的浏览用户，注册用户、民航机票售票员，系统管理员。 根据登陆方式，选择相应的操作方式；如果是一般的浏览用户，只能按照各种方式查看航班信息。如果是一般的注册用户，不但具有一般的浏览用户所有功能，还具有查看自己的信息和订票情况，可以网上订票、退票，修改自己的信息等；如果是民航机票售票员，可以查看数据和编辑航班信息。如果是系统管理员，他拥有管理航班的所有功能，并可创建民航机票售票员，授权用户权限等功能。登录的用户名和密码应该存储在单独的文件中，有加密算法可以进行统计，查找，排序等功能。</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"> </p>
-
-<h5 style="text-align: left;"><a name="_Toc138694585"></a><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><a name="_Toc68487028"></a><a name="_Toc68101080"></a><a name="_Toc68086908"></a><a name="_Toc68086793"></a><a name="_Toc68086677"></a><a name="_Toc68081421"></a><a name="_Toc67967755"></a><a name="_Toc67967387"></a><a name="_Toc67967309"></a><a name="_Toc67888487"></a><a name="_Toc67888394"></a><a name="_Toc48465493"></a><a name="_Hlt138694662">2．概要设计</a></span></h5>
-<p class="0" style="text-align: left;"> </p>
-
-<h5 style="text-align: left;"><a name="_Toc138694586"></a><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><a name="_Toc68487029"></a><a name="_Toc68101081"></a><a name="_Toc68086909"></a><a name="_Toc68086794"></a><a name="_Toc68086678"></a><a name="_Toc68081422"></a><a name="_Toc67967756"></a><a name="_Toc67967388"></a><a name="_Toc67967310"></a><a name="_Toc67888488"></a><a name="_Toc67888395"></a><a name="_Toc48465494">3．详细设计</a></span></h5>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">程序主要有3个模块，机票模块FTicket.cpp/FTicket.h，用户模块FUser.cpp/FUser.h和航班模块FLight.cpp/FLight.h。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">各自有一个文件来储存各自内容(用户表 users.txt航班表 flight.txt订票信息 ticket.txt).。以链表形式在文件中存储。</span></p>
-<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">航班模块实现功能有</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//航班链表初始化</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">FlightNode* Flight::InitialFlightNode(FlightNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输入链表从文件</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">FlightNode* Flight::ReCheck(FlightNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//添加航班</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::InputFlight(FlightNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输出链表到文件</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::OutPutFlight(FlightNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//航班查询</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::FlightQuery(FlightNode* head) </span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//修改航班</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::UpdateFlight(FlightNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//删除航班,级联删除票务信息</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::DeleteFlight(FlightNode* head,TicketNode* thead)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//航班统计</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::FlightStat(FlightNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//订票情况统计</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::TicketQueryStat(FlightNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//热门航班统计</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::HotFlight(FlightNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//冷门航班统计</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::ColdFlight(FlightNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//打折航班统计</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Flight::DiscountFlightStat(FlightNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">其中</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//输入链表从文件]与[//输出链表到文件]为文件操作，同文件航班表flight.txt相关连，功能为欲将内存中的链表存入文件中和将文件中的链表存入内存。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//航班链表初始化]为链表操作。功能是在内存中新建一个链表，为之后操作作准备。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//添加航班][ //航班查询][ //修改航班]为链表操作，功能是增加链表节点，查询链表节点，与修改链表节点内容。  </span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//删除航班,级联删除票务信息]也为链表操作。功能为删除列表节点。同时连接函数ticket.DeleteTicket(Idtmp,thead)，当删除航班时同时删除被删航班得订票信息，借此避免数据的非一致性错误。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//航班统计] [//订票统计] [//热门航班统计][//冷门航班统计][//打折航班统计]为统计部分。[//航班统计]为累加器统计，利用累加器来统计航班数量。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//热门航班统计]和[//冷门航班统计]首先使列表按订票排序，然后为输出排序后前十得航班。如果按升序排列，前十就是冷门航班，降序前十就是热门航班。其中冷门航班添加判断语句，当入座率都在50%以上时无冷门航班。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//订票情况统计]与[//打折航班统计]为链表内容输出，当指定航班时输出相应航班内容。</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">用户模块实现功能有</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//用户链表初始化</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">UserNode* User::InitialUserNode(UserNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输入链表从文件</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">void User::ReCheck(UserNode* head) </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//添加用户</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::RegisterUser(UserNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输出链表到文件</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::OutPutUser(UserNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//用户登录</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">int User::CheckAdmin(UserNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//更改密码</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::UpdatePass(UserNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//用户授权</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::GrantUser(UserNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//删除用户（级联删除订票信息）</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::DeleteUser(UserNode* head,TicketNode* thead)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//用户列表</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::UserList(UserNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//用户消费查询</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool User::UserConsumption(UserNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">其中</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//输入链表从文件]与[//输出链表到文件]为文件操作，同文件用户表user.txt相关连，功能为欲将内存中的链表存入文件中和将文件中的链表存入内存。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//航班链表初始化]为链表操作。功能是在内存中新建一个链表，为之后操作作准备。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//添加用户] [//用户列表] [ //更改密码] [//用户授权]为链表操作，功能是增加链表节点，查看链表全部节点与修改链表节点内容。其中[//添加用户]由用户本人注册来实现，[//更改密码]由用户自己来更改，需要权限较低。[//用户列表]与[//用户授权]由管理员完成。需要权限较高。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//用户登录]对比链表节点，当用户名与密码对应上时可以进行下一步操作。由用户本人来实现。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//删除用户（级联删除订票信息）]为链表操作。功能为删除列表节点。同时连接函数ticket.DeleteuTicket(Idtmp,thead)，当删除用户时，同时删除此用户得订票信息，借此避免数据的非一致性错误。此功能也为管理员功能，需要权限为高。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//用户消费查询] 首先使列表按消费排序，然后为输出排序后前5的用户，作为本月消费前5名输出，此功能也为管理员功能。需要权限较高。</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">机票模块实现功能有</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//机票链表初始化</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">TicketNode* Ticket::InitialTicketNode(TicketNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输入链表从文件</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">TicketNode* Ticket::ReCheck(TicketNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//级联删除订票信息（删除航班时）</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::DeleteTicket(char* Idtmp,TicketNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//级联删除订票信息（删除用户时）</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::DeleteuTicket(char* Idtmp,TicketNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//输出链表到文件</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::OutPutTicket(TicketNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//网上订票</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::InputTicket(TicketNode* head,UserNode* uhead,FlightNode* fhead)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//退订机票</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::TicketQuery(TicketNode* head,UserNode* uhead,FlightNode* fhead)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//订票查询</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool Ticket::TicketStat(TicketNode* head)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">其中</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//输入链表从文件]与[//输出链表到文件]为文件操作，同文件订票信息 ticket.txt相关连，功能为欲将内存中的链表存入文件中和将文件中的链表存入内存。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//机票链表初始化]为链表操作。功能是在内存中新建一个链表，为之后操作作准备。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//网上订票] [//退订机票]为链表操作，功能是增加链表节点与删除链表节点。[//网上订票][//退订机票]皆由用户本人进行操作。权限较低。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//级联删除订票信息（删除航班时）][//级联删除订票信息（删除用户时）]都为级联删除的一部分，嵌套在用户模块与航班模块中，减少由于数据不一致而产生的错误。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">[//订票查询] 为链表内容输出，当指定用户时输出相应用户订票内容。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">排序功能FSort.cpp用函数实现。查找功能整合在各自模块中。    </span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">密码部分调用SHA1加密模块实现加密。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">   程序运行时首先先将用户表 user.txt航班表 flight.txt订票信息 ticket.txt这3个文件中得内容读取到内存中去，一切链表计算全在内存中，运行完成后，将新的链表存储到文件中覆盖旧的文件，达到更改数据的目的。需要注意的是关于有联系的相应项目的删除要注意级联删除相应项目，防止程序出错。</span></p>
-<p class="0" style="text-align: left;"> </p>
-
-<h5 style="text-align: left;"><a name="_Toc138694587"></a><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><a name="_Toc68487030"></a><a name="_Toc68101082"></a><a name="_Toc68086910"></a><a name="_Toc68086795"></a><a name="_Toc68086679"></a><a name="_Toc68081423"></a><a name="_Toc67967757"></a><a name="_Toc67967389"></a><a name="_Toc67967311"></a><a name="_Toc67888489"></a><a name="_Toc67888396"></a><a name="_Toc48465495">4．测试分析</a></span></h5>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">算法分析</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">1、冒泡排序算法</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">使用了C++链表形式的冒泡排序方法，具体实现方法例:</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">while(head-&gt;link != tail)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">p = head;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">while( p -&gt; link -&gt;link != tail &amp;&amp; p -&gt;link-&gt;link !=NULL)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">p = p -&gt; link;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(Id,p-&gt;Id);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(Id0,p-&gt;link-&gt;Id);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">if(Id[0]&gt;=Id0[0])</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">q = new FlightNode;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">节点数据交换</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">delete q;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">tail = p-&gt;link;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> 其中tail为尾部监视指针，类似于计数器，在首轮冒泡结束后tail会自动提前一位，确保外部循环进行到总结点数减1轮次时结束排序。结点交换方法为结点交换或是数据交换，本例中采取的是数据交换方法，形式较为繁琐，不过达到了冒泡排序的目的。</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">2、统计算法——直接插入排序</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">由于统计功能与排序有相似之处，故统计中采用了一定的排序算法，具体方法是链表的直接插入排序。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">例如统计热门航班前十名的算法：</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">FlightNode *p,*q,*h,*t;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">p=head;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">q=new FlightNode;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">q-&gt;link = NULL;</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">p=p-&gt;link;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h=new FlightNode;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;Id,p-&gt;Id);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;TicketNum,p-&gt;TicketNum);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;MaxNum,p-&gt;MaxNum);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h-&gt;link = q-&gt;link;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">q-&gt;link=h;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">bool a=false;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">while( p-&gt;link != NULL)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">p=p-&gt;link;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">t=q;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">//</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">t=t-&gt;link;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">while(atoi(p-&gt;TicketNum) &lt; atoi(t-&gt;link-&gt;TicketNum))</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">{</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">if(t-&gt;link==NULL)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">goto loop;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">t=t-&gt;link;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">if(t-&gt;link==NULL)</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">break;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h=new FlightNode;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;Id,p-&gt;Id);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;TicketNum,p-&gt;TicketNum);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;MaxNum,p-&gt;MaxNum);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h-&gt;link=t-&gt;link;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">t-&gt;link=h;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">continue;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">loop:</span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"> </span><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h=new FlightNode;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;Id,p-&gt;Id);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;TicketNum,p-&gt;TicketNum);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">strcpy(h-&gt;MaxNum,p-&gt;MaxNum);</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">t-&gt;link-&gt;link=h;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">h=t-&gt;link;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">continue;</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">}</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">直接插入排序形式上比冒泡排序较为复杂，但时间复杂度有很大降低，同时可以方便地进行限制范围的排序，降低空间复杂度。事实上本算法在形式上也有很大的提升空间。</span></p>
-<p class="0" style="text-align: left;"> </p>
-
-<h5 style="text-align: left;"><a name="_Toc138694588"></a><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"><a name="_Toc68487031"></a><a name="_Toc68101083"></a><a name="_Toc68086911"></a><a name="_Toc68086796"></a><a name="_Toc68086680"></a><a name="_Toc68081424"></a><a name="_Toc67967758"></a><a name="_Toc67967390"></a><a name="_Toc67967312"></a><a name="_Toc67888490"></a><a name="_Toc67888397"></a><a name="_Toc48465496">5．用户使用说明</a></span></h5>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">主界面（本部分图均略）</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">可以使用括号中的大写字母来选择自己所要的功能。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">一般浏览用户可以直接点Q来查询航班信息。</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">这时点击任意键确认</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">可以按要求查询航班。按B可以返回上一界面</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">想要订票首先要成为注册用户登录。如果不是注册用户要先注册</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">在主菜单中点R注册进入注册界面。</span></p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">然后按要求输入你想要的用户名与密码。如果提示用户名重复请重新输入一个新的用户名与密码如下图</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">成功后进入用户登录界面进行订票等操作</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">购票员与管理员可以进入管理员登录界面进入各自登录界面</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">购票员界面</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">管理员界面</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">进行各自的操作</span></p>
-<p class="0" style="text-align: left;"> </p>
-<p class="0" style="text-align: left;"><span style="font-weight: bold; font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';">源程序清单附电子版后</span></p>
-
-<!--EndFragment--> 
-
-<span style="font-size: 10.5pt; font-family: '宋体'; mso-spacerun: 'yes';"></span>
-
-</span></h3>
-
-
-<p></span></span></span></span></span></span></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-08-29T22:06:44+08:00" pubdate data-updated="true">2008-08-29</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/xiang-mu/'>项目</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2008/08/29/C-C-shi-xi-bao-gao-yu-Win32-ji-yu-Win32-console-app-ding-min-hang-ding//posts/19/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

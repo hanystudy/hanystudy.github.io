@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="In ruby, block is the cornerstone of metaprogramming with a surprisingly powerful scope controlling capability. Based on this definition, much &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="In previous article several basic scope controlling tools are introduced, like block, proc, lambda, and method object. All of them should work well &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,145 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii/">
+		
+			Metaprogramming Ruby: Core Concepts - Eval Family II</a>
+	</h2>
+	<div class="entry-content">
+		<p>In previous article several basic scope controlling tools are introduced, like block, proc, lambda, and method object. All of them should work well when you organize them in your code reasonably. There are more flexible way to mix code and bindings in ruby - eval, which may not be used broadly than others, so that considerable traps about it are still unclear for us.</p>
+
+<h3>3. instance_eval / instance_exec</h3>
+
+<p>BasicObject#instance_eval can be used almost everywhere in ruby, you can use it like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">instance_eval</span> <span class="p">{</span> <span class="vi">@bar</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span> <span class="p">}</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">instance_variable_get</span><span class="p">(</span><span class="s1">&#39;@bar&#39;</span><span class="p">)</span> <span class="c1">#hello</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the block of instance_eval, the scope changes to the instance foo, thus any operations inner it should bind to the instance, except closure variables.</p>
+
+<p>BasicObject#instance_exec has similar feature to eval one, but with arguments support. This benefit shows as below:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
+</span><span class='line'>    <span class="vi">@bar</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;world&#39;</span>
+</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">instance_exec</span><span class="p">(</span><span class="n">output</span><span class="p">){</span><span class="o">|</span><span class="n">output</span><span class="o">|</span> <span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="vi">@bar</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="n">output</span> <span class="c1">#world</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>4. class_eval / class_exec</h3>
+
+<p>Module#class_eval works for evaluating a block in the context of an existing class. It seems to be similar to instance_eval which will have scope changes to instance self, but also changes current class (excluding singleton class).</p>
+
+<p>class_eval can be used to open a existing class, without using keyword ‘class’. That means it has no scope changing issue compared with keyword way. Actually it even does not need to know the constant name of the target, while keyword way indeed needs.</p>
+
+<p>Also Module#class_exec plays same role like instance_exec for instance_eval.</p>
+
+<p>Think about the thing what we’ve discussed several weeks ago, in ruby all items are instance of class, including classes no matter internal or customized. Which means instance_eval and class_eval both can work for classes in many cases, but indeed have different self meaning.</p>
+
+<p>You may also notice that there is also Module#module_eval / Module#module_exec methods, but they are just alias for class_eval / class_exec without any other changes.</p>
+
+<h3>5. Kernel#eval</h3>
+
+<p>Unlike instance_eval/class_eval, Kernel#eval only accept a string of ruby code as its argument, run the code and give the result. Even it’s so powerful, using string of code is not a good choice if you have other ways. The most issue for string of code is security.</p>
+
+<p>Suppose you have eval expression in your code, which means others can evaluate any code using such method, including get/set operations. Ruby defines safe levels, which actually limits the evaluation of code from outside. By default, ruby will mark potentially unsafe objects which many come from external sources. And user could config a global variable $SAFE, it’s range from 0 to 3(0 by default) with more strict.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vg">$SAFE</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span class='line'><span class="nb">eval</span> <span class="s2">&quot;p &#39;hello </span><span class="si">#{</span><span class="nb">gets</span><span class="p">()</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+</span><span class='line'><span class="n">world</span> <span class="c1">#SecurityError: Insecure operation - eval</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default, eval can accept almost any code from outside. However, it will not be permitted for code from I/O device(tainted object) if $SAFE is none zero. Below gives more details about $SAFE:</p>
+
+<table>
+<thead>
+<tr>
+<th>$SAFE</th>
+<th style="text-align:center;"> Constraints</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td style="text-align:center;">No checking of the use of externally supplied (tainted) data is performed. This is Ruby’s default mode.</td>
+</tr>
+<tr>
+<td>>= 1</td>
+<td style="text-align:center;">Ruby disallows the use of tainted data by potentially dangerous operations.</td>
+</tr>
+<tr>
+<td>>= 2</td>
+<td style="text-align:center;">Ruby prohibits the loading of program files from globally writable locations.</td>
+</tr>
+<tr>
+<td>>= 3</td>
+<td style="text-align:center;">All newly created objects are considered tainted.</td>
+</tr>
+</tbody>
+</table>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-16T09:20:27+08:00" pubdate data-updated="true">2015-09-16</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii//posts/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1536,104 +1675,6 @@ remove_method Removes the method identified by symbol from the current class. Fo
 
 	
 		<span class="comments"><a href="/blog/2015/07/21/microservices-why-it-is-trap//posts/2/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/07/19/microservices-scale-3/">
-		
-			Microsevices陷阱: 层级演进（下）</a>
-	</h2>
-	<div class="entry-content">
-		<h3>8. 服务发现</h3>
-
-<p>随着服务数量的增加，如何获取某个服务的信息则成为挑战，同时它也是部署监控的前提条件。另一些开发中遇到的例子，如：一、想获取当前环境中运行的服务（也就是采集监控对象）；二、想获取当前系统中的API列表从而避免重新发明轮子；这些需求其实都隐含了一种新的需求：针对“服务”的发现机制，在近年来发展非常迅速，已经形成了几个相当成熟的解决方案。它们基本上都遵循了如下工作模式：首先提供一种针对服务的注册过程，当启动新实例时就将其注册进系统；然后，提供一种发现系统内已注册服务的途径。我们先来看一种历史最悠久也最简单的解决方案：</p>
-
-<h4>DNS</h4>
-
-<p>DNS是解决服务发现问题最直接、简便和有效的手段。因为借助DNS，尽管实例IP可能随时发生变化，但域名是不变的。因此在早期，大多数应用都会采用类似<code>&lt;service-name&gt;-&lt;environment&gt;.company.com</code>这样的二级域名来指定服务地址。有的甚至去掉了environment，直接搭建不同的DNS服务器并设置不同的映射表，从而实现配置管理的一致性。后者看起来很方便，但成熟的解决方案不多，亚马逊的Route53服务是少数优秀的代表。</p>
-
-<p>然而采用DNS也存在一定风险性。在DNS协议中存在TTL的概念，也就是说主机内部会维护一个DNS表，当TTL未失效时系统仍将采用本地的DNS映射表，这种设置让实例的更新带来一定风险。为了解决这一问题，DNS并不直接指向实例IP，而是若干实例前设置的反向代理（这个通常是固定不变的）。</p>
-
-<p>DNS方案由于其易用性而得到了大量的应用，但随着微服务架构规模的增加，这种方法的有效性和可维护性将逐渐降低，特别是DNS服务器节点的存在，于是就出现了更多动态服务发现方案。</p>
-
-<h3>9. 服务注册</h3>
-
-<p>由于DNS本身的局限性，许多基于服务注册的发现方案被提出并得到了广泛应用。</p>
-
-<h4>Zookeeper</h4>
-
-<p>Zookeeper最初是Hadoop项目的一部分，其用途非常广泛，包括配置管理、同步服务间数据、选举Leader、消息队列以及命名服务（这才是本文重点）。Zookeeper首先是高可用的，其后台是一个集群并且实现数据Replica；Zookeeper的核心提供一种存储信息的层级命名空间，客户端可以在该层级插入、修改和查询节点；此外，它们能够添加针对节点的监视以观察该节点是否发生变化；也就是说，我们可以把服务的地址信息保存在这种存储结构，并且当其中的信息发生改动时执行其它变更操作，例如关闭上游服务。</p>
-
-<p>Zookeeper是一个非常通用的系统，你可以只把它看作是一个能够保存信息树，并且能在任何变化时发出警告的高可用服务。由于其底层性和单一性，目前针对Zookeeper的扩展库也非常之多。从现在的时间来看，Zookeeper可能有些过时——因为与更多后起之秀相比，它看起来不是那么开箱即用，但不可否认其曾经十分流行。必须承认，由于Zookeeper底层算法PAXOS实现起来非常困难，而该产品又饱经考验，任何企图重新发明轮子的组织都在此吃过不少苦头。这正是分布式协调系统复杂性的体现。</p>
-
-<h4>Consul</h4>
-
-<p>Consul同样支持配置管理和服务发现，但提供了更多高级功能，从而更加易用。例如针对服务发现的HTTP接口，以及一个简单的DNS服务器，甚至还提供SRV记录，能够同时提供给定名字的IP和端口信息。这就使得曾经采用DNS服务的公司迁移到Consul变得非常容易。</p>
-
-<p>Consul还提供了节点健康检查功能，这就包含了一部分监控系统的能力，并且由于其高容错设计和依赖临时节点机制的系统的针对性，使其有能力在某些情况下完全替代Nagios和Sensu。</p>
-
-<p>Consul的RESTful HTTP接口覆盖了从服务注册、查询信息、以及健康检查等大部分功能，使其与现有系统集成变的十分简便。其底层依赖的Serf能够检测集群内节点，进行错误管理以及发出警告。良好的设计使Consul如今成为该领域极具竞争力的明星之一。</p>
-
-<h4>Eureka</h4>
-
-<p>Eureka是由Netflix开源的、只关注服务发现领域的系统。Eureka提供基本的负载均衡功能，基于REST的集成终端，以及基于Java的客户端库。但是，由于Eureka是基于JVM并且实现了所有客户端，这对于多语言环境来说可能会是一个挑战。</p>
-
-<h4>自己动手</h4>
-
-<p>在某些公有云服务器中，服务发现可以借助一些内置功能来实现，当然这要建立在你对该产品非常熟悉，且系统规模较小的情况之下，通常会与采用上述重型框架相比省去很多麻烦。另一方面，服务发现除了是对分布式系统内部提供信息，任何现有的report和dashboard都可以借此提供实时的节点信息，从而允许人工检查。</p>
-
-<h3>10. 服务文档化</h3>
-
-<p>随着微服务架构的实施，更多时候我们希望能够以API的形式暴露一部分服务缝隙，从而允许其他开发者接入更多类型的服务。但是构建开放API的过程是非常复杂的，特别是在采用微服务架构时，如何保证服务文档的实时性将成为挑战。这里介绍目前流行的两个服务文档技术：Swagger和HAL。</p>
-
-<h4>Swagger</h4>
-
-<p>Swagger能够通过一组Web界面展示当前的API信息，而你只需要定义一套POST模版即可。Swagger要求相关服务暴露一个符合标准的文件（可以通过Swagger提供的标准库实现），例如对于Java你可以使用方法标注描述相关API。</p>
-
-<h4>HAL和HAL浏览器</h4>
-
-<p>HAL即Hypertext Application Language，是一种超媒体资源的描述标准，HAL同样提供用户界面和标准库。通过Web界面，用户不仅可以查看API信息，还能直接调用相关API。不同的是，HAL中所有的文档信息都基于超媒体控制，因此很容易就能够将信息对外展示。这就限制了用户只能使用超媒体描述系统内资源，而从现有系统迁移则远没那么容易。</p>
-
-<h3>11. 自描述系统</h3>
-
-<p>在SOA的发展初期，类似全局描述、发现以及集成UDDI标准被用于帮助人们理解当前运行着什么服务。事实证明，UDDI对大多数项目来说都非常重，从而导致更多替代产品的出现。</p>
-
-<p>不可否认，获取系统的整个框图并理解其架构对于团队成员来说十分重要。通过关联ID跟踪下游服务并理解调用链、从而让我们更快理解系统原理。采用类似Consul的服务发现技术，能够让我们查看当前运行的微服务。HAL能展示出当前终端上包含的所有服务能力，同时状态监控页面和相关系统能够使我们整体和局部的状态。上述信息都能够用于为进一步设计提供线索，且比只有一个简单到随时会过期的wiki页面强得多。尽管多数情况下我们都是从后者开始的，但不要忘了把上述信息逐渐引入到系统中，随着系统复杂性增加，描述信息的演化能让我们更好的理解系统。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-07-19T17:32:35+08:00" pubdate data-updated="true">2015-07-19</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>, <a class='category' href='/blog/categories/ruan-jian-jia-gou/'>软件架构</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2015/07/19/microservices-scale-3//posts/2/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
