@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 我终究是经受不了传统RPG的诱惑，十多年了仍然如此。这次游戏剧情据说有近百小时的巨量（当然各类修改器总能让这些剧情如便当一般），再加上脚伤要求至少制动一月以上，就当每天多两个小时休闲时间吧（当然这本就是不小的挑战，过去三十几个小时的剧情哪个不是两天就通关的？）。   &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 好吧，我的确是在期待尚在文案中的二代了。实际上终局似乎给出了一些后代的线索，当然另起一条线写过也是完全可以的，毕竟世界观框架已经建立好了。至于本代游戏的评测实在是没必要再写，编剧、音乐、美术、图形都还不错，其实动画可以加入配音的元素，程序的问题影响游戏普及率，制作团队自己要认真对待。   &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,54 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/08/08/gu-jian-1-tong-guan/">
+		
+			古剑1通关</a>
+	</h2>
+	<div class="entry-content">
+		<p> 好吧，我的确是在期待尚在文案中的二代了。实际上终局似乎给出了一些后代的线索，当然另起一条线写过也是完全可以的，毕竟世界观框架已经建立好了。至于本代游戏的评测实在是没必要再写，编剧、音乐、美术、图形都还不错，其实动画可以加入配音的元素，程序的问题影响游戏普及率，制作团队自己要认真对待。</p>
+
+<p> 此外还要老生常谈创新这个东西，平心而论古剑1的创新列表还是不少，但无非都是“再创新”，而且还是自主发挥很少的那种。中文RPG似乎有种魔力，我开始前几天也只是按两个小时的限额玩，后来忍不住后续剧情的诱惑，最后就又成了连续作战，导致没过几天即到了终局&hellip;后来多数因为精力不支而长时间内无法来二周目&hellip;所以期待今后可以出现长期霸占硬盘的耐玩RPG，目前古1的DLC还未放出，因此不好评价这部分内容。</p>
+
+<p> 想起今晚终局了便去看才放出字幕的《哆啦A梦2010大长篇之大雄的人鱼大海战》，发现制作团队连三十周年的纪念剧都做的如此酱油，但他们又继承了何止三十年的家底，最近几年做的废柴倒也不会带来毁灭性的打击。国产团队一缺乏悠久历史，二缺乏雄厚资金，想打造经典必然不容易，但如果在前期就以次充好的话肯定无法长久。今天又看了看官方的企划日志，发现古剑ol居然都在日程了，一时竟不知说什么好。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-08T01:50:47+08:00" pubdate data-updated="true">2010-08-08</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/pcyou-xi/'>pc游戏</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2010/08/08/gu-jian-1-tong-guan//posts/10/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -562,78 +610,6 @@ $(document).ready(
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/04/19/guan-yu-GrassrootDCM-bu-wan/">
-		
-			关于GrassrootDCM补完</a>
-	</h2>
-	<div class="entry-content">
-		<p> 之前提到GDCM基层DCM类库是一个颇为强大的开源dicom文件基础类库。目前，GDCM已经专门针对vtk提供了应用程序接口，我们可以利用vtkGDCMImageReader和vtkGDCMImageWriter两个类完整支持DICOM标准V3的IO操作。</p>
-
-<p> 但是获得GDCM后，遇到一些颇为棘手的问题。</p>
-
-<p> 首先，GDCM对Win32平台只支持vc7.1以后的编译器，而现有的vtk则是采用vc6.0编译。即是说，如果编译GDCM时要cmake选择vtk的扩展项，就必须采用vc7.1以后的编译器重新编译vtk。</p>
-
-<p> 其次，现有的工程均是采用vc6.0创建，如果将平台完全迁移至后续vc版本，就可能会影响目前的工程进度。</p>
-
-<p> 另外，从vc6.0迁移至新版本中所带来的编码问题可能会影响到应用程序的稳定性。</p>
-
-<p> 出于以上考虑，先尝试重新编译vtk，这里我们预设的编译平台为vs2005，即vc8.0。但注意不应覆盖原有vc6.0编译的vtk文件，即在cmake阶段改一下prefix属性值就可以了，其余操作不变。对于新install的vtk文件，我们将环境变量path中bin的原有vtkbin的设置改为新版本值（有些读者之前可能会选择将所有bin文件放入system32中，但是按修改path的方法较好，当然后者的修改方法是相对应的）。</p>
-
-<p> 现在cmake从sourceforge上找来的GDCM2.0.x，仔细检查一些配置项，尤其是扩展vtk项一定要选，g后用vc8.0编译。这里不应出现任何error。现在看来，GDCM的安装步骤其实和vtk没有什么区别，但是对vtk和编译器的要求较严格。</p>
-
-<p> 这里再总结一下我们针对vc6.0使用GDCM+VTK编程的基本思路：</p>
-
-<p> 1、vc6.0引用库采用原有vc6.0编译生成的vtk文件。</p>
-
-<p> 2、运行库采用vc8.0编译生成的vtk文件（即DLL文件）。</p>
-
-<p> 3、在vc6.0中再引用vc8.0编译生成的GDCM文件。</p>
-
-<p> 完成上述步骤，就可以使用vc6.0进行下一步工作了。要注意的是，vtk的运行库一定要更新为vc8.0新编译版本，否则我们一调用GDCM就会因为DLL版本不足而出错。</p>
-
-<p> 关于gdcm的全套文档可以参考：</p>
-
-<p> <a href="http://gdcm.sourceforge.net"><a href="http://gdcm.sourceforge.net">http://gdcm.sourceforge.net</a></a></p>
-
-<p> 这里要再次说明一下，gdcm完整支持dicomV3，这是vtkDICOMImageReader乃至ITK都无法与之相提并论的。在实际应用开发中，还要注意程序基础构架对选择开发平台的影响。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-04-19T20:52:16+08:00" pubdate data-updated="true">2010-04-19</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2010/04/19/guan-yu-GrassrootDCM-bu-wan//posts/10/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
 <nav id="pagenavi">
     
     	
@@ -645,7 +621,7 @@ $(document).ready(
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2018
+	<footer id="footer" class="inner">Copyright &copy; 2019
 
     Han Yi
 
