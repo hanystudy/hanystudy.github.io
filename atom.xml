@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2019-02-03T10:32:37-05:00</updated>
+  <updated>2019-02-10T23:57:34-05:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,244 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[软件设计与架构笔记(8)]]></title>
+    <link href="http://www.hanyi.name/blog/2019/02/06/software-design-and-architecture-notes-8/"/>
+    <updated>2019-02-06T16:23:31-05:00</updated>
+    <id>http://www.hanyi.name/blog/2019/02/06/software-design-and-architecture-notes-8</id>
+    <content type="html"><![CDATA[<h2>面向对象——概念与建模</h2>
+
+<p>由前文<a href="blog/2019/01/24/software-design-and-architecture-notes-7/">编程范式</a>我们知道，对象作为最基础的编程概念广泛存在于各类编程范式中，采用这种范式的语言被称为基于对象语言(Object based language)。本文讨论的<strong>面向对象</strong>(Object oriented)的概念则首次出现在1967年诞生的Simula 67，其中除了对象概念本身外，还进一步提出了<strong>继承</strong>和<strong>多态</strong>这两个重要特性，成为此后长期影响学术界的语言之一。而面向对象在工业界的兴起则始于上世纪80年代，以Smalltalk和C++的相继发明为标志，深刻影响了此后近四十年的软件工程。</p>
+
+<h3>基本概念</h3>
+
+<p>继承是区分面向对象和基于对象的重要特征，大部分面向对象语言的继承是采用<strong>类</strong>(Class)实现的(注意“类”和“对象”是完全不同的编程概念)。我们知道类可被看作是能够创建对象的工厂对象，继承则允许增量式地进行对象扩展。因此，类作为数据抽象的核心，在其基础上实现继承就自然地支持增量式的数据抽象。除了类之外，面向对象还支持一种基于<strong>原型</strong>(Prototype)的特殊实现，后者通常并不包含类定义，任何对象都能够唯一地指定另一个对象作为其原型，其中对象的属性和事件沿原型链传递查找，从而实现继承。从支持增量式对象扩展的角度看，类继承和原型继承没有本质区别。下面讨论在面向对象语境下的一些重要概念。</p>
+
+<ul>
+<li>类。类是一个可能同时包含部分具体实现的抽象数据类型[BMR97]，其被用于描述一组存在于内存中且可直接被用于计算的实例。类的特点在于其同时扮演了<strong>模块</strong>和<strong>类型</strong>两种角色。其中模块作为一种语法概念，通常被用于表示软件分解单元，而类型则被用于动态对象的静态描述，相当于一种语义概念。在非面向对象模式中，上述两种概念通常是被分开表示的。</li>
+</ul>
+
+
+<p>在某些面向对象系统中(例如Smalltalk和Ruby)，类自身也可能是通过对象实现的，这种实例依然是其本身的类被称作<strong>元类</strong>(Metaclass)，面向对象语言或编程环境的作者可以利用元类方便地实现某些动态扩展特性，例如Ruby的<a href="http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-object-oriented-hierarchies/">单例类</a>。</p>
+
+<ul>
+<li>对象。对象是指某个类的运行时实例[BMR97]。</li>
+</ul>
+
+
+<p>虽然“对象”一词最初来源于对真实世界物体的描述，但在实际编程场景中对象已经不仅仅被用于描述真实物体，例如用于描述一组配置属性等因技术需求而诞生的对象。对象是通过<strong>引用</strong>(Reference)进行表示的，并且可以被自身或其它对象引用。一个对象引用唯一地指向了该对象唯一且不变的<strong>标识</strong>(Identity)。对象标识是用于区分不同对象的唯一凭证。</p>
+
+<p>对象的创建过程通常是在面向对象系统中默认定义的，一般包括分配内存空间和初始化两个步骤，前者由系统自身负责，后者允许在程序中自定义初始化过程。以Java的面向对象系统为例，类支持以构造函数(Constructor)定义初始化过程，如果某个类没有包含显式的构造函数，编译器会自动加入一个默认的无参构造函数并在其中调用父类的无参构造函数。</p>
+
+<ul>
+<li>组合与聚合。如果采用引用表示对象，那么对象之间就可以通过引用产生<strong>关联</strong>(Association)。但是仅使用引用不足以描述对象间真实的关系特征，从而无法满足<strong>忠实建模</strong>(Faithful modeling)。<strong>组合</strong>(Composition)关系是指一个对象包含了另一个对象的值，这种关系超过了一般引用的定义，特别是指被包含对象的生命周期被限制在其父对象内。<strong>聚合</strong>(Aggregation)关系指一个对象由另外多个对象组成，其组成关系通过引用实现。与组合的区别在于，聚合中被包含对象的生命周期不受父对象限制。</li>
+</ul>
+
+
+<p>从面向对象中对关系分类的角度看，组合与聚合可以统一被看作<strong>客户</strong>(Client)关系，其实质是对对象间关系的描述。</p>
+
+<ul>
+<li><p>继承。继承描述了一种类之间的扩展关系。在面向对象中，类本身具备良好的模块化特性，从而能够满足信息隐藏的原则，但模块化并不直接提供增量式设计和开发的途径。继承支持了类之间的扩展、特化和组成关系，显著增强了面向对象的可重用性和可扩展性。其中包括四个重要的衍生概念:</p>
+
+<ul>
+<li>重定义(Redefinition)，指子类能够重新实现父类中定义的过程，有时也称作<strong>覆盖</strong>(Override)。</li>
+<li>多态(Polymorphism)，指一个变量实体或数据结构元素，在具备可控静态声明的前提下能够在运行时阶段绑定至不同类型的对象。例如当类A继承类B，那么类A的对象a，可以被赋于类型为B的变量b，且并不违反类型检查。</li>
+<li>静态类型(Static typing)，前面提到多态的前提是具备“可控静态声明”，具体是指对于一个变量的声明类型(也称变量的静态类型)，尽管允许其被赋予不同类型(也称变量的动态类型)，但其动态类型必须是静态类型的后代(后代定义包含其自身)。</li>
+<li>动态绑定(Dynamic binding)，是指变量所指向对象的动态类型决定被调用操作的具体位置。</li>
+</ul>
+</li>
+</ul>
+
+
+<p>本质上，继承同时包含了两个角色且互有重叠:模块和类型。从模块的角度看，继承提供了一种有效的可重用特性。这里提到的有效是指当类A继承类B时，A就立即拥有了B的全部特性，且无须进行任何改动。从类型的角度看，继承同时增强了可重用性和可扩展性，这主要体现在: 1.对于类Rectangle继承类Polygon，即Rectangle的全部实例同时也是Polygon全部实例的子集。2.对于类A继承类B，那么B的任意实例所具有的操作也同时存在于A。在许多文献中，继承也被称作is-a关系。</p>
+
+<ul>
+<li>多重继承。在真实世界中，对象可能同时包含了不同领域的抽象，对应在面向对象中就是多重继承，即一个类可以同时拥有多个父类。例如，类Teacher和类Student都继承了类UniversityPerson，这时需要一个类TeachingAssistant且同时继承自类Teacher和类Student，也就是说通过两个父类间接继承了类UniversityPerson，即<strong>重复继承</strong>。重复继承可能会造成一定的函数访问冲突，特别是当调用类TeachingAssistant的对象的name函数，而其实际上位于类UniversityPerson时，系统就面临多重函数查找路径的问题。而由此引发的复杂性使得多重继承在许多现代面向对象实践中被认为弊大于利，且不被推荐使用。但不可否认，多重继承实际上体现了真实世界原本的复杂性。</li>
+</ul>
+
+
+<p>在支持多重继承的面向对象系统中，通常采用<strong>复制</strong>(Replication)和<strong>共享</strong>(Sharing)两个策略解决前述重复继承问题。复制是指当遇到重复继承时，子类实际上包含了所有继承路径上属性和函数的副本，程序这时需要具体指定被调用副本的名称。共享是指程序可以指定在子类中只保留一份来自祖先的副本，这样就避免了名字冲突的问题，例如C++的<strong>虚继承</strong>(Virtual inheritance)。</p>
+
+<p>许多现代面向对象语言不支持多重继承，但同时为了保留一定的设计能力大多采用了折衷方案，例如Java的<strong>接口</strong>(Interface)、Ruby的<strong>混入</strong>(Mixin)等。</p>
+
+<ul>
+<li>泛型。继承本质上体现了一种纵向的层级扩展关系，由上至下可以被看作是面向对象从抽象化到特化。而<strong>泛型</strong>(Genericity)则支持横向的同级扩展关系，即类型参数化。</li>
+</ul>
+
+
+<p>泛型最经典的案例就是编程语言标准库中常见的容器类，例如Set、List、Map等，这些容器类实际上是参数化的抽象数据类型，其本身包含了抽象数据类型中的具体操作，并藉由客户代码通过指定参数决定具体的元素类型。由于历史的原因，许多现代编程语言中虽然提供了泛型特性，但其实现原理差别巨大。例如C++的模板能完整地重新编译目标代码，最终根据模板参数生成不同的函数和类；而Java的泛型实际上是一种为了增强代码类型安全的语法特性，编译器对泛型语法进行类型检查，并最终通过<strong>类型擦除</strong>(Type erasure)生成无类型参数的目标代码；C#的泛型实现则介于C++的灵活和Java的简易之间，通过运行时<strong>实化</strong>(Reification)进行类型检查和具体操作，从而避免了类型擦除的缺点(例如无法实现泛型数组)，同时把类型参数保留在运行时，从而满足在泛型条件下支持反射。</p>
+
+<h3>面向对象建模(Object Oriented Modeling)</h3>
+
+<p>从上世纪80年代起，随着工业界对面向对象语言从逐渐认识到深入实践，面向对象开始代替传统的结构化方法成为主宰范式。但是，基于面向对象的软件开发很快就面临了更多数量的对象以及更加复杂的关系，实现系统设计也变得空前复杂。作为OO的早期布道者之一，Grady Booch等分别在面向对象的基本概念基础上发展出了一系列全新的建模方法，被统称为<strong>面向对象建模</strong>。</p>
+
+<h4>统一建模语言(Unified Modeling Language, UML)</h4>
+
+<p>1997年，Three amigos在Grady Booch的Booch method、James Rumbaugh的Object modeling technique(OMT)以及Ivar Jacobson的Object oriented software engineering(OOSE)的基础上，正式发布了UML 1.1。UML是一种编程语言无关的通用建模技术，旨在采用统一语言对复杂问题的不同关注点进行建模。</p>
+
+<p>UML由<strong>图形标记</strong>(Graphical notations)和<strong>元模型</strong>(Meta-model)组成。其中图形标记定义了相关概念的图形表示法，也是UML建模的主要工具。元模型是一种对UML模型的形式化表示方法，用于对UML规格说明的精确表达。后者常被用于构建基于UML的计算机辅助软件工程(Computer Aided Software Engineering, CASE)系统。这里只讨论UML的图形标记方法。</p>
+
+<p>下图展示了UML 2.5.1的图形标记分类[UML17]。其中<strong>结构图</strong>(Structure diagrams)用于代表系统中对象的静态结构，通常能够表示系统的核心概念及行为定义，但并不包括行为的动态细节。<strong>行为图</strong>(Behavior diagrams)表示系统中的动态行为，包括方法、协作、活动和状态历史记录等。</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/uml_diagrams_overview.png" alt="The taxonomy of UML diagrams" /></p>
+
+<p>随着UML被纳入国际标准，其复杂度不断增加，即使由对象管理组织(Object Management Group, OMG)定义的狭义UML规范也已经十分臃肿，使其逐渐脱离了日常的软件设计实践。但不可否认，UML的核心内容依然在面向对象建模中占据权威地位。为了保证UML的实用性，本文接下来只讨论核心的图形标记[MFR03]。</p>
+
+<ul>
+<li>类图(Class diagrams)，表示系统中的对象类型及其相互之间的静态关系。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/class_diagrams_overview.png" alt="Class diagram" /></p>
+
+<p>在上图中，每个方框表示类的属性和操作，方框间的实线表示类的相互关系，在每种关系上还标记了两个类之间的<strong>多重关系</strong>(Multiplicity)。关系是UML中最复杂的概念之一，甚至允许通过构造型(Stereotype)对关系进一步扩充。UML的基本关系种类包括：1. 关联(Association)，指类之间的持续性关系，例如类的属性类型，关联采用实线表示，并且可以是无向、单向和双向，带方向的关联进一步揭示了源类中包含以目标类作为类型的属性；2. 依赖(Dependency)，指一个元素(Supplier)的变更可能引起另一个元素(Client)的变更，依赖采用单向的虚线表示；3. 泛化(Generalization)，表示类之间的类型层级关系，例如继承采用带三角箭头的实线表示，如果目标类是接口类，那么采用带三角箭头的虚线表示，抽象类需要额外使用斜体表示。</p>
+
+<p>从上述关系的定义来看，依赖是含义最广泛的关系，也是面向对象建模中需要仔细考虑的问题。过多的依赖路径会导致修改时发生涟漪效应(Ripple effect)，从而降低系统的可维护性。关联进一步包含了前文讨论的组合和聚合关系，其中组合使用一端实心菱形和单向箭头的实线表示，聚合采用一端空心菱形和单向箭头的实线表示，分别如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/aggregation.png" alt="Aggregation" /></p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/composition.png" alt="Composition" /></p>
+
+<p>UML中的大部分工具实质上都是为了设置约束，但仅通过图形标记无法表示所有类型的约束，因此UML支持使用{}表示自定义的约束。自定义约束的具体形式没有严格限定，可以是自然语言、伪代码，也可以采用对象约束语言(Object constraint language, OCL)。</p>
+
+<ul>
+<li>对象图(Object diagrams)，是指系统在某个时间点的对象快照，也被称作实例图。虽然类图能够完整表达对象的结构信息，但有时候并不容易理解，对象图能够以某个真实案例对前者进行补充。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/object_diagram.png" alt="Object diagram" /></p>
+
+<ul>
+<li>包图(Package diagrams)，指一组类或嵌套包的集合。包也被称作命名空间(Namespace)，其作用是定义比类层次更高的系统结构。包图在UML中使用带标签名的方框表示，包之间也可以定义类似类图中关系。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/package_diagram.png" alt="Package diagrams" /></p>
+
+<ul>
+<li>部署图(Deployment diagrams)，指系统的物理结构，特别是软件及其所运行的硬件框架。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/deployment_diagram.png" alt="Deployment diagram" /></p>
+
+<ul>
+<li>组合结构图(Composite diagrams)，指对一个类的内部结构进行层级表示，从而使其更容易被理解。以类TV Viewer为例，下面是TV Viewer的类图:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/composite_structure_1.png" alt="Class diagram of TV Viewer" /></p>
+
+<p>如果用组合结构图进一步描述TV Viewer，则如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/composite_structure_2.png" alt="Composite structure diagram of TV Viewer" /></p>
+
+<ul>
+<li>组件图(Component diagrams)。在UML中，组件是一种从功能角度上看可以独立分发和升级的模块。组件图用于表示组件之间的交互关系，如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/component_diagram.png" alt="Component diagram" /></p>
+
+<ul>
+<li>时序图(Sequence diagrams)，表示一组对象及其之间的协作关系。具体来说，时序图通常限定在一个单独的场景下，包含了一组对象以及依据用例而发生的对象间消息传递，特别是展示了消息发生的顺序信息。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/sequence_diagram.png" alt="Sequence diagram" /></p>
+
+<p>在时序图中，由于第一个消息通常不在参与者(Participants)中，因此也被称作<strong>创始消息</strong>(Found message)。另外，时序图中的参与者是可以被动态创建和销毁的。同时消息传递过程也支持循环、分支以及异步等特性。</p>
+
+<ul>
+<li>状态机图(State machine diagrams)，也称作状态图，表示单个对象的整个生命周期行为。在面向对象中状态具体包括了对象中所有属性值的集合，而状态图则侧重于抽象的状态定义，即提供不同的事件响应方式。一个简单的状态图例子如下:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/state_machine_diagram.png" alt="State machine diagram" /></p>
+
+<p>该状态图表示了一座城堡中的安全机关。图中方框表示一个状态，除了状态名之外，还可以填入状态的内部活动，包括状态事件(Event)、看守(Guard)和活动(Activity)，当某个事件发生时，可根据当前状态选择迁移(Transition)或保持状态不变。更进一步，状态既可以是静止的也可以是活动的，例如当前对象某个正在发生的动作。状态也可以被分组，其作用是表示组内所有子状态的同一个向外部某个超状态(Superstate)迁移的路径。</p>
+
+<p>在并发场景中，单个状态可以被分割成几个正交的子状态图，一个闹钟的例子如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/concurrent_state_diagram.png" alt="Concurrent state diagram" /></p>
+
+<p>该图中用一个历史伪状态标记代替了初始状态标记，意味着当开关打开时，初始状态应为上一次开关关闭时所处的状态。</p>
+
+<p>值得注意的是，状态图对应着两种可能的实现，一种是采用控制流代码或面向对象实现，另一种是基于状态表的解析和查询。前者具有更加复杂的代码结构，且需要持续维护相关代码；后者需要在初期实现一个较复杂的状态表解析和查询特性，后期则主要集中于状态表的数据维护。无论采用哪一种实现，其最终代码都具有一定的样板特征，因此结合代码生成技术都是更好的选择。</p>
+
+<ul>
+<li>活动图(Activity diagrams)，表示过程逻辑的业务流程的行为，且通常是跨多个用例或线程的行为。先看一个活动图的例子:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram.png" alt="Activity diagram" /></p>
+
+<p>从上例可以看出，该活动图与传统的流程图十分类似，最主要的区别在于前者支持并发活动，例如<strong>分叉</strong>(fork)操作可以产生并发的子活动，所有子活动的同步操作通过<strong>结合</strong>(join)进行。活动图中的动作(Action)之间使用流(Flow)或者边(Edge)进行连接，且可以被进一步分解成更多子活动，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_2.png" alt="Action decomposition" /></p>
+
+<p>一般而言，活动图更多聚焦于描述业务过程而非实现，但通过分区(Partition)可以进一步表示不同动作的负责对象，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_3.png" alt="Partition" /></p>
+
+<p>活动图支持基于信号的动作触发场景，信号可以被直接触发并接收，也可以通过定时器触发，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_4.png" alt="Signal" /></p>
+
+<p>活动图还进一步支持采用动作方框下放置别针(Pin)表示该动作的输入和输出参数，如果某个动作的输出与下一个动作的输入参数不同，还需要使用参数变换(Transformation)使其一致。当一个动作会导致下一个动作触发多次时，可以采用扩展区域(Expansion regions)标记需要响应多次的动作集合，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_5.png" alt="Expansion regions" /></p>
+
+<p>在该例中，扩展区域中的动作流程可能会部分导致终止，因此采用终止流(Flow final)进行标记。</p>
+
+<ul>
+<li>通信图(Communication diagrams)，在UML 1.x中被称作协作图(Collaboration diagram)，用于表示对象交互过程中的数据连接，如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/communication_diagram.png" alt="Communication diagram" /></p>
+
+<p>通信图所表达的信息与时序图类似，形式相对灵活但不如后者规整，因此其受欢迎程度也不如后者。</p>
+
+<ul>
+<li>交互概述图(Interaction overview diagrams)，指结合了活动图和时序图的概述表示。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/interaction_overview_diagram.png" alt="Interaction overview diagram" /></p>
+
+<p>交互概述图实际上是一种针对对象交互行为的整体表现方案的总结。</p>
+
+<ul>
+<li>时间图(Timing diagrams)，表示单个或一组对象交互的时间约束。特别是当对象的某个状态存在一定时间约束时，如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/timing_diagram.png" alt="Timing diagram" /></p>
+
+<ul>
+<li>用例图(Use case diagrams)，表示系统的功能需求。用例(Use case)是一种对用户与系统或系统自身交互的描述。用例更注重用户的一般目标，与用户场景(User scenario)不同，后者详细描述了用户与系统的每一步交互(这里的用户不仅指人类)，如果交互过程中发生分支则产生新的场景。也就是说，一个用例包含了许多用户场景。下图是一个用例图的例子:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/use_case_diagram.png" alt="Use case diagram" /></p>
+
+<p>用例是对系统功能的更高级描述，与极限编程中的用户故事(User stories)相比，后者侧重于表示系统特性，且可以用于安排迭代计划，而用例则是单纯的系统功能性描述。在具体实践中，一个特性可能直接对应用例，或者用例中的一个步骤，也可能对应于其中一个场景。而大多数情况下用例要比特性具有更粗的粒度。</p>
+
+<h2>结论</h2>
+
+<p>本文首先讨论了面向对象的核心概念；随着面向对象编程的流行，开发中面临的问题复杂度不断提升，由此催生了面向对象建模技术。UML旨在实现语言无关的通用建模语言，被广泛用于面向对象分析(OOA)和设计(OOD)等活动。另一方面，随着相关国际标准的建立，UML也逐渐变得更加臃肿，因此实践中，视实际情况选择性地对工具进行裁剪就变得尤为重要。</p>
+
+<h2>引用</h2>
+
+<p>BMR97, <a href="https://sophia.javeriana.edu.co/~cbustaca/docencia/POO-2016-01/documentos/Object%20Oriented%20Software%20Construction-Meyer.pdf">Object-Oriented Software Construction</a></p>
+
+<p>UML17, <a href="https://www.omg.org/spec/UML/">The unified modeling language specification</a></p>
+
+<p>MFR03, <a href="https://martinfowler.com/books/uml.html">UML Distilled</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[软件设计与架构笔记(7)]]></title>
@@ -3147,55 +3385,6 @@ remove_method Removes the method identified by symbol from the current class. Fo
 <h5>singleton_methods</h5>
 
 <p>Returns an array of the names of singleton methods for object. Only public and protected singleton methods are returned.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[metaprogramming ruby: core concepts - BasicObject]]></title>
-    <link href="http://www.hanyi.name/blog/2015/08/03/metaprogramming-ruby-core-concepts/"/>
-    <updated>2015-08-03T07:33:27+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/08/03/metaprogramming-ruby-core-concepts</id>
-    <content type="html"><![CDATA[<p>Metaprogramming is one of core features for ruby lang, it&rsquo;s widely used from internal ruby to standard library, also endless magic gems. In next a few articles we will focus on those core stuff. I recommend for <a href="https://pragprog.com/book/ppmetr2/metaprogramming-ruby-2">Metaprogramming ruby 2</a> as a reference, except a little verbose and may be only for primer usage. For more ascent knowledge, perhaps you need to track the <a href="https://github.com/ruby/ruby">trunk</a> of ruby. This essay will concentrate on BasicObject, which is parent for all classes in ruby.</p>
-
-<h3>BasicObject</h3>
-
-<p>As the object oriented hierarchy in ruby core, each type of class is also object of Class except BasicObject, and All the objects of Class has root superclass BasicObject, the one is also object of Class. Thus we&rsquo;ll have whole picture below.</p>
-
-<p><img src="http://content.hanyi.name/images/metaprogramming_ruby/ruby_class.png" alt="Ruby OO hierarchy" /></p>
-
-<h4>i.class methods</h4>
-
-<p>BasicObject only has single public class method, names &ldquo;new&rdquo;.</p>
-
-<h4>ii.instance methods</h4>
-
-<p>logical operators, any instance of BasicObject is almost empty, with only a few methods, like logical operators !, !=, ==. Here == has same meaning with equal? for object level equality, The difference is that == is recommended for descendant overriding, but equal? should always be same as it is defined in BasicObject.</p>
-
-<h5>__id__ / object_id</h5>
-
-<p>An integer identifier of an object, should be unique for a given object. But some objects of builtin classes are reused for optimization, like immediate values (not passed by reference but value, like nil, true, false, Fixnums, Symbols, and some Floats) and frozen string literals.</p>
-
-<h5>__send__ / send</h5>
-
-<p>Double underscore gives a backup for pure alphabet version which may be overrode through other ways. Invokes the method, and passes all arguments using dynamic number of arguments.</p>
-
-<h5>instance_eval / instance_exec</h5>
-
-<p>instance_eval support passing a string of ruby source code, with file path and line number when compilation errors happen, also given block, within the context of receiver. Thus eval code will have access to instance variables and private methods.</p>
-
-<p>instance_exec only support using block as an argument, but allows one more argument to be passed from outer scope into receiver.</p>
-
-<h4>iii.private instance methods</h4>
-
-<h5>method_missing</h5>
-
-<p>In BasicObject, method_missing belongs to private instance methods, any call for this method will raise an error. But descendant can override this method to do dynamic processing, according to user&rsquo;s input like symbol name and arguments. If overrode method does not want to do any processing, super should be called to pass message bottom from up.</p>
-
-<h5>singleton_method_added / singleton_method_removed / singleton_method_undefined</h5>
-
-<p>Callback for singleton method operations. As we already know, ruby will not create the whole clone of the class for any objects. Only with a middle layer between object and class - singleton class. Singleton class is generated when object comes out, and any messages sent to object should be transferred to its singleton class first, then its own class if not matches in singleton class.</p>
-
-<p>class&rsquo;s singleton class is different to object&rsquo;s singleton class. That&rsquo;s because singleton class of a class should be inherited from its parent&rsquo;s singleton class, until BasicObject&rsquo;s singleton class, then it can reach non singleton class. But for object, singleton class should always have parent class of its own class.</p>
 ]]></content>
   </entry>
   

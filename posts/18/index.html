@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 刚刚收到了续费通知的邮件&hellip;才想起blog已经建立将近一年&hellip;  期末考试昨天结束，今天已经是09考研的第一天。据说英语题很难，抢交大不到10%名额的计科师兄可得顶住了&hellip;自己的复习也将于近期开始，计划自然是要周密，况且现在已与三年前有了很大不同& &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 09年寒假期间我们准备连载有关ACM的知识，同时将对一些典型例题进行有效解答。由于时间限制，内容仅能尽量拓宽，而很难深入。 2009-01-15 数据结构 Comments "> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,50 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/01/15/jia-qi-xi-lie-nei-rong-yu-gao/">
+		
+			假期系列内容预告</a>
+	</h2>
+	<div class="entry-content">
+		<p>09年寒假期间我们准备连载有关ACM的知识，同时将对一些典型例题进行有效解答。由于时间限制，内容仅能尽量拓宽，而很难深入。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-15T13:50:32+08:00" pubdate data-updated="true">2009-01-15</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/01/15/jia-qi-xi-lie-nei-rong-yu-gao//posts/18/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -564,291 +608,6 @@ $(document).ready(
 
 	
 		<span class="comments"><a href="/blog/2008/10/25/SCCS-chong-gou-qi-dong//posts/18/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/10/23/Windows-xia-de-j2se-shi-zhong-shi-li/">
-		
-			Windows下的j2se时钟示例</a>
-	</h2>
-	<div class="entry-content">
-		<p>demo里原本有个applet，不过难看又没什么新意，加上了一些功能，其中利用到了JNI，dll文件的源码由于太短就不晒出来了&hellip;</p>
-
-<p>/<em><em>
- </em> @(#)mp77_clock.java
- </em>
- <em> mp77的clock模拟器j2se1.4.2版
- </em>
- <em> mp77 版权所有 西北大学 韩翼
- </em>
- <em> @author mp77
- </em> @version 1.00 2008/10/18
- <em>/
-import java.awt.</em>;
-import java.awt.event.<em>;
-import java.util.</em>;</p>
-
-<p>import javax.swing.<em>;
-import javax.swing.event.</em>;
- 
-public class clock extends JFrame implements Runnable{
- 
- //绘图坐标集合
- private int initX,initY,centerX,centerY,sX,sY,mX,mY,hX,hY;
- 
- private Date trialTime;
- 
- private Calendar calendar;
- 
- private volatile Thread thread;
- 
- //控制面版JPanel
- private static JPanel clockPanel;
- 
- private JButton button;
- 
- private JSpinner spinner;
- 
- private Container container;
- 
- private JSpinner.DateEditor editor;</p>
-
-<p> private SpinnerDateModel model;
- 
- //指针时间变量
- private int seconds,minutes,hours;
- 
- public clock(){
-  
-  super(&ldquo;mp77的clock模拟器j2se版&rdquo;);</p>
-
-<p>  container = getContentPane();
-  container.setLayout(new BorderLayout());</p>
-
-<p>///////////////////控制面版JPanel.start///////////////////
-  clockPanel = new JPanel();</p>
-
-<p>  JLabel label= new JLabel(&ldquo;当前系统时间&rdquo;);</p>
-
-<p>  //JSpinner显示格式
-  calendar = new GregorianCalendar();
-  calendar.getInstance(TimeZone.getTimeZone(&ldquo;GMT+8&rdquo;));
-          
-  Date initDate = calendar.getTime();
-  model = new SpinnerDateModel(initDate,null,null,Calendar.YEAR);  
-  spinner= new JSpinner(model);
-  spinner.addChangeListener(new ChangeListener(){
-   public void stateChanged(ChangeEvent changeEvent)
-   {
-    //挂起thread
-    thread.suspend();
-    
-    //实时更改指针坐标
-    seconds=model.getDate().getSeconds();
-    minutes=model.getDate().getMinutes();
-    hours=model.getDate().getHours();
-    repaint();
-       
-    //唤醒确认button  
-    button.setEnabled(true);</p>
-
-<p>   }
-  });
- 
-  editor = new JSpinner.DateEditor(spinner, &ldquo; HH:mm:ss &rdquo;);
-  spinner.setEditor(editor);
-  
-  //时间修改确认
-  button = new JButton(&ldquo;ok&rdquo;);
-  button.setEnabled(false);
-  button.addActionListener(new ActionListener()
-  {
-   public void actionPerformed(ActionEvent e)
-   {
-     clock.setTime(model.getDate().getHours(),model.getDate().getMinutes(),model.getDate().getSeconds());
-     
-     //唤醒thread
-     thread.resume();
-     //屏蔽确认button
-     button.setEnabled(false);
-   }
-  }
-   );
-  //设置JSpinner为不可编辑状态
-  JFormattedTextField tf =((JSpinner.DefaultEditor)spinner.getEditor()).getTextField();
-        tf.setEditable(false);
-        tf.setBackground(Color.WHITE);
-    
-  clockPanel.add(label);
-  clockPanel.add(spinner);
-  clockPanel.add(button);
-  
-  container.add(clockPanel,BorderLayout.SOUTH);
-  
-  
-  button.setBackground(Color.WHITE);          
-     getContentPane().setBackground(Color.WHITE); 
-///////////////////控制面版JPanel.end///////////////////  </p>
-
-<p>     //指针初始化
-     trialTime = new Date();
-  calendar = new GregorianCalendar();
-  seconds=calendar.get(Calendar.SECOND);
-  minutes=calendar.get(Calendar.MINUTE);
-  hours=calendar.get(Calendar.HOUR);  
-     
-     //窗体属性
-  setSize(300,350);
-     setVisible(true);
-     setResizable(false);
-        
-     </p>
-
-<p>              
- }
- 
- //绘图
- public void paint(Graphics g) {</p>
-
-<p>     clockPanel.setBackground(Color.WHITE);
-  initX=45;
-  initY=55;
-  //表盘圆心坐标
-  centerX=initX+100;
-  centerY=initY+100;
-  
-  //jdk1.6前在vista中存在时区bug
-  TimeZone zone = new SimpleTimeZone(28800000,&ldquo;Asia/Shanghai&rdquo;);
-      calendar.setTimeZone(zone);
-  
-  //指针绘图算法
-     sX=centerX+(int)(90<em>Math.cos(Math.PI</em>seconds/30-Math.PI/2));
-  sY=centerY+(int)(90<em>Math.sin(Math.PI</em>seconds/30-Math.PI/2));
-  
-  mX=centerX+(int)(80<em>Math.cos(Math.PI</em>minutes/30-Math.PI/2+(Math.PI<em>seconds/30)/60));
-  mY=centerY+(int)(80</em>Math.sin(Math.PI<em>minutes/30-Math.PI/2+(Math.PI</em>seconds/30)/60));
-  
-  hX=centerX+(int)(50<em>Math.cos(Math.PI</em>hours/6-Math.PI/2+(Math.PI<em>minutes/30)/12));
-  hY=centerY+(int)(50</em>Math.sin(Math.PI<em>hours/6-Math.PI/2+(Math.PI</em>minutes/30)/12));</p>
-
-<p>     super.paint(g);
-     g.setColor(Color.blue);
-     
-     //绘制表盘和刻度
-     g.drawArc(initX, initY, 200, 200, 0, 360);
-     g.drawLine(centerX,centerY,sX,sY);
-  g.drawLine(centerX,centerY,mX,mY);
-  g.drawLine(centerX,centerY,hX,hY);
-     g.drawString(&ldquo;12&rdquo;,138,70);
-     g.drawString(&ldquo;3&rdquo;,235,160);
-     g.drawString(&ldquo;6&rdquo;,143,250);
-     g.drawString(&ldquo;9&rdquo;,48,160);
-     g.drawString(&ldquo;1&rdquo;,188,85);
-     g.drawString(&ldquo;2&rdquo;,220,118);
-     g.drawString(&ldquo;4&rdquo;,220,205);
-     g.drawString(&ldquo;5&rdquo;,188,235);
-     g.drawString(&ldquo;7&rdquo;,98,235);
-     g.drawString(&ldquo;8&rdquo;,65,205);
-     g.drawString(&ldquo;10&rdquo;,62,118);
-     g.drawString(&ldquo;11&rdquo;,95,85);
-     
-     //秒针针头端红色标记
-     g.setColor(Color.red);
-     g.fillArc(sX-5,sY-5,10,10,0,360);
-     
-    }
- 
-    public void run() {</p>
-
-<p>        Thread me = Thread.currentThread();
-        while (thread == me) {
-            try {
-                Thread.currentThread().sleep(500);
-            } catch (InterruptedException e) {
-            }
-           
-            //重新设置指针坐标
-            trialTime = new Date();
-   calendar = new GregorianCalendar();
-   seconds=calendar.get(Calendar.SECOND);
-   minutes=calendar.get(Calendar.MINUTE);
-   hours=calendar.get(Calendar.HOUR);
-           
-            //重绘全部控件
-            repaint();
-            
-            //重新设置JSpinner内容
-   model = new SpinnerDateModel();
-   spinner.setModel(model);       
-   editor = new JSpinner.DateEditor(spinner, &ldquo; HH:mm:ss &rdquo;);
-   spinner.setEditor(editor);
-   
-   JFormattedTextField tf =((JSpinner.DefaultEditor)spinner.getEditor()).getTextField();
-            tf.setEditable(false);
-            tf.setBackground(Color.WHITE);
-           
-        }
-    }
-   
-    public void start() {
-   thread = new Thread(this);
-        thread.start();
-    }
-   
-    //JNI方法函数
- public static native void setTime(int hours,int minutes,int seconds);
- 
- //载入setTimer.dll
- static
- {
-  System.loadLibrary(&ldquo;setTimer&rdquo;);
- }</p>
-
-<p> //入口
- public static void main(String args[])
- {
-  clock application = new clock();
-  application.setDefaultCloseOperation(
-   JFrame.EXIT_ON_CLOSE
-   );
-  application.start();
- }   
-}</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-10-23T21:04:54+08:00" pubdate data-updated="true">2008-10-23</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/java/'>java</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2008/10/23/Windows-xia-de-j2se-shi-zhong-shi-li//posts/18/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="As we already know, ruby provides several ways to extend our classes and objects including but not limit to OO inheritance, Module mix-in, Dynamic &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="从前有一池清潭，在附近的居民眼里它和普通池塘并没有什么区别。某天一位富绅来到池边，搬起一块巨石砸进了池中心，泛起的沉渣顿时把池水变成了浊潭。富绅见人就说，突然变浑浊的潭水里其实是出土了宝藏，价值万贯。消息传开，好奇的人们不远万里赶到潭边，有的确实想发笔横财，有的只是为了观光。 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,122 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2016/11/20/micro-situational-mixed-reality/">
+		
+			微情境混合现实</a>
+	</h2>
+	<div class="entry-content">
+		<p><em>从前有一池清潭，在附近的居民眼里它和普通池塘并没有什么区别。某天一位富绅来到池边，搬起一块巨石砸进了池中心，泛起的沉渣顿时把池水变成了浊潭。富绅见人就说，突然变浑浊的潭水里其实是出土了宝藏，价值万贯。消息传开，好奇的人们不远万里赶到潭边，有的确实想发笔横财，有的只是为了观光。富绅自己则在潭边围起一段栅栏，向来访者销售门票，不日累积万贯。不久，别处的清潭都变浊了。</em></p>
+
+<p>近年火爆的VR/AR在大众眼中是“黑科技”，其实早在50年前(<a href="https://www.youtube.com/watch?v=ISJWZpFIAlQ">The Sword of Damocles，1965</a>)就被人玩剩了，他的创作者是图形学界祖师之一Ivan Sutherland。但可能是发现自己已经走得太远（实际上当时现代图形学基础还没有完全确立），于是萨大爷就带着他一票学生和下属回去后方铺路，后者们先后发明了Smalltalk编程语言、Gouraud着色算法、图形反走样算法，创办创意设计巨头Adobe以及高性能计算鼻祖SGI，甚至还联合乔帮主创办了Pixar（现任Pixar/Disney动画总裁的Edwin Catmull也是图形学巨擘，发明了灰常实用的Catmull-Rom样条函数，直到现在还被用于关键帧插值和<a href="http://www.cemyuksel.com/research/catmullrom_param/">渲染头发丝</a>）。</p>
+
+<p>有意思的是，VR/AR在理论上的研究早已从感知器官上升到哲学范畴&hellip;&hellip;多年来在实践上却仍然停留在科技馆和特殊行业应用领域。最终，geek们期待的科技大跃进并没有真正到来，尘埃褪去，呈现的却是更加亲民的头显（HMD）和各种奇思妙想的控制器（Controller），无不体现着以人为本的时代理念。而如果你能尝试SteamVR上的应用、特别是体验下Proto奖的获奖作品时，你会欣慰地发现，原来真正有梦想、有创造力的人还在不断涌现，你就会从各种捞钱、炫富的纸金现实中暂时解脱出来了。</p>
+
+<p>如果避开硬科幻，从终极关怀的角度审视VR/AR，我们所处时代的主题原来并非“黑科技”，而是“低门槛”和“大众化”。这里，本文提出一种特定场景下的混合现实产品思路，最后以一个真实的开源Demo为例，希望能为许多有想法的人打开一扇窗，鼓励更多人能参与到这一领域中来。</p>
+
+<p><img src="http://content.hanyi.name/images/c22/full.jpg" alt="C22-Full" /></p>
+
+<h4>为什么是特定场景？</h4>
+
+<p>门槛是首要考虑因素。以Daydream为例，在如今诸多VR/AR平台中，Daydream的优势是非常易见的：它太容易接近大众了。对于其它竞品平台，则更多聚焦在高端和行业应用上，不利于小团队做快速原型开发和内容创新（就是说只适合憋大招）。</p>
+
+<p>而Daydream的劣势目前也很明显：3-DOF的控制器无法捕捉用户的全身动作，反馈缺失导致了沉浸感不足（Vive的这一优势在市面上目前还无人匹敌）；另外，移动设备受限的性能、参差不齐的规格也导致潜在的用户体验问题，这恐怕也是Google率先携Pixel发布的初衷。</p>
+
+<p>因此在设计VR/AR产品时，需要首先考虑平台对应用场景的限制。</p>
+
+<h4>微情境（Micro-Situation）</h4>
+
+<p>理论上说，VR/AR技术几乎可以被用于任何情境。基于现实考量，在“微情境”中实现的性价比则更高。</p>
+
+<p>例如<strong>非厨师职业学习做饭</strong>，传统上可能是一对一的学徒体系；后来发展成书籍报刊、电视传播。前者属于文字模式更多得靠个人天赋，后者的声音＋图像模式就更容易被大众所接受。</p>
+
+<p>但有人可能会质疑为什么不真的去尝试做一顿饭？其实这相当于混淆了学习和实践两种活动，“学做饭”和“做饭”本身不是一回事（当然你也可以说在实践中学习，但你也不能证明你是在完全未经过学习的情况下做了一顿饭，况且如果真的是这样，那么满足各位食客的可能性恐怕微乎其微）。</p>
+
+<p>再来看“虚拟学做饭”这一活动的价值，最大的劣势就是你无法从外观之外获得任何的有效反馈，包括直接吃掉自己的学习成果。而优势是节省钱、食材、时间，切身经历每一道工序，这是现有的学习形式都不具备的。</p>
+
+<p>从这一情境本身来说，用户只需要一间整洁的厨房，摆放整齐的食材和调味品，再加上面前一座灶台即可。而交互内容仅需要双手参与。那么即将进入寻常百姓家的Daydream平台完全满足需求，于是皆大欢喜。</p>
+
+<p>其实这里需要考虑的重点在“微”上，什么样的情境才算是“微情境”呢？我们不尝试进一步去做更多的文字游戏，对于“微情境”的发现要更多依赖对情境本身、以及对VR/AR技术的理解和运用，这也是不可避免的过程。</p>
+
+<p>这里再延伸到一个稍“大”一些的微情境：<strong>产品说明书</strong>。</p>
+
+<p>相信大家对各式各样的产品说明书都不陌生，但从现实的生活经验来看，在大多数情况下，要么产品自身完全做到了自说明，要么很难快速（或者根本无法）从说明书中找到自己需要的答案。多年来，尽管平面设计不断进步，多媒体新招层出不穷，也很难断言一个真正有效的用户-产品沟通方式，而VR/AR的普及将为此带来全新的维度。</p>
+
+<p>例如你网购了一套书柜，然而需要自己动手安装，原本自信满满的你花了很长时间，终于无奈地瘫坐在沉甸甸的零件旁，边满头大汗地研究起貌似手绘的安装说明&hellip;&hellip;在当前情境中，家具的零件都可以被虚拟化，用户也不需要真的在场景中走来走去，而是直接上手了解零件功能和安装步骤即可——可以想见，当平台越廉价，“微情境”中的VR/AR应用所带来的附加价值就会越高（例如直接嵌入产品官网Web，并借助移动设备进行VR/AR显示，具体实现请参考文末Demo）。</p>
+
+<p>或许，人们会在不久之后的春晚上体验到VR/AR抢红包之类的全民娱乐呢？</p>
+
+<h4>为什么是混合现实（MR）？</h4>
+
+<p>在这波VR行情之前，就有许多AR应用运行在智能手机上，此外还包括不久前的google glass，却始终没有杀手级应用出现（酝酿多年也才蹦出一只Pokemon Go&hellip;）。原因甚多，其中市场太小、远离大众是一个非常重要的因素。难道VR就没有市场的疑问？否则巨头们为何集体押注在后者身上？由此可猜想投资VR的回报率明显要更高一筹，却万不能沉迷于只做游客。</p>
+
+<p>值得一提的是Hololens展示了当前无与伦比的MR技术，无奈距离大众太过遥远，注定只会面向专业领域。实际上基于现有的VR设备要想直接实现接近Hololens的MR并不困难，毕竟只需要一个透明显示和空间位置标定，如果要做进一步的场景感知会稍复杂（但也已经不是壁垒），不过由此发展的成本肯定比一步到位要低许多。</p>
+
+<p>（这里不得不说句题外话，平台大战可以造就繁荣的假象，但也可能扰乱了内容创造者们的思想，从而延缓技术的最终普及，这种风险在当前看来是不可避免的）</p>
+
+<p>然而如果单纯比拼想象力，MR更胜VR/AR，虽然前者只是模糊了后者之间的界限。在接受程度上，人们总会倾向于那些更加抽象、简洁且表现力更强的形式，MR无疑将会最终胜出。</p>
+
+<p>真正的困难之处在于，MR不仅仅在于两幅人眼画面的结合，也意味着更加复杂的应用场景，以及更具挑战的交互模式，而不是一个看起来更高级的HMD。</p>
+
+<h4>来自22世纪的程序员（C22）</h4>
+
+<p><a href="https://github.com/hanystudy/coder-from-22nd-century">C22</a>是一个基于传统PC+Cardboard的微情境应用。它展示了未来的程序员，能够摆脱固定显示器的束缚，使用HMD、键鼠就可以编写代码，并且在自身环境周围展示各种信息的技术。</p>
+
+<p><img src="http://content.hanyi.name/images/c22/right.png" alt="C22-Right" /></p>
+
+<p>如上图所示，PC中的应用信息被独立传送至HMD中创建的每个虚拟屏幕上，程序员可以在三维场景中浏览各种信息。</p>
+
+<p>除了信息浏览外，C22允许程序员在盲打的情况下使用键盘、鼠标在对应的应用上进行操作，并且能够实时同步。</p>
+
+<p>由于当前C22无法显示在一块透明质的HMD上（类似Hololens），因此也无法真正让普通用户感受到在现实中操作应用。此外由于分辨率的限制，C22目前能实现的用户体验也比较<a href="https://github.com/hanystudy/coder-from-22nd-century#resolution">受限</a>。</p>
+
+<p><img src="http://content.hanyi.name/images/c22/left.png" alt="C22-Left" /></p>
+
+<p>为了快速实现产品原型，C22全部使用JavaScript编写，并且采用了许多尚未广泛兼容的技术（详见<a href="https://github.com/hanystudy/coder-from-22nd-century">项目github主页</a>），由此带来的好处是核心部分搭建只用了两个晚上的时间，后期为了提高体验可能会进一步扩展当前技术栈。</p>
+
+<p>同样由于兼容问题，C22目前只支持Android设备，并计划在<a href="http://www.roadtovr.com/googles-josh-carpenter-bringing-webvr-daydream-2017/">2017年第一季度支持Daydream</a>，届时，用户可以在周围自由设置信息布局。并且由于WebVR将得到浏览器原生支持，C22的渲染能力也将得到显著提升。</p>
+
+<p>2015年举行的<a href="https://www.protoawards.com/">Proto颁奖大会</a>上，年近八旬的萨大爷<a href="https://www.youtube.com/watch?v=R2BfcKxpB8U">获虚拟现实“创始人奖”</a>，大神激励台下一帮天才后辈说：“内容意味着一切，摄像机（指技术）并不创造内容，只有最伟大的创造者才得以使用技术把现实带给人们”。</p>
+
+<p>闻者深受共鸣。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-11-20T13:37:28+08:00" pubdate data-updated="true">2016-11-20</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/mr/'>mr</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2016/11/20/micro-situational-mixed-reality//posts/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1821,90 +1937,6 @@ remove_method Removes the method identified by symbol from the current class. Fo
 
 	
 		<span class="comments"><a href="/blog/2015/08/21/metaprogramming-ruby-core-concepts-object//posts/2/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/08/03/metaprogramming-ruby-core-concepts/">
-		
-			Metaprogramming Ruby: Core Concepts - BasicObject</a>
-	</h2>
-	<div class="entry-content">
-		<p>Metaprogramming is one of core features for ruby lang, it&rsquo;s widely used from internal ruby to standard library, also endless magic gems. In next a few articles we will focus on those core stuff. I recommend for <a href="https://pragprog.com/book/ppmetr2/metaprogramming-ruby-2">Metaprogramming ruby 2</a> as a reference, except a little verbose and may be only for primer usage. For more ascent knowledge, perhaps you need to track the <a href="https://github.com/ruby/ruby">trunk</a> of ruby. This essay will concentrate on BasicObject, which is parent for all classes in ruby.</p>
-
-<h3>BasicObject</h3>
-
-<p>As the object oriented hierarchy in ruby core, each type of class is also object of Class except BasicObject, and All the objects of Class has root superclass BasicObject, the one is also object of Class. Thus we&rsquo;ll have whole picture below.</p>
-
-<p><img src="http://content.hanyi.name/images/metaprogramming_ruby/ruby_class.png" alt="Ruby OO hierarchy" /></p>
-
-<h4>i.class methods</h4>
-
-<p>BasicObject only has single public class method, names &ldquo;new&rdquo;.</p>
-
-<h4>ii.instance methods</h4>
-
-<p>logical operators, any instance of BasicObject is almost empty, with only a few methods, like logical operators !, !=, ==. Here == has same meaning with equal? for object level equality, The difference is that == is recommended for descendant overriding, but equal? should always be same as it is defined in BasicObject.</p>
-
-<h5>__id__ / object_id</h5>
-
-<p>An integer identifier of an object, should be unique for a given object. But some objects of builtin classes are reused for optimization, like immediate values (not passed by reference but value, like nil, true, false, Fixnums, Symbols, and some Floats) and frozen string literals.</p>
-
-<h5>__send__ / send</h5>
-
-<p>Double underscore gives a backup for pure alphabet version which may be overrode through other ways. Invokes the method, and passes all arguments using dynamic number of arguments.</p>
-
-<h5>instance_eval / instance_exec</h5>
-
-<p>instance_eval support passing a string of ruby source code, with file path and line number when compilation errors happen, also given block, within the context of receiver. Thus eval code will have access to instance variables and private methods.</p>
-
-<p>instance_exec only support using block as an argument, but allows one more argument to be passed from outer scope into receiver.</p>
-
-<h4>iii.private instance methods</h4>
-
-<h5>method_missing</h5>
-
-<p>In BasicObject, method_missing belongs to private instance methods, any call for this method will raise an error. But descendant can override this method to do dynamic processing, according to user&rsquo;s input like symbol name and arguments. If overrode method does not want to do any processing, super should be called to pass message bottom from up.</p>
-
-<h5>singleton_method_added / singleton_method_removed / singleton_method_undefined</h5>
-
-<p>Callback for singleton method operations. As we already know, ruby will not create the whole clone of the class for any objects. Only with a middle layer between object and class - singleton class. Singleton class is generated when object comes out, and any messages sent to object should be transferred to its singleton class first, then its own class if not matches in singleton class.</p>
-
-<p>class&rsquo;s singleton class is different to object&rsquo;s singleton class. That&rsquo;s because singleton class of a class should be inherited from its parent&rsquo;s singleton class, until BasicObject&rsquo;s singleton class, then it can reach non singleton class. But for object, singleton class should always have parent class of its own class.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-08-03T07:33:27+08:00" pubdate data-updated="true">2015-08-03</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/ruby/'>ruby</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2015/08/03/metaprogramming-ruby-core-concepts//posts/2/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
