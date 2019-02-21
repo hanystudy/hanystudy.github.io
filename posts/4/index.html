@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="前面已经提到，构建microservices的第一步即划分服务边界，而对新系统直接进行边界划分具有相当的风险，且通常是不被鼓励的。我们建议选择一个较成熟的codebase再进行服务切割。 1.辨识服务边界 面对已有系统，首先需要做的就是辨识其中隐藏的服务边界。在《Working &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="对于单一系统而言，无论采用何种形式，基本的部署工作流是显而易见的。然而一旦采用微服务架构，服务间的相互依赖性会导致现有工作流发生混乱，这肯定是我们都不愿意看到的。本文谨对此展开讨论。 1.持续集成（CI）和持续交付（CD） CI的核心目标是保证团队成员进行良好的同步协作。 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,152 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/05/19/microservices-trap-deployment/">
+		
+			Microservices陷阱: 部署微服务</a>
+	</h2>
+	<div class="entry-content">
+		<p>对于单一系统而言，无论采用何种形式，基本的部署工作流是显而易见的。然而一旦采用微服务架构，服务间的相互依赖性会导致现有工作流发生混乱，这肯定是我们都不愿意看到的。本文谨对此展开讨论。</p>
+
+<h3>1.持续集成（CI）和持续交付（CD）</h3>
+
+<p>CI的核心目标是保证团队成员进行良好的同步协作。其工作方式通常是检查代码更新状态、获取最新代码并且编译和运行测试。CI的产出物通常是可用于直接进行部署或进一步测试的软件包，理想的情况是所有环境的部署都采用同一个软件包，也就是对于CI只产生唯一的交付物。</p>
+
+<p>值得一提的是，采用CI工具和实践CI方法完全是两回事，例如：保证每天都能合并到主干、保证代码更新都有足够的测试、保证CI持续运行是团队第一要务等等，以上实践能充分发挥CI工具的效用。</p>
+
+<p>CD则把CI和更多软件开发实践结合在一起，例如流水线、自动化部署、以及运维等，从而有效降低项目风险，提高团队效率。</p>
+
+<h3>2.CI与微服务</h3>
+
+<p>当采用微服务架构时，如何与CI结合则成为眼前的工作。最简单的实践可能是，把所有服务存储在同一个代码库中，任何提交都会出发任何服务的构建、测试乃至生成部署包。然而该做法是十分浪费的选择，简单改进是增加构建脚本的复杂度，在代码check out后，针对每个服务，由不同的工作流负责构建相应微服务，从而节约资源。</p>
+
+<p>当微服务扩展至不同团队后，共享代码库的方式可能会带来很多问题，这时就需要直接拆分代码库、实现工作流－微服务一一对应的结构了。</p>
+
+<h4>架构演进对CI的影响</h4>
+
+<p>值得一提的是，CI工作流的设计应和应用架构保持一致。也就是说，在初创项目时期很可能都会是一个单独的代码库，CI的结构也应当比较简单。随着领域模型的逐渐建立和API保持稳定，划分服务并且分别构建会是自然的选择。</p>
+
+<h4>特定平台的交付包</h4>
+
+<p>鉴于微服务允许采用不同的技术栈实现，Jar/War、Gem、Egg等区别导致了CI技术的丰富性，实际上也增加了CI实践的复杂度。因此，采用现代配置管理工具如Chef、Ansible则是必须的。另一方面，当把上述各种不同的技术部署上线时，对配置管理的依赖就更加重要了。</p>
+
+<h4>操作系统交付包</h4>
+
+<p>在实践中，自动配置管理面临着跨平台的挑战。即使是面向Linux，也存在发行版之间差异的问题。如果把配置管理的结果从线上环境变为Rpm、Deb、甚至MSI包，则就大幅度降低了操作系统差异所带来的挑战。当然，最好还是尽量在线上环境采用统一的平台为好。</p>
+
+<h4>自定义镜像</h4>
+
+<p>自定义镜像的好处是，我们不再直接在环境上运行配置管理工具，而是在本地构建好虚拟环境，部署好应用，然后再打成镜像包发布，从而节约了线上部署的繁冗时间，消除此举给线上环境带来的潜在问题。虽然说节约时间，但生成镜像依然是十分耗时的工作，好在现有的配置管理工具几乎都支持VMWare、AWS AMI、Rackspace、Digital Ocean、以及Vagrant打包，你需要做的只是本地运行一遍脚本，然后随时发布镜像包即可。</p>
+
+<h4>镜像即交付包</h4>
+
+<p>当采用镜像部署成为常态，一个合理的选择是把镜像包作为交付物融入CI/CD工作流，真正实现业务和基础设施的分离。</p>
+
+<h4>服务器的不变性</h4>
+
+<p>如果你发现每次运行部署之后，都需要人工检查并修改某些已有配置时，那就意味着配置管理发生了偏差。这种情况发生的原因通常是服务器配置环境发生了变化，而应对措施是尽量不要人工维护或修改环境配置。一个好的实践是在每次代码更新都创建全新的镜像。当然也会损失一些时间成本。</p>
+
+<h3>3.CD与微服务</h3>
+
+<p>当微服务运行在CD工作流中时，需要注意更多潜在的问题。</p>
+
+<h4>环境</h4>
+
+<p>在CD实践中，我们通常会遇到Slow Tests、UAT、Performance Tests分别部署在不同环境上的例子，针对单一系统管理上述环境本身就是一个挑战。而当这些遇到微服务，其规模和工作量就可想而知了。
+环境问题本质上还是配置管理的方式，当不同微服务所需环境互不相同时，选择合理的部署方式则变的非常重要。例如对每个环境构建一个交付包，同时包含环境配置文件，当部署时同时部署代码和配置&hellip;一切看起来顺理成章，但似乎有些违背CD的原则，特别是唯一交付物原则。这就会导致多环境带来的风险削弱好处大幅丧失。另一方面，合并交付包带来的效率、安全等问题是不得不考虑的。
+一种较好的实践是通过一个统一的交付包单独管理不同环境下的配置文件，或是采用配置管理系统——这对微服务而言显得尤为必要。</p>
+
+<h4>服务－主机映射</h4>
+
+<p>部署的另一个问题就是，一个物理机（或容器）上能运行多少服务？面对不同的选项，部署方案也会有所区别。</p>
+
+<p>首先是多服务－单主机模式，好处是简单、方便、成本低。困难在于，监控复杂、服务部署流程也会遇到很多问题，例如如何保证不同服务间的部署代码不存在冲突，而这在微服务系统中并不少见。</p>
+
+<p>其次是应用容器模式，这里的应用容器主要是指.Net或Java Servlet Container等充当应用服务器的容器，适当的统一能避免冲突，但也会带来一些限制。服务间的独立性也难以保证。</p>
+
+<p>单服务－单主机模式，该方法类似于把应用部署在一个类PaaS系统上，当然灵活性也比商用PaaS高，彻底独立带来的好处就是微服务的优势，成本也是显而易见。</p>
+
+<p>PaaS模式，更加简单、便捷的方式，缺点是灵活度低，特别是当需要触及底层改动时，PaaS显得无能为力，但从宏观上说确实是一个发展趋势。</p>
+
+<h4>自动化</h4>
+
+<p>自动化的优势贯穿本文始终，也是微服务技术发展的核心。如果不能实现自动化，微服务提供的各种实践就无法带来任何收益。因此微服务部署的方向就是：一切自动化。</p>
+
+<h3>4.虚拟化</h3>
+
+<p>实现可扩展的现行趋势就是虚拟化。虚拟化能够带来隔离、提高资源利用率等好处，但随着资源利用需求的提高，传统虚拟化显得力不从心。其中共有两种类型的虚拟化，一类是直接基于硬件的虚拟化，另一种是构建在操作系统上，采用层级架构实现的虚拟化，如AWS、VMWare、VSphere、Xen和KVM，这些虚拟机实例基于hypervisor之上，由后者提供资源分配和调度，并向上层应用提供支撑。可以看到，hypervisor承担着核心且重要的任务，其本身的资源需求就很可观。</p>
+
+<h4>Vagrant</h4>
+
+<p>Vagrant本质上只是一个部署平台，其更多用于开发和测试环境而非产品环境。Vagrant方便在本地构建一个虚拟云，能够尽可能真实的模拟在AWS上的线上虚拟环境。然而由于Vagrant实际还是基于虚拟机应用如VirtualBox或VMware，其所占用的资源是相当可观的。特别是在开发环境，开发人员在本地几乎不可能模拟一套完整的生产环境，因此合适的stub仍然十分必要。</p>
+
+<h4>Linux容器</h4>
+
+<p>Linux容器的目标是进一步榨取系统资源，实现原理却很简单：每个容器都基于内核进程fork，并且自身形成一个进程子树。除了LXC，像Solaris Zones、OpenVZ这些都是类似概念的实现，但没有前者更出名。LXC的好处是省去了hypervisor（但并不意味着它就不需要此类功能），相比VM更加轻量、高效。同时容器还提供了更细粒度的资源配置选项。
+不过容器也并非灵丹妙药，相比VM而言只是换了一个载体，在正式项目中，你仍然会遇到hypervisor、routing，甚至security等各种挑战，且并不比解决VM来的容易。</p>
+
+<h4>Docker</h4>
+
+<p>本质上Docker只是一个构建在轻量容器之上的集成平台，它的好处在于一次性集成了容器provision、network、storage和version等功能，面向用户更加友好，并使得容器技术逐渐普及。
+与VM相比，Docker具有容器所拥有的所有优势，同时正在产生一个完整的生态圈，例如CoreOS。Docker面临的挑战也等同于容器，特别是当你真正需要采用Docker搭建PaaS时，毕竟Docker本身几乎没有解决任何已有的技术问题。目前能够帮助用户解决重点问题的包括Google的Kubernetes、CoreOS的集群技术、甚至Deis这种直接提供基于Docker的PaaS平台，就像Heroku一样。</p>
+
+<p>Docker可能解决长期困扰PaaS方案的一系列问题，例如缺少自定义特性（类似Heroku这种已经算做得不错），当PaaS的provision完全向用户放开，且不失易用性，其可选度才真正高于IaaS，Docker目前是这一趋势的有力支撑。</p>
+
+<h3>5.采用一致的部署界面</h3>
+
+<p>微服务部署与普通部署并无二致，同样需要解决横向扩展、相互依赖等问题，而采用一致的部署界面能有效提高效率，无论是基于Windows Powershell、batch、bash、Python Fabric或Ruby Capistrano等各类平台。一般来说部署界面应包含以下内容：</p>
+
+<h4>1.实体名称</h4>
+
+<p>部署对象的名称，例如微服务名。</p>
+
+<h4>2.实体版本</h4>
+
+<h4>3.部署环境</h4>
+
+<p>例如：“deploy artifact=catalog environment=local version=local”。</p>
+
+<p>部署界面的另一个重要部分是环境管理，环境管理的具体内容主要是一些provision的配置信息，部署工具应不限于provision工具的选择，包括puppet、chef或是ansible。</p>
+
+<p>当前，在Deployment和Provision之间依然存在着缝隙，且其中的界限还不明确。例如对于Provision Heroku、或者AWS，或者Provision和Deployment间的相互依赖问题的解决，还缺少一个有效且一致的方案。Terraform看起来是一个潜在的选择。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-19T09:44:53+08:00" pubdate data-updated="true">2015-05-19</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>, <a class='category' href='/blog/categories/ruan-jian-jia-gou/'>软件架构</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2015/05/19/microservices-trap-deployment//posts/4/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -946,86 +1092,6 @@ REST over HTTP也存在缺点，一、生成客户端stub的成本较高，超�
 
 	
 		<span class="comments"><a href="/blog/2012/06/28/shou-dao-kui-zheng-jiu-shi-jie//posts/4/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2012/06/22/Kinect-de-san-wei-chong-jian-1/">
-		
-			Kinect的三维重建(1)</a>
-	</h2>
-	<div class="entry-content">
-		<p>有关Kinect应用开发正日新月异，稍有懈怠就会被远远甩在身后。不过，Kinect目前带给我们的仍只是一个充满无限可能的远景，正如App store能吸引年仅<a href="http://www.cnbeta.com/articles/161695.htm">11岁的开发者</a>一样，Kinect未来将对“全民开发者”产生重要推动作用。另一方面，一些基于Kinect的应用研究仍颇复杂，主要是因为一些关键环节的滞后而导致的。2011年的siggraph talks上，<a href="http://research.microsoft.com/en-us/projects/surfacerecon/">KinectFusion</a>首次展示了实时、廉价、轻便的室内场景三维重建，使得我们向着“无处不在的数字化”迈进了一大步。该项目主要由微软剑桥研究院的研究人员发起实施，研究小组目前公开发表了两篇文章：</p>
-
-<p>Shahram Izadi, David Kim, Otmar Hilliges, David Molyneaux, Richard Newcombe, Pushmeet Kohli, Jamie Shotton, Steve Hodges, Dustin Freeman, Andrew Davison, and Andrew Fitzgibbon, <strong>KinectFusion: Real-time 3D Reconstruction and Interaction Using a Moving Depth Camera</strong>, ACM Symposium on User Interface Software and Technology, October 2011</p>
-
-<p>Richard A. Newcombe, Shahram Izadi, Otmar Hilliges, David Molyneaux, David Kim, Andrew J. Davison, Pushmeet Kohli, Jamie Shotton, Steve Hodges, and Andrew Fitzgibbon, <strong>KinectFusion: Real-Time Dense Surface Mapping and Tracking</strong>, in IEEE ISMAR, IEEE, October 2011</p>
-
-<p>除了Microsoft Research外，国内外大量机构都借助Kinect进行相关研究。仅就实时场景三维重建这项应用而言，由开源机器人研发公司Willow Garage在2011年发起的Point Cloud Libary (PCL)就吸引了全世界数十家著名科研机构参与、十余家公司提供经济支持。PCL是一项集点云获取与处理、滤波、特征提取、关键点标定、表面重建和点云配准以及点云融合等功能为一体的开源点云处理库，PCL使用OpenNI作为系统IO接口，实际成为KinectFusion的开源实现项目，该项目的相关论文发表在<a href="http://www.pointclouds.org/assets/pdf/pcl_icra2011.pdf">ICRA2011</a>上。</p>
-
-<p>上述文献可以说是迄今为止有关Kinect的三维重建应用的最佳切入点了。应注意的是这两篇文章讨论重点的区别，前者先是对KinectFusion整个项目进行了流水式说明，随后解释了文中采用的经典算法的GPU实现，开发者可能会比较感兴趣；而后一篇文章则重点讨论了新的并行算法的形式化描述和性能分析，这部分可能会更吸引一部分研究者。我们将采用一种自上而下的方法先对这两篇文章进行简要介绍。</p>
-
-<p><strong> 概述</strong></p>
-
-<p>有关Kinect的结构光技术读者可以参考这篇<a href="http://www.hanyi.name/blog/?p=335">文章</a>或直接去Google下PrimeSense的专利，这里不再赘述。不过，尽管Kinect在获取深度图方面几乎是达到了性能与质量的完美结合，但仍无法避免深度图中大量抖动的产生，如果我们直接对单张深度图进行bilateral filter双边滤波然后重建出网格模型，会发现重建出的模型表面质量较低，甚至出现孔洞的情况。更重要的是，单张深度图能够获得的只是模型在某个视角下所展现出的一部分，而非表示完整的模型。因此，如何改善基于Kinect深度图的模型重建质量，并实现物体的完整重建成为该项技术的关键。</p>
-
-<p>KinectFusion的首要任务就是克服该难题，它允许用户手持Kinect设备在室内场景自由移动，并实现场景的高质量三维重建。同时，KinectFusion还提供了精彩的AR应用，包括前景、背景和人体的分割与重建、以及AR世界中的多点触摸识别技术。</p>
-
-<p><strong>场景重建</strong></p>
-
-<p>基于上述需求，KinectFusion允许用户手持Kinect设备自由探索室内环境，系统将自动跟踪Kinect摄像头的6DOF姿态，然后融合不同时序的深度图数据并重建出场景的全局模型。由于视角的不断变化，Kinect反馈的深度图也会发生改变，这里采用了类似图像超分辨率技术对深度图进行了细节优化，从而提高模型的重建质量。最后利用Kinect自带的RGB数据进行场景纹理映射。</p>
-
-<p>首先如何利用单Kinect摄像头去跟踪它自己的6DOF姿态？这里采用点云模型的刚性配准对齐来计算摄像头在空间中的6DOF变换，点云配准首选经典的ICP[Besl92, RusinKiewicz01]。之前需要将深度图像数据变换至摄像机的空间坐标系中，并计算其对应点的法线信息；然后逐帧采用基于GPU的ICP实现进行模型配准和6DOF计算；在重建部分，KinectFusion并没有直接融合点云或生成网格模型，而是采用了[Curless96]的体集成算法，最终在全局坐标系中生成一个三维体素网格并进行不断更新，每个体素内最终保存了一段时间内从该体素到物理表面上某一点的平均距离。最后使用Raycast给出隐式表面的渲染结果，另一方面，以摄像机位置作为视点做Raycasting，同样能够得到一个具有真实细节的高质量的合成深度图，然后再对其进行下一轮ICP迭代。这就允许我们能够利用合成深度图与下一帧的深度图进行配准，使重建结果的精度不断提高。</p>
-
-<p>具体算法实现采用了CUDA并行架构，算法基本流程如下：</p>
-
-<p>1）深度坐标变换，对于每个像素启用一只CUDA线程，给定一个Kinect红外摄像头的内部校准矩阵K，使用如下公式</p>
-
-<p><img class="aligncenter" title="\textup{v}_{i}(u) = \textup{D}_{i}(u)\textup{K}^{-1}[u ,1]" src="http://latex.codecogs.com/gif.latex?\textup{v}_{i}(u) = \textup{D}_{i}(u)\textup{K}^{-1}[u ,1]" alt="" /></p>
-
-<p>计算坐标变换；相应的顶点法线则直接取其右、下邻向量的外积，并进行归一化。时间i时的6DOF摄像机姿态使用一个刚性变换矩阵T表示，其中T包括了摄像机的旋转矩阵R和平移矩阵t。变换后的顶点和法线通过T即可再变换至全局坐标系中。</p>
-
-<p>2）摄像机跟踪，该部分的主要目的就是计算6DOF姿态。核心的ICP即迭代最近点算法，首要是需要逐帧计算不同朝向的点集的相关度。这里采用了projective data association方法计算相关度。</p>
-
-<p>3）体集成，针对已配准的点云数据，需要执行后续的融合处理，这里采用了经典的[Curless96]体集成方法融合这些点云数据。</p>
-
-<p>4）光线投射渲染，采用光线投射渲染前步生成的隐式表面。</p>
-
-<p>上述整个管线均采用了并行GPU实现，在下文中，我们将重点解析上述算法的CUDA实现细节。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-22T20:35:07+08:00" pubdate data-updated="true">2012-06-22</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/kinect/'>kinect</a>, <a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2012/06/22/Kinect-de-san-wei-chong-jian-1//posts/4/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

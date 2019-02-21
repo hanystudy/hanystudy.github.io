@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 最初是准备发第七篇技术连载，突然想起由于这几天长期沉浸《Friends》，自己很久都没有认真看一部完整的电影了。  随意在mtime上翻了一翻新片海报。现在回想起来那几乎与普通海报无异，顶部印着电影在多伦多电影节上取得的荣誉，以及转载Time的一句话点评。但影片独特的构思就体现在正下方， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="（串，串在C/C++中的应用—上）          前记：本篇的前半部分事实上在上周末即已完成，原本无意分为两个部分来写，不过身体突发小恙，卧床了两天，为不至于拖延太长时间故先把已完成的发布出来，下不为例。就这样了。   本节我们介绍字符串—一般简称为串，它在计算机数据类型中具有非常重要的地位 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,486 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/02/09/jia-qi-lian-zai-zhi-qi/">
+		
+			假期连载之七</a>
+	</h2>
+	<div class="entry-content">
+		<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">（串，串在</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">C/C++</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中的应用—上）</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">前记：本篇的前半部分事实上在上周末即已完成，原本无意分为两个部分来写，不过身体突发小恙，卧床了两天，为不至于拖延太长时间故先把已完成的发布出来，下不为例。就这样了。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">本节我们介绍字符串—一般简称为串，它在计算机数据类型中具有非常重要的地位。无论从汇编语言、</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">C/C++</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">还是到</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">Java</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，串操作都是语言本身必不可少的一部分内容。尽管每种语言在串的存储形式上存在一些差异，但对其本身的定义和操作却完全一致。最后我们会以</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">C++</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">String</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">容器为例，综合介绍字符串操作的规则及原理。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">字符串</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span></strong><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">字符串是指由零个或多个字符组成的有限序列。每个字符可以是字母、数字或其他字符，串中字符的个数称为字符串长度，当长度为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">0</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">时称为空串。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">学习过</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">C</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">语言的都知道，字符一般用单引号括起来，而字符串则使用双引号。事实上在一般数据结构描述中串默认代表了单个字符的情况，因此都使用单引号表示。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">子串是指任意个连续的字符组成的子序列。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">主串指包含子串的串，字串是主串的一部分。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">字串在主串中的位置，是指字串的第一个字符在主串中的位置。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">串相等的条件是两个串的长度相等，并且每个对应位置的字符也都相等。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">现在，我们可以认识到，<strong style="mso-bidi-font-weight: normal;">串也是一种特定的线性表，其特性主要体现在数据元素的类型为字符</strong>。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">事实上，在</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">C/C++</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中，所谓的字符串其实是以字符串数组</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">char[]</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的形式来进行操作的，这一点与</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">Java</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">lang.String</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的实现有所区别，一般而言</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">Java</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">String</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">类更符合字符串的存储形式。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">串的抽象数据类型的</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">C</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">语言描述表示如下：</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>ADT String</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">数据对象</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">:D={a1,a2,…,an},</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">其中</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">an</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">char</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">类型</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">基本操作</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">:</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span>……</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">这里省略了字符串的基本运算函数，主要是因为在</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">C/C++</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中既有从</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">C</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">语言继承而来的标准库函数，又有</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">C++</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">独立具备的</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">STL</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中的</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">String</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">容器，</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">Java</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中的</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">String</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">类也自成体系。对于众多运算必须明确地加以区别，否则会在实际编程中引起很多困难。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">借助于</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">Internet</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，我们收集了</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">C/C++</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">库函数中关于字符串操作的函数集：</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">void *memccpy (void *dest, const void *src, int c, size_t n);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">从</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">src</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象复制</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符到</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象中。如果复制过程中遇到了字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">则停止复制，返回指针指向</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的下一个位置；否则返回</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">NULL</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">void *memcpy (void *dest, const void *src, size_t n);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">从</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">src</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象复制</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符到</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象中。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">void *memchr (const void *s, int c, size_t n);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象的前</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符中搜索字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。如果搜索到，返回指针指向字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">第一次出现的位置；否则返回</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">NULL</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">int memcmp (const void *s1, const void *s2, size_t n);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">比较</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象和</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象的前</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符。返回值是</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">与</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">第一个不同的字符差值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">int memicmp (const void *s1, const void *s2, size_t n);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">比较</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象和</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象的前</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符，忽略大小写。返回值是</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">与</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">第一个不同的字符差值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">void *memmove (void *dest, const void *src, size_t n);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">从</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">src</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象复制</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符到</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象中。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。不会发生内存重叠。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *stpcpy (char *dest, const char *src);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">复制字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">src</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">到</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest + len(src)</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strcpy (char *dest, const char *src);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">复制字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">src</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">到</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strchr (const char *s, int c);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中搜索字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。如果搜索到，返回指针指向字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">第一次出现的位置；否则返回</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">NULL</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">int strcmp (const char *s1, const char *s2);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">比较字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">和字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。返回值是</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">与</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">第一个不同的字符差值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">int stricmp (const char *s1, const char *s2);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">比较字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">和字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，忽略大小写。返回值是</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">与</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">第一个不同的字符差值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">size_t strcspn (const char *s1, const char *s2);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">返回值是字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的完全由不包含在字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中的字符组成的初始串长度。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">size_t strspn (const char *s1, const char *s2);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">返回值是字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的完全由包含在字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中的字符组成的初始串长度。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strdup (const char *s);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">得到一个字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的复制。返回指针指向复制后的字符串的首地址。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strerror(int errnum);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">返回指针指向由</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">errnum</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所关联的出错消息字符串的首地址。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">errnum</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的宏定义见</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">errno.h</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">size_t strlen (const char *s);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">返回值是字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的长度。不包括结束符’</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">\0</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">′。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">计算长度</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">len</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">时不包括结束符’</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">\0</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">′，计算</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">size</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">时要包括结束符’</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">\0</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">′，亦即</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">size=len+1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strlwr (char *s);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">将字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">全部转换成小写。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strupr (char *s);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">将字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">全部转换成大写。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strncat (char *dest, const char *src, size_t maxlen);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">将字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">src</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">添加到</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">尾部，最多添加</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">maxlen</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strcat (char *dest, const char *src);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">将字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">src</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">添加到</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">尾部。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">int strncmp (const char *s1, const char *s2, size_t maxlen);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">比较字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">和字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，最多比较</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">maxlen</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符。返回值是</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">与</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">第一个不同的字符差值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strncpy (char *dest, const char *src, size_t maxlen);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">复制字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">src</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">到</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中，最多复制</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">maxlen</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">dest</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">int strnicmp(const char *s1, const char *s2, size_t maxlen);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">比较字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">和字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，忽略大小写，最多比较</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">maxlen</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符。返回值是</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">与</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">第一个不同的字符差值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strnset (char *s, int ch, size_t n);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">设置字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中的前</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符全为字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">void *memset (void *s, int c, size_t n);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">设置</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">所指向的对象的前</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">n</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">个字符为字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strset (char *s, int ch);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">设置字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中的字符全为字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。返回指针为</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的值。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strpbrk (const char *s1, const char *s2);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">返回指针指向字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的任意字符第一次出现的位置；如果未出现返回</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">NULL</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strrchr (const char *s, int c);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中搜索字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。如果搜索到，返回指针指向字符</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">c</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">最后一次出现的位置；否则返回</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">NULL</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strrev (char *s);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">将字符串全部翻转，返回指针指向翻转后的字符串。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strstr (const char *s1, const char *s2);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">在字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中搜索字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。如果搜索到，返回指针指向字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">第一次出现的位置；否则返回</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">NULL</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">char *strtok (char *s1, const char *s2);</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">用字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s2</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">中的字符做分隔符将字符串</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">分割。返回指针指向分割后的字符串。第一次调用后需用</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">NULLL</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">替代</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">s1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">作为第一个参数。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">串的存储实现</span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></strong></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></strong></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">由于串是一种特定的线性表，因而其存储结构与普通线性表之间并无很大差异。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">最常用的即是前文已介绍的定长顺序串，其类型定义如下。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">#define MAXLEN 40<span style="mso-tab-count: 1;">    </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">typedef struct</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>char ch[MAXLEN];</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 2;">              </span>int len;<span style="mso-tab-count: 4;">                         </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">存储字符串实际长度</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}SString;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 1;">       </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">还有一种堆串，其串中的字符仍然存放在一组地址连续的存储单元中，但它们的存储空间是在程序执行过程中动态分配的。系统将一个地址连续、容量很大的存储空间作为字符串的可用空间，每当建立一个新串时，系统就会从这个空间中分配一个大小和字符串长度相同的空间存储新串的串值。其类型定义如下</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">:</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">typedef struct</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"><span style="mso-tab-count: 2;">              </span>char *ch;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 2;">              </span>int len;<span style="mso-tab-count: 4;">                         </span>//</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">存储字符串实际长度</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;">}HString;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">由于堆串在实际应用中可以动态分配存储空间，其较定长顺序串而言方便了许多。但由于其本质未能发生变化，故操作上要不断生成新串、销毁旧串。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">同时字符串还可以用链式存储结构表示。在这种结构中，结点值可以存放一个字符，也可以存放多个字符，故结点被称为块，链表相应被称为块链表。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">鉴于块链表的特殊结构，在实际应用中要考虑几个重要因素。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">结点大小：结点大小是指结点</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">data</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">域中存放的字符个数。由于存储密度</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">=</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">串值所占用的存储位</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">/</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">实际为串分配的存储位，得知当存储密度越小，块链表操作越容易，但需耗费更多的存储空间，这就需要根据实际情况来判断。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="mso-tab-count: 1;">       </span></span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">结点大小大于</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">，为节约空间而采用结点大小大于</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">1</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">的方法，尽管存储密度得到了提高，但结点内部串的操作就变得较为复杂，尤其是在进行删除、合并操作时需要充分考虑到</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US">data</span><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;">域自身的运算。</span><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"><span style="font-size: small;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial; mso-bidi-font-size: 10.5pt; mso-bidi-font-family: Arial;"><span style="font-size: small;">（未完待续）</span></span></strong><strong style="mso-bidi-font-weight: normal;"><span style="font-family: Arial; mso-bidi-font-size: 10.5pt;" lang="EN-US"></span></strong></p>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-09T17:15:54+08:00" pubdate data-updated="true">2009-02-09</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/02/09/jia-qi-lian-zai-zhi-qi//posts/17/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -2718,62 +3198,6 @@ $(document).ready(
 
 	
 		<span class="comments"><a href="/blog/2009/01/21/ping-min-de-sheng-li//posts/17/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/01/16/acm-ACM-ICPC-lian-lian-zai-nei-rong-jian/">
-		
-			ACM-ICPC及连载内容简介</a>
-	</h2>
-	<div class="entry-content">
-		<p>有关ACM-ICPC赛事本身的知识请直接前往<a href="http://zh.wikipedia.org/w/index.php?title=ACM%E5%9B%BD%E9%99%85%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B&amp;variant=zh-cn" target="_blank">wiki</a>，在此就不做额外说明了。</p>
-
-<p>对于信息科学，国内乃至国际知名的竞赛大概有两个。除了ACM-ICPC，另一个是IOI国际信息学奥林匹克，后者主要面向中学生举办，内容上也比ACM层次稍浅。在中国，计算机普及教育从上世纪70年代末至80年代初开始，逐渐由面向少数科研专家扩展到基本覆盖全国中小学校，信息学竞赛的受关注度也逐渐增加，包括全国青少年信息学奥林匹克竞赛NOI、全国青少年信息学奥林匹克联赛NOIP以及ACM亚洲区域预赛等众多大型赛事的影响力也在稳步提升。</p>
-
-<p>关于组织信息学竞赛的目的，固然是要继续推进计算机教育的深入普及，在一些重要赛事尤其是像ACM总决赛这样的顶尖赛事中，寻找和发现未来可能的顶级计算机专家也同样受人瞩目。</p>
-
-<p>但是，从近年来尤其是近十年以来各类赛事的发展道路来看，由于创新含量匮乏，再加上诸如ACM等拥有长达30多年历史的老牌赛事很难推陈出新，是否能真正培养出未来的科学家也越来越令人担忧。目前比较普遍的一种情况是，针对竞赛本身的培训愈加严谨，选手水平每届都有较大提高，但通过竞赛能提供给人的信息却未能产生适应时代的效果。</p>
-
-<p>尽管如此，无论如何学习ACM都是当前有志于深入计算机程序设计、算法分析与设计的同学一条明智且正确的选择。通常的建议是，如果你的数学和英语基础较好，那么尽量在刚进入大学时就直接接触ACM，如果相反的话，最好是先花时间奠定基础，怀揣深入学习的目的体验ACM的乐趣，尽管竞赛的意义对你来说已经变得并不重要了（部分“神童”可以忽略，但事实证明不断积累总不是一件坏事）。</p>
-
-<p> 我们收集和连载有关ACM竞赛以及算法设计方面知识的主要目的是，通过共享目前应用广泛的算法设计方法，及其普遍原理，深入大家对程序设计内涵的理解，从而方便今后学习更加高端的信息学知识。</p>
-
-<p> 连载的内容主要分为以下几个部分，常用数据结构分析，常用算法分析，ACM输入输出格式，高级设计和分析技术，高级数据结构分析，组合博弈算法等，在实际应用过程中，我们可能将根据实际情况进行一些内容调整。需要提前说明，本站提供的算法思想或伪代码描述仅供自学和查阅使用，并不涉及任何侵权问题，如有异议，请立即与我们取得联系。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-16T15:56:28+08:00" pubdate data-updated="true">2009-01-16</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/01/16/acm-ACM-ICPC-lian-lian-zai-nei-rong-jian//posts/17/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
