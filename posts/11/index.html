@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 从没想过《轩辕剑》系列会出付费DLC，轩迷们不免又要被痛宰一把了。作为投资方——大宇心中的小算盘昭然若揭：把一部游戏拆成两部分卖，更重要的是后者实际上起到剧情补完的作用：没玩过付费DLC也敢说自己玩过《云之遥》？  当然从质量上看《兰茵篇》对于区区200多新台币来说可称得上是物有所值， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 毕业设计/论文工作终于“完成”了，不过接下来反倒比以前要忙许多。  都说做科研要集团作战才有搞头，无奈现在这样单纯的人太少&hellip;奇怪的是目前各大公司都宣扬“牛人狩猎计划”，馋得大家围着一两个方向上演“百万大军过独桥”的好戏，力争自己能贴上牛屁股，结果到最后对自己的老本行一窍不通，连“ &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,54 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/05/29/da-bian-jie-shu/">
+		
+			答辩结束</a>
+	</h2>
+	<div class="entry-content">
+		<p> 毕业设计/论文工作终于“完成”了，不过接下来反倒比以前要忙许多。</p>
+
+<p> 都说做科研要集团作战才有搞头，无奈现在这样单纯的人太少&hellip;奇怪的是目前各大公司都宣扬“牛人狩猎计划”，馋得大家围着一两个方向上演“百万大军过独桥”的好戏，力争自己能贴上牛屁股，结果到最后对自己的老本行一窍不通，连“牛”的任何部位都没能贴上。</p>
+
+<p> 到处传言找工作不容易，却发现好马们一个比一个跳的勤。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-29T13:56:43+08:00" pubdate data-updated="true">2010-05-29</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2010/05/29/da-bian-jie-shu//posts/11/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -702,97 +750,6 @@ Reader-&gt;SetDataSpacing (0.8, 0.8, 1.5);
 
 	
 		<span class="comments"><a href="/blog/2010/04/04/wordpress-3-0beta1-WordPress-3-0beta1//posts/11/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/03/07/an-zhuang-yu-pei-zhi/">
-		
-			安装与配置</a>
-	</h2>
-	<div class="entry-content">
-		<p> 事实上，vtk users&#8217; mannual和itk software guide两部手册即可满足本部分需要了。对于中文读者而言，改编自c3p社区原创文章的简略中文教程也已经在互联网中广泛流传。这里我们仅仅讨论一些常见安装问题和联用问题。</p>
-
-<p> 对于VC6.0用户 而言，需要注意编译环境是否已经打上了Sevice pack 5，编译过程中出现的未响应问题大部分是sp5环境不存在或不完整所导致的。</p>
-
-<p> 关于是否编译examples，一般建议初学者选择，但itk的该部分将耗费数G硬盘空间，而且严重降低编译效率，资源有限者慎选。</p>
-
-<p> 关于itk在vc++6.0环境中的使用，我们要注意cmake文档的创建。例如对工程ItkRegMFC，我们可以构造如下CMakeLists：</p>
-
-<p>[c][/c]
-PROJECT( ItkRegMFC )</p>
-
-<h1>ADD_DEFINITIONS(-D_AFXDLL)</h1>
-
-<p>SET(CMAKE_MFC_FLAG 2)</p>
-
-<p>SET(ItkRegMFC_SRCS
-   stdAfx.cpp
-   stdAfx.h
-   ItkRegMFC.cpp
-   ItkRegMFC.h
-   ItkRegMFC.rc
-   ItkRegMFCDoc.cpp
-   ItkRegMFCDoc.h
-   MainFrm.cpp
-   MainFrm.h
-   ItkRegMFCView.cpp
-   ItkRegMFCView.h
-   )</p>
-
-<p>IF(WIN32)
-  LINK_LIBRARIES(
-    wsock32
-  )
-ENDIF(WIN32)</p>
-
-<p>FIND_PACKAGE(ITK)
-IF(ITK_FOUND)
-   INCLUDE(${ITK_USE_FILE})
-ELSE(ITK_FOUND)
-   MESSAGE(FATAL_ERROR
-           &ldquo;Cannot build without ITK.  Please set ITK_DIR.&rdquo;)
-ENDIF(ITK_FOUND)</p>
-
-<p>ADD_EXECUTABLE(ItkRegMFC WIN32 ${ItkRegMFC_SRCS})
-INSTALL_TARGETS(/bin ItkRegMFC)
-TARGET_LINK_LIBRARIES(ItkRegMFC ${ITK_LIBRARIES} )
-[c][/c]
-运行cmake生成相应的工程文件即可。</pre></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-07T01:10:46+08:00" pubdate data-updated="true">2010-03-07</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/ke-shi-hua/'>可视化</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2010/03/07/an-zhuang-yu-pei-zhi//posts/11/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

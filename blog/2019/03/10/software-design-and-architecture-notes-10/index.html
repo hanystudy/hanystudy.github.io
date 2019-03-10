@@ -1,0 +1,388 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>软件设计与架构笔记(10)  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="面向模式的领域分析与建模 前文讨论了OOA/OOD的基本概念、工具和方法。我们已经知道，当面临稍复杂的问题域或特殊的上下文时，朴素方法会面临许多挑战，使软件开发风险难以得到有效控制。模式的发现和应用为工业界带来了高效的解决方案，也因此成为甚至比朴素方法更易流行的方法论，即面向模式(Pattern &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">软件设计与架构笔记(10)</h2>
+	<div class="entry-content"><h2>面向模式的领域分析与建模</h2>
+
+<p><a href="http://www.hanyi.name/blog/2019/02/11/software-design-and-architecture-notes-9/">前文</a>讨论了OOA/OOD的基本概念、工具和方法。我们已经知道，当面临稍复杂的问题域或特殊的上下文时，朴素方法会面临许多挑战，使软件开发风险难以得到有效控制。模式的发现和应用为工业界带来了高效的解决方案，也因此成为甚至比朴素方法更易流行的方法论，即<strong>面向模式</strong>(Pattern oriented)。本文是对前文OOA部分的进一步补充和扩展，首先讨论<strong>领域分析</strong>(Domain analysis)，及其与数据建模和OOA的关系，然后深入讨论面向对象分析模式，这些模式大多采用领域特定的概念模型(也称分析模型)进行描述，与纯粹抽象的表达方式相比更易理解，然而其模型结构和分析过程可被应用至更广泛的领域。</p>
+
+<h3>领域分析</h3>
+
+<p><strong>领域分析</strong>是指为了满足跨组件的可复用性，对软件开发信息进行识别、收集、组织的过程[RPD90]。当相似的问题域重现时，期待所构建的软件能够尽可能被复用，从而提高软件的经济效益，这是领域分析的根本动机。因此，相对于可复用的代码，领域分析主要关注于分析和设计的可复用性，这通常反映为组件级的可复用性[JMN80]。</p>
+
+<p>在软件工程的语境下，<strong>领域</strong>是指所构建软件系统的实际应用场景。具体来说，一个领域既可以大至银行业务，也能小至算术运算。一个领域还能被分解成多个子领域，因此复杂的领域可被看成是一种层级的网状结构，层级越高则意味着领域的复杂度也就越高。<strong>领域边界</strong>用于描述领域的范围，定义了每个领域中的对象、操作以及相互之间的关系。<strong>组件</strong>是指一个独立的软件单位，这种独立性可以指独立开发、独立部署或独立运维等特性，并且组件之间还能通过某种协议进行通信。领域是业务单位(例如对应不同的业务部门)，组件则是工程单位(例如对应不同的项目或开发团队)，但二者最终存在一定的映射关系。虽然领域分析有比较明确的目标，但具体的实现方法属于非平凡问题。例如如何确定领域层级、如何确定领域边界以及如何建立与组件之间的映射关系等。</p>
+
+<h4>领域分析的框架模型</h4>
+
+<p>[RPD90]描述了领域分析的结构化上下文视图(SADT Context View)，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/domain_analysis.png" alt="Domain analysis" /></p>
+
+<p>在上述模型看来，领域分析实际上是一种依赖多种输入且高度参数化的框架，其最终产出也可根据参数进行定制。例如，当核心是某个产品而非技术时，领域分析主要关注战略一致性、市场策略、产品定位、风险分析、日常外观等一系列产品特性，这时需要用到通用术语调研、逻辑架构、可靠性标准等方法——这种领域分析活动被称为<strong>产品定义领域分析</strong>(Product definition domain analysis)。当有明确的证据支持当前产品流时，即可进一步就具体产品展开分析，这时往往是概念性领域分析，该活动被称为<strong>需求领域分析</strong>(Requirement domain analysis)。当表示产品线的领域趋于稳定时，就可以考虑构建特定领域的生成器，从而满足高效构建新产品的需求，此过程被称作<strong>生成器领域分析</strong>(Generator domain analysis)。</p>
+
+<h4>领域分析、数据建模、OOA</h4>
+
+<p>我们在<a href="http://www.hanyi.name/blog/2018/12/09/software-design-and-architecture-notes-6/">数据模型与数据建模</a>一文曾讨论过数据建模。从上世纪80年代初期开始，由于关系模型和关系数据库系统的流行，信息系统的构建往往都强依赖于数据库系统。为了保证概念模型能直接用于后续设计和实现，数据建模、特别是概念数据建模成为需求领域分析活动的主要内容之一。其中，实体-关系建模(ER modeling)是数据建模中最具代表性的方法，其分析结果即ER图，后者往往被直接用于数据库设计甚至应用构建[DCH96]。虽然数据建模也重视对真实世界的反映，但其更侧重于表现状态而非过程，而事实上两者对于软件开发同样重要，这也是兼具二者的OOA后来居上的原因。而OO天然具有的<strong>抽象层级</strong>和<strong>抽象边界</strong>等概念，与前文提到的领域和领域边界的概念能够一一对应，且其最终得到的领域概念和对象，亦即需求领域分析的目标。</p>
+
+<p>因此，数据建模和OOA都是领域分析采用相应建模技术的具体实现。在领域分析方法的发展过程中，二者都扮演了重要角色。虽然至今领域分析方法都在不断演进，但从已有经验总结得出的分析模式，能够为常规的领域分析活动提供可靠的候选参考。</p>
+
+<h3>面向对象分析模式</h3>
+
+<p>概念模型是理解和模拟真实世界的基础，但由于后者的复杂性通常都超乎想象，导致概念模型基本不存在正确与否的问题。对此Martin Fowler用模拟斯诺克的例子解释：当需要对球的运动进行建模时，经典牛顿力学和爱因斯坦的狭义相对论都可以作为候选模型，前者非常直观且易于实现，后者实现复杂但具备更好的适应性和精确度。显然，最终生成软件的灵活性和可重用性强烈依赖于所采用的概念模型。但除了个别质量属性外，软件工程中还存在更多的权衡因子，一个典型的例子是可维护性和成本之间的矛盾。一种平衡前述因子的有效办法是构建<strong>极简概念模型</strong>(Simplest conceptual model)——这并非一个容易达成的目标，因为“极简”不是指问题域中最简单的一部分，而是指在更高抽象层级构建概念模型，其内核虽然是“极简”的，却因为良好的伸缩性得以适应更复杂的问题域。在[MFR96]中，Martin用<strong>分析模式</strong>表示用于构建概念模型的模式，随之用<strong>支持模式</strong>表示将概念模型转化为OOD的模式。前者是下面要讨论的重点，后者属于OOD的范畴，本文不做专门讨论。</p>
+
+<ul>
+<li><strong>职责模式</strong>(Accountability)，该模式用于表示个人或者组织之间的职责。在一些问题域中经常需要表示相关职责，例如组织结构、合约、雇佣等，这些都无一例外体现为某种真实对象之间的关系。这里我们把个人、组织这种具体领域的词汇统称为更加抽象的词——<strong>实体</strong>。当不同的实体表现出趋同的职责时，应考虑构建一个更高抽象层级的实体。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/generalized_party.png" alt="Generalized party" /></p>
+
+<p>当不同实体之间存在灵活的组织层级关系时，可以从中提取抽象实体，通过递归引用构建这种层级关系，从而易于应对层级变化。如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/organization_hierarchy.png" alt="Organization hierarchy" /></p>
+
+<p>当实体的子类型间的层级关系存在某种约束时，可以把其添加至相应的子类型内部，从而避免改变模型结构。此外，实体间还可能存在多个层级关系，可以把上述显式引用的关系替换为<strong>关系类型</strong>(Typed relationship)，后者被用于表示实体间组织结构的对象类型，实体通过关联的多个结构对象实现不同的层级关系。同样，实体的结构类型也可以关联相应的约束规则，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/multiple_organization_hierarchies.png" alt="Multiple organization hierarchies" /></p>
+
+<p>上述方法的优势是如果实体的关系类型比较复杂，约束规则可以对应至每种关系类型进行管理。问题在于，如果实体的子类型变化比关系类型更多，那么任何子类型的增删改都会影响现有规则，这时可以把规则关联到每个实体的子类型，而非关系类型。</p>
+
+<p>显然此时模型的复杂度已经有了明显增加，为了方便分析这种复杂性，把当前模型划分成<strong>运行等级</strong>(Operational level)和<strong>知识等级</strong>(Knowledge level)两个部分，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/knowledge_and_operational_levels.png" alt="Knowledge and operational levels of accountability" /></p>
+
+<p>其中运行等级包含职责、实体和两者的关系，知识等级包含职责类型、实体类型和两者的关系。前者用于记录领域中发生的日常事件，后者记录用于监管前者的规则。</p>
+
+<p>另外，实体类型也可能具有抽象层级，这样就能描述更加复杂的场景。例如对于全科医生和专科医生来说，两种类型既具有共性也具有特殊性，因此可以创建一个更加抽象的层级——医生来管理其共性。</p>
+
+<p>职责类型也具有抽象层级，随着职责类型不断增加，相应规则数量也会随之增加。但是，如果职责类型表现为固定且简单的等级关系，例如常见的办公室、部门、区域等，那么可以采用分级职责类型，即直接在职责类型对象内存储静态等级列表和相应规则。后者比传统按抽象层级创建新的职责类型相比更加简单，但缺少灵活性。</p>
+
+<p>职责类型描述职责的种类，但一个具体的职责通常包含更多细节信息，例如地点、数量、内容等，这里称为<strong>运行范围</strong>(Operating scope)。运行范围也可能具有复杂的抽象层级和关联关系，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/operating_scope.png" alt="Operating scope" /></p>
+
+<p>运行范围的一个典型用例是职位描述(Job description)，也就意味着职位描述是与工作职责相互关联的，而非具体的员工实体，这也更加符合真实世界的场景。假设具有某项职责的员工离职，那么其承担的职责应被移交给接替者，可以在此基础上创建一个新的<strong>职位</strong>(Post)实体，于是就实现了职责与员工的直接关联，而是让两者通过职位间接产生关联，从而实现更好的灵活性。</p>
+
+<ul>
+<li><strong>观察与测量模式</strong>(Observations and measurements)，该模式用于表示真实世界对象的信息。以数值类属性为例，体重是人的基本属性之一，一般用数值类型存储。然而如果领域要求更精确一些，数值类属性还需要额外的单位信息，这时就需要构建抽象数据类型，这里称为<strong>Quantity</strong>。几乎一定会用到Quantity类型的领域包括财务(货币单位)、医疗(剂量单位)等。</li>
+</ul>
+
+
+<p>Quantity通常意味着单位转换的问题。一个简单的单位转换率模型如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/unit_conversion.png" alt="Unit conversion" /></p>
+
+<p>如果问题域中包含大量的转换率，可以把单位用量纲表示，这样就可以动态计算单位之间的转换率。对于更复杂的单位转换需求，例如摄氏和华氏这两个温度单位，就需要引入携带计算行为的单位转换模型。在真实世界中，一种物理量的单位经常需要用一些基本单位组合表示，例如平方英尺、米每秒等，这时就需要引入<strong>复合单位</strong>，即引用其它单位的单位。</p>
+
+<p><strong>测量</strong>是一种表示实体中数值属性的抽象数据类型。当一个实体具有大量属性、且这些属性分别用于不同操作时，实体中就可能存在大量针对这些属性的操作。测量的目的就是抽出这些操作，并在此基础上分离出位于知识等级层面的现象类型(Phenomenon type)。如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/measurement.png" alt="Measurement" /></p>
+
+<p>实体还可能包含非数值属性，与测量类似，可以采用独立的抽象数据类型表示非数值属性，二者可以共同提取出更高的抽象层级——<strong>观察</strong>。观察中所包含的规则、解释和创建方式等可以进一步提取出来，构成<strong>协议</strong>。观察往往具有一定的时效性，即观察值仅当满足特定时间段时才有效，可以通过关联时间对象解决。在一些问题域中，观察值可能被发现是无效的，但基于可追溯性无法删除已有的观察值，因此通常是给原有观察关联一个新的<strong>不合格观察</strong>。例如在医疗领域中，患者的检测报告有可能因为各种原因被识别为无效，但仍需要保留历史记录以便追踪治疗历史。医生会根据检测结果诊断病因，有时会因为某种测量结果而判断病因，也可能因后续测量结果调整治疗方案。为了表示观察值所带来的影响，可以将其划分为三种子类型:假设、投影和活动观察。其中活动观察指当前最被信任的观察，假设指需要进一步测试才能确定的观察，投影指医生认为未来可能出现的观察。</p>
+
+<p>观察是可以相互关联并产生影响的，这种情况被称为<strong>关联观察</strong>。如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/associated_observation.png" alt="Associated observation" /></p>
+
+<ul>
+<li><strong>引用对象</strong>(Referring to objects)，这是一种表示对象间引用关系的模式。真实世界的对象大都存在交互，OO首先要解决的问题就是引用对象，这通常是基于一个显式的身份标识。最简单的对象引用方式就是按名字引用其它对象，具体可以是对象名，也可以是对象id。</li>
+</ul>
+
+
+<p>当对象可能在不同场景中具有多种的标识时，简单的名字引用就难以应对各类场景中的特定对象。例如一个学生可能同时有身份证号、学号、甚至准考证号等标识，此时可以采用标识对象表示引用关系，描述场景的对象被称作<strong>标识模式</strong>，这是一种具有上下文信息的人工标识方法。如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/identification_scheme.png" alt="Identification scheme" /></p>
+
+<ul>
+<li><strong>库存与会计</strong>(Inventory and accounting)，一种跟踪企业资金流动的模式，主要用于财务会计、库存和资源管理等领域。通常用<strong>账户</strong>表示具有实际价值及其历史记录的实体，例如银行账户、库存账户等。对于账户中的每两条历史记录(指包含存和取的“两腿交易”)，都能够对应一个<strong>交易</strong>，后者用于记录价值流动的细节。如果问题域存在多腿交易，例如一次交易超过了两个参与方，则允许一个交易引用多条历史记录。从模型的角度看，两腿交易属于多腿交易的一种特殊情况，因此后者的灵活性更好。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/multilegged_transaction.png" alt="Multilegged transaction" /></p>
+
+<p>如果同时拥有多个账户，那么通常会需要额外创建一种<strong>总结账户</strong>，后者被用于汇总其它细节账户，因此这里可以抽取出账户的一个更高抽象层级表示。在税务领域中还存在另一种账户类型——<strong>备忘录账户</strong>，这种账户并非记录当前的实际价值，而是额外存放一份“应税价值”，优点是能实时监测某种价值的累积和变更情况，从而为领域添加更好的可预测性，例如方便进行年度报税。为了保证备忘录账户能够被及时更新，通常在账户中会创建一个触发器，每当一个新的记录被创建，则根据触发规则(Posting rule)创建另一条记录，后者即应税价值。如果创建新记录需要比较复杂的计算，则需要给触发规则关联一个额外的计算对象。值得注意的是，触发规则通常是可逆的，同时由于规则本身包含了交易细节，备忘录账户中的历史记录也就必要保存相应的交易记录。</p>
+
+<p>不同的账户可能具有不同的触发规则，一种方法是把触发规则与账户类型相关联，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/posting_rule.png" alt="Posting rule" /></p>
+
+<p>该模型体现了良好的概念表示，实则兼有利弊。因为其基本假设是账户类型与触发规则应存在某种强关联性，否则反而会使情况更加复杂。一个替代做法是直接把触发规则关联至某个总结账户，这样灵活性就更好，但在概念表现上就比较隐晦。</p>
+
+<p><strong>会计</strong>的实质就是在触发规则的基础上，构建一个多账户网络。这就需要能随时获取指定类型的账户和指定类型的触发规则记录。一般情况下，如果实体具有多个账户，那么该实体会附带一个相应的会计操作。如果问题域中具有极其复杂的会计操作，例如不同类型的触发规则对应不同的会计操作，那么可以通过添加会计操作类型的概念对逻辑进行合理分配。如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/accounting_practice.png" alt="Accounting practice" /></p>
+
+<p>基于上述模型的历史记录具有更强的追溯性，例如每条记录可以查找对应的源——交易，然后根据交易查询其触发规则。同时还能根据问题域创建对应的资产负债表(Balance sheet)账户和损益表(Income statement)账户，前者记录当前实际价值，例如资产总额；后者则记录每笔交易的具体流向。这两种账户虽然具有不完全相同的历史记录，但实际是一个概念的不同方面，被称作<strong>相关账户</strong>。相关性可能存在于多个账户之间，且具有对称性和传递性的特征。</p>
+
+<p>针对一条记录可能存在于多个账户的场景，还需要注意账户间关联应遵循有向无环图(Directed acyclic graph, DAG)，从而保证正确性。如果问题域要求更多的记录类型，可以采用前文讨论的备忘录账户，也可以创建子类型账户。前者具有简单的模型，适合满足简单的报表类需求，对于更加复杂的场景，就需要采用后者负责针对特定记录类型的操作。</p>
+
+<ul>
+<li><strong>计划</strong>(Planning)，该模式用于表示计划，包括制定和追踪两部分内容。任何计划都可以被看作由若干基本动作组成，与计划强调整体性不同的是，动作可以拥有不同的粒度，一个简单的动作可以包含人物、时间和地点等信息。</li>
+</ul>
+
+
+<p>动作通常是状态化的，也可能因为不同状态表现出不同的行为，其中最重要的两个状态是<strong>建议</strong>和<strong>实施</strong>，前者是指动作已经被创建，并且可能已经被赋予了某些资源；后者指动作已经开始执行。虽然同时指向一个真实世界的动作，但是建议和实施实际上可能具有很大的区别，因此，通常不使用关联的动作值/对象表示这两种状态，而是通过创建动作的两个子类型做彻底区分，同时同一个动作的两个子类型之间存在关联关系，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/proposed_and_implemented_action.png" alt="Proposed and implemented action" /></p>
+
+<p>类似地，如果某个动作处于完成状态，但由于完成的动作可能仍需要追溯性，通常可以将其作为实施动作的一个特例。在某些问题域中需要丢弃已经完成的动作，于是需要丢弃状态，丢弃也可能是在实施之前发生，因此丢弃动作应当是独立于建议和实施的动作。如果问题域允许暂停一个动作，那么就需要给动作关联一个暂停对象，该对象携带一个有效期信息，当时间位于该有效期内时，动作将被挂起直到暂停有效期结束。</p>
+
+<p>最基本的计划即一组建议动作的有序集合，这种顺序需要给动作添加依赖保证。当具有多个计划时，一个动作也可能同时位于多个计划中。如果动作允许嵌套，那么计划也可以被看作是一种特殊的动作。</p>
+
+<p>通常，企业中的运行过程也可以用通用的动作进行表示，这里动作和计划位于运行等级，我们把位于知识等级的部分称作<strong>协议</strong>，其结构如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/structure_for_protocol.png" alt="Structure for protocol" /></p>
+
+<p>动作通常是基于协议创建的，最简单的方法是根据协议创建关联的建议动作，也可以在更高层级创建等同于计划的建议动作。如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/plan_action_protocol.png" alt="Relationship of plan, action and protocol" /></p>
+
+<p>我们知道动作在实施前需要分配资源。资源可以被划分为两种基本类型，例如药品、针头、源材料等属于消费型资源，又如设备、房间、人等属于资产型资源。每种资源类型都具备对应的分配方式，这些分配方式具有统一的资源分配接口。</p>
+
+<p>计划是通过观察启动的，后者是基于假设和投影的结果。因此计划的输出结果也应该是观察的形式。与计划类似，观察也是动作的一种子类型，并且可以作为计划的一部分。前述两种观察在知识等级可以采用启动函数和输出函数表示，前者用于触发协议，后者用于把输入的协议和观察组合进行转换并以两个观察概念集合输出:一个表示协议的使用目标，另一个记录边际效应。</p>
+
+<ul>
+<li><strong>交易</strong>(Trading)，指在变化的市场条件下销售和购买商品的模式。<strong>合约</strong>是最基本的交易形式，具体手段包括股票、商品、外汇等。例如大多数市场都以货币为交易手段，于是交易价格就以货币方式表示。交易的两种类型做多(Long)和做空(Short)分别代表买入和卖出，一个基本的交易模型如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/contract.png" alt="Contract" /></p>
+
+<p>银行的风控系统通常以<strong>交易组合</strong>(Portfolio)为单位监控异常交易，交易组合一般拥有采用合约构建其自身的方法，该方法通过合约选择器筛选出合约，并保存在自身记录中。交易组合可以是短期或长期的，短期交易组合是按需创建，使用完成后丢弃；而长期交易组合能存在较长一段时间，因此当新的交易产生时，系统会将其与所有的长期交易组合进行匹配，并添加至满足条件的长期交易组合。</p>
+
+<p>任何金融市场的交易都有<strong>报价</strong>(Quote)，多数情况下“报价”其实包含两个值——买入价和卖出价，这被称为<strong>双向价格</strong>(Two way pricing)。相应地，在某些问题域中也存在<strong>单向价格</strong>(One way pricing)，后者可以被看作是双向价格的一种特殊情况。为了同时支持这两种报价类型，需要构建一个更高抽象层次的报价类型，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/quote.png" alt="Quote" /></p>
+
+<p>如果问题域中单向价格和双向价格的差别非常大，那么抽象类型反而会造成很多局限性，此时就需要对两种价格类型分别建模。</p>
+
+<p>市场中的报价是瞬息万变的，因此报价通常会携带时刻信息。如果想查询市场上所有股票的价格，需要抽取每只股票截至某个时刻的最后一次报价，然后把这些报价添加至一个集合——<strong>场景</strong>(Scenario)，即表示市场在某一时刻的状态。从满足需求的角度来说，直接从全部报价中根据时刻抽取相应报价，即可方便获得市场上的公开价格。但场景是对某个时刻市场价格的抽象表示，可以方便后续的价格查询、分析和比较等。问题域在外汇市场变得更加复杂，由于汇率不再是由单一来源发布，因此需要额外添加一个实体作为价格发布者，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/party.png" alt="Party and scenario" /></p>
+
+<ul>
+<li><strong>交易包</strong>(Trading package)，一种把较大的领域模型拆分为更多小型领域模型的模式。<strong>包</strong>通常指一个独立且具有一定规模的软件模块，例如在OO中包可以是一些类的集合，其内部可见性也表明了包的内聚性。包之间一般存在<strong>多重访问等级</strong>，例如在交易领域中，交易组合会把市场指标作为其描述，场景则为市场指标提供价格计算，交易组合与合约通过场景对自身进行定价，但反过来场景并不需要依赖交易组合或合约。这种包之间的可见性如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/package_visibility.png" alt="Package visibility" /></p>
+
+<p>进一步，交易组合需要从市场指标中获取价格，但并不需要了解场景是如何被创建的。因此虽然之前我们讨论了包之间存在可见性的必要性，但这种可见性必须是可控的。一种解决办法是通过额外的接口实现包之间的依赖，然后针对这些接口创建新的包，从而实现更细粒度的包可见性依赖。这种方法的缺点是包的概念和结构变得更加复杂，进而引发可维护性问题。另一种办法是在现有概念模型的基础上引入表示应用逻辑和表现层的组件，例如创建一个新的风险管理应用包和场景管理应用包，前者负责沟通交易组合与场景，后者专门负责创建场景，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/application_packages.png" alt="Application package" /></p>
+
+<p>注意在上图中还有一个新的包“场景结构”，其目的是为了保证场景包对外提供统一的接口，从而将部分职责从原始场景包中进行了分离。</p>
+
+<p>如果一个包是另一个包的子类型，那么不应出现后者依赖前者的情况，否则会损害子类型的可扩展性。包有时还会出现<strong>互相依赖</strong>的问题，进而导致过高的耦合性，这时需要考虑把这种双向依赖转变为单向依赖，因为后者的耦合度更低，但也可能会增加使用上的复杂度。例如对于实体和合约来说，实体有时需要知道与之相关的合约，反之合约也需要知道参与的实体。对此如果要消除双向依赖，就必须消除某个方向的依赖关系。但是无论是消除任一种关系，都会造成某些客户端应用的复杂度增加的问题。除此之外还可以选择把两个包合并，但也可能引入不恰当的可见性问题。因此对这种互相依赖的解决需要考虑更多上下文进行综合判断。</p>
+
+<h2>结论</h2>
+
+<p>模式是对实践经验的积累和发散，真实世界的复杂性导致了模式只能被发现而不能被发明出来，也因此很难避免其在面临复杂问题域时的局限性。然而，与后续会讨论的其它类型的模式相比，分析模式其实具备更高的灵活性和适用性，特别是比形式化的模式表述更加接近真实的思维方式。</p>
+
+<h2>引用</h2>
+
+<p>RPD90, <a href="http://www.engr.sjsu.edu/fayad/current.courses/cmpe202-spring2015/docs/CmpE202-SE-Link-Part-Two-Fall2013/11-Domain%20Analysis/Domain%20Analysis%20-%20An%20Introduction.pdf">Domain analysis: introduction</a></p>
+
+<p>JMN80, <a href="http://www.bayfronttechnologies.com/thesis.pdf">Software Construction Using Components</a></p>
+
+<p>DCH96, <a href="http://ptgmedia.pearsoncmg.com/images/9780133492125/samplepages/0133492125.pdf">Data model patterns: conventions of thought</a></p>
+
+<p>MFR96, <a href="https://martinfowler.com/books/ap.html">Analysis patterns
+</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2019-03-10T03:11:07-05:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2019/03/10/software-design-and-architecture-notes-10/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2019
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2019/03/10/software-design-and-architecture-notes-10/';
+        var disqus_url = 'http://www.hanyi.name/blog/2019/03/10/software-design-and-architecture-notes-10/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-49392954-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>
