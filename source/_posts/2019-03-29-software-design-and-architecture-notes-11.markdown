@@ -1,0 +1,389 @@
+---
+layout: post
+title: "软件设计与架构笔记(11)"
+date: 2019-03-29 15:50:14 -0400
+comments: true
+categories: 
+- architecture
+tags:
+- software design
+- software architecture
+- design pattern
+---
+
+## 设计模式——动机与陷阱
+
+作为软件设计领域在过去三十多年里最重要的议题之一，时至今日，新的设计模式仍不断被提出和采用。软件设计模式的根本目的是为特定上下文提供经受验证的、可复用的元素，从而提高软件工业的生产效率。该领域在早期是伴随着OO的流行逐渐发展起来的[GHJV95]，前文所讨论的[领域分析模式](http://www.hanyi.name/blog/2019/03/10/software-design-and-architecture-notes-10/)就是OOA相关的模式，此类模式侧重分析和描述问题域本身。OOD/OOP等活动中存在的模式被称为**设计模式**，后者用于描述通用代码设计过程中经常重现的组件结构。
+
+为了便于交流和传播，每种设计模式最为人所知的部分就是名字和典型结构。实际上这是一把双刃剑。一方面它确实促进了模式在业界的普及，起到了良好的教育作用；另一方面，对设计模式的描述往往只表现出其中一面，背后其实隐藏了的许多问题，例如:
+
+* 根本动机，即模式要解决的原始问题，这对于理解模式的适用性非常重要。在不适用场景中应用模式实际上破坏了模式原本的经济效益。
+
+* 复杂性，例如具有较高的实现复杂性，带缺陷的模式实现会引入更加隐蔽的问题。有时候这种复杂性与具体语言相关，因此语言特定的**惯用法**(idioms)也成为一种较底层的模式[BMRSS96]。
+
+* 非适用场景，例如缺少明确的非适用场景的描述，而这部分信息有助于快速排除候选模式。
+
+* 替代方案，例如缺少对已知的非适用场景的替代解决方案。
+
+上述问题的存在使应用设计模式面临许多挑战。对于这些经典设计模式的“动机与陷阱”，本文将在剩余部分逐一展开讨论。
+
+### 单例模式(Singleton Pattern)
+
+在OOD中经常会遇到整个系统要求某个类只产生唯一实例的情况，例如Printer spooler、A/D converter等。单例模式通过限制访问构造方法，并向全局提供统一的实例获取接口，从而保证所生产实例的唯一性，如下图所示：
+
+![Singleton pattern](http://content.hanyi.name/images/design_patterns/singleton_pattern.png)
+
+系统也可能允许某个类创建特定数量的实例，此时可以用Map结构的instances存储对应多组实例，即**多例**(Multiton)模式。虽然单例模式利用OO语言的特性实现了对任意创建实例的限制，但实际上可能引入更多问题。以基于Java语言的单例模式实现为例：
+
+```
+public final class Singleton {
+    private static final Singleton INSTANCE = new Singleton();
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        return INSTANCE;
+    }
+}
+```
+
+与上述采用普通类的实现相比，Java的**单元素枚举**模式具有更加简洁的实现，例如:
+
+```
+public enum Singleton {
+    INSTANCE;
+
+    Singleton();
+}
+```
+
+依据JVM规范中的类加载机制，作为静态常量的INSTANCE初始化会在Singleton类初始化过程中进行，而后者的发生需要满足且不限于以下条件之一：通过new运算符初始化实例;对类的非常静态变量进行读写操作;调用类的静态方法;通过反射调用类;类包含main函数。可见，由于类初始化条件的复杂性，INSTANCE初始化时机是无法得到有效控制的。一种结合懒求值模式的实现能够把INSTANCE初始化从类初始化的过程中分离出来:
+
+```
+public final class Singleton {
+    private static Singleton instance = null;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+```
+
+在多线程场景下，上述实现无法保证Singleton只初始化一次。一种解决办法是把getInstance方法声明为synchronized，但会显著影响程序运行效率。另一种办法是采用**双重检查锁**(Double-checked locking)模式，这时需要把instance变量声明为volatile以保证可见性:
+
+```
+public final class Singleton {
+    private static volatile Singleton instance = null;
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            synchronized(Singleton.class) {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
+事实上，如果充分利用Java的类初始化的原理，则可以借助**按需初始化持有者**(Initialization-on-demand holder)模式实现更高效的懒求值单例模式:
+
+```
+public final class Singleton {
+    private Singleton() {}
+
+    private static class LazyHolder {
+        static final Singleton INSTANCE = new Singleton();
+    }
+
+    public static Singleton getInstance() {
+        return LazyHolder.INSTANCE;
+    }
+}
+```
+
+上述结合多种模式的实现，看似解决了单例模式在Java并发程序中存在的问题，但因其较复杂的代码实现而影响了程序的可理解性。
+
+单例模式的另一个复杂性在于其向系统中引入了全局状态特性，后者被公认为是影响软件质量和可维护性的重要反模式之一。因此，具有可变特性的单例模式实现应受到特别关注。而如果单例模式具有不可变特性，那么可以考虑采用无状态的**工具类**(Utility class)模式，即其携带的所有方法均为静态方法，且无法被用于创建任何实例，例如经典的工具类java.lang.Math。与单例类模式通常会引入额外复杂性相反，工具类模式有时会存在过度简化的问题，因为后者消除了抽象层级存在的可能，使得每次对工具类的引用都造成强依赖关系，即“不够OO”。因此，在采用工具类模式前，应充分理解所在领域与系统核心领域之间的关系及其作用。此外，无论是单例模式还是工具类模式，都可能会影响具体实现代码的可测试性，这点对于Java语言尤为如此。
+
+虽然单例模式使OO在行为上更加接近真实世界，但其可能会引入一系列负面影响。尽管有针对性的模式试图消除这些影响，但始终难以避免引发新的问题，最终仍有可能得不偿失。因此，采用普通类始终是解决前述问题的首选替代方案。
+
+### 工厂模式(Factory Patterns)
+
+工厂模式是指一系列模式，这些模式被用于把实例的创建过程从现有应用逻辑中分离出来，从而更好地管理复杂性。例如，一个Color类可能包含如下构造函数:
+
+```
+Color(String rgb) {//...}
+Color(int red, int green, int blue) {//...}
+Color(int hex) {//...}
+```
+
+注意上述构造函数的参数其实相当于Color的不同表示形式，这种构造过程更像是在进行类型转换，采用**静态工厂方法**(Static factory method)可以令其更加表意:
+
+```
+static from(String rgb) {//...}
+static from(int red, int green, int blue) {//...}
+static from(int hex) {//...}
+```
+
+上述类型转换也可以支持聚合类型，例如java.util.EnumSet的of方法:
+
+```
+static <E extends Enum<E>> EnumSet<E> of(E first, E... rest) {//...}
+```
+
+静态工厂方法也支持创建不属于当前类的实例，例如java.util.Arrays和java.nio.Files等工具类:
+
+```
+static <T> List<T> asList(T... a) {//...}
+static BufferedReader newBufferedReader(Path path) {//...}
+```
+
+除了上述语法糖特性外，静态工厂方法还允许对实例进行缓存，从而控制新实例创建，例如单例模式中的静态方法getInstance。另外，还可以通过设置输入参数返回不同子类型的实例，例如java.util.EnumSet，该抽象类并不提供公共构造函数，而是通过静态工厂方法对输入数据进行分类，按照输入的元素数量自动选择RegularEnumSet或是JumboEnumSet的子类实现。
+
+静态工厂方法是对Java语言中new运算符的替代方案，由于其更好的表意性，该方法通常被用于为编程框架提供统一界面。但是如果某个类只提供静态工厂方法，也就意味着该类无法被正确继承，从而限制OO的抽象类型特性。Java语言中采用静态方法也会影响代码的可测试性。
+
+基于OO的代码框架设计通常采用抽象类或接口表示对象及其相互关系，有时需要负责提供对象创建的功能，但在抽象层级无法确定具体类型。因此先定义抽象的对象创建方法，然后在子类中进行具体实现，该模式被称作**工厂方法**(Factory method):
+
+![Factory method pattern](http://content.hanyi.name/images/design_patterns/factory_method.png)
+
+虽然工厂方法通过采用抽象类型延后了对象的具体类型确定。但是这也意味着始终要配合ConcreteProduct衍生出对应的ConcreteCreator，这种**平行类层级结构**能起到分离职责的作用，但也可能会引入过多的复杂性。
+
+当相关的对象属性或行为随上下文变化时，Client需要根据条件创建不同的对象，于是就产生了对所有相关对象所属类的依赖。这时Client的复杂性会同时受到两个维度的影响：
+
+* 对象创建过程的复杂性。
+
+* 对象所属的抽象类型数量。
+
+通过独立的工厂类对相关对象的创建过程进行封装，并从中抽取统一的抽象接口，这就是**抽象工厂**(Abstract factory)模式。其基本结构如下图所示:
+
+![Abstract factory pattern](http://content.hanyi.name/images/design_patterns/abstract_factory.png)
+
+借助抽象工厂模式，Client只需要依赖于Product和Factory的抽象类型，从而具有更好的可扩展性。当面临更复杂的场景时，抽象工厂模式就显得不够灵活，这里所说的复杂性具体存在两种情况:
+
+* 创建Product依赖于复杂的初始化参数列表，且具有复杂的实现过程。
+
+* Product具有很多类别且经常发生变化，那么AbstractFactory及其子类也会相应增多且面临频繁修改。
+
+一种能够避免创建工厂类且同样能够分离对象创建过程的途径是采用**原型**(Prototype)模式，后者允许通过复制一个已存在的对象从而快速创建新对象。原型模式的基本结构如下图所示:
+
+![Prototype pattern](http://content.hanyi.name/images/design_patterns/prototype.png)
+
+当已经存在一个原型对象时，Client就能通过调用原型对象的clone方法快速创建新对象。这里的原型对象可以采用任意方式创建，例如new运算符或者其它工厂模式。原型模式主要解决以下两个问题:
+
+* 要创建的对象具有复杂的初始化参数列表。
+
+* 在运行时才能确定要创建的对象所属类型。
+
+Java语言中的Object类提供了默认的clone方法(浅拷贝)，但对象所属的类需要包含Cloneable标记接口才能调用和覆盖Object中的clone方法(例如实现深拷贝)。然而无论是实现浅拷贝还是深拷贝，clone方法都会为对象实现引入额外的复杂度，特别是当对象拥有较深的类层级结构或嵌套引用时，如何保证clone方法的正确性和一致性会遭遇挑战。
+
+原型模式可以看作是对其它工厂模式的补充，其有效性依赖于已经存在的原型对象，因此存在较严格的适用场景。相比之下，**建造者**(Builder)模式则是一种通用性更强、更加灵活的对象创建模式。与抽象工厂通过实例方法直接创建对象不同，建造者模式把复杂对象的创建过程划分为相互独立的子过程，最后通过调用build方法生成所需的完整对象。该模式具有如下结构:
+
+![Builder pattern](http://content.hanyi.name/images/design_patterns/builder.png)
+
+建造者模式允许更加可控的对象创建过程，而非传统上通过构造函数或setter方法准备对象所需的输入，因此具有更加表意、灵活且一致的优点。然而与抽象工厂类似，当具有许多不同类型的Product时，就需要创建对应的ConcreteBuilder，从而可能引入额外的复杂性。
+
+### 依赖注入模式(Dependency Injection Pattern)
+
+借助工厂模式，Client能够方便地创建所需的对象。但无论是工厂方法还是抽象工厂，目标对象始终是由Client通过直接或间接方法调用而创建的，因此两者之间依然存在较强的依赖关系。而在多数情况下，Client只关心依赖对象所提供的相关特性，而非对象的创建过程。另一方面，由于语言自身条件的制约(例如Java)，单元测试难以利用stub/mock技术隔离目标代码内部动态创建的对象，导致单元测试的高实现成本和低运行效率。为了解决前述问题，可以把创建对象的职责从Client彻底分离出来，即在外部完成对象创建，然后依照Client的实际需求“注入”相关依赖，从而使Client能够更聚焦于自身功能特性，这种模式被称作**依赖注入**(DI)。下图进一步解释了该模式的结构和原理:
+
+![Dependency injection pattern](http://content.hanyi.name/images/design_patterns/dependency_injection.jpg)
+
+构建依赖对象的过程被称作**装配**(Assembling)，通常是由**注入器**(Injector)负责装配过程，其中包括向Client注入依赖。一种注入器的实现模式是**服务定位器**(Service locator)，在该模式中Client获取任何外部依赖都需要通过服务定位器进行查询，后者相当于保存相关依赖的注册表服务。其基本结构如下图所示:
+
+![Service locator pattern](http://content.hanyi.name/images/design_patterns/service_locator.png)
+
+虽然采用服务定位器的Client不再关心依赖对象的创建，但前两者之间仍存在强依赖关系，同时由于服务定位器的实现通常是基于单例和静态工厂方法，因此可能成为并发条件下的系统瓶颈，也欠缺可测试性。彻底实现Client与依赖获取分离的方式是**依赖注入容器**模式，该方法通过Client无关的代码或配置文件实现对象装配，然后将其与Client中声明的依赖相互关联以便注入。Client声明所需依赖和实现注入点的方式有三种:
+
+* 构造函数注入，即在Client进行初始化的过程中注入依赖。该方法有助于维护Client内部状态的一致性，也让Client的依赖项更易于被理解，这是最常见的一种DI实现方式。
+
+* setter注入，即当Client完成初始化后，通过其提供的setter方法注入依赖。当Client存在很多依赖项时，单纯依赖构造函数注入会面临长参数列表的问题，同时如果Client存在多种依赖组合状态，就需要相应数量的构造函数，相比之下setter注入就更加灵活。
+
+* 接口注入，与setter注入类似，区别在于setter方法来自于独立的接口，并由Client实现相关接口的方法。该方法的优势在于外部的注入代码可以完全忽略Client的具体类型，仅通过相关接口类型的引用向其注入所需依赖。
+
+DI能够最大化分离依赖的创建和实际应用，从而实现显著的模块解耦。由于对象装配完全由注入器提供的机制负责，因此这里往往是DI最核心和最复杂的部分。许多基于动态特性的DI实现也使静态对象追踪更加困难，进而可能增加软件的维护成本。
+
+### 组件依赖模式(Component Dependency Patterns)
+
+软件开发的过程中经常存在独立的软件单元，例如被独立开发的类(如类库)，或是包含一组类的子系统，亦或是相互独立的对象。组件通常具有独立的设计和演化规则，因此不同组件对外提供的接口也不尽相同。实现组件间依赖的一般做法是引用目标组件的原始接口，但这会造成组件间的强耦合，当需要替换某些组件、或者对依赖过程实现扩展时会产生较高代价。组件依赖模式就是为了解决此类问题的一组设计模式。
+
+一种解决组件间依赖的模式是**适配器**(Adapter)，也称**包装**(Wrapper)。该模式会额外创建一个Wrapper类包装目标组件，同时遵循面向Client的一致性接口。具体的包装手段有类适配器和对象适配器两种，其基本结构分别如下图所示:
+
+![Adapter pattern](http://content.hanyi.name/images/design_patterns/adapter.png)
+
+类适配器具有更加简洁和OO的外观，但也存在一些潜在的限制。首先类适配器只能包装具体类而非接口，因为后者没有可供复用的具体实现。其次继承通常具有侵入性，仅以代码复用为目的的继承可能会破坏原有类的封装能力，从而损害了OO的内核。对象适配器则与之相反，虽然可能需要额外的对象创建和连接操作，但不存在类适配器的问题，因此更容易应对复杂性。
+
+适配器模式主要解决依赖已有类的问题，但类似的结构也可被用于正在开发的类，有时因为希望保持接口和实现相对独立。传统上接口是作为与Client间的契约先于实现而确定的，但是当接口本身也具有一定复杂性时，就可能需要接口和实现分别独立演化，以便必要时还能切换其它替代实现，这种模式被称作**桥接**(Bridge)。其基本结构如下图所示:
+
+![Bridge pattern](http://content.hanyi.name/images/design_patterns/bridge.jpg)
+
+桥接模式具有和对象适配器相似的结构，但要注意其根本动机的不同。桥接模式支持从原有具体类中分离出承担接口职责的部分，从而应对接口和实现同时可能发生快速变更的情况。而适配器是在目标类稳定的情况下利用额外的接口包装以实现代码快速复用。
+
+当目标类的接口满足Client需求，但在具体应用时需要引入额外的**面向切面**(Aspect oriented)功能时(例如访问控制、日志记录等)，可以创建与其拥有相同接口的代理类，通过类似对象适配器的结构对目标类的对象进行包装，这就是**代理**(Proxy)模式。该模式的基本结构如下:
+
+![Proxy pattern](http://content.hanyi.name/images/design_patterns/proxy.png)
+
+如果一个已有的子系统由若干接口和类组成，且其内部具有复杂的结构关系。为了提高子系统的易用性，可以额外维护一个统一的对外接口类，将系统特性通过简单的接口定义向外部发布，即**外观**(Facade)模式。该模式的基本结构如下:
+
+![Facade pattern](http://content.hanyi.name/images/design_patterns/facade.png)
+
+与其它模式关注类之间的依赖问题不同，外观模式主要解决子系统间的依赖问题，但其解决问题的基本思路是一致的。有时对象间的依赖也会存在问题，例如可能会生成庞大数量的目标对象，使系统资源过度消耗。当大量目标对象中包含许多重复信息时，一种解决方法是通过创建共享对象以减少资源总消耗，这种模式称作**享元**(Flyweight)。享元模式具有如下基本结构:
+
+![Flyweight pattern](http://content.hanyi.name/images/design_patterns/flyweight.png)
+
+为了实现目标对象共享，可以采用抽象工厂或工厂方法生产被Client依赖的享元对象，当已有的享元对象满足共享条件时，系统会直接返回该对象而非重新创建。享元对象相当于对目标对象的重新包装，但这并不意味着享元对象是一定可以被复用的，例如当目标对象包含特定的外部状态信息时，就需要专门再创建一个非共享享元对象保存这些外部状态信息，并且在对应的共享享元对象中保存对其引用。
+
+### 增量扩展模式(Incremental Extension Patterns)
+
+OO的重要特性之一是通过继承实现增量式扩展，这种特性能帮助我们有效管理系统复杂性。但是正如[面向对象——概念与建模](http://www.hanyi.name/blog/2019/02/06/software-design-and-architecture-notes-8/)一文中提到的，继承除了提供模块能力外还兼有类型概念，这种概念兼有利弊，特别是令继承的适用场景受到一定限制，不合适的继承非但不能有效管理复杂性，反而会带来更多问题，此时就需要考虑用组合替代继承实现模块扩展，这就是**组合优于继承**(Composition over inheritance)长期占据主流观点的原因。接下来要讨论的设计模式或采用继承或采用组合的方法来解决增量扩展的问题。
+
+当系统需要同时维护很多对象时，维护增量式扩展的核心问题之一是如何管理每个对象的定义及其相互间的关系。当所有对象间关系呈现为树形或层级结构、并且Client与这些对象交互存在趋向一致的外部接口时，可以采用**组合**(Composite)模式。该模式为系统中的对象提供了统一的外部接口，作为非叶节点的对象可以包含并将同类型的对象作为其子节点。组合模式的基本结构如下图所示:
+
+![Composite pattern](http://content.hanyi.name/images/design_patterns/composite.png)
+
+组合模式所提供的增量扩展能力在于可以通过实现Component接口任意添加新的节点类型，虽然是等同于继承的扩展方式，但除了具有树形或层级结构这种特殊的对象间关系外，多数时候组合模式并不能适用。相比之下，聚合是一种更加普遍的对象间关系，其中聚合对象可以包含若干个不同类型的局部对象，在实践中聚合关系往往是通过对象间的组合实现的，这被称作**整体和局部**(Whole-Part)模式。下图给出了该模式的基本结构:
+
+![Whole-part pattern](http://content.hanyi.name/images/design_patterns/whole_part.png)
+
+与组合模式最大的区别在于，该模式并不要求“整体”和“局部”对象具有统一的访问接口，通常只有整体对象对外提供服务，而局部对象具有多种类型且一般不会向外界暴露。类似的结构也存在于**主从**(Master-slave)模式，该模式描述的对象间关系一般只有两层——主对象和从对象，其基本结构如下图所示:
+
+![Master-slave pattern](http://content.hanyi.name/images/design_patterns/master_slave.png)
+
+其中主对象可以按需把接收到的工作分解并指派给若干从对象，最终再汇总从对象的计算结果并产生最终结果，主从模式有助于提高系统容错性、并行性和计算准确性。
+
+有时需要实现对象的动态扩展，为了保持扩展对Client透明，需要同时借助继承的抽象类型特性保证扩展结果具有与原对象一致的接口，这就是**装饰器**(Decorator)模式。该模式的基本结构如下:
+
+![Decorator pattern](http://content.hanyi.name/images/design_patterns/decorator.png)
+
+为了描述具体的扩展内容，首先需要创建与目标对象相同接口的装饰器对象，后者只需关心各自要扩展的功能；在对象创建阶段，用装饰器对象包装目标对象，如果存在多个装饰器对象，则继续用其包装装饰后的对象；最终生成的装饰后对象具有与目标对象完全一致的对外接口，因此装饰器模式能够最大限度地保持Client不变。
+
+如果一个上下文需要在不同状态中表现出不同行为，可以把这些状态对应的行为单独抽取出来，利用组合关系使其行为能够被动态替换，这就是**状态**(State)模式。与装饰器模式类似，状态模式也是一种同时结合了继承和组合的增量扩展模式，该模式的基本结构如下:
+
+![State pattern](http://content.hanyi.name/images/design_patterns/state.png)
+
+除了内部状态发生改变之外，上下文行为还可能会因为其它因素产生变化，例如需要选择不同的算法策略，此时可以采用与状态模式具有几乎相同结构的**策略**(Strategy)模式:
+
+![Strategy pattern](http://content.hanyi.name/images/design_patterns/strategy.png)
+
+状态模式和策略模式都属于纵向增量扩展模式，即每次扩展相当于对原有功能进行完整替换，这种扩展方式具有较高的灵活度。在某些场景中，上下文行为存在相对固定的套路，延续这种套路虽然可能会引入某些限制，但使后续扩展的关注点更加明确，从而提高增量式扩展的效率。**模板方法**(Template method)模式就是这类横向增量扩展模式的典型代表，其基本结构如下:
+
+![Template method pattern](http://content.hanyi.name/images/design_patterns/template_method.png)
+
+该模式中提供的模板方法就是一个预置的算法框架，任何扩展只需替换其中预设的子步骤。另一种预置了算法框架的模式是**迭代器**(Iterator)，该模式封装了数据结构的基本操作，从而令Client更加关注在具体元素的操作。其基本结构如下:
+
+![Iterator pattern](http://content.hanyi.name/images/design_patterns/iterator.png)
+
+在前述模式的基础上，可以进一步抽象出元素操作，从而满足数据结构及其算法、数据结构中的元素、元素对应的操作的独立扩展，这就是**访问者**(Visitor)模式。该模式的基本结构如下:
+
+![Visitor pattern](http://content.hanyi.name/images/design_patterns/visitor.png)
+
+由于实现了最大限度的抽象化，访问者模式同时在上述三个维度上提供了增量扩展能力，但同时也引入了较高的复杂度，特别是当元素及其操作分别属于不同的类层级结构，但其相互之间仍然存在着强耦合关系，导致代码的可维护性受到损害。
+
+### 消息模式(Messaging Patterns)
+
+OO中的对象间通信主要通过消息传递进行，最直接的消息传递方式就是调用目标对象的方法。消息模式主要用于解决下述几个方面的复杂性:
+
+* 消息的发送者和接收者。
+
+* 消息的表示和传递。
+
+* 消息的存储和管理。
+
+当接收者的消息处理过程比较复杂，例如具有层次式的处理结构时(类似多层嵌套的条件分支)，可以把其中每一层的处理逻辑抽取出来构建独立对象，然后将原始的消息接收者替换为一组对象链，即**责任链**(Chain of responsibility)模式。该模式的基本结构如下:
+
+![Chain of responsibility pattern](http://content.hanyi.name/images/design_patterns/chain.png)
+
+在责任链模式中，原来的消息接收者被划分成多个职责独立的对象，消息由一次处理变为沿着责任链进行传递并被多个对象分别处理。这种变化降低了原始代码的圈复杂度，而且方便复用现有对象组建新的责任链。
+
+对于作为消息发送者的对象，把待发送的消息和接收者从中抽取出来构建独立对象，一方面可以降低发送者的复杂度，满足消息类型的增量扩展；另一方面可以灵活控制消息的发送时机。这种模式被称作**命令**(Command)模式。其基本结构如下所示:
+
+![Command pattern](http://content.hanyi.name/images/design_patterns/command.png)
+
+上图中的Invoker扮演消息发送者的角色，Receiver则是消息的接收者，Client负责创建命令对象并将其和接收者关联。命令模式中的命令对象是不可变的，这种特性使命令对象能够被重复使用，但无法保存状态。另一种相似的模式——**命令处理器**(Command processor)允许创建具有可变状态的命令对象，其代价是扮演Invoker的命令处理器需要每次从Client获取新建的命令对象，其基本结构如下所示:
+
+![Command processor pattern](http://content.hanyi.name/images/design_patterns/command_processor.png)
+
+如果一次消息发送对应了多个接收者，并且接收者还可能会发生动态增加或减少，那么在每个接收者上实现观察者接口，然后将其动态注册至消息的发送者上，当消息发送时会依次发送至每个已注册的接收者。这就是**观察者**(Observer)模式。该模式的基本结构如下:
+
+![Observer pattern](http://content.hanyi.name/images/design_patterns/observer.png)
+
+观察者是一种消息传递模式，特别是当存在一对多的消息传递关系时，应用观察者模式能够实现消息发送者和接收者的解耦，并且支持动态的接收者增加和减少特性。观察者模式有时也被称作**发布者-订阅者**(Publisher-subscriber)模式，但后者有时存在更多变种。例如传统的观察者模式主要依赖消息推送(Push)，所有观察者都被动接收消息。但是发布者-订阅者模式中还支持消息拉取(Pull)，这时发布者只会发送很简单的变更通知，由订阅者决定是否读取该消息。消息拉取是一种更加灵活的消息传递方式，特别是当消息量可能超出了接收者的承受能力时，拉取实际上对接收者起到了保护作用。如果不存在消息过载的情况，那么采用推送则更加简单且实时。
+
+如果系统中存在许多对象，并且这些对象间大都存在着某种消息传递关系时，可以创建一个中介对象负责接收并转发对象发送的消息，即**中介者**(Mediator)模式。该模式的基本结构如下:
+
+![Mediator pattern](http://content.hanyi.name/images/design_patterns/mediator.png)
+
+与观察者模式类似，中介者模式能够解决多对多的对象间消息传递和动态增减问题。但是该模式会增加获取消息传递路径和参与双方信息的难度，使某些重要的领域逻辑无法在代码中得到清晰呈现，进而间接提高维护成本。因此当消息传递包含关键领域逻辑时，应避免采用中介者模式，当然最终的设计和实现可能会更加复杂，以**视图处理器**(View handler)模式为例:
+
+![View handler pattern](http://content.hanyi.name/images/design_patterns/view_handler.jpg)
+
+该模式用于解决多文档窗口管理的问题。多文档窗口通常存在于Word等文本编辑工具，其特点是系统可以同时打开多个窗口，而且每个窗口可以指向任意文档的内容。该问题的复杂性在于每个窗口中的操作可能会影响其它窗口的显示结果，同时当用户点击退出时系统需要针对每个打开的文档向其询问是否要保存已修改的内容。视图处理器模式定义了系统中存在的三种对象:
+
+* 视图处理器，负责管理所有视图，以及对外提供针对视图的操作。
+
+* 视图，负责保存当前视图的内部状态，向视图处理器提供基本操作。
+
+* 供应者，负责保存数据，并且向其观察者发送数据更新消息。
+
+该模式的对象间的消息传递存在两种情况:
+
+* 当视图内的数据发生修改，该修改被反馈给供应者，然后把更新后的状态通过观察者模式发送给视图处理器和其它相关视图。
+
+* 外部触发系统调用视图控制器提供的接口，然后把相关更新依次传递到每个视图。
+
+当多个对象间消息传递发生在跨进程的对等网络中时，消息传递需要先后经过序列化和反序列化，这时可以采用**转发者-接收者**(Forwarder-receiver)模式。
+
+![Forwarder-receiver pattern](http://content.hanyi.name/images/design_patterns/forwarder-receiver.png)
+
+在该模式下，消息发送者需要首先把消息传递给转发者；后者进行序列化和寻址，然后把消息传递至接收者；接收者接到消息后先进行反序列化，然后把消息返回给接收对象。有时需要保持网络地址对消息双方透明，从而实现信道自动调度，此时可以采用**客户端-调度器-服务器**模式。该模式的基本结构如下:
+
+![Client dispatcher server pattern](http://content.hanyi.name/images/design_patterns/client_dispatcher_server.png)
+
+在处理相关消息时，有时会导致接收者的内部状态发生改变，但消息的发送者可能要求撤销某些消息处理，其实质是恢复消息接收者的状态到历史的某个时刻。一种简单的做法是由消息接收者返回当前内部状态，以备忘录对象的形式在外部进行保存。当回退需求发生时，发送者向接收者发送备忘录对象并要求恢复至指定状态。这种模式被称为**备忘录**(Memento)，其基本结构如下:
+
+![Memento pattern](http://content.hanyi.name/images/design_patterns/memento.png)
+
+## 结论
+
+作为软件设计的最佳实践，设计模式从诞生之初就受到了工业界和学术界的热捧，并把OO进一步推向了金字塔顶端。近年来随着软件开发框架和工具链的日益完善，设计模式在日常应用开发中逐渐退居幕后，成为新技术背后的驱动力。但是，作为软件工业化的必经之路，新模式的发现及传播不可能由此中断。对于任何一种模式，了解其场景和结构固然重要，但深入理解模式的动机和陷阱才意味着做到了正确理解，才能真正将其作为软件设计的最佳实践。
+
+## 引用
+
+GHJV95, [Design Patterns: Elements of Reusable Object-Oriented Software](https://sophia.javeriana.edu.co/~cbustaca/docencia/DSBP-2018-01/recursos/Erich%20Gamma,%20Richard%20Helm,%20Ralph%20Johnson,%20John%20M.%20Vlissides-Design%20Patterns_%20Elements%20of%20Reusable%20Object-Oriented%20Software%20%20-Addison-Wesley%20Professional%20%281994%29.pdf)
+
+
+BMRSS96, [Pattern-Oriented Software Architecture Volume 1: A System of Patterns](https://github.com/ppizarro/coursera/blob/master/POSA/Books/Pattern-Oriented%20Software%20Architecture/Pattern-Oriented%20Software%20Architecture%2C%20Volume%201%20-%20A%20System%20Of%20Patterns.pdf)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
