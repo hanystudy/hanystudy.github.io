@@ -1,0 +1,406 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>软件设计与架构笔记(12)  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="设计原则与代码味道 在此之前我们已经讨论了面向对象分析与设计、领域分析及其模式以及设计模式。其中朴素的分析和设计方法具有通用性，但需要长期的实际经验积累，在这一过程中不可避免会付出一定代价。虽然模式提供了可复用的设计元素，但基本都存在特定上下文的限制。尽管仍有新的模式不断被提出， &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">软件设计与架构笔记(12)</h2>
+	<div class="entry-content"><h2>设计原则与代码味道</h2>
+
+<p>在此之前我们已经讨论了<a href="http://www.hanyi.name/blog/2019/02/11/software-design-and-architecture-notes-9/">面向对象分析与设计</a>、<a href="http://www.hanyi.name/blog/2019/03/10/software-design-and-architecture-notes-10/">领域分析及其模式</a>以及<a href="http://www.hanyi.name/blog/2019/03/29/software-design-and-architecture-notes-11/">设计模式</a>。其中朴素的分析和设计方法具有通用性，但需要长期的实际经验积累，在这一过程中不可避免会付出一定代价。虽然模式提供了可复用的设计元素，但基本都存在特定上下文的限制。尽管仍有新的模式不断被提出，但并不意味着其适用性和局限性已被明确认识。同样是来源于经验，有一些设计知识能适用于绝大多数场景，从而具备更广泛的适用性，这就是本文首先要讨论的<strong>设计原则</strong>。设计原则是来源于实际经验且能够指导一般软件设计的法则，其根本动机是发现并解决软件设计问题。</p>
+
+<p>一般而言，发现软件设计问题的终极方法是以真实需求为基础构建软件，然后收集并分析该软件的开发和运行反馈——显然这种方式的代价过于昂贵。一种退而求其次的办法是构建原型系统，在原型阶段只考虑待验证的核心功能，尽早交付给用户使用并收集相关反馈，该方法使软件设计能够更快响应变化。但是我们知道设计复杂度与问题的复杂度是正相关的，而<strong>易变性</strong>又是软件设计的一个重要特征，因此从原型获得一次反馈的效用会随着时间推移和问题复杂度的增加而逐步降低，于是需要缩短反馈周期以实现频繁反馈。高反馈频率意味着更高的交付效率，然而交付效率的提升又有赖于恰当的工程方法和可扩展的设计。因此，“黑盒”式的问题反馈方法虽然为设计问题发现提供了事实依据，但其效率受软件自身设计问题所制约。另一方面，从最初采集得到反馈到定位具体设计问题，对问题根因可能存在不同解读方式，导致最终结论的有效性也可能面临挑战。</p>
+
+<p>幸运的是软件开发并非孤立问题，软件设计实践中遇到的问题及其解决方案往往具有普遍性。在这些知识的基础上诞生了一系列被普遍认可的、“白盒”式的设计原则，使软件设计中的潜在问题能够被更早发现和解决。应注意，某些设计原则是针对特定上下文，例如Liscov替换原则之于OO，更多则适用于广泛的上下文。本文剩余部分首先介绍设计原则背后的核心设计属性，然后按所适应的场景分组并讨论经典的设计原则，最后讨论相比于设计原则更轻量、更贴近日常编程活动、且涵盖更广泛的经验知识——代码味道及其与设计原则之间由表及里的内在联系。</p>
+
+<h3>设计属性和通用设计原则</h3>
+
+<p>每提起设计原则就会出现许多经典的名字和概念，但诸多原则都表现了相对稳定的设计属性，这些属性往往也是软件设计领域中的核心概念，且在前文大多已经讨论过：</p>
+
+<ul>
+<li><p><strong>耦合性</strong>(Coupling)，即模块间依赖的程度，耦合越高则意味着该模块将难以被维护，详见<a href="http://www.hanyi.name/blog/2018/10/12/software-design-and-architecture-notes-4/">结构化设计方法</a>。</p></li>
+<li><p><strong>内聚性</strong>(Cohesion)，即模块具有单一目的性的程度，内聚越高则意味着更好的可理解性和可重用性，详见<a href="http://www.hanyi.name/blog/2018/10/12/software-design-and-architecture-notes-4/">结构化设计方法</a>。</p></li>
+<li><p><strong>正交性</strong>(Orthogonality)，即模块能够独立发生变化的程度，具有正交性的模块意味着更容易应对变化。正交性最初被用于描述一种针对关系数据库的设计原则[DC93]，即对于任意两个相互独立的表，其无损分解后的子集不存在相互重叠的情况，该原则能够帮助发现关系数据库设计存在的数据冗余问题。[AD00]详细解释了正交性在更广泛的软件设计问题中的意义，特别是其在模块化、组件化、分层设计等不同设计方法中的一致性体现。</p></li>
+<li><p><strong>信息隐藏性</strong>(Information hiding)，即模块尽力隐藏其实现细节的程度，具有信息隐藏的模块通常意味着更低的耦合性，详见<a href="http://www.hanyi.name/blog/2018/10/03/software-design-and-architecture-notes-3/">模块化编程</a>。</p></li>
+</ul>
+
+
+<p>设计属性为评估设计质量建立了基础，但由于更加强调概念完整性，使其在形式上很难直接与具体的设计问题相关联，于是就出现了数量更多且更具实践意义的设计原则。对于早期提出的、通用的设计原则来说，其可能借鉴自其它领域，例如:</p>
+
+<ul>
+<li><p><strong>关注点分离</strong>(Separation of concerns, SoC)，即把注意力集中在某个方面，而非与其它无关方面相混淆。该原则最初来源于Dijkstra对计算领域中科学性思维属性的探索[EWD74]，后来被引入软件设计领域，用于强调软件模块之间应具有尽可能少的特性重叠。</p></li>
+<li><p><strong>一次且仅一次</strong>(Once and only once)，也称Don&rsquo;t repeat yourself，DRY。指任何知识都应在系统中有唯一、清晰和权威的表示。该原则适用于许多软件设计领域。例如<strong>单一数据源</strong>(Single source of truth, SSOT)，指系统中的任何数据元素都只有一份，任何其它具有相同定义的数据都是该唯一元素的引用，目的是保证数据的完整性和规范性。</p></li>
+<li><p><strong>保持简洁</strong>(Keep it simple stupid, KISS)，简洁意味着易于理解、维护和扩展。KISS旨在强调简洁性对于系统设计的重要性。实际上简洁性还普遍适用于设计、建筑和哲学等其它领域，例如Simplicity is the ultimate sophistication，Brevity is the soul of wit，Less is more，Make simple tasks simple以及Simplify, then add lightness等。</p></li>
+</ul>
+
+
+<h3>实体设计原则</h3>
+
+<p>实体通常指软件中表示模块的单位，例如存在于许多编程范式中的类、模块等元素。针对实体的代表性设计原则如下:</p>
+
+<ul>
+<li><p><strong>单一职责</strong>(Single responsibility)，指任意实体应只有一个使其产生变更的原因。这里“产生变更的原因”等价于实体的职责，即要求实体具有尽可能少的变化维度。单一职责原则是表述最简单的设计原则之一，也是最难被遵循的原则。这是因为职责的定位和分离会随着上下文变化而不同，这需要一定的实践经验和分析过程，且缺少直观的量化手段。尽管如此，单一职责原则仍有可能通过遵循其它设计原则而间接实现。</p></li>
+<li><p><strong>开放-封闭</strong>(Open closed)，指任意实体应对扩展开放，对修改封闭[BM88]。当程序需要发生变更时，应尽可能通过添加新的代码而非修改已有代码来完成，即增量扩展。频繁发生修改的实体通常是难以被预测和重用的。值得注意的是，对大多数软件设计来说，保证100%对修改封闭是难以实现的。因此实际中通常采用一些策略性封闭方法，例如:</p>
+
+<ul>
+<li><p>采用抽象加强显式封闭。如果新的需求导致无法满足对修改封闭，首先应考虑当前的抽象设计，是否需要调整或引入新的抽象从而加强显式封闭特性。</p></li>
+<li><p>采用数据驱动实现封闭。当修改可能影响同一抽象层级下的许多实体时，可以考虑采用配置数据驱动代码的方式限制修改的影响范围。该方法能够避免引入额外依赖，同时把修改封闭在尽可能小的范围。</p></li>
+</ul>
+
+
+<p>无论是采用抽象还是数据驱动方法，都有可能引入新的封闭性问题。因此实践中往往需要不断考虑并扩展实体对修改的封闭性。</p></li>
+<li><p><strong>Liskov替换</strong>(Liskov substitution)，如果S是T的子类型，那么对T的任意对象的引用可以被直接替换为S的对象，且毋须修改已有代码。Liskov原则中的“替换”不仅是指语法上父子类型相互兼容，进一步子类型应当保留父类型中的不变量(见<a href="http://www.hanyi.name/blog/2019/02/11/software-design-and-architecture-notes-9/">设计契约</a>)，从而实现在语义层面的兼容。在类型系统中，前述这种更趋严格的子类型定义被称作<strong>行为子类型</strong>(Behavior subtyping)[LB87]。</p></li>
+<li><p><strong>接口隔离</strong>(Interface segregation)，指客户端不应被强迫依赖于它们不用的接口。当实体中需要引入一个新的公共方法时，一般会在其接口中声明具有相同签名的方法。如果该抽象层级下对应了多个子类型，但并非所有子类型都需要新声明的方法时，就意味着发生了<strong>接口污染</strong>，这种接口也被称作”胖接口”。依赖于胖接口的客户端代码被迫依赖于许多对它们来说无意义的接口，从而大幅增加了级联变更发生的概率。</p></li>
+</ul>
+
+
+<h3>实体依赖原则</h3>
+
+<p>软件的不同实体之间通常存在着依赖关系，针对实体间依赖的代表性设计原则如下:</p>
+
+<ul>
+<li><p><strong>依赖倒置</strong>(Dependency inversion)，指高层实体不应依赖低层实体，两者都应该依赖于抽象;抽象不应依赖细节，细节应依赖抽象。当发生直接依赖的实体之间同时存在层级关系时，应当使其依赖共同的抽象。</p></li>
+<li><p><strong>控制反转</strong>(Inversion of control)，指通过框架实现程序的控制流，从而操作客户端代码以实现自定义扩展[MFR05]。传统上软件由客户端代码和所依赖的代码库组成，其中客户端代码扮演了负责控制流的角色。为了实现可扩展性，需要首先建立抽象，框架就是集合了众多抽象设计的代码骨架，其中提供了客户端代码的接口，但控制流就从客户端移交到框架端。该原则也被称作<strong>好莱坞原则</strong>(Hollywood principle)，即<strong>Don&rsquo;t call us, we&rsquo;ll call you</strong>。</p></li>
+<li><p><strong>最少知识</strong>(Least knowledge)，也称<strong>迪米特法则</strong>(Law of demeter)[LHR88]。对于任何类C以及C中的方法M，M中发生直接调用的对象的类应符合以下两种情形之一:</p>
+
+<ul>
+<li><p>方法M的参数对象所属的类(参数对象可以是M中创建的对象、M中发生的函数调用所创建的对象、或者是M中引用的全局变量对象，包括C)。</p></li>
+<li><p>类C中任何实例变量对象所属的类。</p></li>
+</ul>
+
+
+<p>应用最少知识原则能够降低系统本身和对其修改的复杂度。该原则的另一个名字“迪米特”是最初应用该项原则所设计的OO系统[LHR88]。</p></li>
+</ul>
+
+
+<h3>包设计原则</h3>
+
+<p>与Java的package和C++的namespace等关键字不同，包在设计原则的上下文中是指独立的可交付物(有时也被称作<strong>组件</strong>)，例如jar包和dll文件。包是常见于大规模的软件系统中的概念，这里的“规模”没有具体的量化指标，可能是指代码行数、团队大小以及系统复杂度等。针对包的代表性设计原则如下:</p>
+
+<ul>
+<li><p><strong>重用-发布等价</strong>(Reuse-Release equivalency)，指可重用代码的粒度不应小于代码的可发布粒度。我们知道可重用性是OOD的一个重要属性，可重用的代码应遵循如下原则:</p>
+
+<ul>
+<li><p>可以被独立开发、维护、测试、分发。</p></li>
+<li><p>具体实现对外部隐藏，只通过<strong>发布接口</strong>(Published Interface)对外公开[MFR02]。</p></li>
+</ul>
+
+
+<p>违反上述原则的代码重用通常都具有副作用，例如<strong>代码复制</strong>(Code clone)、破坏代码封装导致的<strong>强耦合</strong>等。针对这些问题，在可发布粒度上实现代码重用是一种有效的解决办法，该方法通过封装和可追踪使代码具有更好的可重用性，包就是实现这种可发布粒度的有效途径。</p></li>
+<li><p><strong>共同封闭</strong>(Common closure)，指包中的不同实体应当封闭于相似的修改原因。根据前文对开放-封闭原则的讨论，实际中始终存在无法令实体对其封闭的修改。而如果不同实体具有共同的修改，那么应使它们属于同一个包。也就是说，同类型的修改应尽可能被限制于最少数量的包中。</p></li>
+<li><p><strong>共同重用</strong>(Common reuse)，指包中的不同实体应当具有被共同使用的倾向。一般情况下，如果某些实体之间存在抽象层级的协作关系，那么它们应属于同一个包。否则，仅针对个别实体的修改可能引起跨包修改，从而存在较高风险。与共同封闭原则类似，该原则有利于加强包的可维护性，这在大多数上下文中比可重用性更加重要。</p></li>
+</ul>
+
+
+<h3>包依赖原则</h3>
+
+<p>与实体间存在依赖关系类似，包之间也存在依赖关系，针对包之间依赖的代表性设计原则如下:</p>
+
+<ul>
+<li><p><strong>无环依赖</strong>(Acyclic dependencies)，指包之间的依赖关系图应是一个有向无环图(DAG)。作为可发布的软件单元，不同包之间不可避免着存在着依赖关系。如果软件系统中存在包的循环依赖关系，即环形依赖，则可能导致以下问题:</p>
+
+<ul>
+<li><p>依赖环中的所有包存在共同修改的可能，破坏了可独立发布的属性。</p></li>
+<li><p>包可能间接依赖于大量其它包，从而降低可维护性。</p></li>
+</ul>
+
+
+<p>一种解决循环依赖的方法是应用依赖倒置原则，提取依赖的共同抽象。另一种方法是把现有包中被依赖的部分抽取出来组成新的包。</p></li>
+<li><p><strong>稳定依赖</strong>(Stable dependencies)，指包之间应遵循更加稳定的依赖方向。如果一个模块是易变的，那么对该模块的依赖在很大程度上也是易变的，这种<strong>易变性</strong>(Volatility)会沿着依赖的方向传递，从而影响整个系统的可维护性。然而由于软件的易变性可能存在许多影响因子，不同影响因子所导致的后果也不尽相同。其中<strong>稳定性</strong>(Stability)被用于描述模块修改的难易程度，即当模块越难以被修改即越稳定。Uncle Bob提出了一种稳定性的度量指标，可以用如下形式计算:</p>
+
+<p>Ca: 传入耦合(Afferent coupling)，依赖于当前包内实体的外部实体数量。</p>
+
+<p>Ce: 传出耦合(Efferent coupling)，依赖于外部实体的包内实体数量。</p>
+
+<p>I: 不稳定系数(Instability)，且I = Ce ÷ (Ca + Ce)，则I范围是[0,1]，当I=0时当前包最稳定，I=1时则最不稳定。</p>
+
+<p>因此，被依赖的包应具有比依赖包更大的I值，即满足稳定依赖原则。</p></li>
+<li><p><strong>稳定抽象</strong>(Stable abstractions)，指稳定性越高的包也应越抽象，反之则越具体。由于高度稳定的包往往难以被修改，因此其应尽可能抽象，从而使系统的易变部分始终保持在不稳定包的具体实现中。包的抽象程度被称作<strong>抽象性</strong>，与稳定性相同，Uncle Bob提出了抽象性A的计算方式:</p>
+
+<p>A = 抽象实体数 ÷ 实体总数。</p></li>
+</ul>
+
+
+<p>根据稳定性和抽象性的定义，理想情况下的软件系统应呈现类似如下线性关系:</p>
+
+<p><img src="http://content.hanyi.name/images/design_principles/abstraction_instability.png" alt="Abstraction-Instability graph" /></p>
+
+<p>也就是说，当已知某个包的稳定性和抽象性度量时，我们就可以进一步计算它们在上述坐标中偏离理想值的程度，用距离D表示这种程度，从而有:</p>
+
+<p>D = |(A + I - 1) ÷ √2|</p>
+
+<p>在实际中能够通过计算包的D值，从而决定包的设计合理性，D值越大的包应优先被关注和改进。</p>
+
+<h3>代码味道</h3>
+
+<p>相比于设计原则，代码味道是一种更加轻量的、被用于识别设计问题的方法。如果把具有良好设计的代码视作是干净无味的话，那么代码味道则可被用于发现那些“显而易见”的“异常”代码。“味道”一词并不是一个正式的概念，Martin Fowler认为代码味道应具备三个基本特征[MFR06]:</p>
+
+<ul>
+<li><p>代码味道应是易于被察觉的。</p></li>
+<li><p>代码味道不一定表示代码中存在设计问题，即使存在“问题”，也有可能是因为设计权衡的结果。</p></li>
+<li><p>代码味道非常易于被程序员理解和掌握，基于代码异味的重构使新手程序员也有机会持续改进设计，即使在缺少对深层次设计原则理解和相关经验的情况下。</p></li>
+</ul>
+
+
+<p>与设计原则类似，按照作用层级可以把代码异味划分为方法、实体(类和模块)以及通用三个类别。</p>
+
+<ul>
+<li><p>具有代表性的方法级代码味道包括:</p>
+
+<ul>
+<li><strong>长方法</strong>(Long function)和<strong>长参数列表</strong>(Long parameter list)，不仅导致代码难于理解，还可能违反单一职责原则。</li>
+<li><strong>重复switch</strong>(Repeated switches)，尽管switch语句具有易于理解的结构，但可能违反开放-封闭原则，特别是当相似结构的switch语句重复出现时，会相应存在多处需要同时被修改的代码。</li>
+<li><strong>循环</strong>(Loops)，随着内循环和管道式编程的普及，常规的外循环语句由于相对复杂的结构已经成为循环计算的备选方案。</li>
+<li><strong>特性依恋</strong>(Feature envy)，指实体中的某个方法过度依赖了其它实体中的数据或方法，进而可能违反了关注点分离原则。</li>
+</ul>
+</li>
+<li><p>具有代表性的实体级代码味道包括:</p>
+
+<ul>
+<li><strong>临时值域</strong>(Temporary field)，指实体中仅在部分情况下有效的属性，这可能违反单一职责原则和关注点分离原则。</li>
+<li><strong>消息链</strong>(Message chains)，如果存在对象的方法的链式调用，且每个阶段的调用都作用于不同对象，这种消息链可能违反了最少知识原则。</li>
+<li><strong>中间人</strong>(Middle man)，指缺少实际意义的代理方法。尽管封装被作为是OO的重要特征，但某些时候存在不合理的封装，例如一些实体中存在的代理方法，其作用仅是分离了真正的调用对象和被调用对象，这可能违反了单一职责原则和关注点分离原则。</li>
+<li><strong>内幕交易</strong>(Insider trading)，指实体间发生数据处理和相互传递的现象。数据交易可能会引起过度耦合，但有时很难完全避免，因此需要尽可能减少此类现象出现的频率。</li>
+<li><strong>过大的类</strong>(Large class)，指一些包含了大量属性的类。这可能违反了单一职责原则和关注点分离原则。</li>
+<li><strong>异曲同工的类</strong>(Alternative classes with different interfaces)，指某些具有相同类型特性的类，因其具有不同接口而无法利用OO的多态性。</li>
+<li><strong>数据类</strong>(Data class)，指只包含可被外部读写的属性的类，导致有关该类的操作散布在不同的类中，这可能违反单一职责原则。</li>
+<li><strong>被拒绝的馈赠</strong>(Refused bequest)，指在继承关系中，子类拒绝或忽略了父类中的某些方法或数据，这可能违反接口隔离原则。一种解决办法是创建父类的兄弟类，使方法和数据相分离——这只在具有良好抽象意义的情况下有效，否则可能会引入更多复杂度，反而得不偿失。如果现有抽象更加稳定，而“被拒绝”的元素又足以影响可维护性，更有效的办法是抽取新的类，并采用对象代理关系替换原有继承关系。</li>
+</ul>
+</li>
+<li><p>具有代表性的通用代码味道包括:</p>
+
+<ul>
+<li><strong>数据泥团</strong>(Data clumps)，指某些经常同时出现的数据组合，其出现场景可能包括不同类中的属性、许多方法签名的参数等。通常可以采用创建新的类表示这些数据组合。</li>
+<li><strong>重复代码</strong>(Duplicated code)，指相同或相似的代码结构在程序中多次出现的现象。最易被识别的重复代码通常发生在同一个类或拥有继承关系的多个类中，也比较容易被消除。除此之外，对重复代码的识别和解决都可能需要进一步的设计权衡。</li>
+<li><strong>全局数据</strong>(Global data)，特别是可变的全局数据，即全局变量。我们已经多次强调了这种共享可变状态的代码可能导致潜在的质量和可维护性问题。实际上，即使是非共享状态的<strong>可变数据</strong>(Mutable data)，依然可能导致代码质量问题。</li>
+<li><strong>发散式变化</strong>(Divergent change)，即某个模块可能会由于不同原因而导致不同方式的修改，违反了单一职责原则。如果修改原因只有一种，但引起了其它模块发生多次级联修改，则称作<strong>霰弹式修改</strong>(Shotgun surgery)。</li>
+<li><strong>基本类型偏执</strong>(Primitive obsession)，指采用基本类型表示某些复杂数据类型，而非创建独立的类，这可能导致大量的重复代码。</li>
+<li><strong>懒元素</strong>(Lazy element)，指某些设计元素(例如类、实体)只有非常简单的功能，甚至使用一、两行代码就能清楚表现该元素的特性，那么他们就没有单独存在的必要。与之表现形式相反，但具有统一思想的<strong>夸夸其谈未来性</strong>(Speculative generality)，或者称作<strong>大设计先行</strong>(Big design up front, BDUF)，则表示发生了过度设计。</li>
+<li><strong>过高的圈复杂度</strong>(High cyclomatic complexity)，指代码中存在过度复杂的控制流图。圈复杂度通常用代码中的线性逻辑路径数进行表示。假设用N表示代码中的基本区块(指不包含任何控制分支的连续代码片段)数，E表示连接基本区块的边数，P表示连通子图数，那么圈复杂度M可用公式M = E - N + 2P进行计算。过高的圈复杂度可能意味着过度复杂的逻辑或缺少结构性的代码。</li>
+<li><strong>神秘命名</strong>(Mysterious name)和<strong>注释</strong>(Comments)，这两种代码味道经常同时出现，因为合理的命名更加表意，也就降低了额外注释的必要性。当然在某些时候再合理的命名也无法表达某些上下文时，注释则是必要的补充。</li>
+</ul>
+</li>
+</ul>
+
+
+<p>尽管前述大部分的代码味道都有“程度”的概念，使其具体的应用仍然依赖实际经验，但仍然有一些可以遵循的规则。例如，针对重复代码的<strong>事不过三规则</strong>(Rule of Three)，这里虽然中文成语中的数量是虚指，但具体应用时可以作为实际阈值，也就是说当重复代码出现三次时，就应考虑采取相应解决方案了。当然这种规则只能作为初步判断条件，进一步仍然需要结合设计原则进行恰当分析。</p>
+
+<h2>结论</h2>
+
+<p>为了发现和定位软件设计中存在的问题，人们在实践中总结出了一系列具有普遍意义的设计原则。看似纷繁复杂的设计原则其实体现了一致的设计属性，并在长期的设计分析和验证过程中不断得到认可。为了进一步缩短软件设计的反馈周期，在代码编写活动中就可以通过识别代码味道尽早发现潜在的设计问题，并通过持续重构保证软件的设计质量。</p>
+
+<h2>引用</h2>
+
+<p>DC93, <a href="http://web.archive.org/web/20100224075429/http://www.dbdebunk.com/page/page/622331.htm">The Principle of Orthogonal Design</a></p>
+
+<p>AD00, <a href="https://www.nceclusters.no/globalassets/filer/nce/diverse/the-pragmatic-programmer.pdf">The Pragmatic Programmer: From Journeyman to Master</a></p>
+
+<p>EWD74, <a href="https://www.cs.utexas.edu/users/EWD/transcriptions/EWD04xx/EWD447.html">On the role of scientific thought</a></p>
+
+<p>BM88, <a href="https://sophia.javeriana.edu.co/~cbustaca/docencia/POO-2016-01/documentos/Object%20Oriented%20Software%20Construction-Meyer.pdf">Object Oriented Software Construction</a></p>
+
+<p>LB87, <a href="https://klevas.mif.vu.lt/~plukas/resources/OODPrinciples/Liskov1987.pdf">Data Abstraction and Hierarchy</a></p>
+
+<p>LHR88, <a href="https://www2.ccs.neu.edu/research/demeter/papers/law-of-demeter/oopsla88-law-of-demeter.pdf">Object-Oriented Programming: An Objective Sense of Style</a></p>
+
+<p>MFR00, <a href="https://martinfowler.com/books/refactoring.html">Refactoring: Improving the Design of Existing Code</a></p>
+
+<p>MFR02, <a href="https://martinfowler.com/bliki/PublishedInterface.html">Published Interface</a></p>
+
+<p>MFR05, <a href="https://martinfowler.com/bliki/InversionOfControl.html">Inversion Of Control</a></p>
+
+<p>MFR06, <a href="https://martinfowler.com/bliki/CodeSmell.html">CodeSmell</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2019-04-23T15:59:14-04:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2019/04/23/software-design-and-architecture-notes-12/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2019
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2019/04/23/software-design-and-architecture-notes-12/';
+        var disqus_url = 'http://www.hanyi.name/blog/2019/04/23/software-design-and-architecture-notes-12/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-49392954-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>
