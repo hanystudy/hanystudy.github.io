@@ -4,7 +4,7 @@
   <title><![CDATA[Category: architecture | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/architecture/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2019-04-23T12:48:12-04:00</updated>
+  <updated>2019-05-14T11:50:29-04:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,190 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[软件设计与架构笔记(13)]]></title>
+    <link href="http://www.hanyi.name/blog/2019/05/14/software-design-and-architecture-notes-13/"/>
+    <updated>2019-05-14T11:14:51-04:00</updated>
+    <id>http://www.hanyi.name/blog/2019/05/14/software-design-and-architecture-notes-13</id>
+    <content type="html"><![CDATA[<h2>设计诊断</h2>
+
+<p><strong>设计诊断</strong>(Design diagnosis)是指获取、分析、检测软件设计及其质量的活动。经济利益是驱动软件设计诊断的重要原因之一，特别是对于具有重要价值的软件设施来说，尽早发现并解决设计中存在的问题是十分必要的。然而一直以来软件设计都被认为是难以度量和评价。一方面是因为设计中包含的决策通常是涉及对领域、技术或其它上下文因素的权衡，这是任何客观标准都难以做到完全覆盖的，因此始终无法100%消除对主观参与的依赖，导致设计诊断的权威性受到限制。另一方面，已有的设计验证方法普遍落后于软件开发技术的创造和更替。尽管<a href="http://www.hanyi.name/blog/2019/04/23/software-design-and-architecture-notes-12/">设计原则与代码味道</a>具有一定的普适性，但是大部分原则本身缺少明确的定量或定性规则(即使存在这类规则一般也很难适用于新的开发技术)，少量有明确的规则通常被归为静态代码分析和风格检查，尚不足以达到设计诊断的目的。</p>
+
+<p>因此为了实现设计诊断，一方面需要对软件设计进行统一的形式化表示，避免对具体的软件开发技术产生依赖。在前者的基础上进一步分析当前软件设计，帮助分析人员理解现有设计、发现设计中的潜在缺陷、甚至模拟历史和未来的设计演化，从而为工程进度和技术债管理提供依据。本文的剩余部分将详细讨论这些主题。</p>
+
+<h3>设计分析(Design analysis)</h3>
+
+<p>设计分析的目标是研究设计本身，后者通常表示解决问题的方案，也可以指构建解决方案的过程。[BC00]认为，理想的解决方案可被视作具有一系列特性的集合，其中的每种特性都可以被归纳为某个维度，即<strong>设计参数</strong>(Design parameters)。不同的设计参数之间存在一定的依赖关系，即<strong>设计结构</strong>(Design structure)。设计参数的所有可能值的集合被称作<strong>设计空间</strong>(Design space)。在整个设计过程中，每个设计参数由对应的<strong>设计任务</strong>(Design tasks)决定，后者相互之间的依赖关系被称为<strong>任务结构</strong>(Task structure)。例如要设计一个马克杯，“是否包含杯盖”是一个设计参数，而“杯盖直径”则是依赖于前者的另一个设计参数，而对于“容器直径”来说，“杯盖直径”与其存在相互依赖的关系。相应地，分别负责杯盖和容器的设计任务之间也就存在依赖，因此设计结构和任务结构具有一致性。前述这些结构可以用一种邻接方阵进行表示，即接下来要讨论的<strong>设计/任务结构矩阵</strong>(Design/Task structure matrix，DSM/TSM)。</p>
+
+<h4>设计结构矩阵</h4>
+
+<p>在DSM(TSM)中，每个结点表示设计参数(或设计任务)，两个设计参数之间的依赖用符号x进行表示，一个马克杯的设计结构例子如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/full_dsm.png" alt="Full DSM" /></p>
+
+<p>虽然该DSM只有10x10，但每个结点间依赖都可能包含了丰富的物理和工程属性，真实场景中也许会非常复杂。根据设计参数之间的依赖关系类型，在DSM中可以进一步发掘出一些微结构，例如:</p>
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/dsm.png" alt="Micro DSM" /></p>
+
+<p>上图描述了两种微观的设计结构，(a)表示层次结构，(b)表示无层次的相互依赖结构，这两种设计结构实质上体现了不同的关系强度，显然(b)体现了更强的相互关系。</p>
+
+<p>另外，真实案例中的矩阵规模通常要比马克杯大得多，例如一个设计笔记本电脑的TSM如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/computer_tsm.png" alt="A laptop computer TSM" /></p>
+
+<p>上图中的TSM相比于马克杯的例子有几个新的元素。首先矩阵中的设计任务呈现出特定排序(或呈现为下三角矩阵)，即相互之间存在强关联的设计任务被放置的更近，越接近对角线的依赖密度就越高。其次整个矩阵上产生了若干相互关联的区块，这些区块直接反映了系统中的独立组件，例如驱动系统、主板等，被称作<strong>原型模块</strong>(Protomodules)。原型模块通常是由领域知识或者组织结构等上下文决定，但是并非真正意义上的模块，因为其本身不具有接下来要讨论的<strong>模块性</strong>(Modularity)。</p>
+
+<h4>模块性与设计规则</h4>
+
+<p>一般而言，高复杂度的问题会导致同样高复杂度的设计，而一个“好”的设计能够有效地管理其自身复杂性。[BC00]认为，<strong>模块化</strong>(Modularization)是系统管理自身复杂性的核心，也是二十世纪以来计算机乃至更多其它领域得以飞速发展的重要原因。系统的模块化程度体现为<strong>模块性</strong>(Modularity)，其中包含两个重要概念:</p>
+
+<p><strong>模块</strong>，即内部元素间的关系比与外部元素间更强的系统单元，这些关系的相对强弱决定了模块的粒度。</p>
+
+<p><strong>抽象</strong>、<strong>信息隐藏</strong>和<strong>接口</strong>，即当一个系统达到一定复杂度时，需要将其拆分成不同部分，抽象的目的在于隐藏其内部复杂性，且通过接口与系统的其它部分进行交互。</p>
+
+<p>在设计笔记本电脑的TSM中，我们知道主板和显示屏之间的设计任务多存在循环依赖，一个例子如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/design_rule_tsm.png" alt="Cycling in a laptop computer TSM" /></p>
+
+<p>该例中的多个设计任务因为相应设计参数而存在互相依赖，例如主板要决定CPU的规格和所采用的中断协议，而显示屏需要确定详细规格。当主板中具有独立的图形控制器时，显示屏的规格就会发生改变。否则CPU就要根据显示屏的规格提供更多的计算能力，并且采用不同的中断协议。由此可见，“主板是否包含独立的图形控制器”就成为其它设计参数的关键依赖参数。从系统的角度看，其整体复杂性通常是由一系列关键依赖参数决定的，一旦其中某个设计参数确定，则许多依赖的设计参数也就相应确定。这些关键依赖参数被称作<strong>设计规则</strong>(Design rule)。一个完整的系统设计规则集合应至少包含如下信息:</p>
+
+<ul>
+<li><p>模块及其在系统中扮演的角色。</p></li>
+<li><p>模块间通信的接口。</p></li>
+<li><p>系统集成协议以及测试某个模块是否遵循设计规则。</p></li>
+</ul>
+
+
+<p>通过抽取设计规则可以消除原型模块间的相互依赖，从而形成真正意义的模块。其中，设计规则被称为<strong>显性模块</strong>(Explicit modules)，而其他相互独立的部分被称为<strong>隐性模块</strong>(Implicit modules)。一个模块化后拥有完整设计规则集合的DSM/TSM所下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/modularization.png" alt="Modularization" /></p>
+
+<p>DSM/TSM对于计划设计过程同样具有意义，在上例中，首先进行的是设计规则阶段，然后进入可并行进行的隐性模块设计阶段，最后是系统集成和测试阶段。其中，设计规则作为所有阶段的输入，隐性模块则作为集成和测试阶段的输入。</p>
+
+<h4>模块演化及其模拟</h4>
+
+<p>模块性反映了系统的结构状况。如果一个系统具有嵌套层级结构，每个结构单元对内强关联，对外则相互独立，并且具有良好的功能角色定义——那么该系统就被称作<strong>模块化系统</strong>。值得注意的是，系统结构并非一成不变，一方面是因为某些设计参数间的依赖并不容易在初期就显现出来，另一方面，由于复杂的结构往往导致更高的经济成本，因此在真实场景中更加倾向于寻求结构和经济之间的平衡。为了描述模块的动态特征，可以采用<strong>模块操作符</strong>(Modular operators)，[BC00]提出了六种最基本的模块操作符，后者能够用于表示动态结构的所有可能演化路径:</p>
+
+<ul>
+<li><strong>分解</strong>(Splitting)，把现有设计或任务划分成多个模块，在层次结构中这往往意味着产生了新层，例如以下模块化层级设计:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/dsm_splitting_before.png" alt="Two-level modular design hierarchy" /></p>
+
+<p>上例中描述了A~D四个隐性模块以及一个集成和测试阶段，从模块化的角度来看它们都属于相同层级。当更多设计参数及其依赖显现，并且上下文满足模块化设计需求时，新的设计规则以及相应的接口、测试就会出现，于是就诞生了新的层级，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/dsm_splitting_after.png" alt="Three-level modular design hierarchy" /></p>
+
+<p>在进行分解操作后，新的层级应当只对其所依赖的设计规则负责，而对全局设计规则以及上层的集成和测试部分保持透明，这对设计任务和阶段执行具有重要意义。</p>
+
+<ul>
+<li><p><strong>替换</strong>(Substituting)，指替换现有模块设计。替换通常是因为多种设计路径之间存在竞争关系，于是更多受到经济系统因素的驱动。模块的可替换性通常是由分解所决定的，因此分解在此扮演了非常重要的角色。</p></li>
+<li><p><strong>增强</strong>(Augmenting)和<strong>排除</strong>(Excluding)，即添加或删除模块，与分解与替换不同的是，增强和排除是针对已经模块化的系统来说的。排除体现了模块化设计的可配置性，也就是说用户可以按需选择模块，这与替换的特性是相当的。增强通常是由于系统中需要引入新特性，为了保证可增强性，需要在设计规则阶段就要考虑这种能力。</p></li>
+<li><p><strong>反转</strong>(Inverting)，指创建新的设计规则。我们知道设计规则来自于设计参数，后者广泛存在于隐性模块中。因此有时需要把隐性模块从当前的设计层级中“拉取”上来，使其对更多模块保持可见。</p></li>
+<li><p><strong>移植</strong>(Porting)，即把当前模块移植到新系统。某些隐性模块支持从当前系统移植到新系统，那么该模块至少应满足以下条件之一:</p>
+
+<ul>
+<li><p>所依赖的设计规则在新系统中存在且不变。</p></li>
+<li><p>模块本身不受设计规则的影响。</p></li>
+</ul>
+</li>
+</ul>
+
+
+<p>采用上述模块操作符可以模拟任何过去、现在和未来所发生的设计变化。例如可以抽取设计演化历史中的连续片段，然后用模块操作符描述每一步的变化。对于进行中乃至未来的设计来说，模块演化则是非确定的，采用公式(j6 X 2) - 1即可计算模块演化的所有可能路径，例如当系统中包含6个模块时，就有93311种演化可能。</p>
+
+<h4>应用DSM分析软件设计</h4>
+
+<p>[NEVD05]首次把DSM用于管理复杂软件系统的<strong>依赖模型</strong>(Dependency model)，具体方法是通过静态分析提取代码的依赖关系，然后在DSM中进行层次结构展示，支持人工选取设计规则，并且检测出违反相关规则的依赖关系。</p>
+
+<p>通过静态分析提取到的大多属于语法依赖，即字面引用所体现的依赖关系。不同编程语言的语法依赖类型存在一定区别，并且语言自身的模块化特性也不尽相同，因此存在多种表示软件依赖模型的方式。一种简单的做法是忽略依赖类型间的差异，选择统一的模块化元素作为DSM的设计参数，例如Java中的类，并且按照元素间存在的引用数量定义依赖强度。下例展示了jEdit v4.2的DSM:</p>
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/jedit_dsm.png" alt="DSM for jEdit v4.2" /></p>
+
+<p>当DSM规模较大时，需要支持进一步显示矩阵中的层次结构。尽管许多现代编程语言都在语法上提供了层次化结构的特性(例如包、类、方法等)，这些信息可被直接用于DSM分层。但是，多数情况下软件的层次结构无法满足[BC00]的模块性标准，这种在实际中十分普遍的情况被称作软件结构的<strong>技术债</strong>。为了方便理解和改进现有系统的模块性，业界开发了许多针对DSM的聚类算法，即从DSM中的元素及其依赖出发，通过重新排列元素顺序实现自动聚类，其中有代表性的方法有:</p>
+
+<ul>
+<li><p>[JNW73]采用<strong>矩阵分区算法</strong>把初始矩阵划分成若干子矩阵，使后者满足下三角矩阵的特征，从而消除循环依赖。</p>
+
+<p>该算法的基本思路是针对每个元素，首先构建可达性(Reachability)集合R(s)与先导(Antecedent)集合A(s)，前者指从该元素出发能到达的所有元素集合，后者指从非当前元素出发能到达或经过该元素的路径的所有元素集合，以及两者交集R(s)A(s)。算法每次迭代选择满足R(s)A(s) = R(s)的元素集合作为当前矩阵的top-levels，然后将其从剩余元素的集合中删除并重复这一过程，直到剩余元素个数为0。矩阵分区算法的优点是实现简单，能够快速筛选出不存在循环依赖的子矩阵，对DSM分层具有一定意义。但是该方法无法满足更多的模块化特性，例如[BC00]中指出的隐性模块间的相互独立性。</p></li>
+<li><p>聚类分析中常用的<strong>启发式算法</strong>同样被用于构建DSM的元素聚类。如果某个系统内存在一系列规模合理且相互独立的子模块，那么这些子模块内的依赖关系一定趋近于DSM对角线，以此推论为基础设计距离惩罚函数作为启发式算法的目标函数[TS94]。与分区算法相比，启发式算法能够实现模块间独立条件下的更优结果，而且实现也比较简单，例如聚类部分采用现有的遗传算法框架[RAC08]。但是，设计软件模块性的目标函数是一项挑战。另外，软件的模块性往往还体现在层次结构方面，这是一般的聚类方法难以同时考虑的。</p></li>
+<li><p>由于DSM本质上是有向图，因此可以采用图算法进行DSM分层。[SYG09]是一种基于图算法的DSM层次聚类方法，首先计算DSM的凝聚图(Condensation graph)，然后找出所有出度为0的结点的所有依赖关系路径，再从拥有最长路径的结点出发构建DSM的层次结构。该方法构建出的层次结构一定满足下三角矩阵，同一层的模块间保持相互独立且允许并行开发。其优点在于使用DSM实际反映出软件的层次结构，从而能够进一步诊断软件的设计问题[RYR15]。</p>
+
+<p>如果要根据DSM中依赖关系的强弱寻找更优化的层次结构，则可以采用<strong>图聚类</strong>方法[SS07]，特别是针对有向图聚类[FM13]。[SA14]采用<strong>谱聚类</strong>方法对DSM进行重新聚类，该方法建立在DSM中具有较大特征值的特征向量、特征值、模块层次数以及每层模块数等数量之间的相关性基础上，通过对原始DSM进行奇异值分解、分析和降维，计算每个结点在k维空间的线性表示，最后以结点在k维空间中的距离进行聚类。尽管该方法需要指定k值，但是聚类结果依然能正确反映DSM的层次结构。例如:</p></li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/spectral_clustering.png" alt="Spectral clustering" /></p>
+
+<p>其中(a)是原始DSM，(b)&copy;(d)分别表示k=2，k=4，k=8时的谱聚类结果，可以看到随着k值的变化，聚类结果始终能表现出实际DSM的层次结构。</p>
+
+<h3>设计度量(Design metrics)</h3>
+
+<p>设计度量涉及一系列面向软件设计的度量指标，包括针对整体模块性的度量、接口强度和优先级、扇入/扇出、联通度以及可见度等等。值得注意的是，设计的度量结果并不能直接等价于设计质量，通常可以作为支持设计分析结果的辅助证据，帮助定位具体问题并结合具体上下文制定改进计划。</p>
+
+<p><strong>模块度</strong>是一种度量整体模块性的指标。[MAC06]认为可以通过计算DSM中元素间的依赖成本，例如依赖的数量和分布模式等，从而实现模块度的间接计算，并且其中存在两种可能的应用场景:</p>
+
+<ul>
+<li><p>比较软件A和软件B的模块性。</p></li>
+<li><p>比较软件A在T时刻和T + N时刻的模块性。</p></li>
+</ul>
+
+
+<p>假设DSM的元素数量为n，其中<strong>传播成本</strong>(Propagation cost，Pc)忽略元素所在的位置，假设直接依赖和间接依赖具有同等成本，然后计算所有元素的扇入或扇出数M，则Pc = M / n2。对于整个系统而言，扇入和扇出数是相等的，因此M可以任选其中一种进行计算。<strong>聚集成本</strong>(Clustered cost)把模块内和模块间的依赖进行区别计算，首先指定一个依赖阈值(通常是10%~100%间的数)，并将DSM中被依赖次数超过该阈值的元素计入主控元素，然后根据以下条件计算每项依赖所包含的成本:</p>
+
+<ul>
+<li>DependencyCost(i -> j | j is a vertical bus) = d</li>
+<li>DependencyCost(i -> j | in same cluster) = d * n^λ</li>
+<li>DependencyCost(i -> j | not in same cluster) = d * N^λ
+其中d是表示是否存在i -> j依赖的二进制值，n指模块规模，N指DSM规模。λ是自定义参数。</li>
+</ul>
+
+
+<p>除了通过依赖成本计算模块度，另一类方法是直接计算模块度。根据模块从内及外且依赖由强变弱的定义，[GG04]提出了一种通用的模块度计算方法，该方法的前提是DSM中已经包含了精确的模块化信息。当DSM中不包含模块化信息，或者需要直接计算系统的实际依赖复杂度时，可采用<strong>奇异值模块度指数</strong>(Singular Value Modularity Index，SMI)[KO11]。该方法通过对DSM进行奇异值分解，然后计算奇异值的下降率从而表示系统模块度。以下面三种典型的结构模式为例:</p>
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/different_patterns.png" alt="Typical structural patterns" /></p>
+
+<p>从模块性来看，单块(Integral)系统的模块性较差，总线(Bus-modular)系统也比较差，模块化系统则相对较好。对这些模式对应的DSM进行奇异值分解，从而得到上面三种结构的奇异值下降模式:</p>
+
+<p><img src="http://content.hanyi.name/images/design_diagnosis/singular_value_decay_pattern.png" alt="Singular value decay pattern" /></p>
+
+<p>可以看出，单块系统的下降趋势非常陡峭，总线型系统比较陡峭，而模块化系统的下降趋势则相对平滑。基于上述关联关系，可以认为当系统的模块性较差时，奇异值会出现迅速下降的情况(SMI较低)，而模块性较好的系统，奇异值下降则通常比较缓慢(SMI较高)，这种相关性也是上文讨论的谱聚类方法的基本假设。</p>
+
+<h2>结论</h2>
+
+<p>设计诊断包括分析和度量两个方面，其中设计分析主要负责设计的形式化表示，例如本文讨论的DSM工具。在DSM的基础上可以进一步分析和模拟设计演化过程，发现设计缺陷以及优化系统模块性。DSM同样可以用于设计度量，设计度量指标不直接等价于设计质量，但可以指导设计及其改进。除了基本的度量指标外，模块度是度量系统整体模块性的核心，可以用于不同软件之间和相同软件的不同版本之间的模块性评价。</p>
+
+<h2>引用</h2>
+
+<p>BC00, <a href="https://mitpress.mit.edu/books/design-rules-volume-1">Design Rules, Vol. 1: The Power of Modularity</a></p>
+
+<p>NEVD05, <a href="https://lattix.com/dev/files/wp/oopsla05.pdf">Using Dependency Models to Manage Complex Software Architecture</a></p>
+
+<p>JNW73, <a href="https://systemsconcept.org/html/Content/BM_1973%20.pdf">Binary Matrices in System Modeling</a></p>
+
+<p>TS94, <a href="http://web.mit.edu/eppinger/www/pdf/Pimmler_DTM1994.pdf">Integration analysis of product decompositions</a></p>
+
+<p>RAC08, <a href="https://www.tandfonline.com/doi/abs/10.1080/09544820802563226">Systematic module and interface definition using component design structure matrix</a></p>
+
+<p>SS07, <a href="http://www.leonidzhukov.net/hse/2018/sna/papers/GraphClustering_Schaeffer07.pdf">Graph clustering</a></p>
+
+<p>FM13, <a href="https://arxiv.org/pdf/1308.0971.pdf">Clustering and Community Detection in Directed Networks: A Survey</a></p>
+
+<p>SYG09, <a href="https://www.cs.drexel.edu/~yfcai/papers/2009/ASE2009_drh.pdf">Design Rule Hierarchies and Parallelism in Software Development Tasks</a></p>
+
+<p>RYR15, <a href="https://apps.dtic.mil/dtic/tr/fulltext/u2/a621415.pdf">Hotspot Patterns: The Formal Definition and Automatic Detection of Architecture Smells</a></p>
+
+<p>SA14, <a href="https://www.researchgate.net/profile/Andy_Dong/publication/269279676_A_spectral_analysis_software_to_detect_modules_in_a_DSM_Risk_and_change_management_in_complex_systems/links/54dc1a540cf28d3de65ea241.pdf">A Spectral Analysis Software to Detect Modules in a DSM</a></p>
+
+<p>MAC06, <a href="https://pdfs.semanticscholar.org/cbfe/a3d346938dba911239502cc97b282668af71.pdf">Exploring the Structure of Complex Software Designs: An Empirical Study of Open Source and Proprietary Code</a></p>
+
+<p>GG04, <a href="https://proceedings.asmedigitalcollection.asme.org/proceeding.aspx?articleid=1651497">A Comparison of Modular Product Design Methods on Improvement and Iteration</a></p>
+
+<p>KO11, <a href="https://hal.archives-ouvertes.fr/hal-00571207/document">Degree of Modularity in Engineering Systems and Products with Technical and Business Constraints</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[软件设计与架构笔记(12)]]></title>
@@ -974,244 +1158,6 @@ static BufferedReader newBufferedReader(Path path) {//...}
 Object-Oriented Thinking</a></p>
 
 <p>BM92, <a href="http://se.inf.ethz.ch/~meyer/publications/computer/contract.pdf">Applying “Design by Contract”</a></p>
-
-<p>MFR03, <a href="https://martinfowler.com/books/uml.html">UML Distilled</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[软件设计与架构笔记(8)]]></title>
-    <link href="http://www.hanyi.name/blog/2019/02/06/software-design-and-architecture-notes-8/"/>
-    <updated>2019-02-06T16:23:31-05:00</updated>
-    <id>http://www.hanyi.name/blog/2019/02/06/software-design-and-architecture-notes-8</id>
-    <content type="html"><![CDATA[<h2>面向对象——概念与建模</h2>
-
-<p>由前文<a href="blog/2019/01/24/software-design-and-architecture-notes-7/">编程范式</a>我们知道，对象作为最基础的编程概念广泛存在于各类编程范式中，采用这种范式的语言被称为基于对象语言(Object based language)。本文讨论的<strong>面向对象</strong>(Object oriented)的概念则首次出现在1967年诞生的Simula 67，其中除了对象概念本身外，还进一步提出了<strong>继承</strong>和<strong>多态</strong>这两个重要特性，成为此后长期影响学术界的语言之一。而面向对象在工业界的兴起则始于上世纪80年代，以Smalltalk和C++的相继发明为标志，深刻影响了此后近四十年的软件工程。</p>
-
-<h3>基本概念</h3>
-
-<p>继承是区分面向对象和基于对象的重要特征，大部分面向对象语言的继承是采用<strong>类</strong>(Class)实现的(注意“类”和“对象”是完全不同的编程概念)。我们知道类可被看作是能够创建对象的工厂对象，继承则允许增量式地进行对象扩展。因此，类作为数据抽象的核心，在其基础上实现继承就自然地支持增量式的数据抽象。除了类之外，面向对象还支持一种基于<strong>原型</strong>(Prototype)的特殊实现，后者通常并不包含类定义，任何对象都能够唯一地指定另一个对象作为其原型，其中对象的属性和事件沿原型链传递查找，从而实现继承。从支持增量式对象扩展的角度看，类继承和原型继承没有本质区别。下面讨论在面向对象语境下的一些重要概念。</p>
-
-<ul>
-<li>类。类是一个可能同时包含部分具体实现的抽象数据类型[BMR97]，其被用于描述一组存在于内存中且可直接被用于计算的实例。类的特点在于其同时扮演了<strong>模块</strong>和<strong>类型</strong>两种角色。其中模块作为一种语法概念，通常被用于表示软件分解单元，而类型则被用于动态对象的静态描述，相当于一种语义概念。在非面向对象模式中，上述两种概念通常是被分开表示的。</li>
-</ul>
-
-
-<p>在某些面向对象系统中(例如Smalltalk和Ruby)，类自身也可能是通过对象实现的，这种实例依然是其本身的类被称作<strong>元类</strong>(Metaclass)，面向对象语言或编程环境的作者可以利用元类方便地实现某些动态扩展特性，例如Ruby的<a href="http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-object-oriented-hierarchies/">单例类</a>。</p>
-
-<ul>
-<li>对象。对象是指某个类的运行时实例[BMR97]。</li>
-</ul>
-
-
-<p>虽然“对象”一词最初来源于对真实世界物体的描述，但在实际编程场景中对象已经不仅仅被用于描述真实物体，例如用于描述一组配置属性等因技术需求而诞生的对象。对象是通过<strong>引用</strong>(Reference)进行表示的，并且可以被自身或其它对象引用。一个对象引用唯一地指向了该对象唯一且不变的<strong>标识</strong>(Identity)。对象标识是用于区分不同对象的唯一凭证。</p>
-
-<p>对象的创建过程通常是在面向对象系统中默认定义的，一般包括分配内存空间和初始化两个步骤，前者由系统自身负责，后者允许在程序中自定义初始化过程。以Java的面向对象系统为例，类支持以构造函数(Constructor)定义初始化过程，如果某个类没有包含显式的构造函数，编译器会自动加入一个默认的无参构造函数并在其中调用父类的无参构造函数。</p>
-
-<ul>
-<li>组合与聚合。如果采用引用表示对象，那么对象之间就可以通过引用产生<strong>关联</strong>(Association)。但是仅使用引用不足以描述对象间真实的关系特征，从而无法满足<strong>忠实建模</strong>(Faithful modeling)。<strong>组合</strong>(Composition)关系是指一个对象包含了另一个对象的值，这种关系超过了一般引用的定义，特别是指被包含对象的生命周期被限制在其父对象内。<strong>聚合</strong>(Aggregation)关系指一个对象由另外多个对象组成，其组成关系通过引用实现。与组合的区别在于，聚合中被包含对象的生命周期不受父对象限制。</li>
-</ul>
-
-
-<p>从面向对象中对关系分类的角度看，组合与聚合可以统一被看作<strong>客户</strong>(Client)关系，其实质是对对象间关系的描述。</p>
-
-<ul>
-<li><p>继承。继承描述了一种类之间的扩展关系。在面向对象中，类本身具备良好的模块化特性，从而能够满足信息隐藏的原则，但模块化并不直接提供增量式设计和开发的途径。继承支持了类之间的扩展、特化和组成关系，显著增强了面向对象的可重用性和可扩展性。其中包括四个重要的衍生概念:</p>
-
-<ul>
-<li>重定义(Redefinition)，指子类能够重新实现父类中定义的过程，有时也称作<strong>覆盖</strong>(Override)。</li>
-<li>多态(Polymorphism)，指一个变量实体或数据结构元素，在具备可控静态声明的前提下能够在运行时阶段绑定至不同类型的对象。例如当类A继承类B，那么类A的对象a，可以被赋于类型为B的变量b，且并不违反类型检查。</li>
-<li>静态类型(Static typing)，前面提到多态的前提是具备“可控静态声明”，具体是指对于一个变量的声明类型(也称变量的静态类型)，尽管允许其被赋予不同类型(也称变量的动态类型)，但其动态类型必须是静态类型的后代(后代定义包含其自身)。</li>
-<li>动态绑定(Dynamic binding)，是指变量所指向对象的动态类型决定被调用操作的具体位置。</li>
-</ul>
-</li>
-</ul>
-
-
-<p>本质上，继承同时包含了两个角色且互有重叠:模块和类型。从模块的角度看，继承提供了一种有效的可重用特性。这里提到的有效是指当类A继承类B时，A就立即拥有了B的全部特性，且无须进行任何改动。从类型的角度看，继承同时增强了可重用性和可扩展性，这主要体现在: 1.对于类Rectangle继承类Polygon，即Rectangle的全部实例同时也是Polygon全部实例的子集。2.对于类A继承类B，那么B的任意实例所具有的操作也同时存在于A。在许多文献中，继承也被称作is-a关系。</p>
-
-<ul>
-<li>多重继承。在真实世界中，对象可能同时包含了不同领域的抽象，对应在面向对象中就是多重继承，即一个类可以同时拥有多个父类。例如，类Teacher和类Student都继承了类UniversityPerson，这时需要一个类TeachingAssistant且同时继承自类Teacher和类Student，也就是说通过两个父类间接继承了类UniversityPerson，即<strong>重复继承</strong>。重复继承可能会造成一定的函数访问冲突，特别是当调用类TeachingAssistant的对象的name函数，而其实际上位于类UniversityPerson时，系统就面临多重函数查找路径的问题。而由此引发的复杂性使得多重继承在许多现代面向对象实践中被认为弊大于利，且不被推荐使用。但不可否认，多重继承实际上体现了真实世界原本的复杂性。</li>
-</ul>
-
-
-<p>在支持多重继承的面向对象系统中，通常采用<strong>复制</strong>(Replication)和<strong>共享</strong>(Sharing)两个策略解决前述重复继承问题。复制是指当遇到重复继承时，子类实际上包含了所有继承路径上属性和函数的副本，程序这时需要具体指定被调用副本的名称。共享是指程序可以指定在子类中只保留一份来自祖先的副本，这样就避免了名字冲突的问题，例如C++的<strong>虚继承</strong>(Virtual inheritance)。</p>
-
-<p>许多现代面向对象语言不支持多重继承，但同时为了保留一定的设计能力大多采用了折衷方案，例如Java的<strong>接口</strong>(Interface)、Ruby的<strong>混入</strong>(Mixin)等。</p>
-
-<ul>
-<li>泛型。继承本质上体现了一种纵向的层级扩展关系，由上至下可以被看作是面向对象从抽象化到特化。而<strong>泛型</strong>(Genericity)则支持横向的同级扩展关系，即类型参数化。</li>
-</ul>
-
-
-<p>泛型最经典的案例就是编程语言标准库中常见的容器类，例如Set、List、Map等，这些容器类实际上是参数化的抽象数据类型，其本身包含了抽象数据类型中的具体操作，并藉由客户代码通过指定参数决定具体的元素类型。由于历史的原因，许多现代编程语言中虽然提供了泛型特性，但其实现原理差别巨大。例如C++的模板能完整地重新编译目标代码，最终根据模板参数生成不同的函数和类；而Java的泛型实际上是一种为了增强代码类型安全的语法特性，编译器对泛型语法进行类型检查，并最终通过<strong>类型擦除</strong>(Type erasure)生成无类型参数的目标代码；C#的泛型实现则介于C++的灵活和Java的简易之间，通过运行时<strong>实化</strong>(Reification)进行类型检查和具体操作，从而避免了类型擦除的缺点(例如无法实现泛型数组)，同时把类型参数保留在运行时，从而满足在泛型条件下支持反射。</p>
-
-<h3>面向对象建模(Object Oriented Modeling)</h3>
-
-<p>从上世纪80年代起，随着工业界对面向对象语言从逐渐认识到深入实践，面向对象开始代替传统的结构化方法成为主宰范式。但是，基于面向对象的软件开发很快就面临了更多数量的对象以及更加复杂的关系，实现系统设计也变得空前复杂。作为OO的早期布道者之一，Grady Booch等分别在面向对象的基本概念基础上发展出了一系列全新的建模方法，被统称为<strong>面向对象建模</strong>。</p>
-
-<h4>统一建模语言(Unified Modeling Language, UML)</h4>
-
-<p>1997年，Three amigos在Grady Booch的Booch method、James Rumbaugh的Object modeling technique(OMT)以及Ivar Jacobson的Object oriented software engineering(OOSE)的基础上，正式发布了UML 1.1。UML是一种编程语言无关的通用建模技术，旨在采用统一语言对复杂问题的不同关注点进行建模。</p>
-
-<p>UML由<strong>图形标记</strong>(Graphical notations)和<strong>元模型</strong>(Meta-model)组成。其中图形标记定义了相关概念的图形表示法，也是UML建模的主要工具。元模型是一种对UML模型的形式化表示方法，用于对UML规格说明的精确表达。后者常被用于构建基于UML的计算机辅助软件工程(Computer Aided Software Engineering, CASE)系统。这里只讨论UML的图形标记方法。</p>
-
-<p>下图展示了UML 2.5.1的图形标记分类[UML17]。其中<strong>结构图</strong>(Structure diagrams)用于代表系统中对象的静态结构，通常能够表示系统的核心概念及行为定义，但并不包括行为的动态细节。<strong>行为图</strong>(Behavior diagrams)表示系统中的动态行为，包括方法、协作、活动和状态历史记录等。</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/uml_diagrams_overview.png" alt="The taxonomy of UML diagrams" /></p>
-
-<p>随着UML被纳入国际标准，其复杂度不断增加，即使由对象管理组织(Object Management Group, OMG)定义的狭义UML规范也已经十分臃肿，使其逐渐脱离了日常的软件设计实践。但不可否认，UML的核心内容依然在面向对象建模中占据权威地位。为了保证UML的实用性，本文接下来只讨论核心的图形标记[MFR03]。</p>
-
-<ul>
-<li>类图(Class diagrams)，表示系统中的对象类型及其相互之间的静态关系。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/class_diagrams_overview.png" alt="Class diagram" /></p>
-
-<p>在上图中，每个方框表示类的属性和操作，方框间的实线表示类的相互关系，在每种关系上还标记了两个类之间的<strong>多重关系</strong>(Multiplicity)。关系是UML中最复杂的概念之一，甚至允许通过构造型(Stereotype)对关系进一步扩充。UML的基本关系种类包括：1. 关联(Association)，指类之间的持续性关系，例如类的属性类型，关联采用实线表示，并且可以是无向、单向和双向，带方向的关联进一步揭示了源类中包含以目标类作为类型的属性；2. 依赖(Dependency)，指一个元素(Supplier)的变更可能引起另一个元素(Client)的变更，依赖采用单向的虚线表示；3. 泛化(Generalization)，表示类之间的类型层级关系，例如继承采用带三角箭头的实线表示，如果目标类是接口类，那么采用带三角箭头的虚线表示，抽象类需要额外使用斜体表示。</p>
-
-<p>从上述关系的定义来看，依赖是含义最广泛的关系，也是面向对象建模中需要仔细考虑的问题。过多的依赖路径会导致修改时发生涟漪效应(Ripple effect)，从而降低系统的可维护性。关联进一步包含了前文讨论的组合和聚合关系，其中组合使用一端实心菱形和单向箭头的实线表示，聚合采用一端空心菱形和单向箭头的实线表示，分别如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/aggregation.png" alt="Aggregation" /></p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/composition.png" alt="Composition" /></p>
-
-<p>UML中的大部分工具实质上都是为了设置约束，但仅通过图形标记无法表示所有类型的约束，因此UML支持使用{}表示自定义的约束。自定义约束的具体形式没有严格限定，可以是自然语言、伪代码，也可以采用对象约束语言(Object constraint language, OCL)。</p>
-
-<ul>
-<li>对象图(Object diagrams)，是指系统在某个时间点的对象快照，也被称作实例图。虽然类图能够完整表达对象的结构信息，但有时候并不容易理解，对象图能够以某个真实案例对前者进行补充。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/object_diagram.png" alt="Object diagram" /></p>
-
-<ul>
-<li>包图(Package diagrams)，指一组类或嵌套包的集合。包也被称作命名空间(Namespace)，其作用是定义比类层次更高的系统结构。包图在UML中使用带标签名的方框表示，包之间也可以定义类似类图中关系。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/package_diagram.png" alt="Package diagrams" /></p>
-
-<ul>
-<li>部署图(Deployment diagrams)，指系统的物理结构，特别是软件及其所运行的硬件框架。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/deployment_diagram.png" alt="Deployment diagram" /></p>
-
-<ul>
-<li>组合结构图(Composite diagrams)，指对一个类的内部结构进行层级表示，从而使其更容易被理解。以类TV Viewer为例，下面是TV Viewer的类图:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/composite_structure_1.png" alt="Class diagram of TV Viewer" /></p>
-
-<p>如果用组合结构图进一步描述TV Viewer，则如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/composite_structure_2.png" alt="Composite structure diagram of TV Viewer" /></p>
-
-<ul>
-<li>组件图(Component diagrams)。在UML中，组件是一种从功能角度上看可以独立分发和升级的模块。组件图用于表示组件之间的交互关系，如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/component_diagram.png" alt="Component diagram" /></p>
-
-<ul>
-<li>时序图(Sequence diagrams)，表示一组对象及其之间的协作关系。具体来说，时序图通常限定在一个单独的场景下，包含了一组对象以及依据用例而发生的对象间消息传递，特别是展示了消息发生的顺序信息。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/sequence_diagram.png" alt="Sequence diagram" /></p>
-
-<p>在时序图中，由于第一个消息通常不在参与者(Participants)中，因此也被称作<strong>创始消息</strong>(Found message)。另外，时序图中的参与者是可以被动态创建和销毁的。同时消息传递过程也支持循环、分支以及异步等特性。</p>
-
-<ul>
-<li>状态机图(State machine diagrams)，也称作状态图，表示单个对象的整个生命周期行为。在面向对象中状态具体包括了对象中所有属性值的集合，而状态图则侧重于抽象的状态定义，即提供不同的事件响应方式。一个简单的状态图例子如下:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/state_machine_diagram.png" alt="State machine diagram" /></p>
-
-<p>该状态图表示了一座城堡中的安全机关。图中方框表示一个状态，除了状态名之外，还可以填入状态的内部活动，包括状态事件(Event)、看守(Guard)和活动(Activity)，当某个事件发生时，可根据当前状态选择迁移(Transition)或保持状态不变。更进一步，状态既可以是静止的也可以是活动的，例如当前对象某个正在发生的动作。状态也可以被分组，其作用是表示组内所有子状态的同一个向外部某个超状态(Superstate)迁移的路径。</p>
-
-<p>在并发场景中，单个状态可以被分割成几个正交的子状态图，一个闹钟的例子如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/concurrent_state_diagram.png" alt="Concurrent state diagram" /></p>
-
-<p>该图中用一个历史伪状态标记代替了初始状态标记，意味着当开关打开时，初始状态应为上一次开关关闭时所处的状态。</p>
-
-<p>值得注意的是，状态图对应着两种可能的实现，一种是采用控制流代码或面向对象实现，另一种是基于状态表的解析和查询。前者具有更加复杂的代码结构，且需要持续维护相关代码；后者需要在初期实现一个较复杂的状态表解析和查询特性，后期则主要集中于状态表的数据维护。无论采用哪一种实现，其最终代码都具有一定的样板特征，因此结合代码生成技术都是更好的选择。</p>
-
-<ul>
-<li>活动图(Activity diagrams)，表示过程逻辑的业务流程的行为，且通常是跨多个用例或线程的行为。先看一个活动图的例子:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram.png" alt="Activity diagram" /></p>
-
-<p>从上例可以看出，该活动图与传统的流程图十分类似，最主要的区别在于前者支持并发活动，例如<strong>分叉</strong>(fork)操作可以产生并发的子活动，所有子活动的同步操作通过<strong>结合</strong>(join)进行。活动图中的动作(Action)之间使用流(Flow)或者边(Edge)进行连接，且可以被进一步分解成更多子活动，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_2.png" alt="Action decomposition" /></p>
-
-<p>一般而言，活动图更多聚焦于描述业务过程而非实现，但通过分区(Partition)可以进一步表示不同动作的负责对象，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_3.png" alt="Partition" /></p>
-
-<p>活动图支持基于信号的动作触发场景，信号可以被直接触发并接收，也可以通过定时器触发，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_4.png" alt="Signal" /></p>
-
-<p>活动图还进一步支持采用动作方框下放置别针(Pin)表示该动作的输入和输出参数，如果某个动作的输出与下一个动作的输入参数不同，还需要使用参数变换(Transformation)使其一致。当一个动作会导致下一个动作触发多次时，可以采用扩展区域(Expansion regions)标记需要响应多次的动作集合，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_5.png" alt="Expansion regions" /></p>
-
-<p>在该例中，扩展区域中的动作流程可能会部分导致终止，因此采用终止流(Flow final)进行标记。</p>
-
-<ul>
-<li>通信图(Communication diagrams)，在UML 1.x中被称作协作图(Collaboration diagram)，用于表示对象交互过程中的数据连接，如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/communication_diagram.png" alt="Communication diagram" /></p>
-
-<p>通信图所表达的信息与时序图类似，形式相对灵活但不如后者规整，因此其受欢迎程度也不如后者。</p>
-
-<ul>
-<li>交互概述图(Interaction overview diagrams)，指结合了活动图和时序图的概述表示。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/interaction_overview_diagram.png" alt="Interaction overview diagram" /></p>
-
-<p>交互概述图实际上是一种针对对象交互行为的整体表现方案的总结。</p>
-
-<ul>
-<li>时间图(Timing diagrams)，表示单个或一组对象交互的时间约束。特别是当对象的某个状态存在一定时间约束时，如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/timing_diagram.png" alt="Timing diagram" /></p>
-
-<ul>
-<li>用例图(Use case diagrams)，表示系统的功能需求。用例(Use case)是一种对用户与系统或系统自身交互的描述。用例更注重用户的一般目标，与用户场景(User scenario)不同，后者详细描述了用户与系统的每一步交互(这里的用户不仅指人类)，如果交互过程中发生分支则产生新的场景。也就是说，一个用例包含了许多用户场景。下图是一个用例图的例子:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/use_case_diagram.png" alt="Use case diagram" /></p>
-
-<p>用例是对系统功能的更高级描述，与极限编程中的用户故事(User stories)相比，后者侧重于表示系统特性，且可以用于安排迭代计划，而用例则是单纯的系统功能性描述。在具体实践中，一个特性可能直接对应用例，或者用例中的一个步骤，也可能对应于其中一个场景。而大多数情况下用例要比特性具有更粗的粒度。</p>
-
-<h2>结论</h2>
-
-<p>本文首先讨论了面向对象的核心概念；随着面向对象编程的流行，开发中面临的问题复杂度不断提升，由此催生了面向对象建模技术。UML旨在实现语言无关的通用建模语言，被广泛用于面向对象分析(OOA)和设计(OOD)等活动。另一方面，随着相关国际标准的建立，UML也逐渐变得更加臃肿，因此实践中，视实际情况选择性地对工具进行裁剪就变得尤为重要。</p>
-
-<h2>引用</h2>
-
-<p>BMR97, <a href="https://sophia.javeriana.edu.co/~cbustaca/docencia/POO-2016-01/documentos/Object%20Oriented%20Software%20Construction-Meyer.pdf">Object-Oriented Software Construction</a></p>
-
-<p>UML17, <a href="https://www.omg.org/spec/UML/">The unified modeling language specification</a></p>
 
 <p>MFR03, <a href="https://martinfowler.com/books/uml.html">UML Distilled</a></p>
 ]]></content>

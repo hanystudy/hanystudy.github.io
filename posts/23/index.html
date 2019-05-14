@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="3、数据类型（中）  1）C-串与string    c++的字符串分两类，一种是由c语言沿袭而来，称为c-串。例如，    char buffer[7]=&ldquo;Hello!&rdquo;; //由于所有字符串必须以\0为结束符，则长度定义必须比实际元素个数多1    事实上， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="3、数据类型（下）  1)向量(Vectors)    Vector是C++标准模板类库的重要组成部分,使用时需要包含头文件vector.主要定义方式如下:     vector &lt;int&gt; a(10);                     //定义了10个整数元素,但没有赋初值 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,169 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/04/11/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-wu/">
+		
+			C++学习笔记(重温计划之五)</a>
+	</h2>
+	<div class="entry-content">
+		<p>3、数据类型（下）</p>
+
+<p> 1)向量(Vectors)</p>
+
+<p>   Vector是C++标准模板类库的重要组成部分,使用时需要包含头文件vector.主要定义方式如下:</p>
+
+<p>    vector &lt;int&gt; a(10);                     //定义了10个整数元素,但没有赋初值</p>
+
+<p>    vector &lt;int&gt; b(10,1);                  //定义了10个整数元素,且每个元素的初值为1</p>
+
+<p>    vector &lt;int&gt; c(b);                       //用一个现成的向量创建一个向量</p>
+
+<p>    vector &lt;int&gt; d(b.begin(),b.begin()+3);             //定义了一个其值为向量b前3个值的向量</p>
+
+<p> 我们知道,当输出一个数组时我们一般用循环实现.在vector中,有相应的遍历器函数,形式为vector&lt;int&gt;::iterator,例如:</p>
+
+<p>   for(vector&lt;int&gt;::iterator it = a.begin(); it != a.end() ; ++it)</p>
+
+<p>    cout &lt;&lt;*it &lt;&lt;&ldquo; &rdquo;;</p>
+
+<p>   有关向量的其他操作如下:</p>
+
+<p>a.assign(b.begin(),b.begin()+3);     //将b的0-2元素构成的向量赋给a
+a.assign(4,2);                       //将a向量只含0-3元素,且赋为值2
+int x = a.back();                    //将a的最后一个向量元素值赋给整数变量x
+a.clear();                           //a向量元素清空
+if(a.empty()) cout &lt;&lt; &ldquo;empty&rdquo;;       //a.empty()作为条件判断空或非空
+int y = a.front();                   //将a的第一个向量元素赋给整数变量
+ya.pop_back;                         //删除a向量的最后一个元素
+a.push_back(5);                      //在a向量最后插入一个元素,其值为5
+a.resize(10);                        //将向量元素个数调至10个,多则删,少则补,其值随机
+a.resize(10,2);                      //将向量元素个数调至10个,多则删,少则补,其值为2
+if(a==b) cout &lt;&lt; &ldquo;equal&rdquo;;            //向量的比较操作还有!=,&lt;,&lt;=,&gt;,&gt;=</p>
+
+<p>   向量与数组相比的好处是,其空间大小不需要提前指定,可以不断添加新的元素.但是,向量初始化时会分配一定的预留空间,如果添加元素的个数超过了预留空间,则需要扩容.内存意义上的扩容需要删除原空间并添加新的空间,这就必然增加向量操作的负担,因此在预计添加元素个数较多的情况下,我们还是需要给定向量的初始化大小.</p>
+
+<p>   和数组类似,向量也存在2维向量乃至多维向量.我们通常使用 vector&lt;vector&lt;int&gt;&gt; 的形式声明一个2维向量,其一般操作和1维向量的方法是一致的.</p>
+
+<p> 2)指针与引用</p>
+
+<p>   c++的指针应用几乎是必不可少,我们将用较大篇幅来研究指针的用法.</p>
+
+<p> a.指针的定义</p>
+
+<p>   如下的定义方式都是正确的</p>
+
+<p>   int * p;</p>
+
+<p>   char *cp;</p>
+
+<p>   float* fp;</p>
+
+<p>   double*dp;</p>
+
+<p>   我们也可以定义一个二级指针</p>
+
+<p>   int ** iip;</p>
+
+<p>   但需要注意的是,一个*只能修饰一个指针,例如</p>
+
+<p>   int* ip,iq;   //其中ip为指针变量,而iq为整形变量</p>
+
+<p>   在指针初始化的过程中,有下面的形式:</p>
+
+<p>   int* ip;</p>
+
+<p>   int iCount = 18;</p>
+
+<p>   int* iPtr = &amp;iCount;       //初始化,&amp;表示实体的地址,&amp;后可以是一个变量,但不能是具体数值</p>
+
+<p>   ip = &amp;iCount;;              //赋值</p>
+
+<p>   须注意,int<em> ip = &amp;iCount; 与 </em>ip = &amp;iCount; 并不相同,前者为初始化并赋值,后者本身形式错误.诸如 int<em> iPtr; </em>iPtr = 58;的语句也是毫无意义的.</p>
+
+<p> b.指针类型</p>
+
+<p>  指针是有类型的,其类型也必须是一致的.在c语言中,有强制类型转换(int *),但事实上,c++有自身的强制转换函数.例如:</p>
+
+<p>   int<em> ip = reinterpret_cast&lt;int</em>&gt;(&amp;f);           //reinterpret的含义本身是&#8221; 重解释&#8221;,因而将float型指针无条件转换为整形指针.</p>
+
+<p> c.指针运算</p>
+
+<p>   #include&lt;iostream&gt;
+   using namespace std;
+   int main(void){
+     int iArray[6];
+     for(int i=0;i&lt;6;++i) iArray[i]= i<em>2;
+     for(int</em> iP=iArray; iP&lt;iArray+6; iP+=1)
+     cout&lt;&lt;iP&lt;&lt;&ldquo;: &rdquo;&lt;&lt;*iP&lt;&lt;endl;
+   }</p>
+
+<p>   上面的程序例中,指针运算在数组中的应用已有了初步展现.同时对于不同类型的指针,相应的运算操作也有不同的数据变化.但是,在指针进行超过数组范围的操作时是非常危险的.</p>
+
+<p> d.指针限定</p>
+
+<p>   我们知道,一个指针可以表示两个实体,即地址值和间仿值.因而,指针本身也分为指针常量和常量指针.</p>
+
+<p>   const int a = 78;</p>
+
+<p>   int b = 10;</p>
+
+<p>   int c = 18;</p>
+
+<p>   const int* ip = &amp;a;                  //const 修饰指向的实体类型 常量指针 无法修改数值</p>
+
+<p>   int<em> const cp = &amp;b;                 //const 修饰指针</em>cp 指针常量 无法修改地址</p>
+
+<p>   int const* dp = &amp;b;                 //同上</p>
+
+<p>   const int *const icp = &amp;c;       //常量指针常量 均无法修改</p>
+
+<p> e.引用</p>
+
+<p>   引用定义为:</p>
+
+<p>   int someInt = 5,anyInt = 8;</p>
+
+<p>   int &amp; rInt = someIne;    //引用的作用类似别名,但值得注意的是, 如果重定义 rInt = anyInt,则rInt地址不变,值变为8,引用与指针的差别也就在于此了.即引用无法更改所引用的地址.通常我们也能使用const int &amp; rInt = someIne使上述语句无法运行.但实体本身的操作someInt = 8同样能达到目的.</p>
+
+<p>   引用的主要作用是进行参数传递,这在后文中将有较为详细深入的介绍.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-04-11T11:44:32+08:00" pubdate data-updated="true">2008-04-11</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/c-plus-plus-slash-c/'>c++/c</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2008/04/11/C-xue-xi-bi-ji-chong-wen-ji-hua-zhi-wu//posts/23/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -3734,207 +3897,6 @@ int main(int argc, char *argv[])
 
 	
 		<span class="comments"><a href="/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-er//posts/23/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-yi/">
-		
-			Visual C++动态链接库编程（一）</a>
-	</h2>
-	<div class="entry-content">
-		<p> 最近在网上闲逛，一是为了巩固和拓展一下对C/C++的研习，二是大致感受下windows编程原理。当然最近被汇编也搞的比较晕乎，找机会出来透点新鲜空气。</p>
-
-<p> 要说我接触VC的时间很短，仅凭一两个工程实例和一本本科阶段教材恐怕也是微不足道。下面这篇文章就是对书本之外相当不错的补充，当然此类书籍绝不缺少字纸版本。只不过，文章作者宋宝华老师所展现给我们的，却不比任何动辄数百页的书商们逊色。</p>
-
-<p> 　　<strong>1.概论</strong></p>
-
-<p>　　先来阐述一下DLL(Dynamic Linkable Library)的概念，你可以简单的把DLL看成一种仓库，它提供给你一些可以直接拿来用的变量、函数或类。在仓库的发展史上经历了“无库－静态链接库－动态链接库”的时代。静态链接库与动态链接库都是共享代码的方式，如果采用静态链接库，则无论你愿不愿意，lib中的指令都被直接包含在最终生成的EXE文件中了。但是若使用DLL，该DLL不必被包含在最终EXE文件中，EXE文件执行时可以“动态”地引用和卸载这个与EXE独立的DLL文件。静态链接库和动态链接库的另外一个区别在于静态链接库中不能再包含其他的动态链接库或者静态库，而在动态链接库中还可以再包含其他的动态或静态链接库。</p>
-
-<p>  对动态链接库，我们还需建立如下概念：</p>
-
-<p>　　（1）DLL 的编制与具体的编程语言及编译器无关</p>
-
-<p>　　只要遵循约定的DLL接口规范和调用方式，用各种语言编写的DLL都可以相互调用。譬如Windows提供的系统DLL（其中包括了Windows的API），在任何开发环境中都能被调用，不在乎其是Visual Basic、Visual C++还是Delphi。</p>
-
-<p>　　（2）动态链接库随处可见</p>
-
-<p>　　我们在Windows目录下的system32文件夹中会看到kernel32.dll、user32.dll和gdi32.dll，windows的大多数API都包含在这些DLL中。kernel32.dll中的函数主要处理内存管理和进程调度；user32.dll中的函数主要控制用户界面；gdi32.dll中的函数则负责图形方面的操作。</p>
-
-<p>　　一般的<a target="_blank" href="http://dev.yesky.com/" class="bluekey">程序</a>员都用过类似MessageBox的函数，其实它就包含在user32.dll这个动态链接库中。由此可见DLL对我们来说其实并不陌生。</p>
-
-<p>　　(3)VC动态链接库的分类</p>
-
-<p>　　Visual C++支持三种DLL，它们分别是Non-MFC DLL（非MFC动态库）、MFC Regular DLL（MFC规则DLL）、MFC Extension DLL（MFC扩展DLL）。</p>
-
-<p>　　非MFC动态库不采用MFC类库结构，其导出函数为标准的C接口，能被非MFC或MFC编写的应用程序所调用；MFC规则DLL 包含一个继承自CWinApp的类，但其无消息循环；MFC扩展DLL采用MFC的动态链接版本创建，它只能被用MFC类库所编写的应用程序所调用。</p>
-
-<p>　　由于本文篇幅较长，内容较多，势必需要先对阅读本文的有关事项进行说明，下面以问答形式给出。</p>
-
-<p>　　问：本文主要讲解什么内容？</p>
-
-<p>　　答：本文详细介绍了DLL编程的方方面面，努力学完本文应可以对DLL有较全面的掌握，并能编写大多数DLL程序。</p>
-
-<p>　　问：如何看本文？</p>
-
-<p>　　答：本文每一个主题的讲解都附带了源代码例程，可以随文下载（每个工程都经WINRAR压缩）。所有这些例程都由笔者编写并在VC++6.0中调试通过。</p>
-
-<p>　　当然看懂本文不是读者的最终目的，读者应亲自动手实践才能真正掌握DLL的奥妙。</p>
-
-<p>　　问：学习本文需要什么样的基础知识？</p>
-
-<p>　　答：如果你掌握了C，并大致掌握了C++，了解一点MFC的知识，就可以轻松地看懂本文。</p>
-
-<p>　<strong>　2.静态链接库</strong></p>
-
-<p>　　对静态链接库的讲解不是本文的重点，但是在具体讲解DLL之前，通过一个静态链接库的例子可以快速地帮助我们建立“库”的概念。</p>
-
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/6v58bw881n81.jpg" />
-图1 建立一个静态链接库</td>
-</tr>
-</table>
-
-
-<p>　　如图1，在VC++6.0中new一个名称为libTest的static library工程（单击此处下载本工程），并新建lib.h和lib.cpp两个文件，lib.h和lib.cpp的源代码如下：</p>
-
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>//文件：lib.h
-
-#ifndef LIB_H
-#define LIB_H
-extern &#8220;C&#8221; int add(int x,int y);　　　//声明为C编译、连接方式的外部函数
-#endif
-
-//文件：lib.cpp
-
-#include &#8220;lib.h&#8221;
-int add(int x,int y)
-{
-　return x + y;
-}</td>
-</tr>
-</table>
-
-
-<p>　　编译这个工程就得到了一个.lib文件，这个文件就是一个函数库，它提供了add的功能。将头文件和.lib文件提交给用户后，用户就可以直接使用其中的add函数了。</p>
-
-<p>　　标准Turbo C2.0中的C库函数（我们用来的scanf、printf、memcpy、strcpy等）就来自这种静态库。</p>
-
-<p>　　下面来看看怎么使用这个库，在libTest工程所在的工作区内new一个libCall工程。libCall工程仅包含一个main.cpp文件，它演示了静态链接库的调用方法，其源代码如下：</p>
-
-<table border="1" bgColor="#e3e3e3" align="center" width="90%" borderColor="#cccccc">
-<tr>
-<td>#include &lt;stdio.h&gt;
-#include &#8220;..\lib.h&#8221;
-#pragma comment( lib, &#8220;..&#92;debug&#92;libTest.lib&#8221; ) 　//指定与静态库一起连接
-
-int main(int argc, char* argv[])
-{
-　printf( &#8220;2 + 3 = %d&#8221;, add( 2, 3 ) );
-}</td>
-</tr>
-</table>
-
-
-<p>　　静态链接库的调用就是这么简单，或许我们每天都在用，可是我们没有明白这个概念。代码中#pragma comment( lib , &ldquo;..\debug\libTest.lib&rdquo; )的意思是指本文件生成的.obj文件应与libTest.lib一起连接。如果不用#pragma comment指定，则可以直接在VC++中设置，如图2，依次选择tools、options、directories、library files菜单或选项，填入库文件路径。图2中加红圈的部分为我们添加的libTest.lib文件的路径。</p>
-
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/rcw6s5cz52wb.jpg" />
-图2 在VC中设置库文件路径</td>
-</tr>
-</table>
-
-
-<p>　　这个静态链接库的例子至少让我们明白了库函数是怎么回事，它们是哪来的。我们现在有下列模糊认识了：</p>
-
-<p>　　（1）库不是个怪物，编写库的程序和编写一般的程序区别不大，只是库不能单独执行；</p>
-
-<p>　　（2）库提供一些可以给别的程序调用的东东，别的程序要调用它必须以某种方式指明它要调用之。</p>
-
-<p>　　以上从静态链接库分析而得到的对库的懵懂概念可以直接引申到动态链接库中，动态链接库与静态链接库在编写和调用上的不同体现在库的外部接口定义及调用方式略有差异。</p>
-
-<p><strong>3.库的调试与查看</p>
-
-<p></strong>　　在具体进入各类DLL的详细阐述之前，有必要对库文件的调试与查看方法进行一下介绍，因为从下一节开始我们将面对大量的例子工程。</p>
-
-<p>　　由于库文件不能单独执行，因而在按下F5（开始debug模式执行）或CTRL+F5（运行）执行时，其弹出如图3所示的对话框，要求用户输入可执行文件的路径来启动库函数的执行。这个时候我们输入要调用该库的EXE文件的路径就可以对库进行调试了，其调试技巧与一般应用工程的调试一样。</p>
-
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/xupwa5a7t93h.jpg" />
-图3 库的调试与“运行”</td>
-</tr>
-</table>
-
-
-<p>　　通常有比上述做法更好的调试途径，那就是将库工程和应用工程（调用库的工程）放置在同一VC工作区，只对应用工程进行调试，在应用工程调用库中函数的语句处设置断点，执行后按下F11，这样就单步进入了库中的函数。第2节中的libTest和libCall工程就放在了同一工作区，其工程结构如图4所示。</p>
-
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/lv690b4m255y.jpg" />
-图4　把库工程和调用库的工程放入同一工作区进行调试</td>
-</tr>
-</table>
-
-
-<p>　　上述调试方法对静态链接库和动态链接库而言是一致的。所以本文提供下载的所有源代码中都包含了库工程和调用库的工程，这二者都被包含在一个工作区内，这是笔者提供这种打包下载的用意所在。</p>
-
-<p>　　动态链接库中的导出接口可以使用Visual C++的Depends工具进行查看，让我们用Depends打开系统目录中的user32.dll，看到了吧？红圈内的就是几个版本的MessageBox了！原来它真的在这里啊，原来它就在这里啊！</p>
-
-<table border="0" align="center" width="90%">
-<tr>
-<td>
-<p align="center"><img border="0" src="http://dev.yesky.com/imagelist/05/10/4q1kv1nrlhov.jpg" />
-图5　用Depends查看DLL</td>
-</tr>
-</table>
-
-
-<p>　　当然Depends工具也可以显示DLL的层次结构，若用它打开一个可执行文件则可以看出这个可执行文件调用了哪些DLL。</p>
-
-<p>　　好，让我们正式进入动态链接库的世界，先来看看最一般的DLL，即非MFC DLL。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-04-05T14:44:45+08:00" pubdate data-updated="true">2008-04-05</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/zhuan-zai/'>转载</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2008/04/05/visual-Visual-C-dong-tai-lian-jie-ku-bian-cheng-yi//posts/23/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
