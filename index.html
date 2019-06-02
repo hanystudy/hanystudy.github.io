@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="设计诊断 设计诊断(Design diagnosis)是指获取、分析、检测软件设计及其质量的活动。经济利益是驱动软件设计诊断的重要原因之一，特别是对于具有重要价值的软件设施来说，尽早发现并解决设计中存在的问题是十分必要的。然而一直以来软件设计都被认为是难以度量和评价。 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="敏捷软件设计 早期的软件开发方法源自传统制造业和建筑业，即按照需求、分析、设计、开发、测试、运营等阶段顺序执行。这种线性的软件开发过程被称作瀑布模型(Waterfall)。瀑布模型在上世纪70年代逐渐发展成熟，成为软件开发方法的事实标准。随着互联网的出现，软件工业迈入飞速发展， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,171 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2019/06/01/software-design-and-architecture-notes-14/">
+		
+			软件设计与架构笔记(14)</a>
+	</h2>
+	<div class="entry-content">
+		<h2>敏捷软件设计</h2>
+
+<p>早期的软件开发方法源自传统制造业和建筑业，即按照需求、分析、设计、开发、测试、运营等阶段顺序执行。这种线性的软件开发过程被称作<strong>瀑布模型</strong>(Waterfall)。瀑布模型在上世纪70年代逐渐发展成熟，成为软件开发方法的事实标准。随着互联网的出现，软件工业迈入飞速发展，频繁变更的需求和快速更替的技术使瀑布模型遭遇了空前挑战。于是，通过从先进制造业汲取经验，行业一线的职业程序员们开始调整原有方法，90年代先后诞生了<strong>统一过程</strong>(Unified process)、<strong>Scrum</strong>、<strong>极限编程</strong>(Extreme programming)等轻量级软件开发方法。2001年，程序员们从这些方法的核心思想中提炼出了著名的<strong>敏捷宣言</strong>，由此敏捷成为前述一系列软件开发方法的代名词。时至今日，对于需求明确并且依赖成熟技术的软件开发活动来说，严谨且可靠的瀑布模型仍然占有一席之地。敏捷思想则在自互联网时代开启的一系列新兴领域中更受欢迎，也更具备发展空间。</p>
+
+<p>敏捷对软件设计产生了重大影响，正如Martin Fowler所指出的，极限编程不仅宣告了Big Design Up Front的终结，还严重影响了一批热门的技术实践例如UML、框架构建、设计模式[MFL00]。然而软件设计并未因敏捷而消失，敏捷也不意味着无设计或设计灾难，为了与传统瀑布模型的<strong>计划设计</strong>(Planned design)进行区别，敏捷设计被描述为<strong>演进式设计</strong>(Evolutionary design)、<strong>持续设计</strong>(Continuous design)或<strong>浮现式设计</strong>(Emergent design)，或许这些名词有时夹带了浓厚的宣传意味，但是不可否认分析与设计、原则与模式依然是敏捷软件设计的核心，后者的主要特点在于更加强调轻量化的敏捷设计实践。这往往意味着:</p>
+
+<ul>
+<li><p>强调价值交付，交付价值是推动整个软件工业发展的重要经济基础，因此价值应当始终是软件开发的优先选项。</p></li>
+<li><p>强调团队责任，而不是把职责局限于分析师、设计师、XX师等不同工种，从而减少<strong>单点失败</strong>(Single point failure)。</p></li>
+<li><p>强调快速反馈，无论是测试驱动开发还是持续集成，通过尽可能的自动化实现软件设计质量的实时监控，且应保证快速响应。</p></li>
+</ul>
+
+
+<p>具备代表性的实践有面向设计一致性的<a href="http://www.hanyi.name/blog/2019/04/23/software-design-and-architecture-notes-12/"><strong>代码味道</strong></a>和<strong>重构</strong>、面向功能一致性的<strong>测试驱动开发</strong>(Test driven development)以及面向团队一致性的<strong>结对编程</strong>(Pair programming)、<strong>代码评审</strong>(Code review)和<strong>持续集成</strong>(Continuous integration)等。敏捷正是通过前述一系列实践，从而避免从BDUF走向另一个设计熵增的极端。本文剩余部分将进一步讨论价值交付、团队责任和快速反馈在敏捷软件设计活动中的具体体现。</p>
+
+<h3>价值交付：扩展—收缩模式(Expand-Contract Pattern)</h3>
+
+<p>应对变化是敏捷软件设计的永恒主题。当现有设计发生变化时，这种变化可能通过接口向模块外传递，从而影响更多其它模块。特别对于<a href="https://martinfowler.com/bliki/PublishedInterface.html">公共接口</a>来说，变更现有设计会产生较高成本，进而影响交付的价值。[MFL14]讨论了一种扩展—收缩模式，其核心思想是在变更设计的同时保持向后兼容，当新设计产生的价值得到验证后再移除旧设计。例如下列代码:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class WindowFactory {
+</span><span class='line'>
+</span><span class='line'>    public Window createWindow(String title, int x, int y, int width, int height) {
+</span><span class='line'>        ...
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该例中的抽象工厂类WindowFactory能够创建不同类型的Window，参数列表接受窗口名、位置和尺寸等信息，其中位置和尺寸能够使用Rect对象代替，从而有:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class WindowFactory {
+</span><span class='line'>
+</span><span class='line'>    public Window createWindow(String title, Rect rect) {
+</span><span class='line'>        ...
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果该接口属于公共接口，那么所有客户端组件都必须被动修改，否则将无法正常工作。更加合理的做法是首先保留原接口(<strong>扩展</strong>):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class WindowFactory {
+</span><span class='line'>
+</span><span class='line'>    public Window createWindow(String title, int x, int y, int width, int height) {
+</span><span class='line'>        ...
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    public Window createWindow(String title, Rect rect) {
+</span><span class='line'>        ...
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当客户端组件迁移完成后，再移除失效的接口(<strong>收缩</strong>)。通过采用扩展—收缩模式，能够有效控制设计变更对交付价值的影响，这也是敏捷软件设计的核心目标之一。</p>
+
+<p>同样的模式还被应用于演进式数据库设计[MFL16]，特别是当数据模式发生破坏性修改时(修改表名、列名等操作)，需要保证在迁移阶段同时支持新旧两种数据访问模式。例如当修改表名时，可以通过创建与旧表名相同的视图提供向后支持。当设计需要修改列名时，可以先创建新的列，然后通过触发器实现新旧两列的同步，直至迁移阶段结束再清理旧模式。在真实场景中应根据数据库类型、应用类型等相关上下文决定具体实现，但设计思想仍然遵循扩展—收缩模式。</p>
+
+<h3>团队责任：模型风暴(Model Storming)</h3>
+
+<p>模型风暴是一种即时建模活动，其目的是把设计责任赋予团队而非个人。理论上说模型风暴可以发生在敏捷软件开发过程的任何时间，但通常是由一名用户故事的所有者(Story owner)在进入开发阶段前发起。首先由所有者确保理解所要解决的问题，然后集合若干团队成员(通常是2~3人)进行站立会议(Stand session)。在所有者介绍完背景并确保所有人理解上下文后，团队开始在一个共享建模工具上探索设计方案，直至大家充分理解并达成一致，会议结束(通常是5~10分钟)。</p>
+
+<p>模型风暴有两种应用场景——分析和设计。分析模型风暴主要是帮助团队理解需求，这时应尽可能集合相关干系人(产品负责人、业务分析师、设计师、质量分析师和开发等)，然后通过绘制草图帮助所有人理解原始需求，并澄清相关问题。这一阶段的关键在于鼓励各种干系人参与建模过程，于是应尽量采用包容性建模(Inclusive modeling)及相关工具，避免过度专业和复杂的工具应用，从而促进沟通。常见的包容性工具有白板、索引卡、便利贴、白板纸等。</p>
+
+<p>设计模型风暴是在编写代码前由若干开发人员共同完成的设计活动。根据开发人员的技术背景，建模过程可以采用<a href="http://www.hanyi.name/blog/2019/02/06/software-design-and-architecture-notes-8/">UML</a>、<a href="http://www.hanyi.name/blog/2019/02/11/software-design-and-architecture-notes-9/">类职责协作卡</a>(CRC)、<a href="http://www.hanyi.name/blog/2018/10/23/software-design-and-architecture-notes-5/">数据流程图</a>或一般流程图等包容性工具。具体过程可以参考<a href="http://www.hanyi.name/blog/2019/02/11/software-design-and-architecture-notes-9/">前文</a>介绍的CRC及其在协作式OOD中的应用。</p>
+
+<p>模型风暴能够促进设计知识在团队中进行传递，从而有效控制软件设计的单点失败风险。</p>
+
+<h3>快速反馈：设计监测(Design Monitoring)</h3>
+
+<p>快速反馈主要是指能够快速验证当前设计的完整性，并在发现设计缺陷时提供警报，这往往需要依赖专业面向软件设计的静态代码分析工具来完成。通常的做法是把相关工具集成进现有的持续集成过程，并作为某种质量检测报告输出，从而实现设计监测。设计监测工具主要通过分析软件结构中的依赖热点(Hotspot)进行，一般有两种途径分析这些热点——<strong>度量</strong>和<strong>模式</strong>。</p>
+
+<p>度量是通过对软件结构中的实体及其依赖关系进行量化分析，从而反映软件模块化的程度。一种可量化的设计原则是<a href="http://www.hanyi.name/blog/2019/04/23/software-design-and-architecture-notes-12/">包依赖原则</a>，在此基础上的经典Java开源实现即JDepend(现基本停止维护)，该工具以Java语言的包为单位，分别计算每个包的类数量(TC)、具体类数量(CC)、抽象类数量(AC)、传入耦合(Ca)、传出耦合(Ce)、抽象系数(A)、不稳定性(I)、偏离距离(D)，每种度量的具体定义本文不再赘述。</p>
+
+<p>模式主要是指检测依赖中的反模式，后者主要是违反设计原则的实际情况，例如违反包间无环依赖，接口隔离、Liskov替换、依赖倒置等。具体做法是把软件设计中的依赖关系用图表示，然后检测图中存在的违反设计原则的特定模式(Motif)，经典开源实现即Google的<a href="https://code.google.com/archive/p/gueryframework/">GUERY</a>(停止维护)。该工具能够根据图中的顶点、关系及其路径长度等条件识别特定模式，并且根据Tarjan算法计算强联通子图进而生成凝聚图。</p>
+
+<p>免费工具除前述外，还有针对Java程序的依赖抽取和可视化工具<a href="http://www.dependency-analyzer.org/">Class Dependency Analyzer(CDA)</a>，CDA能够把相关依赖以UML的形式进行可视化，帮助用户理解并管理复杂软件结构。专业用于依赖分析的商业工具有<a href="http://www.lattix.com/">Lattix</a>、<a href="http://www.hello2morrow.com/products/sonargraph">SonarGraph</a>、<a href="http://www.headwaysoftware.com/products/?code=Structure101">Structure 101</a>、<a href="https://www.jarchitect.com/">JArchitect</a>/<a href="https://www.ndepend.com/">NDepend</a>/<a href="https://www.cppdepend.com/">CppDepend</a>等，本文不再赘述。</p>
+
+<p>值得一提的是，面向软件设计领域无论是免费还是商业工具，尽管其内置的设计规则具有普遍性，同时也支持自定义规则，但通常都存在较高的学习、维护和实施成本，实际上并不能真正达到快速反馈的目的。对处于一线的中小型敏捷团队来说过重，更适用于一些已经具备较高价值的商业软件开发和大型软件组织的架构看护活动。</p>
+
+<p><a href="https://www.archunit.org">ArchUnit</a>是一个基于Java语言的开源依赖检查框架，用户通过编写测试断言的形式约束软件结构依赖，并且通过现有单元测试框架如Junit实现自动运行。与前面提到的主流第三方工具相比，该工具也定义了一些具有普遍意义的依赖规则，同时还具有如下优势:</p>
+
+<ul>
+<li><p>直接采用原生语言并作为宿主的测试实现，支持包、类、注解、分层、分片等多种概念实体，使定义复杂的Java代码依赖规则更加容易。</p></li>
+<li><p>采用单元测试的思路，使依赖规则能够更快响应软件结构变化，降低规则维护的成本，真正实现快速反馈。</p></li>
+<li><p>允许开发人员结合价值交付、团队责任等灵活定制依赖规则，特别适用于敏捷软件设计的场景。</p></li>
+</ul>
+
+
+<p>该工具的缺点是无法向多数GUI工具那样支持依赖分析，内置规则也不如成熟商业工具丰富，因此要求开发人员深入理解设计原则，并能够结合上下文定制恰当的规则。</p>
+
+<h2>结论</h2>
+
+<p>在一般的敏捷宣传语言中，诸如<strong>大道至简</strong>(You Aren&rsquo;t Gonna Need It，YAGNI)和<strong>恰如其分</strong>(Just enough)等词汇往往被使用且被轻易误解。原因在于脱离了具体的实践，敏捷就只剩下一个以人为本的空壳，并不能反映出源自核心的根本经济动力。因此无论是从软件匠艺(Craftsmanship)还是专业主义(Professionalism)来看，敏捷对开发人员的要求都要更高。反映在软件设计领域，具体就是除了基本的分析和设计方法、原则和模式等知识外，进一步注重软件设计中的价值交付、团队责任以及快速反馈等实践。</p>
+
+<h2>引用</h2>
+
+<p>MFL00, <a href="https://martinfowler.com/articles/designDead.html">Is Design Dead?
+</a></p>
+
+<p>MFL14, <a href="https://martinfowler.com/bliki/ParallelChange.html">Parallel Change</a></p>
+
+<p>MFL16, <a href="https://martinfowler.com/articles/evodb.html">Evolutionary Database Design</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2019-06-01T23:31:49-04:00" pubdate data-updated="true">2019-06-01</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2019/06/01/software-design-and-architecture-notes-14//index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -2639,185 +2804,6 @@ Object-Oriented Thinking</a></p>
 
 	
 		<span class="comments"><a href="/blog/2018/10/23/software-design-and-architecture-notes-5//index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2018/10/12/software-design-and-architecture-notes-4/">
-		
-			软件设计与架构笔记(4)</a>
-	</h2>
-	<div class="entry-content">
-		<h2>结构化分析与设计方法(Structured Analysis and Design Methods)</h2>
-
-<p>除了指导<a href="http://www.hanyi.name/blog/2018/09/25/software-design-and-architecture-notes-2/">程序设计</a>，结构化方法还被广泛应用于系统分析和设计领域，成为软件设计方法论的开端。从时间轴来看，从结构化编程到结构化程序设计，再到软件的结构化设计和分析，软件设计的方法论是从底向上发展的，其根本推动力是日益增加的系统复杂性。</p>
-
-<h3>结构化设计(Structured Design)</h3>
-
-<p>1974年，Larry Constantine等提出了一系列通过降低系统复杂性，从而提高编码、调试、修改等工作效率的软件设计思想，并将其统一命名为结构化设计[SMC74]。通用的结构化设计思想包括<strong>简洁性</strong>和<strong>可观测性</strong>，其中，简洁性作为衡量和评估设计方案的主要度量指标，体现在分割后的系统模块间具有设计、开发、更正、修改的独立性；可观测性则体现了软件易被感知功能和原理的能力。尽管系统分割具有良好的工程意义，但其引起的模块间重叠部分代码以及相互关系反而可能会增加复杂性。前文我们已经介绍了信息隐藏这一重要的模块化概念，结构化设计则提出了一个更具实践意义的设计指标：<strong>耦合(coupling)</strong>。</p>
-
-<h4>耦合</h4>
-
-<p>通常情况下，更少或更简洁的模块间连接就意味着更好的可理解性，同时变更或出错所引起的模块间传递也会受到抑制。系统复杂度不仅体现在模块间的连接数量，更体现在每个连接所承担的关联强度，这种强度的度量被称作<strong>耦合度</strong>。强耦合意味着高复杂度，造成模块难以被理解、修改和更正的后果。因此，软件设计可以通过建立模块间的弱耦合降低系统复杂度。</p>
-
-<p>一个特定连接产生的耦合度是一个包含多重因子的函数，这些因子包括连接复杂度、连接指向模块自身亦或其内部、连接所发送或接收的内容等，Larry将其归纳为三个主要的耦合因子：接口复杂度、连接类型和通信类型。耦合度受这三个因子的变化规律如下表所示：</p>
-
-<table>
-<thead>
-<tr>
-<th style="text-align:center;">Coupling</th>
-<th style="text-align:center;">Interface complexity</th>
-<th style="text-align:center;">Type of connection  </th>
-<th style="text-align:center;">Type of communication</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center;">Low     </td>
-<td style="text-align:center;">simple,obvious      </td>
-<td style="text-align:center;">to module by name   </td>
-<td style="text-align:center;">data                 </td>
-</tr>
-<tr>
-<td style="text-align:center;">        </td>
-<td style="text-align:center;">                    </td>
-<td style="text-align:center;">                    </td>
-<td style="text-align:center;">control              </td>
-</tr>
-<tr>
-<td style="text-align:center;">High    </td>
-<td style="text-align:center;">complicated,obscure </td>
-<td style="text-align:center;">to internal elements</td>
-<td style="text-align:center;">hybrid               </td>
-</tr>
-</tbody>
-</table>
-
-
-<p>Larry认为，弱耦合应具有接口简单直观，只通过名字引用其它模块，以及尽量仅通过数据进行通信等特征，反之则会增加耦合度。具体来说：</p>
-
-<ol>
-<li><p>接口复杂度，指模块间接口是否能清晰地表述连接，而不是包含了过多的信息导致难以理解。特别当多个模块通过共享一个公共环境(common environment)实现交互时，该公共环境中任意元素的增加都可能会导致系统整体复杂度的显著提升。例如在M个对象中，存在M(M-1)对相互关系，假设这些对象之间的公共环境包含N个元素，那么就有NM(M-1)对一阶关系，亦即变更或错误传递的可能路径数量。可见接口复杂度对系统整体复杂度的显著影响。</p></li>
-<li><p>连接类型，指模块间相互关联的形式，例如仅通过模块名字进行关联，还是进一步引用了模块内部的元素。在后一种情况下，该模块内部的修改很可能传递至其它依赖它的模块，导致潜在的复杂度增加。</p></li>
-<li><p>通信类型，指模块间通信内容的形式。对于系统中任何有效模块，其或者通过传递数据实现通信，或者通过被“控制”进行某项任务。显然，仅通过数据实现通信的接口更易被理解，而控制类型的通信使模块功能难以被直观理解。</p></li>
-</ol>
-
-
-<p>实现<strong>弱耦合</strong>的途径不一，一个方向是尽量降低元素间关系发生在不同模块间的可能，简单来说就是最小化模块间的关联，并且保证元素间关系只发生在相同模块内部。为了验证元素间关系是否都存在于模块内，Larry同时给出了一个描述模块内部元素间相互绑定程度的指标：<strong>内聚(Cohesiveness)</strong>。</p>
-
-<h4>内聚</h4>
-
-<p>由前述可知，实现内部高度绑定的模块，就能够达到降低耦合的目标，即模块自身的强内聚性。一般而言，对模块内聚程度的描述可以被划分成如下六个层级（由弱到强的非线性关系）：</p>
-
-<ol>
-<li><p>巧合的(Coincidental)。例如元素通过某种模块化方法被“无意间”划分到某个共同模块中，或者某个模块的创建仅仅是为了消除重复代码。在这种情况下，模块极易因为变更而变得“不可重用”，因此这类绑定只是发生于巧合之中。</p></li>
-<li><p>逻辑的(Logical)。这种关系通常隐含了某种逻辑联系，例如负责程序中所有输入输出的模块，或者负责操作所有数据的模块。其问题在于，以此类关系实现的模块易存在内部元素间的相互缠绕，从而降低元素间的独立性，同时也会导致模块接口的复杂性增加。</p></li>
-<li><p>一时的(Temporal)。该关系建立在逻辑层面的关系基础上，同时元素间还存在某种时间上的一致性。例如程序的初始化、终止、清理等阶段的操作，其元素间存在一定的功能逻辑，同时也常一起发生。尽管如此，这种关系依然存在于逻辑层面类似的缺陷。</p></li>
-<li><p>通信的(Communicational)。元素间通过相同输入/输出数据集合的引用进行关联，例如“打印”和“装订”文件，显示出更强的绑定关系。</p></li>
-<li><p>连续的(Sequential)。如果某个元素的输出恰好是另一个元素的输入，即意味着目标问题可以通过简单流程图进行描述和解决，那么其存在连续的强绑定关系。但需要注意，这种过程式处理会导致该模块独立于程序的其它功能部分，从而使其难以被其它系统模块复用。这也是连续层面与进一步功能层面关系所导致的内聚度存在较大差距的原因。</p></li>
-<li><p>功能的(Functional)。在这种层面的关系下，模块中的元素都与同一个独立功能相关。一种判断某个模块是否为功能层面的绑定的方法是，通过一句话描述该模块功能，然后进行验证：</p>
-
-<ol type="a">
-<li><p>该句是否为复合句，是否包含逗号、多个动词等等，如果是则该模块可能包含连续或通信层面的绑定；</p></li>
-<li><p>如果语句中包含时间相关的词，那么可能存在一时或连续层面的绑定；</p></li>
-<li><p>如果语句中动词的操作对象不是一个特定对象，那么可能存在逻辑层面绑定；</p></li>
-<li><p>如果语句中包含初始化、清理等词，说明可能是一时层面的绑定。</p></li>
-</ol>
-</li>
-</ol>
-
-
-<p>值得注意，元素间可能存在多个上述的关系，而通常我们可以使用其中内聚度表现最高的关系表示整体程度。但是如果模块中没有一组元素的关系表现为功能层面绑定，那么该模块的内聚性就表现较低。</p>
-
-<h4>可预测模块</h4>
-
-<p>模块的可预测性是指当给定相同的输入时，该模块每次被调用所发生的操作也完全相同，亦即独立于环境的特性。不可预测的模块不一定是存在错误的，例如当模块内部维持某种状态，该状态在针对当前模块的操作下会发生不断变化，从而导致返回结果或实际发生操作的不同。这种不可预测的模块在实际应用中经常发生，尽管是无错误的。模块的可预测性，有时也被成为“黑盒性”，使该模块能较容易被清楚地理解，例如通过简单的注释、描述性的名字或者良好定义的接口等方法。</p>
-
-<h3>结构化设计技术</h3>
-
-<p>软件设计过程可以被看作包含一般设计和详细设计两个部分。一般设计的目的在于确定系统需要的函数有哪些(回答what)，详细设计描述如何实现这些函数(回答how)。这些设计阶段需要确定函数标识、函数范围结构的调用参数和调用关系、所关联的模块等信息，并且保证模块能够被独立设计、实现和测试。</p>
-
-<h4>结构图(Structure Chart)</h4>
-
-<p>传统的流程图方法能够描述代码块执行的顺序和条件分支，但是在一般设计阶段，由于我们侧重于了解what，流程图会不可避免地增加设计复杂度。因此这里介绍一种较为简单的结构图用于表述函数及其调用关系。结构图所包含的符号标记如下图所示：</p>
-
-<p><img src="http://content.hanyi.name/images/structured_design/definitions_of_symbols_used_in_structure_charts.png" alt="Definitions of symbols used in structure charts" /></p>
-
-<p>假设某系统设计包含三个模块，分别是A、B和C，其中模块间的关系是A调用B，B调用C；从执行顺序上看，B的代码会首先执行，然后是C，最后是A。那么上述信息可以分别用结构图和流程图表示如下：</p>
-
-<p><img src="http://content.hanyi.name/images/structured_design/structure_chart_vs_flowchart.png" alt="Structure Chart vs Flowchart" /></p>
-
-<p>从上图可以看出，相比于流程图，结构图能够清楚表示模块间关系，并且有潜力进一步描述模块的接口信息，这恰好是在一般程序设计阶段需要进行的工作，流程图就不具有优势。</p>
-
-<h4>基于结构图的软件设计过程</h4>
-
-<p>下面以设计一个较为复杂的模拟输入——处理——输出(Input Process Output, IPO)类型的系统为例，给出一种衍生自结构图、由IBM开发的基于层次输入处理输出(Hierarchical IPO)图的一般设计过程：</p>
-
-<p>Step 1. 根据问题描述，绘出系统大致的功能性草图。本例中模拟系统的大致功能是一个数据输入、处理和输出的过程，其大致可以被描述如下：</p>
-
-<p><img src="http://content.hanyi.name/images/structured_design/rough_structure_of_simulation_system.png" alt="Rough structure of simulation system" /></p>
-
-<p>Step 2. 识别外部的概念数据流，指来源于系统外的、独立于具体物理I/O设备的相关数据流。在本例中，概念数据流包括输入参数、格式化的返回结果等。</p>
-
-<p>Step 3. 识别问题中的主要概念数据流(包括输入和输出)，确定该问题的功能图中的“最高级抽象”节点。对于输入的数据流而言，其抽象节点存在于距离物理输入形态最远，但依然可以视作输入数据的阶段。本例中该节点可能在于构建矩阵阶段。同时，针对输出数据流可以把结果矩阵作为输出的抽象节点，如下图所示。</p>
-
-<p><img src="http://content.hanyi.name/images/structured_design/determining_points_of_highest_abstraction.png" alt="Determining points of highest abstraction" /></p>
-
-<p>Step 4. 根据前面步骤得到的信息，针对每个抽象输入数据节点，使用一个源模块(source module)表示其结构。相应设计对应的入模块(sink module)。通常系统存在一个源和入分支，具体参数依赖问题描述而定，但其通用模式如下图所示。</p>
-
-<p><img src="http://content.hanyi.name/images/structured_design/the_top_level.png" alt="The Top Level" /></p>
-
-<p>在本例中，模块A即系统入口，也就是说模块A的功能意味着整个问题的解决；模块B用于获取主要数据流；模块C用于把主要输入流变换成主要输出流；模块D用于处理主要的输出数据流。</p>
-
-<p>Step 5. 针对源模块，通过识别其中最后一次变换操作，生成当前模块的数据返回形式，然后再识别前一次变换的抽象节点。对于入模块，与源模块相反，通过识别其中第一次处理操作，确认抽象输出节点，直到获取期望的输出形式。基于逐步求精的思想重复步骤5，直到抵达最初的源模块和最后的入模块。构建出的部分结构图如下所示。</p>
-
-<p><img src="http://content.hanyi.name/images/structured_design/lower_levels.png" alt="Lower Levels" /></p>
-
-<p>在这一逐步求精的设计过程中，划分的终止条件因具体问题而异，通用的判断方法之一即前文提到的耦合与内聚等设计思想。</p>
-
-<p>（未完待续）</p>
-
-<h2>结论</h2>
-
-<p>结构化设计的兴起使结构图及其衍生工具成为软件设计领域的重要工具。同时，在软件设计模块化道路上的深入实践也促使许多重要的软件设计思想被提出，诸如耦合、内聚等重要概念被广泛用于指导包括结构化设计及后续的设计方法论，影响至今。</p>
-
-<h2>引用</h2>
-
-<p>SMC74, <a href="https://ieeexplore.ieee.org/document/5388187">Structured design</a></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2018-10-12T15:28:06-04:00" pubdate data-updated="true">2018-10-12</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/architecture/'>architecture</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2018/10/12/software-design-and-architecture-notes-4//index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

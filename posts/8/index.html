@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 本博即将迎来第300篇文章了。重建三年多来我做过多次较大的改动，这一版本无疑是维持较久的（已超过一年时间）。目前觉得对大家有所帮助的还是有关于技术方面的文章，但显然技术需要“交流”才能进步。不过有趣的是本博自诩为“交流频道”，却几乎没有相关交流的内容——这其实与我始终坚守这个独立的小站点有关， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content=" 万恶的项目终于要结题了&hellip;这时无论如何确该总结一下。实际上这次项目最大的收获有两部分，本文仅介绍其中之一—Web开发中的一些安全问题及其解决策略。  项目的安全问题起源于首次测试版本提交。测试方使用了IBM Rational Appscan扫描提交的两部分应用程序， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,124 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/04/17/web-kai-fa-de-ruo-gan-an-quan-wen-ti-xiao-jie/">
+		
+			Web开发的若干安全问题小结</a>
+	</h2>
+	<div class="entry-content">
+		<p> 万恶的项目终于要结题了&hellip;这时无论如何确该总结一下。实际上这次项目最大的收获有两部分，本文仅介绍其中之一—Web开发中的一些安全问题及其解决策略。</p>
+
+<p> 项目的安全问题起源于首次测试版本提交。测试方使用了IBM Rational Appscan扫描提交的两部分应用程序，每个应用程序返回了将近二十个安全问题，具体列表这里先省略。Appscan是IBM旗下知名的web安全自动化测试工具，同类产品中较知名的还有HP的Webinspect。测试方回复的意思是说所有安全问题在项目验收前必须全部解决，而事实上本项目从设计阶段起就没有考虑过应用程序级的安全问题，对方也从未提出过此类要求。不过我们还是尝试先在逻辑上处理部分问题，自测后发现所有问题依然存在，包括众所周知且已有很多解决方案的Injection。</p>
+
+<p> 纠结几日后大家终于决定重构，考虑在重构过程中再应用安全策略，于是又花了几周时间问题才得以基本解决。然而在解决web安全问题的过程中我们查阅了较多资料，由于缺乏经验，网上的许多解决方案基本都是无效的。当然也不能排除测试手段随着新的漏洞出现而加强的可能。这里我们仅就使用Appscan 7.8.0.2 Rules-Update 947的测试报告针对一些常见问题给出相应的解决办法。</p>
+
+<p> 应当注意，目前Web安全领域拥有自己的国际性非盈利组织OWASP（Open Web Application Security Project），大部分Web安全问题的讨论都可以在<a href="https://www.owasp.org/index.php/Main_Page"><a href="https://www.owasp.org/index.php/Main_Page">https://www.owasp.org/index.php/Main_Page</a></a>上找到相应的文章。如果读者对Web安全感兴趣，那么可以直接转向官网，本文接下来只考虑如何让应用程序通过Appscan 7.8的安全测试:)（如果仅仅是服务器或tomcat配置的问题，那么本文将不涉及）</p>
+
+<p> <strong>Injection</strong></p>
+
+<p> SQL盲注问题十分普遍，一般考虑前端+后台验证。我们最初在后台对每个表单进行了关键词检测，然而测试依然不通过，而且仔细查阅资料后发现我们的过滤规则要比一般规则复杂得多，唯一问题在于处理策略不同：我们是直接给出错误提示，而大部分策略是将关键词截断后交付处理。郁闷的是改进后依然不能通过测试。于是开始求助，发现许多专业的JEE开发人员基本都直接使用一种servlet过滤器，项目地址<a href="http://securityfilter.sourceforge.net/"><a href="http://securityfilter.sourceforge.net/">http://securityfilter.sourceforge.net/</a></a>，更神奇的是，配置该过滤器后问题的确不存在了，但是从表单直接进行关键词提交后台依然能收到完整语句，比较奇怪。此外，另一个问题Cross Site Scripting跨站点脚本攻击由于此过滤器的出现也不复存在了。</p>
+
+<p> <strong>Inadequate Account lockout</strong></p>
+
+<p> 不充分的账户封锁，这个问题看起来很简单，就是为了防止黑客暴力破解用户密码。尽管目前大多数站点使用的验证码技术已经足以克服此类问题，但Appscan测试对于验证码确实是无能为力的，因此测试方要求取消应用程序的验证码功能。后来使用了错误次数限制方案，如果某用户登录失败超过若干次，则直接禁止用户再尝试登录，直到申请管理员解封为止。</p>
+
+<p> <strong>Session Identifier Not Updated</strong></p>
+
+<p> 会话标识未更新，Appscan给出的描述是建议用户每次登录时需使用新的会话标识。网上给出了一种很简单的解决方案：</p>
+
+<p>[c] session.invalidate();</p>
+
+<p> Cookie cookie = request.getCookies()[0];</p>
+
+<p> cookie.setMaxAge(0);[/c]</p>
+
+<p> 上述代码是解决问题的核心，但不会使用照样无法解决任何问题。我们最终的解决方法是限制每次停留在登录页上的时间，如果超时提交登录则返回页面更新session后要求重新登录。另外，对于任何登录失败、用户注销、意外退出等情况都要彻底清除一遍sessionid。最后为了彻底解决这一问题，每次用户进入login页面后先检查sessionid是否更新，否则跳至过渡页清空sessionid后再返回login，问题解决。</p>
+
+<p> <strong>Unencrypted Login Request</strong></p>
+
+<p> 已解密的登录请求，要求就是数据加密传输。开始想当然地编写了一种简单的前端加密算法，再从后台进行解密，然而Appscan依然报此错（现在感觉是测试软件本身的问题，最后再谈）。于是决定转https，JEE平台转https的通行步骤如下：使用java keytool生成RSA密钥，打开tomcat的8443端口，并配置相应密钥即可，具体步骤网上很多，GOOGLE即可。更麻烦的问题随之而来，测试方认为尽管提供了8443的https访问，但仍然还可以通过8080使用普通的http访问，并要求禁止普通模式登录。</p>
+
+<p> 但是由于要把8080端口提供给项目的WebService组件，不太可能完全禁掉。这里在项目web.xml里添加了一些配置解决：</p>
+
+<p>[c]&lt;security-constraint&gt;</p>
+
+<p>&lt;!&ndash; Authorization setting for SSL &ndash;&gt;</p>
+
+<p>&lt;web-resource-collection &gt;</p>
+
+<p>&lt;web-resource-name &gt;SSL&lt;/web-resource-name&gt;</p>
+
+<p>&lt;url-pattern&gt;*.jsp&lt;/url-pattern&gt;</p>
+
+<p>&lt;url-pattern&gt;*.action&lt;/url-pattern&gt;</p>
+
+<p>&lt;/web-resource-collection&gt;</p>
+
+<p>&lt;user-data-constraint&gt;</p>
+
+<p>&lt;transport-guarantee&gt;CONFIDENTIAL&lt;/transport-guarantee&gt;</p>
+
+<p>&lt;/user-data-constraint&gt;</p>
+
+<p>&lt;/security-constraint&gt;</p>
+
+<p>&lt;login-config&gt;</p>
+
+<p>&lt;!&ndash; Authorization setting for SSL &ndash;&gt;</p>
+
+<p>&lt;auth-method&gt;CLIENT-CERT&lt;/auth-method&gt;</p>
+
+<p>&lt;realm-name&gt;Client Cert Users-only Area&lt;/realm-name&gt;</p>
+
+<p>&lt;/login-config&gt;[/c]</p>
+
+<p> 应注意，由于项目的一些组件无法通过https，因此url-pattern字段只对.jsp和.action进行了限制，如果不做特定限制，则系统默认是全部使用https传输。而且上述设置一旦在某个工程中出现，那么当前tomcat将全局采用这一配置。（这是实验结果，目前不评价其合理性）</p>
+
+<p> <strong>Cross-site request forgery</strong></p>
+
+<p> 跨站点请求伪造，网上研究文章一大堆，同时也是OWASP 2010 TOP 10级别。问题是很久都无法根本解决，经过两周研究后终于得以通过Appscan的CSRF检测。其实基本思路很简单，即在用户的提交的表单中加入一个隐藏域，存储一个唯一验证标识码：如sessionid。用户提交表单后由后台首先验证sessionid与提交标识是否一致，否则报错。</p>
+
+<p> 然而要过Appscan的检测还是不太容易。首先是针对所有action的sessionid验证标识码检查，例如login，如果在session中始终保留一个标识，那么可能会报Session Identifier Not Updated错，解决方法是在登录成功后修改一下验证标识码。其实许多无法彻底解决的原因在于报错处理，起初我们将此类错误全部统一转向了一个安全报错页面，后来始终都无法解决这一问题。后来发现如果将错误情况转至首页则Appscan就不会报错，这可能是一个软件特征匹配的bug。</p>
+
+<p> 除此之外，包括许多tomcat的配置问题这里就不再一一说明了。本次项目所引出的web安全问题确实需要得到重视，然而我们也应看到，过渡迷信流行的自动化测试工具可能会导致在某些问题上缘木求鱼，尤其是对于Appscan这种判断防御行为的复杂软件，仅靠有限的规则设置就当做是web安全的唯一标准——这也并非是聪明人的选择。</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-17T00:59:26+08:00" pubdate data-updated="true">2011-04-17</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/web/'>web</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2011/04/17/web-kai-fa-de-ruo-gan-an-quan-wen-ti-xiao-jie//posts/8/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -738,72 +856,6 @@ const char* string = &quot;mp77的技术交流频道&quot;;
 
 	
 		<span class="comments"><a href="/blog/2011/02/11/Qt-de-ming-yun//posts/8/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/02/02/2010-nian-zhong-zong-jie-ji-hanyi-name-chong-jian-san-nian-ji-nian/">
-		
-			2010年终总结暨hanyi.name重建三年纪念暨&#8230;&#8230;</a>
-	</h2>
-	<div class="entry-content">
-		<p>本博并非是什么牛博。</p>
-
-<p>从2010年5月初百度统计上线ip数据至2010年12月31日，有效访问ip也仅2003个，且相信其中相当一部分流量来源于本人。此外，去年明显对此博怠慢许多，全年文章数竟还不到40篇，其中纯粹的技术类更是寥寥&hellip;&hellip;究其原因，恐怕是心有余而力不足，本文从抬笔到发布也整整磨蹭了一周时间。</p>
-
-<p>我自小就懒，主要是懒得动，中学以前就退而求其次喜爱上画画，然而画作没有丝毫技术含量，也基本没人能看得懂。不想后来导致钢笔字惨不忍睹，人称“狗爬体”——于是小学师傅劝家里送我去学书法。谁知这玩意技术含量颇高，课堂作品往往又被人称作“骨头体”——人看了不适狗看了兴奋，就无奈放弃了。然而这次小经历让我认识了颜公真卿和他的颜勤礼碑，以及笔墨宣纸等物，好不风雅!后来一次随家人出游，沿着溪边摸到一碗鹅卵石，寻思着揣回去做砚台用（后来想想可能还真不如墨盒实用），用旧报纸包了回家藏好，可惜很快还是被主人家当做垃圾清理了。</p>
-
-<p>大概十年前，我的初中语文老师教我养成了写文章的嗜好，每周一至两篇，题目体裁不限，大概每节课前要众同学轮流上去宣读自己的文章。然而真正自己写文章的并不多，坚持每次都自己写的就更少，我向来不喜去抄别人的文章：名作太长且不易蒙混过关，其余作者大家水平都是一般，何必互相抄来抄去呢——于是就慢慢习惯了。 记得当时我在那小册子上也是无所不写，下至童话短篇，上至新闻政治，无所不包。后来因此事必躬亲遭人讥讽，遂题名“孤芳自赏集”聊以自慰。有幸在台上宣读了两篇，直捣得众人时而笑得前仰后合，连绵不绝，整整占去了半节课的光景，教师也毫不在意。不幸的是这两本小册子在上次搬家时不知所踪，四年前突闻启蒙师长英年早逝，实在令人惋惜， 然而写文章的习惯就自此保留至今了。</p>
-
-<p>惭愧的是，自2007年底至今的三年多时间里，本博共发布的文章尚不足三百篇，且不少还是所谓的“纯技术类”。这与我2008年决定真正从事计算机，并决定读研是有关系的：试想我与“高档”计算机“共事”也有十二、三年，接触带个芯片就能做字处理的机器就更久了，然而竟从来不能真正令其思己所想，做己所作，纵然“人机”相识也已近七十年，在各个领域离各路专家宣扬的“和谐共生”也还差得极远。换句话说，这领域尚有如此多的文章可做，何愁今后没有文章可写呢？</p>
-
-<p>如果在此概括的话，2010年确是荒废之年。那么2010年荒废在何处呢？</p>
-
-<p>首先是年初面临研究生入学考试，这一折腾至少要到5月份才逐渐平息，实在是没有必要且浪费时间（当然也有到二月底就长痛不如短痛的猛士了）。其间夹杂着做了毕设，找老师选了题目，先是坦白自己基本零基础，编程大概只会部分html这种伪语言，其余只能承认课堂上貌似有介绍过了。老师倒也不介意，邮件给发个网址kitware，自己回去琢磨去吧。我倒是对这老师万分感激，起码最后至少也给评了“优”。然而后来发现，教师行业如今也是背景为上，资历次之，学识为轻——这绝非偶然现象，只是如果现世皆如此，众生倒也见怪不怪了。</p>
-
-<p>毕设时对vtk/itk/gdcm/CT/MRI感兴趣，于是开了vtk的话题，并入可视化部分，但是没好好写过几篇。5月份报了驾校，教练倒是君子，只是不时骂的狗血喷头，无奈此时已晚报了一个多月，入夏以后再就没去过，如今校长三天两头催着考科二科三，只好待开春以后再说了。</p>
-
-<p>毕设结束就意味着毕业，兄弟各自谋生的谋生、奔前程的奔前程、泡妞的泡妞，我在家休息了半天就重新拉回学校干活，热翻整个七月。七月份唯一有意思的是和阿仝在东哥宿舍留宿了几周，话说近年来我已少有在夏天出门了。不过东哥找工作的压力还不小，我只好逼着他把天龙八部删了又删，只留下一个自己突然颇感兴趣的连连看，可恶越往后打越难，可在整个七月份那就是唯一的乐趣了。</p>
-
-<p>八月份带着半残疾回家休整，恰逢又一款中文RPG发售，和年初的云之遥呈现交相辉映之势。赶紧把游戏通了关，又听闻wlk要推出。wow这个东西简直让人又爱又恨，从2003年听说到崇拜，2004年随公会打进wowar、nga，建模拟器抢先体验，经历2005年初的万人号，2006年的折磨到疯狂，2007年的放弃到回归，2008年的再放弃到再回归，2009年的彻底决裂，直到2010年的八月又被暴雪这帮奸商给拉了回去。不过我似乎已经不属于这个游戏所处的时空维度了，wow的元素在我看来已成为了精致的计算机图形学工程产品，其中蕴含的才是我应当追求的。  12月是失去的月份，本应当去体验一下久违一年的自习之趣，无奈俗务缠身，差点考试都没法应付，然而又让我彻底与wow隔绝了。</p>
-
-<p>这就是我的一篇针对2010年的粗粒度总结。值得一提的是，今年（2011）2月5日，本博将迎来三周年，记得一周年（2009）时我略数了下大概有文章百篇，到了今年竟只有250、260篇左右，文章数显得略少。后来想想，本博的观者每天也不到十人，而且跳出率有十分之九那么高，著书立说实在谈不上，倒不如写写杂记，技术上的东西有了足够积累才能有所领悟，倒也不愿强求指标了。</p>
-
-<p>2010唯一郁闷的就是，某官方名为扫黄打非实际醉翁之意不在酒，先是恐吓着要封了全国的个人网站，后来又威胁要夺我的cn域名，我这域名没什么普世寓意本值不了多少钱，结果硬是被他们挥刀自宫，毁掉了我们在高速发展的互联网上弘扬自己悠久历史文化的契机和未来，而这点仅存的果实，如今竟也变成了紧俏货。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-02T19:11:11+08:00" pubdate data-updated="true">2011-02-02</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2011/02/02/2010-nian-zhong-zong-jie-ji-hanyi-name-chong-jian-san-nian-ji-nian//posts/8/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

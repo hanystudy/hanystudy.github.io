@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content=" 最近开始看《Friends》，曾经在网上听说了Ross的十年之痒，但苦于一直没有充足的时间领略这部长达238集并热播十年的情景剧。现在终于能开怀畅“品”了。  更夸张的是，第一次接触Friends就一口气用一天多点的时间看完了第一季的完整内容&hellip;或许还真是闲得慌了。不可否认， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="(线性表的链式存储—循环链表、双向链表、静态链表)   上节我们介绍了线性表的链式存储结构中最重要的一种—单链表结构，但在这样的结构中也存在一些问题，而这些在顺序存储中却能得到较好的体现。为此，我们需要对单链表的存储结构进行一些改进，以实现我们需要的功能。 例如， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,267 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/01/26/jia-qi-lian-zai-zhi-san/">
+		
+			假期连载之三</a>
+	</h2>
+	<div class="entry-content">
+		<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">(</span></span><strong style="mso-bidi-font-weight: normal;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">线性表的链式存储—循环链表、双向链表、静态链表</span></strong><span lang="EN-US"><span style="font-family: Times New Roman;">)</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">上节我们介绍了线性表的链式存储结构中最重要的一种—单链表结构，但在这样的结构中也存在一些问题，而这些在顺序存储中却能得到较好的体现。为此，我们需要对单链表的存储结构进行一些改进，以实现我们需要的功能。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">例如，在单链表中有时会给出某个结点的地址，并要求寻找其它所有结点，我们知道单链表结点中包括了指向其直接后继的指针域，但并不能回溯执行，因此在大多数情况下并不能实现题设的要求。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">我们提供一种“首尾相接”的链表，其原理是将尾结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指针由</span><span lang="EN-US"><span style="font-family: Times New Roman;">null</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">改为指向表头结点，于是就形成了单链表形式的循环链表，简称循环链表。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在不带附加头结点链表中，尾结点的情况为</span><span lang="EN-US"><span style="font-family: Times New Roman;">rear-&gt;next=head</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，其中</span><span lang="EN-US"><span style="font-family: Times New Roman;">head</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为头指针。而在带头结点链表中这种情况就变成</span><span lang="EN-US"><span style="font-family: Times New Roman;">rear-&gt;next=head-&gt;next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。相应地，关于单链表操作的循环条件</span><span lang="EN-US"><span style="font-family: Times New Roman;">p!=NULL</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">或</span><span lang="EN-US"><span style="font-family: Times New Roman;">p-&gt;next!=NULL</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">将变为</span><span lang="EN-US"><span style="font-family: Times New Roman;">p!=head</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">或</span><span lang="EN-US"><span style="font-family: Times New Roman;">p!=head-&gt;next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，具体由是否附加头结点决定。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">下面来看一个关于循环链表的应用问题——约瑟夫环（</span><span lang="EN-US"><span style="font-family: Times New Roman;">Josephus</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">约瑟夫环问题原本为一个数学应用，是由古罗马的史学家约瑟夫（</span><span lang="EN-US"><span style="font-family: Times New Roman;">Josephus</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">）提出的。它的具体数学抽象为：设有编号为</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，</span><span lang="EN-US"><span style="font-family: Times New Roman;">2</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，……，</span><span lang="EN-US"><span style="font-family: Times New Roman;">n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的</span><span lang="EN-US"><span style="font-family: Times New Roman;">n(n&gt;0)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个人围成一个圈，从第</span><span lang="EN-US"><span style="font-family: Times New Roman;">1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个人开始报数，报到</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">时停止报数，报</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的人出圈，再从他的下一个人起重新报数，报到</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">时停止报数，报</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">的出圈，……，如此下去，直到所有人全部出圈为止。当任意给定</span><span lang="EN-US"><span style="font-family: Times New Roman;">n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">和</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">后，设计算法求最后一个出圈的人的最初序号。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">事实上数学家们早已给出了这个问题或以此为基础衍生出的各种问题的数学解答，我们仅需要根据简单的递推公式即可轻松解决此类问题。但事实上，它其实也是一个循环链表的典型问题。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">这是因为，其一，环事实上就是循环链表的抽象表现，在本题中环链的大小不断发生改变，也恰符合链表设置的最初意义，另外，约瑟夫环所对应的操作几乎囊括了循环链表的所有基本运算问题。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">下面给出</span><span lang="EN-US"><span style="font-family: Times New Roman;">C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">描述的约瑟夫环求解代码：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">template&lt;class T&gt;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">void Josephus(CircList&lt;T&gt;&amp;Js,int n,int m)<span style="mso-tab-count: 2;">         </span>//n</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为结点数，</span><span lang="EN-US"><span style="font-family: Times New Roman;">m</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为间隔数</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">{</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>CircLinkNode&lt;T&gt;*p=Js.getHead(),*pre=NULL;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>int i,j;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>for(i=0;i&lt;n-1;i++)</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>{</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>for(j=1;j&lt;m;j++)</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>{</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 3;">                     </span>pre=p;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 63pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p=p-&gt;link;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">cout&lt;&lt;”</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">出圈的是：</span><span lang="EN-US"><span style="font-family: Times New Roman;">”&lt;&lt;p-&gt;data&lt;&lt;endl;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">pre-&gt;link=p-&gt;link;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">delete p;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 42pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p=pre-&gt;link;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt 21pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">}</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">};</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">注：本例仅给出约瑟夫环的求解方法函数，</span><span lang="EN-US"><span style="font-family: Times New Roman;">CircLinkNode</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">及</span><span lang="EN-US"><span style="font-family: Times New Roman;">CircList</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">类需要自行写出。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">循环链表实现了一定的回溯操作，丰富了单链表的功能。但其在寻找直接前驱时的时间复杂度仍为</span><span lang="EN-US"><span style="font-family: Times New Roman;">O(n)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，我们要使用更为高效的替代算法以实现</span><span lang="EN-US"><span style="font-family: Times New Roman;">O(1)</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，则就产生了双向循环链表，简称双向链表。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">顾名思义，双向链表的结点中包含了三个数据成员，除原有的数据域，直接后继指针</span><span lang="EN-US"><span style="font-family: Times New Roman;">*next</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">外，又添加了指向直接前驱的指针</span><span lang="EN-US"><span style="font-family: Times New Roman;">*prior</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">在实际应用中，双向循环链表在仅需求后继结点的情况下和单链表的基本用法相类似。但当需同时顾及到前驱和后继两方面结点时就会发生改变。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">首先我们知道在双向链表中存在下式成立：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p-&gt;prior-&gt;next==p;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p==p-&gt;next-&gt;prior;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">我们据此给出双向链表前插操作的伪码表示：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;">DlinkIns(L,i,e)<span style="mso-tab-count: 6;">                                          </span>//L</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为原链表，</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为插入位置，</span><span lang="EN-US"><span style="font-family: Times New Roman;">e</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为插入数据</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">检查位置</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">是否合法，否则返回</span><span lang="EN-US"><span style="font-family: Times New Roman;">-1</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span lang="EN-US"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>//</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">设置</span><span lang="EN-US"><span style="font-family: Times New Roman;">*p</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">指向第</span><span lang="EN-US"><span style="font-family: Times New Roman;">i</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">个结点</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>S=(DNode*)malloc(sizeof(DNode));</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>If(s) then</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>s-&gt;data=e;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>s-&gt;prior=p-&gt;prior;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>p-&gt;prior-&gt;next=s;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>s-&gt;next=p;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>p-&gt;prior=s;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>return OK</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>else then</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 2;">              </span>return -1</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">执行循环链表删除运算时，需要注意应从两个方面同时补链，例如：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p-&gt;prior-&gt;next=p-&gt;next;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;">p-&gt;next-&gt;prior=p-&gt;prior;</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt; text-indent: 21pt;"><span style="font-size: small;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">通过连载一和连载二我们较详细地介绍了线性表的几种存储结构和运算方法，它们都是基于</span><span lang="EN-US"><span style="font-family: Times New Roman;">C/C++</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">或</span><span lang="EN-US"><span style="font-family: Times New Roman;">Java</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言而言的。在一些语言诸如</span><span lang="EN-US"><span style="font-family: Times New Roman;">BASIC</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">、</span><span lang="EN-US"><span style="font-family: Times New Roman;">FORTRAN</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中并不包含“指针”这种数据类型（当然</span><span lang="EN-US"><span style="font-family: Times New Roman;">Java</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">中也不存在</span><span lang="EN-US"><span style="font-family: Times New Roman;">C</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">语言意义上的指针，但并这不影响其对链表结构的诠释）。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-size: small; font-family: Times New Roman;">       </span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在我们同样需要在此类领域中实现链表应用时，数组就成为最为可靠的手段，但这并不同于顺序表的动态存储，而是采用结构体数组的形式，通过设置数据域和“游标</span><span lang="EN-US"><span style="font-family: Times New Roman;">Cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">”模拟链表结点，以达到和链表类似的目的，这就是<strong style="mso-bidi-font-weight: normal;">静态链表</strong>。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">游标</span><span lang="EN-US"><span style="font-family: Times New Roman;">Cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">通常为非负整数形式，它存放后继结点在结构数组中的数组下标值（并非绝对位置）。根据结点</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值可以轻松凭借</span><span lang="EN-US"><span style="font-family: Times New Roman;">StaticList[cursor].data</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">获得当前后继结点的值。而数组最后一个结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值通常为</span><span lang="EN-US"><span style="font-family: Times New Roman;">-1</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">表示</span><span lang="EN-US"><span style="font-family: Times New Roman;">null</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">由于数组的特性，首先<strong style="mso-bidi-font-weight: normal;">静态链表的长度是固定的</strong>。因此在执行添加</span><span lang="EN-US"><span style="font-family: Times New Roman;">/</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">删除操作时并不能实际创建</span><span lang="EN-US"><span style="font-family: Times New Roman;">/</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">释放内存空间，而全部在原数组内部进行。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">在后插法添加结点操作中，新结点先存放在数组空闲空间中，然后使新结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值等于要插入结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">，再将原结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值等于新结点在结构体数组中的实际下标值。以上步骤可由以下语句实现：</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>StaticList[s].cursor=StaticList[p].cursor;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small;"><span style="font-family: Times New Roman;"><span style="mso-tab-count: 1;">       </span>StaticList[p].cursor=s;</span></span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">这说明尽管静态链表中的数据结点物理位置可能并不连续，但其逻辑次序并未发生变化，这就接近于链表的实际存储结构。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">执行静态链表的删除操作时，只需使要删除结点前驱的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值等于要删除结点的</span><span lang="EN-US"><span style="font-family: Times New Roman;">cursor</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">值即可。实际上要删除的结点空间并未发生任何修改。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">由以上操作可知，当静态链表在经过数次插入</span><span lang="EN-US"><span style="font-family: Times New Roman;">/</span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">删除操作后，其总结点数其实只增未降，这就使得静态链表的运行效率大打折扣。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-size: small;"><span lang="EN-US"><span style="mso-tab-count: 1;"><span style="font-family: Times New Roman;">       </span></span></span><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';">为此，我们一般额外设置一个<strong style="mso-bidi-font-weight: normal;">备用静态链表</strong>，该表结点所存放的值是空闲空间以及因删除操作而回收的结点空间，实际运算时需要原链表和备用表的互相协作以达到相关目的。</span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span lang="EN-US"><span style="font-size: small; font-family: Times New Roman;"> </span></span></p>
+
+
+<p class="MsoNormal" style="margin: 0cm 0cm 0pt;"><span style="font-family: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman';"><span style="font-size: small;">（<strong style="mso-bidi-font-weight: normal;">未完待续</strong>）</span></span></p>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-26T19:31:32+08:00" pubdate data-updated="true">2009-01-26</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/shu-ju-jie-gou/'>数据结构</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/01/26/jia-qi-lian-zai-zhi-san//posts/18/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1545,74 +1806,6 @@ $(document).ready(
 
 	
 		<span class="comments"><a href="/blog/2008/12/21/jin-ru-qi-mo-zhou-qi//posts/18/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/11/28/SCCS-chong-gou-ban-fa-bu-cheng-yao-bug-ce-shi-kai-fa-jian-yi/">
-		
-			SCCS重构版发布~诚邀bug测试、开发建议</a>
-	</h2>
-	<div class="entry-content">
-		<p>值得欣慰的是，“基于web的程序语言智能学习系统”在今晚赶回家后2小时内完成了internet正式发布前的准备工作，我们可能会选择较有代表性的设计文档在近期予以公布。</p>
-
-<p>整个系统由于限制工期短（整整1个月），且由于并没有占用课内学时，因而实际的开发时间估计也比较可怜。整体完成度达到了预期的50%，但美工方面真正做起来的时候才觉得很难&hellip;数据库设计方面还存在一定问题，整体安全性上未作过多考量，一些无关正常使用的bug还是比较明显，但相较于7月份的版本，我们至少在以下几个方面取得突破：</p>
-
-<p>1、首次尝试独立创建模版网页，尽管参考了everydns，但仅限于视觉上的借鉴，css代码完全独立编写。</p>
-
-<p>2、首次以较全面的数据库设计流程完成了初步设计，但问题很多，成品还存在一些问题，这些已经可以在今后的设计阶段中被当作宝贵的经验。</p>
-
-<p>3、首次全面接触javascript和xml技术，即Ajax。初步了解了主流网站系统的Ajax应用方法，此类部分的源代码可在今后得以沿用，该方向的前景是用面向对象的方法对已成熟的技术进行重构，方便复用。</p>
-
-<p>4、使用php初步完成了迄今为止最大的网站项目，目前的数据字典已经覆盖C++/C近七百条库函数，已具备实用意义。</p>
-
-<p>5、在对较大规模数据库的系统中使用查询优化工作，这是数据库设计方面的范畴，同时对本系统的真正实现也具有重大意义。</p>
-
-<p>注：本文以后的SCCS将不再作为本系统的英文缩写，按正式名称取开头字母则为&#8221;wiplls”，这将是本系统的新名称，在今后可能的技术更新中将统一使用该名称。</p>
-
-<p>系统的唯一入口地址为：</p>
-
-<p><a href="http://www.hanyi.name/code"><a href="http://www.hanyi.name/code">http://www.hanyi.name/code</a></a></p>
-
-<p>待beta成熟后将全面取代原有版本，并启用code.hanyi.name的独立二级域名。</p>
-
-<p>ps:同时也提前宣传一下
-<br><img src="http://tbn2.google.cn/images?q=tbn:sZ-C_CNecw0J::">
-<br>&amp;怀念</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-11-28T20:57:15+08:00" pubdate data-updated="true">2008-11-28</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/xiang-mu/'>项目</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2008/11/28/SCCS-chong-gou-ban-fa-bu-cheng-yao-bug-ce-shi-kai-fa-jian-yi//posts/18/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

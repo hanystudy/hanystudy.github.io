@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="模块化编程(Modular Programming)：信息隐藏与职责分割 上世纪60年代起，人们意识到实现复杂系统的前提是把系统合理分割为相互独立的部分，这些独立的部分被称作模块。与前文提到的结构化编程和过程式编程的区别是，一个模块可包含若干个子程，也允许组装不同模块以实现子程或程序。D.L. &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="结构化分析与设计方法(Structured Analysis and Design Methods) 除了指导程序设计，结构化方法还被广泛应用于系统分析和设计领域，成为软件设计方法论的开端。从时间轴来看，从结构化编程到结构化程序设计，再到软件的结构化设计和分析，软件设计的方法论是从底向上发展的， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,185 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/10/12/software-design-and-architecture-notes-4/">
+		
+			软件设计与架构笔记(4)</a>
+	</h2>
+	<div class="entry-content">
+		<h2>结构化分析与设计方法(Structured Analysis and Design Methods)</h2>
+
+<p>除了指导<a href="http://www.hanyi.name/blog/2018/09/25/software-design-and-architecture-notes-2/">程序设计</a>，结构化方法还被广泛应用于系统分析和设计领域，成为软件设计方法论的开端。从时间轴来看，从结构化编程到结构化程序设计，再到软件的结构化设计和分析，软件设计的方法论是从底向上发展的，其根本推动力是日益增加的系统复杂性。</p>
+
+<h3>结构化设计(Structured Design)</h3>
+
+<p>1974年，Larry Constantine等提出了一系列通过降低系统复杂性，从而提高编码、调试、修改等工作效率的软件设计思想，并将其统一命名为结构化设计[SMC74]。通用的结构化设计思想包括<strong>简洁性</strong>和<strong>可观测性</strong>，其中，简洁性作为衡量和评估设计方案的主要度量指标，体现在分割后的系统模块间具有设计、开发、更正、修改的独立性；可观测性则体现了软件易被感知功能和原理的能力。尽管系统分割具有良好的工程意义，但其引起的模块间重叠部分代码以及相互关系反而可能会增加复杂性。前文我们已经介绍了信息隐藏这一重要的模块化概念，结构化设计则提出了一个更具实践意义的设计指标：<strong>耦合(coupling)</strong>。</p>
+
+<h4>耦合</h4>
+
+<p>通常情况下，更少或更简洁的模块间连接就意味着更好的可理解性，同时变更或出错所引起的模块间传递也会受到抑制。系统复杂度不仅体现在模块间的连接数量，更体现在每个连接所承担的关联强度，这种强度的度量被称作<strong>耦合度</strong>。强耦合意味着高复杂度，造成模块难以被理解、修改和更正的后果。因此，软件设计可以通过建立模块间的弱耦合降低系统复杂度。</p>
+
+<p>一个特定连接产生的耦合度是一个包含多重因子的函数，这些因子包括连接复杂度、连接指向模块自身亦或其内部、连接所发送或接收的内容等，Larry将其归纳为三个主要的耦合因子：接口复杂度、连接类型和通信类型。耦合度受这三个因子的变化规律如下表所示：</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">Coupling</th>
+<th style="text-align:center;">Interface complexity</th>
+<th style="text-align:center;">Type of connection  </th>
+<th style="text-align:center;">Type of communication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">Low     </td>
+<td style="text-align:center;">simple,obvious      </td>
+<td style="text-align:center;">to module by name   </td>
+<td style="text-align:center;">data                 </td>
+</tr>
+<tr>
+<td style="text-align:center;">        </td>
+<td style="text-align:center;">                    </td>
+<td style="text-align:center;">                    </td>
+<td style="text-align:center;">control              </td>
+</tr>
+<tr>
+<td style="text-align:center;">High    </td>
+<td style="text-align:center;">complicated,obscure </td>
+<td style="text-align:center;">to internal elements</td>
+<td style="text-align:center;">hybrid               </td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Larry认为，弱耦合应具有接口简单直观，只通过名字引用其它模块，以及尽量仅通过数据进行通信等特征，反之则会增加耦合度。具体来说：</p>
+
+<ol>
+<li><p>接口复杂度，指模块间接口是否能清晰地表述连接，而不是包含了过多的信息导致难以理解。特别当多个模块通过共享一个公共环境(common environment)实现交互时，该公共环境中任意元素的增加都可能会导致系统整体复杂度的显著提升。例如在M个对象中，存在M(M-1)对相互关系，假设这些对象之间的公共环境包含N个元素，那么就有NM(M-1)对一阶关系，亦即变更或错误传递的可能路径数量。可见接口复杂度对系统整体复杂度的显著影响。</p></li>
+<li><p>连接类型，指模块间相互关联的形式，例如仅通过模块名字进行关联，还是进一步引用了模块内部的元素。在后一种情况下，该模块内部的修改很可能传递至其它依赖它的模块，导致潜在的复杂度增加。</p></li>
+<li><p>通信类型，指模块间通信内容的形式。对于系统中任何有效模块，其或者通过传递数据实现通信，或者通过被“控制”进行某项任务。显然，仅通过数据实现通信的接口更易被理解，而控制类型的通信使模块功能难以被直观理解。</p></li>
+</ol>
+
+
+<p>实现<strong>弱耦合</strong>的途径不一，一个方向是尽量降低元素间关系发生在不同模块间的可能，简单来说就是最小化模块间的关联，并且保证元素间关系只发生在相同模块内部。为了验证元素间关系是否都存在于模块内，Larry同时给出了一个描述模块内部元素间相互绑定程度的指标：<strong>内聚(Cohesiveness)</strong>。</p>
+
+<h4>内聚</h4>
+
+<p>由前述可知，实现内部高度绑定的模块，就能够达到降低耦合的目标，即模块自身的强内聚性。一般而言，对模块内聚程度的描述可以被划分成如下六个层级（由弱到强的非线性关系）：</p>
+
+<ol>
+<li><p>巧合的(Coincidental)。例如元素通过某种模块化方法被“无意间”划分到某个共同模块中，或者某个模块的创建仅仅是为了消除重复代码。在这种情况下，模块极易因为变更而变得“不可重用”，因此这类绑定只是发生于巧合之中。</p></li>
+<li><p>逻辑的(Logical)。这种关系通常隐含了某种逻辑联系，例如负责程序中所有输入输出的模块，或者负责操作所有数据的模块。其问题在于，以此类关系实现的模块易存在内部元素间的相互缠绕，从而降低元素间的独立性，同时也会导致模块接口的复杂性增加。</p></li>
+<li><p>一时的(Temporal)。该关系建立在逻辑层面的关系基础上，同时元素间还存在某种时间上的一致性。例如程序的初始化、终止、清理等阶段的操作，其元素间存在一定的功能逻辑，同时也常一起发生。尽管如此，这种关系依然存在于逻辑层面类似的缺陷。</p></li>
+<li><p>通信的(Communicational)。元素间通过相同输入/输出数据集合的引用进行关联，例如“打印”和“装订”文件，显示出更强的绑定关系。</p></li>
+<li><p>连续的(Sequential)。如果某个元素的输出恰好是另一个元素的输入，即意味着目标问题可以通过简单流程图进行描述和解决，那么其存在连续的强绑定关系。但需要注意，这种过程式处理会导致该模块独立于程序的其它功能部分，从而使其难以被其它系统模块复用。这也是连续层面与进一步功能层面关系所导致的内聚度存在较大差距的原因。</p></li>
+<li><p>功能的(Functional)。在这种层面的关系下，模块中的元素都与同一个独立功能相关。一种判断某个模块是否为功能层面的绑定的方法是，通过一句话描述该模块功能，然后进行验证：</p>
+
+<ol type="a">
+<li><p>该句是否为复合句，是否包含逗号、多个动词等等，如果是则该模块可能包含连续或通信层面的绑定；</p></li>
+<li><p>如果语句中包含时间相关的词，那么可能存在一时或连续层面的绑定；</p></li>
+<li><p>如果语句中动词的操作对象不是一个特定对象，那么可能存在逻辑层面绑定；</p></li>
+<li><p>如果语句中包含初始化、清理等词，说明可能是一时层面的绑定。</p></li>
+</ol>
+</li>
+</ol>
+
+
+<p>值得注意，元素间可能存在多个上述的关系，而通常我们可以使用其中内聚度表现最高的关系表示整体程度。但是如果模块中没有一组元素的关系表现为功能层面绑定，那么该模块的内聚性就表现较低。</p>
+
+<h4>可预测模块</h4>
+
+<p>模块的可预测性是指当给定相同的输入时，该模块每次被调用所发生的操作也完全相同，亦即独立于环境的特性。不可预测的模块不一定是存在错误的，例如当模块内部维持某种状态，该状态在针对当前模块的操作下会发生不断变化，从而导致返回结果或实际发生操作的不同。这种不可预测的模块在实际应用中经常发生，尽管是无错误的。模块的可预测性，有时也被成为“黑盒性”，使该模块能较容易被清楚地理解，例如通过简单的注释、描述性的名字或者良好定义的接口等方法。</p>
+
+<h3>结构化设计技术</h3>
+
+<p>软件设计过程可以被看作包含一般设计和详细设计两个部分。一般设计的目的在于确定系统需要的函数有哪些(回答what)，详细设计描述如何实现这些函数(回答how)。这些设计阶段需要确定函数标识、函数范围结构的调用参数和调用关系、所关联的模块等信息，并且保证模块能够被独立设计、实现和测试。</p>
+
+<h4>结构图(Structure Chart)</h4>
+
+<p>传统的流程图方法能够描述代码块执行的顺序和条件分支，但是在一般设计阶段，由于我们侧重于了解what，流程图会不可避免地增加设计复杂度。因此这里介绍一种较为简单的结构图用于表述函数及其调用关系。结构图所包含的符号标记如下图所示：</p>
+
+<p><img src="http://content.hanyi.name/images/structured_design/definitions_of_symbols_used_in_structure_charts.png" alt="Definitions of symbols used in structure charts" /></p>
+
+<p>假设某系统设计包含三个模块，分别是A、B和C，其中模块间的关系是A调用B，B调用C；从执行顺序上看，B的代码会首先执行，然后是C，最后是A。那么上述信息可以分别用结构图和流程图表示如下：</p>
+
+<p><img src="http://content.hanyi.name/images/structured_design/structure_chart_vs_flowchart.png" alt="Structure Chart vs Flowchart" /></p>
+
+<p>从上图可以看出，相比于流程图，结构图能够清楚表示模块间关系，并且有潜力进一步描述模块的接口信息，这恰好是在一般程序设计阶段需要进行的工作，流程图就不具有优势。</p>
+
+<h4>基于结构图的软件设计过程</h4>
+
+<p>下面以设计一个较为复杂的模拟输入——处理——输出(Input Process Output, IPO)类型的系统为例，给出一种衍生自结构图、由IBM开发的基于层次输入处理输出(Hierarchical IPO)图的一般设计过程：</p>
+
+<p>Step 1. 根据问题描述，绘出系统大致的功能性草图。本例中模拟系统的大致功能是一个数据输入、处理和输出的过程，其大致可以被描述如下：</p>
+
+<p><img src="http://content.hanyi.name/images/structured_design/rough_structure_of_simulation_system.png" alt="Rough structure of simulation system" /></p>
+
+<p>Step 2. 识别外部的概念数据流，指来源于系统外的、独立于具体物理I/O设备的相关数据流。在本例中，概念数据流包括输入参数、格式化的返回结果等。</p>
+
+<p>Step 3. 识别问题中的主要概念数据流(包括输入和输出)，确定该问题的功能图中的“最高级抽象”节点。对于输入的数据流而言，其抽象节点存在于距离物理输入形态最远，但依然可以视作输入数据的阶段。本例中该节点可能在于构建矩阵阶段。同时，针对输出数据流可以把结果矩阵作为输出的抽象节点，如下图所示。</p>
+
+<p><img src="http://content.hanyi.name/images/structured_design/determining_points_of_highest_abstraction.png" alt="Determining points of highest abstraction" /></p>
+
+<p>Step 4. 根据前面步骤得到的信息，针对每个抽象输入数据节点，使用一个源模块(source module)表示其结构。相应设计对应的入模块(sink module)。通常系统存在一个源和入分支，具体参数依赖问题描述而定，但其通用模式如下图所示。</p>
+
+<p><img src="http://content.hanyi.name/images/structured_design/the_top_level.png" alt="The Top Level" /></p>
+
+<p>在本例中，模块A即系统入口，也就是说模块A的功能意味着整个问题的解决；模块B用于获取主要数据流；模块C用于把主要输入流变换成主要输出流；模块D用于处理主要的输出数据流。</p>
+
+<p>Step 5. 针对源模块，通过识别其中最后一次变换操作，生成当前模块的数据返回形式，然后再识别前一次变换的抽象节点。对于入模块，与源模块相反，通过识别其中第一次处理操作，确认抽象输出节点，直到获取期望的输出形式。基于逐步求精的思想重复步骤5，直到抵达最初的源模块和最后的入模块。构建出的部分结构图如下所示。</p>
+
+<p><img src="http://content.hanyi.name/images/structured_design/lower_levels.png" alt="Lower Levels" /></p>
+
+<p>在这一逐步求精的设计过程中，划分的终止条件因具体问题而异，通用的判断方法之一即前文提到的耦合与内聚等设计思想。</p>
+
+<p>（未完待续）</p>
+
+<h2>结论</h2>
+
+<p>结构化设计的兴起使结构图及其衍生工具成为软件设计领域的重要工具。同时，在软件设计模块化道路上的深入实践也促使许多重要的软件设计思想被提出，诸如耦合、内聚等重要概念被广泛用于指导包括结构化设计及后续的设计方法论，影响至今。</p>
+
+<h2>引用</h2>
+
+<p>SMC74, <a href="https://ieeexplore.ieee.org/document/5388187">Structured design</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-10-12T15:28:06-04:00" pubdate data-updated="true">2018-10-12</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2018/10/12/software-design-and-architecture-notes-4//posts/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1751,158 +1930,6 @@ $(document).ready(
 
 	
 		<span class="comments"><a href="/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family//posts/2/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/09/08/metaprogramming-ruby-core-concepts-open-classes-and-refinements/">
-		
-			Metaprogramming Ruby: Core Concepts - Open Classes &amp; Refinements</a>
-	</h2>
-	<div class="entry-content">
-		<h3>Opening Classes</h3>
-
-<p>Opening classes brings much flexibility for ruby. It permits you to modify existed classes or modules permanently, without having to implement whole world in case you just need to give a simple patch for current tool. For example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">String</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">to_alphanumeric</span>
-</span><span class='line'>    <span class="nb">gsub</span><span class="p">(</span><span class="sr">/[^\w\s]/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>to_alphanumeric is new interface to return only alpha and numeric part of a string. However, opening class may not work well, especially it&rsquo;s commonly dangerous to opening a frequently used target which would cause unexpected error in code. Due to this reason someone calls opening classes monkey patch and just leaves far from this feature.</p>
-
-<p>While whatever, monkey patch continues conciseness in ruby, sometimes you are able to save your life gracefully with such powerful tool, except the trap behind it.</p>
-
-<h3>Refinements</h3>
-
-<p>From ruby 2.0, there is a more advanced form of monkey patch which is called refinements. Refinements are providing a way to extend classes only under specific scope, but not including modules. For example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">C</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">foo</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;C#foo&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">module</span> <span class="nn">M</span>
-</span><span class='line'>  <span class="n">refine</span> <span class="n">C</span> <span class="k">do</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">foo</span>
-</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;C#foo in M&quot;</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Module#refine creates an anonymous module that contains the changes or refinements to the class (C in the example). self in the refine block is this anonymous module similar to Module#module_eval.</p>
-
-<h4>Scope</h4>
-
-<p>We use using to activate refinements defined in any places, but you may only activate refinements at top-level, not inside any class, module or method scope. You may activate refinements in a string passed to Kernel#eval that is evaluated at top-level. Refinements are active until the end of the file or the end of the eval string, respectively.</p>
-
-<p>Refinements are lexical in scope. When control is transferred outside the scope the refinement is deactivated. This means that when you require or load a file or call a method that is defined outside the current scope the refinement will be deactivated.</p>
-
-<p>If a method is defined in a scope where a refinement is active the refinement will be active when the method is called.</p>
-
-<p>When defining multiple refinements in the same module, inside a refine block all refinements from the same module are active when a refined method is called.</p>
-
-<p>You may also activate refinements in a class or module definition, in which case the refinements are activated from the point where using is called to the end of the class or module definition.</p>
-
-<h4>Method lookup under refinement</h4>
-
-<p>When looking up a method for an instance of class C Ruby checks:</p>
-
-<h5>1. If refinements are active for C, in the reverse order they were activated:</h5>
-
-<p>  The prepended modules from the refinement for C</p>
-
-<p>  The refinement for C</p>
-
-<p>  The included modules from the refinement for C</p>
-
-<h5>2. The prepended modules of C</h5>
-
-<h5>3. C</h5>
-
-<h5>4. The included modules of C</h5>
-
-<p>If no method was found at any point this repeats with the superclass of C.</p>
-
-<p>Note that methods in a subclass have priority over refinements in a superclass. For example, if the method / is defined in a refinement for Integer 1 / 2 invokes the original Fixnum#/ because Fixnum is a subclass of Integer and is searched before the refinements for the superclass Integer.</p>
-
-<p>If a method foo is defined on Integer in a refinement, 1.foo invokes that method since foo does not exist on Fixnum.</p>
-
-<h4>Super</h4>
-
-<p>When super is invoked method lookup checks:</p>
-
-<h5>The included modules of the current class. Note that the current class may be a refinement.</h5>
-
-<h5>If the current class is a refinement, the method lookup proceeds as in the Method Lookup section above.</h5>
-
-<h5>If the current class has a direct superclass, the method proceeds as in the Method Lookup section above using the superclass.</h5>
-
-<p>Note that super in a method of a refinement invokes the method in the refined class even if there is another refinement which has been activated in the same context.</p>
-
-<h4>Refinements and module inclusion</h4>
-
-<p>Refinements are inherited by module inclusion. That is, using activates all refinements in the ancestors of the specified module. Refinements in a descendant have priority over refinements in an ancestor.</p>
-
-<p>After all, refinement is still an experiment feature in ruby 2.x series, there is a detailed <a href="https://bugs.ruby-lang.org/projects/ruby-trunk/wiki/RefinementsSpec">specification</a> in official website, which should cover most aspect of it.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-09-08T22:40:23+08:00" pubdate data-updated="true">2015-09-08</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/ruby/'>ruby</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2015/09/08/metaprogramming-ruby-core-concepts-open-classes-and-refinements//posts/2/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
