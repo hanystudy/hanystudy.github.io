@@ -4,7 +4,7 @@
   <title><![CDATA[Category: architecture | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/architecture/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2019-06-01T23:33:07-04:00</updated>
+  <updated>2019-06-08T13:16:02-04:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,124 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[软件设计与架构笔记(15)]]></title>
+    <link href="http://www.hanyi.name/blog/2019/06/08/software-design-and-architecture-notes-15/"/>
+    <updated>2019-06-08T13:14:00-04:00</updated>
+    <id>http://www.hanyi.name/blog/2019/06/08/software-design-and-architecture-notes-15</id>
+    <content type="html"><![CDATA[<h2>软件架构说什么？</h2>
+
+<p><strong>架构</strong>(Architecture)一词源自建筑领域，尽管看起来与软件设计毫无关联，但人们从上世纪60年代起就注意到两者的相似性[PHJ06]，并从结构和工程等方面大量借鉴了这个古老的学科，软件设计也因此获益匪浅[GHJV95]。当然不仅是软件，这个词也被其它领域广泛借鉴，例如作为计算机基础的<strong>体系结构</strong>(Computer architecture)，后者主要指计算机的物理结构或者CPU指令集。又比如<strong>企业架构</strong>(Enterprise architecture)、<strong>解决方案架构</strong>(Solution architecture)或者<strong>信息架构</strong>(Information architecture)等，则是表示针对各自问题域的专业性实践集合。</p>
+
+<p>虽然架构与<strong>设计</strong>同属于本系列的主题之一，但迄今为止我们都很少提及。一方面是因为，作为诞生于上世纪90年代的buzz word，软件架构是在软件设计的基础上发展而来的，前者继承了后者的许多核心思想，例如模块化、原则、模式等，逐渐形成了更加庞大的体系。另一方面，架构一词如今具有极其丰富的含义，以至于可能达到阻碍交流的地步，因此确有必要首先对部分概念予以澄清。此外，除非特别说明，本系列文章中的架构均指软件架构。</p>
+
+<h3>定义和解释</h3>
+
+<p><em>架构是指一个系统在其所在环境中的基本概念和属性，这体现为系统的元素、关系及其设计和演进的原则。</em></p>
+
+<p>虽然这是ISO/IEC 42010对架构的正式定义，另一种USP(Unique selling proposition)定义则更详细地解释了这一点:</p>
+
+<p><em>架构是一系列重要的决策，涉及描述软件系统的组织、确定结构化元素及其接口、确定元素在协作中的特定行为、指导结构和行为元素通过组合逐渐形成较大子系统的风格(涉及元素、接口、协作和组织等)。此外还要考虑用途、功能、性能、适应力、可重用性、可理解性、经济性、技术限制及其权衡、美学等因素。</em></p>
+
+<p>以上定义明确指出了架构的<strong>表示</strong>(Representation)、<strong>质量属性</strong>(Quality attribute)以及<strong>风格</strong>(Style)等核心内容。此外，针对已有的架构方案，有时需要进行专门的<strong>架构评估</strong>(Architecture evaluation)，从而提前发现问题并控制潜在风险。本文剩余部分将作进一步讨论。</p>
+
+<h3>架构表示</h3>
+
+<p>由于架构本身的丰富性，采用适当方法描述架构就变得非常重要，一种基本的架构描述工具是<strong>架构视图</strong>(Architecture view)，其被用于表示架构在解决特定问题时所体现的结构化信息。由于完整的架构一般会涉及众多干系人，在单一视图中无法清楚表示所有信息，因此为了进一步在视图中区分来自不同干系人的诉求，采用<strong>架构视点</strong>(Architecture viewpoint)聚焦于某一类架构决策，并采用特定的标记和建模技术建立对应的架构视图。常见的架构视点有功能、逻辑、数据、模块、组件-连接器、需求、实现、并发、性能、安全、部署、用户使用及反馈等，由此可见其对应的架构视图也就非常丰富。</p>
+
+<p>以组件-连接器类型的架构视图为例，该架构视图定义了系统中的可计算组件及其交互方式，其中组件是指可独立运行、且支持交互或存储数据的软件单元，连接器则被用于描述组件之间的交互机制。在构建组件-连接器视图的过程中，组件可以根据承担功能、可重用性、硬件单元，甚至团队的技术背景、康威定律以及产品演化路径等方式定义。同时，组件还需要描述其对外提供交互的接口(API)，包括访问端口、参数以及参数类型。然后根据组件间交互的需求，如同步、异步、延迟、吞吐量等确定连接器的类型和通信协议。连接器两端的组件分别被称为调用者和被调用者，组件与连接器之间通常需要相关配置以确定关联信息。</p>
+
+<h4>架构描述语言</h4>
+
+<p>通常，架构视图是采用<strong>架构描述语言</strong>(Architecture description languages，ADL)具体实现的，如AADL、Wright、ACME、xADL等专门面向软件架构的语言。同时也可以采用通用的建模语言，例如UML，实际上后者在工业界更加流行。架构视图和ADL共同组成了架构表示的基本方法，但仍不足以有效应对架构的复杂性。这是因为在真实场景中架构视点可能是非常多的，架构需要从核心视点出发逐步完善，因此需要进一步参考适当的<strong>架构框架</strong>(Architecture framework)。</p>
+
+<h4>架构框架</h4>
+
+<p>架构框架是指在特定应用领域或干系人社区中，创建、解释、分析和使用架构表示的通用实践集合。一种经典的架构框架是“4+1架构视图模型”[PK95]，其基本思想是需要采用若干个相互平行、且具有不同架构视点的架构视图，具体来说就是<strong>逻辑视图</strong>、<strong>进程视图</strong>、<strong>开发视图</strong>和<strong>物理视图</strong>等四种主要架构视图，以及相应的<strong>用例和场景</strong>说明，从而达到表示完整架构的目的。</p>
+
+<ul>
+<li><p>逻辑视图，即把系统按照功能、通信、行为等进行结构化分解的结果，描述系统的静态信息。具体可以采用UML中的类图或状态图实现。</p></li>
+<li><p>进程视图，即对系统中进程和线程的通信、执行过程进行描述，即系统的动态运行信息。具体可以采用UML中的部署图和活动图实现。</p></li>
+<li><p>开发视图，也称作<strong>实现视图</strong>，用于描述软件开发过程中的软件结构，例如组件、包、类、子系统、代码库、文件等。具体可采用UML的组件图或包图实现。</p></li>
+<li><p>物理视图，描述系统运行的硬件资源结构，及其与系统进程之间的映射关系。具体可采用UML中的部署图、时序图或协作图实现。</p></li>
+<li><p>用例和场景，也称作<strong>用例视图</strong>，即从少量核心用例出发，描述系统中对象间、进程间的交互顺序。该视图主要用于构建可验证的架构原型，从而对当前架构进行测试。</p></li>
+</ul>
+
+
+<p>根据上述5种架构视图，4+1架构视图模型能够建立一个核心的软件架构表示。然而从架构对整个软件工程的影响角度来说，架构框架作为架构表示的核心，往往还需要更多架构视点的支持，这与具体上下文密切相关，特别是接下来要讨论的质量属性。</p>
+
+<h3>质量属性</h3>
+
+<p>除了满足功能需求，架构还需要考虑系统的非功能需求(二者相互正交)，后者也被称作系统的质量属性，例如性能、可靠性、资源利用率、可用性、精确性等。与功能需求最显著的不同在于，质量属性往往是相对概念，一般表现为某种程度，且具备多种领域背景。正因为如此，质量属性大大提升了架构的复杂性，也是除了功能需求变化外另一个可能引起架构变化的重要原因。</p>
+
+<p>ISO/IEC 25010对软件质量进行了明确定义，其中功能性表示系统功能的完整性、正确性、适当性与合规性，此外还包含7种非功能属性以及对应的子属性:</p>
+
+<ul>
+<li><p>可靠性，指系统在特定时间和条件下维持当前性能的能力，包括成熟度、容错性、可恢复下、可用性等指标。</p></li>
+<li><p>易用性，指个体或群体在使用系统时的难易程度。包括易理解性、易学习性、易操作性、界面美观性、操作错误保护以及可访问性。</p></li>
+<li><p>高效性，指系统在特定条件下，资源使用量与软件性能之间的关系。包括耗时、资源利用率、容量等指标。</p></li>
+<li><p>兼容性，指系统在特定的软、硬件环境中能够正常运行的能力。包括共存性、互操作性等指标。</p></li>
+<li><p>安全性，指系统保护数据和执行正当行为的能力。包括保密性、完整性、非拒绝性、可审计性以及可验证性。</p></li>
+<li><p>可维护性，指系统在需要做出特定修改时所花费的成本大小。包括可分析性、可改变性、稳定性、可测试性、模块性、可重用性以及可修改性。</p></li>
+<li><p>可移植性，指系统迁移到其它环境的能力。包括可适应性、可安装性、可替换性等。</p></li>
+</ul>
+
+
+<p>值得一提的是，经验研究表明并非所有的非功能需求都有同等机会引发架构变化[JAD16]，尽管它们可能拥有相同的重要性。但在进行架构相关决策时，依然不可避免地要考虑功能以及多种质量属性，这就导致从零开始设计架构具有极高的成本和风险。因此绝大多数架构设计活动实际上是遵循着经受实践检验的经验，即下面要讨论的<strong>架构风格</strong>。</p>
+
+<h3>架构风格</h3>
+
+<p>架构风格是指一系列满足功能和特定质量属性的设计决策与约束子集[RNE09]，其意义在于:</p>
+
+<ul>
+<li><p>提供可重用的领域和工程知识，特别是相同领域或产品族中与应用无关的设计规则和决策，避免重新发明轮子。</p></li>
+<li><p>阻止架构腐化和偏离，帮助未来开发人员在不损害基本架构原则的基础上扩展系统。</p></li>
+<li><p>根据质量需求指导设计。</p></li>
+</ul>
+
+
+<p>以经典的<strong>管道-过滤器</strong>架构为例，在该架构风格中，所有的过滤器都通过两个字节流“输入”和“输出”进行通信，这样就保证了任何过滤器都能够互相连接——即满足兼容性。另外，过滤器之间可以一次只传递部分数据，这样就能够尽可能提高过滤器之间并行计算的能力，从而提高系统效率。除此之外，应用中常见的架构风格还包括但不限于:</p>
+
+<ul>
+<li><p>客户端-服务器(C/S)架构。</p></li>
+<li><p>分层(三层或N层)架构。</p></li>
+<li><p>点对点(Peer-to-peer)架构。</p></li>
+<li><p>事件驱动(Event-driven)架构，也称隐式调用架构。</p></li>
+<li><p>表述性状态转移(REST)架构。</p></li>
+<li><p>面向服务架构(SOA)。</p></li>
+<li><p>领域驱动设计(DDD)。</p></li>
+</ul>
+
+
+<p>限于篇幅本文无法详细讨论每种架构风格。而事实上，在实际软件开发过程中架构风格往往是在最初就确定的，因此可被视为架构设计的设计规则。另外，大部分情况下整个系统会拥有多种架构风格，从而满足各种质量属性需求。</p>
+
+<h3>架构评估</h3>
+
+<p>由于架构的重要性，团队通常需要对已有的架构方案进行评估。架构权衡分析(Architecture tradeoff analysis method)是一种架构评估方法，采用该方法首先需要建立一个专门的架构评审小组，该小组应至少包含所有的干系人。启动评估后，首先应确保所有参与者熟悉评估流程以及业务背景。向所有评估者展示更高层次的系统架构，包括所采用的架构风格。然后通过<strong>质量属性树</strong>描述系统所要特别关注的质量属性，并且为每个所要满足的属性提供一个具体场景。一个质量属性树的例子如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/architecture/quality_tree.png" alt="Quality attribute tree" /></p>
+
+<p>把所有场景按照优先级进行排序，然后逐一分析当前架构对该场景的适用性，根据相关反馈进行调整。最后在更大范围的干系人组织中分享当前架构知识。</p>
+
+<h2>结论</h2>
+
+<p>软件架构包含三个核心问题，分别是架构表示、质量属性和架构风格。架构表示是架构得以沟通并完善的重要途径，在架构设计的过程中不仅要考虑功能需求，还要考虑非功能需求(质量属性)，不同的架构风格在应对特定质量属性方面具有优势，因此真实场景中需要组合架构风格以满足来自不同干系人的需求。</p>
+
+<h2>引用</h2>
+
+<p>PHJ06, <a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1605175">The Past, Present, and Future of Software Architecture</a></p>
+
+<p>GHJV95, <a href="https://sophia.javeriana.edu.co/~cbustaca/docencia/DSBP-2018-01/recursos/Erich%20Gamma,%20Richard%20Helm,%20Ralph%20Johnson,%20John%20M.%20Vlissides-Design%20Patterns_%20Elements%20of%20Reusable%20Object-Oriented%20Software%20%20-Addison-Wesley%20Professional%20%281994%29.pdf">Design Patterns: Elements of Reusable Object-Oriented Software</a></p>
+
+<p>PK95, <a href="https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf">Architectural Blueprints—The “4+1” View
+Model of Software Architecture</a></p>
+
+<p>RNE09, <a href="https://www.softwarearchitecturebook.com/">Software Architecture: Foundations, Theory, and Practice</a></p>
+
+<p>JAD16, <a href="http://www.aset.tu-berlin.de/fileadmin/fg331/Publications/ICSE16.pdf">Are “Non-functional” Requirements really Non-functional?</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[软件设计与架构笔记(14)]]></title>
@@ -875,201 +993,6 @@ static BufferedReader newBufferedReader(Path path) {//...}
 <p>GHJV95, <a href="https://sophia.javeriana.edu.co/~cbustaca/docencia/DSBP-2018-01/recursos/Erich%20Gamma,%20Richard%20Helm,%20Ralph%20Johnson,%20John%20M.%20Vlissides-Design%20Patterns_%20Elements%20of%20Reusable%20Object-Oriented%20Software%20%20-Addison-Wesley%20Professional%20%281994%29.pdf">Design Patterns: Elements of Reusable Object-Oriented Software</a></p>
 
 <p>BMRSS96, <a href="https://github.com/ppizarro/coursera/blob/master/POSA/Books/Pattern-Oriented%20Software%20Architecture/Pattern-Oriented%20Software%20Architecture%2C%20Volume%201%20-%20A%20System%20Of%20Patterns.pdf">Pattern-Oriented Software Architecture Volume 1: A System of Patterns</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[软件设计与架构笔记(10)]]></title>
-    <link href="http://www.hanyi.name/blog/2019/03/10/software-design-and-architecture-notes-10/"/>
-    <updated>2019-03-10T03:11:07-05:00</updated>
-    <id>http://www.hanyi.name/blog/2019/03/10/software-design-and-architecture-notes-10</id>
-    <content type="html"><![CDATA[<h2>面向模式的领域分析与建模</h2>
-
-<p><a href="http://www.hanyi.name/blog/2019/02/11/software-design-and-architecture-notes-9/">前文</a>讨论了OOA/OOD的基本概念、工具和方法。我们已经知道，当面临稍复杂的问题域或特殊的上下文时，朴素方法会面临许多挑战，使软件开发风险难以得到有效控制。模式的发现和应用为工业界带来了高效的解决方案，也因此成为甚至比朴素方法更易流行的方法论，即<strong>面向模式</strong>(Pattern oriented)。本文是对前文OOA部分的进一步补充和扩展，首先讨论<strong>领域分析</strong>(Domain analysis)，及其与数据建模和OOA的关系，然后深入讨论面向对象分析模式，这些模式大多采用领域特定的概念模型(也称分析模型)进行描述，与纯粹抽象的表达方式相比更易理解，然而其模型结构和分析过程可被应用至更广泛的领域。</p>
-
-<h3>领域分析</h3>
-
-<p><strong>领域分析</strong>是指为了满足跨组件的可复用性，对软件开发信息进行识别、收集、组织的过程[RPD90]。当相似的问题域重现时，期待所构建的软件能够尽可能被复用，从而提高软件的经济效益，这是领域分析的根本动机。因此，相对于可复用的代码，领域分析主要关注于分析和设计的可复用性，这通常反映为组件级的可复用性[JMN80]。</p>
-
-<p>在软件工程的语境下，<strong>领域</strong>是指所构建软件系统的实际应用场景。具体来说，一个领域既可以大至银行业务，也能小至算术运算。一个领域还能被分解成多个子领域，因此复杂的领域可被看成是一种层级的网状结构，层级越高则意味着领域的复杂度也就越高。<strong>领域边界</strong>用于描述领域的范围，定义了每个领域中的对象、操作以及相互之间的关系。<strong>组件</strong>是指一个独立的软件单位，这种独立性可以指独立开发、独立部署或独立运维等特性，并且组件之间还能通过某种协议进行通信。领域是业务单位(例如对应不同的业务部门)，组件则是工程单位(例如对应不同的项目或开发团队)，但二者最终存在一定的映射关系。虽然领域分析有比较明确的目标，但具体的实现方法属于非平凡问题。例如如何确定领域层级、如何确定领域边界以及如何建立与组件之间的映射关系等。</p>
-
-<h4>领域分析的框架模型</h4>
-
-<p>[RPD90]描述了领域分析的结构化上下文视图(SADT Context View)，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/domain_analysis.png" alt="Domain analysis" /></p>
-
-<p>在上述模型看来，领域分析实际上是一种依赖多种输入且高度参数化的框架，其最终产出也可根据参数进行定制。例如，当核心是某个产品而非技术时，领域分析主要关注战略一致性、市场策略、产品定位、风险分析、日常外观等一系列产品特性，这时需要用到通用术语调研、逻辑架构、可靠性标准等方法——这种领域分析活动被称为<strong>产品定义领域分析</strong>(Product definition domain analysis)。当有明确的证据支持当前产品流时，即可进一步就具体产品展开分析，这时往往是概念性领域分析，该活动被称为<strong>需求领域分析</strong>(Requirement domain analysis)。当表示产品线的领域趋于稳定时，就可以考虑构建特定领域的生成器，从而满足高效构建新产品的需求，此过程被称作<strong>生成器领域分析</strong>(Generator domain analysis)。</p>
-
-<h4>领域分析、数据建模、OOA</h4>
-
-<p>我们在<a href="http://www.hanyi.name/blog/2018/12/09/software-design-and-architecture-notes-6/">数据模型与数据建模</a>一文曾讨论过数据建模。从上世纪80年代初期开始，由于关系模型和关系数据库系统的流行，信息系统的构建往往都强依赖于数据库系统。为了保证概念模型能直接用于后续设计和实现，数据建模、特别是概念数据建模成为需求领域分析活动的主要内容之一。其中，实体-关系建模(ER modeling)是数据建模中最具代表性的方法，其分析结果即ER图，后者往往被直接用于数据库设计甚至应用构建[DCH96]。虽然数据建模也重视对真实世界的反映，但其更侧重于表现状态而非过程，而事实上两者对于软件开发同样重要，这也是兼具二者的OOA后来居上的原因。而OO天然具有的<strong>抽象层级</strong>和<strong>抽象边界</strong>等概念，与前文提到的领域和领域边界的概念能够一一对应，且其最终得到的领域概念和对象，亦即需求领域分析的目标。</p>
-
-<p>因此，数据建模和OOA都是领域分析采用相应建模技术的具体实现。在领域分析方法的发展过程中，二者都扮演了重要角色。虽然至今领域分析方法都在不断演进，但从已有经验总结得出的分析模式，能够为常规的领域分析活动提供可靠的候选参考。</p>
-
-<h3>面向对象分析模式</h3>
-
-<p>概念模型是理解和模拟真实世界的基础，但由于后者的复杂性通常都超乎想象，导致概念模型基本不存在正确与否的问题。对此Martin Fowler用模拟斯诺克的例子解释：当需要对球的运动进行建模时，经典牛顿力学和爱因斯坦的狭义相对论都可以作为候选模型，前者非常直观且易于实现，后者实现复杂但具备更好的适应性和精确度。显然，最终生成软件的灵活性和可重用性强烈依赖于所采用的概念模型。但除了个别质量属性外，软件工程中还存在更多的权衡因子，一个典型的例子是可维护性和成本之间的矛盾。一种平衡前述因子的有效办法是构建<strong>极简概念模型</strong>(Simplest conceptual model)——这并非一个容易达成的目标，因为“极简”不是指问题域中最简单的一部分，而是指在更高抽象层级构建概念模型，其内核虽然是“极简”的，却因为良好的伸缩性得以适应更复杂的问题域。在[MFR96]中，Martin用<strong>分析模式</strong>表示用于构建概念模型的模式，随之用<strong>支持模式</strong>表示将概念模型转化为OOD的模式。前者是下面要讨论的重点，后者属于OOD的范畴，本文不做专门讨论。</p>
-
-<ul>
-<li><strong>职责模式</strong>(Accountability)，该模式用于表示个人或者组织之间的职责。在一些问题域中经常需要表示相关职责，例如组织结构、合约、雇佣等，这些都无一例外体现为某种真实对象之间的关系。这里我们把个人、组织这种具体领域的词汇统称为更加抽象的词——<strong>实体</strong>。当不同的实体表现出趋同的职责时，应考虑构建一个更高抽象层级的实体。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/generalized_party.png" alt="Generalized party" /></p>
-
-<p>当不同实体之间存在灵活的组织层级关系时，可以从中提取抽象实体，通过递归引用构建这种层级关系，从而易于应对层级变化。如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/organization_hierarchy.png" alt="Organization hierarchy" /></p>
-
-<p>当实体的子类型间的层级关系存在某种约束时，可以把其添加至相应的子类型内部，从而避免改变模型结构。此外，实体间还可能存在多个层级关系，可以把上述显式引用的关系替换为<strong>关系类型</strong>(Typed relationship)，后者被用于表示实体间组织结构的对象类型，实体通过关联的多个结构对象实现不同的层级关系。同样，实体的结构类型也可以关联相应的约束规则，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/multiple_organization_hierarchies.png" alt="Multiple organization hierarchies" /></p>
-
-<p>上述方法的优势是如果实体的关系类型比较复杂，约束规则可以对应至每种关系类型进行管理。问题在于，如果实体的子类型变化比关系类型更多，那么任何子类型的增删改都会影响现有规则，这时可以把规则关联到每个实体的子类型，而非关系类型。</p>
-
-<p>显然此时模型的复杂度已经有了明显增加，为了方便分析这种复杂性，把当前模型划分成<strong>运行等级</strong>(Operational level)和<strong>知识等级</strong>(Knowledge level)两个部分，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/knowledge_and_operational_levels.png" alt="Knowledge and operational levels of accountability" /></p>
-
-<p>其中运行等级包含职责、实体和两者的关系，知识等级包含职责类型、实体类型和两者的关系。前者用于记录领域中发生的日常事件，后者记录用于监管前者的规则。</p>
-
-<p>另外，实体类型也可能具有抽象层级，这样就能描述更加复杂的场景。例如对于全科医生和专科医生来说，两种类型既具有共性也具有特殊性，因此可以创建一个更加抽象的层级——医生来管理其共性。</p>
-
-<p>职责类型也具有抽象层级，随着职责类型不断增加，相应规则数量也会随之增加。但是，如果职责类型表现为固定且简单的等级关系，例如常见的办公室、部门、区域等，那么可以采用分级职责类型，即直接在职责类型对象内存储静态等级列表和相应规则。后者比传统按抽象层级创建新的职责类型相比更加简单，但缺少灵活性。</p>
-
-<p>职责类型描述职责的种类，但一个具体的职责通常包含更多细节信息，例如地点、数量、内容等，这里称为<strong>运行范围</strong>(Operating scope)。运行范围也可能具有复杂的抽象层级和关联关系，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/operating_scope.png" alt="Operating scope" /></p>
-
-<p>运行范围的一个典型用例是职位描述(Job description)，也就意味着职位描述是与工作职责相互关联的，而非具体的员工实体，这也更加符合真实世界的场景。假设具有某项职责的员工离职，那么其承担的职责应被移交给接替者，可以在此基础上创建一个新的<strong>职位</strong>(Post)实体，于是就避免了职责与员工的直接关联，而是让两者通过职位间接产生关联，从而实现更好的灵活性。</p>
-
-<ul>
-<li><strong>观察与测量模式</strong>(Observations and measurements)，该模式用于表示真实世界对象的信息。以数值类属性为例，体重是人的基本属性之一，一般用数值类型存储。然而如果领域要求更精确一些，数值类属性还需要额外的单位信息，这时就需要构建抽象数据类型，这里称为<strong>Quantity</strong>。几乎一定会用到Quantity类型的领域包括财务(货币单位)、医疗(剂量单位)等。</li>
-</ul>
-
-
-<p>Quantity通常意味着单位转换的问题。一个简单的单位转换率模型如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/unit_conversion.png" alt="Unit conversion" /></p>
-
-<p>如果问题域中包含大量的转换率，可以把单位用量纲表示，这样就可以动态计算单位之间的转换率。对于更复杂的单位转换需求，例如摄氏和华氏这两个温度单位，就需要引入携带计算行为的单位转换模型。在真实世界中，一种物理量的单位经常需要用一些基本单位组合表示，例如平方英尺、米每秒等，这时就需要引入<strong>复合单位</strong>，即引用其它单位的单位。</p>
-
-<p><strong>测量</strong>是一种表示实体中数值属性的抽象数据类型。当一个实体具有大量属性、且这些属性分别用于不同操作时，实体中就可能存在大量针对这些属性的操作。测量的目的就是抽出这些操作，并在此基础上分离出位于知识等级层面的现象类型(Phenomenon type)。如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/measurement.png" alt="Measurement" /></p>
-
-<p>实体还可能包含非数值属性，与测量类似，可以采用独立的抽象数据类型表示非数值属性，二者可以共同提取出更高的抽象层级——<strong>观察</strong>。观察中所包含的规则、解释和创建方式等可以进一步提取出来，构成<strong>协议</strong>。观察往往具有一定的时效性，即观察值仅当满足特定时间段时才有效，可以通过关联时间对象解决。在一些问题域中，观察值可能被发现是无效的，但基于可追溯性无法删除已有的观察值，因此通常是给原有观察关联一个新的<strong>不合格观察</strong>。例如在医疗领域中，患者的检测报告有可能因为各种原因被识别为无效，但仍需要保留历史记录以便追踪治疗历史。医生会根据检测结果诊断病因，有时会因为某种测量结果而判断病因，也可能因后续测量结果调整治疗方案。为了表示观察值所带来的影响，可以将其划分为三种子类型:假设、投影和活动观察。其中活动观察指当前最被信任的观察，假设指需要进一步测试才能确定的观察，投影指医生认为未来可能出现的观察。</p>
-
-<p>观察是可以相互关联并产生影响的，这种情况被称为<strong>关联观察</strong>。如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/associated_observation.png" alt="Associated observation" /></p>
-
-<ul>
-<li><strong>引用对象</strong>(Referring to objects)，这是一种表示对象间引用关系的模式。真实世界的对象大都存在交互，OO首先要解决的问题就是引用对象，这通常是基于一个显式的身份标识。最简单的对象引用方式就是按名字引用其它对象，具体可以是对象名，也可以是对象id。</li>
-</ul>
-
-
-<p>当对象可能在不同场景中具有多种的标识时，简单的名字引用就难以应对各类场景中的特定对象。例如一个学生可能同时有身份证号、学号、甚至准考证号等标识，此时可以采用标识对象表示引用关系，描述场景的对象被称作<strong>标识模式</strong>，这是一种具有上下文信息的人工标识方法。如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/identification_scheme.png" alt="Identification scheme" /></p>
-
-<ul>
-<li><strong>库存与会计</strong>(Inventory and accounting)，一种跟踪企业资金流动的模式，主要用于财务会计、库存和资源管理等领域。通常用<strong>账户</strong>表示具有实际价值及其历史记录的实体，例如银行账户、库存账户等。对于账户中的每两条历史记录(指包含存和取的“两腿交易”)，都能够对应一个<strong>交易</strong>，后者用于记录价值流动的细节。如果问题域存在多腿交易，例如一次交易超过了两个参与方，则允许一个交易引用多条历史记录。从模型的角度看，两腿交易属于多腿交易的一种特殊情况，因此后者的灵活性更好。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/multilegged_transaction.png" alt="Multilegged transaction" /></p>
-
-<p>如果同时拥有多个账户，那么通常会需要额外创建一种<strong>总结账户</strong>，后者被用于汇总其它细节账户，因此这里可以抽取出账户的一个更高抽象层级表示。在税务领域中还存在另一种账户类型——<strong>备忘录账户</strong>，这种账户并非记录当前的实际价值，而是额外存放一份“应税价值”，优点是能实时监测某种价值的累积和变更情况，从而为领域添加更好的可预测性，例如方便进行年度报税。为了保证备忘录账户能够被及时更新，通常在账户中会创建一个触发器，每当一个新的记录被创建，则根据触发规则(Posting rule)创建另一条记录，后者即应税价值。如果创建新记录需要比较复杂的计算，则需要给触发规则关联一个额外的计算对象。值得注意的是，触发规则通常是可逆的，同时由于规则本身包含了交易细节，备忘录账户中的历史记录也就无须保存相应的交易记录。</p>
-
-<p>不同的账户可能具有不同的触发规则，一种方法是把触发规则与账户类型相关联，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/posting_rule.png" alt="Posting rule" /></p>
-
-<p>该模型体现了良好的概念表示，实则兼有利弊。因为其基本假设是账户类型与触发规则应存在某种强关联性，否则反而会使情况更加复杂。一个替代做法是直接把触发规则关联至某个总结账户，这样灵活性就更好，但在概念表现上则比较隐晦。</p>
-
-<p><strong>会计</strong>的实质就是在触发规则的基础上，构建一个多账户网络。这就需要能随时获取指定类型的账户和指定类型的触发规则记录。一般情况下，如果实体具有多个账户，那么该实体会附带一个相应的会计操作。如果问题域中具有极其复杂的会计操作，例如不同类型的触发规则对应不同的会计操作，那么可以通过添加会计操作类型的概念对逻辑进行合理分配。如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/accounting_practice.png" alt="Accounting practice" /></p>
-
-<p>基于上述模型的历史记录具有更强的追溯性，例如每条记录可以查找对应的源——交易，然后根据交易查询其触发规则。同时还能根据问题域创建对应的资产负债表(Balance sheet)账户和损益表(Income statement)账户，前者记录当前实际价值，例如资产总额；后者则记录每笔交易的具体流向。这两种账户虽然具有不完全相同的历史记录，但实际是一个概念的不同方面，被称作<strong>相关账户</strong>。相关性可能存在于多个账户之间，且具有对称性和传递性的特征。</p>
-
-<p>针对一条记录可能存在于多个账户的场景，还需要注意账户间关联应遵循有向无环图(Directed acyclic graph, DAG)，从而保证正确性。如果问题域要求更多的记录类型，可以采用前文讨论的备忘录账户，也可以创建子类型账户。前者具有简单的模型，适合满足简单的报表类需求，对于更加复杂的场景，就需要采用后者负责针对特定记录类型的操作。</p>
-
-<ul>
-<li><strong>计划</strong>(Planning)，该模式用于表示计划，包括制定和追踪两部分内容。任何计划都可以被看作由若干基本<strong>动作</strong>(Action)组成，与计划强调整体性不同的是，动作可以拥有不同的粒度，一个简单的动作可以包含人物、时间和地点等信息。</li>
-</ul>
-
-
-<p>动作通常是状态化的，也可能因为不同状态表现出不同的行为，其中最重要的两个状态是<strong>建议</strong>和<strong>实施</strong>，前者是指动作已经被创建，并且可能已经被赋予了某些资源；后者指动作已经开始执行。虽然同时指向一个真实世界的动作，但是建议和实施实际上可能具有很大的区别，因此，通常不使用关联的动作值/对象表示这两种状态，而是通过创建动作的两个子类型做彻底区分，同时同一个动作的两个子类型之间保持关联，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/proposed_and_implemented_action.png" alt="Proposed and implemented action" /></p>
-
-<p>类似地，如果某个动作处于完成状态，但由于完成的动作可能仍需要追溯性，通常可以将其作为实施动作的一个特例。在某些问题域中需要丢弃已经完成的动作，于是需要丢弃状态，丢弃也可能是在实施之前发生，因此丢弃动作应当是独立于建议和实施的动作。如果问题域允许暂停一个动作，那么就需要给动作关联一个暂停对象，该对象携带一个有效期信息，当时间位于该有效期内时，动作将被挂起直到暂停有效期结束。</p>
-
-<p>最基本的计划即一组建议动作的有序集合，这种顺序需要给动作添加依赖保证。当具有多个计划时，一个动作也可能同时位于多个计划中。如果动作允许嵌套，那么计划也可以被看作是一种特殊的动作。</p>
-
-<p>通常企业的运行过程可以用通用的动作进行表示，其中动作和计划位于运行等级，我们把位于知识等级的部分称作<strong>协议</strong>，其结构如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/structure_for_protocol.png" alt="Structure for protocol" /></p>
-
-<p>动作通常是基于协议创建的，最简单的方法是根据协议创建关联的建议动作，也可以在更高层级创建等同于计划的建议动作。如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/plan_action_protocol.png" alt="Relationship of plan, action and protocol" /></p>
-
-<p>我们知道动作在实施前需要分配资源。资源可以被划分为两种基本类型，例如药品、针头、源材料等属于消费型资源，又如设备、房间、人等属于资产型资源。每种资源类型都具备对应的分配方式，这些分配方式具有统一的资源分配接口。</p>
-
-<p>计划是通过观察启动的，后者是基于假设和投影的结果。因此计划的输出结果也应该是观察的形式。与计划类似，观察也是动作的一种子类型，并且可以作为计划的一部分。前述两种观察在知识等级可以采用启动函数和输出函数表示，前者用于触发协议，后者用于把输入的协议和观察组合进行转换并以两个观察概念集合输出:一个表示协议的使用目标，另一个记录边际效应。</p>
-
-<ul>
-<li><strong>交易</strong>(Trading)，指在变化的市场条件下销售和购买商品的模式。<strong>合约</strong>是最基本的交易形式，具体的实现手段包括股票、商品、外汇等。例如大多数市场都以货币为交易手段，于是交易价格就以货币方式表示。交易的两种类型做多(Long)和做空(Short)分别代表买入和卖出，一个基本的交易模型如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/contract.png" alt="Contract" /></p>
-
-<p>银行的风控系统通常以<strong>交易组合</strong>(Portfolio)为单位监控异常交易，交易组合一般拥有采用合约构建其自身的方法，该方法通过合约选择器筛选出合约，并保存在自身记录中。交易组合可以是短期或长期的，短期交易组合是按需创建，使用完成后丢弃；而长期交易组合能存在较长一段时间，因此当新的交易产生时，系统会将其与所有的长期交易组合进行匹配，并添加至满足条件的长期交易组合。</p>
-
-<p>任何金融市场的交易都有<strong>报价</strong>(Quote)，多数情况下“报价”其实包含两个值——买入价和卖出价，这被称为<strong>双向价格</strong>(Two way pricing)。相应地，在某些问题域中也存在<strong>单向价格</strong>(One way pricing)，后者可以被看作是双向价格的一种特殊情况。为了同时支持这两种报价类型，需要构建一个更高抽象层次的报价类型，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/quote.png" alt="Quote" /></p>
-
-<p>如果问题域中单向价格和双向价格的差别非常大，那么抽象类型反而会造成很多局限性，此时就需要对两种价格类型分别建模。</p>
-
-<p>市场中的报价是瞬息万变的，因此报价通常会携带时刻信息。如果想查询市场上所有股票的价格，需要抽取每只股票截至某个时刻的最后一次报价，然后把这些报价添加至一个集合——<strong>场景</strong>(Scenario)，即表示市场在某一时刻的状态。从满足需求的角度来说，直接从全部报价中根据时刻抽取相应报价，即可方便获得市场上的公开价格。但场景是对某个时刻市场价格的抽象表示，可以方便后续的价格查询、分析和比较等。问题域在外汇市场变得更加复杂，由于汇率不再是由单一来源发布，因此需要额外添加一个实体作为价格发布者，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/party.png" alt="Party and scenario" /></p>
-
-<ul>
-<li><strong>交易包</strong>(Trading package)，一种把较大的领域模型拆分为更多小型领域模型的模式。<strong>包</strong>通常指一个独立且具有一定规模的软件模块，例如在OO中包可以是一些类的集合，其内部可见性也表明了包的内聚性。包之间一般存在<strong>多重访问等级</strong>，例如在交易领域中，交易组合会把市场指标作为其描述，场景则为市场指标提供价格计算，交易组合与合约通过场景对自身进行定价，但反过来场景并不需要依赖交易组合或合约。这种包之间的可见性如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/package_visibility.png" alt="Package visibility" /></p>
-
-<p>进一步，交易组合需要从市场指标中获取价格，但并不需要了解场景是如何被创建的。因此虽然之前我们讨论了包之间存在可见性的必要性，但这种可见性必须是可控的。一种解决办法是通过额外的接口实现包之间的依赖，然后针对这些接口创建新的包，从而实现更细粒度的包可见性依赖。这种方法的缺点是包的概念和结构变得更加复杂，进而引发可维护性问题。另一种办法是在现有概念模型的基础上引入表示应用逻辑和表现层的组件，例如创建一个新的风险管理应用包和场景管理应用包，前者负责沟通交易组合与场景，后者专门负责创建场景，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/pattern_oriented_domain_analysis_and_modeling/application_packages.png" alt="Application package" /></p>
-
-<p>注意在上图中还有一个新的包“场景结构”，其目的是为了保证场景包对外提供统一的接口，从而将部分职责从原始场景包中进行了分离。</p>
-
-<p>如果一个包是另一个包的子类型，那么不应出现后者依赖前者的情况，否则会损害子类型的可扩展性。包有时还会出现<strong>互相依赖</strong>的问题，进而导致过高的耦合性，这时需要考虑把这种双向依赖转变为单向依赖，因为后者的耦合度更低，但也可能会增加使用上的复杂度。例如对于实体和合约来说，实体有时需要知道与之相关的合约，反之合约也需要知道参与的实体。对此如果要消除双向依赖，就必须消除某个方向的依赖关系。但是无论是消除任一种关系，都会造成某些客户端应用的复杂度增加的问题。除此之外还可以选择把两个包合并，但也可能引入不恰当的可见性问题。因此对这种互相依赖的解决需要考虑更多上下文进行综合判断。</p>
-
-<h2>结论</h2>
-
-<p>模式是对实践经验的积累和发散，真实世界的复杂性导致了模式只能被发现而不能被发明出来，也因此很难避免其在面临复杂问题域时的局限性。然而，与后续会讨论的其它类型的模式相比，分析模式其实具备更高的灵活性和适用性，特别是比形式化的模式表述更加接近真实的思维方式。</p>
-
-<h2>引用</h2>
-
-<p>RPD90, <a href="http://www.engr.sjsu.edu/fayad/current.courses/cmpe202-spring2015/docs/CmpE202-SE-Link-Part-Two-Fall2013/11-Domain%20Analysis/Domain%20Analysis%20-%20An%20Introduction.pdf">Domain analysis: introduction</a></p>
-
-<p>JMN80, <a href="http://www.bayfronttechnologies.com/thesis.pdf">Software Construction Using Components</a></p>
-
-<p>DCH96, <a href="http://ptgmedia.pearsoncmg.com/images/9780133492125/samplepages/0133492125.pdf">Data model patterns: conventions of thought</a></p>
-
-<p>MFR96, <a href="https://martinfowler.com/books/ap.html">Analysis patterns
-</a></p>
 ]]></content>
   </entry>
   

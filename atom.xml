@@ -4,7 +4,7 @@
   <title><![CDATA[Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2019-06-01T23:33:07-04:00</updated>
+  <updated>2019-06-08T13:16:02-04:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,124 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[软件设计与架构笔记(15)]]></title>
+    <link href="http://www.hanyi.name/blog/2019/06/08/software-design-and-architecture-notes-15/"/>
+    <updated>2019-06-08T13:14:00-04:00</updated>
+    <id>http://www.hanyi.name/blog/2019/06/08/software-design-and-architecture-notes-15</id>
+    <content type="html"><![CDATA[<h2>软件架构说什么？</h2>
+
+<p><strong>架构</strong>(Architecture)一词源自建筑领域，尽管看起来与软件设计毫无关联，但人们从上世纪60年代起就注意到两者的相似性[PHJ06]，并从结构和工程等方面大量借鉴了这个古老的学科，软件设计也因此获益匪浅[GHJV95]。当然不仅是软件，这个词也被其它领域广泛借鉴，例如作为计算机基础的<strong>体系结构</strong>(Computer architecture)，后者主要指计算机的物理结构或者CPU指令集。又比如<strong>企业架构</strong>(Enterprise architecture)、<strong>解决方案架构</strong>(Solution architecture)或者<strong>信息架构</strong>(Information architecture)等，则是表示针对各自问题域的专业性实践集合。</p>
+
+<p>虽然架构与<strong>设计</strong>同属于本系列的主题之一，但迄今为止我们都很少提及。一方面是因为，作为诞生于上世纪90年代的buzz word，软件架构是在软件设计的基础上发展而来的，前者继承了后者的许多核心思想，例如模块化、原则、模式等，逐渐形成了更加庞大的体系。另一方面，架构一词如今具有极其丰富的含义，以至于可能达到阻碍交流的地步，因此确有必要首先对部分概念予以澄清。此外，除非特别说明，本系列文章中的架构均指软件架构。</p>
+
+<h3>定义和解释</h3>
+
+<p><em>架构是指一个系统在其所在环境中的基本概念和属性，这体现为系统的元素、关系及其设计和演进的原则。</em></p>
+
+<p>虽然这是ISO/IEC 42010对架构的正式定义，另一种USP(Unique selling proposition)定义则更详细地解释了这一点:</p>
+
+<p><em>架构是一系列重要的决策，涉及描述软件系统的组织、确定结构化元素及其接口、确定元素在协作中的特定行为、指导结构和行为元素通过组合逐渐形成较大子系统的风格(涉及元素、接口、协作和组织等)。此外还要考虑用途、功能、性能、适应力、可重用性、可理解性、经济性、技术限制及其权衡、美学等因素。</em></p>
+
+<p>以上定义明确指出了架构的<strong>表示</strong>(Representation)、<strong>质量属性</strong>(Quality attribute)以及<strong>风格</strong>(Style)等核心内容。此外，针对已有的架构方案，有时需要进行专门的<strong>架构评估</strong>(Architecture evaluation)，从而提前发现问题并控制潜在风险。本文剩余部分将作进一步讨论。</p>
+
+<h3>架构表示</h3>
+
+<p>由于架构本身的丰富性，采用适当方法描述架构就变得非常重要，一种基本的架构描述工具是<strong>架构视图</strong>(Architecture view)，其被用于表示架构在解决特定问题时所体现的结构化信息。由于完整的架构一般会涉及众多干系人，在单一视图中无法清楚表示所有信息，因此为了进一步在视图中区分来自不同干系人的诉求，采用<strong>架构视点</strong>(Architecture viewpoint)聚焦于某一类架构决策，并采用特定的标记和建模技术建立对应的架构视图。常见的架构视点有功能、逻辑、数据、模块、组件-连接器、需求、实现、并发、性能、安全、部署、用户使用及反馈等，由此可见其对应的架构视图也就非常丰富。</p>
+
+<p>以组件-连接器类型的架构视图为例，该架构视图定义了系统中的可计算组件及其交互方式，其中组件是指可独立运行、且支持交互或存储数据的软件单元，连接器则被用于描述组件之间的交互机制。在构建组件-连接器视图的过程中，组件可以根据承担功能、可重用性、硬件单元，甚至团队的技术背景、康威定律以及产品演化路径等方式定义。同时，组件还需要描述其对外提供交互的接口(API)，包括访问端口、参数以及参数类型。然后根据组件间交互的需求，如同步、异步、延迟、吞吐量等确定连接器的类型和通信协议。连接器两端的组件分别被称为调用者和被调用者，组件与连接器之间通常需要相关配置以确定关联信息。</p>
+
+<h4>架构描述语言</h4>
+
+<p>通常，架构视图是采用<strong>架构描述语言</strong>(Architecture description languages，ADL)具体实现的，如AADL、Wright、ACME、xADL等专门面向软件架构的语言。同时也可以采用通用的建模语言，例如UML，实际上后者在工业界更加流行。架构视图和ADL共同组成了架构表示的基本方法，但仍不足以有效应对架构的复杂性。这是因为在真实场景中架构视点可能是非常多的，架构需要从核心视点出发逐步完善，因此需要进一步参考适当的<strong>架构框架</strong>(Architecture framework)。</p>
+
+<h4>架构框架</h4>
+
+<p>架构框架是指在特定应用领域或干系人社区中，创建、解释、分析和使用架构表示的通用实践集合。一种经典的架构框架是“4+1架构视图模型”[PK95]，其基本思想是需要采用若干个相互平行、且具有不同架构视点的架构视图，具体来说就是<strong>逻辑视图</strong>、<strong>进程视图</strong>、<strong>开发视图</strong>和<strong>物理视图</strong>等四种主要架构视图，以及相应的<strong>用例和场景</strong>说明，从而达到表示完整架构的目的。</p>
+
+<ul>
+<li><p>逻辑视图，即把系统按照功能、通信、行为等进行结构化分解的结果，描述系统的静态信息。具体可以采用UML中的类图或状态图实现。</p></li>
+<li><p>进程视图，即对系统中进程和线程的通信、执行过程进行描述，即系统的动态运行信息。具体可以采用UML中的部署图和活动图实现。</p></li>
+<li><p>开发视图，也称作<strong>实现视图</strong>，用于描述软件开发过程中的软件结构，例如组件、包、类、子系统、代码库、文件等。具体可采用UML的组件图或包图实现。</p></li>
+<li><p>物理视图，描述系统运行的硬件资源结构，及其与系统进程之间的映射关系。具体可采用UML中的部署图、时序图或协作图实现。</p></li>
+<li><p>用例和场景，也称作<strong>用例视图</strong>，即从少量核心用例出发，描述系统中对象间、进程间的交互顺序。该视图主要用于构建可验证的架构原型，从而对当前架构进行测试。</p></li>
+</ul>
+
+
+<p>根据上述5种架构视图，4+1架构视图模型能够建立一个核心的软件架构表示。然而从架构对整个软件工程的影响角度来说，架构框架作为架构表示的核心，往往还需要更多架构视点的支持，这与具体上下文密切相关，特别是接下来要讨论的质量属性。</p>
+
+<h3>质量属性</h3>
+
+<p>除了满足功能需求，架构还需要考虑系统的非功能需求(二者相互正交)，后者也被称作系统的质量属性，例如性能、可靠性、资源利用率、可用性、精确性等。与功能需求最显著的不同在于，质量属性往往是相对概念，一般表现为某种程度，且具备多种领域背景。正因为如此，质量属性大大提升了架构的复杂性，也是除了功能需求变化外另一个可能引起架构变化的重要原因。</p>
+
+<p>ISO/IEC 25010对软件质量进行了明确定义，其中功能性表示系统功能的完整性、正确性、适当性与合规性，此外还包含7种非功能属性以及对应的子属性:</p>
+
+<ul>
+<li><p>可靠性，指系统在特定时间和条件下维持当前性能的能力，包括成熟度、容错性、可恢复下、可用性等指标。</p></li>
+<li><p>易用性，指个体或群体在使用系统时的难易程度。包括易理解性、易学习性、易操作性、界面美观性、操作错误保护以及可访问性。</p></li>
+<li><p>高效性，指系统在特定条件下，资源使用量与软件性能之间的关系。包括耗时、资源利用率、容量等指标。</p></li>
+<li><p>兼容性，指系统在特定的软、硬件环境中能够正常运行的能力。包括共存性、互操作性等指标。</p></li>
+<li><p>安全性，指系统保护数据和执行正当行为的能力。包括保密性、完整性、非拒绝性、可审计性以及可验证性。</p></li>
+<li><p>可维护性，指系统在需要做出特定修改时所花费的成本大小。包括可分析性、可改变性、稳定性、可测试性、模块性、可重用性以及可修改性。</p></li>
+<li><p>可移植性，指系统迁移到其它环境的能力。包括可适应性、可安装性、可替换性等。</p></li>
+</ul>
+
+
+<p>值得一提的是，经验研究表明并非所有的非功能需求都有同等机会引发架构变化[JAD16]，尽管它们可能拥有相同的重要性。但在进行架构相关决策时，依然不可避免地要考虑功能以及多种质量属性，这就导致从零开始设计架构具有极高的成本和风险。因此绝大多数架构设计活动实际上是遵循着经受实践检验的经验，即下面要讨论的<strong>架构风格</strong>。</p>
+
+<h3>架构风格</h3>
+
+<p>架构风格是指一系列满足功能和特定质量属性的设计决策与约束子集[RNE09]，其意义在于:</p>
+
+<ul>
+<li><p>提供可重用的领域和工程知识，特别是相同领域或产品族中与应用无关的设计规则和决策，避免重新发明轮子。</p></li>
+<li><p>阻止架构腐化和偏离，帮助未来开发人员在不损害基本架构原则的基础上扩展系统。</p></li>
+<li><p>根据质量需求指导设计。</p></li>
+</ul>
+
+
+<p>以经典的<strong>管道-过滤器</strong>架构为例，在该架构风格中，所有的过滤器都通过两个字节流“输入”和“输出”进行通信，这样就保证了任何过滤器都能够互相连接——即满足兼容性。另外，过滤器之间可以一次只传递部分数据，这样就能够尽可能提高过滤器之间并行计算的能力，从而提高系统效率。除此之外，应用中常见的架构风格还包括但不限于:</p>
+
+<ul>
+<li><p>客户端-服务器(C/S)架构。</p></li>
+<li><p>分层(三层或N层)架构。</p></li>
+<li><p>点对点(Peer-to-peer)架构。</p></li>
+<li><p>事件驱动(Event-driven)架构，也称隐式调用架构。</p></li>
+<li><p>表述性状态转移(REST)架构。</p></li>
+<li><p>面向服务架构(SOA)。</p></li>
+<li><p>领域驱动设计(DDD)。</p></li>
+</ul>
+
+
+<p>限于篇幅本文无法详细讨论每种架构风格。而事实上，在实际软件开发过程中架构风格往往是在最初就确定的，因此可被视为架构设计的设计规则。另外，大部分情况下整个系统会拥有多种架构风格，从而满足各种质量属性需求。</p>
+
+<h3>架构评估</h3>
+
+<p>由于架构的重要性，团队通常需要对已有的架构方案进行评估。架构权衡分析(Architecture tradeoff analysis method)是一种架构评估方法，采用该方法首先需要建立一个专门的架构评审小组，该小组应至少包含所有的干系人。启动评估后，首先应确保所有参与者熟悉评估流程以及业务背景。向所有评估者展示更高层次的系统架构，包括所采用的架构风格。然后通过<strong>质量属性树</strong>描述系统所要特别关注的质量属性，并且为每个所要满足的属性提供一个具体场景。一个质量属性树的例子如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/architecture/quality_tree.png" alt="Quality attribute tree" /></p>
+
+<p>把所有场景按照优先级进行排序，然后逐一分析当前架构对该场景的适用性，根据相关反馈进行调整。最后在更大范围的干系人组织中分享当前架构知识。</p>
+
+<h2>结论</h2>
+
+<p>软件架构包含三个核心问题，分别是架构表示、质量属性和架构风格。架构表示是架构得以沟通并完善的重要途径，在架构设计的过程中不仅要考虑功能需求，还要考虑非功能需求(质量属性)，不同的架构风格在应对特定质量属性方面具有优势，因此真实场景中需要组合架构风格以满足来自不同干系人的需求。</p>
+
+<h2>引用</h2>
+
+<p>PHJ06, <a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=1605175">The Past, Present, and Future of Software Architecture</a></p>
+
+<p>GHJV95, <a href="https://sophia.javeriana.edu.co/~cbustaca/docencia/DSBP-2018-01/recursos/Erich%20Gamma,%20Richard%20Helm,%20Ralph%20Johnson,%20John%20M.%20Vlissides-Design%20Patterns_%20Elements%20of%20Reusable%20Object-Oriented%20Software%20%20-Addison-Wesley%20Professional%20%281994%29.pdf">Design Patterns: Elements of Reusable Object-Oriented Software</a></p>
+
+<p>PK95, <a href="https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf">Architectural Blueprints—The “4+1” View
+Model of Software Architecture</a></p>
+
+<p>RNE09, <a href="https://www.softwarearchitecturebook.com/">Software Architecture: Foundations, Theory, and Practice</a></p>
+
+<p>JAD16, <a href="http://www.aset.tu-berlin.de/fileadmin/fg331/Publications/ICSE16.pdf">Are “Non-functional” Requirements really Non-functional?</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[软件设计与架构笔记(14)]]></title>
@@ -3721,139 +3839,6 @@ Object-Oriented Thinking</a></p>
 </tbody>
 </table>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[metaprogramming ruby: core concepts - eval family I]]></title>
-    <link href="http://www.hanyi.name/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family/"/>
-    <updated>2015-09-14T23:08:19+08:00</updated>
-    <id>http://www.hanyi.name/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family</id>
-    <content type="html"><![CDATA[<p>In ruby, block is the cornerstone of metaprogramming with a surprisingly powerful scope controlling capability. Based on this definition, much brilliant interfaces are introduced, and help to implement many valuable features, like callable objects, eval and its huge family.</p>
-
-<h3>1. blocks</h3>
-
-<p>Block represents a snippet of code, it permits to be called immediately or lately depends on different cases. But compared with some similar concepts in functional programming languages, like Lisp, block still has more limits, and more readability respectively.</p>
-
-<p>In commonly, block can be used like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show_hello</span>
-</span><span class='line'>  <span class="k">yield</span> <span class="s1">&#39;hello&#39;</span> <span class="k">if</span> <span class="nb">block_given?</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">show_hello</span> <span class="p">{</span> <span class="o">|</span><span class="n">say</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">say</span> <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">show_hello</span> <span class="k">do</span> <span class="o">|</span><span class="n">say</span><span class="o">|</span>
-</span><span class='line'>  <span class="n">file</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;/tmp/output.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">file</span><span class="o">.</span><span class="n">write</span> <span class="n">say</span>
-</span><span class='line'>  <span class="n">file</span><span class="o">.</span><span class="n">close</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>&lsquo;yield&rsquo; is a ruby keyword used to call blocks sent to the current method. block_given? is an instance method from Kernel to probe whether there is a block for current method.</p>
-
-<p>One of the most useful aspect of block is closure, it captures bindings where it&rsquo;s defined, and avoid impact of scope changing by connecting to those bindings, like flat scopes, and shared scopes.</p>
-
-<p>Frankly speaking, block is actually not responsible for running code, but only representation (Except yield, which indeed means running code immediately). There are more powerful tools to help enhance block usage.</p>
-
-<h3>2. callable objects</h3>
-
-<p>Block is just like a package of code, and you need to use yield to execute it if you like. However, there are more ways to package code in ruby, including Proc and lambda.</p>
-
-<h4>Proc</h4>
-
-<p>We already know that block is not an object in ruby which is really quite a few, but Proc is basically a block turned object, can be seen as a consistent form of block, and you do not have to use yield to run it immediately, it will be running later as you want (Deferred Evaluation). you can define a Proc like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">inc</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span>
-</span><span class='line'><span class="n">inc</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#2</span>
-</span><span class='line'><span class="n">dec</span> <span class="o">=</span> <span class="nb">proc</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">}</span>
-</span><span class='line'><span class="n">inc</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>lambda</h4>
-
-<p>Except for Proc, lambda can also be used for transferring blocks, but with simpler and a little different way:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">inc</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span>
-</span><span class='line'><span class="n">inc</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#2</span>
-</span><span class='line'><span class="n">dec</span> <span class="o">=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">}</span>
-</span><span class='line'><span class="n">dec</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#1</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>&amp; operator</h4>
-
-<p>Once you have defined a block for a method, there is a way to convert it to a Proc inner method by using &amp;. For example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">bar</span>
-</span><span class='line'>  <span class="k">yield</span> <span class="s1">&#39;ruby&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">operation</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">bar</span><span class="p">(</span><span class="o">&amp;</span><span class="n">operation</span><span class="p">)</span>
-</span><span class='line'>  <span class="n">operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;world&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">foo</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">&quot;hello </span><span class="si">#{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="c1"># hello ruby</span>
-</span><span class='line'><span class="c1"># hello world</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>&amp; can be seen like transferring a block into Proc, but you need to remove &amp; if you want to use it as a Proc.</p>
-
-<h4>Comparison between procs and lambdas</h4>
-
-<p>You may notice that lambda is also a Proc, but you can still use Proc#lambda? to see the actual type of the target. Besides there are two important differences: keyword &lsquo;return&rsquo; and arguments checking.</p>
-
-<h5>a. return</h5>
-
-<p>As plain blocks, the program will return out of scope where block defined if return statement is set inner block, so does Proc (which may mean that the return may cause exception when the block is called in nonreturnable scope, like top-level). While for lambda, the return only runs out of block, not even farther.</p>
-
-<h5>b. arity</h5>
-
-<p>Arity means the number of arguments. In real case, lambda has less tolerance than Proc, which means that lambda requires correct number of arity, which is no need for procs.</p>
-
-<h4>Method objects</h4>
-
-<p>All methods are objects of Method. You can use Kernel#method or Kernel#singleton_method to get the object of method, then use Method#call to run the method. Also you may use Method#to_proc and define_method to convert method and proc to each other. Eventhough the method still has scope of it&rsquo;s defined.</p>
-
-<h5>Unbound Methods</h5>
-
-<p>Method object can also be unbound from original scopes by using Method#unbind, or Module#instance_method. Generated UnboundMethod object can not be called directly, but you can still call it after bind it to another scope by using UnboundMethod#bind. The only notice is that UnboundMethod object can only be bound to same class or sub if it&rsquo;s from class, and no such limitation when it&rsquo;s from module.</p>
 ]]></content>
   </entry>
   

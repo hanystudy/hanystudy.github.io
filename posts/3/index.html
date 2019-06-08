@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="Opening Classes Opening classes brings much flexibility for ruby. It permits you to modify existed classes or modules permanently, without having to &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="In ruby, block is the cornerstone of metaprogramming with a surprisingly powerful scope controlling capability. Based on this definition, much &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,174 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family/">
+		
+			Metaprogramming Ruby: Core Concepts - Eval Family I</a>
+	</h2>
+	<div class="entry-content">
+		<p>In ruby, block is the cornerstone of metaprogramming with a surprisingly powerful scope controlling capability. Based on this definition, much brilliant interfaces are introduced, and help to implement many valuable features, like callable objects, eval and its huge family.</p>
+
+<h3>1. blocks</h3>
+
+<p>Block represents a snippet of code, it permits to be called immediately or lately depends on different cases. But compared with some similar concepts in functional programming languages, like Lisp, block still has more limits, and more readability respectively.</p>
+
+<p>In commonly, block can be used like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">show_hello</span>
+</span><span class='line'>  <span class="k">yield</span> <span class="s1">&#39;hello&#39;</span> <span class="k">if</span> <span class="nb">block_given?</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">show_hello</span> <span class="p">{</span> <span class="o">|</span><span class="n">say</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">say</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">show_hello</span> <span class="k">do</span> <span class="o">|</span><span class="n">say</span><span class="o">|</span>
+</span><span class='line'>  <span class="n">file</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;/tmp/output.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">file</span><span class="o">.</span><span class="n">write</span> <span class="n">say</span>
+</span><span class='line'>  <span class="n">file</span><span class="o">.</span><span class="n">close</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&lsquo;yield&rsquo; is a ruby keyword used to call blocks sent to the current method. block_given? is an instance method from Kernel to probe whether there is a block for current method.</p>
+
+<p>One of the most useful aspect of block is closure, it captures bindings where it&rsquo;s defined, and avoid impact of scope changing by connecting to those bindings, like flat scopes, and shared scopes.</p>
+
+<p>Frankly speaking, block is actually not responsible for running code, but only representation (Except yield, which indeed means running code immediately). There are more powerful tools to help enhance block usage.</p>
+
+<h3>2. callable objects</h3>
+
+<p>Block is just like a package of code, and you need to use yield to execute it if you like. However, there are more ways to package code in ruby, including Proc and lambda.</p>
+
+<h4>Proc</h4>
+
+<p>We already know that block is not an object in ruby which is really quite a few, but Proc is basically a block turned object, can be seen as a consistent form of block, and you do not have to use yield to run it immediately, it will be running later as you want (Deferred Evaluation). you can define a Proc like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">inc</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span>
+</span><span class='line'><span class="n">inc</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#2</span>
+</span><span class='line'><span class="n">dec</span> <span class="o">=</span> <span class="nb">proc</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">}</span>
+</span><span class='line'><span class="n">inc</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>lambda</h4>
+
+<p>Except for Proc, lambda can also be used for transferring blocks, but with simpler and a little different way:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">inc</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span>
+</span><span class='line'><span class="n">inc</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#2</span>
+</span><span class='line'><span class="n">dec</span> <span class="o">=</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">}</span>
+</span><span class='line'><span class="n">dec</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>&amp; operator</h4>
+
+<p>Once you have defined a block for a method, there is a way to convert it to a Proc inner method by using &amp;. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">bar</span>
+</span><span class='line'>  <span class="k">yield</span> <span class="s1">&#39;ruby&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">operation</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">bar</span><span class="p">(</span><span class="o">&amp;</span><span class="n">operation</span><span class="p">)</span>
+</span><span class='line'>  <span class="n">operation</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;world&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">foo</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">&quot;hello </span><span class="si">#{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="c1"># hello ruby</span>
+</span><span class='line'><span class="c1"># hello world</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>&amp; can be seen like transferring a block into Proc, but you need to remove &amp; if you want to use it as a Proc.</p>
+
+<h4>Comparison between procs and lambdas</h4>
+
+<p>You may notice that lambda is also a Proc, but you can still use Proc#lambda? to see the actual type of the target. Besides there are two important differences: keyword &lsquo;return&rsquo; and arguments checking.</p>
+
+<h5>a. return</h5>
+
+<p>As plain blocks, the program will return out of scope where block defined if return statement is set inner block, so does Proc (which may mean that the return may cause exception when the block is called in nonreturnable scope, like top-level). While for lambda, the return only runs out of block, not even farther.</p>
+
+<h5>b. arity</h5>
+
+<p>Arity means the number of arguments. In real case, lambda has less tolerance than Proc, which means that lambda requires correct number of arity, which is no need for procs.</p>
+
+<h4>Method objects</h4>
+
+<p>All methods are objects of Method. You can use Kernel#method or Kernel#singleton_method to get the object of method, then use Method#call to run the method. Also you may use Method#to_proc and define_method to convert method and proc to each other. Eventhough the method still has scope of it&rsquo;s defined.</p>
+
+<h5>Unbound Methods</h5>
+
+<p>Method object can also be unbound from original scopes by using Method#unbind, or Module#instance_method. Generated UnboundMethod object can not be called directly, but you can still call it after bind it to another scope by using UnboundMethod#bind. The only notice is that UnboundMethod object can only be bound to same class or sub if it&rsquo;s from class, and no such limitation when it&rsquo;s from module.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-14T23:08:19+08:00" pubdate data-updated="true">2015-09-14</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/ruby/'>ruby</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2015/09/14/metaprogramming-ruby-core-concepts-eval-family//posts/3/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1466,124 +1634,6 @@ remove_method Removes the method identified by symbol from the current class. Fo
 
 	
 		<span class="comments"><a href="/blog/2015/07/19/microservices-scale-3//posts/3/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/07/18/microservices-scale-2/">
-		
-			Microsevices陷阱: 层级演进（中）</a>
-	</h2>
-	<div class="entry-content">
-		<h3>5. 缓存</h3>
-
-<p>当某个操作的结果可以被临时存储，从而使后续的相同操作能够直接采用上述结果，而非花费同样时间和资源在重复操作上，这种性能优化方法就是缓存技术。如今面临大规模的HTTP访问量，缓存已经成为解决性能瓶颈的大杀器之一。</p>
-
-<p>当然，即使是单一系统，目前也存在众多缓存方案可供选择。但对微服务架构来说，可选择的就更多——问题是对于分布式系统而言，由于节点间的相互对等性，缓存存在于客户端或是服务端，会是一个艰难的选择。</p>
-
-<h4>客户端、代理和服务端缓存</h4>
-
-<p>对于三个主要的缓存承载对象之一，客户端缓存主要是把数据放在客户端中，并由客户端决定是否从服务端刷新数据。一种理想的情况是，由服务端负责提供是否需要刷新的线索，然后由客户端决定是否刷新，这种技术被广泛用于HTTP缓存。</p>
-
-<p>代理是指位于客户端和服务端之间的设施，由代理决定缓存机制的包括反向代理或CDN技术。</p>
-
-<p>另一种方法是由服务端负责缓存技术，如采用Redis或Memcache，或者更简单的一些片内缓存技术。</p>
-
-<p>对上述方案的选择主要取决于优化的目标。例如，客户端缓存主要目的是降低网络负载，并且实现起来最为简便；缺点是一旦实行成熟的客户端缓存机制，服务端要想做出什么修改就比较困难，特别是容易引发未经验证的脏数据问题（下文会做进一步讨论）。而对代理缓存来说，其对客户端/服务端都是完全透明的，且针对普通HTTP通信实现也很简单，例如采用反向代理如Squid或Varnish。尽管代理会引入更多网络路由节点，但这对随后的性能提升来说基本是可以忽略不计。服务端缓存能够保证对客户端实现透明化，而且一旦缓存位于服务边界上，就能很容易解决脏数据、分析和优化命中率。同时服务端缓存对于系统性能的提升是最为有效和迅速的——但实现起来又稍复杂。</p>
-
-<p>一般缓存技术的选择可以是混合性的，但也有分布式系统内部完全不设缓存的情况，因此要具体问题具体分析。</p>
-
-<h4>HTTP缓存</h4>
-
-<p>HTTP协议提供了全面的缓存技术，包括客户端和服务端。首先，HTTP头的cache-control指令告诉客户端是否应该缓存当前响应信息，以及缓存时间。同样，还包含一个Expires属性，用于标记该信息在某个时间点后过期，而非持续多长时间。对于静态网站数据，如图像、CSS等，使用cache-control的time to live（TTL）就能够很好解决这一问题。</p>
-
-<p>除了cache-control和Expires，HTTP还提供了一种Entity Tags（ETags）机制。ETag其实是用来标记当前信息是否已经发生变化，即使URI不变，也能识别该信息是否是最新的。应当明确，ETags本身不提供缓存机制，而是通过Conditioanl GET实现，后者是说在GET请求中添加某些头信息，从而告诉服务端只有当该条件满足时才返回整个信息。</p>
-
-<p>当然，ETags还少不了要打上cache-control，只有当TTL或Expires满足时，客户端才会发送信息并携带If-None-Match: ETag值。服务端通过读取If-None-Match信息，判断客户端的信息是否已经过时，如果已是最新，则返回304 Not Modified，否则返回整体信息和200 OK。这些方法在反向代理上被广泛采用，甚至包括CDN如AWS的CloudFront和Akamail。一般的HTTP标准库也都包含这些功能。</p>
-
-<p>无论是cache-control、Expires或ETags，其在功能上相互存在一定重叠。而这也确实会对HTTP通信带来一些问题，特别是混合使用时。建议参考《REST in Practice》或HTTP/1.1协议的13章。</p>
-
-<p>即使不采用HTTP协议进行消息缓存，也应当参考这部分的设计思路，无论对客户端/服务端的缓存实施都是很有价值的。</p>
-
-<h4>写缓存</h4>
-
-<p>对写操作设置缓存在某些场景下是必要的，例如当写操作突然增加时，短期间内频繁I/O会降低系统性能，好的做法是先把数据写入本地缓存中，之后再统一更新至下游节点。另一方面，当下游服务发生不可用的情况时，写操作的数据会被较好的保存，并不会造成数据丢失的问题。</p>
-
-<h4>恢复缓存</h4>
-
-<p>缓存也能够被用于灾难恢复。例如对客户端缓存来说，当下游节点出现问题，客户端就可以把本地缓存作为临时数据，而不是直接导致不可用。Web技术早起曾经有一种Guardian技术，作用是定期生成整个网站的静态内容，当系统离线时就采用静态版本提供服务，尽管数据不是最新的，但仍可以向用户提供服务。</p>
-
-<h4>隐藏源</h4>
-
-<p>由于未命中缓存的存在，一般系统的源都会面临未缓存请求的访问，当请求数量突然增加时就可能导致源崩溃，继而影响整个分布式系统。因此，在某些系统中，请求永远不能直接访问源，当缓存未命中时会立即得到错误响应，同时缓存节点也会把相应的请求信息异步发送至源，再由源把所需数据同步至缓存节点。这种做法的好处就是完全避免了源遭遇大访问量的情况，从而提高系统整体稳定性。</p>
-
-<h4>缓存建立的原则</h4>
-
-<p>目前业界有一种趋势，就是多级缓存＋各类缓存。实际上，缓存就意味着脏数据的可能：当缓存层级增加，脏数据的概率和数量也会随之增加，对于某些业务场景而言这是不可容忍的。特别是当采用微服务架构，类似后果的影响会被无限放大。因此采用缓存的原则就是：简单、单一、有效。</p>
-
-<p>另一方面，采用缓存要时刻保持警惕，因为脏数据对某些业务场景来说几乎是零容忍的。更何况不同缓存所带来的约束也各不相同——例如HTTP缓存中的Expires: Never，就可能导致某些用户理论上永远无法更新数据，其后果可想而知。因此，一定要在完全理解概念的基础上，再谨慎引入缓存技术。</p>
-
-<h3>6. 自动扩展</h3>
-
-<p>自动扩展的前提是基础设施的全面自动化，此类问题在前几篇文章已经提到多次。但是，仅有运维自动化还不足以实现自动扩展——应用至少应部署在公有/私有云之上。例如，在一天中的某个时间段内系统负载总是面临峰值考验，如采用AWS公有云服务的话，动态开启/关闭节点可以节省成本，同时还能在面临高负载时应对自如，当然前提是你手中有足够的运营数据。这种根据数据决定基础扩展策略的方式，通常被称作预测式扩展。</p>
-
-<p>另一种自动扩展方法是反应式扩展。如果某个节点出现问题，或系统负载突然达到一个危险的峰值，则自动启动新节点以增强吞吐能力。反应式方法的关键在于发现问题、启动节点的速度，当然一方面是靠团队Devops的能力，另一方面还要得到云服务商的支持。</p>
-
-<p>实践证明，无论是预测式扩展，或是反应式扩展，其对提高系统整体可用性都是非常有效的。这里的建议是，当团队初次涉足该领域时，应优先考虑设置节点失败条件下的反应式扩展功能，然后再根据更多数据采取进一步行动。</p>
-
-<h3>7. 分布式系统与CAP原则</h3>
-
-<p>十多年来，CAP原则成为构建分布式系统时不可逃避的话题。尽管CAP原则在其科学性上倍受<a href="http://markburgess.org/blog_cap.html">质疑</a>，但其作为权威的实践经验仍不失指导性。</p>
-
-<p>CAP分别表示一致性、可用性和分区容错性。一致性是指任何节点上的数据都是保持一致的；可用性意味着任何请求都会得到响应；而分区容错性指当系统内部通信出现问题时，依然有能力保证整体可靠性。</p>
-
-<p>CAP原则的基本内容就是，分布式系统始终无法同时囊括上述三种属性，多数情况下只能择其二设计。在实践中，与CAP原则相符的例子比比皆是，假设一个分布式系统包含A、B两个实例，后台数据存储在Ad和Bd两个Replica数据节点上。当Ad和Bd间的网络通信中断时，如果不关闭A或B的其中一个，则Replica的数据就会无法实现同步，从而造成不一致。而如果关闭实例A或B，则会降低系统可用性。这就显示出一致性和可用性之间的矛盾——分布式系统无法放弃分区容错：因为其本身就是为此而生。</p>
-
-<h4>AP系统</h4>
-
-<p>如果强调可用性，就意味着一致性可能出现问题。一般情况下，如果多个数据节点间发生不一致，也可以在某个时间后使其交换数据以达到同步，而非立即实行。这就是强调多次的最终一致性。最终一致性系统预示着用户将有可能收到脏数据，这就要建立在具体的业务需求基础上了。</p>
-
-<h4>CP系统</h4>
-
-<p>有时我们不可避免地面临强一致性，即使因为无法达到一致而被迫拒绝服务——这就是牺牲可用性的强一致性系统。然而，在分布式领域，稳定可靠的强一致性系统实现非常困难，一方面是由于分布式事务操作的低效性，另一方面是实现分布式锁算法的困难性（即使是单进程锁，要踩的坑也很多）。因此如果确实要构建强一致系统，采用现有成熟方案非常重要——因为它们通常都经历了时间的考验。当然对比前者，建立AP系统可能就要容易许多。</p>
-
-<h4>孰优孰劣？</h4>
-
-<p>AP和CP，选谁？前者只能实现“最终一致”，后者实现起来则“困难重重”。然而不能否认，在金融系统中，一致性几乎是必须的；而对大部分系统而言，AP则是更加现实的做法。要知道，在大多数情况下，选择AP和CP并非零和游戏，整个系统中可以同时存在AP和CP两种架构，以满足不同需求。要提醒的是，如果采用CP模式，调研好现有方案并择优采用是前提。AP则是更加具有普适性的大众选择。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-07-18T17:34:06+08:00" pubdate data-updated="true">2015-07-18</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>, <a class='category' href='/blog/categories/ruan-jian-jia-gou/'>软件架构</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2015/07/18/microservices-scale-2//posts/3/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
