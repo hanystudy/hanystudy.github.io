@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="上接软件设计与架构笔记(4) 前文描述的HIPO模型是一个典型的基于结构图的IPO系统设计模型，其基本思想依然是由顶至下，逐步求精。基于经验Larry进一步总结了通用的系统设计准则[SMC74]。 程序结构和问题结构。减少程序变更所造成影响的重要方法之一，就是保证设计结构匹配问题本身的结构。 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="数据模型与数据建模(Data Model and Data Modeling) 信息系统(Information Systems)是人类社会重要的基础应用之一，也是计算机自诞生起最重要的应用领域。在计算机信息系统中，数据(Data)作为信息的主要载体，也是沟通人与硬件系统的桥梁，其复杂性不言而喻 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,136 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2018/12/09/software-design-and-architecture-notes-6/">
+		
+			软件设计与架构笔记(6)</a>
+	</h2>
+	<div class="entry-content">
+		<h2>数据模型与数据建模(Data Model and Data Modeling)</h2>
+
+<p><strong>信息系统</strong>(Information Systems)是人类社会重要的基础应用之一，也是计算机自诞生起最重要的应用领域。在计算机信息系统中，<strong>数据</strong>(Data)作为信息的主要载体，也是沟通人与硬件系统的桥梁，其复杂性不言而喻。可以说，本文涉及的数据模型与数据建模技术的发展，始终是以弥补人机之间的鸿沟为目标的。</p>
+
+<h3>数据模型</h3>
+
+<p>在设计信息系统时，为了应对信息的复杂性，人们利用<strong>数据模型</strong>描述数据元素、元素间关系及其与真实世界实体的映射，从而达成抽象且一致的信息表示。初期的数据模型包括<strong>文件系统模型</strong>(File System Model)、<strong>层级模型</strong>(Hierarchical Model)和<strong>网络模型</strong>(Network Model)等。</p>
+
+<p>文件系统模型利用计算机文件系统模拟制表(Tabulation)，包含一般表格中的字段、记录等概念、且具备顺序和随机访问文件的能力，数据可按文本或二进制类型进行存储。这是一种非常简洁的数据模型，诸如csv、dsv等标准格式至今仍被广泛使用。</p>
+
+<p>层级模型与文件系统模型拥有类似的字段和记录等概念，所不同的是记录之间可以按树形结构进行关联，从而表示记录之间的关系。相比较于文件系统模型，层级模型能够显式表达记录间的连接关系，并允许按照标准的树遍历算法进行数据遍历；缺点在于子记录只能拥有唯一的父记录，反过来则没有限制。发布于1966年的IBM Information Management System(IMS)就是基于层级模型构建。</p>
+
+<p>网络模型旨在克服层级模型对关系限制的缺陷，允许每条记录拥有多个父记录和子记录。从<strong>数据模式</strong>(Data Schema)的描述上来看，网络模型的对象关系呈现出一个通用的网状结构，从而具有较层级模型更好的表达能力。1969年，数据系统语言委员会(CODASYL)下属的数据仓库任务小组(DBTG)发布了网络模型规范，该规范包括了一种用于定义数据模式的<strong>数据定义语言</strong>(DDL)，以及能够被嵌入宿主语言的<strong>数据操纵语言</strong>(DML)，首次提出了独立于宿主语言的数据语言的概念，并且通过国际标准化组织制定了多项标准。但是自诞生后，网络模型并未被工业界和学术界广泛接纳，并在此后十年的竞争中败给更具形式化能力的<strong>关系模型</strong>(Relational Model)和后续模型。</p>
+
+<p>Edgar F. Codd在1970年提出了关系模型[EFC70]，其包含两个主要内容：</p>
+
+<ol>
+<li><p>对应于N个数据集合，使用N元关系组表达集合间的关系，使模型具备更精确的数学表达能力。</p></li>
+<li><p>一种具有强描述能力的全局数据子语言，该语言基于结构化一阶谓词逻辑算子，能够用于表达基于关系模型的数据操作。</p></li>
+</ol>
+
+
+<p>关系模型为设计人员提供了统一抽象的界面，很好地隐藏了数据操作与底层系统交互的实现细节。但是也存在一些不足：</p>
+
+<ol>
+<li><p>根据关系模型的数学定义，集合之间的关系通过维护单独的N元关系组实现，其实质是集合间的笛卡尔积。但是通过这种形式化表示无法进一步揭示笛卡尔积的基数信息，而实践证明这种数量关系在描述数据模型时非常重要。</p></li>
+<li><p>与问题1类似，关系模型的形式化表达缺乏一定的语义信息，无法进一步揭露关系的实质。尽管这种针对关系的语义信息不是始终必要的，但实践证明语义对数据模型的可表达能力具有重要意义。</p></li>
+</ol>
+
+
+<p>为了解决上述问题，Peter Chen进一步发展出了<strong>实体-关系模型</strong>(ER模型)，后者成为当前数据模型的重要描述工具和行业标准[PPC76]。ER模型包含四个主要概念：<strong>实体</strong>(Entity)，即现实世界的实例，通常是名词形式；<strong>关系</strong>(Relationship)，实体间的关联方式，通常是动词形式；<strong>类型</strong>(Type)，对实体的类别定义，通常是名词形式；<strong>角色</strong>(Role)，对实体在某个关系下的特殊定义，通常也是名词形式[PPC02]。</p>
+
+<p>ER模型的一个重要技术是<strong>实体-关系图</strong>(ER Diagram，ER图)，即用图展示前述的概念及其联系，其中方框表示实体的类型；菱形表示关系；圆圈表示实体或关系类型的属性；实体类型关系和实体属性关系上还标注了数量关系。一个典型的ER图如下图所示。</p>
+
+<p><img src="http://content.hanyi.name/images/data_model_and_data_modeling/er_diagram.png" alt="er diagram" /></p>
+
+<p>尽管本节介绍的数据模型为数据表达提供了形式化工具，但是在面对复杂系统时，设计人员不可能凭空得出系统终极的数据表示，于是<strong>数据建模</strong>就成为支撑构建数据模型的重要方法论。</p>
+
+<h3>数据建模</h3>
+
+<p>实践表明，在软件需求分析起初就需要开始构建数据模型，数据建模应关注数据的需求和实现等特定方面。一般的数据建模过程依次产生下列三种数据模型：</p>
+
+<ol>
+<li><p>概念数据模型(Conceptual Data Model)，从高层角度描述系统的信息需求，具体包括主要的信息概念及其相互关系。1969年，网络模型之父Charles W. Bachman提出了数据结构图(Data Structure Diagram)[CWB69]，并将其用于描述概念数据模型。
+<img src="http://content.hanyi.name/images/data_model_and_data_modeling/data_structure_diagram.png" alt="data structure diagram" /></p></li>
+<li><p>逻辑数据模型(Logical Data Model)，描述信息中领域的具体结构，例如表、列及其关系等。在复杂度较低时，设计人员往往可以跳过概念数据模型，从而直接得出逻辑数据模型。该模型与概念数据模型都是独立于具体的持久化技术（例如通用的数据库管理系统）。</p></li>
+<li><p>物理数据模型(Physical Data Model)，满足非功能需求的且可立即被实现的数据模型。该模型与存储技术、维护技术和更新/查询场景等因素密切相关。</p></li>
+</ol>
+
+
+<h4>数据分类</h4>
+
+<p>在开始构建数据模型之前，需要首先识别系统需求中的数据分类，从而确定相应的问题范围，并使用相应的数据模型进行建模。实践中存在多种逻辑思维实践以实现前期的数据分析，[DMG08]描述了一种被广泛认可的数据分类方式，把数据按照特性划分为下列六类：</p>
+
+<p><strong>主数据</strong>(Master Data)，表示业务需求中出现的人物、地点、事物等信息。</p>
+
+<p><strong>事务性数据</strong>(Transactional Data)，表示业务发生时伴随的内部或外部事件或事务，例如发起订单、创建发票、支付等活动。</p>
+
+<p><strong>引用数据</strong>(Reference Data)，表示被系统、应用、数据存储、进程、报表乃至事务性或主数据所引用的值或分类模式的集合，例如状态码、名词简写、产品类型等静态数据。</p>
+
+<p><strong>元数据</strong>(Metadata)，表示数据本身的数据，方便数据的检索、解释和使用。</p>
+
+<p><strong>历史数据</strong>(Historical Data)，表示在某个时刻发生、且不可修改的数据，例如日志。</p>
+
+<p><strong>临时数据</strong>(Temporary Data)，表示因为某些技术需求而被临时创建的数据，通常没有独立的业务含义。</p>
+
+<p>值得一提的是，上述分类方法只应被看作一个指导性原则，具体实践时应视上下文灵活调整。在本例中，对应前面提到的三种数据模型，概念数据模型通常考虑主数据和元数据，逻辑数据模型进一步包括了事务性和引用数据，物理数据模型最终实现覆盖全部类型的数据。采用前文提到的ER模型即可对这三种数据模型分别建模。</p>
+
+<h4>关系范式</h4>
+
+<p>在构建逻辑和物理数据模型时，为了能尽可能降低关系模型中的关系表示所带来的数据冗余，从而加强数据的一致性，关系模型提出了<strong>规范化</strong>(Normalization)的概念，以对关系表示本身进行约束，并在此后一段时间相继发展出了多种范式。其中常用的范式包括：第一范式(1NF)，即没有多值属性的关系；第二范式(2NF)，即满足第一范式且非主属性不依赖任何候选键的子集；第三范式(3NF)，即在第二范式的基础上不存在传递依赖。虽然规范化对强化数据一致性约束方面有促进作用，但其造成的后果是使许多数据表示被物理隔离，从而在实现数据操作方面引起额外耗费。因此在实际设计数据模型时，规范化设计的采用是和系统的非功能需求(Non-functional requirement)密切相关的。</p>
+
+<h2>结论</h2>
+
+<p>数据模型是信息系统设计的重要内容，在经历上世纪70年代的激烈竞争后，关系模型因占据理论高位更加受到学术界青睐，最终成就了80年代起通用关系型数据库系统的统治地位。ER模型和ER图因其更具表达能力，从而成为最重要的数据建模工具。数据模型方法领域的先驱Bachman(网络模型)、Codd(关系模型)和Chen(ER模型)也先后因其开创性贡献而获颁图灵奖。</p>
+
+<h2>引用</h2>
+
+<p>CWB69, <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.172.3370&amp;rep=rep1&amp;type=pdf">Data Structure Diagrams</a></p>
+
+<p>EFC70, <a href="https://www.seas.upenn.edu/~zives/03f/cis550/codd.pdf">A Relational Model of Data for Large Shared Data Banks</a></p>
+
+<p>PPC76, <a href="https://www.csc.lsu.edu/~chen/pdf/erd-5-pages.pdf">The Entity-Relationship Model-Toward a Unified View of Data</a></p>
+
+<p>PPC02, <a href="https://csc.lsu.edu/~chen/pdf/Chen_Pioneers.pdf">Entity-Relationship Modeling: Historical Events, Future Trends, and Lessons Learned</a></p>
+
+<p>DMG08, <a href="https://dl.acm.org/citation.cfm?id=2821563">Executing Data Quality Projects: Ten Steps to Quality Data and Trusted Information</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2018-12-09T10:53:07-05:00" pubdate data-updated="true">2018-12-09</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2018/12/09/software-design-and-architecture-notes-6//posts/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1829,145 +1959,6 @@ $(document).ready(
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii/">
-		
-			Metaprogramming Ruby: Core Concepts - Eval Family II</a>
-	</h2>
-	<div class="entry-content">
-		<p>In previous article several basic scope controlling tools are introduced, like block, proc, lambda, and method object. All of them should work well when you organize them in your code reasonably. There are more flexible way to mix code and bindings in ruby - eval, which may not be used broadly than others, so that considerable traps about it are still unclear for us.</p>
-
-<h3>3. instance_eval / instance_exec</h3>
-
-<p>BasicObject#instance_eval can be used almost everywhere in ruby, you can use it like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">instance_eval</span> <span class="p">{</span> <span class="vi">@bar</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span> <span class="p">}</span>
-</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">instance_variable_get</span><span class="p">(</span><span class="s1">&#39;@bar&#39;</span><span class="p">)</span> <span class="c1">#hello</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In the block of instance_eval, the scope changes to the instance foo, thus any operations inner it should bind to the instance, except closure variables.</p>
-
-<p>BasicObject#instance_exec has similar feature to eval one, but with arguments support. This benefit shows as below:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Foo</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span>
-</span><span class='line'>    <span class="vi">@bar</span> <span class="o">=</span> <span class="s1">&#39;hello&#39;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'><span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;world&#39;</span>
-</span><span class='line'><span class="n">foo</span> <span class="o">=</span> <span class="no">Foo</span><span class="o">.</span><span class="n">new</span>
-</span><span class='line'><span class="n">foo</span><span class="o">.</span><span class="n">instance_exec</span><span class="p">(</span><span class="n">output</span><span class="p">){</span><span class="o">|</span><span class="n">output</span><span class="o">|</span> <span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="vi">@bar</span><span class="si">}</span><span class="s2"> </span><span class="si">#{</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="n">output</span> <span class="c1">#world</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>4. class_eval / class_exec</h3>
-
-<p>Module#class_eval works for evaluating a block in the context of an existing class. It seems to be similar to instance_eval which will have scope changes to instance self, but also changes current class (excluding singleton class).</p>
-
-<p>class_eval can be used to open a existing class, without using keyword ‘class’. That means it has no scope changing issue compared with keyword way. Actually it even does not need to know the constant name of the target, while keyword way indeed needs.</p>
-
-<p>Also Module#class_exec plays same role like instance_exec for instance_eval.</p>
-
-<p>Think about the thing what we’ve discussed several weeks ago, in ruby all items are instance of class, including classes no matter internal or customized. Which means instance_eval and class_eval both can work for classes in many cases, but indeed have different self meaning.</p>
-
-<p>You may also notice that there is also Module#module_eval / Module#module_exec methods, but they are just alias for class_eval / class_exec without any other changes.</p>
-
-<h3>5. Kernel#eval</h3>
-
-<p>Unlike instance_eval/class_eval, Kernel#eval only accept a string of ruby code as its argument, run the code and give the result. Even it’s so powerful, using string of code is not a good choice if you have other ways. The most issue for string of code is security.</p>
-
-<p>Suppose you have eval expression in your code, which means others can evaluate any code using such method, including get/set operations. Ruby defines safe levels, which actually limits the evaluation of code from outside. By default, ruby will mark potentially unsafe objects which many come from external sources. And user could config a global variable $SAFE, it’s range from 0 to 3(0 by default) with more strict.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vg">$SAFE</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span class='line'><span class="nb">eval</span> <span class="s2">&quot;p &#39;hello </span><span class="si">#{</span><span class="nb">gets</span><span class="p">()</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-</span><span class='line'><span class="n">world</span> <span class="c1">#SecurityError: Insecure operation - eval</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>By default, eval can accept almost any code from outside. However, it will not be permitted for code from I/O device(tainted object) if $SAFE is none zero. Below gives more details about $SAFE:</p>
-
-<table>
-<thead>
-<tr>
-<th>$SAFE</th>
-<th style="text-align:center;"> Constraints</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td style="text-align:center;">No checking of the use of externally supplied (tainted) data is performed. This is Ruby’s default mode.</td>
-</tr>
-<tr>
-<td>>= 1</td>
-<td style="text-align:center;">Ruby disallows the use of tainted data by potentially dangerous operations.</td>
-</tr>
-<tr>
-<td>>= 2</td>
-<td style="text-align:center;">Ruby prohibits the loading of program files from globally writable locations.</td>
-</tr>
-<tr>
-<td>>= 3</td>
-<td style="text-align:center;">All newly created objects are considered tainted.</td>
-</tr>
-</tbody>
-</table>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-09-16T09:20:27+08:00" pubdate data-updated="true">2015-09-16</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/ruby/'>ruby</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2015/09/16/metaprogramming-ruby-core-concepts-eval-family-ii//posts/2/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
 <nav id="pagenavi">
     
     	
@@ -1979,7 +1970,7 @@ $(document).ready(
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2019
+	<footer id="footer" class="inner">Copyright &copy; 2020
 
     Han Yi
 

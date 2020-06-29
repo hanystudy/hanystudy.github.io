@@ -1,0 +1,679 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>软件设计与架构笔记(16): 架构风格——反应式架构  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="架构风格——反应式架构 在过去10年，多核、云计算、移动/IOT、用户体验等相关领域的发展使传统上以可维护性为核心的软件架构面临着新的挑战，这主要体现在软件系统的即时响应性(Responsiveness)、回弹性(Resilience)以及弹性(Elasticity)等架构质量属性[JDRM14 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">软件设计与架构笔记(16): 架构风格——反应式架构</h2>
+	<div class="entry-content"><h2>架构风格——反应式架构</h2>
+
+<p>在过去10年，多核、云计算、移动/IOT、用户体验等相关领域的发展使传统上以可维护性为核心的软件架构面临着新的挑战，这主要体现在软件系统的<strong>即时响应性</strong>(Responsiveness)、<strong>回弹性</strong>(Resilience)以及<strong>弹性</strong>(Elasticity)等架构质量属性[JDRM14]。</p>
+
+<p>即时响应性旨在合理成本范围内提供低延迟的用户体验。显然这并非是全新的质量属性，传统上围绕它的解决方案包括算法优化、摩尔定律等。然而，随着系统复杂性不断上升，即时响应性不可避免地受到损害，业界发明了许多技术解决这一问题。从架构角度看，这些技术可以被划分为<strong>纵向</strong>(Scale up/down)和<strong>横向</strong>(Scale out/in)两种基本的扩展方案。其中，前者以多核技术为代表，后者则依赖分布式技术，两者在架构方面互为补充。由此衍生的细分领域包括但不限于并发编程、分布式通信、数据一致性、节点协调、错误处理、职责分离等，这些技术在实践中形成了一系列设计原则和模式。<strong>反应式架构</strong>(Reactive architecture)就是以这些原则和模式为基础、进而发展为一种面向现代高即时响应性的软件系统的架构风格。</p>
+
+<h3>多核与反应式编程</h3>
+
+<p>多核技术提供了纵向的单机扩展能力，但要利用这种底层能力离不开上层并发编程的支持。经典的并发编程框架如Java Concurrency[BG99]，提供了最接近底层且功能强大的并发编程API，例如下列一个爬虫的代码片段(例子来源于互联网):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class Crawler {
+</span><span class='line'>   private ConcurrentHashMap&lt;String, Boolean&gt; seen = new ConcurrentHashMap&lt;String, Boolean&gt;();
+</span><span class='line'>   private AtomicInteger pending = new AtomicInteger(0);
+</span><span class='line'>   
+</span><span class='line'>   public Crawler(String baseUrl, int numOfThreads) {
+</span><span class='line'>       this.client = HttpClientBuilder.create().build();
+</span><span class='line'>       this.baseUrl = baseUrl;
+</span><span class='line'>       this.executorService = Executors.newFixedThreadPool(numOfThreads, new ThreadFactory() {
+</span><span class='line'>          public Thread newThread(Runnable r) {
+</span><span class='line'>              return new Thread(r, "Crawler-Worker");
+</span><span class='line'>           }
+</span><span class='line'>       });
+</span><span class='line'>   }
+</span><span class='line'>   
+</span><span class='line'>   public void start() {
+</span><span class='line'>       handle(baseUrl);
+</span><span class='line'>   }
+</span><span class='line'>   
+</span><span class='line'>   private void handle(final String link) {        
+</span><span class='line'>      if (seen.containsKey(link))
+</span><span class='line'>          return;
+</span><span class='line'>      seen.put(link, true);
+</span><span class='line'>      pending.incrementAndGet();
+</span><span class='line'>      executorService.execute(new Runnable() {
+</span><span class='line'>          public void run() {
+</span><span class='line'>              List&lt;String&gt; links = getLinksFromUrl(link);
+</span><span class='line'>              for (String link : links) {
+</span><span class='line'>                  handle(link);
+</span><span class='line'>              }
+</span><span class='line'>              pending.decrementAndGet();
+</span><span class='line'>              if (pending.get() == 0) {
+</span><span class='line'>                  synchronized (lock) {
+</span><span class='line'>                      lock.notify();
+</span><span class='line'>                  }
+</span><span class='line'>              }
+</span><span class='line'>          }
+</span><span class='line'>      });
+</span><span class='line'>   }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>客户端代码如下:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class Main{
+</span><span class='line'>  public static void main(String[] args) throws InterruptedException {
+</span><span class='line'>          if (args.length != 2) {
+</span><span class='line'>              System.err.println("Invalid syntax: &lt;baseUrl&gt; &lt;numOfThreads&gt;");
+</span><span class='line'>              System.exit(1);
+</span><span class='line'>          }
+</span><span class='line'>          String baseUrl = args[0];
+</span><span class='line'>          int numOfThreads = Integer.parseInt(args[1]);
+</span><span class='line'>          Crawler crawler = new Crawler(baseUrl, numOfThreads);
+</span><span class='line'>          crawler.start();
+</span><span class='line'>          crawler.join();
+</span><span class='line'>          crawler.shutdown();
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该例中的爬虫实现基于Java Concurrency的ExecutorService API，一种共享状态并发式编程模型。为了保证线程安全，代码中采用了ConcurrentHashMap、AtomicInteger、Lock和Synchronized等Java特有的并发编程技术，存在复杂度较高、易理解性差、共享状态维护难度高、易出错等缺点。</p>
+
+<p><strong>反应式编程</strong>(Reactive programming)是一种具有异步编程风格的编程框架，其衍生自基于数据流的并发声明式编程模型，采用事件驱动和非阻塞线程技术，从而降低因为资源等待导致的并发性能瓶颈。首先来看一个基于RxJava[RXJ14]的爬虫代码片段(例子来源于互联网):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class ObservableCrawler {
+</span><span class='line'>  private Subscriber&lt;? super String&gt; subscriber;
+</span><span class='line'>  
+</span><span class='line'>  public static Observable&lt;String&gt; create(Crawler crawler, String url, int numOfThreads) {
+</span><span class='line'>      ObservableCrawler o = new ObservableCrawler(crawler, numOfThreads);
+</span><span class='line'>      return Observable.create(subscriber -&gt; {
+</span><span class='line'>          o.subscriber = subscriber;
+</span><span class='line'>          if (o.executorService == null) {
+</span><span class='line'>              o.process(url);
+</span><span class='line'>              subscriber.onCompleted();
+</span><span class='line'>          } else {
+</span><span class='line'>              o.processAsync(url);
+</span><span class='line'>          }
+</span><span class='line'>      });
+</span><span class='line'>  }
+</span><span class='line'>  private ObservableCrawler(Crawler crawler, int numOfThreads) {
+</span><span class='line'>      this.crawler = crawler;
+</span><span class='line'>      this.executorService = numOfThreads &gt; 0 ?
+</span><span class='line'>              Executors.newFixedThreadPool(numOfThreads, r -&gt; new Thread(r, "Crawler-" + threadIdGenerator.incrementAndGet()))
+</span><span class='line'>              : null;
+</span><span class='line'>  }
+</span><span class='line'>  
+</span><span class='line'>  private void processAsync(String url) {
+</span><span class='line'>         pendingTasks.incrementAndGet();
+</span><span class='line'>         executorService.submit(() -&gt; {
+</span><span class='line'>             // If item is not unique, skip processing
+</span><span class='line'>             boolean isFirstTime =  results.add(url);
+</span><span class='line'>             if (isFirstTime) {
+</span><span class='line'>                 subscriber.onNext(url);
+</span><span class='line'>                 crawler.crawl(url, this::processAsync);
+</span><span class='line'>             }
+</span><span class='line'>             if (pendingTasks.decrementAndGet() == 0) {
+</span><span class='line'>                 subscriber.onCompleted();
+</span><span class='line'>                 executorService.shutdown();
+</span><span class='line'>             }
+</span><span class='line'>         });
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其客户端代码如下:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class CrawlerClient {
+</span><span class='line'>  public CrawlerClient(Crawler crawler, String url, int numOfThreads) {
+</span><span class='line'>      this.observable = ObservableCrawler.create(crawler, url, numOfThreads);
+</span><span class='line'>      observable.subscribe(this::onNext, this::onError, this::onCompleted);
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  public void waitForCompletion() throws InterruptedException {
+</span><span class='line'>      completionLatch.await();
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>与前面直接基于Java Concurrency的例子类似，该例同样采用了ExecutorService实现爬虫的并发执行，其中waitForCompletion也提供了阻塞客户端的能力。两者的区别在于，RxJava的版本采用观察者模式对爬虫类进行了封装，客户端不再需要等待代码执行结束后再执行后续指令。其中的一部分技术细节，例如线程安全代码被封装在API中，再通过回调函数接口提供给客户端，后者只需要关心onNext、onError和onCompleted的线程安全实现，这在一定程度上降低了Java并发编程的复杂度。</p>
+
+<p>除了上例介绍中朴素的回调函数API之外，反应式编程通常还可能提供多种异步编程风格API，包括但不限于:</p>
+
+<ul>
+<li><p>Futures/Promises，一种单赋值容器，支持针对单写/多读场景的、自上而下的异步编程风格，能够有效解决回调地狱(Callback hell)的问题。</p></li>
+<li><p>流(Streams)，一种无界限的数据处理流，支持多个源点、汇点间的异步、非阻塞、背压(Backpressure)的数据变换管道。例如函数组合(Functional composition)提供的map、filter、fold等流式操作。这里的背压是指当异步执行管道中的消费端计算能力不足，上游仍然持续生产事件，从而导致系统过载的问题。反应式编程API一般通过配置不同策略以防止潜在的系统灾难。</p></li>
+<li><p>数据流变量(Dataflow variables)，一种单赋值变量，能够基于输入、过程和其它变量实现自动更新。</p></li>
+</ul>
+
+
+<p>前述例子中采用的RxJava遵循了ReactiveX标准——一套反应式编程的技术规范[REX]，类似的反应式编程扩展(Rx)支持已被添加至许多编程语言中，如RxJS、Rx.NET、RxScala等。此外，RxJava还支持JVM平台的反应式流规范(Reactive Streams Specification)[RSS]，从而具备与其它反应式编程API之间的互操作性。与传统编程模型相比，反应式编程在多核利用率、并发编程、系统模块性、工作流组装方面相较于传统编程模型具有优势。但其同样可能会损害代码的易理解性，并且通常只局限于单机计算，虽然有助于加强即时响应性，但并不能满足反应式架构要求的另外两个核心质量属性:</p>
+
+<ul>
+<li><p>回弹性，指系统在出错时能够自动恢复并保持正常的即时响应性目标。</p></li>
+<li><p>弹性，是指系统在异常工作负载下，能够自适应调整自身容量从而维持其正常的即时响应性目标。</p></li>
+</ul>
+
+
+<p>这正是分布式系统成为云计算、移动/IOT领域核心技术的重要原因。</p>
+
+<h3>分布式与异步消息传递</h3>
+
+<p>分布式技术的目标是为系统提供横向扩展能力。通过负载监控和自动化伸缩技术，实现系统容量的自适应调节，从而满足弹性需求。另外，通过隔离组件控制系统错误/灾难的级联传递，再将错误提交至安全上下文中即时处理，从而满足回弹性需求。</p>
+
+<p>反应式架构使用<strong>异步消息传递</strong>作为组件间的通信模式，通过在组件间建立临时边界，实现组件间的松耦合、隔离与地址透明化，达到时间、空间二重解耦的目的。值得注意的是，这里的空间解耦既可以指单机中的线程/进程，也可以指分布式系统的组件。“消息传递”意味着组件通常是长期存活且可被调用者直接定位、实现定向通信的方式，这与另一种流行的分布式系统通信模式——“事件传递”有着重要区别。因为“事件传递”是通过事件源的状态变化引发相应事件，再通过观察者模式通知“订阅”的组件，因此其关注点在于<strong>可定位事件源</strong>。而在“消息传递”中则相反，调用者需要明确知道被调用者的位置信息，即更加关注<strong>可定位接收者</strong>——这是反应式架构实现回弹性和弹性的重要基础。因为后者具有更强的控制力:负载管理、错误检测、消息丢弃/复制/排序、通过监控和调整消息队列实现流量控制以及背压等。</p>
+
+<p>以应对回弹性为例，为了使系统在出错时仍然保持正常的即时响应性，需要实现调用者和被调用者的完全隔离，使后者发生的错误不被传递至前者，同时应支持消息被传递到多个复制组件中，即便错误发生时系统仍能正常提供服务。虽然容错性也是受到普遍重视的质量属性之一，但是传统上强耦合、深度嵌套的同步调用链代码缺少一致的容错方案。反应式架构明确要求把错误信息封装在消息中传递至其它组件，并使其在出错组件外部的一个安全上下文中得到有效处理(代理模式)。这里体现的基本思想是把错误处理从原有调用链中解耦，即移除客户端中针对服务端错误进行处理的职责。</p>
+
+<p>再以弹性计算为例，系统被要求能够根据实际负载需求自动增加或减少所占用资源，从而动态调整吞吐量。这种自适应性意味着无介入实现系统伸缩、状态/行为冗余、负载均衡、失效备援和系统升级等能力。其基本思想是在编程抽象和语义层面实现组件空间位置的透明化，使系统更易于伸缩，且这种可伸缩性无需局限于CPU核甚至数据中心。</p>
+
+<h3>消息传递并发式模型及其应用</h3>
+
+<p>消息传递并发式模型是一种通过异步通信信道实现组件间通信的编程模型，目前被广泛应用于实现反应式架构中的“异步消息传递”模式，例如经典的Actor模型[CPR73]。</p>
+
+<p>Actor是一种相比基于线程的并发编程更高级的抽象模型，其旨在解决如下问题:</p>
+
+<ul>
+<li><p>伸缩性，指包括单机和分布式环境下的系统扩容能力，即隐藏系统横向、纵向扩展的底层技术差异。</p></li>
+<li><p>透明性，指同时适应单机和分布式环境下的定位能力，例如在单机环境下采用并发编程语言，在分布式环境下采用网络通信，这些完全不同的资源定位方式导致系统难以从单机向分布式演化。</p></li>
+<li><p>不一致性，这里的不一致性是指在许多超大型系统中，面向人的信息系统交互存在不一致的问题，例如文档、标准等。</p></li>
+</ul>
+
+
+<p>在Actor模型中，最基本的并发计算元素被称作actor。actor之间可以发送和接收消息，并且各自维护一个内部状态。当actor接收到消息时，可以并行执行下列响应方法:</p>
+
+<ul>
+<li><p>创建有限数量的新actor。</p></li>
+<li><p>发送有限数量的消息给其它actor。</p></li>
+<li><p>定义下一次接收消息时触发的行为。</p></li>
+</ul>
+
+
+<p>Actor模型无论在计算理论还是在实际应用中都产生了重要影响，特别是可以被用于描述一些流行的并发编程框架，例如下面要介绍的Erlang/OTP Processes[EOP]和Akka Actors[AA]。</p>
+
+<h4>Erlang/OTP Processes</h4>
+
+<p>Erlang是一种声明式编程语言，除了基本的语法规则外，Erlang在其内核语言的基础上还提供了一套专有运行时系统和库——OTP(Open Telecom Platform)，后者是Erlang实现分布式、软实时、高容错、高可用、热部署的基础[OTP]。其中，<strong>进程</strong>(Processes，注意这里不是操作系统进程)是Erlang并发编程的基本计算元素，类似actor。如下列代码所示(例子来源于互联网):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>-module(counter).
+</span><span class='line'>-export([run/0, counter/1]).
+</span><span class='line'>
+</span><span class='line'>run() -&gt;
+</span><span class='line'>    S = spawn(counter, counter, [0]),
+</span><span class='line'>    send_msgs(S, 100000),
+</span><span class='line'>    S.
+</span><span class='line'>
+</span><span class='line'>counter(Sum) -&gt;
+</span><span class='line'>    receive
+</span><span class='line'>        value -&gt; io:fwrite("Value is ~w~n", [Sum]);
+</span><span class='line'>        {inc, Amount} -&gt; counter(Sum+Amount)
+</span><span class='line'>    end.
+</span><span class='line'>
+</span><span class='line'>send_msgs(_, 0) -&gt; true;
+</span><span class='line'>send_msgs(S, Count) -&gt;
+</span><span class='line'>    S ! {inc, 1},
+</span><span class='line'>    send_msgs(S, Count-1).
+</span><span class='line'>
+</span><span class='line'>% Usage:
+</span><span class='line'>%    1&gt; c(counter).
+</span><span class='line'>%    2&gt; S = counter:run().
+</span><span class='line'>%       ... Wait a bit until all children have run ...
+</span><span class='line'>%    3&gt; S ! value.
+</span><span class='line'>%    Value is 100000</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上例中实现了一个并发计数器counter，并向外部提供两个函数run和counter。其中run函数的作用是创建一个新的counter进程，然后向其发送倒计时时间消息。counter定义了消息接收行为，包括打印和增数。send_msgs通过!向S进程发送消息，然后通过递归实现倒数。与actor概念类似，Erlang的进程相互之间完全隔离，并通过消息传递相互通信。由于进程的创建和销毁十分轻量化，从而允许系统中容纳数量非常可观的进程(在普通PC中即可实现千万级进程数)，这些进程可以在运行时系统中存在很长时间，如果没有消息接收或者运行了太长时间，进程就会被重新放入调度队列，避免影响其它正常运行进程。</p>
+
+<h4>Akka Actors</h4>
+
+<p>Akka是一个基于JVM的并发编程框架，其中的核心模块Akka Actors的Scala语法部分借鉴自Erlang，例如:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>object HelloWorld {
+</span><span class='line'>  final case class Greet(whom: String, replyTo: ActorRef[Greeted])
+</span><span class='line'>  final case class Greeted(whom: String, from: ActorRef[Greet])
+</span><span class='line'>
+</span><span class='line'>  def apply(): Behavior[Greet] = Behaviors.receive { (context, message) =&gt;
+</span><span class='line'>    context.log.info("Hello {}!", message.whom)
+</span><span class='line'>    message.replyTo ! Greeted(message.whom, context.self)
+</span><span class='line'>    Behaviors.same
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>与此相比Java版本就显得较为繁琐一些，但也很容易理解:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>public class HelloWorld extends AbstractBehavior&lt;HelloWorld.Greet&gt; {
+</span><span class='line'>
+</span><span class='line'>  public static final class Greet {
+</span><span class='line'>    public final String whom;
+</span><span class='line'>    public final ActorRef&lt;Greeted&gt; replyTo;
+</span><span class='line'>
+</span><span class='line'>    public Greet(String whom, ActorRef&lt;Greeted&gt; replyTo) {
+</span><span class='line'>      this.whom = whom;
+</span><span class='line'>      this.replyTo = replyTo;
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  public static final class Greeted {
+</span><span class='line'>    public final String whom;
+</span><span class='line'>    public final ActorRef&lt;Greet&gt; from;
+</span><span class='line'>
+</span><span class='line'>    public Greeted(String whom, ActorRef&lt;Greet&gt; from) {
+</span><span class='line'>      this.whom = whom;
+</span><span class='line'>      this.from = from;
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  public static Behavior&lt;Greet&gt; create() {
+</span><span class='line'>    return Behaviors.setup(HelloWorld::new);
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  private HelloWorld(ActorContext&lt;Greet&gt; context) {
+</span><span class='line'>    super(context);
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  @Override
+</span><span class='line'>  public Receive&lt;Greet&gt; createReceive() {
+</span><span class='line'>    return newReceiveBuilder().onMessage(Greet.class, this::onGreet).build();
+</span><span class='line'>  }
+</span><span class='line'>
+</span><span class='line'>  private Behavior&lt;Greet&gt; onGreet(Greet command) {
+</span><span class='line'>    getContext().getLog().info("Hello {}!", command.whom);
+</span><span class='line'>    command.replyTo.tell(new Greeted(command.whom, getContext().getSelf()));
+</span><span class='line'>    return this;
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>从编程模型的角度看，Akka Actors与Erlang Processes本质上是一致的，然而其底层系统存在巨大差别——更多是JVM与OTP的差别。两者如今也都形成了各自庞大的生态系统，成为设计反应式架构的重要参考，并且在通信、数字金融、在线游戏、在线交易、统计、社交媒体、移动应用等领域得到了广泛应用。</p>
+
+<h2>结论</h2>
+
+<p>本文介绍了一种流行的架构风格——反应式架构，详细讨论了即时响应性、回弹性和弹性等质量属性以及异步消息传递模式。在具体实践层面，首先讨论了事件驱动模式的反应式编程及其在多核环境中的应用，进一步介绍了消息传递模式的Actor模型及相关的流行编程框架——Erlang Processes和Akka Actors。由此可见，<strong>参考架构风格的关键在于理解其要解决的核心问题，即要满足的特定的功能或非功能需求是否符合期望。一旦确定架构风格，其特定的设计原则就应尽量被作为软件开发的通用设计原则。而针对架构风格中包含的多种模式、框架和系统，就需要依据具体上下文灵活做出选择。</strong></p>
+
+<h2>引用</h2>
+
+<p>JDRM14, <a href="https://www.reactivemanifesto.org/">https://www.reactivemanifesto.org/</a></p>
+
+<p>BG99, <a href="https://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601">Java Concurrency in Practice</a></p>
+
+<p>RXJ14, <a href="https://github.com/ReactiveX/RxJava">https://github.com/ReactiveX/RxJava</a></p>
+
+<p>REX, <a href="http://reactivex.io/">http://reactivex.io/</a></p>
+
+<p>RSS, <a href="http://www.reactive-streams.org/">http://www.reactive-streams.org/</a></p>
+
+<p>CPR73, <a href="https://dl.acm.org/doi/10.5555/1624775.1624804">A universal modular ACTOR formalism for artificial intelligence</a></p>
+
+<p>EOP, <a href="https://erlang.org/doc/reference_manual/processes.html">https://erlang.org/doc/reference_manual/processes.html</a></p>
+
+<p>AA, <a href="https://doc.akka.io/docs/akka/current/typed/index.html">https://doc.akka.io/docs/akka/current/typed/index.html</a></p>
+
+<p>OTP, <a href="https://erlang.org/doc/">https://erlang.org/doc/</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2020-06-29T15:20:02+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2020/06/29/software-design-and-architecture-notes-16/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2020
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2020/06/29/software-design-and-architecture-notes-16/';
+        var disqus_url = 'http://www.hanyi.name/blog/2020/06/29/software-design-and-architecture-notes-16/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-49392954-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>
