@@ -1,0 +1,543 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>软件设计与架构笔记(17): 架构风格演变——从Client/Server出发  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="我们可能听说过多种架构风格，不同架构风格之间往往不是非此即彼的关系，它们或可以被组合使用，或包含相同的成分，也可能存在各自的侧重方向。更重要的是，一组架构风格之间有时存在继承和发展关系，即本文要讨论的演变。人们通常更重视架构风格的具体内容，缺少理解架构风格的动机，极少了解背后隐藏的陷阱， &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">软件设计与架构笔记(17): 架构风格演变——从Client/Server出发</h2>
+	<div class="entry-content"><p>我们可能听说过多种架构风格，不同架构风格之间往往不是非此即彼的关系，它们或可以被组合使用，或包含相同的成分，也可能存在各自的侧重方向。更重要的是，一组架构风格之间有时存在继承和发展关系，即本文要讨论的演变。人们通常更重视架构风格的具体内容，缺少理解架构风格的动机，极少了解背后隐藏的陷阱，而它们的重要性是依次上升的，这也从根本上导致了架构风格演变的产生。下文就以C/S架构风格的演变为例进一步讨论。</p>
+
+<h2>起源——Client/Server(C/S)</h2>
+
+<p>计算机网络的发明令计算资源的跨空间共享成为可能。受到这种能力所蕴含的经济价值驱动，人们在网络诞生初期就发明了集中式的计算设施(如Mainframe)以及更多相对轻量的工作站(如Workstation)，分散的工作站通过远程作业输入(Remote Job Entry)实现向Mainframe发送数据处理作业并由后者进行处理。这就是如今早已枝繁叶茂的C/S架构风格雏形。</p>
+
+<p>虽然在诞生初期即取得巨大成功，但C/S也经历了曲折的发展时期。一个极端是终端逐渐控制台化，仅提供基本输入输出能力，如数据库管理系统(DBMS)。另一个极端是，随着个人计算机(PC)问世，各种新领域需求激增，在一段时期内受网络、硬件条件限制，人们不再满足于轻量化终端，开始推崇更强大的通用型计算机，富客户端(Rich client)概念由此产生(单机软件需求在这一时期也达到了巅峰)。而如今，互联网、云计算、移动/IOT等领域的应用无一不建立在C/S(B/S)的基础上，多以服务的形式提供给用户或其它服务。另一方面，如今很少人会专门谈论C/S，因为随着应用场景的丰富以及待解决问题的深入，人们更多关注C/S的某些细节领域，从而衍生出细分的架构风格。然而，前述演变与C/S本身的动机和陷阱息息相关。</p>
+
+<p>作为一种中心化的分布式架构，C/S相较于非分布式架构天然地具有更多复杂性，从今天的工程角度看绝不应把复杂性作为首选项。但我们知道，C/S最根本的出发点是提高软件(计算资源)的经济价值，这种价值判断一般更合理地来自业务评估(尽管有时可能也会受到IT管理制约)，因此这种架构风格更多是被应用环境决定——这在如今互联网时代更加如此。</p>
+
+<p>而C/S复杂性就在于，它把本就繁杂的<a href="http://hanyi.name/blog/2019/06/08/software-design-and-architecture-notes-15/">架构质量属性</a>的复杂度进一步提高了数个维度，且后果往往超出业务预料:</p>
+
+<ul>
+<li><p>可靠性，由本地环境到不稳定网络和共享服务端环境，可靠性保证的复杂度无疑显著增加。</p></li>
+<li><p>易用性，在相似开发成本和客户端侧技术等条件下，C/S的易用性往往较差。</p></li>
+<li><p>高效性，C/S的初衷是共享资源，从而提高利用率，但这并非是免费午餐。在满足相同服务等级的条件下，C/S要通过额外的动态资源调整以实现高效性。</p></li>
+<li><p>兼容性，表现基本一致。</p></li>
+<li><p>安全性，由于资源和服务共享的原因，C/S面临更复杂的安全问题。</p></li>
+<li><p>可维护性，相同系统复杂性条件下，C/S具有更高的设计成本，也因此具备可维护性优势。但C/S产品通常被寄希望于覆盖更多业务场景，导致复杂度一般更高，也因此更难以维护。</p></li>
+<li><p>可移植性，面向服务的C/S通常具有优势。但如果软件不是以服务的形式提供，而是所谓的On premise部署，其复杂性则会显著增加。</p></li>
+</ul>
+
+
+<p>C/S逐步流行后，针对上述挑战，逐渐衍生出诸多细分的架构风格，对过去半个世纪乃至今天的软件架构产生了深远影响。</p>
+
+<h2>发展——远程过程调用(RPC)</h2>
+
+<p>上文提到由于C/S的分布式特征，使其面临极高的复杂度，这里原因之一是网络通信的不可靠性。因此人们首先想到抽象出一个独立的通信层，该层负责向下管理进程间通信要解决的问题，向上为应用层提供面向通信领域的语言级接口，即本节要讨论的RPC。</p>
+
+<p>从工程实践的角度看，RPC拥有曲折的发展历程，此类汇总文献很多，本文不再赘述。如今随着RPC成为分布式架构的基础元素之一，不同平台、语言、甚至科技公司都专门开发了方便落地的RPC框架和工具。这里把RPC视为一种架构风格，因为除了眼花缭乱的RPC实现，绝大多数RPC都集中在解决如下几个问题，且具有相似的针对性约束和模式:</p>
+
+<h3>消息表示</h3>
+
+<p>虽然定义为语言级，但为了保证兼容性，RPC需要采用中立的通信数据流，即不依赖任何具体的系统或语言。例如常见且兼容性好的JSON、XML、YAML，或开放但实际专属的Protobuff、Thrift、Java Object Serialization Stream Protocol等，这就需要RPC框架各自实现语言的内存模型和数据流之间的相互模式——序列化和反序列化。兼容性和高效性是这里最关注的质量属性。</p>
+
+<h3>消息传递</h3>
+
+<p>消息传递往往是RPC中功能最复杂的部分，它主要提供对网络传输的抽象，因此包括但不限于通信模型、地址、协议栈、异常/超时处理、安全、多线程、缓存等众多领域。如果一个RPC框架试图解决前述所有问题，就不得不需要借助更高级别的抽象，难以想象其复杂性和易用性。因此，如今轻量化成为RPC领域的主流。</p>
+
+<h3>接口表示</h3>
+
+<p>理想情况下，程序中的方法应可直接作为RPC的接口使用，这也是定位于语言级的初衷。但实际上如今流行RPC框架都拥有跨语言的特性，一种更流行的模式就是构建一个中立的接口层，使用语言无关的技术定义接口信息，再在语言层面映射到具体方法。例如gRPC中采用Protocol Buffers定义服务:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>service Greeter {
+</span><span class='line'>  rpc SayHello (HelloRequest) returns (HelloReply);
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>message HelloRequest {
+</span><span class='line'>  string name = 1;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>message HelloReply {
+</span><span class='line'>  string message = 1;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上述服务定义可以被直接编译成目标语言的客户端和服务端代码，从而作为接口被引用。</p>
+
+<p>如今选择RPC更多是出于高效性或定制化的目的，即强烈依赖某些RPC工具的特性或特定场景。而一旦进入互联网的开放世界，这种依赖就成为普适性的阻碍，人们就会倾向于更加中立的架构风格。</p>
+
+<h2>成熟——REST</h2>
+
+<p>在互联网时代，应用面临着高效性、可维护性、简洁性和可靠性等方面更严峻的挑战。REST就是为了解决上述挑战而被设计和提出的，其本身由一套支持HTTP 1.1和URI标准协议的核心设计原则组成，后者已成为互联网标准之一。</p>
+
+<p>REST的全称是表述性状态转移(REpresentational State Transfer)，它把互联网抽象成一个由Web资源组成的网络，用户通过资源标识符和相关操作符向应用发送请求，以获取目标资源或更改目标资源的状态。REST包含如下设计约束:</p>
+
+<ul>
+<li><p>C/S架构，即组件间的交互方式是以客户端向服务端的资源URI请求，由此获得响应。</p></li>
+<li><p>无状态性，即服务端不直接保持与客户端的会话信息，如有需要应由客户端在发起会话时携带相关信息。无状态使服务端避免维持与多个客户端之间会话信息，从而保证高效性。</p></li>
+<li><p>可缓存性，即Web资源应具有描述可缓存性的能力，并且客户端和其它中间设施应能够根据这些描述选择暂存相关资源，从而减轻服务端负载。</p></li>
+<li><p>分层系统，通过划分出具有不同职责的中间层，实现负载均衡、缓存、认证和授权等具体特性。</p></li>
+<li><p>统一接口，即组件间接口应遵循以下原则:</p>
+
+<ul>
+<li><p>采用资源标识符识别目标资源，资源表示支持多种格式，例如HTML、XML、JSON。</p></li>
+<li><p>通过资源表示实现资源操作，特别是针对资源的增加、修改、删除操作，要求客户端首先应保持目标资源的表示。</p></li>
+<li><p>自描述性消息，即消息本身应携带充分的描述，例如消息格式等信息，从而允许消费方能正确解析该消息。</p></li>
+<li><p>HATEOAS(Hypermedia as the engine of application state)，即客户端只需要保留访问应用的初始URI，其他资源的URI应当由每次请求返回的资源本身提供。</p></li>
+</ul>
+</li>
+<li><p>可编程客户端(可选)，通过编程的方式向客户端提供可供执行的程序，从而提高易用性。</p></li>
+</ul>
+
+
+<p>REST侧重于解决更广泛存在的问题，其绝对的中立性是一大优势。但另一方面，除了总结出互联网应用架构设计的基本约束，REST缺少具体的设计和实践指南。在一段时期内，人们忽视了HTTP协议的开放价值，反而推崇大厂商通过合纵连横试图达到垄断的标准。</p>
+
+<h2>繁盛——面向服务架构(SOA)</h2>
+
+<p>与RPC、REST关注高效性、简洁性等基础架构属性相比，<strong>SOA</strong>是在分布式场景下面向业务模型的更高层抽象。这里的服务对应业务活动单元，并且多个服务可以组合成为更复杂的业务活动单元，这是一种旨在适应业务模型的架构风格，也一度被认为是未来互联网的标准。</p>
+
+<p>从技术角度看，SOA把组件划分成三个基本角色:服务提供、服务消费、服务注册，服务提供和消费方通过服务注册进行识别，从而实现相互通信，以此为基础构建分布式架构。由少数厂商联盟发起，在SOA发展伊始就陆续推出了一套基于Web的服务架构协议，即风靡一时的<strong>Web服务</strong>(Web services)。这些基于XML的协议族包括了:</p>
+
+<ul>
+<li>SOAP(Simple Object Access Protocol)，规定消息表示，具体包含消息属性和内容。下列代码片段是Google搜索引擎的SOAP消息封装:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+</span><span class='line'>  &lt;soap:Body&gt;
+</span><span class='line'>    &lt;gs:doGoogleSearch xmlns:gs="urn:GoogleSearch"&gt; 
+</span><span class='line'>      &lt;key&gt;00000000000000000000000000000000&lt;/key&gt;
+</span><span class='line'>      &lt;q&gt;REST book&lt;/q&gt;
+</span><span class='line'>      &lt;start&gt;0&lt;/start&gt;
+</span><span class='line'>      &lt;maxResults&gt;10&lt;/maxResults&gt;
+</span><span class='line'>      &lt;filter&gt;true&lt;/filter&gt;
+</span><span class='line'>      &lt;restrict/&gt;
+</span><span class='line'>      &lt;safeSearch&gt;false&lt;/safeSearch&gt;
+</span><span class='line'>      &lt;lr/&gt;
+</span><span class='line'>      &lt;ie&gt;latin1&lt;/ie&gt;
+</span><span class='line'>      &lt;oe&gt;latin1&lt;/oe&gt;
+</span><span class='line'>    &lt;/gs:doGoogleSearch&gt;
+</span><span class='line'>  &lt;/soap:Body&gt;
+</span><span class='line'>&lt;/soap:Envelope&gt; </span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>WSDL(Web Services Description Language)，规定接口表示。具体包括抽象类型定义(types)、参数具体类型(message)、接口和SOAP绑定(binding)和服务描述(service)。下列代码片段把ping命令的功能封装为Web服务，并用WSDL进行描述:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+</span><span class='line'>&lt;definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="uri:weblogscom" targetNamespace="uri:weblogscom"&gt;
+</span><span class='line'>  &lt;types&gt;
+</span><span class='line'>    &lt;s:schema targetNamespace="uri:weblogscom"&gt;
+</span><span class='line'>      &lt;s:complexType name="pingResult"&gt;
+</span><span class='line'>        &lt;s:sequence&gt;
+</span><span class='line'>          &lt;s:element minOccurs="1" maxOccurs="1" name="flerror" type="s:boolean" /&gt;
+</span><span class='line'>          &lt;s:element minOccurs="1" maxOccurs="1" name="message" type="s:string" /&gt;
+</span><span class='line'>        &lt;/s:sequence&gt;
+</span><span class='line'>      &lt;/s:complexType&gt;
+</span><span class='line'>    &lt;/s:schema&gt;
+</span><span class='line'>  &lt;/types&gt;
+</span><span class='line'>  &lt;message name="pingRequest"&gt;
+</span><span class='line'>    &lt;part name="weblogname" type="s:string" /&gt;
+</span><span class='line'>    &lt;part name="weblogurl" type="s:string" /&gt;
+</span><span class='line'>  &lt;/message&gt;
+</span><span class='line'>  &lt;message name="pingResponse"&gt;
+</span><span class='line'>    &lt;part name="result" type="tns:pingResult" /&gt;
+</span><span class='line'>  &lt;/message&gt;
+</span><span class='line'>  &lt;portType name="pingPort"&gt;
+</span><span class='line'>    &lt;operation name="ping"&gt;
+</span><span class='line'>      &lt;input message="tns:pingRequest" /&gt;
+</span><span class='line'>      &lt;output message="tns:pingResponse" /&gt;
+</span><span class='line'>    &lt;/operation&gt;
+</span><span class='line'>  &lt;/portType&gt;
+</span><span class='line'>  &lt;binding name="pingSoap" type="tns:pingPort"&gt;
+</span><span class='line'>    &lt;soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" /&gt;
+</span><span class='line'>    &lt;operation name="ping"&gt;
+</span><span class='line'>      &lt;soap:operation soapAction="/weblogUpdates" style="rpc" /&gt;
+</span><span class='line'>      &lt;input&gt;
+</span><span class='line'>        &lt;soap:body use="encoded" namespace="uri:weblogscom" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" /&gt;
+</span><span class='line'>      &lt;/input&gt;
+</span><span class='line'>      &lt;output&gt;
+</span><span class='line'>        &lt;soap:body use="encoded" namespace="uri:weblogscom" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" /&gt;
+</span><span class='line'>      &lt;/output&gt;
+</span><span class='line'>    &lt;/operation&gt;
+</span><span class='line'>  &lt;/binding&gt;
+</span><span class='line'>  &lt;service name="weblogscom"&gt;
+</span><span class='line'>    &lt;document&gt;For a complete description of this service, go to the following
+</span><span class='line'>URL: http://www.soapware.org/weblogsCom&lt;/document&gt;
+</span><span class='line'>    &lt;port name="pingPort" binding="tns:pingSoap"&gt;
+</span><span class='line'>      &lt;soap:address location="http://rpc.weblogs.com:80/" /&gt;
+</span><span class='line'>    &lt;/port&gt;
+</span><span class='line'>  &lt;/service&gt;
+</span><span class='line'>&lt;/definitions&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>UDDI(Universal Description, Discovery, and Integration)，规定服务注册和发布等。下列代码片段用于把前面提到的ping服务发布在UDDI目录中:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;businessEntity businessKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" 
+</span><span class='line'>                operator="www.weblogs.com/services/uddi" 
+</span><span class='line'>                authorizedName="xxxxxxxxxx"&gt;
+</span><span class='line'>  &lt;discoveryURLs&gt;
+</span><span class='line'>    &lt;discoveryURL useType="businessEntity"&gt;http://www.weblogs.com/services/uddi/uddiget?businessKey=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;/discoveryURL&gt;
+</span><span class='line'>  &lt;/discoveryURLs&gt;
+</span><span class='line'>  &lt;name&gt;Services&lt;/name&gt;
+</span><span class='line'>  &lt;description xml:lang="en"&gt;Web services resource site&lt;/description&gt;
+</span><span class='line'>  &lt;contacts&gt;
+</span><span class='line'>    &lt;contact useType="Founder"&gt;
+</span><span class='line'>      &lt;personName&gt;XX XX&lt;/personName&gt;
+</span><span class='line'>      &lt;phone useType="Founder" /&gt;
+</span><span class='line'>      &lt;email useType="Founder"&gt;xx@xx.xx&lt;/email&gt;
+</span><span class='line'>    &lt;/contact&gt;
+</span><span class='line'>  &lt;/contacts&gt;
+</span><span class='line'>  &lt;businessServices&gt;
+</span><span class='line'>    &lt;businessService serviceKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" 
+</span><span class='line'>                     businessKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"&gt;
+</span><span class='line'>      &lt;name&gt;Ping&lt;/name&gt;
+</span><span class='line'>      &lt;description xml:lang="en"&gt;This is a ping service&lt;/description&gt;
+</span><span class='line'>      &lt;bindingTemplates&gt;
+</span><span class='line'>        &lt;bindingTemplate bindingKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" 
+</span><span class='line'>                         serviceKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"&gt;
+</span><span class='line'>          &lt;description xml:lang="en"&gt;SOAP binding for ping service&lt;/description&gt;
+</span><span class='line'>          &lt;accessPoint URLType="http"&gt;http://rpc.weblogs.com:80/&lt;/accessPoint&gt;
+</span><span class='line'>          &lt;tModelInstanceDetails&gt;
+</span><span class='line'>            &lt;tModelInstanceInfo tModelKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" /&gt;
+</span><span class='line'>          &lt;/tModelInstanceDetails&gt;
+</span><span class='line'>        &lt;/bindingTemplate&gt;
+</span><span class='line'>      &lt;/bindingTemplates&gt;
+</span><span class='line'>    &lt;/businessService&gt;
+</span><span class='line'>  &lt;/businessServices&gt;
+</span><span class='line'>&lt;/businessEntity&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上述XML协议族看似提供了语言和平台无关的特性，但过度繁冗引发高效性的担忧。同时Web服务意图达到事无巨细，即便在今天也堪称过度设计，给当时软件开发造成了额外负担，与方兴未艾的敏捷运动背道而驰，却很少有人看到Web服务的真正价值。此外，Web服务的某些重要组件，例如其负责服务注册和通信的核心模式ESB(Enterprise Service Bus)在实践中引发严重的可维护性问题，企业往往投入巨资采购ESB却使得软件修改变得更加困难——成为过度设计的后遗症。因而尽管得到了大厂商鼓吹和投资，SOA包括Web服务终成昙花一现，逐渐被弃用。</p>
+
+<p>必须承认，SOA同样也具有普适性的内核，许多SOA时代的设计成果如今已经成为<a href="http://hanyi.name/blog/2015/02/18/microservices-trap/"><strong>微服务</strong></a>最佳实践的一部分，区别是它们不再成为少数大厂商及其联盟的专利。</p>
+
+<h2>回归——RESTful</h2>
+
+<p>当人们面对Web服务浩如烟海的XML协议群焦头烂额之际，目光重新聚焦在轻量化设计，伴随敏捷开发运动兴起，Web服务的最初形式逐渐被弃用，取而代之的是RESTful和相关开源社区崛起。</p>
+
+<p>RESTful提倡充分利用HTTP 1.1和URI等既有协议，思考包括资源表示、状态表示、语义化API、资源定位等核心约束。同时得以兼容开源社区对HTTP生态的高效性、安全性扩展，最终形成了互联网时代的标准参考架构。</p>
+
+<p>本节之所以称为回归RESTful，是因为从RPC到Web服务，架构设计一直试图以不断分层的方式重新定义问题和寻找新的解决方案，以至于忽视了很多当时已经成熟的方案。例如一些Web服务采用RPC over HTTP方案，即把HTTP仅作为消息传递工具，再在其上重新设计一套复杂的RPC框架——相当于坐在汽车上重新造轮子。当然，对于组织内部应用来说这也许只是一种潜在的过度设计，实施起来并没有太大麻烦，但这种笨重性根本无法适用于开放的互联网时代。RESTful相比于Web服务的过度设计，后者存在许多冗余特性，且在既有HTTP协议中存在对等替代，例如:</p>
+
+<ul>
+<li><p>SOAP协议用XML重新封装了消息属性和内容，然后再用RPC或HTTP进行传递。但HTTP协议自带的头属性(Header)、内容(Body)、状态(Status)和方法(Methods)天然就拥有这种职责划分，且具备更好的性能。</p></li>
+<li><p>WSDL协议用于描述服务接口、参数静态类型和消息格式，但在实际应用中很少有人会手写这些繁冗的信息，而是通过基于Java或C#等语言的工具自动生成WSDL，然后提供给需要服务的客户端应用，其目的是客户端可以通过方法调用的形式实现Web服务调用(与RPC类似)。这种接口层在某些封闭场景下可能是合理的，但在当前互联网时代只能是掣肘大于收益，缺少普适性。实际上，RESTful社区也曾经提出过一种同样基于XML但较轻量的WADL(Web application description language)作为替代协议，却永久停留在了文本阶段，甚至从未落地。</p></li>
+<li><p>UDDI协议用于服务注册和发布，这是一种比WSDL更复杂的、希望把服务与业务需求关联起来并对外发布的目录协议，客户端可以使用UDDI查询并浏览可用的服务。遗憾的是，与其复杂的协议内容相比，UDDI这种超前设计实际缺少应用场景。今天的RESTful也只是实现了以开放API规范(OpenAPI Specification)等发布API功能和描述的最佳实践。</p></li>
+</ul>
+
+
+<p>RESTful在Web服务中的回归使人的注意力重新回到对设计本质的思考，最终形成具有普适性的Web API设计指南——RESTful API，并伴随着开源Web框架Ruby on Rails、Django推广并流行至今，产生了巨大影响力，在如今开源Web框架领域，已经很难看到不支持RESTful API了。</p>
+
+<h2>展望——后RESTful时代</h2>
+
+<p>RESTful已成为互联网时代最具标志性的架构风格，尽管由于各种原因，许多应用实际上并未严格遵循RESTful，也会在细分场景中寻找替代方案。例如，RESTful(或RPC)中的每一个Endpoint都要提供明确的接口描述，包括URI、请求内容、响应内容等。由于接口的特殊性，实践中因为需求变更导致接口变更是一个繁琐且容易引起BUG的过程。当在数据读取的场景中所需数据可能发生频繁变更时，GraphQL就成为RESTful之外的另一个选项。</p>
+
+<p>GraphQL旨在提供一种长期稳定且一致的API接口，从而避免频繁接口变更，其实现思路与RPC over HTTP类似，即通过向单一Endpoint发送一个数据查询对象，再获得所请求的数据，因此这种API是可以根据客户端需求动态返回恰好所需数据的。与RESTful相比，GraphQL无法充分利用HTTP的固有特性，特别是URI、缓存、数据操作等，因此不得不引入额外依赖并导致复杂性，在实践中也面临较多限定条件，例如查询语言、实现框架等。因此，GraphQL通常是作为RESTful的补充，而非绝对替代。RESTful的普适性还体现在云计算、移动/IOT领域的广泛应用场景。在服务化思想盛行的今天，RESTful的中立和兼容性使其仍然是互联网应用的默认选择。</p>
+
+<h2>结论</h2>
+
+<p>本文讨论了架构风格演变，特别是从计算机网络诞生到互联网时代，架构风格从C/S一路发展到RESTful的整个过程，以及各个里程碑背后的动机和陷阱。对于架构质量属性，单独了解和掌握并不困难，但工程中往往需要综合考虑多个质量属性，这就要求针对相关设计约束进行系统管理，架构风格就是这个过程里每个里程碑输出的产品。</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2021-06-27T16:50:48+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2021/06/27/software-design-and-architecture-notes-17/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2021
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2021/06/27/software-design-and-architecture-notes-17/';
+        var disqus_url = 'http://www.hanyi.name/blog/2021/06/27/software-design-and-architecture-notes-17/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-49392954-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

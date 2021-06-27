@@ -4,7 +4,7 @@
   <title><![CDATA[Category: architecture | Wing of Dream 梦境之翼]]></title>
   <link href="http://www.hanyi.name/blog/categories/architecture/atom.xml" rel="self"/>
   <link href="http://www.hanyi.name/"/>
-  <updated>2020-06-29T16:19:33+08:00</updated>
+  <updated>2021-06-27T16:50:49+08:00</updated>
   <id>http://www.hanyi.name/</id>
   <author>
     <name><![CDATA[Han Yi]]></name>
@@ -12,6 +12,251 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[软件设计与架构笔记(17): 架构风格演变——从Client/Server出发]]></title>
+    <link href="http://www.hanyi.name/blog/2021/06/27/software-design-and-architecture-notes-17/"/>
+    <updated>2021-06-27T16:50:48+08:00</updated>
+    <id>http://www.hanyi.name/blog/2021/06/27/software-design-and-architecture-notes-17</id>
+    <content type="html"><![CDATA[<p>我们可能听说过多种架构风格，不同架构风格之间往往不是非此即彼的关系，它们或可以被组合使用，或包含相同的成分，也可能存在各自的侧重方向。更重要的是，一组架构风格之间有时存在继承和发展关系，即本文要讨论的演变。人们通常更重视架构风格的具体内容，缺少理解架构风格的动机，极少了解背后隐藏的陷阱，而它们的重要性是依次上升的，这也从根本上导致了架构风格演变的产生。下文就以C/S架构风格的演变为例进一步讨论。</p>
+
+<h2>起源——Client/Server(C/S)</h2>
+
+<p>计算机网络的发明令计算资源的跨空间共享成为可能。受到这种能力所蕴含的经济价值驱动，人们在网络诞生初期就发明了集中式的计算设施(如Mainframe)以及更多相对轻量的工作站(如Workstation)，分散的工作站通过远程作业输入(Remote Job Entry)实现向Mainframe发送数据处理作业并由后者进行处理。这就是如今早已枝繁叶茂的C/S架构风格雏形。</p>
+
+<p>虽然在诞生初期即取得巨大成功，但C/S也经历了曲折的发展时期。一个极端是终端逐渐控制台化，仅提供基本输入输出能力，如数据库管理系统(DBMS)。另一个极端是，随着个人计算机(PC)问世，各种新领域需求激增，在一段时期内受网络、硬件条件限制，人们不再满足于轻量化终端，开始推崇更强大的通用型计算机，富客户端(Rich client)概念由此产生(单机软件需求在这一时期也达到了巅峰)。而如今，互联网、云计算、移动/IOT等领域的应用无一不建立在C/S(B/S)的基础上，多以服务的形式提供给用户或其它服务。另一方面，如今很少人会专门谈论C/S，因为随着应用场景的丰富以及待解决问题的深入，人们更多关注C/S的某些细节领域，从而衍生出细分的架构风格。然而，前述演变与C/S本身的动机和陷阱息息相关。</p>
+
+<p>作为一种中心化的分布式架构，C/S相较于非分布式架构天然地具有更多复杂性，从今天的工程角度看绝不应把复杂性作为首选项。但我们知道，C/S最根本的出发点是提高软件(计算资源)的经济价值，这种价值判断一般更合理地来自业务评估(尽管有时可能也会受到IT管理制约)，因此这种架构风格更多是被应用环境决定——这在如今互联网时代更加如此。</p>
+
+<p>而C/S复杂性就在于，它把本就繁杂的<a href="http://hanyi.name/blog/2019/06/08/software-design-and-architecture-notes-15/">架构质量属性</a>的复杂度进一步提高了数个维度，且后果往往超出业务预料:</p>
+
+<ul>
+<li><p>可靠性，由本地环境到不稳定网络和共享服务端环境，可靠性保证的复杂度无疑显著增加。</p></li>
+<li><p>易用性，在相似开发成本和客户端侧技术等条件下，C/S的易用性往往较差。</p></li>
+<li><p>高效性，C/S的初衷是共享资源，从而提高利用率，但这并非是免费午餐。在满足相同服务等级的条件下，C/S要通过额外的动态资源调整以实现高效性。</p></li>
+<li><p>兼容性，表现基本一致。</p></li>
+<li><p>安全性，由于资源和服务共享的原因，C/S面临更复杂的安全问题。</p></li>
+<li><p>可维护性，相同系统复杂性条件下，C/S具有更高的设计成本，也因此具备可维护性优势。但C/S产品通常被寄希望于覆盖更多业务场景，导致复杂度一般更高，也因此更难以维护。</p></li>
+<li><p>可移植性，面向服务的C/S通常具有优势。但如果软件不是以服务的形式提供，而是所谓的On premise部署，其复杂性则会显著增加。</p></li>
+</ul>
+
+
+<p>C/S逐步流行后，针对上述挑战，逐渐衍生出诸多细分的架构风格，对过去半个世纪乃至今天的软件架构产生了深远影响。</p>
+
+<h2>发展——远程过程调用(RPC)</h2>
+
+<p>上文提到由于C/S的分布式特征，使其面临极高的复杂度，这里原因之一是网络通信的不可靠性。因此人们首先想到抽象出一个独立的通信层，该层负责向下管理进程间通信要解决的问题，向上为应用层提供面向通信领域的语言级接口，即本节要讨论的RPC。</p>
+
+<p>从工程实践的角度看，RPC拥有曲折的发展历程，此类汇总文献很多，本文不再赘述。如今随着RPC成为分布式架构的基础元素之一，不同平台、语言、甚至科技公司都专门开发了方便落地的RPC框架和工具。这里把RPC视为一种架构风格，因为除了眼花缭乱的RPC实现，绝大多数RPC都集中在解决如下几个问题，且具有相似的针对性约束和模式:</p>
+
+<h3>消息表示</h3>
+
+<p>虽然定义为语言级，但为了保证兼容性，RPC需要采用中立的通信数据流，即不依赖任何具体的系统或语言。例如常见且兼容性好的JSON、XML、YAML，或开放但实际专属的Protobuff、Thrift、Java Object Serialization Stream Protocol等，这就需要RPC框架各自实现语言的内存模型和数据流之间的相互模式——序列化和反序列化。兼容性和高效性是这里最关注的质量属性。</p>
+
+<h3>消息传递</h3>
+
+<p>消息传递往往是RPC中功能最复杂的部分，它主要提供对网络传输的抽象，因此包括但不限于通信模型、地址、协议栈、异常/超时处理、安全、多线程、缓存等众多领域。如果一个RPC框架试图解决前述所有问题，就不得不需要借助更高级别的抽象，难以想象其复杂性和易用性。因此，如今轻量化成为RPC领域的主流。</p>
+
+<h3>接口表示</h3>
+
+<p>理想情况下，程序中的方法应可直接作为RPC的接口使用，这也是定位于语言级的初衷。但实际上如今流行RPC框架都拥有跨语言的特性，一种更流行的模式就是构建一个中立的接口层，使用语言无关的技术定义接口信息，再在语言层面映射到具体方法。例如gRPC中采用Protocol Buffers定义服务:</p>
+
+<pre><code>service Greeter {
+  rpc SayHello (HelloRequest) returns (HelloReply);
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloReply {
+  string message = 1;
+}
+</code></pre>
+
+<p>上述服务定义可以被直接编译成目标语言的客户端和服务端代码，从而作为接口被引用。</p>
+
+<p>如今选择RPC更多是出于高效性或定制化的目的，即强烈依赖某些RPC工具的特性或特定场景。而一旦进入互联网的开放世界，这种依赖就成为普适性的阻碍，人们就会倾向于更加中立的架构风格。</p>
+
+<h2>成熟——REST</h2>
+
+<p>在互联网时代，应用面临着高效性、可维护性、简洁性和可靠性等方面更严峻的挑战。REST就是为了解决上述挑战而被设计和提出的，其本身由一套支持HTTP 1.1和URI标准协议的核心设计原则组成，后者已成为互联网标准之一。</p>
+
+<p>REST的全称是表述性状态转移(REpresentational State Transfer)，它把互联网抽象成一个由Web资源组成的网络，用户通过资源标识符和相关操作符向应用发送请求，以获取目标资源或更改目标资源的状态。REST包含如下设计约束:</p>
+
+<ul>
+<li><p>C/S架构，即组件间的交互方式是以客户端向服务端的资源URI请求，由此获得响应。</p></li>
+<li><p>无状态性，即服务端不直接保持与客户端的会话信息，如有需要应由客户端在发起会话时携带相关信息。无状态使服务端避免维持与多个客户端之间会话信息，从而保证高效性。</p></li>
+<li><p>可缓存性，即Web资源应具有描述可缓存性的能力，并且客户端和其它中间设施应能够根据这些描述选择暂存相关资源，从而减轻服务端负载。</p></li>
+<li><p>分层系统，通过划分出具有不同职责的中间层，实现负载均衡、缓存、认证和授权等具体特性。</p></li>
+<li><p>统一接口，即组件间接口应遵循以下原则:</p>
+
+<ul>
+<li><p>采用资源标识符识别目标资源，资源表示支持多种格式，例如HTML、XML、JSON。</p></li>
+<li><p>通过资源表示实现资源操作，特别是针对资源的增加、修改、删除操作，要求客户端首先应保持目标资源的表示。</p></li>
+<li><p>自描述性消息，即消息本身应携带充分的描述，例如消息格式等信息，从而允许消费方能正确解析该消息。</p></li>
+<li><p>HATEOAS(Hypermedia as the engine of application state)，即客户端只需要保留访问应用的初始URI，其他资源的URI应当由每次请求返回的资源本身提供。</p></li>
+</ul>
+</li>
+<li><p>可编程客户端(可选)，通过编程的方式向客户端提供可供执行的程序，从而提高易用性。</p></li>
+</ul>
+
+
+<p>REST侧重于解决更广泛存在的问题，其绝对的中立性是一大优势。但另一方面，除了总结出互联网应用架构设计的基本约束，REST缺少具体的设计和实践指南。在一段时期内，人们忽视了HTTP协议的开放价值，反而推崇大厂商通过合纵连横试图达到垄断的标准。</p>
+
+<h2>繁盛——面向服务架构(SOA)</h2>
+
+<p>与RPC、REST关注高效性、简洁性等基础架构属性相比，<strong>SOA</strong>是在分布式场景下面向业务模型的更高层抽象。这里的服务对应业务活动单元，并且多个服务可以组合成为更复杂的业务活动单元，这是一种旨在适应业务模型的架构风格，也一度被认为是未来互联网的标准。</p>
+
+<p>从技术角度看，SOA把组件划分成三个基本角色:服务提供、服务消费、服务注册，服务提供和消费方通过服务注册进行识别，从而实现相互通信，以此为基础构建分布式架构。由少数厂商联盟发起，在SOA发展伊始就陆续推出了一套基于Web的服务架构协议，即风靡一时的<strong>Web服务</strong>(Web services)。这些基于XML的协议族包括了:</p>
+
+<ul>
+<li>SOAP(Simple Object Access Protocol)，规定消息表示，具体包含消息属性和内容。下列代码片段是Google搜索引擎的SOAP消息封装:</li>
+</ul>
+
+
+<pre><code>&lt;soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+  &lt;soap:Body&gt;
+    &lt;gs:doGoogleSearch xmlns:gs="urn:GoogleSearch"&gt; 
+      &lt;key&gt;00000000000000000000000000000000&lt;/key&gt;
+      &lt;q&gt;REST book&lt;/q&gt;
+      &lt;start&gt;0&lt;/start&gt;
+      &lt;maxResults&gt;10&lt;/maxResults&gt;
+      &lt;filter&gt;true&lt;/filter&gt;
+      &lt;restrict/&gt;
+      &lt;safeSearch&gt;false&lt;/safeSearch&gt;
+      &lt;lr/&gt;
+      &lt;ie&gt;latin1&lt;/ie&gt;
+      &lt;oe&gt;latin1&lt;/oe&gt;
+    &lt;/gs:doGoogleSearch&gt;
+  &lt;/soap:Body&gt;
+&lt;/soap:Envelope&gt; 
+</code></pre>
+
+<ul>
+<li>WSDL(Web Services Description Language)，规定接口表示。具体包括抽象类型定义(types)、参数具体类型(message)、接口和SOAP绑定(binding)和服务描述(service)。下列代码片段把ping命令的功能封装为Web服务，并用WSDL进行描述:</li>
+</ul>
+
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="uri:weblogscom" targetNamespace="uri:weblogscom"&gt;
+  &lt;types&gt;
+    &lt;s:schema targetNamespace="uri:weblogscom"&gt;
+      &lt;s:complexType name="pingResult"&gt;
+        &lt;s:sequence&gt;
+          &lt;s:element minOccurs="1" maxOccurs="1" name="flerror" type="s:boolean" /&gt;
+          &lt;s:element minOccurs="1" maxOccurs="1" name="message" type="s:string" /&gt;
+        &lt;/s:sequence&gt;
+      &lt;/s:complexType&gt;
+    &lt;/s:schema&gt;
+  &lt;/types&gt;
+  &lt;message name="pingRequest"&gt;
+    &lt;part name="weblogname" type="s:string" /&gt;
+    &lt;part name="weblogurl" type="s:string" /&gt;
+  &lt;/message&gt;
+  &lt;message name="pingResponse"&gt;
+    &lt;part name="result" type="tns:pingResult" /&gt;
+  &lt;/message&gt;
+  &lt;portType name="pingPort"&gt;
+    &lt;operation name="ping"&gt;
+      &lt;input message="tns:pingRequest" /&gt;
+      &lt;output message="tns:pingResponse" /&gt;
+    &lt;/operation&gt;
+  &lt;/portType&gt;
+  &lt;binding name="pingSoap" type="tns:pingPort"&gt;
+    &lt;soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" /&gt;
+    &lt;operation name="ping"&gt;
+      &lt;soap:operation soapAction="/weblogUpdates" style="rpc" /&gt;
+      &lt;input&gt;
+        &lt;soap:body use="encoded" namespace="uri:weblogscom" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" /&gt;
+      &lt;/input&gt;
+      &lt;output&gt;
+        &lt;soap:body use="encoded" namespace="uri:weblogscom" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" /&gt;
+      &lt;/output&gt;
+    &lt;/operation&gt;
+  &lt;/binding&gt;
+  &lt;service name="weblogscom"&gt;
+    &lt;document&gt;For a complete description of this service, go to the following
+URL: http://www.soapware.org/weblogsCom&lt;/document&gt;
+    &lt;port name="pingPort" binding="tns:pingSoap"&gt;
+      &lt;soap:address location="http://rpc.weblogs.com:80/" /&gt;
+    &lt;/port&gt;
+  &lt;/service&gt;
+&lt;/definitions&gt;
+</code></pre>
+
+<ul>
+<li>UDDI(Universal Description, Discovery, and Integration)，规定服务注册和发布等。下列代码片段用于把前面提到的ping服务发布在UDDI目录中:</li>
+</ul>
+
+
+<pre><code>&lt;businessEntity businessKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" 
+                operator="www.weblogs.com/services/uddi" 
+                authorizedName="xxxxxxxxxx"&gt;
+  &lt;discoveryURLs&gt;
+    &lt;discoveryURL useType="businessEntity"&gt;http://www.weblogs.com/services/uddi/uddiget?businessKey=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;/discoveryURL&gt;
+  &lt;/discoveryURLs&gt;
+  &lt;name&gt;Services&lt;/name&gt;
+  &lt;description xml:lang="en"&gt;Web services resource site&lt;/description&gt;
+  &lt;contacts&gt;
+    &lt;contact useType="Founder"&gt;
+      &lt;personName&gt;XX XX&lt;/personName&gt;
+      &lt;phone useType="Founder" /&gt;
+      &lt;email useType="Founder"&gt;xx@xx.xx&lt;/email&gt;
+    &lt;/contact&gt;
+  &lt;/contacts&gt;
+  &lt;businessServices&gt;
+    &lt;businessService serviceKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" 
+                     businessKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"&gt;
+      &lt;name&gt;Ping&lt;/name&gt;
+      &lt;description xml:lang="en"&gt;This is a ping service&lt;/description&gt;
+      &lt;bindingTemplates&gt;
+        &lt;bindingTemplate bindingKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" 
+                         serviceKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"&gt;
+          &lt;description xml:lang="en"&gt;SOAP binding for ping service&lt;/description&gt;
+          &lt;accessPoint URLType="http"&gt;http://rpc.weblogs.com:80/&lt;/accessPoint&gt;
+          &lt;tModelInstanceDetails&gt;
+            &lt;tModelInstanceInfo tModelKey="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" /&gt;
+          &lt;/tModelInstanceDetails&gt;
+        &lt;/bindingTemplate&gt;
+      &lt;/bindingTemplates&gt;
+    &lt;/businessService&gt;
+  &lt;/businessServices&gt;
+&lt;/businessEntity&gt;
+</code></pre>
+
+<p>上述XML协议族看似提供了语言和平台无关的特性，但过度繁冗引发高效性的担忧。同时Web服务意图达到事无巨细，即便在今天也堪称过度设计，给当时软件开发造成了额外负担，与方兴未艾的敏捷运动背道而驰，却很少有人看到Web服务的真正价值。此外，Web服务的某些重要组件，例如其负责服务注册和通信的核心模式ESB(Enterprise Service Bus)在实践中引发严重的可维护性问题，企业往往投入巨资采购ESB却使得软件修改变得更加困难——成为过度设计的后遗症。因而尽管得到了大厂商鼓吹和投资，SOA包括Web服务终成昙花一现，逐渐被弃用。</p>
+
+<p>必须承认，SOA同样也具有普适性的内核，许多SOA时代的设计成果如今已经成为<a href="http://hanyi.name/blog/2015/02/18/microservices-trap/"><strong>微服务</strong></a>最佳实践的一部分，区别是它们不再成为少数大厂商及其联盟的专利。</p>
+
+<h2>回归——RESTful</h2>
+
+<p>当人们面对Web服务浩如烟海的XML协议群焦头烂额之际，目光重新聚焦在轻量化设计，伴随敏捷开发运动兴起，Web服务的最初形式逐渐被弃用，取而代之的是RESTful和相关开源社区崛起。</p>
+
+<p>RESTful提倡充分利用HTTP 1.1和URI等既有协议，思考包括资源表示、状态表示、语义化API、资源定位等核心约束。同时得以兼容开源社区对HTTP生态的高效性、安全性扩展，最终形成了互联网时代的标准参考架构。</p>
+
+<p>本节之所以称为回归RESTful，是因为从RPC到Web服务，架构设计一直试图以不断分层的方式重新定义问题和寻找新的解决方案，以至于忽视了很多当时已经成熟的方案。例如一些Web服务采用RPC over HTTP方案，即把HTTP仅作为消息传递工具，再在其上重新设计一套复杂的RPC框架——相当于坐在汽车上重新造轮子。当然，对于组织内部应用来说这也许只是一种潜在的过度设计，实施起来并没有太大麻烦，但这种笨重性根本无法适用于开放的互联网时代。RESTful相比于Web服务的过度设计，后者存在许多冗余特性，且在既有HTTP协议中存在对等替代，例如:</p>
+
+<ul>
+<li><p>SOAP协议用XML重新封装了消息属性和内容，然后再用RPC或HTTP进行传递。但HTTP协议自带的头属性(Header)、内容(Body)、状态(Status)和方法(Methods)天然就拥有这种职责划分，且具备更好的性能。</p></li>
+<li><p>WSDL协议用于描述服务接口、参数静态类型和消息格式，但在实际应用中很少有人会手写这些繁冗的信息，而是通过基于Java或C#等语言的工具自动生成WSDL，然后提供给需要服务的客户端应用，其目的是客户端可以通过方法调用的形式实现Web服务调用(与RPC类似)。这种接口层在某些封闭场景下可能是合理的，但在当前互联网时代只能是掣肘大于收益，缺少普适性。实际上，RESTful社区也曾经提出过一种同样基于XML但较轻量的WADL(Web application description language)作为替代协议，却永久停留在了文本阶段，甚至从未落地。</p></li>
+<li><p>UDDI协议用于服务注册和发布，这是一种比WSDL更复杂的、希望把服务与业务需求关联起来并对外发布的目录协议，客户端可以使用UDDI查询并浏览可用的服务。遗憾的是，与其复杂的协议内容相比，UDDI这种超前设计实际缺少应用场景。今天的RESTful也只是实现了以开放API规范(OpenAPI Specification)等发布API功能和描述的最佳实践。</p></li>
+</ul>
+
+
+<p>RESTful在Web服务中的回归使人的注意力重新回到对设计本质的思考，最终形成具有普适性的Web API设计指南——RESTful API，并伴随着开源Web框架Ruby on Rails、Django推广并流行至今，产生了巨大影响力，在如今开源Web框架领域，已经很难看到不支持RESTful API了。</p>
+
+<h2>展望——后RESTful时代</h2>
+
+<p>RESTful已成为互联网时代最具标志性的架构风格，尽管由于各种原因，许多应用实际上并未严格遵循RESTful，也会在细分场景中寻找替代方案。例如，RESTful(或RPC)中的每一个Endpoint都要提供明确的接口描述，包括URI、请求内容、响应内容等。由于接口的特殊性，实践中因为需求变更导致接口变更是一个繁琐且容易引起BUG的过程。当在数据读取的场景中所需数据可能发生频繁变更时，GraphQL就成为RESTful之外的另一个选项。</p>
+
+<p>GraphQL旨在提供一种长期稳定且一致的API接口，从而避免频繁接口变更，其实现思路与RPC over HTTP类似，即通过向单一Endpoint发送一个数据查询对象，再获得所请求的数据，因此这种API是可以根据客户端需求动态返回恰好所需数据的。与RESTful相比，GraphQL无法充分利用HTTP的固有特性，特别是URI、缓存、数据操作等，因此不得不引入额外依赖并导致复杂性，在实践中也面临较多限定条件，例如查询语言、实现框架等。因此，GraphQL通常是作为RESTful的补充，而非绝对替代。RESTful的普适性还体现在云计算、移动/IOT领域的广泛应用场景。在服务化思想盛行的今天，RESTful的中立和兼容性使其仍然是互联网应用的默认选择。</p>
+
+<h2>结论</h2>
+
+<p>本文讨论了架构风格演变，特别是从计算机网络诞生到互联网时代，架构风格从C/S一路发展到RESTful的整个过程，以及各个里程碑背后的动机和陷阱。对于架构质量属性，单独了解和掌握并不困难，但工程中往往需要综合考虑多个质量属性，这就要求针对相关设计约束进行系统管理，架构风格就是这个过程里每个里程碑输出的产品。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[软件设计与架构笔记(16): 架构风格——反应式架构]]></title>
@@ -729,219 +974,6 @@ Model of Software Architecture</a></p>
 <p>GG04, <a href="https://proceedings.asmedigitalcollection.asme.org/proceeding.aspx?articleid=1651497">A Comparison of Modular Product Design Methods on Improvement and Iteration</a></p>
 
 <p>KO11, <a href="https://hal.archives-ouvertes.fr/hal-00571207/document">Degree of Modularity in Engineering Systems and Products with Technical and Business Constraints</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[软件设计与架构笔记(12)]]></title>
-    <link href="http://www.hanyi.name/blog/2019/04/23/software-design-and-architecture-notes-12/"/>
-    <updated>2019-04-23T15:59:14-04:00</updated>
-    <id>http://www.hanyi.name/blog/2019/04/23/software-design-and-architecture-notes-12</id>
-    <content type="html"><![CDATA[<h2>设计原则与代码味道</h2>
-
-<p>在此之前我们已经讨论了<a href="http://www.hanyi.name/blog/2019/02/11/software-design-and-architecture-notes-9/">面向对象分析与设计</a>、<a href="http://www.hanyi.name/blog/2019/03/10/software-design-and-architecture-notes-10/">领域分析及其模式</a>以及<a href="http://www.hanyi.name/blog/2019/03/29/software-design-and-architecture-notes-11/">设计模式</a>。其中朴素的分析和设计方法具有通用性，但需要长期的实际经验积累，在这一过程中不可避免会付出一定代价。虽然模式提供了可复用的设计元素，但基本都存在特定上下文的限制。尽管仍有新的模式不断被提出，但并不意味着其适用性和局限性已被明确认识。同样是来源于经验，有一些设计知识能适用于绝大多数场景，从而具备更广泛的适用性，这就是本文首先要讨论的<strong>设计原则</strong>。设计原则是来源于实际经验且能够指导一般软件设计的法则，其根本动机是发现并解决软件设计问题。</p>
-
-<p>一般而言，发现软件设计问题的终极方法是以真实需求为基础构建软件，然后收集并分析该软件的开发和运行反馈——显然这种方式的代价过于昂贵。一种退而求其次的办法是构建原型系统，在原型阶段只考虑待验证的核心功能，尽早交付给用户使用并收集相关反馈，该方法使软件设计能够更快响应变化。但是我们知道设计复杂度与问题的复杂度是正相关的，而<strong>易变性</strong>又是软件设计的一个重要特征，因此从原型获得一次反馈的效用会随着时间推移和问题复杂度的增加而逐步降低，于是需要缩短反馈周期以实现频繁反馈。高反馈频率意味着更高的交付效率，然而交付效率的提升又有赖于恰当的工程方法和可扩展的设计。因此，“黑盒”式的问题反馈方法虽然为设计问题发现提供了事实依据，但其效率受软件自身设计问题所制约。另一方面，从最初采集得到反馈到定位具体设计问题，对问题根因可能存在不同解读方式，导致最终结论的有效性也可能面临挑战。</p>
-
-<p>幸运的是软件开发并非孤立问题，软件设计实践中遇到的问题及其解决方案往往具有普遍性。在这些知识的基础上诞生了一系列被普遍认可的、“白盒”式的设计原则，使软件设计中的潜在问题能够被更早发现和解决。应注意，某些设计原则是针对特定上下文，例如Liscov替换原则之于OO，更多则适用于广泛的上下文。本文剩余部分首先介绍设计原则背后的核心设计属性，然后按所适应的场景分组并讨论经典的设计原则，最后讨论相比于设计原则更轻量、更贴近日常编程活动、且涵盖更广泛的经验知识——代码味道及其与设计原则之间由表及里的内在联系。</p>
-
-<h3>设计属性和通用设计原则</h3>
-
-<p>每提起设计原则就会出现许多经典的名字和概念，但诸多原则都表现了相对稳定的设计属性，这些属性往往也是软件设计领域中的核心概念，且在前文大多已经讨论过：</p>
-
-<ul>
-<li><p><strong>耦合性</strong>(Coupling)，即模块间依赖的程度，耦合越高则意味着该模块将难以被维护，详见<a href="http://www.hanyi.name/blog/2018/10/12/software-design-and-architecture-notes-4/">结构化设计方法</a>。</p></li>
-<li><p><strong>内聚性</strong>(Cohesion)，即模块具有单一目的性的程度，内聚越高则意味着更好的可理解性和可重用性，详见<a href="http://www.hanyi.name/blog/2018/10/12/software-design-and-architecture-notes-4/">结构化设计方法</a>。</p></li>
-<li><p><strong>正交性</strong>(Orthogonality)，即模块能够独立发生变化的程度，具有正交性的模块意味着更容易应对变化。正交性最初被用于描述一种针对关系数据库的设计原则[DC93]，即对于任意两个相互独立的表，其无损分解后的子集不存在相互重叠的情况，该原则能够帮助发现关系数据库设计存在的数据冗余问题。[AD00]详细解释了正交性在更广泛的软件设计问题中的意义，特别是其在模块化、组件化、分层设计等不同设计方法中的一致性体现。</p></li>
-<li><p><strong>信息隐藏性</strong>(Information hiding)，即模块尽力隐藏其实现细节的程度，具有信息隐藏的模块通常意味着更低的耦合性，详见<a href="http://www.hanyi.name/blog/2018/10/03/software-design-and-architecture-notes-3/">模块化编程</a>。</p></li>
-</ul>
-
-
-<p>设计属性为评估设计质量建立了基础，但由于更加强调概念完整性，使其在形式上很难直接与具体的设计问题相关联，于是就出现了数量更多且更具实践意义的设计原则。对于早期提出的、通用的设计原则来说，其可能借鉴自其它领域，例如:</p>
-
-<ul>
-<li><p><strong>关注点分离</strong>(Separation of concerns, SoC)，即把注意力集中在某个方面，而非与其它无关方面相混淆。该原则最初来源于Dijkstra对计算领域中科学性思维属性的探索[EWD74]，后来被引入软件设计领域，用于强调软件模块之间应具有尽可能少的特性重叠。</p></li>
-<li><p><strong>一次且仅一次</strong>(Once and only once)，也称Don&rsquo;t repeat yourself，DRY。指任何知识都应在系统中有唯一、清晰和权威的表示。该原则适用于许多软件设计领域。例如<strong>单一数据源</strong>(Single source of truth, SSOT)，指系统中的任何数据元素都只有一份，任何其它具有相同定义的数据都是该唯一元素的引用，目的是保证数据的完整性和规范性。</p></li>
-<li><p><strong>保持简洁</strong>(Keep it simple stupid, KISS)，简洁意味着易于理解、维护和扩展。KISS旨在强调简洁性对于系统设计的重要性。实际上简洁性还普遍适用于设计、建筑和哲学等其它领域，例如Simplicity is the ultimate sophistication，Brevity is the soul of wit，Less is more，Make simple tasks simple以及Simplify, then add lightness等。</p></li>
-</ul>
-
-
-<h3>实体设计原则</h3>
-
-<p>实体通常指软件中表示模块的单位，例如存在于许多编程范式中的类、模块等元素。针对实体的代表性设计原则如下:</p>
-
-<ul>
-<li><p><strong>单一职责</strong>(Single responsibility)，指任意实体应只有一个使其产生变更的原因。这里“产生变更的原因”等价于实体的职责，即要求实体具有尽可能少的变化维度。单一职责原则是表述最简单的设计原则之一，也是最难被遵循的原则。这是因为职责的定位和分离会随着上下文变化而不同，这需要一定的实践经验和分析过程，且缺少直观的量化手段。尽管如此，单一职责原则仍有可能通过遵循其它设计原则而间接实现。</p></li>
-<li><p><strong>开放-封闭</strong>(Open closed)，指任意实体应对扩展开放，对修改封闭[BM88]。当程序需要发生变更时，应尽可能通过添加新的代码而非修改已有代码来完成，即增量扩展。频繁发生修改的实体通常是难以被预测和重用的。值得注意的是，对大多数软件设计来说，保证100%对修改封闭是难以实现的。因此实际中通常采用一些策略性封闭方法，例如:</p>
-
-<ul>
-<li><p>采用抽象加强显式封闭。如果新的需求导致无法满足对修改封闭，首先应考虑当前的抽象设计，是否需要调整或引入新的抽象从而加强显式封闭特性。</p></li>
-<li><p>采用数据驱动实现封闭。当修改可能影响同一抽象层级下的许多实体时，可以考虑采用配置数据驱动代码的方式限制修改的影响范围。该方法能够避免引入额外依赖，同时把修改封闭在尽可能小的范围。</p></li>
-</ul>
-
-
-<p>无论是采用抽象还是数据驱动方法，都有可能引入新的封闭性问题。因此实践中往往需要不断考虑并扩展实体对修改的封闭性。</p></li>
-<li><p><strong>Liskov替换</strong>(Liskov substitution)，如果S是T的子类型，那么对T的任意对象的引用可以被直接替换为S的对象，且毋须修改已有代码。Liskov原则中的“替换”不仅是指语法上父子类型相互兼容，进一步子类型应当保留父类型中的不变量(见<a href="http://www.hanyi.name/blog/2019/02/11/software-design-and-architecture-notes-9/">设计契约</a>)，从而实现在语义层面的兼容。在类型系统中，前述这种更趋严格的子类型定义被称作<strong>行为子类型</strong>(Behavior subtyping)[LB87]。</p></li>
-<li><p><strong>接口隔离</strong>(Interface segregation)，指客户端不应被强迫依赖于它们不用的接口。当实体中需要引入一个新的公共方法时，一般会在其接口中声明具有相同签名的方法。如果该抽象层级下对应了多个子类型，但并非所有子类型都需要新声明的方法时，就意味着发生了<strong>接口污染</strong>，这种接口也被称作”胖接口”。依赖于胖接口的客户端代码被迫依赖于许多对它们来说无意义的接口，从而大幅增加了级联变更发生的概率。</p></li>
-</ul>
-
-
-<h3>实体依赖原则</h3>
-
-<p>软件的不同实体之间通常存在着依赖关系，针对实体间依赖的代表性设计原则如下:</p>
-
-<ul>
-<li><p><strong>依赖倒置</strong>(Dependency inversion)，指高层实体不应依赖低层实体，两者都应该依赖于抽象;抽象不应依赖细节，细节应依赖抽象。当发生直接依赖的实体之间同时存在层级关系时，应当使其依赖共同的抽象。</p></li>
-<li><p><strong>控制反转</strong>(Inversion of control)，指通过框架实现程序的控制流，从而操作客户端代码以实现自定义扩展[MFR05]。传统上软件由客户端代码和所依赖的代码库组成，其中客户端代码扮演了负责控制流的角色。为了实现可扩展性，需要首先建立抽象，框架就是集合了众多抽象设计的代码骨架，其中提供了客户端代码的接口，但控制流就从客户端移交到框架端。该原则也被称作<strong>好莱坞原则</strong>(Hollywood principle)，即<strong>Don&rsquo;t call us, we&rsquo;ll call you</strong>。</p></li>
-<li><p><strong>最少知识</strong>(Least knowledge)，也称<strong>迪米特法则</strong>(Law of demeter)[LHR88]。对于任何类C以及C中的方法M，M中发生直接调用的对象的类应符合以下两种情形之一:</p>
-
-<ul>
-<li><p>方法M的参数对象所属的类(参数对象可以是M中创建的对象、M中发生的函数调用所创建的对象、或者是M中引用的全局变量对象，包括C)。</p></li>
-<li><p>类C中任何实例变量对象所属的类。</p></li>
-</ul>
-
-
-<p>应用最少知识原则能够降低系统本身和对其修改的复杂度。该原则的另一个名字“迪米特”是最初应用该项原则所设计的OO系统[LHR88]。</p></li>
-</ul>
-
-
-<h3>包设计原则</h3>
-
-<p>与Java的package和C++的namespace等关键字不同，包在设计原则的上下文中是指独立的可交付物(有时也被称作<strong>组件</strong>)，例如jar包和dll文件。包是常见于大规模的软件系统中的概念，这里的“规模”没有具体的量化指标，可能是指代码行数、团队大小以及系统复杂度等。针对包的代表性设计原则如下:</p>
-
-<ul>
-<li><p><strong>重用-发布等价</strong>(Reuse-Release equivalency)，指可重用代码的粒度不应小于代码的可发布粒度。我们知道可重用性是OOD的一个重要属性，可重用的代码应遵循如下原则:</p>
-
-<ul>
-<li><p>可以被独立开发、维护、测试、分发。</p></li>
-<li><p>具体实现对外部隐藏，只通过<strong>发布接口</strong>(Published Interface)对外公开[MFR02]。</p></li>
-</ul>
-
-
-<p>违反上述原则的代码重用通常都具有副作用，例如<strong>代码复制</strong>(Code clone)、破坏代码封装导致的<strong>强耦合</strong>等。针对这些问题，在可发布粒度上实现代码重用是一种有效的解决办法，该方法通过封装和可追踪使代码具有更好的可重用性，包就是实现这种可发布粒度的有效途径。</p></li>
-<li><p><strong>共同封闭</strong>(Common closure)，指包中的不同实体应当封闭于相似的修改原因。根据前文对开放-封闭原则的讨论，实际中始终存在无法令实体对其封闭的修改。而如果不同实体具有共同的修改，那么应使它们属于同一个包。也就是说，同类型的修改应尽可能被限制于最少数量的包中。</p></li>
-<li><p><strong>共同重用</strong>(Common reuse)，指包中的不同实体应当具有被共同使用的倾向。一般情况下，如果某些实体之间存在抽象层级的协作关系，那么它们应属于同一个包。否则，仅针对个别实体的修改可能引起跨包修改，从而存在较高风险。与共同封闭原则类似，该原则有利于加强包的可维护性，这在大多数上下文中比可重用性更加重要。</p></li>
-</ul>
-
-
-<h3>包依赖原则</h3>
-
-<p>与实体间存在依赖关系类似，包之间也存在依赖关系，针对包之间依赖的代表性设计原则如下:</p>
-
-<ul>
-<li><p><strong>无环依赖</strong>(Acyclic dependencies)，指包之间的依赖关系图应是一个有向无环图(DAG)。作为可发布的软件单元，不同包之间不可避免着存在着依赖关系。如果软件系统中存在包的循环依赖关系，即环形依赖，则可能导致以下问题:</p>
-
-<ul>
-<li><p>依赖环中的所有包存在共同修改的可能，破坏了可独立发布的属性。</p></li>
-<li><p>包可能间接依赖于大量其它包，从而降低可维护性。</p></li>
-</ul>
-
-
-<p>一种解决循环依赖的方法是应用依赖倒置原则，提取依赖的共同抽象。另一种方法是把现有包中被依赖的部分抽取出来组成新的包。</p></li>
-<li><p><strong>稳定依赖</strong>(Stable dependencies)，指包之间应遵循更加稳定的依赖方向。如果一个模块是易变的，那么对该模块的依赖在很大程度上也是易变的，这种<strong>易变性</strong>(Volatility)会沿着依赖的方向传递，从而影响整个系统的可维护性。然而由于软件的易变性可能存在许多影响因子，不同影响因子所导致的后果也不尽相同。其中<strong>稳定性</strong>(Stability)被用于描述模块修改的难易程度，即当模块越难以被修改即越稳定。Uncle Bob提出了一种稳定性的度量指标，可以用如下形式计算:</p>
-
-<p>Ca: 传入耦合(Afferent coupling)，依赖于当前包内实体的外部实体数量。</p>
-
-<p>Ce: 传出耦合(Efferent coupling)，依赖于外部实体的包内实体数量。</p>
-
-<p>I: 不稳定系数(Instability)，且I = Ce ÷ (Ca + Ce)，则I范围是[0,1]，当I=0时当前包最稳定，I=1时则最不稳定。</p>
-
-<p>因此，被依赖的包应具有比依赖包更大的I值，即满足稳定依赖原则。</p></li>
-<li><p><strong>稳定抽象</strong>(Stable abstractions)，指稳定性越高的包也应越抽象，反之则越具体。由于高度稳定的包往往难以被修改，因此其应尽可能抽象，从而使系统的易变部分始终保持在不稳定包的具体实现中。包的抽象程度被称作<strong>抽象性</strong>，与稳定性相同，Uncle Bob提出了抽象性A的计算方式:</p>
-
-<p>A = 抽象实体数 ÷ 实体总数。</p></li>
-</ul>
-
-
-<p>根据稳定性和抽象性的定义，理想情况下的软件系统应呈现类似如下线性关系:</p>
-
-<p><img src="http://content.hanyi.name/images/design_principles/abstraction_instability.png" alt="Abstraction-Instability graph" /></p>
-
-<p>也就是说，当已知某个包的稳定性和抽象性度量时，我们就可以进一步计算它们在上述坐标中偏离理想值的程度，用距离D表示这种程度，从而有:</p>
-
-<p>D = |(A + I - 1) ÷ √2|</p>
-
-<p>在实际中能够通过计算包的D值，从而决定包的设计合理性，D值越大的包应优先被关注和改进。</p>
-
-<h3>代码味道</h3>
-
-<p>相比于设计原则，代码味道是一种更加轻量的、被用于识别设计问题的方法。如果把具有良好设计的代码视作是干净无味的话，那么代码味道则可被用于发现那些“显而易见”的“异常”代码。“味道”一词并不是一个正式的概念，Martin Fowler认为代码味道应具备三个基本特征[MFR06]:</p>
-
-<ul>
-<li><p>代码味道应是易于被察觉的。</p></li>
-<li><p>代码味道不一定表示代码中存在设计问题，即使存在“问题”，也有可能是因为设计权衡的结果。</p></li>
-<li><p>代码味道非常易于被程序员理解和掌握，基于代码异味的重构使新手程序员也有机会持续改进设计，即使在缺少对深层次设计原则理解和相关经验的情况下。</p></li>
-</ul>
-
-
-<p>与设计原则类似，按照作用层级可以把代码异味划分为方法、实体(类和模块)以及通用三个类别。</p>
-
-<ul>
-<li><p>具有代表性的方法级代码味道包括:</p>
-
-<ul>
-<li><strong>长方法</strong>(Long function)和<strong>长参数列表</strong>(Long parameter list)，不仅导致代码难于理解，还可能违反单一职责原则。</li>
-<li><strong>重复switch</strong>(Repeated switches)，尽管switch语句具有易于理解的结构，但可能违反开放-封闭原则，特别是当相似结构的switch语句重复出现时，会相应存在多处需要同时被修改的代码。</li>
-<li><strong>循环</strong>(Loops)，随着内循环和管道式编程的普及，常规的外循环语句由于相对复杂的结构已经成为循环计算的备选方案。</li>
-<li><strong>特性依恋</strong>(Feature envy)，指实体中的某个方法过度依赖了其它实体中的数据或方法，进而可能违反了关注点分离原则。</li>
-</ul>
-</li>
-<li><p>具有代表性的实体级代码味道包括:</p>
-
-<ul>
-<li><strong>临时值域</strong>(Temporary field)，指实体中仅在部分情况下有效的属性，这可能违反单一职责原则和关注点分离原则。</li>
-<li><strong>消息链</strong>(Message chains)，如果存在对象的方法的链式调用，且每个阶段的调用都作用于不同对象，这种消息链可能违反了最少知识原则。</li>
-<li><strong>中间人</strong>(Middle man)，指缺少实际意义的代理方法。尽管封装被作为是OO的重要特征，但某些时候存在不合理的封装，例如一些实体中存在的代理方法，其作用仅是分离了真正的调用对象和被调用对象，这可能违反了单一职责原则和关注点分离原则。</li>
-<li><strong>内幕交易</strong>(Insider trading)，指实体间发生数据处理和相互传递的现象。数据交易可能会引起过度耦合，但有时很难完全避免，因此需要尽可能减少此类现象出现的频率。</li>
-<li><strong>过大的类</strong>(Large class)，指一些包含了大量属性的类。这可能违反了单一职责原则和关注点分离原则。</li>
-<li><strong>异曲同工的类</strong>(Alternative classes with different interfaces)，指某些具有相同类型特性的类，因其具有不同接口而无法利用OO的多态性。</li>
-<li><strong>数据类</strong>(Data class)，指只包含可被外部读写的属性的类，导致有关该类的操作散布在不同的类中，这可能违反单一职责原则。</li>
-<li><strong>被拒绝的馈赠</strong>(Refused bequest)，指在继承关系中，子类拒绝或忽略了父类中的某些方法或数据，这可能违反接口隔离原则。一种解决办法是创建父类的兄弟类，使方法和数据相分离——这只在具有良好抽象意义的情况下有效，否则可能会引入更多复杂度，反而得不偿失。如果现有抽象更加稳定，而“被拒绝”的元素又足以影响可维护性，更有效的办法是抽取新的类，并采用对象代理关系替换原有继承关系。</li>
-</ul>
-</li>
-<li><p>具有代表性的通用代码味道包括:</p>
-
-<ul>
-<li><strong>数据泥团</strong>(Data clumps)，指某些经常同时出现的数据组合，其出现场景可能包括不同类中的属性、许多方法签名的参数等。通常可以采用创建新的类表示这些数据组合。</li>
-<li><strong>重复代码</strong>(Duplicated code)，指相同或相似的代码结构在程序中多次出现的现象。最易被识别的重复代码通常发生在同一个类或拥有继承关系的多个类中，也比较容易被消除。除此之外，对重复代码的识别和解决都可能需要进一步的设计权衡。</li>
-<li><strong>全局数据</strong>(Global data)，特别是可变的全局数据，即全局变量。我们已经多次强调了这种共享可变状态的代码可能导致潜在的质量和可维护性问题。实际上，即使是非共享状态的<strong>可变数据</strong>(Mutable data)，依然可能导致代码质量问题。</li>
-<li><strong>发散式变化</strong>(Divergent change)，即某个模块可能会由于不同原因而导致不同方式的修改，违反了单一职责原则。如果修改原因只有一种，但引起了其它模块发生多次级联修改，则称作<strong>霰弹式修改</strong>(Shotgun surgery)。</li>
-<li><strong>基本类型偏执</strong>(Primitive obsession)，指采用基本类型表示某些复杂数据类型，而非创建独立的类，这可能导致大量的重复代码。</li>
-<li><strong>懒元素</strong>(Lazy element)，指某些设计元素(例如类、实体)只有非常简单的功能，甚至使用一、两行代码就能清楚表现该元素的特性，那么他们就没有单独存在的必要。与之表现形式相反，但具有统一思想的<strong>夸夸其谈未来性</strong>(Speculative generality)，或者称作<strong>大设计先行</strong>(Big design up front, BDUF)，则表示发生了过度设计。</li>
-<li><strong>过高的圈复杂度</strong>(High cyclomatic complexity)，指代码中存在过度复杂的控制流图。圈复杂度通常用代码中的线性逻辑路径数进行表示。假设用N表示代码中的基本区块(指不包含任何控制分支的连续代码片段)数，E表示连接基本区块的边数，P表示连通子图数，那么圈复杂度M可用公式M = E - N + 2P进行计算。过高的圈复杂度可能意味着过度复杂的逻辑或缺少结构性的代码。</li>
-<li><strong>神秘命名</strong>(Mysterious name)和<strong>注释</strong>(Comments)，这两种代码味道经常同时出现，因为合理的命名更加表意，也就降低了额外注释的必要性。当然在某些时候再合理的命名也无法表达某些上下文时，注释则是必要的补充。</li>
-</ul>
-</li>
-</ul>
-
-
-<p>尽管前述大部分的代码味道都有“程度”的概念，使其具体的应用仍然依赖实际经验，但仍然有一些可以遵循的规则。例如，针对重复代码的<strong>事不过三规则</strong>(Rule of Three)，这里虽然中文成语中的数量是虚指，但具体应用时可以作为实际阈值，也就是说当重复代码出现三次时，就应考虑采取相应解决方案了。当然这种规则只能作为初步判断条件，进一步仍然需要结合设计原则进行恰当分析。</p>
-
-<h2>结论</h2>
-
-<p>为了发现和定位软件设计中存在的问题，人们在实践中总结出了一系列具有普遍意义的设计原则。看似纷繁复杂的设计原则其实体现了一致的设计属性，并在长期的设计分析和验证过程中不断得到认可。为了进一步缩短软件设计的反馈周期，在代码编写活动中就可以通过识别代码味道尽早发现潜在的设计问题，并通过持续重构保证软件的设计质量。</p>
-
-<h2>引用</h2>
-
-<p>DC93, <a href="http://web.archive.org/web/20100224075429/http://www.dbdebunk.com/page/page/622331.htm">The Principle of Orthogonal Design</a></p>
-
-<p>AD00, <a href="https://www.nceclusters.no/globalassets/filer/nce/diverse/the-pragmatic-programmer.pdf">The Pragmatic Programmer: From Journeyman to Master</a></p>
-
-<p>EWD74, <a href="https://www.cs.utexas.edu/users/EWD/transcriptions/EWD04xx/EWD447.html">On the role of scientific thought</a></p>
-
-<p>BM88, <a href="https://sophia.javeriana.edu.co/~cbustaca/docencia/POO-2016-01/documentos/Object%20Oriented%20Software%20Construction-Meyer.pdf">Object Oriented Software Construction</a></p>
-
-<p>LB87, <a href="https://klevas.mif.vu.lt/~plukas/resources/OODPrinciples/Liskov1987.pdf">Data Abstraction and Hierarchy</a></p>
-
-<p>LHR88, <a href="https://www2.ccs.neu.edu/research/demeter/papers/law-of-demeter/oopsla88-law-of-demeter.pdf">Object-Oriented Programming: An Objective Sense of Style</a></p>
-
-<p>MFR00, <a href="https://martinfowler.com/books/refactoring.html">Refactoring: Improving the Design of Existing Code</a></p>
-
-<p>MFR02, <a href="https://martinfowler.com/bliki/PublishedInterface.html">Published Interface</a></p>
-
-<p>MFR05, <a href="https://martinfowler.com/bliki/InversionOfControl.html">Inversion Of Control</a></p>
-
-<p>MFR06, <a href="https://martinfowler.com/bliki/CodeSmell.html">CodeSmell</a></p>
 ]]></content>
   </entry>
   

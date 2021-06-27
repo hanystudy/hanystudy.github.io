@@ -9,7 +9,8 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="自搬来恰好一年，由于平时不在家的缘故，很少在附近逛。对这里的印象始终是“乱哄哄”的，人在路上都是挤避着走。 要不是文灯老头号称“亲临”西安，估计还要在家再坐禅一个月，不至于每天破纪录地六点多起床赶安定门的次班21路，也就不会为了赶一辆公交车一大早穿行在古怪的小巷中了。 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="突然想起09剧场版8月可能会出dvd,于是翻了翻dygod,还未发布,不过好在迅雷上片源还算是比较充足.
+剧情么基本上是近30年前的翻版,记忆中似乎没多大区别.非要挑出"不同"的话可能只有本作的主题歌《大切にするよ》了&hellip;wikipedia.jp上的口碑貌似还是不错的. 大切にするよ &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +98,75 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/08/26/da-qie/">
+		
+			大切にするよ</a>
+	</h2>
+	<div class="entry-content">
+		<p>突然想起09剧场版8月可能会出dvd,于是翻了翻dygod,还未发布,不过好在迅雷上片源还算是比较充足.
+剧情么基本上是近30年前的翻版,记忆中似乎没多大区别.非要挑出&#8221;不同&#8221;的话可能只有本作的主题歌《大切にするよ》了&hellip;wikipedia.jp上的口碑貌似还是不错的.</p>
+
+<p>大切にするよ
+作詞：柴咲コウ 作曲：市川淳
+あなたは今どこに住んでるかな
+元気でいるのかな　寒くはないかな
+困った顔しないで　投げだしたりしないで
+後戻りはしないで　暮らしててね、笑っててね…そして
+いつかはあなたも大人になって
+出会った人と恋に落ちる
+そんなときにも　どこかで手を合わせ祈ってる
+あなたの指定席、変わってないかな
+前みたいに外を　ながめているかな
+たまにしかってくれた　たまに笑わせてくれた
+離れても遠くから　心の瞳(め)で見てくれてた　今も…
+あなたがそこに生きてるだけで
+それだけで　私も生きられる
+いつか私も1人で立てるようになるかな
+誰もがいつしか時間の旅終えて
+次の場所へ歩く
+そして気づいてゆく
+見えない繋がれた手に
+いつかはあなたも言葉じゃなくて
+愛する人に愛伝える
+そんなときにも　どこかで手を合わせ祈ってる</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-26T00:56:44+08:00" pubdate data-updated="true">2009-08-26</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/tian-xuan-zhi-zuo/'>天选之作</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2009/08/26/da-qie//posts/14/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -1802,467 +1872,6 @@ new_fd = accept(sockfd, &amp;their_addr, &amp;sin_size);</p>
 	
 </div></article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/06/07/MP77-de-UNIX-ke-jian-bi-ji-9/">
-		
-			MP77的UNIX课件笔记(9)</a>
-	</h2>
-	<div class="entry-content">
-		<p>本章和下一章讨论UNIX进程控制和进程间通信机制和相关System call。从“操作系统原理”中我们了解到，进程是OS进行系统资源管理的基本单位。其具体的内容则不属于本章讨论范围，但我们假设读者已经阅读过有关操作系统进程管理方面的文献。</p>
-
-<p><a id="more"></a><a id="more-177"></a></p>
-
-<p>1 进程控制</p>
-
-<p>进程是如何创建的？我们以日常工作的shell平台为起点展开讨论。</p>
-
-<p>1.1 用程序运行程序</p>
-
-<p>简单地说，shell是用于管理程序的系统工具，其实质也是一个程序。</p>
-
-<p>用程序运行程序的思想来实现一个简单shell，我们想到被称为exec的System call。exec的特点是：</p>
-
-<p>1、exec创建执行其它程序的进程，而不必返回。</p>
-
-<p>2、这些例程简单的把新程序覆盖在旧程序上，并以调用者提供的参数去执行这个新代码。</p>
-
-<p>下面是一段使用exec运行ls的程序示例：</p>
-
-<p>main()</p>
-
-<p>{</p>
-
-<p>/*the definition below can also be made like this:</p>
-
-<p>char <em>args[4]={&ldquo;ls&rdquo;,&ldquo;-l&rdquo;,&ldquo;/usr/bin&rdquo;,&ldquo;(char</em>)0&rdquo;}*/</p>
-
-<p>char *args[4];</p>
-
-<p>args[0] = &ldquo;ls&rdquo;; /<em> build the arglist </em>/</p>
-
-<p>args[1] = &ldquo;-l&rdquo;;</p>
-
-<p>args[2] = &ldquo;/usr/bin&rdquo;;</p>
-
-<p>args[3] = (char <em>) 0; /</em> terminate with NULL */</p>
-
-<p>printf(&ldquo;about to execute ls -l /usr/bin\n&rdquo; );</p>
-
-<p>execvp( &ldquo;ls&rdquo; , args );</p>
-
-<p>printf( &ldquo;that was ls, cool, eh?\n&rdquo;);</p>
-
-<p>}</p>
-
-<p>exec包含六种形式，除了建立在exec基础上之外：</p>
-
-<p>l与v，指定命令行参数的两种方式，l代表的形式在函数参数中列举出命令行参数，v要实现组织成一个数组。函数参数中的命令行参数表，参数数目可变，所以最后一个要以0为结束标识。</p>
-
-<p>e，用envp数组的内容初始化环境参数，否则使用与当前相同的环境参数environ。</p>
-
-<p>p，函数第一个参数，是程序文件名，在环境变量PATH指定的多个查找目录中查询可执行文件，否则不按PATH指定路径自动搜索。</p>
-
-<p>由于exec覆盖源进程直接运行目标程序，因此上段C代码中的最后一行输出that was ls,cool,eh?并不会显示在标准输出。</p>
-
-<p>很明显，仅仅使用exec无法满足我们的需求，这种需求主要表现在：</p>
-
-<p>1、为了保护旧程序，要把它分割成两个副本：其中一个被覆盖，而另一个则等待新的覆盖进程的结束。</p>
-
-<p>2、调用成功不返回；失败返回。</p>
-
-<p>为了实现以上功能，需要建立新的进程供exec调用。</p>
-
-<p>1.2 进程创建</p>
-
-<p>Unix涉及进程创建的基本System call是int fork()。fork()调用成功内核建立一个新进程。新进程是调用fork()的进程的副本。即新创建的进程继承了其父进程的环境。</p>
-
-<p>新进程(子进程）运行与创建者（父进程）一样的程序，其中的变量与创建进程的变量相同.</p>
-
-<p>父进程与子进程并发执行，哪一个进程能够占用CPU由进程调度程序决定。它们都是从fork()调用后的那条语句开始执行。例如程序段：</p>
-
-<p>main()</p>
-
-<p>{int pid;</p>
-
-<p>printf(“for example”);</p>
-
-<p>pid=fork();</p>
-
-<p>printf(“fok system calll”);</p>
-
-<p>……</p>
-
-<p>}</p>
-
-<p>标准输出中至少会出现fok system call * 2的显示，且表象上根本无法分别“父”与“子”。简单地说，父子进程间互不影响其数据堆栈的情况。</p>
-
-<p>注意到fork的返回值为整型，实际上就是子进程的process id。也就是说，fork会同时返回两个分别指示父子进程的pid。其中：</p>
-
-<p>1、父进程的返回值为子进程的PID；</p>
-
-<p>2、子进程的返回值为0；</p>
-
-<p>3、出错返回值为-1，并将errno置为相应值。</p>
-
-<h1>include</h1>
-
-<p>main(){</p>
-
-<p>int ret_from_fork, my_pid;</p>
-
-<p>my_pid = getpid();</p>
-
-<p>printf(&ldquo;Hi, my pid is %d\n&rdquo;, my_pid );</p>
-
-<p>ret_from_fork = fork();</p>
-
-<p>sleep(1);</p>
-
-<p>printf(&ldquo;after fork().  It returned %d and my pid is %d\n&rdquo;,</p>
-
-<p>ret_from_fork, getpid());</p>
-
-<p>}</p>
-
-<p>本段程序演示了fork父子进程的pid状态。至于父子进程标识谁最先显示，完全由CPU决定。</p>
-
-<p>1.3 空闲进程</p>
-
-<p>现在回过头来再看shell，似乎心中有数了许多。紧接着问题来了，我们现在知道shell程序通过创建子进程运行新程序，那么此时父进程处于什么地位？子程序运行结束后又是如何回退至父进程的?</p>
-
-<p>显然父进程需要做的是在子进程运行过程中等待，直到子进程结束。这就需要用到/usr/include/sys/wait.h中的System call了。</p>
-
-<p>pid_t wait(int *status);</p>
-
-<p>其中pid_t定义在/usr/include/sys/types.h中，返回值代表已终止的子进程的pid号。status的作用是返回一个整型值，其代表了子进程终止的原因。子进程的终止一般有两种情况：“自杀”和“被杀”，“自杀”即自愿终止，在程序中调用函数exit()或主函数return均可。“被杀”是指由其它进程或者操作系统内核向进程发送信号将其杀死。第一种情况可以获得进程正常终止的返回码，第二种情况可以获得进程被杀死的信号值，“信号值”会在下一篇文章讨论。</p>
-
-<p>在/usr/include/sys/wait.h中定义了几个宏支持返回status的调用：</p>
-
-<p>WIFEXITED(status)，如果进程正常终止，则为真。调用WEXITSTATUS(status)可以返回子进程的返回码。</p>
-
-<p>WIFSIGNALED(status)，如果进程异常终止，则为真。调用WTERMSIG(status)获得子进程被杀的信号值。</p>
-
-<p>严格说来，status的低8位反映了子进程的终止状态：0表示子进程正常结束，非0表示出现了各种各样的问题。status高8位带回了exit的返回值。低7位记录信号序号,bit 7 用来指明发生了错误并产生了内核映像(core dump)。</p>
-
-<p>1.4 简单shell的实现</p>
-
-<p>至此，我们完全有能力制作一个简单的仿真shell程序了，尽管尚无法实现有关信号、文本编辑器以及一些其它特殊功能的调用。</p>
-
-<p>从本篇开始，我们将构建一个shell及其基本系统命令的C语言程序，此项工作会持续到本系列连载的结束。</p>
-
-<p>/<em> example of simple shell </em>/</p>
-
-<h1>include</h1>
-
-<h1>include</h1>
-
-<h1>define   MAXARGS    20 /<em> cmdline args </em>/</h1>
-
-<h1>define   ARGLEN 100 /<em> token length </em>/</h1>
-
-<p>main()</p>
-
-<p>{char <em>arglist[MAXARGS+1]; /</em> an array of ptrs */</p>
-
-<p>int numargs; /<em> index into array </em>/</p>
-
-<p>char argbuf[ARGLEN]; /<em> read stuff here </em>/</p>
-
-<p>char <em>makestring(); /</em> malloc etc */</p>
-
-<p>numargs = 0;</p>
-
-<p>while ( numargs &lt; MAXARGS )</p>
-
-<p>{   printf(&ldquo;Arg[%d]? &rdquo;, numargs);</p>
-
-<p>if ( fgets(argbuf, ARGLEN, stdin) &amp;&amp; *argbuf != &lsquo;\n&rsquo; )</p>
-
-<p>arglist[numargs++] = makestring(argbuf);</p>
-
-<p>else</p>
-
-<p>{  if ( numargs &gt; 0 ) /<em> any args? </em>/</p>
-
-<p>{ arglist[numargs]=NULL; /<em> close list </em>/</p>
-
-<p>execute( arglist ); /<em> do it </em>/</p>
-
-<p>numargs = 0; /<em> and reset </em>/</p>
-
-<p>}</p>
-
-<p>}}</p>
-
-<p>return 0;}</p>
-
-<p>execute( char *arglist[] )</p>
-
-<p>{    int pid,   exitstatus; /<em> of child </em>/</p>
-
-<p>pid = fork(); /<em> make new process </em>/</p>
-
-<p>switch( pid ){</p>
-
-<p>case -1:</p>
-
-<p>perror(&ldquo;fork failed&rdquo;);</p>
-
-<p>exit(1);</p>
-
-<p>case 0:</p>
-
-<p>execvp(arglist[0], arglist); /<em> do it </em>/</p>
-
-<p>perror(&ldquo;execvp failed&rdquo;);</p>
-
-<p>exit(1);</p>
-
-<p>default:</p>
-
-<p>while( wait(&amp;exitstatus) != pid );</p>
-
-<p>printf(&ldquo;child exited with status %d,%d\n&rdquo;,</p>
-
-<p>exitstatus&gt;&gt;8, exitstatus&amp;0377);</p>
-
-<p>}</p>
-
-<p>}</p>
-
-<p>char <em>makestring( char </em>buf )</p>
-
-<p>/*</p>
-
-<ul>
-<li>trim off newline and create storage for the string</li>
-</ul>
-
-
-<p>*/</p>
-
-<p>{</p>
-
-<p>char <em>cp, </em>malloc();</p>
-
-<p>buf[strlen(buf)-1] = &lsquo;\0&rsquo;; /<em> trim newline </em>/</p>
-
-<p>cp = malloc( strlen(buf)+1 );         /<em> get memory </em>/</p>
-
-<p>if ( cp == NULL ){ /<em> or die </em>/</p>
-
-<p>fprintf(stderr,&ldquo;no memory\n&rdquo;);</p>
-
-<p>exit(1);</p>
-
-<p>}</p>
-
-<p>strcpy(cp, buf); /<em> copy chars </em>/</p>
-
-<p>return cp; /<em> return ptr </em>/</p>
-
-<p>}</p>
-
-<p>/<em> end of example </em>/</p>
-
-<p>1.5 字符串解析的C语言细节处理</p>
-
-<p>通过上述程序我们可以获得一种对输入字符串进行格式解析的方法，事实上C语言库函数中即给出了一些极为方便的函数调用。</p>
-
-<p>char <em>strtok(char </em>string, char *tokens);</p>
-
-<p>1、给定字符串string以及“单词”分界符的集合tokens，从字符串中分析出一个“单词”。忽略字符串中连续多个的单词分隔符。</p>
-
-<p>2、函数返回值是指向单词的首字符的指针。</p>
-
-<p>3、函数的副作用是，会修改原先给定的字符串存储空间中的内容。</p>
-
-<p>以下是strtok运行原理解析：</p>
-
-<p>首先键盘输入 who  am i后按enter，应当注意who之前有一个空格和一个制表符（tab），who和am之间有两个空格。</p>
-
-<p>下面是用fgets(s, sizeof s, stdin)读入到内存中的字符串s的存储结构，每个字节用十六进制列出。</p>
-
-<p>\t w h o a m i \n \0</p>
-
-<p>s 20 09 77 68 6f 20 20 61 6d 20 69 0a 00</p>
-
-<p>第一次执行p=strtok(s,&ldquo; \t\n&rdquo;)之后的状态:</p>
-
-<p>\t w h o a m i \n \0</p>
-
-<p>s 20 09 77 68 6f 00 20 61 6d 20 69 0a 00</p>
-
-<p>p</p>
-
-<p>第二次执行p=strtok(NULL,&ldquo; \t\n&rdquo;)后的状态:</p>
-
-<p>\t w h o a m i \n \0</p>
-
-<p>s 20 09 77 68 6f 00 20 61 6d 00 69 0a 00</p>
-
-<p>p</p>
-
-<p>第三次执行p=strtok(NULL,&ldquo; \t\n&rdquo;)后的状态:</p>
-
-<p>\t w h o a m i \n \0</p>
-
-<p>s 20 09 77 68 6f 00 20 61 6d 00 69 00 00</p>
-
-<p>p</p>
-
-<p>这时，strtok扫描结束的位置指向了字符串尾部的&#8217;\0&#8217;，第四次再执行strtok就会返回NULL，表示找不到新的单词。</p>
-
-<p>1.6 另类的进程创建方法</p>
-
-<p>vfork()创建一个进程，而新进程的目的是exec一个新程序。vfork与fork一样都创建一个子进程，但它并不把父进程的地址空间完全复制到子进程，因为子进程会立即调用exec（或exit），于是也就不访问该地址空间，不过它在exec(或exit)调用之前，它在父进程空间运行。</p>
-
-<p>vfork()保证子进程先运行，在它调用exec(或exit)之后父进程才运行。</p>
-
-<p>这里需要明确两个终止操作的区别exit和<em>exit，它们均定义在/usr/include/unistd.h中，不同的是前者属于C语言库函数的范畴，而</em>exit属于System call，也就是说，在具体实现中，exit最终仍需要调用_exit。</p>
-
-<p>但exit终止进程时比系统调用<em>exit多做一些操作。这些操作主要是自动关闭用fopen等函数创建的缓冲I/O文件，将缓冲区里的数据写到磁盘上。exit释放缓冲文件的文件缓冲区和缓冲文件所需要的数据结构，因为库函数相关的这些数据都存放在进程的数据区内，这会影响子进程借用的父进程的数据段，所以，当采用vfork()创建进程时，必须直接使用系统调用</em>exit。</p>
-
-<p>例如下段程序：</p>
-
-<h1>cat vf.c</h1>
-
-<p>int main(void){</p>
-
-<p>int a = 1;</p>
-
-<p>if (vfork() == 0) {</p>
-
-<p>a++;</p>
-
-<p>_exit(0);</p>
-
-<p>} else {</p>
-
-<p>a++;</p>
-
-<p>}</p>
-
-<p>printf(&ldquo;a=%d\n&rdquo;, a);</p>
-
-<p>}</p>
-
-<h1>cc vf.c -o vf</h1>
-
-<h1>./vf</h1>
-
-<p>a=3</p>
-
-<p>显然子进程使用了父进程的数据区进行操作。</p>
-
-<p>1.7 另类的程序运行方法</p>
-
-<p>在C语言标准库中还定义了这样的函数，其本质上使用了fork、exec、wait等System call，用于执行某一行命令。</p>
-
-<p>int system(char *cmd)</p>
-
-<p>其中cmd是可执行程序的名称。该系统调用的功能是执行参数cmd所指定的命令。正确返回0，否则返回错误代码（非0值）。它的执行与命令行键入的命令具有同样的效果。</p>
-
-<p>现在考虑如下实际问题：</p>
-
-<p>编程时希望在程序中获得系统当前的IP转发路由表，一时又找不到编程接口，但是，执行netstat -rn命令后可以获得这个表格。选项r指的是路由表，选项n指的是输出IP地址时用数字形式，而不是自动将地址转换为主机名。</p>
-
-<p>将命令输出重定向到一个临时文件中，然后从程序中读这个文件的内容，获取所希望的信息。最后，把文件删除。具体实现如下：</p>
-
-<h1>cat cmd.c</h1>
-
-<h1>include</h1>
-
-<p>main(){</p>
-
-<p>char fname[256], cmd[256], buf[256];</p>
-
-<p>FILE *f;</p>
-
-<p>tmpnam(fname);</p>
-
-<p>sprintf(cmd, &ldquo;netstat -rn &gt; %s&rdquo;, fname);</p>
-
-<p>printf(&ldquo;Execute \&rdquo;%s\&ldquo;\n&rdquo;, cmd);</p>
-
-<p>system(cmd);</p>
-
-<p>f = fopen(fname, &ldquo;r&rdquo;);</p>
-
-<p>while(fgets(buf, sizeof buf, f))</p>
-
-<p>printf(&ldquo;%s&rdquo;, buf);</p>
-
-<p>fclose(f);</p>
-
-<p>printf(&ldquo;Remove file \&rdquo;%s\&ldquo;\n&rdquo;, fname);</p>
-
-<p>unlink(fname);</p>
-
-<p>}</p>
-
-<p>唯一需要解释的是char * tmpnam(char *str);</p>
-
-<p>其作用是获得一个临时文件的文件名，库函数会保证这个文件名与已有文件名不冲突。</p>
-
-<p>库函数sprintf的用法和printf类似，只是打印的字符存到了字符串而不是显示在终端输出。sprintf使用和printf一样的格式控制字符串，程序员还经常用它将二进制数字转换成ASCII码串。</p>
-
-<p>程序把system(cmd)得到的文件打印出来。需要时，程序应该解读这个文件，获得所需要的信息。</p>
-
-<p>1.8 进程信息获取命令</p>
-
-<p>ps（process status）命令列出系统中进程的当前状态，实际上就是将进程系统数据段中的部分进程属性有选择地打印出来。不同的UNIX系统，ps命令的使用也有些差别。</p>
-
-<p>-a （all）列出所有当前终端上启动的进程；</p>
-
-<p>-t （tty）指定一个终端名字，列出这个终端上启动的所有进程，如ps -t pts/1；</p>
-
-<p>-u （User）指定一个用户名，列出这个用户的所有进程，如ps -u jiang；</p>
-
-<p>-e （everything）列出系统中所有的进程；</p>
-
-<p>-f （full）以full格式列出进程；</p>
-
-<p>-l （long）以long格式列出进程。</p>
-
-<p>下一节将介绍进程间通信的相关原理和方法。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-06-07T09:49:39+08:00" pubdate data-updated="true">2009-06-07</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/unix-slash-linux/'>unix/linux</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2009/06/07/MP77-de-UNIX-ke-jian-bi-ji-9//posts/14/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
 <nav id="pagenavi">
     
     	
@@ -2274,7 +1883,7 @@ new_fd = accept(sockfd, &amp;their_addr, &amp;sin_size);</p>
     
     <div class="center"><a href="/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2020
+	<footer id="footer" class="inner">Copyright &copy; 2021
 
     Han Yi
 
