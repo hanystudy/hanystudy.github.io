@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="我们可能听说过多种架构风格，不同架构风格之间往往不是非此即彼的关系，它们或可以被组合使用，或包含相同的成分，也可能存在各自的侧重方向。更重要的是，一组架构风格之间有时存在继承和发展关系，即本文要讨论的演变。人们通常更重视架构风格的具体内容，缺少理解架构风格的动机，极少了解背后隐藏的陷阱， &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="截至目前我们已经讨论了若干种架构风格，实际上绝大多数工程实践都具备一定的架构风格(尽管有些风格是显式定义、有些则是隐式存在的)。显式地定义架构风格有助于维护架构设计的稳定性，例如表现该设计是基于C/S、SOA、REST或反应式架构风格，以及在应用架构风格时引入的自定义部分。 &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,111 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2021/11/04/software-design-and-architecture-notes-18/">
+		
+			软件设计与架构笔记(18): 面向质量属性的架构模式</a>
+	</h2>
+	<div class="entry-content">
+		<p>截至目前我们已经讨论了若干种架构风格，实际上绝大多数工程实践都具备一定的架构风格(尽管有些风格是显式定义、有些则是隐式存在的)。显式地定义架构风格有助于维护架构设计的稳定性，例如表现该设计是基于C/S、SOA、REST或反应式架构风格，以及在应用架构风格时引入的自定义部分。某些被广泛采用的架构风格，有时也有另一个名字——<strong>架构模式</strong>(这里主要指基础架构模式)。风格与模式是完全不同的概念，前者通常更具理论性和抽象性，多用于描述设计指南或方法论；后者更注重实践性和可复用性，且通常遵循一套标准的模式语言(这得益于<a href="http://www.hanyi.name/blog/2019/03/29/software-design-and-architecture-notes-11/">面向对象设计模式</a>的流行)，具有更精确的问题域和规范说明。而接下来首先要讨论的基础架构模式则兼具风格和模式的属性，它们具有普遍适用性，擅长于复杂问题的高层架构设计，当然也包含明确的结构和行为约束。此外还有数量更多的架构模式专注于解决特定场景中的问题，尽管这些问题可谓五花八门，但大部分的根本动机是改善架构质量属性，这也是本文讨论架构模式的主要视角。下一篇文章会从应用场景的角度讨论架构模式。</p>
+
+<h3>基础架构模式</h3>
+
+<p>基础架构模式产生于对复杂问题的初步认知和分解，类似构建思维导图，良好、清晰的系统结构往往是深入解决方案的前提。例如网络通信系统，先有经典的OSI七层模型，也有流行的TCP/IP五层模型，这里应用了分治策略把一个复杂问题分割为几个子问题(层)，同时定义了子问题之间的关联方式。再例如一个信息系统可被划分为如下层次：表现层、领域层、数据驱动层。这种由上(外)及下(内)的层次结构，相邻层通过预定义的接口实现服务式交互，即下层作为服务提供者，上层作为消费者，即架构模式中最经典的<strong>分层模式</strong>(Layered Pattern)。分层模式表现出的优势在于:1)层次间相互独立；2)每层可复用；3)每一层可替换；4)易于理解，从而有利于维持架构设计的一致性。</p>
+
+<p>分层模式并非万能，特别是某些糟糕的分层设计可能会导致较高的设计复杂度，比如虽然表面上实现了层次间的独立，但仍然存在大量逻辑和数据耦合，导致每层内部的变更不得不传递至外部——从相邻层乃至跨多层的级联变更，结果反而造成更高的维护成本和引发质量问题。同时，由于引入了层次间隔离，大多数分层设计会损失性能，在进行性能调优时也可能与该层的功能性划分冲突，导致更大范围的变更影响。分层模式的另一个挑战是软件的容错性:例如在设计错误处理时，除错误的描述以外，还要额外考虑错误处理的职责分配、处理方式、跨层传递以及其它现实因素。一种常见原则是在尽可能低层处理发生的错误，然后把错误信息传递给上层，其优点是避免由上层单独维护大量的错误处理场景。但上层通常也需要被告知错误信息并做出反应，甚至直达交互界面，以及方便运行时排错和易用性。因此，错误处理通常要在全局设计阶段进行考虑。</p>
+
+<p>基础架构模式中还有一种常见的、类似水厂工艺流程的流水线(Pipeline)结构。在流水线中，原水被输入管道。依照标准工序，原水需要经过若干过滤方法处理，每道工序由对应的过滤器负责，过滤器从上游管道接收水进行加工，再把处理后水输入下游管道，再由后续过滤器处理——最终获得符合标准的自来水。在数据处理系统中，原始数据作为原水流经数据管道，管道中的过滤器依次对数据进行处理——这就是<strong>管道——过滤器模式</strong>(Pipe &amp; Filters Pattern)。如果把过滤器视为层，那么管道——过滤器模式可以看作是分层模式的一种特例，特别是在可复用性、可替换性等方面的优势对数据处理系统来说更具价值。此外，该模式还支持可伸缩性:1)支持流(增量)数据的高效处理，因为上游过滤器不需要处理完全部数据再交给下游，从而减少整体等待时间；2)支持分块数据的高效处理，采用并行计算的能力实现过滤器的横向伸缩，缩短整体处理时间。</p>
+
+<p>管道——过滤器模式也存在对应陷阱，比如一般要求过滤器之间应当完全独立，因为耦合意味着可能需要提供全局状态——这就限制了该模式在可伸缩性方面的优势，也可能会损害整体可维护性。此外，过滤器的接口设计也十分重要，例如Unix中的管道接口统一采用标准字节流，并不规定具体数据格式，因此管道两端的程序都需要实现相应的数据转换。这种方式的优点是保证高可移植性，但会增加数据序列化/反序列化的维护成本和系统开销。在许多实践中，上述成本远远超过了过滤器自身的负载需求。管道——过滤器模式还具有较分层模式更严重的容错性问题。因为不同于分层模式的“双向”通信，管道——过滤器一般是“单向”的，上游一般无法及时了解下游的错误状态，一种方法是引入全局状态管理错误信息，在此基础上实现过滤器同步——无疑会导致复杂性、可维护性以及性能等方面的损失。因此，数据处理系统一般尽量避免引入复杂的错误处理逻辑，只聚焦在错误信息采集和管理——意味着一旦错误发生，只能通过重启整条流水线来恢复系统。而如果系统对容错性有很严格的要求，则只有考虑更普适的分层模式作为妥协。</p>
+
+<p>实践中还有许多复杂性问题是非确定的，例如天气/地震预报、语音识别乃至自动控制系统(机器人、无人驾驶或导弹防御系统等)，凭借当前科技水平很难找到一个精确的模型能够与之对应。因此，为了不断优化得到更合理的结果，通常会考虑组合多种近似模型进行协作。其中，单一模型可能是复杂但相对确定的，多个模型间的协作方式则不确定。如果把每个模型视为独立组件，也就不存在一个固定的组件间依赖结构。这时可以采用中心化结构，即通过一个控制器控制组件协作，并且每个组件只从数据中心获取或写入数据，即<strong>黑板模式</strong>(Blackboard Pattern)。该模式包含三个基本元素:</p>
+
+<ul>
+<li><p>黑板，即数据中心，向知识源和控制器开放读写功能。可以是文件系统、数据库或消息队列等。</p></li>
+<li><p>知识源，即组成整体解决方案的组件，例如各种传感器、雷达、车辆控制器、武器发射控制器等。</p></li>
+<li><p>控制器，负责控制知识源的运行。</p></li>
+</ul>
+
+
+<p>从结构上看，黑板模式可能是最复杂的、但也最灵活的一种架构模式。灵活性在于组件只需要考虑针对黑板的增删改查，由控制器负责监控黑板状态并调度组件执行，组件间几乎完全解耦。黑板模式同样具有良好的独立性、可复用性、可替换性和易修改性，还包括容错性——因为知识源只从黑板中读取和写入数据，组件错误不会发生级联传递。黑板模式主要的缺点在于响应性和复杂性，前者主要是由于组件间通信的不确定性，导致缺少可预估且合理的系统响应时间；后者是因为应用该模式所需的额外复杂度，整个工程包括前期设计、实现、调试和测试等活动都会面临挑战，当然其中一部分原因是问题自身的不确定性。</p>
+
+<p>至此本文已经讨论了三种基础架构模式，它们分别代表了架构设计中的最基本结构：层次结构、流水线结构和中心化结构。尽管这些结构具有普适性，但也存在相应的陷阱，并最终影响着架构的质量属性。实践中还存在更多针对特定质量属性的架构模式，本文的后半部分将主要讨论这些模式。</p>
+
+<h3>面向可伸缩性的架构模式</h3>
+
+<p>可伸缩性是分布式系统架构的一个重要质量属性。在<a href="http://www.hanyi.name/blog/2021/06/27/software-design-and-architecture-notes-17/">上一篇文章</a>中，我们讨论了几种分布式系统架构风格的演变过程，上文提到的基本结构也普遍存在于分布式系统中。但是，仅凭这些无法实现分布式系统的可伸缩性:例如，分布式组件虽然通常都是物理隔离的，但是组件间的逻辑依赖依然存在。无论是点对点(Peer-to-Peer)结构还是主从(Master-Slave)结构，都无法避免产生组件间协作的需求。最基本的，例如服务调用方需要首先知道服务提供方的地址，这就导致组件间的动态耦合，从而限制了系统的可伸缩性。为解决该问题，实践中通常会引入一个独立的中介组件，服务提供方组件能够在中介组件中动态注册，而服务调用方只需要向中介组件发送消息，再由中介把消息交付至服务提供方——这样通过操作中介组件即可协调各个组件，这就是分布式系统架构的<strong>中介模式</strong>(Broker Pattern)。</p>
+
+<p>中介模式是分布式系统的核心模式之一，如今已发展成为分布式架构的重要基础设施。中介模式的优势在于实现了分布式组件的动态解耦，并且把分布式系统协调的职责尽可能从业务组件中分离，使分布式系统开发的复杂性得到了有效管理。另一方面，中介组件会影响系统的整体响应性，也存在单点失败的问题，为此一般需要采用资源冗余的方式来保证可靠性，采用中介模式的系统还面临可追踪性与可测试性的挑战。因而，采用中介模式无论如何都会引入额外的开发和维护成本。</p>
+
+<h3>面向易用性的架构模式</h3>
+
+<p>系统易用性主要体现在交互方面，而MVC也许是迄今为止该领域中最为人熟知的架构模式，它把交互式系统划分为三种抽象组件:1)模型，提供核心功能和数据；2)视图，定义信息的展示方式；3)控制器，处理用户请求。其中，模型的数据更改会通知视图更新；视图需要依赖模型数据进行信息展示，视图还可以接受用户指令，然后将指令传递给控制器；控制器根据用户具体指令，调用模型中的具体业务逻辑以更改数据，然后调用特定的视图展示修改后的结果。MVC的重要贡献在于在一定程度上分离了模型及其用户端表示，使得交互式系统具有更好的易修改性——这一点尤为重要，因为用户界面往往是系统中改动最频繁的部分，而MVC的职责划分使视图组件更易于修改。另一方面，尽管界面变更的影响得到了限制，但模型变更则可能影响到视图和控制器，从而引起可维护性问题。MVC模式先后衍生出许多变种MV*模式，例如表示-抽象-控制(Presentation-Abstraction-Control)模式，层级模型-视图-控制器(Hierarchical Model-View-Controller)模式，模型-视图-表示(Model-View-Presenter)模式，模型-视图-视图模型(Model-View-ViewModel)模式等，这些模式通过更多抽象旨在进一步简化特定场景的用户界面，但也更加复杂从而导致更多局限性，这里不再进一步展开。</p>
+
+<h3>面向可适应性的架构模式</h3>
+
+<p>可适应性的一个典型的例子是操作系统:向下要支持多种硬件环境，向上要运行海量应用程序。可适应性指系统适应外部需求变化的能力，这一般要依赖于抽象设计:一种方式是构建一个仅实现必要功能的核心组件并对外提供服务接口，以此为基础通过扩展服务实现其它功能，包括外部扩展的功能，即<strong>微内核模式</strong>(Microkernel Pattern)；另一种方式是允许外部环境通过接口改变组件功能和系统结构，即<strong>反射模式</strong>(Reflection Pattern)。下文进一步讨论这两种模式。</p>
+
+<p>微内核模式要求核心组件只包含必要功能、高层结构和扩展接口，并尽可能把大多数功能分配给扩展服务。应用该模式需要先定义一个稳定的抽象内核，其它扩展功能只需要与内核实现交互。例如，通过硬件访问接口就可以把操作系统完整移植到不同的硬件平台。但是，微内核的前提是存在一个稳定的内核设计，这通常并不容易，因此会引入设计复杂度和试错成本。另一个挑战是针对性能可持续优化的能力，因为性能优化和抽象设计往往并不相互正交。</p>
+
+<p>反射模式把系统划分为两层:元层(Meta level)和基础层(Base level)，其中元层用于定义软件自身的结构和行为，元层中的数据被封装在元对象(Metaobjects)中，例如类型定义、算法或者函数调用机制等信息。基础层用于定义应用的基本逻辑，其中的组件通过访问元对象实现具体功能。这样，元对象本身就成为系统对外的扩展点，从实现动态可扩展性。为了对外提供接口，反射模式定义了元对象协议(Metaobject Protocol, MOP)，允许客户端编辑元对象，从而影响基础层中的实际功能。反射模式旨在避免修改系统源代码的前提下实现系统功能扩展乃至变更，当然对降低软件的维护成本有积极意义，但是，这种灵活性是以牺牲可靠性为代价的，因为要验证元对象修改的正确性是十分困难的；同时，反射模式会显著增加系统的设计与开发成本；由于元层和基础层的相互交替也限制了系统性能及可持续优化能力。</p>
+
+<h3>面向可用性的架构模式</h3>
+
+<p>可用性是指系统对外持续提供服务的能力。系统会由于软硬件发生错误、维护等事件被迫停机而导致服务中断，一次关键服务中断可能会造成巨大损失。解决可用性问题的核心思想是引入冗余资源，并能够在错误发生时及时启用备用资源继续提供服务。但是，系统中的许多组件在运行时需要进行额外配置和管理，这些配置可能涵盖功能性和非功能性等方面，一旦配置更改需要进行重新构建组件等操作时就会迫使系统停机。一种解决办法是通过统一接口对外提供针对组件的状态控制和配置功能，包括组件的初始化、挂起、恢复、终止等，中央系统可以从组件仓库中请求获取组件，然后调用对应接口对组件进行动态配置，即<strong>组件配置器模式</strong>(Component Configurator Pattern)。</p>
+
+<p>组件配置器模式的一个重要应用场景是热部署(Hot deployment)，目的是避免大型系统在日常维护时发生中断服务的情况，同时还有助于提高系统的灵活性和可维护性。但是，该模式会导致开发、运维应用以及基础设施的复杂度显著提升，并使系统的安全性与可观测性等方面面临更大挑战。</p>
+
+<h3>面向安全性的架构模式</h3>
+
+<p>安全性是指系统免于被破坏的能力。从架构设计的角度看，一个重要的安全原则是<strong>最小权限原则</strong>(Least Privilege Principle)，即任何个体只拥有访问它需要功能的权限。对此最常见的实践策略是<strong>身份和访问控制</strong>(Identity &amp; Access Control)，即当访问者向某个功能组件请求交互时，通过一个独立的安全组件对其进行验证和授权，后者可以选择允许或拒绝该次请求。由于每个功能组件的安全策略可能不同，因此需要功能组件提供一个可供外部拦截对其请求的接口，再由安全组件针对该接口实现验证或授权，即实现<strong>拦截器模式</strong>(Interceptor Pattern)。</p>
+
+<p>拦截器模式的贡献在于隔离了功能性需求和非功能性需求例如安全性场景，此外还常被用于负载均衡、容错处理等其它场景中。但是，拦截器模式有时会因“过度灵活”而导致滥用，从而损害可维护性:例如一个功能组件被注册了多个拦截器，这些拦截器的影响并不正交，再结合执行序列问题，导致拦截器组件之间发生了逻辑耦合，额外增加了架构复杂度。</p>
+
+<h2>结论</h2>
+
+<p>本文讨论了几种经典架构模式[POSA96]，包括基础架构模式，以及面向特定质量属性的架构模式。但这只是架构模式领域的冰山一角，直至今日依然不断有新的架构模式被提出和讨论。架构模式也从最初的普适性，到跟随应用场景的变化不断细分。尽管经过快速发展，始终不变的是任何模式都会导致后果——即对质量属性的影响，亦即架构模式的动机与陷阱。</p>
+
+<h2>引用</h2>
+
+<p>POSA96, <a href="http://www.dre.vanderbilt.edu/~schmidt/POSA/">Pattern-Oriented Software Architecture</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2021-11-04T21:50:48+08:00" pubdate data-updated="true">2021-11-04</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2021/11/04/software-design-and-architecture-notes-18//index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -2706,279 +2811,6 @@ Object-Oriented Thinking</a></p>
 
 	
 		<span class="comments"><a href="/blog/2019/02/11/software-design-and-architecture-notes-9//index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2019/02/06/software-design-and-architecture-notes-8/">
-		
-			软件设计与架构笔记(8)</a>
-	</h2>
-	<div class="entry-content">
-		<h2>面向对象——概念与建模</h2>
-
-<p>由前文<a href="blog/2019/01/24/software-design-and-architecture-notes-7/">编程范式</a>我们知道，对象作为最基础的编程概念广泛存在于各类编程范式中，采用这种范式的语言被称为基于对象语言(Object based language)。本文讨论的<strong>面向对象</strong>(Object oriented)的概念则首次出现在1967年诞生的Simula 67，其中除了对象概念本身外，还进一步提出了<strong>继承</strong>和<strong>多态</strong>这两个重要特性，成为此后长期影响学术界的语言之一。而面向对象在工业界的兴起则始于上世纪80年代，以Smalltalk和C++的相继发明为标志，深刻影响了此后近四十年的软件工程。</p>
-
-<h3>基本概念</h3>
-
-<p>继承是区分面向对象和基于对象的重要特征，大部分面向对象语言的继承是采用<strong>类</strong>(Class)实现的(注意“类”和“对象”是完全不同的编程概念)。我们知道类可被看作是能够创建对象的工厂对象，继承则允许增量式地进行对象扩展。因此，类作为数据抽象的核心，在其基础上实现继承就自然地支持增量式的数据抽象。除了类之外，面向对象还支持一种基于<strong>原型</strong>(Prototype)的特殊实现，后者通常并不包含类定义，任何对象都能够唯一地指定另一个对象作为其原型，其中对象的属性和事件沿原型链传递查找，从而实现继承。从支持增量式对象扩展的角度看，类继承和原型继承没有本质区别。下面讨论在面向对象语境下的一些重要概念。</p>
-
-<ul>
-<li>类。类是一个可能同时包含部分具体实现的抽象数据类型[BMR97]，其被用于描述一组存在于内存中且可直接被用于计算的实例。类的特点在于其同时扮演了<strong>模块</strong>和<strong>类型</strong>两种角色。其中模块作为一种语法概念，通常被用于表示软件分解单元，而类型则被用于动态对象的静态描述，相当于一种语义概念。在非面向对象模式中，上述两种概念通常是被分开表示的。</li>
-</ul>
-
-
-<p>在某些面向对象系统中(例如Smalltalk和Ruby)，类自身也可能是通过对象实现的，这种实例依然是其本身的类被称作<strong>元类</strong>(Metaclass)，面向对象语言或编程环境的作者可以利用元类方便地实现某些动态扩展特性，例如Ruby的<a href="http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-object-oriented-hierarchies/">单例类</a>。</p>
-
-<ul>
-<li>对象。对象是指某个类的运行时实例[BMR97]。</li>
-</ul>
-
-
-<p>虽然“对象”一词最初来源于对真实世界物体的描述，但在实际编程场景中对象已经不仅仅被用于描述真实物体，例如用于描述一组配置属性等因技术需求而诞生的对象。对象是通过<strong>引用</strong>(Reference)进行表示的，并且可以被自身或其它对象引用。一个对象引用唯一地指向了该对象唯一且不变的<strong>标识</strong>(Identity)。对象标识是用于区分不同对象的唯一凭证。</p>
-
-<p>对象的创建过程通常是在面向对象系统中默认定义的，一般包括分配内存空间和初始化两个步骤，前者由系统自身负责，后者允许在程序中自定义初始化过程。以Java的面向对象系统为例，类支持以构造函数(Constructor)定义初始化过程，如果某个类没有包含显式的构造函数，编译器会自动加入一个默认的无参构造函数并在其中调用父类的无参构造函数。</p>
-
-<ul>
-<li>组合与聚合。如果采用引用表示对象，那么对象之间就可以通过引用产生<strong>关联</strong>(Association)。但是仅使用引用不足以描述对象间真实的关系特征，从而无法满足<strong>忠实建模</strong>(Faithful modeling)。<strong>组合</strong>(Composition)关系是指一个对象包含了另一个对象的值，这种关系超过了一般引用的定义，特别是指被包含对象的生命周期被限制在其父对象内。<strong>聚合</strong>(Aggregation)关系指一个对象由另外多个对象组成，其组成关系通过引用实现。与组合的区别在于，聚合中被包含对象的生命周期不受父对象限制。</li>
-</ul>
-
-
-<p>从面向对象中对关系分类的角度看，组合与聚合可以统一被看作<strong>客户</strong>(Client)关系，其实质是对对象间关系的描述。</p>
-
-<ul>
-<li><p>继承。继承描述了一种类之间的扩展关系。在面向对象中，类本身具备良好的模块化特性，从而能够满足信息隐藏的原则，但模块化并不直接提供增量式设计和开发的途径。继承支持了类之间的扩展、特化和组成关系，显著增强了面向对象的可重用性和可扩展性。其中包括四个重要的衍生概念:</p>
-
-<ul>
-<li>重定义(Redefinition)，指子类能够重新实现父类中定义的过程，有时也称作<strong>覆盖</strong>(Override)。</li>
-<li>多态(Polymorphism)，指一个变量实体或数据结构元素，在具备可控静态声明的前提下能够在运行时阶段绑定至不同类型的对象。例如当类A继承类B，那么类A的对象a，可以被赋于类型为B的变量b，且并不违反类型检查。</li>
-<li>静态类型(Static typing)，前面提到多态的前提是具备“可控静态声明”，具体是指对于一个变量的声明类型(也称变量的静态类型)，尽管允许其被赋予不同类型(也称变量的动态类型)，但其动态类型必须是静态类型的后代(后代定义包含其自身)。</li>
-<li>动态绑定(Dynamic binding)，是指变量所指向对象的动态类型决定被调用操作的具体位置。</li>
-</ul>
-</li>
-</ul>
-
-
-<p>本质上，继承同时包含了两个角色且互有重叠:模块和类型。从模块的角度看，继承提供了一种有效的可重用特性。这里提到的有效是指当类A继承类B时，A就立即拥有了B的全部特性，且无须进行任何改动。从类型的角度看，继承同时增强了可重用性和可扩展性，这主要体现在: 1.对于类Rectangle继承类Polygon，即Rectangle的全部实例同时也是Polygon全部实例的子集。2.对于类A继承类B，那么B的任意实例所具有的操作也同时存在于A。在许多文献中，继承也被称作is-a关系。</p>
-
-<ul>
-<li>多重继承。在真实世界中，对象可能同时包含了不同领域的抽象，对应在面向对象中就是多重继承，即一个类可以同时拥有多个父类。例如，类Teacher和类Student都继承了类UniversityPerson，这时需要一个类TeachingAssistant且同时继承自类Teacher和类Student，也就是说通过两个父类间接继承了类UniversityPerson，即<strong>重复继承</strong>。重复继承可能会造成一定的函数访问冲突，特别是当调用类TeachingAssistant的对象的name函数，而其实际上位于类UniversityPerson时，系统就面临多重函数查找路径的问题。而由此引发的复杂性使得多重继承在许多现代面向对象实践中被认为弊大于利，且不被推荐使用。但不可否认，多重继承实际上体现了真实世界原本的复杂性。</li>
-</ul>
-
-
-<p>在支持多重继承的面向对象系统中，通常采用<strong>复制</strong>(Replication)和<strong>共享</strong>(Sharing)两个策略解决前述重复继承问题。复制是指当遇到重复继承时，子类实际上包含了所有继承路径上属性和函数的副本，程序这时需要具体指定被调用副本的名称。共享是指程序可以指定在子类中只保留一份来自祖先的副本，这样就避免了名字冲突的问题，例如C++的<strong>虚继承</strong>(Virtual inheritance)。</p>
-
-<p>许多现代面向对象语言不支持多重继承，但同时为了保留一定的设计能力大多采用了折衷方案，例如Java的<strong>接口</strong>(Interface)、Ruby的<strong>混入</strong>(Mixin)等。</p>
-
-<ul>
-<li>泛型。继承本质上体现了一种纵向的层级扩展关系，由上至下可以被看作是面向对象从抽象化到特化。而<strong>泛型</strong>(Genericity)则支持横向的同级扩展关系，即类型参数化。</li>
-</ul>
-
-
-<p>泛型最经典的案例就是编程语言标准库中常见的容器类，例如Set、List、Map等，这些容器类实际上是参数化的抽象数据类型，其本身包含了抽象数据类型中的具体操作，并藉由客户代码通过指定参数决定具体的元素类型。由于历史的原因，许多现代编程语言中虽然提供了泛型特性，但其实现原理差别巨大。例如C++的模板能完整地重新编译目标代码，最终根据模板参数生成不同的函数和类；而Java的泛型实际上是一种为了增强代码类型安全的语法特性，编译器对泛型语法进行类型检查，并最终通过<strong>类型擦除</strong>(Type erasure)生成无类型参数的目标代码；C#的泛型实现则介于C++的灵活和Java的简易之间，通过运行时<strong>实化</strong>(Reification)进行类型检查和具体操作，从而避免了类型擦除的缺点(例如无法实现泛型数组)，同时把类型参数保留在运行时，从而满足在泛型条件下支持反射。</p>
-
-<h3>面向对象建模(Object Oriented Modeling)</h3>
-
-<p>从上世纪80年代起，随着工业界对面向对象语言从逐渐认识到深入实践，面向对象开始代替传统的结构化方法成为主宰范式。但是，基于面向对象的软件开发很快就面临了更多数量的对象以及更加复杂的关系，实现系统设计也变得空前复杂。作为OO的早期布道者之一，Grady Booch等分别在面向对象的基本概念基础上发展出了一系列全新的建模方法，被统称为<strong>面向对象建模</strong>。</p>
-
-<h4>统一建模语言(Unified Modeling Language, UML)</h4>
-
-<p>1997年，Three amigos在Grady Booch的Booch method、James Rumbaugh的Object modeling technique(OMT)以及Ivar Jacobson的Object oriented software engineering(OOSE)的基础上，正式发布了UML 1.1。UML是一种编程语言无关的通用建模技术，旨在采用统一语言对复杂问题的不同关注点进行建模。</p>
-
-<p>UML由<strong>图形标记</strong>(Graphical notations)和<strong>元模型</strong>(Meta-model)组成。其中图形标记定义了相关概念的图形表示法，也是UML建模的主要工具。元模型是一种对UML模型的形式化表示方法，用于对UML规格说明的精确表达。后者常被用于构建基于UML的计算机辅助软件工程(Computer Aided Software Engineering, CASE)系统。这里只讨论UML的图形标记方法。</p>
-
-<p>下图展示了UML 2.5.1的图形标记分类[UML17]。其中<strong>结构图</strong>(Structure diagrams)用于代表系统中对象的静态结构，通常能够表示系统的核心概念及行为定义，但并不包括行为的动态细节。<strong>行为图</strong>(Behavior diagrams)表示系统中的动态行为，包括方法、协作、活动和状态历史记录等。</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/uml_diagrams_overview.png" alt="The taxonomy of UML diagrams" /></p>
-
-<p>随着UML被纳入国际标准，其复杂度不断增加，即使由对象管理组织(Object Management Group, OMG)定义的狭义UML规范也已经十分臃肿，使其逐渐脱离了日常的软件设计实践。但不可否认，UML的核心内容依然在面向对象建模中占据权威地位。为了保证UML的实用性，本文接下来只讨论核心的图形标记[MFR03]。</p>
-
-<ul>
-<li>类图(Class diagrams)，表示系统中的对象类型及其相互之间的静态关系。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/class_diagrams_overview.png" alt="Class diagram" /></p>
-
-<p>在上图中，每个方框表示类的属性和操作，方框间的实线表示类的相互关系，在每种关系上还标记了两个类之间的<strong>多重关系</strong>(Multiplicity)。关系是UML中最复杂的概念之一，甚至允许通过构造型(Stereotype)对关系进一步扩充。UML的基本关系种类包括：1. 关联(Association)，指类之间的持续性关系，例如类的属性类型，关联采用实线表示，并且可以是无向、单向和双向，带方向的关联进一步揭示了源类中包含以目标类作为类型的属性；2. 依赖(Dependency)，指一个元素(Supplier)的变更可能引起另一个元素(Client)的变更，依赖采用单向的虚线表示；3. 泛化(Generalization)，表示类之间的类型层级关系，例如继承采用带三角箭头的实线表示，如果目标类是接口类，那么采用带三角箭头的虚线表示，抽象类需要额外使用斜体表示。</p>
-
-<p>从上述关系的定义来看，依赖是含义最广泛的关系，也是面向对象建模中需要仔细考虑的问题。过多的依赖路径会导致修改时发生涟漪效应(Ripple effect)，从而降低系统的可维护性。关联进一步包含了前文讨论的组合和聚合关系，其中组合使用一端实心菱形和单向箭头的实线表示，聚合采用一端空心菱形和单向箭头的实线表示，分别如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/aggregation.png" alt="Aggregation" /></p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/composition.png" alt="Composition" /></p>
-
-<p>UML中的大部分工具实质上都是为了设置约束，但仅通过图形标记无法表示所有类型的约束，因此UML支持使用{}表示自定义的约束。自定义约束的具体形式没有严格限定，可以是自然语言、伪代码，也可以采用对象约束语言(Object constraint language, OCL)。</p>
-
-<ul>
-<li>对象图(Object diagrams)，是指系统在某个时间点的对象快照，也被称作实例图。虽然类图能够完整表达对象的结构信息，但有时候并不容易理解，对象图能够以某个真实案例对前者进行补充。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/object_diagram.png" alt="Object diagram" /></p>
-
-<ul>
-<li>包图(Package diagrams)，指一组类或嵌套包的集合。包也被称作命名空间(Namespace)，其作用是定义比类层次更高的系统结构。包图在UML中使用带标签名的方框表示，包之间也可以定义类似类图中关系。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/package_diagram.png" alt="Package diagrams" /></p>
-
-<ul>
-<li>部署图(Deployment diagrams)，指系统的物理结构，特别是软件及其所运行的硬件框架。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/deployment_diagram.png" alt="Deployment diagram" /></p>
-
-<ul>
-<li>组合结构图(Composite diagrams)，指对一个类的内部结构进行层级表示，从而使其更容易被理解。以类TV Viewer为例，下面是TV Viewer的类图:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/composite_structure_1.png" alt="Class diagram of TV Viewer" /></p>
-
-<p>如果用组合结构图进一步描述TV Viewer，则如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/composite_structure_2.png" alt="Composite structure diagram of TV Viewer" /></p>
-
-<ul>
-<li>组件图(Component diagrams)。在UML中，组件是一种从功能角度上看可以独立分发和升级的模块。组件图用于表示组件之间的交互关系，如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/component_diagram.png" alt="Component diagram" /></p>
-
-<ul>
-<li>时序图(Sequence diagrams)，表示一组对象及其之间的协作关系。具体来说，时序图通常限定在一个单独的场景下，包含了一组对象以及依据用例而发生的对象间消息传递，特别是展示了消息发生的顺序信息。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/sequence_diagram.png" alt="Sequence diagram" /></p>
-
-<p>在时序图中，由于第一个消息通常不在参与者(Participants)中，因此也被称作<strong>创始消息</strong>(Found message)。另外，时序图中的参与者是可以被动态创建和销毁的。同时消息传递过程也支持循环、分支以及异步等特性。</p>
-
-<ul>
-<li>状态机图(State machine diagrams)，也称作状态图，表示单个对象的整个生命周期行为。在面向对象中状态具体包括了对象中所有属性值的集合，而状态图则侧重于抽象的状态定义，即提供不同的事件响应方式。一个简单的状态图例子如下:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/state_machine_diagram.png" alt="State machine diagram" /></p>
-
-<p>该状态图表示了一座城堡中的安全机关。图中方框表示一个状态，除了状态名之外，还可以填入状态的内部活动，包括状态事件(Event)、看守(Guard)和活动(Activity)，当某个事件发生时，可根据当前状态选择迁移(Transition)或保持状态不变。更进一步，状态既可以是静止的也可以是活动的，例如当前对象某个正在发生的动作。状态也可以被分组，其作用是表示组内所有子状态的同一个向外部某个超状态(Superstate)迁移的路径。</p>
-
-<p>在并发场景中，单个状态可以被分割成几个正交的子状态图，一个闹钟的例子如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/concurrent_state_diagram.png" alt="Concurrent state diagram" /></p>
-
-<p>该图中用一个历史伪状态标记代替了初始状态标记，意味着当开关打开时，初始状态应为上一次开关关闭时所处的状态。</p>
-
-<p>值得注意的是，状态图对应着两种可能的实现，一种是采用控制流代码或面向对象实现，另一种是基于状态表的解析和查询。前者具有更加复杂的代码结构，且需要持续维护相关代码；后者需要在初期实现一个较复杂的状态表解析和查询特性，后期则主要集中于状态表的数据维护。无论采用哪一种实现，其最终代码都具有一定的样板特征，因此结合代码生成技术都是更好的选择。</p>
-
-<ul>
-<li>活动图(Activity diagrams)，表示过程逻辑的业务流程的行为，且通常是跨多个用例或线程的行为。先看一个活动图的例子:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram.png" alt="Activity diagram" /></p>
-
-<p>从上例可以看出，该活动图与传统的流程图十分类似，最主要的区别在于前者支持并发活动，例如<strong>分叉</strong>(fork)操作可以产生并发的子活动，所有子活动的同步操作通过<strong>结合</strong>(join)进行。活动图中的动作(Action)之间使用流(Flow)或者边(Edge)进行连接，且可以被进一步分解成更多子活动，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_2.png" alt="Action decomposition" /></p>
-
-<p>一般而言，活动图更多聚焦于描述业务过程而非实现，但通过分区(Partition)可以进一步表示不同动作的负责对象，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_3.png" alt="Partition" /></p>
-
-<p>活动图支持基于信号的动作触发场景，信号可以被直接触发并接收，也可以通过定时器触发，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_4.png" alt="Signal" /></p>
-
-<p>活动图还进一步支持采用动作方框下放置别针(Pin)表示该动作的输入和输出参数，如果某个动作的输出与下一个动作的输入参数不同，还需要使用参数变换(Transformation)使其一致。当一个动作会导致下一个动作触发多次时，可以采用扩展区域(Expansion regions)标记需要响应多次的动作集合，如下图所示:</p>
-
-<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_5.png" alt="Expansion regions" /></p>
-
-<p>在该例中，扩展区域中的动作流程可能会部分导致终止，因此采用终止流(Flow final)进行标记。</p>
-
-<ul>
-<li>通信图(Communication diagrams)，在UML 1.x中被称作协作图(Collaboration diagram)，用于表示对象交互过程中的数据连接，如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/communication_diagram.png" alt="Communication diagram" /></p>
-
-<p>通信图所表达的信息与时序图类似，形式相对灵活但不如后者规整，因此其受欢迎程度也不如后者。</p>
-
-<ul>
-<li>交互概述图(Interaction overview diagrams)，指结合了活动图和时序图的概述表示。如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/interaction_overview_diagram.png" alt="Interaction overview diagram" /></p>
-
-<p>交互概述图实际上是一种针对对象交互行为的整体表现方案的总结。</p>
-
-<ul>
-<li>时间图(Timing diagrams)，表示单个或一组对象交互的时间约束。特别是当对象的某个状态存在一定时间约束时，如下图所示:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/timing_diagram.png" alt="Timing diagram" /></p>
-
-<ul>
-<li>用例图(Use case diagrams)，表示系统的功能需求。用例(Use case)是一种对用户与系统或系统自身交互的描述。用例更注重用户的一般目标，与用户场景(User scenario)不同，后者详细描述了用户与系统的每一步交互(这里的用户不仅指人类)，如果交互过程中发生分支则产生新的场景。也就是说，一个用例包含了许多用户场景。下图是一个用例图的例子:</li>
-</ul>
-
-
-<p><img src="http://content.hanyi.name/images/object_oriented/use_case_diagram.png" alt="Use case diagram" /></p>
-
-<p>用例是对系统功能的更高级描述，与极限编程中的用户故事(User stories)相比，后者侧重于表示系统特性，且可以用于安排迭代计划，而用例则是单纯的系统功能性描述。在具体实践中，一个特性可能直接对应用例，或者用例中的一个步骤，也可能对应于其中一个场景。而大多数情况下用例要比特性具有更粗的粒度。</p>
-
-<h2>结论</h2>
-
-<p>本文首先讨论了面向对象的核心概念；随着面向对象编程的流行，开发中面临的问题复杂度不断提升，由此催生了面向对象建模技术。UML旨在实现语言无关的通用建模语言，被广泛用于面向对象分析(OOA)和设计(OOD)等活动。另一方面，随着相关国际标准的建立，UML也逐渐变得更加臃肿，因此实践中，视实际情况选择性地对工具进行裁剪就变得尤为重要。</p>
-
-<h2>引用</h2>
-
-<p>BMR97, <a href="https://sophia.javeriana.edu.co/~cbustaca/docencia/POO-2016-01/documentos/Object%20Oriented%20Software%20Construction-Meyer.pdf">Object-Oriented Software Construction</a></p>
-
-<p>UML17, <a href="https://www.omg.org/spec/UML/">The unified modeling language specification</a></p>
-
-<p>MFR03, <a href="https://martinfowler.com/books/uml.html">UML Distilled</a></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2019-02-06T16:23:31-05:00" pubdate data-updated="true">2019-02-06</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/architecture/'>architecture</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2019/02/06/software-design-and-architecture-notes-8//index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 

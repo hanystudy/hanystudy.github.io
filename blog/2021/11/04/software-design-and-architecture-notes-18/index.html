@@ -1,0 +1,263 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script data-cfasync="false" type="text/javascript" src="//use.typekit.net/axj3cfp.js"></script>
+	<script data-cfasync="false" type="text/javascript">try{Typekit.load();}catch(e){}</script>
+	<meta charset="utf-8">
+	<title>软件设计与架构笔记(18): 面向质量属性的架构模式  | Wing of Dream 梦境之翼</title>
+
+<meta name="author" content="Han Yi"> 
+
+<meta name="description" content="截至目前我们已经讨论了若干种架构风格，实际上绝大多数工程实践都具备一定的架构风格(尽管有些风格是显式定义、有些则是隐式存在的)。显式地定义架构风格有助于维护架构设计的稳定性，例如表现该设计是基于C/S、SOA、REST或反应式架构风格，以及在应用架构风格时引入的自定义部分。某些被广泛采用的架构风格 &hellip;"> <meta name="keywords" content="">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Wing of Dream 梦境之翼" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.png" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js"></script>
+
+<script language="Javascript" type="text/javascript">
+$(document).ready(
+  function() {
+    (function($) {
+      $(".fancybox[data-content-id]").each(function() {
+        this.href = $(this).data('content-id');
+      });
+      $(".fancybox").fancybox({
+        beforeLoad: function() {
+          var el, 
+              id = $(this.element).data('title-id');
+
+          if (id) {
+            el = $('#' + id);
+
+            if (el.length) {
+              this.title = el.html();
+            }
+          }
+          if ($(this).data('content')) {
+            this.content = $(this).data('content');
+          }
+        },
+        helpers: {
+          title: {
+            type: 'inside'
+          }
+        }
+      });
+    })(jQuery);
+  }
+);
+</script>
+
+	
+</head>
+
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Wing of Dream 梦境之翼</a></h1>
+<h4></h4>
+<nav id="main-nav"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul>
+	<li><a href="/">Blog</a></li>
+	<li><a href="/about">About</a></li>
+	<li><a href="/portfolio">Portfolio</a></li>
+	<li><a href="/archives">Archive</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:www.hanyi.name">
+			</form>
+		</div>
+	</div>
+</nav>
+
+
+</header>
+
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">软件设计与架构笔记(18): 面向质量属性的架构模式</h2>
+	<div class="entry-content"><p>截至目前我们已经讨论了若干种架构风格，实际上绝大多数工程实践都具备一定的架构风格(尽管有些风格是显式定义、有些则是隐式存在的)。显式地定义架构风格有助于维护架构设计的稳定性，例如表现该设计是基于C/S、SOA、REST或反应式架构风格，以及在应用架构风格时引入的自定义部分。某些被广泛采用的架构风格，有时也有另一个名字——<strong>架构模式</strong>(这里主要指基础架构模式)。风格与模式是完全不同的概念，前者通常更具理论性和抽象性，多用于描述设计指南或方法论；后者更注重实践性和可复用性，且通常遵循一套标准的模式语言(这得益于<a href="http://www.hanyi.name/blog/2019/03/29/software-design-and-architecture-notes-11/">面向对象设计模式</a>的流行)，具有更精确的问题域和规范说明。而接下来首先要讨论的基础架构模式则兼具风格和模式的属性，它们具有普遍适用性，擅长于复杂问题的高层架构设计，当然也包含明确的结构和行为约束。此外还有数量更多的架构模式专注于解决特定场景中的问题，尽管这些问题可谓五花八门，但大部分的根本动机是改善架构质量属性，这也是本文讨论架构模式的主要视角。下一篇文章会从应用场景的角度讨论架构模式。</p>
+
+<h3>基础架构模式</h3>
+
+<p>基础架构模式产生于对复杂问题的初步认知和分解，类似构建思维导图，良好、清晰的系统结构往往是深入解决方案的前提。例如网络通信系统，先有经典的OSI七层模型，也有流行的TCP/IP五层模型，这里应用了分治策略把一个复杂问题分割为几个子问题(层)，同时定义了子问题之间的关联方式。再例如一个信息系统可被划分为如下层次：表现层、领域层、数据驱动层。这种由上(外)及下(内)的层次结构，相邻层通过预定义的接口实现服务式交互，即下层作为服务提供者，上层作为消费者，即架构模式中最经典的<strong>分层模式</strong>(Layered Pattern)。分层模式表现出的优势在于:1)层次间相互独立；2)每层可复用；3)每一层可替换；4)易于理解，从而有利于维持架构设计的一致性。</p>
+
+<p>分层模式并非万能，特别是某些糟糕的分层设计可能会导致较高的设计复杂度，比如虽然表面上实现了层次间的独立，但仍然存在大量逻辑和数据耦合，导致每层内部的变更不得不传递至外部——从相邻层乃至跨多层的级联变更，结果反而造成更高的维护成本和引发质量问题。同时，由于引入了层次间隔离，大多数分层设计会损失性能，在进行性能调优时也可能与该层的功能性划分冲突，导致更大范围的变更影响。分层模式的另一个挑战是软件的容错性:例如在设计错误处理时，除错误的描述以外，还要额外考虑错误处理的职责分配、处理方式、跨层传递以及其它现实因素。一种常见原则是在尽可能低层处理发生的错误，然后把错误信息传递给上层，其优点是避免由上层单独维护大量的错误处理场景。但上层通常也需要被告知错误信息并做出反应，甚至直达交互界面，以及方便运行时排错和易用性。因此，错误处理通常要在全局设计阶段进行考虑。</p>
+
+<p>基础架构模式中还有一种常见的、类似水厂工艺流程的流水线(Pipeline)结构。在流水线中，原水被输入管道。依照标准工序，原水需要经过若干过滤方法处理，每道工序由对应的过滤器负责，过滤器从上游管道接收水进行加工，再把处理后水输入下游管道，再由后续过滤器处理——最终获得符合标准的自来水。在数据处理系统中，原始数据作为原水流经数据管道，管道中的过滤器依次对数据进行处理——这就是<strong>管道——过滤器模式</strong>(Pipe &amp; Filters Pattern)。如果把过滤器视为层，那么管道——过滤器模式可以看作是分层模式的一种特例，特别是在可复用性、可替换性等方面的优势对数据处理系统来说更具价值。此外，该模式还支持可伸缩性:1)支持流(增量)数据的高效处理，因为上游过滤器不需要处理完全部数据再交给下游，从而减少整体等待时间；2)支持分块数据的高效处理，采用并行计算的能力实现过滤器的横向伸缩，缩短整体处理时间。</p>
+
+<p>管道——过滤器模式也存在对应陷阱，比如一般要求过滤器之间应当完全独立，因为耦合意味着可能需要提供全局状态——这就限制了该模式在可伸缩性方面的优势，也可能会损害整体可维护性。此外，过滤器的接口设计也十分重要，例如Unix中的管道接口统一采用标准字节流，并不规定具体数据格式，因此管道两端的程序都需要实现相应的数据转换。这种方式的优点是保证高可移植性，但会增加数据序列化/反序列化的维护成本和系统开销。在许多实践中，上述成本远远超过了过滤器自身的负载需求。管道——过滤器模式还具有较分层模式更严重的容错性问题。因为不同于分层模式的“双向”通信，管道——过滤器一般是“单向”的，上游一般无法及时了解下游的错误状态，一种方法是引入全局状态管理错误信息，在此基础上实现过滤器同步——无疑会导致复杂性、可维护性以及性能等方面的损失。因此，数据处理系统一般尽量避免引入复杂的错误处理逻辑，只聚焦在错误信息采集和管理——意味着一旦错误发生，只能通过重启整条流水线来恢复系统。而如果系统对容错性有很严格的要求，则只有考虑更普适的分层模式作为妥协。</p>
+
+<p>实践中还有许多复杂性问题是非确定的，例如天气/地震预报、语音识别乃至自动控制系统(机器人、无人驾驶或导弹防御系统等)，凭借当前科技水平很难找到一个精确的模型能够与之对应。因此，为了不断优化得到更合理的结果，通常会考虑组合多种近似模型进行协作。其中，单一模型可能是复杂但相对确定的，多个模型间的协作方式则不确定。如果把每个模型视为独立组件，也就不存在一个固定的组件间依赖结构。这时可以采用中心化结构，即通过一个控制器控制组件协作，并且每个组件只从数据中心获取或写入数据，即<strong>黑板模式</strong>(Blackboard Pattern)。该模式包含三个基本元素:</p>
+
+<ul>
+<li><p>黑板，即数据中心，向知识源和控制器开放读写功能。可以是文件系统、数据库或消息队列等。</p></li>
+<li><p>知识源，即组成整体解决方案的组件，例如各种传感器、雷达、车辆控制器、武器发射控制器等。</p></li>
+<li><p>控制器，负责控制知识源的运行。</p></li>
+</ul>
+
+
+<p>从结构上看，黑板模式可能是最复杂的、但也最灵活的一种架构模式。灵活性在于组件只需要考虑针对黑板的增删改查，由控制器负责监控黑板状态并调度组件执行，组件间几乎完全解耦。黑板模式同样具有良好的独立性、可复用性、可替换性和易修改性，还包括容错性——因为知识源只从黑板中读取和写入数据，组件错误不会发生级联传递。黑板模式主要的缺点在于响应性和复杂性，前者主要是由于组件间通信的不确定性，导致缺少可预估且合理的系统响应时间；后者是因为应用该模式所需的额外复杂度，整个工程包括前期设计、实现、调试和测试等活动都会面临挑战，当然其中一部分原因是问题自身的不确定性。</p>
+
+<p>至此本文已经讨论了三种基础架构模式，它们分别代表了架构设计中的最基本结构：层次结构、流水线结构和中心化结构。尽管这些结构具有普适性，但也存在相应的陷阱，并最终影响着架构的质量属性。实践中还存在更多针对特定质量属性的架构模式，本文的后半部分将主要讨论这些模式。</p>
+
+<h3>面向可伸缩性的架构模式</h3>
+
+<p>可伸缩性是分布式系统架构的一个重要质量属性。在<a href="http://www.hanyi.name/blog/2021/06/27/software-design-and-architecture-notes-17/">上一篇文章</a>中，我们讨论了几种分布式系统架构风格的演变过程，上文提到的基本结构也普遍存在于分布式系统中。但是，仅凭这些无法实现分布式系统的可伸缩性:例如，分布式组件虽然通常都是物理隔离的，但是组件间的逻辑依赖依然存在。无论是点对点(Peer-to-Peer)结构还是主从(Master-Slave)结构，都无法避免产生组件间协作的需求。最基本的，例如服务调用方需要首先知道服务提供方的地址，这就导致组件间的动态耦合，从而限制了系统的可伸缩性。为解决该问题，实践中通常会引入一个独立的中介组件，服务提供方组件能够在中介组件中动态注册，而服务调用方只需要向中介组件发送消息，再由中介把消息交付至服务提供方——这样通过操作中介组件即可协调各个组件，这就是分布式系统架构的<strong>中介模式</strong>(Broker Pattern)。</p>
+
+<p>中介模式是分布式系统的核心模式之一，如今已发展成为分布式架构的重要基础设施。中介模式的优势在于实现了分布式组件的动态解耦，并且把分布式系统协调的职责尽可能从业务组件中分离，使分布式系统开发的复杂性得到了有效管理。另一方面，中介组件会影响系统的整体响应性，也存在单点失败的问题，为此一般需要采用资源冗余的方式来保证可靠性，采用中介模式的系统还面临可追踪性与可测试性的挑战。因而，采用中介模式无论如何都会引入额外的开发和维护成本。</p>
+
+<h3>面向易用性的架构模式</h3>
+
+<p>系统易用性主要体现在交互方面，而MVC也许是迄今为止该领域中最为人熟知的架构模式，它把交互式系统划分为三种抽象组件:1)模型，提供核心功能和数据；2)视图，定义信息的展示方式；3)控制器，处理用户请求。其中，模型的数据更改会通知视图更新；视图需要依赖模型数据进行信息展示，视图还可以接受用户指令，然后将指令传递给控制器；控制器根据用户具体指令，调用模型中的具体业务逻辑以更改数据，然后调用特定的视图展示修改后的结果。MVC的重要贡献在于在一定程度上分离了模型及其用户端表示，使得交互式系统具有更好的易修改性——这一点尤为重要，因为用户界面往往是系统中改动最频繁的部分，而MVC的职责划分使视图组件更易于修改。另一方面，尽管界面变更的影响得到了限制，但模型变更则可能影响到视图和控制器，从而引起可维护性问题。MVC模式先后衍生出许多变种MV*模式，例如表示-抽象-控制(Presentation-Abstraction-Control)模式，层级模型-视图-控制器(Hierarchical Model-View-Controller)模式，模型-视图-表示(Model-View-Presenter)模式，模型-视图-视图模型(Model-View-ViewModel)模式等，这些模式通过更多抽象旨在进一步简化特定场景的用户界面，但也更加复杂从而导致更多局限性，这里不再进一步展开。</p>
+
+<h3>面向可适应性的架构模式</h3>
+
+<p>可适应性的一个典型的例子是操作系统:向下要支持多种硬件环境，向上要运行海量应用程序。可适应性指系统适应外部需求变化的能力，这一般要依赖于抽象设计:一种方式是构建一个仅实现必要功能的核心组件并对外提供服务接口，以此为基础通过扩展服务实现其它功能，包括外部扩展的功能，即<strong>微内核模式</strong>(Microkernel Pattern)；另一种方式是允许外部环境通过接口改变组件功能和系统结构，即<strong>反射模式</strong>(Reflection Pattern)。下文进一步讨论这两种模式。</p>
+
+<p>微内核模式要求核心组件只包含必要功能、高层结构和扩展接口，并尽可能把大多数功能分配给扩展服务。应用该模式需要先定义一个稳定的抽象内核，其它扩展功能只需要与内核实现交互。例如，通过硬件访问接口就可以把操作系统完整移植到不同的硬件平台。但是，微内核的前提是存在一个稳定的内核设计，这通常并不容易，因此会引入设计复杂度和试错成本。另一个挑战是针对性能可持续优化的能力，因为性能优化和抽象设计往往并不相互正交。</p>
+
+<p>反射模式把系统划分为两层:元层(Meta level)和基础层(Base level)，其中元层用于定义软件自身的结构和行为，元层中的数据被封装在元对象(Metaobjects)中，例如类型定义、算法或者函数调用机制等信息。基础层用于定义应用的基本逻辑，其中的组件通过访问元对象实现具体功能。这样，元对象本身就成为系统对外的扩展点，从实现动态可扩展性。为了对外提供接口，反射模式定义了元对象协议(Metaobject Protocol, MOP)，允许客户端编辑元对象，从而影响基础层中的实际功能。反射模式旨在避免修改系统源代码的前提下实现系统功能扩展乃至变更，当然对降低软件的维护成本有积极意义，但是，这种灵活性是以牺牲可靠性为代价的，因为要验证元对象修改的正确性是十分困难的；同时，反射模式会显著增加系统的设计与开发成本；由于元层和基础层的相互交替也限制了系统性能及可持续优化能力。</p>
+
+<h3>面向可用性的架构模式</h3>
+
+<p>可用性是指系统对外持续提供服务的能力。系统会由于软硬件发生错误、维护等事件被迫停机而导致服务中断，一次关键服务中断可能会造成巨大损失。解决可用性问题的核心思想是引入冗余资源，并能够在错误发生时及时启用备用资源继续提供服务。但是，系统中的许多组件在运行时需要进行额外配置和管理，这些配置可能涵盖功能性和非功能性等方面，一旦配置更改需要进行重新构建组件等操作时就会迫使系统停机。一种解决办法是通过统一接口对外提供针对组件的状态控制和配置功能，包括组件的初始化、挂起、恢复、终止等，中央系统可以从组件仓库中请求获取组件，然后调用对应接口对组件进行动态配置，即<strong>组件配置器模式</strong>(Component Configurator Pattern)。</p>
+
+<p>组件配置器模式的一个重要应用场景是热部署(Hot deployment)，目的是避免大型系统在日常维护时发生中断服务的情况，同时还有助于提高系统的灵活性和可维护性。但是，该模式会导致开发、运维应用以及基础设施的复杂度显著提升，并使系统的安全性与可观测性等方面面临更大挑战。</p>
+
+<h3>面向安全性的架构模式</h3>
+
+<p>安全性是指系统免于被破坏的能力。从架构设计的角度看，一个重要的安全原则是<strong>最小权限原则</strong>(Least Privilege Principle)，即任何个体只拥有访问它需要功能的权限。对此最常见的实践策略是<strong>身份和访问控制</strong>(Identity &amp; Access Control)，即当访问者向某个功能组件请求交互时，通过一个独立的安全组件对其进行验证和授权，后者可以选择允许或拒绝该次请求。由于每个功能组件的安全策略可能不同，因此需要功能组件提供一个可供外部拦截对其请求的接口，再由安全组件针对该接口实现验证或授权，即实现<strong>拦截器模式</strong>(Interceptor Pattern)。</p>
+
+<p>拦截器模式的贡献在于隔离了功能性需求和非功能性需求例如安全性场景，此外还常被用于负载均衡、容错处理等其它场景中。但是，拦截器模式有时会因“过度灵活”而导致滥用，从而损害可维护性:例如一个功能组件被注册了多个拦截器，这些拦截器的影响并不正交，再结合执行序列问题，导致拦截器组件之间发生了逻辑耦合，额外增加了架构复杂度。</p>
+
+<h2>结论</h2>
+
+<p>本文讨论了几种经典架构模式[POSA96]，包括基础架构模式，以及面向特定质量属性的架构模式。但这只是架构模式领域的冰山一角，直至今日依然不断有新的架构模式被提出和讨论。架构模式也从最初的普适性，到跟随应用场景的变化不断细分。尽管经过快速发展，始终不变的是任何模式都会导致后果——即对质量属性的影响，亦即架构模式的动机与陷阱。</p>
+
+<h2>引用</h2>
+
+<p>POSA96, <a href="http://www.dre.vanderbilt.edu/~schmidt/POSA/">Pattern-Oriented Software Architecture</a></p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2021-11-04T21:50:48+08:00" pubdate data-updated="true"></time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2021/11/04/software-design-and-architecture-notes-18/#disqus_thread">Comments</a></span>
+	
+</div></article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
+	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
+
+
+
+<section id="comment">
+    <h2 class="title">Comments</h2>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</section>
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2021
+
+    Han Yi
+
+<br>
+Powered by Octopress.
+</footer>
+	<script src="/javascripts/slash.js"></script>
+<script src="/javascripts/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+	$('.fancybox').fancybox();
+})(jQuery);
+</script> <!-- Delete or comment this line to disable Fancybox -->
+
+
+<script type="text/javascript">
+      var disqus_shortname = 'hanyi';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.hanyi.name/blog/2021/11/04/software-design-and-architecture-notes-18/';
+        var disqus_url = 'http://www.hanyi.name/blog/2021/11/04/software-design-and-architecture-notes-18/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-49392954-1']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+
+
+</body>
+</html>

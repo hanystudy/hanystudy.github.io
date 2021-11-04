@@ -9,7 +9,7 @@
 
 <meta name="author" content="Han Yi"> 
 
-<meta name="description" content="编程范式(Programming Paradigms) 作为专业程序员，对方法论的持续抽象绝对是一项明智的长期投资。 Robert W. Floyd在1978年图灵奖颁奖礼上如是说[RWF79]，这里所说的“方法论”即编程范式(Programming Paradigms)。 &hellip;"> <meta name="keywords" content="">
+<meta name="description" content="面向对象——概念与建模 由前文编程范式我们知道，对象作为最基础的编程概念广泛存在于各类编程范式中，采用这种范式的语言被称为基于对象语言(Object based language)。本文讨论的面向对象(Object oriented)的概念则首次出现在1967年诞生的Simula 67， &hellip;"> <meta name="keywords" content="">
 
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -97,6 +97,279 @@ $(document).ready(
 </header>
 
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2019/02/06/software-design-and-architecture-notes-8/">
+		
+			软件设计与架构笔记(8)</a>
+	</h2>
+	<div class="entry-content">
+		<h2>面向对象——概念与建模</h2>
+
+<p>由前文<a href="blog/2019/01/24/software-design-and-architecture-notes-7/">编程范式</a>我们知道，对象作为最基础的编程概念广泛存在于各类编程范式中，采用这种范式的语言被称为基于对象语言(Object based language)。本文讨论的<strong>面向对象</strong>(Object oriented)的概念则首次出现在1967年诞生的Simula 67，其中除了对象概念本身外，还进一步提出了<strong>继承</strong>和<strong>多态</strong>这两个重要特性，成为此后长期影响学术界的语言之一。而面向对象在工业界的兴起则始于上世纪80年代，以Smalltalk和C++的相继发明为标志，深刻影响了此后近四十年的软件工程。</p>
+
+<h3>基本概念</h3>
+
+<p>继承是区分面向对象和基于对象的重要特征，大部分面向对象语言的继承是采用<strong>类</strong>(Class)实现的(注意“类”和“对象”是完全不同的编程概念)。我们知道类可被看作是能够创建对象的工厂对象，继承则允许增量式地进行对象扩展。因此，类作为数据抽象的核心，在其基础上实现继承就自然地支持增量式的数据抽象。除了类之外，面向对象还支持一种基于<strong>原型</strong>(Prototype)的特殊实现，后者通常并不包含类定义，任何对象都能够唯一地指定另一个对象作为其原型，其中对象的属性和事件沿原型链传递查找，从而实现继承。从支持增量式对象扩展的角度看，类继承和原型继承没有本质区别。下面讨论在面向对象语境下的一些重要概念。</p>
+
+<ul>
+<li>类。类是一个可能同时包含部分具体实现的抽象数据类型[BMR97]，其被用于描述一组存在于内存中且可直接被用于计算的实例。类的特点在于其同时扮演了<strong>模块</strong>和<strong>类型</strong>两种角色。其中模块作为一种语法概念，通常被用于表示软件分解单元，而类型则被用于动态对象的静态描述，相当于一种语义概念。在非面向对象模式中，上述两种概念通常是被分开表示的。</li>
+</ul>
+
+
+<p>在某些面向对象系统中(例如Smalltalk和Ruby)，类自身也可能是通过对象实现的，这种实例依然是其本身的类被称作<strong>元类</strong>(Metaclass)，面向对象语言或编程环境的作者可以利用元类方便地实现某些动态扩展特性，例如Ruby的<a href="http://www.hanyi.name/blog/2015/08/29/metaprogramming-ruby-core-concepts-object-oriented-hierarchies/">单例类</a>。</p>
+
+<ul>
+<li>对象。对象是指某个类的运行时实例[BMR97]。</li>
+</ul>
+
+
+<p>虽然“对象”一词最初来源于对真实世界物体的描述，但在实际编程场景中对象已经不仅仅被用于描述真实物体，例如用于描述一组配置属性等因技术需求而诞生的对象。对象是通过<strong>引用</strong>(Reference)进行表示的，并且可以被自身或其它对象引用。一个对象引用唯一地指向了该对象唯一且不变的<strong>标识</strong>(Identity)。对象标识是用于区分不同对象的唯一凭证。</p>
+
+<p>对象的创建过程通常是在面向对象系统中默认定义的，一般包括分配内存空间和初始化两个步骤，前者由系统自身负责，后者允许在程序中自定义初始化过程。以Java的面向对象系统为例，类支持以构造函数(Constructor)定义初始化过程，如果某个类没有包含显式的构造函数，编译器会自动加入一个默认的无参构造函数并在其中调用父类的无参构造函数。</p>
+
+<ul>
+<li>组合与聚合。如果采用引用表示对象，那么对象之间就可以通过引用产生<strong>关联</strong>(Association)。但是仅使用引用不足以描述对象间真实的关系特征，从而无法满足<strong>忠实建模</strong>(Faithful modeling)。<strong>组合</strong>(Composition)关系是指一个对象包含了另一个对象的值，这种关系超过了一般引用的定义，特别是指被包含对象的生命周期被限制在其父对象内。<strong>聚合</strong>(Aggregation)关系指一个对象由另外多个对象组成，其组成关系通过引用实现。与组合的区别在于，聚合中被包含对象的生命周期不受父对象限制。</li>
+</ul>
+
+
+<p>从面向对象中对关系分类的角度看，组合与聚合可以统一被看作<strong>客户</strong>(Client)关系，其实质是对对象间关系的描述。</p>
+
+<ul>
+<li><p>继承。继承描述了一种类之间的扩展关系。在面向对象中，类本身具备良好的模块化特性，从而能够满足信息隐藏的原则，但模块化并不直接提供增量式设计和开发的途径。继承支持了类之间的扩展、特化和组成关系，显著增强了面向对象的可重用性和可扩展性。其中包括四个重要的衍生概念:</p>
+
+<ul>
+<li>重定义(Redefinition)，指子类能够重新实现父类中定义的过程，有时也称作<strong>覆盖</strong>(Override)。</li>
+<li>多态(Polymorphism)，指一个变量实体或数据结构元素，在具备可控静态声明的前提下能够在运行时阶段绑定至不同类型的对象。例如当类A继承类B，那么类A的对象a，可以被赋于类型为B的变量b，且并不违反类型检查。</li>
+<li>静态类型(Static typing)，前面提到多态的前提是具备“可控静态声明”，具体是指对于一个变量的声明类型(也称变量的静态类型)，尽管允许其被赋予不同类型(也称变量的动态类型)，但其动态类型必须是静态类型的后代(后代定义包含其自身)。</li>
+<li>动态绑定(Dynamic binding)，是指变量所指向对象的动态类型决定被调用操作的具体位置。</li>
+</ul>
+</li>
+</ul>
+
+
+<p>本质上，继承同时包含了两个角色且互有重叠:模块和类型。从模块的角度看，继承提供了一种有效的可重用特性。这里提到的有效是指当类A继承类B时，A就立即拥有了B的全部特性，且无须进行任何改动。从类型的角度看，继承同时增强了可重用性和可扩展性，这主要体现在: 1.对于类Rectangle继承类Polygon，即Rectangle的全部实例同时也是Polygon全部实例的子集。2.对于类A继承类B，那么B的任意实例所具有的操作也同时存在于A。在许多文献中，继承也被称作is-a关系。</p>
+
+<ul>
+<li>多重继承。在真实世界中，对象可能同时包含了不同领域的抽象，对应在面向对象中就是多重继承，即一个类可以同时拥有多个父类。例如，类Teacher和类Student都继承了类UniversityPerson，这时需要一个类TeachingAssistant且同时继承自类Teacher和类Student，也就是说通过两个父类间接继承了类UniversityPerson，即<strong>重复继承</strong>。重复继承可能会造成一定的函数访问冲突，特别是当调用类TeachingAssistant的对象的name函数，而其实际上位于类UniversityPerson时，系统就面临多重函数查找路径的问题。而由此引发的复杂性使得多重继承在许多现代面向对象实践中被认为弊大于利，且不被推荐使用。但不可否认，多重继承实际上体现了真实世界原本的复杂性。</li>
+</ul>
+
+
+<p>在支持多重继承的面向对象系统中，通常采用<strong>复制</strong>(Replication)和<strong>共享</strong>(Sharing)两个策略解决前述重复继承问题。复制是指当遇到重复继承时，子类实际上包含了所有继承路径上属性和函数的副本，程序这时需要具体指定被调用副本的名称。共享是指程序可以指定在子类中只保留一份来自祖先的副本，这样就避免了名字冲突的问题，例如C++的<strong>虚继承</strong>(Virtual inheritance)。</p>
+
+<p>许多现代面向对象语言不支持多重继承，但同时为了保留一定的设计能力大多采用了折衷方案，例如Java的<strong>接口</strong>(Interface)、Ruby的<strong>混入</strong>(Mixin)等。</p>
+
+<ul>
+<li>泛型。继承本质上体现了一种纵向的层级扩展关系，由上至下可以被看作是面向对象从抽象化到特化。而<strong>泛型</strong>(Genericity)则支持横向的同级扩展关系，即类型参数化。</li>
+</ul>
+
+
+<p>泛型最经典的案例就是编程语言标准库中常见的容器类，例如Set、List、Map等，这些容器类实际上是参数化的抽象数据类型，其本身包含了抽象数据类型中的具体操作，并藉由客户代码通过指定参数决定具体的元素类型。由于历史的原因，许多现代编程语言中虽然提供了泛型特性，但其实现原理差别巨大。例如C++的模板能完整地重新编译目标代码，最终根据模板参数生成不同的函数和类；而Java的泛型实际上是一种为了增强代码类型安全的语法特性，编译器对泛型语法进行类型检查，并最终通过<strong>类型擦除</strong>(Type erasure)生成无类型参数的目标代码；C#的泛型实现则介于C++的灵活和Java的简易之间，通过运行时<strong>实化</strong>(Reification)进行类型检查和具体操作，从而避免了类型擦除的缺点(例如无法实现泛型数组)，同时把类型参数保留在运行时，从而满足在泛型条件下支持反射。</p>
+
+<h3>面向对象建模(Object Oriented Modeling)</h3>
+
+<p>从上世纪80年代起，随着工业界对面向对象语言从逐渐认识到深入实践，面向对象开始代替传统的结构化方法成为主宰范式。但是，基于面向对象的软件开发很快就面临了更多数量的对象以及更加复杂的关系，实现系统设计也变得空前复杂。作为OO的早期布道者之一，Grady Booch等分别在面向对象的基本概念基础上发展出了一系列全新的建模方法，被统称为<strong>面向对象建模</strong>。</p>
+
+<h4>统一建模语言(Unified Modeling Language, UML)</h4>
+
+<p>1997年，Three amigos在Grady Booch的Booch method、James Rumbaugh的Object modeling technique(OMT)以及Ivar Jacobson的Object oriented software engineering(OOSE)的基础上，正式发布了UML 1.1。UML是一种编程语言无关的通用建模技术，旨在采用统一语言对复杂问题的不同关注点进行建模。</p>
+
+<p>UML由<strong>图形标记</strong>(Graphical notations)和<strong>元模型</strong>(Meta-model)组成。其中图形标记定义了相关概念的图形表示法，也是UML建模的主要工具。元模型是一种对UML模型的形式化表示方法，用于对UML规格说明的精确表达。后者常被用于构建基于UML的计算机辅助软件工程(Computer Aided Software Engineering, CASE)系统。这里只讨论UML的图形标记方法。</p>
+
+<p>下图展示了UML 2.5.1的图形标记分类[UML17]。其中<strong>结构图</strong>(Structure diagrams)用于代表系统中对象的静态结构，通常能够表示系统的核心概念及行为定义，但并不包括行为的动态细节。<strong>行为图</strong>(Behavior diagrams)表示系统中的动态行为，包括方法、协作、活动和状态历史记录等。</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/uml_diagrams_overview.png" alt="The taxonomy of UML diagrams" /></p>
+
+<p>随着UML被纳入国际标准，其复杂度不断增加，即使由对象管理组织(Object Management Group, OMG)定义的狭义UML规范也已经十分臃肿，使其逐渐脱离了日常的软件设计实践。但不可否认，UML的核心内容依然在面向对象建模中占据权威地位。为了保证UML的实用性，本文接下来只讨论核心的图形标记[MFR03]。</p>
+
+<ul>
+<li>类图(Class diagrams)，表示系统中的对象类型及其相互之间的静态关系。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/class_diagrams_overview.png" alt="Class diagram" /></p>
+
+<p>在上图中，每个方框表示类的属性和操作，方框间的实线表示类的相互关系，在每种关系上还标记了两个类之间的<strong>多重关系</strong>(Multiplicity)。关系是UML中最复杂的概念之一，甚至允许通过构造型(Stereotype)对关系进一步扩充。UML的基本关系种类包括：1. 关联(Association)，指类之间的持续性关系，例如类的属性类型，关联采用实线表示，并且可以是无向、单向和双向，带方向的关联进一步揭示了源类中包含以目标类作为类型的属性；2. 依赖(Dependency)，指一个元素(Supplier)的变更可能引起另一个元素(Client)的变更，依赖采用单向的虚线表示；3. 泛化(Generalization)，表示类之间的类型层级关系，例如继承采用带三角箭头的实线表示，如果目标类是接口类，那么采用带三角箭头的虚线表示，抽象类需要额外使用斜体表示。</p>
+
+<p>从上述关系的定义来看，依赖是含义最广泛的关系，也是面向对象建模中需要仔细考虑的问题。过多的依赖路径会导致修改时发生涟漪效应(Ripple effect)，从而降低系统的可维护性。关联进一步包含了前文讨论的组合和聚合关系，其中组合使用一端实心菱形和单向箭头的实线表示，聚合采用一端空心菱形和单向箭头的实线表示，分别如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/aggregation.png" alt="Aggregation" /></p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/composition.png" alt="Composition" /></p>
+
+<p>UML中的大部分工具实质上都是为了设置约束，但仅通过图形标记无法表示所有类型的约束，因此UML支持使用{}表示自定义的约束。自定义约束的具体形式没有严格限定，可以是自然语言、伪代码，也可以采用对象约束语言(Object constraint language, OCL)。</p>
+
+<ul>
+<li>对象图(Object diagrams)，是指系统在某个时间点的对象快照，也被称作实例图。虽然类图能够完整表达对象的结构信息，但有时候并不容易理解，对象图能够以某个真实案例对前者进行补充。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/object_diagram.png" alt="Object diagram" /></p>
+
+<ul>
+<li>包图(Package diagrams)，指一组类或嵌套包的集合。包也被称作命名空间(Namespace)，其作用是定义比类层次更高的系统结构。包图在UML中使用带标签名的方框表示，包之间也可以定义类似类图中关系。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/package_diagram.png" alt="Package diagrams" /></p>
+
+<ul>
+<li>部署图(Deployment diagrams)，指系统的物理结构，特别是软件及其所运行的硬件框架。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/deployment_diagram.png" alt="Deployment diagram" /></p>
+
+<ul>
+<li>组合结构图(Composite diagrams)，指对一个类的内部结构进行层级表示，从而使其更容易被理解。以类TV Viewer为例，下面是TV Viewer的类图:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/composite_structure_1.png" alt="Class diagram of TV Viewer" /></p>
+
+<p>如果用组合结构图进一步描述TV Viewer，则如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/composite_structure_2.png" alt="Composite structure diagram of TV Viewer" /></p>
+
+<ul>
+<li>组件图(Component diagrams)。在UML中，组件是一种从功能角度上看可以独立分发和升级的模块。组件图用于表示组件之间的交互关系，如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/component_diagram.png" alt="Component diagram" /></p>
+
+<ul>
+<li>时序图(Sequence diagrams)，表示一组对象及其之间的协作关系。具体来说，时序图通常限定在一个单独的场景下，包含了一组对象以及依据用例而发生的对象间消息传递，特别是展示了消息发生的顺序信息。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/sequence_diagram.png" alt="Sequence diagram" /></p>
+
+<p>在时序图中，由于第一个消息通常不在参与者(Participants)中，因此也被称作<strong>创始消息</strong>(Found message)。另外，时序图中的参与者是可以被动态创建和销毁的。同时消息传递过程也支持循环、分支以及异步等特性。</p>
+
+<ul>
+<li>状态机图(State machine diagrams)，也称作状态图，表示单个对象的整个生命周期行为。在面向对象中状态具体包括了对象中所有属性值的集合，而状态图则侧重于抽象的状态定义，即提供不同的事件响应方式。一个简单的状态图例子如下:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/state_machine_diagram.png" alt="State machine diagram" /></p>
+
+<p>该状态图表示了一座城堡中的安全机关。图中方框表示一个状态，除了状态名之外，还可以填入状态的内部活动，包括状态事件(Event)、看守(Guard)和活动(Activity)，当某个事件发生时，可根据当前状态选择迁移(Transition)或保持状态不变。更进一步，状态既可以是静止的也可以是活动的，例如当前对象某个正在发生的动作。状态也可以被分组，其作用是表示组内所有子状态的同一个向外部某个超状态(Superstate)迁移的路径。</p>
+
+<p>在并发场景中，单个状态可以被分割成几个正交的子状态图，一个闹钟的例子如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/concurrent_state_diagram.png" alt="Concurrent state diagram" /></p>
+
+<p>该图中用一个历史伪状态标记代替了初始状态标记，意味着当开关打开时，初始状态应为上一次开关关闭时所处的状态。</p>
+
+<p>值得注意的是，状态图对应着两种可能的实现，一种是采用控制流代码或面向对象实现，另一种是基于状态表的解析和查询。前者具有更加复杂的代码结构，且需要持续维护相关代码；后者需要在初期实现一个较复杂的状态表解析和查询特性，后期则主要集中于状态表的数据维护。无论采用哪一种实现，其最终代码都具有一定的样板特征，因此结合代码生成技术都是更好的选择。</p>
+
+<ul>
+<li>活动图(Activity diagrams)，表示过程逻辑的业务流程的行为，且通常是跨多个用例或线程的行为。先看一个活动图的例子:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram.png" alt="Activity diagram" /></p>
+
+<p>从上例可以看出，该活动图与传统的流程图十分类似，最主要的区别在于前者支持并发活动，例如<strong>分叉</strong>(fork)操作可以产生并发的子活动，所有子活动的同步操作通过<strong>结合</strong>(join)进行。活动图中的动作(Action)之间使用流(Flow)或者边(Edge)进行连接，且可以被进一步分解成更多子活动，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_2.png" alt="Action decomposition" /></p>
+
+<p>一般而言，活动图更多聚焦于描述业务过程而非实现，但通过分区(Partition)可以进一步表示不同动作的负责对象，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_3.png" alt="Partition" /></p>
+
+<p>活动图支持基于信号的动作触发场景，信号可以被直接触发并接收，也可以通过定时器触发，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_4.png" alt="Signal" /></p>
+
+<p>活动图还进一步支持采用动作方框下放置别针(Pin)表示该动作的输入和输出参数，如果某个动作的输出与下一个动作的输入参数不同，还需要使用参数变换(Transformation)使其一致。当一个动作会导致下一个动作触发多次时，可以采用扩展区域(Expansion regions)标记需要响应多次的动作集合，如下图所示:</p>
+
+<p><img src="http://content.hanyi.name/images/object_oriented/activity_diagram_5.png" alt="Expansion regions" /></p>
+
+<p>在该例中，扩展区域中的动作流程可能会部分导致终止，因此采用终止流(Flow final)进行标记。</p>
+
+<ul>
+<li>通信图(Communication diagrams)，在UML 1.x中被称作协作图(Collaboration diagram)，用于表示对象交互过程中的数据连接，如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/communication_diagram.png" alt="Communication diagram" /></p>
+
+<p>通信图所表达的信息与时序图类似，形式相对灵活但不如后者规整，因此其受欢迎程度也不如后者。</p>
+
+<ul>
+<li>交互概述图(Interaction overview diagrams)，指结合了活动图和时序图的概述表示。如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/interaction_overview_diagram.png" alt="Interaction overview diagram" /></p>
+
+<p>交互概述图实际上是一种针对对象交互行为的整体表现方案的总结。</p>
+
+<ul>
+<li>时间图(Timing diagrams)，表示单个或一组对象交互的时间约束。特别是当对象的某个状态存在一定时间约束时，如下图所示:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/timing_diagram.png" alt="Timing diagram" /></p>
+
+<ul>
+<li>用例图(Use case diagrams)，表示系统的功能需求。用例(Use case)是一种对用户与系统或系统自身交互的描述。用例更注重用户的一般目标，与用户场景(User scenario)不同，后者详细描述了用户与系统的每一步交互(这里的用户不仅指人类)，如果交互过程中发生分支则产生新的场景。也就是说，一个用例包含了许多用户场景。下图是一个用例图的例子:</li>
+</ul>
+
+
+<p><img src="http://content.hanyi.name/images/object_oriented/use_case_diagram.png" alt="Use case diagram" /></p>
+
+<p>用例是对系统功能的更高级描述，与极限编程中的用户故事(User stories)相比，后者侧重于表示系统特性，且可以用于安排迭代计划，而用例则是单纯的系统功能性描述。在具体实践中，一个特性可能直接对应用例，或者用例中的一个步骤，也可能对应于其中一个场景。而大多数情况下用例要比特性具有更粗的粒度。</p>
+
+<h2>结论</h2>
+
+<p>本文首先讨论了面向对象的核心概念；随着面向对象编程的流行，开发中面临的问题复杂度不断提升，由此催生了面向对象建模技术。UML旨在实现语言无关的通用建模语言，被广泛用于面向对象分析(OOA)和设计(OOD)等活动。另一方面，随着相关国际标准的建立，UML也逐渐变得更加臃肿，因此实践中，视实际情况选择性地对工具进行裁剪就变得尤为重要。</p>
+
+<h2>引用</h2>
+
+<p>BMR97, <a href="https://sophia.javeriana.edu.co/~cbustaca/docencia/POO-2016-01/documentos/Object%20Oriented%20Software%20Construction-Meyer.pdf">Object-Oriented Software Construction</a></p>
+
+<p>UML17, <a href="https://www.omg.org/spec/UML/">The unified modeling language specification</a></p>
+
+<p>MFR03, <a href="https://martinfowler.com/books/uml.html">UML Distilled</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2019-02-06T16:23:31-05:00" pubdate data-updated="true">2019-02-06</time></div>
+	
+
+<div class="tags">
+
+	<a class='category' href='/blog/categories/architecture/'>architecture</a>
+
+</div>
+
+
+	
+		<span class="comments"><a href="/blog/2019/02/06/software-design-and-architecture-notes-8//posts/2/index.html#disqus_thread">Comments</a></span>
+	
+</div></article>
 
 
     <article class="post">
@@ -2055,122 +2328,6 @@ $(document).ready(
 
 	
 		<span class="comments"><a href="/blog/2017/12/17/owl-exploratory-testing//posts/2/index.html#disqus_thread">Comments</a></span>
-	
-</div></article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2016/11/20/micro-situational-mixed-reality/">
-		
-			微情境混合现实</a>
-	</h2>
-	<div class="entry-content">
-		<p><em>从前有一池清潭，在附近的居民眼里它和普通池塘并没有什么区别。某天一位富绅来到池边，搬起一块巨石砸进了池中心，泛起的沉渣顿时把池水变成了浊潭。富绅见人就说，突然变浑浊的潭水里其实是出土了宝藏，价值万贯。消息传开，好奇的人们不远万里赶到潭边，有的确实想发笔横财，有的只是为了观光。富绅自己则在潭边围起一段栅栏，向来访者销售门票，不日累积万贯。不久，别处的清潭都变浊了。</em></p>
-
-<p>近年火爆的VR/AR在大众眼中是“黑科技”，其实早在50年前(<a href="https://www.youtube.com/watch?v=ISJWZpFIAlQ">The Sword of Damocles，1965</a>)就被人玩剩了，他的创作者是图形学界祖师之一Ivan Sutherland。但可能是发现自己已经走得太远（实际上当时现代图形学基础还没有完全确立），于是萨大爷就带着他一票学生和下属回去后方铺路，后者们先后发明了Smalltalk编程语言、Gouraud着色算法、图形反走样算法，创办创意设计巨头Adobe以及高性能计算鼻祖SGI，甚至还联合乔帮主创办了Pixar（现任Pixar/Disney动画总裁的Edwin Catmull也是图形学巨擘，发明了灰常实用的Catmull-Rom样条函数，直到现在还被用于关键帧插值和<a href="http://www.cemyuksel.com/research/catmullrom_param/">渲染头发丝</a>）。</p>
-
-<p>有意思的是，VR/AR在理论上的研究早已从感知器官上升到哲学范畴&hellip;&hellip;多年来在实践上却仍然停留在科技馆和特殊行业应用领域。最终，geek们期待的科技大跃进并没有真正到来，尘埃褪去，呈现的却是更加亲民的头显（HMD）和各种奇思妙想的控制器（Controller），无不体现着以人为本的时代理念。而如果你能尝试SteamVR上的应用、特别是体验下Proto奖的获奖作品时，你会欣慰地发现，原来真正有梦想、有创造力的人还在不断涌现，你就会从各种捞钱、炫富的纸金现实中暂时解脱出来了。</p>
-
-<p>如果避开硬科幻，从终极关怀的角度审视VR/AR，我们所处时代的主题原来并非“黑科技”，而是“低门槛”和“大众化”。这里，本文提出一种特定场景下的混合现实产品思路，最后以一个真实的开源Demo为例，希望能为许多有想法的人打开一扇窗，鼓励更多人能参与到这一领域中来。</p>
-
-<p><img src="http://content.hanyi.name/images/c22/full.jpg" alt="C22-Full" /></p>
-
-<h4>为什么是特定场景？</h4>
-
-<p>门槛是首要考虑因素。以Daydream为例，在如今诸多VR/AR平台中，Daydream的优势是非常易见的：它太容易接近大众了。对于其它竞品平台，则更多聚焦在高端和行业应用上，不利于小团队做快速原型开发和内容创新（就是说只适合憋大招）。</p>
-
-<p>而Daydream的劣势目前也很明显：3-DOF的控制器无法捕捉用户的全身动作，反馈缺失导致了沉浸感不足（Vive的这一优势在市面上目前还无人匹敌）；另外，移动设备受限的性能、参差不齐的规格也导致潜在的用户体验问题，这恐怕也是Google率先携Pixel发布的初衷。</p>
-
-<p>因此在设计VR/AR产品时，需要首先考虑平台对应用场景的限制。</p>
-
-<h4>微情境（Micro-Situation）</h4>
-
-<p>理论上说，VR/AR技术几乎可以被用于任何情境。基于现实考量，在“微情境”中实现的性价比则更高。</p>
-
-<p>例如<strong>非厨师职业学习做饭</strong>，传统上可能是一对一的学徒体系；后来发展成书籍报刊、电视传播。前者属于文字模式更多得靠个人天赋，后者的声音＋图像模式就更容易被大众所接受。</p>
-
-<p>但有人可能会质疑为什么不真的去尝试做一顿饭？其实这相当于混淆了学习和实践两种活动，“学做饭”和“做饭”本身不是一回事（当然你也可以说在实践中学习，但你也不能证明你是在完全未经过学习的情况下做了一顿饭，况且如果真的是这样，那么满足各位食客的可能性恐怕微乎其微）。</p>
-
-<p>再来看“虚拟学做饭”这一活动的价值，最大的劣势就是你无法从外观之外获得任何的有效反馈，包括直接吃掉自己的学习成果。而优势是节省钱、食材、时间，切身经历每一道工序，这是现有的学习形式都不具备的。</p>
-
-<p>从这一情境本身来说，用户只需要一间整洁的厨房，摆放整齐的食材和调味品，再加上面前一座灶台即可。而交互内容仅需要双手参与。那么即将进入寻常百姓家的Daydream平台完全满足需求，于是皆大欢喜。</p>
-
-<p>其实这里需要考虑的重点在“微”上，什么样的情境才算是“微情境”呢？我们不尝试进一步去做更多的文字游戏，对于“微情境”的发现要更多依赖对情境本身、以及对VR/AR技术的理解和运用，这也是不可避免的过程。</p>
-
-<p>这里再延伸到一个稍“大”一些的微情境：<strong>产品说明书</strong>。</p>
-
-<p>相信大家对各式各样的产品说明书都不陌生，但从现实的生活经验来看，在大多数情况下，要么产品自身完全做到了自说明，要么很难快速（或者根本无法）从说明书中找到自己需要的答案。多年来，尽管平面设计不断进步，多媒体新招层出不穷，也很难断言一个真正有效的用户-产品沟通方式，而VR/AR的普及将为此带来全新的维度。</p>
-
-<p>例如你网购了一套书柜，然而需要自己动手安装，原本自信满满的你花了很长时间，终于无奈地瘫坐在沉甸甸的零件旁，边满头大汗地研究起貌似手绘的安装说明&hellip;&hellip;在当前情境中，家具的零件都可以被虚拟化，用户也不需要真的在场景中走来走去，而是直接上手了解零件功能和安装步骤即可——可以想见，当平台越廉价，“微情境”中的VR/AR应用所带来的附加价值就会越高（例如直接嵌入产品官网Web，并借助移动设备进行VR/AR显示，具体实现请参考文末Demo）。</p>
-
-<p>或许，人们会在不久之后的春晚上体验到VR/AR抢红包之类的全民娱乐呢？</p>
-
-<h4>为什么是混合现实（MR）？</h4>
-
-<p>在这波VR行情之前，就有许多AR应用运行在智能手机上，此外还包括不久前的google glass，却始终没有杀手级应用出现（酝酿多年也才蹦出一只Pokemon Go&hellip;）。原因甚多，其中市场太小、远离大众是一个非常重要的因素。难道VR就没有市场的疑问？否则巨头们为何集体押注在后者身上？由此可猜想投资VR的回报率明显要更高一筹，却万不能沉迷于只做游客。</p>
-
-<p>值得一提的是Hololens展示了当前无与伦比的MR技术，无奈距离大众太过遥远，注定只会面向专业领域。实际上基于现有的VR设备要想直接实现接近Hololens的MR并不困难，毕竟只需要一个透明显示和空间位置标定，如果要做进一步的场景感知会稍复杂（但也已经不是壁垒），不过由此发展的成本肯定比一步到位要低许多。</p>
-
-<p>（这里不得不说句题外话，平台大战可以造就繁荣的假象，但也可能扰乱了内容创造者们的思想，从而延缓技术的最终普及，这种风险在当前看来是不可避免的）</p>
-
-<p>然而如果单纯比拼想象力，MR更胜VR/AR，虽然前者只是模糊了后者之间的界限。在接受程度上，人们总会倾向于那些更加抽象、简洁且表现力更强的形式，MR无疑将会最终胜出。</p>
-
-<p>真正的困难之处在于，MR不仅仅在于两幅人眼画面的结合，也意味着更加复杂的应用场景，以及更具挑战的交互模式，而不是一个看起来更高级的HMD。</p>
-
-<h4>来自22世纪的程序员（C22）</h4>
-
-<p><a href="https://github.com/hanystudy/coder-from-22nd-century">C22</a>是一个基于传统PC+Cardboard的微情境应用。它展示了未来的程序员，能够摆脱固定显示器的束缚，使用HMD、键鼠就可以编写代码，并且在自身环境周围展示各种信息的技术。</p>
-
-<p><img src="http://content.hanyi.name/images/c22/right.png" alt="C22-Right" /></p>
-
-<p>如上图所示，PC中的应用信息被独立传送至HMD中创建的每个虚拟屏幕上，程序员可以在三维场景中浏览各种信息。</p>
-
-<p>除了信息浏览外，C22允许程序员在盲打的情况下使用键盘、鼠标在对应的应用上进行操作，并且能够实时同步。</p>
-
-<p>由于当前C22无法显示在一块透明质的HMD上（类似Hololens），因此也无法真正让普通用户感受到在现实中操作应用。此外由于分辨率的限制，C22目前能实现的用户体验也比较<a href="https://github.com/hanystudy/coder-from-22nd-century#resolution">受限</a>。</p>
-
-<p><img src="http://content.hanyi.name/images/c22/left.png" alt="C22-Left" /></p>
-
-<p>为了快速实现产品原型，C22全部使用JavaScript编写，并且采用了许多尚未广泛兼容的技术（详见<a href="https://github.com/hanystudy/coder-from-22nd-century">项目github主页</a>），由此带来的好处是核心部分搭建只用了两个晚上的时间，后期为了提高体验可能会进一步扩展当前技术栈。</p>
-
-<p>同样由于兼容问题，C22目前只支持Android设备，并计划在<a href="http://www.roadtovr.com/googles-josh-carpenter-bringing-webvr-daydream-2017/">2017年第一季度支持Daydream</a>，届时，用户可以在周围自由设置信息布局。并且由于WebVR将得到浏览器原生支持，C22的渲染能力也将得到显著提升。</p>
-
-<p>2015年举行的<a href="https://www.protoawards.com/">Proto颁奖大会</a>上，年近八旬的萨大爷<a href="https://www.youtube.com/watch?v=R2BfcKxpB8U">获虚拟现实“创始人奖”</a>，大神激励台下一帮天才后辈说：“内容意味着一切，摄像机（指技术）并不创造内容，只有最伟大的创造者才得以使用技术把现实带给人们”。</p>
-
-<p>闻者深受共鸣。</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2016-11-20T13:37:28+08:00" pubdate data-updated="true">2016-11-20</time></div>
-	
-
-<div class="tags">
-
-	<a class='category' href='/blog/categories/mr/'>mr</a>
-
-</div>
-
-
-	
-		<span class="comments"><a href="/blog/2016/11/20/micro-situational-mixed-reality//posts/2/index.html#disqus_thread">Comments</a></span>
 	
 </div></article>
 
